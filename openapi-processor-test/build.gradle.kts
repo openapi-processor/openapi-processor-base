@@ -27,6 +27,8 @@ dependencies {
     compileOnly("com.github.hauner.openapi:openapi-processor-api:${project.ext.get("processorApiVersion")}")
 
     implementation("org.codehaus.groovy:groovy-all:2.5.10")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.10.2")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.10.2")
     implementation("com.google.jimfs:jimfs:1.1")
     implementation("io.github.java-diff-utils:java-diff-utils:4.5")
 }

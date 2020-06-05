@@ -16,6 +16,9 @@
 
 package com.github.hauner.openapi.test
 
+import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.github.difflib.DiffUtils
 import com.github.difflib.UnifiedDiffUtils
 import org.junit.Rule
@@ -61,10 +64,11 @@ abstract class ProcessorTestBase {
 
         then:
         def packageName = testSet.packageName
-        def expectedPath = "/tests/${source}/${packageName}"
+        def sourcePath = "/tests/${source}"
+        def expectedPath = "${sourcePath}/${packageName}"
         def generatedPath = Path.of (folder.root.toString()).resolve (packageName)
 
-        def expectedFiles = collectExpectedPaths (expectedPath)
+        def expectedFiles = collectOutputPaths (sourcePath, packageName)
             .sort ()
         def generatedFiles = collectPaths (generatedPath)
             .sort ()
@@ -88,12 +92,9 @@ abstract class ProcessorTestBase {
         def source = testSet.name
 
         Path root = Files.createDirectory (fs.getPath ("source"))
-//        copy ("/tests/${source}/input", root)
-        // expected results
-        copy ("/tests/${source}", [
-            "mapping.yaml", "openapi.yaml"
-        ], root)
-        copy ("/tests/${source}/${testSet.packageName}", root)
+
+        copy ("/tests/${source}", collectInputPaths ("/tests/${source}"), root)
+        copy ("/tests/${source}", collectOutputPaths ("/tests/${source}", ), root)
 
 
         Path api = root.resolve ('openapi.yaml')
@@ -185,7 +186,7 @@ abstract class ProcessorTestBase {
     /**
      * collect paths in file system
      */
-    private static List<String> collectPaths(Path source) {
+    protected static List<String> collectPaths(Path source) {
         def files = []
 
         def found = Files.walk (source)
@@ -202,42 +203,42 @@ abstract class ProcessorTestBase {
     }
 
     /**
-     * collect expected paths, strips path prefix
+     * collect input paths
      */
-    private List<String> collectExpectedPaths (String path) {
-        collectResourcePaths (path).collect {
-            it.substring (path.size () + 1)
+    protected List<String> collectInputPaths (String path) {
+        collectResourcePaths (path, "inputs.yaml")
+    }
+
+    /**
+     * collect output paths
+     */
+    protected List<String> collectOutputPaths (String path) {
+        collectResourcePaths (path, "outputs.yaml")
+    }
+
+    /**
+     * collect output paths, strips path prefix
+     */
+    protected List<String> collectOutputPaths (String path, String packageName) {
+        collectResourcePaths (path, "outputs.yaml").collect {
+            it.substring (packageName.size () + 1)
         }
     }
 
     /**
-     * collect paths from resources
+     * collect paths from output.yaml in resources
      */
-    private List<String> collectResourcePaths (String path) {
-        def files = []
-        def folders = []
-
-        this.class.getResourceAsStream (path).eachLine {
-            String item = "${path}/$it"
-
-            if (item.endsWith (".java") || item.endsWith (".yaml")) {
-                files << item
-            } else {
-                folders << item
-            }
-        }
-
-        for (String f: folders) {
-            files.addAll (collectResourcePaths (f))
-        }
-
-        return files
+    protected List<String> collectResourcePaths (String path, String itemsYaml) {
+        def source = getResource ("${path}/${itemsYaml}").text
+        def mapper = createYamlParser ()
+        def sourceItems = mapper.readValue (source, TestItems)
+        sourceItems.items
     }
 
     /**
      * unified diff resources <=> file system
      */
-    void printUnifiedDiff (String expected, Path generated) {
+    protected void printUnifiedDiff (String expected, Path generated) {
         def expectedLines = getResource (expected).readLines ()
 
         def patch = DiffUtils.diff (
@@ -260,7 +261,7 @@ abstract class ProcessorTestBase {
     /**
      * unified diff file system <=> file system
      */
-    static void printUnifiedDiff (Path expected, Path generated) {
+    protected static void printUnifiedDiff (Path expected, Path generated) {
         def patch = DiffUtils.diff (
             expected.readLines (),
             generated.readLines ())
@@ -278,7 +279,7 @@ abstract class ProcessorTestBase {
         }
     }
 
-    private String preparePath(String path) {
+    protected String preparePath(String path) {
         // the openapi4j parser works properly with custom protocols. To load the test files from
         // the resources we the test "resource:" protocol
 
@@ -290,100 +291,13 @@ abstract class ProcessorTestBase {
         testSet.parser == "OPENAPI4J" ? "resource:${path}" : path
     }
 
-    private InputStream getResource (String path) {
+    protected InputStream getResource (String path) {
         this.class.getResourceAsStream (path)
     }
 
-}
-
-
-/*
-
-package com.github.hauner.openapi.core.processor
-
-import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.PropertyNamingStrategy
-import com.fasterxml.jackson.databind.module.SimpleModule
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
-import com.fasterxml.jackson.module.kotlin.KotlinModule
-import com.github.hauner.openapi.core.processor.mapping.Mapping
-import com.github.hauner.openapi.core.processor.mapping.VersionedMapping
-import com.github.hauner.openapi.core.processor.mapping.Parameter
-import com.github.hauner.openapi.core.processor.mapping.ParameterDeserializer
-import com.github.hauner.openapi.core.processor.mapping.version.Mapping as VersionMapping
-import com.github.hauner.openapi.core.processor.mapping.v2.Mapping as MappingV2
-import com.github.hauner.openapi.core.processor.mapping.v2.Parameter as ParameterV2
-import com.github.hauner.openapi.core.processor.mapping.v2.ParameterDeserializer as ParameterDeserializerV2
-
-
-class MappingReader {
-
-    VersionedMapping read (String typeMappings) {
-        if (typeMappings == null || typeMappings.empty) {
-            return null
-        }
-
-        def mapping
-        if (isUrl (typeMappings)) {
-            mapping = new URL (typeMappings).text
-        } else if (isFileName (typeMappings)) {
-            mapping = new File (typeMappings).text
-        } else {
-            mapping = typeMappings
-        }
-
-        def versionMapper = createVersionParser ()
-        VersionMapping version = versionMapper.readValue (mapping, VersionMapping)
-        if (version.v2) {
-            def mapper = createV2Parser ()
-            mapper.readValue (mapping, MappingV2)
-        } else {
-            // assume v1
-            def mapper = createYamlParser ()
-            mapper.readValue (mapping, Mapping)
-        }
-    }
-
-    private ObjectMapper createV2Parser () {
-        SimpleModule module = new SimpleModule ()
-        module.addDeserializer (ParameterV2, new ParameterDeserializerV2 ())
-
+    protected static ObjectMapper createYamlParser () {
         new ObjectMapper (new YAMLFactory ())
             .configure (DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-            .setPropertyNamingStrategy (PropertyNamingStrategy.KEBAB_CASE)
-            .registerModules (new KotlinModule (), module)
-    }
-
-    private ObjectMapper createYamlParser () {
-        SimpleModule module = new SimpleModule ()
-        module.addDeserializer (Parameter, new ParameterDeserializer ())
-
-        new ObjectMapper (new YAMLFactory ())
-            .configure (DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-            .setPropertyNamingStrategy (PropertyNamingStrategy.KEBAB_CASE)
-            .registerModule (module)
-    }
-
-    private ObjectMapper createVersionParser () {
-        new ObjectMapper (new YAMLFactory ())
-            .configure (DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-            .setPropertyNamingStrategy (PropertyNamingStrategy.KEBAB_CASE)
-            .registerModule (new KotlinModule ())
-    }
-
-    private boolean isFileName (String name) {
-        name.endsWith ('.yaml') || name.endsWith ('.yml')
-    }
-
-    private boolean isUrl (String source) {
-        try {
-            new URL (source)
-        } catch (MalformedURLException ignore) {
-            false
-        }
     }
 
 }
-
- */
