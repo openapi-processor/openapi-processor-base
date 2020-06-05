@@ -68,7 +68,7 @@ abstract class ProcessorTestBase {
         def expectedPath = "${sourcePath}/${packageName}"
         def generatedPath = Path.of (folder.root.toString()).resolve (packageName)
 
-        def expectedFiles = collectOutputPaths (sourcePath, packageName)
+        def expectedFiles = collectRelativeOutputPaths (sourcePath, packageName)
             .sort ()
         def generatedFiles = collectPaths (generatedPath)
             .sort ()
@@ -93,9 +93,8 @@ abstract class ProcessorTestBase {
 
         Path root = Files.createDirectory (fs.getPath ("source"))
 
-        copy ("/tests/${source}", collectInputPaths ("/tests/${source}"), root)
-        copy ("/tests/${source}", collectOutputPaths ("/tests/${source}"), root)
-
+        copy ("/tests/${source}", collectAbsoluteInputPaths ("/tests/${source}"), root)
+        copy ("/tests/${source}", collectAbsoluteOutputPaths ("/tests/${source}"), root)
 
         Path api = root.resolve ('openapi.yaml')
         Path target = fs.getPath ('target')
@@ -162,13 +161,6 @@ abstract class ProcessorTestBase {
     /**
      * copy paths resources <=> file system
      */
-    protected void copy (String source, Path target) {
-        copy (source, collectResourcePaths (source), target)
-    }
-
-    /**
-     * copy paths resources <=> file system
-     */
     protected void copy (String source, List<String> sources, Path target) {
         for (String p : sources) {
             String relativePath = p.substring (source.size () + 1)
@@ -181,7 +173,6 @@ abstract class ProcessorTestBase {
             src.transferTo (dst)
         }
     }
-
 
     /**
      * collect paths in file system
@@ -205,36 +196,43 @@ abstract class ProcessorTestBase {
     /**
      * collect input paths
      */
-    protected List<String> collectInputPaths (String path) {
-        collectResourcePaths (path, "inputs.yaml")
+    protected List<String> collectAbsoluteInputPaths (String path) {
+        collectAbsoluteResourcePaths (path, "inputs.yaml")
     }
 
     /**
      * collect output paths
      */
-    protected List<String> collectOutputPaths (String path) {
-        collectResourcePaths (path, "outputs.yaml")
+    protected List<String> collectAbsoluteOutputPaths (String path) {
+        collectAbsoluteResourcePaths (path, "outputs.yaml")
     }
 
     /**
-     * collect output paths, strips path prefix
+     * collect output paths, relative to packageName
      */
-    protected List<String> collectOutputPaths (String path, String packageName) {
-        collectResourcePaths (path, "outputs.yaml").collect {
-            it.substring ("${path}/${packageName}".size () + 1)
+    protected List<String> collectRelativeOutputPaths (String path, String packageName) {
+        collectRelativeResourcePaths (path, "outputs.yaml").collect {
+            it.substring (packageName.size () + 1)
         }
     }
 
     /**
-     * collect full paths from output.yaml in resources
+     * collect absolute paths from output.yaml in resources
      */
-    protected List<String> collectResourcePaths (String path, String itemsYaml) {
+    protected List<String> collectAbsoluteResourcePaths (String path, String itemsYaml) {
+        collectRelativeResourcePaths (path, itemsYaml).collect {
+            "${path}/${it}".toString ()
+        }
+    }
+
+    /**
+     * collect paths from output.yaml in resources
+     */
+    protected List<String> collectRelativeResourcePaths (String path, String itemsYaml) {
         def source = getResource ("${path}/${itemsYaml}").text
         def mapper = createYamlParser ()
         def sourceItems = mapper.readValue (source, TestItems)
-        sourceItems.items.collect {
-            "${path}/${it}".toString ()
-        }
+        sourceItems.items
     }
 
     /**
