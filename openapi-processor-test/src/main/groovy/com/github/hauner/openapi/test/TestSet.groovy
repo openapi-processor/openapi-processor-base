@@ -22,6 +22,7 @@ class TestSet {
 
     static def testSetsCore = [
         'bean-validation',
+        'endpoint-exclude'
     ]
 
     static def testSetsFramework = [
