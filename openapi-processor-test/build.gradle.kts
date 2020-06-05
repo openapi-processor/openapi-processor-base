@@ -32,3 +32,52 @@ dependencies {
     implementation("com.google.jimfs:jimfs:1.1")
     implementation("io.github.java-diff-utils:java-diff-utils:4.5")
 }
+
+val sourcesJar by tasks.registering(Jar::class) {
+    archiveClassifier.set("sources")
+    from(sourceSets.main.get().allSource)
+}
+
+val javadocJar by tasks.registering(Jar::class) {
+    dependsOn("javadoc")
+    archiveClassifier.set("javadoc")
+    from(tasks.javadoc.get().destinationDir)
+}
+
+artifacts {
+    archives(sourcesJar)
+    archives(javadocJar)
+}
+
+bintray {
+    user = project.ext.get("bintrayUser").toString()
+    key = project.ext.get("bintrayKey").toString()
+
+    setPublications("processor")
+
+    pkg.apply {
+        repo = "openapi-processor"
+        name = "openapi-processor-test"
+        //userOrg = 'openapi-processor'
+        setLicenses("Apache-2.0")
+        vcsUrl = "https://github.com/hauner/openapi-processor-test"
+
+        version.apply {
+            name = project.version.toString()
+        }
+    }
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("processor") {
+            from(components["java"])
+            artifact(sourcesJar.get())
+            artifact(javadocJar.get())
+
+            groupId = project.group.toString()
+            artifactId = project.name
+            version = project.version.toString()
+        }
+    }
+}
