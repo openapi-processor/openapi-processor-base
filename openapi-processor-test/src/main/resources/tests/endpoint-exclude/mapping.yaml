@@ -4,10 +4,7 @@ options:
   package-name: generated
 
 map:
-  result: org.springframework.http.ResponseEntity
 
   paths:
     /endpoint-exclude/{foo}:
       exclude: true
-
-
