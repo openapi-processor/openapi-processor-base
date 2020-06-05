@@ -94,7 +94,7 @@ abstract class ProcessorTestBase {
         Path root = Files.createDirectory (fs.getPath ("source"))
 
         copy ("/tests/${source}", collectInputPaths ("/tests/${source}"), root)
-        copy ("/tests/${source}", collectOutputPaths ("/tests/${source}", ), root)
+        copy ("/tests/${source}", collectOutputPaths ("/tests/${source}"), root)
 
 
         Path api = root.resolve ('openapi.yaml')
