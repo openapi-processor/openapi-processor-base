@@ -171,7 +171,7 @@ abstract class ProcessorTestBase {
      */
     protected void copy (String source, List<String> sources, Path target) {
         for (String p : sources) {
-            String relativePath = p.substring (source.size ())
+            String relativePath = p.substring (source.size () + 1)
 
             Path targetPath = target.resolve (relativePath.toString ())
             Files.createDirectories (targetPath.getParent ())
@@ -221,18 +221,20 @@ abstract class ProcessorTestBase {
      */
     protected List<String> collectOutputPaths (String path, String packageName) {
         collectResourcePaths (path, "outputs.yaml").collect {
-            it.substring (packageName.size () + 1)
+            it.substring ("${path}/${packageName}".size () + 1)
         }
     }
 
     /**
-     * collect paths from output.yaml in resources
+     * collect full paths from output.yaml in resources
      */
     protected List<String> collectResourcePaths (String path, String itemsYaml) {
         def source = getResource ("${path}/${itemsYaml}").text
         def mapper = createYamlParser ()
         def sourceItems = mapper.readValue (source, TestItems)
-        sourceItems.items
+        sourceItems.items.collect {
+            "${path}/${it}".toString ()
+        }
     }
 
     /**
