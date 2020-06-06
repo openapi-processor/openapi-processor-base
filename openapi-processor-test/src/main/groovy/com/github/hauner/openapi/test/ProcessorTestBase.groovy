@@ -48,11 +48,11 @@ abstract class ProcessorTestBase {
         def processor = testSet.processor
         def options = [
             parser: testSet.parser,
-            apiPath: "resource:/tests/${source}/openapi.yaml",
+            apiPath: "resource:/tests/${source}/inputs/openapi.yaml",
             targetDir: folder.root
         ]
 
-        def mappingYaml = getResource ("/tests/${source}/mapping.yaml")
+        def mappingYaml = getResource ("/tests/${source}/inputs/mapping.yaml")
         if(mappingYaml) {
             options.mapping = mappingYaml.text
         } else {
@@ -93,10 +93,11 @@ abstract class ProcessorTestBase {
 
         Path root = Files.createDirectory (fs.getPath ("source"))
 
-        copy ("/tests/${source}", collectAbsoluteInputPaths ("/tests/${source}"), root)
-        copy ("/tests/${source}", collectAbsoluteOutputPaths ("/tests/${source}"), root)
+        def path = "/tests/${source}"
+        copy (path, collectAbsoluteInputPaths (path), root)
+        copy (path, collectAbsoluteOutputPaths (path), root)
 
-        Path api = root.resolve ('openapi.yaml')
+        Path api = root.resolve ('inputs/openapi.yaml')
         Path target = fs.getPath ('target')
 
         def processor = testSet.processor
@@ -106,7 +107,7 @@ abstract class ProcessorTestBase {
             targetDir: target.toUri ().toURL ().toString ()
         ]
 
-        def mappingYaml = root.resolve ('mapping.yaml')
+        def mappingYaml = root.resolve ('inputs/mapping.yaml')
         if(Files.exists (mappingYaml)) {
             options.mapping = mappingYaml.toUri ().toURL ().toString ()
         } else {
@@ -204,14 +205,14 @@ abstract class ProcessorTestBase {
      * collect output paths
      */
     protected List<String> collectAbsoluteOutputPaths (String path) {
-        collectAbsoluteResourcePaths (path, "outputs.yaml")
+        collectAbsoluteResourcePaths (path, "generated.yaml")
     }
 
     /**
      * collect output paths, relative to packageName
      */
     protected List<String> collectRelativeOutputPaths (String path, String packageName) {
-        collectRelativeResourcePaths (path, "outputs.yaml").collect {
+        collectRelativeResourcePaths (path, "generated.yaml").collect {
             it.substring (packageName.size () + 1)
         }
     }
@@ -229,9 +230,13 @@ abstract class ProcessorTestBase {
      * collect paths from output.yaml in resources
      */
     protected List<String> collectRelativeResourcePaths (String path, String itemsYaml) {
-        def source = getResource ("${path}/${itemsYaml}").text
+        def source = getResource ("${path}/${itemsYaml}")
+        if (!source) {
+            println "ERROR: missing '${path}/${itemsYaml}' configuration file!"
+        }
+
         def mapper = createYamlParser ()
-        def sourceItems = mapper.readValue (source, TestItems)
+        def sourceItems = mapper.readValue (source.text, TestItems)
         sourceItems.items
     }
 
