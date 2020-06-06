@@ -20,38 +20,28 @@ import com.github.hauner.openapi.api.OpenApiProcessor
 
 class TestSet {
 
-    static def testSetsCore = [
+    static def ALL = [
         'bean-validation',
-        'endpoint-exclude'
-    ]
-
-    static def testSetsFramework = [
-
-    ]
-
-    static def testSets = [
-        'bean-validation',
-//        'endpoint-exclude',
-//        'method-operation-id',
-//        'no-response-content',
-//        'params-additional',
-//        'params-complex-data-types',
-//        'params-enum',
-//        'params-simple-data-types',
-//        'params-request-body',
-//        'params-request-body-multipart-form-data',
-//        'params-path-simple-data-types',
-//        'params-spring-pageable-mapping',
-//        'ref-into-another-file',
-//        'ref-loop',
-//        'response-array-data-type-mapping',
-//        'response-complex-data-types',
-//        'response-content-multiple',
-//        'response-content-single',
-//        'response-result-mapping',
-//        'response-simple-data-types',
-//        'response-single-multi-mapping',
-//        'schema-composed'
+        'endpoint-exclude',
+        'endpoint-http-mapping',                    // uses framework annotations
+        'method-operation-id',
+        'params-additional',
+        'params-complex-data-types',                // uses framework annotations
+        'params-enum',
+        'params-path-simple-data-types',            // uses framework annotations
+        'params-request-body',                      // uses framework annotations
+        'params-request-body-multipart-form-data',  // uses framework annotations
+        'params-simple-data-types',                 // uses framework annotations
+        'ref-into-another-file',
+        'ref-loop',
+        'response-array-data-type-mapping',
+        'response-complex-data-types',
+        'response-content-multiple',
+        'response-content-single',
+        'response-result-mapping',
+        'response-simple-data-types',
+        'response-single-multi-mapping',
+        'schema-composed'
     ]
 
     static String DEFAULT_MAPPING = """\
