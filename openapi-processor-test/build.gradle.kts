@@ -9,6 +9,11 @@ plugins {
 group = "com.github.hauner.openapi"
 version = "1.0.0.M1"
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
 ext {
     set("processorApiVersion", "1.0.0.M4")
 
