@@ -37,7 +37,7 @@ dependencies {
 
     implementation("org.junit.jupiter:junit-jupiter-api:5.6.2")
     runtimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.2")
-    runtimeOnly("'org.junit.vintage:junit-vintage-engine:5.6.2")
+    runtimeOnly("org.junit.vintage:junit-vintage-engine:5.6.2")
     compileOnly("junit:junit:4.13")
 }
 
