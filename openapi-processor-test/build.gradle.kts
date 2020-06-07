@@ -33,7 +33,7 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-databind:2.11.0")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.11.0")
     implementation("io.github.java-diff-utils:java-diff-utils:4.7")
-    implementation("com.google.jimfs:jimfs:1.1")
+    api("com.google.jimfs:jimfs:1.1")
 
     implementation("org.junit.jupiter:junit-jupiter-api:5.6.2")
     runtimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.2")
