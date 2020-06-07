@@ -31,9 +31,10 @@ repositories {
 dependencies {
     compileOnly("com.github.hauner.openapi:openapi-processor-api:${project.ext.get("processorApiVersion")}")
 
-    implementation("org.codehaus.groovy:groovy-all:2.5.10")
+    implementation("org.codehaus.groovy:groovy:2.5.12")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.11.0")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.11.0")
+    implementation("io.github.java-diff-utils:java-diff-utils:4.7")
     implementation("com.google.jimfs:jimfs:1.1")
 
     implementation("org.junit.jupiter:junit-jupiter-api:5.6.2")
