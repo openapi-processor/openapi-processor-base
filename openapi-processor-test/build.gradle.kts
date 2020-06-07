@@ -15,8 +15,6 @@ java {
 }
 
 ext {
-    set("processorApiVersion", "1.0.0.M4")
-
     set("bintrayUser", project.findProperty("BINTRAY_USER") ?: "n/a")
     set("bintrayKey", project.findProperty("BINTRAY_KEY") ?: "n/a")
 }
@@ -29,7 +27,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("com.github.hauner.openapi:openapi-processor-api:${project.ext.get("processorApiVersion")}")
+    compileOnly("com.github.hauner.openapi:openapi-processor-api:1.0.0")
 
     implementation("org.codehaus.groovy:groovy:2.5.12")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.11.0")
