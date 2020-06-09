@@ -284,18 +284,6 @@ abstract class ProcessorTestBase {
         }
     }
 
-    protected String preparePath(String path) {
-        // the openapi4j parser works properly with custom protocols. To load the test files from
-        // the resources we the test "resource:" protocol
-
-        // the swagger parser works with http(s) & file protocols only.
-        // If it is something different (or nothing) it tries to find the given path as-is on the
-        // file system. If that fails it tries to load the path as resource. To load the test files
-        // from the resources it must not have a protocol.
-
-        testSet.parser == "OPENAPI4J" ? "resource:${path}" : path
-    }
-
     protected InputStream getResource (String path) {
         this.class.getResourceAsStream (path)
     }
