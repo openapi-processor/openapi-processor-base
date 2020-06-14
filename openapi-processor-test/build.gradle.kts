@@ -3,11 +3,15 @@ plugins {
     id("java-library")
     id("maven-publish")
     id("com.jfrog.bintray") version ("1.8.5")
+    id("com.jfrog.artifactory") version ("4.15.2")
     id("com.github.ben-manes.versions") version ("0.28.0")
 }
 
-group = "com.github.hauner.openapi"
-version = "1.0.0.M1"
+val projectGroupId: String by project
+val projectVersion: String by project
+
+group = projectGroupId
+version = projectVersion
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -22,6 +26,10 @@ ext {
 repositories {
     mavenCentral()
     maven {
+        setUrl("https://dl.bintray.com/openapi-processor/primary")
+    }
+    maven {
+        // deprecated but still used
         setUrl("https://dl.bintray.com/hauner/openapi-processor")
     }
 }
@@ -60,28 +68,18 @@ artifacts {
     archives(javadocJar)
 }
 
-bintray {
-    user = project.ext.get("bintrayUser").toString()
-    key = project.ext.get("bintrayKey").toString()
+//apply(from = "${rootProject.rootDir}/gradle/publishing.gradle.kts")
 
-    setPublications("processor")
-
-    pkg.apply {
-        repo = "openapi-processor"
-        name = "openapi-processor-test"
-        //userOrg = 'openapi-processor'
-        setLicenses("Apache-2.0")
-        vcsUrl = "https://github.com/hauner/openapi-processor-test"
-
-        version.apply {
-            name = project.version.toString()
-        }
-    }
-}
+val projectTitle: String by project
+val projectDesc: String by project
+val projectUrl: String by project
+val projectGithubRepo: String by project
+val bintrayUser: String by project.ext
+val bintrayKey: String by project.ext
 
 publishing {
     publications {
-        create<MavenPublication>("processor") {
+        create<MavenPublication>("projectArtifacts") {
             from(components["java"])
             artifact(sourcesJar.get())
             artifact(javadocJar.get())
@@ -89,6 +87,78 @@ publishing {
             groupId = project.group.toString()
             artifactId = project.name
             version = project.version.toString()
+
+            with(pom) {
+
+                withXml {
+                    val root = asNode()
+                    root.appendNode("name", projectTitle)
+                    root.appendNode("description", projectDesc)
+                    root.appendNode("url", projectUrl)
+                }
+
+                licenses {
+                    license {
+                        name.set("The Apache Software License, Version 2.0")
+                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                        distribution.set("repo")
+                    }
+                }
+
+                developers {
+                    developer {
+                        id.set("hauner")
+                        name.set("Martin Hauner")
+                    }
+                }
+
+                scm {
+                   url.set("https://github.com/${projectGithubRepo}")
+                }
+            }
+        }
+    }
+}
+
+
+artifactory {
+    setContextUrl("https://oss.jfrog.org")
+
+    publish(delegateClosureOf<org.jfrog.gradle.plugin.artifactory.dsl.PublisherConfig> {
+        repository(delegateClosureOf<groovy.lang.GroovyObject> {
+            setProperty("repoKey", "oss-snapshot-local")
+            setProperty("username", bintrayUser)
+            setProperty("password", bintrayKey)
+        })
+
+        defaults(delegateClosureOf<groovy.lang.GroovyObject> {
+            invokeMethod("publications", arrayOf("projectArtifacts"))
+            setProperty("publishArtifacts", true)
+            setPublishPom(true)
+        })
+    })
+
+    resolve(delegateClosureOf<org.jfrog.gradle.plugin.artifactory.dsl.ResolverConfig> {
+        setProperty("repoKey", "jcenter")
+    })
+}
+
+
+bintray {
+    user = project.ext.get("bintrayUser").toString()
+    key = project.ext.get("bintrayKey").toString()
+
+    setPublications("projectArtifacts")
+
+    pkg.apply {
+        repo = "primary"
+        name = "openapi-processor-test"
+        userOrg = "openapi-processor"
+        setLicenses("Apache-2.0")
+        vcsUrl = "https://github.com/${projectGithubRepo}"
+
+        version.apply {
+            name = project.version.toString()
         }
     }
 }
