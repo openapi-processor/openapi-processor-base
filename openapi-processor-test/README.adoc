@@ -8,7 +8,7 @@
 
 // badges
 //link:{oaps-ci}[image:{badge-ci}[]]
-link:{oaps-license}[image:{badge-license}[]]
+//link:{oaps-license}[image:{badge-license}[]]
 
 
 == openapi-processor-test
