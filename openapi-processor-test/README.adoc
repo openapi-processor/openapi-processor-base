@@ -113,6 +113,6 @@ class ProcessorEndToEndTest extends ProcessorTestBase {
 See link:{oap-core}[openapi-processor-core] and link:{oap-spring}[openapi-processor-spring] for
 working examples.
 
-== openapi-processor Documentation
+== openapi-processor documentation
 
 See link:{oap-docs}[here].
