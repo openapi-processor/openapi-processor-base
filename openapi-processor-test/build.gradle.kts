@@ -23,17 +23,30 @@ ext {
 
 repositories {
     mavenCentral()
+
     maven {
         setUrl("https://dl.bintray.com/openapi-processor/primary")
+        content {
+           includeGroup ("io.openapiprocessor")
+        }
+        mavenContent {
+            releasesOnly()
+        }
     }
+
     maven {
-        // deprecated but still used
-        setUrl("https://dl.bintray.com/hauner/openapi-processor")
+        setUrl("https://oss.jfrog.org/artifactory/oss-snapshot-local")
+        content {
+           includeGroup("io.openapiprocessor")
+        }
+        mavenContent {
+            snapshotsOnly()
+        }
     }
 }
 
 dependencies {
-    compileOnly("com.github.hauner.openapi:openapi-processor-api:1.0.0")
+    compileOnly("io.openapiprocessor:openapi-processor-api:1.1.0.M1")
 
     implementation("org.codehaus.groovy:groovy:2.5.12")
     implementation("org.codehaus.groovy:groovy-nio:2.5.12")
