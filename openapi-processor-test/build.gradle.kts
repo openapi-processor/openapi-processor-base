@@ -2,8 +2,6 @@ plugins {
     groovy
     id("java-library")
     id("maven-publish")
-    id("com.jfrog.bintray") version ("1.8.5")
-    id("com.jfrog.artifactory") version ("4.15.2")
     id("com.github.ben-manes.versions") version ("0.28.0")
 }
 
@@ -88,18 +86,14 @@ publishing {
             artifactId = project.name
             version = project.version.toString()
 
-            with(pom) {
-
-                withXml {
-                    val root = asNode()
-                    root.appendNode("name", projectTitle)
-                    root.appendNode("description", projectDesc)
-                    root.appendNode("url", projectUrl)
-                }
+            pom {
+                name.set(projectTitle)
+                description.set("${projectTitle} - ${projectDesc} - ${project.name} module")
+                url.set(projectUrl)
 
                 licenses {
                     license {
-                        name.set("The Apache Software License, Version 2.0")
+                        name.set("The Apache License, Version 2.0")
                         url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
                         distribution.set("repo")
                     }
@@ -118,47 +112,17 @@ publishing {
             }
         }
     }
-}
 
+    repositories {
+        maven {
+            val releasesRepoUrl = "https://api.bintray.com/maven/openapi-processor/primary/${project.name}/;publish=1;override=0"
+            val snapshotsRepoUrl = "https://oss.jfrog.org/oss-snapshot-local/"
+            url = uri(if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl)
 
-artifactory {
-    setContextUrl("https://oss.jfrog.org")
-
-    publish(delegateClosureOf<org.jfrog.gradle.plugin.artifactory.dsl.PublisherConfig> {
-        repository(delegateClosureOf<groovy.lang.GroovyObject> {
-            setProperty("repoKey", "oss-snapshot-local")
-            setProperty("username", bintrayUser)
-            setProperty("password", bintrayKey)
-        })
-
-        defaults(delegateClosureOf<groovy.lang.GroovyObject> {
-            invokeMethod("publications", arrayOf("projectArtifacts"))
-            setProperty("publishArtifacts", true)
-            setPublishPom(true)
-        })
-    })
-
-    resolve(delegateClosureOf<org.jfrog.gradle.plugin.artifactory.dsl.ResolverConfig> {
-        setProperty("repoKey", "jcenter")
-    })
-}
-
-
-bintray {
-    user = project.ext.get("bintrayUser").toString()
-    key = project.ext.get("bintrayKey").toString()
-
-    setPublications("projectArtifacts")
-
-    pkg.apply {
-        repo = "primary"
-        name = "openapi-processor-test"
-        userOrg = "openapi-processor"
-        setLicenses("Apache-2.0")
-        vcsUrl = "https://github.com/${projectGithubRepo}"
-
-        version.apply {
-            name = project.version.toString()
+            credentials {
+                username = project.ext.get("bintrayUser").toString()
+                password = project.ext.get("bintrayKey").toString()
+            }
         }
     }
 }
