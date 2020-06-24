@@ -90,7 +90,7 @@ val bintrayKey: String by project.ext
 
 publishing {
     publications {
-        create<MavenPublication>("projectArtifacts") {
+        create<MavenPublication>("OpenApiProcessor") {
             from(components["java"])
             artifact(sourcesJar.get())
             artifact(javadocJar.get())
