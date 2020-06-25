@@ -1,10 +1,11 @@
 :badge-license: https://img.shields.io/badge/License-Apache%202.0-blue.svg?labelColor=313A42
-:badge-ci: https://github.com/hauner/openapi-processor-test/workflows/ci/badge.svg
-:oaps-ci: https://github.com/hauner/openapi-processor-test/actions?query=workflow%3Aci
-:oaps-license: https://github.com/hauner/openapi-processor-test/blob/master/LICENSE
+:badge-ci: https://github.com/openapi-processor/openapi-processor-test/workflows/ci/badge.svg
+:oaps-ci: https://github.com/openapi-processor/openapi-processor-test/actions?query=workflow%3Aci
+:oaps-license: https://github.com/openapi-processor/openapi-processor-test/blob/master/LICENSE
 :oap-docs: https://hauner.github.com/openapi-processor/spring/current/index.html
-:opa-core: https://github.com/hauner/openapi-processor-test
-:opa-spring: https://github.com/hauner/openapi-processor-spring
+
+:oap-core: https://github.com/openapi-processor/openapi-processor-core
+:oap-spring: https://github.com/openapi-processor/openapi-processor-spring
 
 // badges
 //link:{oaps-ci}[image:{badge-ci}[]]
@@ -113,6 +114,6 @@ class ProcessorEndToEndTest extends ProcessorTestBase {
 See link:{oap-core}[openapi-processor-core] and link:{oap-spring}[openapi-processor-spring] for
 working examples.
 
-== openapi-processor documentation
+== documentation
 
 See link:{oap-docs}[here].

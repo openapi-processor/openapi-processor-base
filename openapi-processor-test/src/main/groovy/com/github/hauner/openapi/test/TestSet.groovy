@@ -16,7 +16,8 @@
 
 package com.github.hauner.openapi.test
 
-import com.github.hauner.openapi.api.OpenApiProcessor
+import io.openapiprocessor.api.OpenApiProcessor
+
 
 class TestSet {
 
