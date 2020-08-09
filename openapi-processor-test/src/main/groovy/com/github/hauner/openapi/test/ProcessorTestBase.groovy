@@ -176,10 +176,12 @@ abstract class ProcessorTestBase {
     }
 
     /**
-     * collect paths in file system
+     * collect paths in file system.
+     *
+     * will convert all paths to use "/" as path separator
      */
     protected static List<String> collectPaths(Path source) {
-        def files = []
+        List<String> files = []
 
         def found = Files.walk (source)
             .filter ({ f ->
@@ -191,7 +193,9 @@ abstract class ProcessorTestBase {
             })
         found.close ()
 
-        return files
+        files.collect {
+            it.replace ("\\\\", "/")
+        }
     }
 
     /**
