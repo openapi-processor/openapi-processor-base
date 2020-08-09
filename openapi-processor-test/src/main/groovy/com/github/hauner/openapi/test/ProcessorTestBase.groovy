@@ -194,7 +194,7 @@ abstract class ProcessorTestBase {
         found.close ()
 
         files.collect {
-            it.replace ("\\\\", "/")
+            it.replace ('\\', '/')
         }
     }
 
