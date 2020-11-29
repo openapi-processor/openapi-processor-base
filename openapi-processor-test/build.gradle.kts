@@ -2,7 +2,7 @@ plugins {
     groovy
     id("java-library")
     id("maven-publish")
-    id("com.github.ben-manes.versions") version ("0.28.0")
+    id("com.github.ben-manes.versions") version ("0.36.0")
 }
 
 val projectGroupId: String by project
@@ -46,21 +46,21 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.openapiprocessor:openapi-processor-api:1.1.0-SNAPSHOT")
+    compileOnly("io.openapiprocessor:openapi-processor-api:1.2.0")
 
     implementation("org.codehaus.groovy:groovy:2.5.12")
     implementation("org.codehaus.groovy:groovy-nio:2.5.12")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.11.0")
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.11.0")
-    implementation("io.github.java-diff-utils:java-diff-utils:4.7")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.12.0")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.12.0")
+    implementation("io.github.java-diff-utils:java-diff-utils:4.9")
     implementation("com.google.jimfs:jimfs:1.1") {
         exclude("com.google.guava")
     }
 
-    compileOnly("junit:junit:4.13")
-    implementation("org.junit.jupiter:junit-jupiter-api:5.6.2")
-    runtimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.2")
-    runtimeOnly("org.junit.vintage:junit-vintage-engine:5.6.2")
+    compileOnly("junit:junit:4.13.1")
+    implementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
+    runtimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.0")
+    runtimeOnly("org.junit.vintage:junit-vintage-engine:5.7.0")
 }
 
 val sourcesJar by tasks.registering(Jar::class) {
