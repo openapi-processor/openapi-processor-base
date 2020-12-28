@@ -56,11 +56,6 @@ dependencies {
     implementation("com.google.jimfs:jimfs:1.1") {
         exclude("com.google.guava")
     }
-
-    compileOnly("junit:junit:4.13.1")
-    implementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
-    runtimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.0")
-    runtimeOnly("org.junit.vintage:junit-vintage-engine:5.7.0")
 }
 
 val sourcesJar by tasks.registering(Jar::class) {

@@ -1,55 +1,42 @@
 /*
- * Copyright 2019-2020 the original authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright © 2020 https://github.com/openapi-processor/openapi-processor-test
+ * PDX-License-Identifier: Apache-2.0
  */
 
-package com.github.hauner.openapi.test
+package io.openapiprocessor.test
 
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.github.difflib.DiffUtils
 import com.github.difflib.UnifiedDiffUtils
-import org.junit.Rule
-import org.junit.rules.TemporaryFolder
+import com.github.hauner.openapi.test.TestItems
+import com.github.hauner.openapi.test.TestSet
 
 import java.nio.file.FileSystem
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.stream.Stream
 
-import static org.junit.Assert.assertEquals
-
-abstract class ProcessorTestBase {
-
-    @Rule
-    public TemporaryFolder folder = new TemporaryFolder()
+/**
+ * used to execute test sets.
+ */
+class TestSetRunner {
 
     TestSet testSet
 
-    ProcessorTestBase (TestSet testSet) {
+    TestSetRunner(TestSet testSet) {
         this.testSet = testSet
     }
 
-    protected runOnNativeFileSystem () {
+    boolean runOnNativeFileSystem (File folder) {
         def source = testSet.name
 
         def processor = testSet.processor
         def options = [
             parser: testSet.parser,
             apiPath: "resource:/tests/${source}/inputs/openapi.yaml",
-            targetDir: folder.root
+            targetDir: folder.absolutePath
         ]
 
         def mappingYaml = getResource ("/tests/${source}/inputs/mapping.yaml")
@@ -66,7 +53,7 @@ abstract class ProcessorTestBase {
         def packageName = testSet.packageName
         def sourcePath = "/tests/${source}"
         def expectedPath = "${sourcePath}/${packageName}"
-        def generatedPath = Path.of (folder.root.toString()).resolve (packageName)
+        def generatedPath = Path.of (folder.absolutePath).resolve (packageName)
 
         def expectedFiles = collectRelativeOutputPaths (sourcePath, packageName)
             .sort ()
@@ -75,20 +62,18 @@ abstract class ProcessorTestBase {
 
         assert expectedFiles == generatedFiles
 
+        def success = true
         expectedFiles.each {
             def expected = "${expectedPath}/$it"
             def generated = generatedPath.resolve (it)
 
-            printUnifiedDiff (expected, generated)
-            assertEquals(
-                // ignore cr (ie. crlf vs lf)
-                getResource (expected).text.replace('\r',''),
-                generated.text.replace('\r','')
-            )
+            success &= printUnifiedDiff (expected, generated)
         }
+
+        success
     }
 
-    protected void runOnCustomFileSystem (FileSystem fs) {
+    boolean runOnCustomFileSystem (FileSystem fs) {
         def source = testSet.name
 
         Path root = Files.createDirectory (fs.getPath ("source"))
@@ -126,23 +111,21 @@ abstract class ProcessorTestBase {
         def generatedFiles = collectPaths (generatedPath)
         assert expectedFiles == generatedFiles
 
+        def success = true
         expectedFiles.each {
-            def expected = expectedPath.resolve (it)
+            def expected = "${expectedPath}/$it"
             def generated = generatedPath.resolve (it)
 
-            printUnifiedDiff (expected, generated)
-            assertEquals(
-                // ignore cr (ie. crlf vs lf)
-                expected.text.replace('\r',''),
-                generated.text.replace('\r','')
-            )
+            success &= printUnifiedDiff (expected, generated)
         }
+
+        success
     }
 
     /**
      * copy paths file system <=> file system
      */
-    protected static void copy (Path source, Path target) {
+    private static void copy (Path source, Path target) {
         Stream<Path> paths = Files.walk (source)
             .filter ({f -> !Files.isDirectory (f)})
 
@@ -162,7 +145,7 @@ abstract class ProcessorTestBase {
     /**
      * copy paths resources <=> file system
      */
-    protected void copy (String source, List<String> sources, Path target) {
+    private void copy (String source, List<String> sources, Path target) {
         for (String p : sources) {
             String relativePath = p.substring (source.size () + 1)
 
@@ -180,7 +163,7 @@ abstract class ProcessorTestBase {
      *
      * will convert all paths to use "/" as path separator
      */
-    protected static List<String> collectPaths(Path source) {
+    private static List<String> collectPaths(Path source) {
         List<String> files = []
 
         def found = Files.walk (source)
@@ -201,21 +184,21 @@ abstract class ProcessorTestBase {
     /**
      * collect input paths
      */
-    protected List<String> collectAbsoluteInputPaths (String path) {
+    private List<String> collectAbsoluteInputPaths (String path) {
         collectAbsoluteResourcePaths (path, "inputs.yaml")
     }
 
     /**
      * collect output paths
      */
-    protected List<String> collectAbsoluteOutputPaths (String path) {
+    private List<String> collectAbsoluteOutputPaths (String path) {
         collectAbsoluteResourcePaths (path, "generated.yaml")
     }
 
     /**
      * collect output paths, relative to packageName
      */
-    protected List<String> collectRelativeOutputPaths (String path, String packageName) {
+    private List<String> collectRelativeOutputPaths (String path, String packageName) {
         collectRelativeResourcePaths (path, "generated.yaml").collect {
             it.substring (packageName.size () + 1)
         }
@@ -224,7 +207,7 @@ abstract class ProcessorTestBase {
     /**
      * collect absolute paths from output.yaml in resources
      */
-    protected List<String> collectAbsoluteResourcePaths (String path, String itemsYaml) {
+    private List<String> collectAbsoluteResourcePaths (String path, String itemsYaml) {
         collectRelativeResourcePaths (path, itemsYaml).collect {
             "${path}/${it}".toString ()
         }
@@ -233,7 +216,7 @@ abstract class ProcessorTestBase {
     /**
      * collect paths from output.yaml in resources
      */
-    protected List<String> collectRelativeResourcePaths (String path, String itemsYaml) {
+    private List<String> collectRelativeResourcePaths (String path, String itemsYaml) {
         def source = getResource ("${path}/${itemsYaml}")
         if (!source) {
             println "ERROR: missing '${path}/${itemsYaml}' configuration file!"
@@ -246,8 +229,10 @@ abstract class ProcessorTestBase {
 
     /**
      * unified diff resources <=> file system
+     *
+     * @return true if delta
      */
-    protected void printUnifiedDiff (String expected, Path generated) {
+    private boolean printUnifiedDiff (String expected, Path generated) {
         def expectedLines = getResource (expected).readLines ()
 
         def patch = DiffUtils.diff (
@@ -259,18 +244,20 @@ abstract class ProcessorTestBase {
             generated.toString (),
             expectedLines,
             patch,
-            2
+            4
         )
 
         diff.each {
             println it
         }
+
+        return !patch.deltas.isEmpty ()
     }
 
     /**
      * unified diff file system <=> file system
      */
-    protected static void printUnifiedDiff (Path expected, Path generated) {
+    private static void printUnifiedDiff (Path expected, Path generated) {
         def patch = DiffUtils.diff (
             expected.readLines (),
             generated.readLines ())
@@ -288,11 +275,11 @@ abstract class ProcessorTestBase {
         }
     }
 
-    protected InputStream getResource (String path) {
+    private InputStream getResource (String path) {
         this.class.getResourceAsStream (path)
     }
 
-    protected static ObjectMapper createYamlParser () {
+    private static ObjectMapper createYamlParser () {
         new ObjectMapper (new YAMLFactory ())
             .configure (DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
     }
