@@ -46,7 +46,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.openapiprocessor:openapi-processor-api:1.2.0")
+    compileOnly("io.openapiprocessor:openapi-processor-api:2020.3")
 
     implementation("org.codehaus.groovy:groovy:2.5.12")
     implementation("org.codehaus.groovy:groovy-nio:2.5.12")
