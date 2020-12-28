@@ -113,7 +113,7 @@ class TestSetRunner {
 
         def success = true
         expectedFiles.each {
-            def expected = "${expectedPath}/$it"
+            def expected = expectedPath.resolve (it)
             def generated = generatedPath.resolve (it)
 
             success &= printUnifiedDiff (expected, generated)
