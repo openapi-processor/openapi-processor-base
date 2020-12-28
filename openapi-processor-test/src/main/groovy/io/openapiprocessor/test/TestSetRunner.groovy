@@ -29,6 +29,12 @@ class TestSetRunner {
         this.testSet = testSet
     }
 
+    /**
+     * runs test set on the native file system
+     *
+     * @param folder temp folder
+     * @return true on success, false on failure, ie. if there were any differences
+     */
     boolean runOnNativeFileSystem (File folder) {
         def source = testSet.name
 
@@ -67,12 +73,18 @@ class TestSetRunner {
             def expected = "${expectedPath}/$it"
             def generated = generatedPath.resolve (it)
 
-            success &= printUnifiedDiff (expected, generated)
+            success &= !printUnifiedDiff (expected, generated)
         }
 
         success
     }
 
+    /**
+     * runs test set on the given file system
+     *
+     * @param fs the file system
+     * @return true on success, false on failure, ie. if there were any differences
+     */
     boolean runOnCustomFileSystem (FileSystem fs) {
         def source = testSet.name
 
@@ -116,7 +128,7 @@ class TestSetRunner {
             def expected = expectedPath.resolve (it)
             def generated = generatedPath.resolve (it)
 
-            success &= printUnifiedDiff (expected, generated)
+            success &= !printUnifiedDiff (expected, generated)
         }
 
         success
@@ -230,7 +242,7 @@ class TestSetRunner {
     /**
      * unified diff resources <=> file system
      *
-     * @return true if delta
+     * @return true if there is a difference
      */
     private boolean printUnifiedDiff (String expected, Path generated) {
         def expectedLines = getResource (expected).readLines ()
