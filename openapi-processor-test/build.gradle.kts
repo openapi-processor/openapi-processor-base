@@ -48,8 +48,8 @@ repositories {
 dependencies {
     compileOnly("io.openapiprocessor:openapi-processor-api:2020.3")
 
-    implementation("org.codehaus.groovy:groovy:2.5.12")
-    implementation("org.codehaus.groovy:groovy-nio:2.5.12")
+    implementation("org.codehaus.groovy:groovy:3.0.7")
+    implementation("org.codehaus.groovy:groovy-nio:3.0.7")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.12.0")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.12.0")
     implementation("io.github.java-diff-utils:java-diff-utils:4.9")
