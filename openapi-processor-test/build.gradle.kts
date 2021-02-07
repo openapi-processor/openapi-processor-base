@@ -2,6 +2,7 @@ plugins {
     groovy
     id("java-library")
     id("maven-publish")
+    id("signing")
     id("com.github.ben-manes.versions") version ("0.36.0")
 }
 
@@ -16,28 +17,38 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
+fun getBuildProperty(property: String): String {
+    val prop: String? = project.findProperty(property) as String?
+    if(prop != null) {
+        return prop
+    }
+
+    val env: String? = System.getenv(property)
+    if (env != null) {
+        return env
+    }
+
+    return "n/a"
+}
+
+fun isReleaseVersion(): Boolean {
+    return !(project.version.toString().endsWith("SNAPSHOT"))
+}
+
 ext {
-    set("bintrayUser", project.findProperty("BINTRAY_USER") ?: "n/a")
-    set("bintrayKey", project.findProperty("BINTRAY_KEY") ?: "n/a")
+    set("publishUser", getBuildProperty("PUBLISH_USER"))
+    set("publishKey", getBuildProperty("PUBLISH_KEY"))
+    set("signKey", getBuildProperty("SIGN_KEY"))
+    set("signPwd", getBuildProperty("SIGN_PWD"))
 }
 
 repositories {
     mavenCentral()
 
     maven {
-        setUrl("https://dl.bintray.com/openapi-processor/primary")
+        setUrl("https://oss.sonatype.org/content/repositories/snapshots")
         content {
-           includeGroup ("io.openapiprocessor")
-        }
-        mavenContent {
-            releasesOnly()
-        }
-    }
-
-    maven {
-        setUrl("https://oss.jfrog.org/artifactory/oss-snapshot-local")
-        content {
-           includeGroup("io.openapiprocessor")
+            includeGroup("io.openapiprocessor")
         }
         mavenContent {
             snapshotsOnly()
@@ -46,7 +57,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.openapiprocessor:openapi-processor-api:2020.3")
+    compileOnly("io.openapiprocessor:openapi-processor-api:2021.1")
 
     implementation("org.codehaus.groovy:groovy:3.0.7")
     implementation("org.codehaus.groovy:groovy-nio:3.0.7")
@@ -80,8 +91,11 @@ val projectTitle: String by project
 val projectDesc: String by project
 val projectUrl: String by project
 val projectGithubRepo: String by project
-val bintrayUser: String by project.ext
-val bintrayKey: String by project.ext
+
+// does not work on oss.sonatype.org
+tasks.withType<GenerateModuleMetadata>().configureEach {
+    enabled = false
+}
 
 publishing {
     publications {
@@ -96,7 +110,7 @@ publishing {
 
             pom {
                 name.set(projectTitle)
-                description.set("${projectTitle} - ${projectDesc} - ${project.name} module")
+                description.set(projectDesc)
                 url.set(projectUrl)
 
                 licenses {
@@ -123,14 +137,26 @@ publishing {
 
     repositories {
         maven {
-            val releasesRepoUrl = "https://api.bintray.com/maven/openapi-processor/primary/${project.name}/;publish=1;override=0"
-            val snapshotsRepoUrl = "https://oss.jfrog.org/oss-snapshot-local/"
-            url = uri(if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl)
+            val releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+            val snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots"
+            url = uri(if (isReleaseVersion()) releasesRepoUrl else snapshotsRepoUrl)
 
             credentials {
-                username = project.ext.get("bintrayUser").toString()
-                password = project.ext.get("bintrayKey").toString()
+                username = project.extra["publishUser"].toString()
+                password = project.extra["publishKey"].toString()
             }
         }
     }
+}
+
+tasks.withType<Sign>().configureEach {
+    onlyIf { isReleaseVersion() }
+}
+
+signing {
+    useInMemoryPgpKeys(
+        project.extra["signKey"].toString(),
+        project.extra["signPwd"].toString())
+
+    sign(publishing.publications["OpenApiProcessor"])
 }
