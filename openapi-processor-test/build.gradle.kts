@@ -31,6 +31,20 @@ fun getBuildProperty(property: String): String {
     return "n/a"
 }
 
+fun getBuildSignKey(property: String): String {
+    val prop: String? = project.findProperty(property) as String?
+    if(prop != null) {
+        return prop
+    }
+
+    val env: String? = System.getenv(property)
+    if (env != null) {
+        return env.replace("\\n", "\n")
+    }
+
+    return "n/a"
+}
+
 fun isReleaseVersion(): Boolean {
     return !(project.version.toString().endsWith("SNAPSHOT"))
 }
@@ -38,7 +52,7 @@ fun isReleaseVersion(): Boolean {
 ext {
     set("publishUser", getBuildProperty("PUBLISH_USER"))
     set("publishKey", getBuildProperty("PUBLISH_KEY"))
-    set("signKey", getBuildProperty("SIGN_KEY"))
+    set("signKey", getBuildSignKey("SIGN_KEY"))
     set("signPwd", getBuildProperty("SIGN_PWD"))
 }
 
