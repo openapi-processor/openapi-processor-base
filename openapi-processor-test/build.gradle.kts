@@ -163,9 +163,9 @@ publishing {
     }
 }
 
-tasks.withType<Sign>().configureEach {
-    onlyIf { isReleaseVersion() }
-}
+//tasks.withType<Sign>().configureEach {
+//    onlyIf { isReleaseVersion() }
+//}
 
 signing {
     useInMemoryPgpKeys(
