@@ -7,10 +7,13 @@
 :oap-core: https://github.com/openapi-processor/openapi-processor-core
 :oap-spring: https://github.com/openapi-processor/openapi-processor-spring
 
+:oap-central: https://search.maven.org/search?q=io.openapiprocessor
+:badge-central: https://img.shields.io/maven-central/v/io.openapiprocessor/openapi-processor-test?label=Maven%20Central
+
 // badges
 //link:{oaps-ci}[image:{badge-ci}[]]
 //link:{oaps-license}[image:{badge-license}[]]
-
+link:{oap-central}[image:{badge-central}[]]
 
 == openapi-processor-test
 
