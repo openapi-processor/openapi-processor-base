@@ -5,7 +5,7 @@
 
 package io.openapiprocessor.test
 
-import io.openapiprocessor.api.OpenApiProcessor
+import io.openapiprocessor.api.v1.OpenApiProcessor
 
 
 class TestSet {
