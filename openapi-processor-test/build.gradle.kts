@@ -4,6 +4,7 @@ plugins {
     id("maven-publish")
     id("signing")
     id("com.github.ben-manes.versions") version ("0.38.0")
+    id("io.github.gradle-nexus.publish-plugin") version ("1.1.0")
 }
 
 val projectGroupId: String by project
@@ -169,4 +170,13 @@ signing {
         project.extra["signPwd"].toString())
 
     sign(publishing.publications["OpenApiProcessor"])
+}
+
+nexusPublishing {
+    repositories {
+        sonatype {
+            username.set(project.extra["publishUser"].toString())
+            password.set(project.extra["publishKey"].toString())
+        }
+    }
 }
