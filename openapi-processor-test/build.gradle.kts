@@ -3,7 +3,7 @@ plugins {
     id("java-library")
     id("maven-publish")
     id("signing")
-    id("com.github.ben-manes.versions") version ("0.36.0")
+    id("com.github.ben-manes.versions") version ("0.38.0")
 }
 
 val projectGroupId: String by project
@@ -69,12 +69,12 @@ repositories {
 dependencies {
     compileOnly("io.openapiprocessor:openapi-processor-api:2021.1")
 
-    implementation("org.codehaus.groovy:groovy:3.0.7")
-    implementation("org.codehaus.groovy:groovy-nio:3.0.7")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.12.0")
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.12.0")
-    implementation("io.github.java-diff-utils:java-diff-utils:4.9")
-    implementation("com.google.jimfs:jimfs:1.1") {
+    implementation("org.codehaus.groovy:groovy:3.0.8")
+    implementation("org.codehaus.groovy:groovy-nio:3.0.8")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.12.3")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.12.3")
+    implementation("io.github.java-diff-utils:java-diff-utils:4.10")
+    implementation("com.google.jimfs:jimfs:1.2") {
         exclude("com.google.guava")
     }
 }
