@@ -1,2 +1,2 @@
-com.github.hauner.openapi.test.streamhandler.MemoryStreamHandlerProvider
-com.github.hauner.openapi.test.streamhandler.ResourceStreamHandlerProvider
+io.openapiprocessor.test.stream.MemoryStreamHandlerProvider
+io.openapiprocessor.test.stream.ResourceStreamHandlerProvider

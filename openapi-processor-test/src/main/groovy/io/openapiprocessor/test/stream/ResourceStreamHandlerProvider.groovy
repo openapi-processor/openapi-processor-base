@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.test.streamhandler
+package io.openapiprocessor.test.stream
 
 import java.net.spi.URLStreamHandlerProvider
 

@@ -10,8 +10,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.github.difflib.DiffUtils
 import com.github.difflib.UnifiedDiffUtils
-import com.github.hauner.openapi.test.TestItems
-import com.github.hauner.openapi.test.TestSet
 
 import java.nio.file.FileSystem
 import java.nio.file.Files

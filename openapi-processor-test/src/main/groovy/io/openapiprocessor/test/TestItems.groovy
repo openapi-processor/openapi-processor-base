@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.test
+package io.openapiprocessor.test
 
 /**
  * input.yaml / generated.yaml mapping.
