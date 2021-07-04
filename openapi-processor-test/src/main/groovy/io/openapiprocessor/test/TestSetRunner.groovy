@@ -5,16 +5,9 @@
 
 package io.openapiprocessor.test
 
-import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
-import com.github.difflib.DiffUtils
-import com.github.difflib.UnifiedDiffUtils
-
 import java.nio.file.FileSystem
 import java.nio.file.Files
 import java.nio.file.Path
-import java.util.stream.Stream
 
 /**
  * used to execute test sets.
@@ -22,9 +15,11 @@ import java.util.stream.Stream
 class TestSetRunner {
 
     TestSet testSet
+    FileSupport files
 
-    TestSetRunner(TestSet testSet) {
+    TestSetRunner(TestSet testSet, FileSupport files) {
         this.testSet = testSet
+        this.files = files
     }
 
     /**
@@ -43,7 +38,7 @@ class TestSetRunner {
             targetDir: folder.absolutePath
         ]
 
-        def mappingYaml = getResource ("/tests/${source}/inputs/mapping.yaml")
+        def mappingYaml = files.getResource ("/tests/${source}/inputs/mapping.yaml")
         if(mappingYaml) {
             options.mapping = mappingYaml.text
         } else {
@@ -59,10 +54,8 @@ class TestSetRunner {
         def expectedPath = "${sourcePath}/${packageName}"
         def generatedPath = Path.of (folder.absolutePath).resolve (packageName)
 
-        def expectedFiles = collectRelativeOutputPaths (sourcePath, packageName)
-            .sort ()
-        def generatedFiles = collectPaths (generatedPath)
-            .sort ()
+        def expectedFiles = files.collectRelativeOutputPaths (sourcePath, packageName).sort ()
+        def generatedFiles = files.collectPaths (generatedPath).sort ()
 
         assert expectedFiles == generatedFiles
 
@@ -71,7 +64,7 @@ class TestSetRunner {
             def expected = "${expectedPath}/$it"
             def generated = generatedPath.resolve (it)
 
-            success &= !printUnifiedDiff (expected, generated)
+            success &= !files.printUnifiedDiff (expected, generated)
         }
 
         success
@@ -89,8 +82,8 @@ class TestSetRunner {
         Path root = Files.createDirectory (fs.getPath ("source"))
 
         def path = "/tests/${source}"
-        copy (path, collectAbsoluteInputPaths (path), root)
-        copy (path, collectAbsoluteOutputPaths (path), root)
+        files.copy (path, files.collectAbsoluteInputPaths (path), root)
+        files.copy (path, files.collectAbsoluteOutputPaths (path), root)
 
         Path api = root.resolve ('inputs/openapi.yaml')
         Path target = fs.getPath ('target')
@@ -117,8 +110,8 @@ class TestSetRunner {
         processor.run (options)
 
         then:
-        def expectedFiles = collectPaths (expectedPath)
-        def generatedFiles = collectPaths (generatedPath)
+        def expectedFiles = files.collectPaths (expectedPath)
+        def generatedFiles = files.collectPaths (generatedPath)
         assert expectedFiles == generatedFiles
 
         def success = true
@@ -126,172 +119,10 @@ class TestSetRunner {
             def expected = expectedPath.resolve (it)
             def generated = generatedPath.resolve (it)
 
-            success &= !printUnifiedDiff (expected, generated)
+            success &= !files.printUnifiedDiff (expected, generated)
         }
 
         success
-    }
-
-    /**
-     * copy paths file system <=> file system
-     */
-    private static void copy (Path source, Path target) {
-        Stream<Path> paths = Files.walk (source)
-            .filter ({f -> !Files.isDirectory (f)})
-
-        paths.forEach { p ->
-            Path relativePath = source.relativize (p)
-            Path targetPath = target.resolve (relativePath.toString ())
-            Files.createDirectories (targetPath.getParent ())
-
-            InputStream src = Files.newInputStream (p)
-            OutputStream dst = Files.newOutputStream (targetPath)
-            src.transferTo (dst)
-        }
-
-        paths.close ()
-    }
-
-    /**
-     * copy paths resources <=> file system
-     */
-    private void copy (String source, List<String> sources, Path target) {
-        for (String p : sources) {
-            String relativePath = p.substring (source.size () + 1)
-
-            Path targetPath = target.resolve (relativePath.toString ())
-            Files.createDirectories (targetPath.getParent ())
-
-            InputStream src = getResource (p)
-            OutputStream dst = Files.newOutputStream (targetPath)
-            src.transferTo (dst)
-        }
-    }
-
-    /**
-     * collect paths in file system.
-     *
-     * will convert all paths to use "/" as path separator
-     */
-    private static List<String> collectPaths(Path source) {
-        List<String> files = []
-
-        def found = Files.walk (source)
-            .filter ({ f ->
-                !Files.isDirectory (f)
-            })
-
-        found.forEach ({f ->
-                files << source.relativize (f).toString ()
-            })
-        found.close ()
-
-        files.collect {
-            it.replace ('\\', '/')
-        }
-    }
-
-    /**
-     * collect input paths
-     */
-    private List<String> collectAbsoluteInputPaths (String path) {
-        collectAbsoluteResourcePaths (path, "inputs.yaml")
-    }
-
-    /**
-     * collect output paths
-     */
-    private List<String> collectAbsoluteOutputPaths (String path) {
-        collectAbsoluteResourcePaths (path, "generated.yaml")
-    }
-
-    /**
-     * collect output paths, relative to packageName
-     */
-    private List<String> collectRelativeOutputPaths (String path, String packageName) {
-        collectRelativeResourcePaths (path, "generated.yaml").collect {
-            it.substring (packageName.size () + 1)
-        }
-    }
-
-    /**
-     * collect absolute paths from output.yaml in resources
-     */
-    private List<String> collectAbsoluteResourcePaths (String path, String itemsYaml) {
-        collectRelativeResourcePaths (path, itemsYaml).collect {
-            "${path}/${it}".toString ()
-        }
-    }
-
-    /**
-     * collect paths from output.yaml in resources
-     */
-    private List<String> collectRelativeResourcePaths (String path, String itemsYaml) {
-        def source = getResource ("${path}/${itemsYaml}")
-        if (!source) {
-            println "ERROR: missing '${path}/${itemsYaml}' configuration file!"
-        }
-
-        def mapper = createYamlParser ()
-        def sourceItems = mapper.readValue (source.text, TestItems)
-        sourceItems.items
-    }
-
-    /**
-     * unified diff resources <=> file system
-     *
-     * @return true if there is a difference
-     */
-    private boolean printUnifiedDiff (String expected, Path generated) {
-        def expectedLines = getResource (expected).readLines ()
-
-        def patch = DiffUtils.diff (
-            expectedLines,
-            generated.readLines ())
-
-        def diff = UnifiedDiffUtils.generateUnifiedDiff (
-            getResource (expected).text,
-            generated.toString (),
-            expectedLines,
-            patch,
-            4
-        )
-
-        diff.each {
-            println it
-        }
-
-        return !patch.deltas.isEmpty ()
-    }
-
-    /**
-     * unified diff file system <=> file system
-     */
-    private static void printUnifiedDiff (Path expected, Path generated) {
-        def patch = DiffUtils.diff (
-            expected.readLines (),
-            generated.readLines ())
-
-        def diff = UnifiedDiffUtils.generateUnifiedDiff (
-            expected.toString (),
-            generated.toString (),
-            expected.readLines (),
-            patch,
-            2
-        )
-
-        diff.each {
-            println it
-        }
-    }
-
-    private InputStream getResource (String path) {
-        this.class.getResourceAsStream (path)
-    }
-
-    private static ObjectMapper createYamlParser () {
-        new ObjectMapper (new YAMLFactory ())
-            .configure (DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
     }
 
 }
