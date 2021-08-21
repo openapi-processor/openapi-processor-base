@@ -32,8 +32,8 @@ class MemoryStreamHandlerProvider extends URLStreamHandlerProvider {
 
                     @Override
                     void connect () throws IOException {
-                        data = getData ()
                         connected = true
+                        data = Memory.get (url.path)
                     }
 
                     @Override
@@ -43,11 +43,10 @@ class MemoryStreamHandlerProvider extends URLStreamHandlerProvider {
 
                     @Override
                     InputStream getInputStream () throws IOException {
-                        return new ByteArrayInputStream (data)
-                    }
+                        if(!connected)
+                            connect ()
 
-                    private byte[] getData () {
-                        Memory.get (url.path)
+                        return new ByteArrayInputStream (data)
                     }
 
                 }
