@@ -23,4 +23,8 @@ class Memory {
         contents.put (path, data)
     }
 
+    static clear() {
+        contents.clear ()
+    }
+
 }
