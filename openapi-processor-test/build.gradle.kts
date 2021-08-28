@@ -72,8 +72,8 @@ dependencies {
 
     implementation("org.codehaus.groovy:groovy:3.0.8")
     implementation("org.codehaus.groovy:groovy-nio:3.0.8")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.12.3")
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.12.3")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.12.4")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.12.4")
     implementation("io.github.java-diff-utils:java-diff-utils:4.10")
     implementation("com.google.jimfs:jimfs:1.2") {
         exclude("com.google.guava")
