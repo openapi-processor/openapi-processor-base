@@ -70,11 +70,14 @@ repositories {
 dependencies {
     compileOnly("io.openapiprocessor:openapi-processor-api:2021.1")
 
-    implementation("org.codehaus.groovy:groovy:3.0.8")
-    implementation("org.codehaus.groovy:groovy-nio:3.0.8")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.12.4")
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.12.4")
-    implementation("io.github.java-diff-utils:java-diff-utils:4.10")
+    implementation(platform("com.fasterxml.jackson:jackson-bom:2.13.0"))
+    implementation(platform("org.codehaus.groovy:groovy-bom:3.0.9"))
+
+    implementation("org.codehaus.groovy:groovy")
+    implementation("org.codehaus.groovy:groovy-nio")
+    implementation("com.fasterxml.jackson.core:jackson-databind")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml")
+    implementation("io.github.java-diff-utils:java-diff-utils:4.11")
     implementation("com.google.jimfs:jimfs:1.2") {
         exclude("com.google.guava")
     }
