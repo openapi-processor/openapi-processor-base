@@ -16,11 +16,14 @@ import java.nio.file.Path
 import java.util.stream.Stream
 
 class FileSupport {
-
     private Class resourceBase
+    private String inputs
+    private String generated
 
-    FileSupport(Class resourceBase) {
+    FileSupport(Class resourceBase, String inputs = "inputs.yaml", String generated = "generated.yaml") {
         this.resourceBase = resourceBase
+        this.inputs = inputs
+        this.generated = generated
     }
 
     /**
@@ -93,21 +96,21 @@ class FileSupport {
      * collect input paths
      */
     List<String> collectAbsoluteInputPaths (String path) {
-        collectAbsoluteResourcePaths (path, "inputs.yaml")
+        collectAbsoluteResourcePaths (path, inputs)
     }
 
     /**
      * collect output paths
      */
     List<String> collectAbsoluteOutputPaths (String path) {
-        collectAbsoluteResourcePaths (path, "generated.yaml")
+        collectAbsoluteResourcePaths (path, generated)
     }
 
     /**
      * collect output paths, relative to packageName
      */
     List<String> collectRelativeOutputPaths (String path, String packageName) {
-        collectRelativeResourcePaths (path, "generated.yaml").collect {
+        collectRelativeResourcePaths (path, generated).collect {
             it.substring (packageName.size () + 1)
         }
     }

@@ -34,7 +34,7 @@ class TestSetRunner {
         def processor = testSet.processor
         def options = [
             parser: testSet.parser,
-            apiPath: "resource:/tests/${source}/inputs/openapi.yaml",
+            apiPath: "resource:/tests/${source}/inputs/${testSet.openapi}",
             targetDir: folder.absolutePath
         ]
 
@@ -85,7 +85,7 @@ class TestSetRunner {
         files.copy (path, files.collectAbsoluteInputPaths (path), root)
         files.copy (path, files.collectAbsoluteOutputPaths (path), root)
 
-        Path api = root.resolve ('inputs/openapi.yaml')
+        Path api = root.resolve ("inputs/${testSet.openapi}")
         Path target = fs.getPath ('target')
 
         def processor = testSet.processor
