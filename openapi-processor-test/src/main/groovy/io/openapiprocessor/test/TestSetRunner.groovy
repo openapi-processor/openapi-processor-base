@@ -90,7 +90,7 @@ class TestSetRunner {
 
         def processor = testSet.processor
         def options = [
-            parser: 'OPENAPI4J', // swagger-parser does not work with fs
+            parser: testSet.parser,
             apiPath: api.toUri ().toURL ().toString (),
             targetDir: target.toUri ().toURL ().toString ()
         ]
