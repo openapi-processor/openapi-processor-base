@@ -38,13 +38,30 @@ options:
      */
     String parser
 
+    /**
+     * root openapi file
+     */
+    String openapi = "openapi.yaml"
+
+    /**
+     * the inputs.yaml
+     */
+    String inputs = "inputs.yaml"
+
+    /**
+     * the generated.yaml
+     */
+    String generated = "generated.yaml"
+
+
+
     static String getDefaultOptions() {
         DEFAULT_MAPPING
     }
 
     @Override
     String toString () {
-        "${parser.toLowerCase ()} - $name"
+        "${parser.toLowerCase ()} - $name ($openapi)"
     }
 
 }
