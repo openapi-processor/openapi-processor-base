@@ -70,8 +70,8 @@ repositories {
 dependencies {
     compileOnly("io.openapiprocessor:openapi-processor-api:2021.1")
 
-    implementation(platform("com.fasterxml.jackson:jackson-bom:2.13.1"))
-    implementation(platform("org.codehaus.groovy:groovy-bom:3.0.9"))
+    implementation(platform("com.fasterxml.jackson:jackson-bom:2.13.2.1"))
+    implementation(platform("org.codehaus.groovy:groovy-bom:3.0.10"))
 
     implementation("org.codehaus.groovy:groovy")
     implementation("org.codehaus.groovy:groovy-nio")
