@@ -54,13 +54,16 @@ class TestSetRunner {
         def expectedPath = "${sourcePath}/${packageName}"
         def generatedPath = Path.of (folder.absolutePath).resolve (packageName)
 
-        def expectedFiles = files.collectRelativeOutputPaths (sourcePath, packageName).sort ()
-        def generatedFiles = files.collectPaths (generatedPath).sort ()
+        def expectedFiles = files.getExpectedFiles (sourcePath, packageName)
+        def generatedFiles = files.getGeneratedFiles (generatedPath)
 
-        assert expectedFiles == generatedFiles
+        // should generate expected files including the ignored files
+        def allExpectedFiles = (expectedFiles.items + expectedFiles.ignore).sort ()
+        assert allExpectedFiles == generatedFiles
 
+        // compare expected files with the generated files, skip the ignored files
         def success = true
-        expectedFiles.each {
+        expectedFiles.items.each {
             def expected = "${expectedPath}/$it"
             def generated = generatedPath.resolve (it)
 
@@ -110,9 +113,17 @@ class TestSetRunner {
         processor.run (options)
 
         then:
+        def expectedFilesYml = files.getExpectedFiles (path, packageName)
+        def generatedFiles = files.getGeneratedFiles (generatedPath)
+
+        // should generate expected files including the ignored files
+        def allExpectedFiles = (expectedFilesYml.items + expectedFilesYml.ignore).sort ()
+        assert allExpectedFiles == generatedFiles
+
+        // compare expected files (on the custom files system) with the generated files, skip the
+        // ignored files
         def expectedFiles = files.collectPaths (expectedPath)
-        def generatedFiles = files.collectPaths (generatedPath)
-        assert expectedFiles == generatedFiles
+        expectedFiles.removeAll (expectedFilesYml.ignore)
 
         def success = true
         expectedFiles.each {

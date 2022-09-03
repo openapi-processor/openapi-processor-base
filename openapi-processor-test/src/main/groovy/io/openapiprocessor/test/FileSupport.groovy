@@ -110,13 +110,18 @@ class FileSupport {
      * collect output paths, relative to packageName
      */
     List<String> collectRelativeOutputPaths (String path, String packageName) {
-        collectRelativeResourcePaths (path, generated).collect {
-            it.substring (packageName.size () + 1)
+        def testItems = readTestItems (path, generated)
+
+        def items = []
+        testItems.items.forEach {
+            items.add (it.substring (packageName.size () + 1))
         }
+
+        items
     }
 
     /**
-     * collect absolute paths from output.yaml in resources
+     * collect absolute paths from items listed in the test items yaml file
      */
     List<String> collectAbsoluteResourcePaths (String path, String itemsYaml) {
         collectRelativeResourcePaths (path, itemsYaml).collect {
@@ -125,17 +130,63 @@ class FileSupport {
     }
 
     /**
-     * collect paths from output.yaml in resources
+     * collect paths from test items yaml file (input.yaml/generated.yaml)
      */
     List<String> collectRelativeResourcePaths (String path, String itemsYaml) {
+        def testItems = readTestItems (path, itemsYaml)
+        testItems.items
+    }
+
+    /**
+     * get the generated files.
+     *
+     * @param path path of the generated files
+     * @return the generated files
+     */
+    static List<String> getGeneratedFiles (Path path) {
+        collectPaths (path)
+            .sort ()
+    }
+
+    /**
+     * read expected files and strip package name.
+     *
+     * @param path the resource path of the test
+     * @param packageName stripped package name
+     * @return the expected files
+     */
+    TestItems getExpectedFiles (String path, String packageName) {
+        def items = readTestItems (path, generated)
+
+        def wanted = items.items.collect {
+            it.substring (packageName.size () + 1)
+        }
+
+        def ignore = items.ignore.collect {
+            it.substring (packageName.size () + 1)
+        }
+
+        def expected = new TestItems ()
+        expected.items = wanted.sort ()
+        expected.ignore = ignore.sort ()
+        expected
+    }
+
+    /**
+     * read test items yaml
+     *
+     * @param resource path
+     * @param name of test items yaml file
+     * @return content of yaml
+     */
+    TestItems readTestItems (String path, String itemsYaml) {
         def source = getResource ("${path}/${itemsYaml}")
         if (!source) {
             println "ERROR: missing '${path}/${itemsYaml}' configuration file!"
         }
 
         def mapper = createYamlParser ()
-        def sourceItems = mapper.readValue (source.text, TestItems)
-        sourceItems.items
+        mapper.readValue (source.text, TestItems)
     }
 
     /**

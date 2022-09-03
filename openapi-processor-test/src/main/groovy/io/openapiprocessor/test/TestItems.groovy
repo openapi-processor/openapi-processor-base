@@ -20,7 +20,6 @@ package io.openapiprocessor.test
  * input.yaml / generated.yaml mapping.
  */
 class TestItems {
-
     List<String> items
-
+    List<String> ignore
 }
