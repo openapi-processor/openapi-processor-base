@@ -57,13 +57,13 @@ class TestSetRunner {
         def expectedFiles = files.getExpectedFiles (sourcePath, packageName)
         def generatedFiles = files.getGeneratedFiles (generatedPath)
 
-        // should generate expected files including the ignored files
-        def allExpectedFiles = (expectedFiles.items + expectedFiles.ignore).sort ()
-        assert allExpectedFiles == generatedFiles
+        // even if not expected, check that the annotation was generated
+        def expectedFilesPlus = expectedFiles + ["support/Generated.java"]
+        assert expectedFilesPlus == generatedFiles
 
-        // compare expected files with the generated files, skip the ignored files
+        // compare expected files with the generated files
         def success = true
-        expectedFiles.items.each {
+        expectedFiles.each {
             def expected = "${expectedPath}/$it"
             def generated = generatedPath.resolve (it)
 
@@ -113,17 +113,12 @@ class TestSetRunner {
         processor.run (options)
 
         then:
-        def expectedFilesYml = files.getExpectedFiles (path, packageName)
+        def expectedFiles = files.getExpectedFiles (path, packageName)
         def generatedFiles = files.getGeneratedFiles (generatedPath)
 
-        // should generate expected files including the ignored files
-        def allExpectedFiles = (expectedFilesYml.items + expectedFilesYml.ignore).sort ()
-        assert allExpectedFiles == generatedFiles
-
-        // compare expected files (on the custom files system) with the generated files, skip the
-        // ignored files
-        def expectedFiles = files.collectPaths (expectedPath)
-        expectedFiles.removeAll (expectedFilesYml.ignore)
+        // even if not expected, check that the annotation was generated
+        def expectedFilesPlus = expectedFiles + ["support/Generated.java"]
+        assert expectedFilesPlus == generatedFiles
 
         def success = true
         expectedFiles.each {

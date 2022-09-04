@@ -143,9 +143,29 @@ class FileSupport {
      * @param path path of the generated files
      * @return the generated files
      */
-    static List<String> getGeneratedFiles (Path path) {
-        collectPaths (path)
-            .sort ()
+    static SortedSet<String> getGeneratedFiles (Path path) {
+        def result = new TreeSet<String> ()
+        result.addAll (collectPaths (path))
+        result
+    }
+
+    /**
+     *get the expected files (from generated.yaml) and strip package name.
+     *
+     * @param path the resource path of the test
+     * @param packageName stripped package name
+     * @return the expected files
+     */
+    SortedSet<String> getExpectedFiles (String path, String packageName) {
+        def items = readTestItems (path, generated)
+
+        def wanted = items.items.collect {
+            it.substring (packageName.size () + 1)
+        }
+
+        def result = new TreeSet<String> ()
+        result.addAll (wanted)
+        result
     }
 
     /**
@@ -154,7 +174,6 @@ class FileSupport {
      * @param path the resource path of the test
      * @param packageName stripped package name
      * @return the expected files
-     */
     TestItems getExpectedFiles (String path, String packageName) {
         def items = readTestItems (path, generated)
 
@@ -171,6 +190,7 @@ class FileSupport {
         expected.ignore = ignore.sort ()
         expected
     }
+    */
 
     /**
      * read test items yaml
