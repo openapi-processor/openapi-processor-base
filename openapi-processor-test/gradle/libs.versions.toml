@@ -1,4 +1,6 @@
 [versions]
+build-jdk = "11"
+target-jvm = "8"
 
 [libraries]
 openapi-processor-api = "io.openapiprocessor:openapi-processor-api:2021.1"

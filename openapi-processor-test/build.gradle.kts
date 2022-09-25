@@ -15,7 +15,7 @@ version = projectVersion
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(11))
+        languageVersion.set(JavaLanguageVersion.of(libs.versions.build.jdk.get()))
     }
 
     withJavadocJar ()
