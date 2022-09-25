@@ -3,8 +3,8 @@ plugins {
     id("java-library")
     id("maven-publish")
     id("signing")
-    id("com.github.ben-manes.versions") version ("0.42.0")
-    id("io.github.gradle-nexus.publish-plugin") version ("1.1.0")
+    alias(libs.plugins.nexus)
+    alias(libs.plugins.versions)
 }
 
 val projectGroupId: String by project
@@ -69,17 +69,18 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.openapiprocessor:openapi-processor-api:2021.1")
+    compileOnly(libs.openapi.processor.api)
 
-    implementation(platform("com.fasterxml.jackson:jackson-bom:2.13.3"))
-    implementation(platform("org.codehaus.groovy:groovy-bom:3.0.10"))
-
-    implementation("org.codehaus.groovy:groovy")
-    implementation("org.codehaus.groovy:groovy-nio")
+    implementation(platform(libs.jackson.bom))
     implementation("com.fasterxml.jackson.core:jackson-databind")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml")
-    implementation("io.github.java-diff-utils:java-diff-utils:4.11")
-    implementation("com.google.jimfs:jimfs:1.2") {
+
+    implementation(platform(libs.groovy.bom))
+    implementation("org.codehaus.groovy:groovy")
+    implementation("org.codehaus.groovy:groovy-nio")
+
+    implementation(libs.diff.utils)
+    implementation(libs.jimfs) {
         exclude("com.google.guava")
     }
 }
