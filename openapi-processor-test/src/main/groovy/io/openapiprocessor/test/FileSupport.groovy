@@ -222,7 +222,10 @@ class FileSupport {
     }
 
     /**
-     * unified diff resources <=> file system
+     * unified diff resources <=> file system.
+     *
+     * @param expected resource path
+     * @param generated file system path
      *
      * @return true if there is a difference
      */
@@ -249,9 +252,14 @@ class FileSupport {
     }
 
     /**
-     * unified diff file system <=> file system
+     * unified diff file system <=> file system.
+     *
+     * @param expected file system path
+     * @param generated file system path
+     *
+     * @return true if there is a difference
      */
-    static void printUnifiedDiff (Path expected, Path generated) {
+    boolean printUnifiedDiff (Path expected, Path generated) {
         def patch = DiffUtils.diff (
             expected.readLines (),
             generated.readLines ())
@@ -267,6 +275,8 @@ class FileSupport {
         diff.each {
             println it
         }
+
+        return !patch.deltas.isEmpty ()
     }
 
     InputStream getResource (String path) {
