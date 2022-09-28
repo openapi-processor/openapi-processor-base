@@ -13,6 +13,7 @@ groovy-bom = "org.codehaus.groovy:groovy-bom:3.0.13"
 
 diff-utils = "io.github.java-diff-utils:java-diff-utils:4.12"
 jimfs = "com.google.jimfs:jimfs:1.2"
+slf4j = "org.slf4j:slf4j-api:2.0.0-alpha7"
 
 [plugins]
 versions = { id = "com.github.ben-manes.versions", version = "0.42.0" }

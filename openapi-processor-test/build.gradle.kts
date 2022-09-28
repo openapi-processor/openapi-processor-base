@@ -48,6 +48,7 @@ dependencies {
     implementation(libs.jimfs) {
         exclude("com.google.guava")
     }
+    implementation(libs.slf4j)
 }
 
 apply(from = "${rootProject.rootDir}/gradle/publishing.gradle")

@@ -10,12 +10,16 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.github.difflib.DiffUtils
 import com.github.difflib.UnifiedDiffUtils
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.stream.Stream
 
 class FileSupport {
+    private static final Logger log = LoggerFactory.getLogger (FileSupport)
+
     private Class resourceBase
     private String inputs
     private String generated
@@ -37,13 +41,17 @@ class FileSupport {
             .filter ({f -> !Files.isDirectory (f)})
 
         paths.forEach { p ->
-            Path relativePath = source.relativize (p)
-            Path targetPath = target.resolve (relativePath.toString ())
-            Files.createDirectories (targetPath.getParent ())
+            try {
+                Path relativePath = source.relativize (p)
+                Path targetPath = target.resolve (relativePath.toString ())
+                Files.createDirectories (targetPath.getParent ())
 
-            InputStream src = Files.newInputStream (p)
-            OutputStream dst = Files.newOutputStream (targetPath)
-            src.transferTo (dst)
+                InputStream src = Files.newInputStream (p)
+                OutputStream dst = Files.newOutputStream (targetPath)
+                src.transferTo (dst)
+            } catch (Exception ex) {
+                log.error ("failed to copy {}", p.toString (), ex)
+            }
         }
 
         paths.close ()
@@ -58,14 +66,18 @@ class FileSupport {
      */
     void copy (String source, List<String> sources, Path target) {
         for (String p : sources) {
-            String relativePath = p.substring (source.size () + 1)
+            try {
+                String relativePath = p.substring (source.size () + 1)
 
-            Path targetPath = target.resolve (relativePath.toString ())
-            Files.createDirectories (targetPath.getParent ())
+                Path targetPath = target.resolve (relativePath.toString ())
+                Files.createDirectories (targetPath.getParent ())
 
-            InputStream src = getResource (p)
-            OutputStream dst = Files.newOutputStream (targetPath)
-            src.transferTo (dst)
+                InputStream src = getResource (p)
+                OutputStream dst = Files.newOutputStream (targetPath)
+                src.transferTo (dst)
+            } catch (Exception ex) {
+                log.error ("failed to copy {}", p, ex)
+            }
         }
     }
 
