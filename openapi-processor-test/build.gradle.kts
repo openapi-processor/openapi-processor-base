@@ -41,8 +41,8 @@ dependencies {
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml")
 
     implementation(platform(libs.groovy.bom))
-    implementation("org.codehaus.groovy:groovy")
-    implementation("org.codehaus.groovy:groovy-nio")
+    implementation("org.apache.groovy:groovy")
+    implementation("org.apache.groovy:groovy-nio")
 
     implementation(libs.diff.utils)
     implementation(libs.jimfs) {

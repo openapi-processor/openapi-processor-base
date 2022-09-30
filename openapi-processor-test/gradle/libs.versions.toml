@@ -1,6 +1,6 @@
 [versions]
 build-jdk = "11"
-target-jvm = "8"
+target-jdk = "8"
 
 [libraries]
 openapi-processor-api = "io.openapiprocessor:openapi-processor-api:2021.1"
@@ -9,7 +9,7 @@ jackson-bom = "com.fasterxml.jackson:jackson-bom:2.13.4"
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind" }
 jackson-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml" }
 
-groovy-bom = "org.codehaus.groovy:groovy-bom:3.0.13"
+groovy-bom = "org.apache.groovy:groovy-bom:4.0.5"
 
 diff-utils = "io.github.java-diff-utils:java-diff-utils:4.12"
 jimfs = "com.google.jimfs:jimfs:1.2"
