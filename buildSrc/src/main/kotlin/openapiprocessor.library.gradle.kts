@@ -8,7 +8,7 @@ plugins {
     jacoco
     kotlin("jvm")
 
-    id("org.checkerframework")
+    //id("org.checkerframework")
     id("com.github.ben-manes.versions")
 }
 
@@ -34,7 +34,7 @@ repositories {
 }
 
 dependencies {
-    checkerFramework(libs.checker)
+//    checkerFramework(libs.checker)
 }
 
 jacoco {
@@ -54,6 +54,7 @@ tasks.withType<Test>().configureEach {
     finalizedBy(tasks.named("jacocoTestReport"))
 }
 
+/*
 configure<CheckerFrameworkExtension> {
     skipCheckerFramework = true
     excludeTests = true
@@ -66,3 +67,4 @@ configure<CheckerFrameworkExtension> {
 //        "org.checkerframework.checker.index.IndexChecker"
     )
 }
+ */

@@ -1,19 +1,19 @@
 plugins {
     id("openapiprocessor.library")
+    id("openapiprocessor.publish")
     id("openapiprocessor.test")
     id("openapiprocessor.testInt")
     id("openapiprocessor.version")
 
     id 'antlr'
     id 'groovy'
-    id 'maven-publish'
-    id 'signing'
+//    id 'maven-publish'
+//    id 'signing'
     alias(libs.plugins.sonar)
-    alias(libs.plugins.nexus)
 }
 
-group projectGroupId
-version projectVersion
+//group projectGroupId
+//version projectVersion
 
 repositories {
 //    mavenLocal()
@@ -160,5 +160,14 @@ generateVersion {
     targetPackage = "io.openapiprocessor.core"
 }
 
-apply from: "${rootProject.rootDir}/gradle/publishing.gradle"
+publishing {
+    publications {
+        getByName/*<MavenPublication>*/("openapiprocessor") {
+            pom {
+                description.set(projectDesc)
+            }
+        }
+    }
+}
+
 apply from: "${rootProject.rootDir}/gradle/publishing.tasks.gradle.kts"

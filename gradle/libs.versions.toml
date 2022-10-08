@@ -1,4 +1,6 @@
 [versions]
+processor = "2022.7-SNAPSHOT"
+
 kotlin = "1.7.20"
 build-jdk = "11"
 target-jdk = "8"
@@ -41,6 +43,8 @@ kotest-runner = { module = "io.kotest:kotest-runner-junit5" }
 kotest-datatest = { module = "io.kotest:kotest-framework-datatest" }
 mockk = "io.mockk:mockk:1.13.2"
 
+diff-utils = "io.github.java-diff-utils:java-diff-utils:4.12"
+
 groovy-bom = "org.apache.groovy:groovy-bom:4.0.5"
 spock = "org.spockframework:spock-core:2.2-groovy-4.0"
 
@@ -57,3 +61,5 @@ kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 nexus = { id = "io.github.gradle-nexus.publish-plugin", version = "1.1.0" }
 jacoco = { id = "org.barfuin.gradle.jacocolog", version = "2.0.0" }
 sonar = { id = "org.sonarqube", version =  "3.4.0.2513" }
+
+#versions = { id = "com.github.ben-manes.versions", version = "0.42.0" }

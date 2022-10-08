@@ -5,7 +5,7 @@
 :sonar: https://sonarcloud.io/dashboard?id=openapi-processor_openapi-processor-core
 
 :oaps-license: https://github.com/openapi-processor/openapi-processor-core/blob/master/LICENSE
-:oap-docs: https://docs.openapiprocessor.io
+:oap-docs: https://openapiprocessor.io
 :openapi: https://www.openapis.org/
 
 :oap-central: https://search.maven.org/search?q=io.openapiprocessor
@@ -27,7 +27,7 @@ link:{oap-central}[image:{badge-central}[]]
 
 == openapi-processor-core
 
-this is the re-usable core of the openapi-processors that generate java code.
+this is the re-usable core of the openapi-processors that generates java code.
 
 It reads the link:{openapi}[OpenAPI] yaml, converts it to an internal model and provides writers to generate java code.
 

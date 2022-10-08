@@ -1,8 +1,8 @@
-//import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     `kotlin-dsl`
-    `java-gradle-plugin`
+//    `java-gradle-plugin`
 }
 
 repositories {
@@ -21,9 +21,9 @@ dependencies {
     implementation(libs.plugin.outdated)
 }
 
-//tasks.withType<KotlinCompile> {
-//    kotlinOptions.jvmTarget = "11"
-//}
+tasks.withType<KotlinCompile> {
+    kotlinOptions.jvmTarget = "11"
+}
 
 gradlePlugin {
     plugins {
