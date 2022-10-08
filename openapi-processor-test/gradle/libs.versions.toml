@@ -1,0 +1,21 @@
+[versions]
+build-jdk = "11"
+target-jdk = "8"
+
+[libraries]
+openapi-processor-api = "io.openapiprocessor:openapi-processor-api:2021.1"
+
+jackson-bom = "com.fasterxml.jackson:jackson-bom:2.13.4"
+jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind" }
+jackson-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml" }
+
+groovy-bom = "org.apache.groovy:groovy-bom:4.0.5"
+
+diff-utils = "io.github.java-diff-utils:java-diff-utils:4.12"
+jimfs = "com.google.jimfs:jimfs:1.2"
+slf4j = "org.slf4j:slf4j-api:2.0.3"
+
+[plugins]
+versions = { id = "com.github.ben-manes.versions", version = "0.42.0" }
+nexus = { id = "io.github.gradle-nexus.publish-plugin", version = "1.1.0" }
+jacoco = { id = "org.barfuin.gradle.jacocolog", version = "2.0.0" }

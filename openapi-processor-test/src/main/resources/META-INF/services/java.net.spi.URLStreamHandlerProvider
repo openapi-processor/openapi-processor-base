@@ -1,0 +1,2 @@
+io.openapiprocessor.test.stream.MemoryStreamHandlerProvider
+io.openapiprocessor.test.stream.ResourceStreamHandlerProvider
