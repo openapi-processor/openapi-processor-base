@@ -1,0 +1,19 @@
+:openapi: https://www.openapis.org/
+:core: https://github.com/openapi-processor/openapi-processor-base/tree/master/openapi-processor-core
+:test: https://github.com/openapi-processor/openapi-processor-base/tree/master/openapi-processor-test
+
+== openapi-processor-base
+
+target framework independent code of openapi-processor.
+
+== modules
+
+=== link:{core}[openapi-processor-core]
+
+this is the re-usable core of the openapi-processors that generates java code.
+
+It reads the link:{openapi}[OpenAPI] yaml, converts it to an internal model and provides writers to generate java code.
+
+=== link:{test}[openapi-processor-test]
+
+this contains re-usable code for running integration test of an openapi-processor-x.
