@@ -1,0 +1,14 @@
+openapi-processor-mapping: v2
+
+options:
+  package-name: generated
+
+map:
+#  result-style: success # default
+
+  paths: {}
+
+# to set a no content type response status enable a wrapper (e.g. Spring ResponseEntity)
+#  paths:
+#    /foo:
+#      result: io.openapiprocessor.ResultWrapper

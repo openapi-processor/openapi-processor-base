@@ -1,0 +1,164 @@
+plugins {
+    id("openapiprocessor.library")
+    id("openapiprocessor.test")
+    id("openapiprocessor.testInt")
+    id("openapiprocessor.version")
+
+    id 'antlr'
+    id 'groovy'
+    id 'maven-publish'
+    id 'signing'
+    alias(libs.plugins.sonar)
+    alias(libs.plugins.nexus)
+}
+
+group projectGroupId
+version projectVersion
+
+repositories {
+//    mavenLocal()
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs 'build/antlr'
+        }
+    }
+}
+
+java {
+    withJavadocJar ()
+    withSourcesJar ()
+}
+
+tasks.named('generateGrammarSource') {
+    def antlrPkg = 'io.openapiprocessor.core.processor.mapping.v2.parser.antlr'
+    arguments += ['-package', antlrPkg]
+    outputDirectory = new File("$buildDir/antlr/${antlrPkg.replace ('.', '/')}".toString())
+}
+
+tasks.named('compileTestGroovy') {
+    dependsOn 'compileKotlin'
+    classpath += files(compileKotlin.destinationDirectory)
+    classpath += files(compileTestKotlin.destinationDirectory)
+}
+
+kotlin {
+    jvmToolchain {
+        languageVersion.set(JavaLanguageVersion.of(11))
+    }
+}
+
+tasks.named('compileKotlin') {
+    dependsOn 'generateGrammarSource', 'generateVersion'
+    kotlinOptions.jvmTarget = "1.8"
+}
+
+tasks.named('compileTestKotlin') {
+    dependsOn 'generateTestGrammarSource'
+}
+
+tasks.named('compileTestIntKotlin') {
+    dependsOn 'generateTestIntGrammarSource'
+}
+
+tasks.named('sourcesJar') {
+    dependsOn 'generateGrammarSource'
+}
+
+dependencies {
+    antlr (libs.antlr)
+
+    compileOnly libs.openapi.processor.api
+
+    implementation (libs.openapi4j)
+    implementation (libs.swagger) {
+        exclude group: 'io.swagger.parser.v3', module: 'swagger-parser-v2-converter'
+        exclude group: 'io.swagger.core.v3', module: 'swagger-annotations'
+    }
+
+    implementation (platform(libs.openapi.parser.bom))
+    implementation (libs.openapi.parser.parser)
+    implementation (libs.openapi.parser.jackson)
+    implementation (platform(libs.jackson.bom))
+    implementation (libs.jackson.kotlin)
+    implementation (libs.commons.text)
+    implementation (libs.commonmark)
+    implementation (libs.java.format)
+    implementation (libs.json.schema.validator)
+    implementation (libs.slf4j)
+
+    testImplementation (libs.openapi.processor.api)
+    testImplementation (libs.openapi.processor.test)
+    testImplementation (platform(libs.groovy.bom))
+    testImplementation (platform(libs.kotest.bom))
+    testImplementation (libs.kotest.runner)
+    testImplementation (libs.kotest.datatest)
+    testImplementation (libs.mockk)
+    testImplementation (libs.spock)
+    testImplementation (libs.logback)
+    testImplementation (libs.jimfs)
+
+    testIntImplementation (libs.openapi.processor.api)
+    testIntImplementation (libs.openapi.processor.test)
+    testIntImplementation (platform(libs.groovy.bom))
+    testIntImplementation (platform(libs.kotest.bom))
+    testIntImplementation (libs.kotest.runner)
+    testIntImplementation (libs.kotest.datatest)
+    testIntImplementation (libs.mockk)
+    testIntImplementation (libs.spock)
+    testIntImplementation (libs.logback)
+    testIntImplementation (libs.jimfs)
+
+    constraints {
+        implementation(libs.guava) {
+            because("avoid the android version")
+        }
+        implementation(libs.snakeyaml) {
+            because("vulnerabilities in 1.31")
+        }
+
+        testImplementation(libs.guava) {
+            because("avoid the android version")
+        }
+        testImplementation(libs.snakeyaml) {
+            because("vulnerabilities in 1.31")
+        }
+
+        testIntImplementation(libs.guava) {
+            because("avoid the android version")
+        }
+        testIntImplementation(libs.snakeyaml) {
+            because("vulnerabilities in 1.31")
+        }
+    }
+}
+
+tasks.named("dependencyUpdates").configure {
+    rejectVersionIf {
+        String v = it.candidate.version
+        println "candidate ${it.candidate}:$v"
+        return v.endsWith ("-M1") || v.contains ("alpha")
+    }
+}
+
+jacocoTestReport {
+    getExecutionData().setFrom(fileTree(buildDir).include("/jacoco/*.exec"))
+}
+
+sonarqube {
+  properties {
+    property "sonar.projectKey", "openapi-processor_openapi-processor-core"
+    property "sonar.organization", "openapi-processor"
+    property "sonar.host.url", "https://sonarcloud.io"
+    property "sonar.coverage.jacoco.xmlReportPaths", "$buildDir/reports/jacoco/test/jacocoTestReport.xml"
+  }
+}
+
+generateVersion {
+    targetPackage = "io.openapiprocessor.core"
+}
+
+apply from: "${rootProject.rootDir}/gradle/publishing.gradle"
+apply from: "${rootProject.rootDir}/gradle/publishing.tasks.gradle.kts"

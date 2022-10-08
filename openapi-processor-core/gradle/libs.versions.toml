@@ -1,0 +1,59 @@
+[versions]
+kotlin = "1.7.20"
+build-jdk = "11"
+target-jdk = "8"
+
+junit = "5.9.1"
+jacoco = "0.8.7"
+
+[libraries]
+openapi-processor-api = "io.openapiprocessor:openapi-processor-api:2021.1"
+openapi-processor-test = "io.openapiprocessor:openapi-processor-test:2022.4"
+
+openapi-parser-bom = "io.openapiprocessor:openapi-parser-bom:2022.1.1"
+openapi-parser-parser = { module = "io.openapiprocessor:openapi-parser" }
+openapi-parser-jackson = { module = "io.openapiprocessor:openapi-parser-jackson" }
+
+jackson-bom = "com.fasterxml.jackson:jackson-bom:2.13.4"
+jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind" }
+jackson-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml" }
+jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
+snakeyaml = "org.yaml:snakeyaml:1.33"
+
+openapi4j = "org.openapi4j:openapi-parser:1.0.7"
+swagger = "io.swagger.parser.v3:swagger-parser:2.0.28"
+
+antlr = "org.antlr:antlr4:4.11.1"
+
+java-format = "com.google.googlejavaformat:google-java-format:1.15.0"
+guava = "com.google.guava:guava:31.1-jre"
+commons-text = "org.apache.commons:commons-text:1.9"
+commonmark = "com.atlassian.commonmark:commonmark:0.17.0"
+json-schema-validator = "com.networknt:json-schema-validator:1.0.73"
+
+checker = "org.checkerframework:checker:3.25.0"
+jimfs = "com.google.jimfs:jimfs:1.2"
+slf4j = "org.slf4j:slf4j-api:2.0.3"
+logback = "ch.qos.logback:logback-classic:1.4.1"
+
+kotest-bom = "io.kotest:kotest-bom:5.4.2"
+kotest-runner = { module = "io.kotest:kotest-runner-junit5" }
+kotest-datatest = { module = "io.kotest:kotest-framework-datatest" }
+mockk = "io.mockk:mockk:1.13.2"
+
+groovy-bom = "org.apache.groovy:groovy-bom:4.0.5"
+spock = "org.spockframework:spock-core:2.2-groovy-4.0"
+
+plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+plugin-checker = "org.checkerframework:checkerframework-gradle-plugin:0.6.16"
+plugin-outdated = "com.github.ben-manes:gradle-versions-plugin:0.42.0"
+
+[bundles]
+jackson = ["jackson-databind", "jackson-yaml", "jackson-kotlin"]
+openapi-parser = ["openapi-parser-parser", "openapi-parser-jackson"]
+
+[plugins]
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+nexus = { id = "io.github.gradle-nexus.publish-plugin", version = "1.1.0" }
+jacoco = { id = "org.barfuin.gradle.jacocolog", version = "2.0.0" }
+sonar = { id = "org.sonarqube", version =  "3.4.0.2513" }
