@@ -36,7 +36,7 @@ json-schema-validator = "com.networknt:json-schema-validator:1.0.73"
 checker = "org.checkerframework:checker:3.25.0"
 jimfs = "com.google.jimfs:jimfs:1.2"
 slf4j = "org.slf4j:slf4j-api:2.0.3"
-logback = "ch.qos.logback:logback-classic:1.4.1"
+logback = "ch.qos.logback:logback-classic:1.4.3"
 
 kotest-bom = "io.kotest:kotest-bom:5.4.2"
 kotest-runner = { module = "io.kotest:kotest-runner-junit5" }
