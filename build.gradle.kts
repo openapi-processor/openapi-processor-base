@@ -6,12 +6,16 @@ plugins {
     alias(libs.plugins.nexus)
 }
 
-// do not create jar for the root project
-tasks.named("jar") { enabled = false }
+group = "io.openapiprocessor"
+version = libs.versions.processor.get()
+println("version: $version")
 
 repositories {
     mavenCentral()
 }
+
+// do not create jar for the root project
+tasks.named("jar") { enabled = false }
 
 // check
 tasks.named("build") {
@@ -21,10 +25,6 @@ tasks.named("build") {
 tasks.named("jacocoLogAggregatedCoverage") {
     dependsOn ("check")
 }
-
-group = "io.openapiprocessor"
-version = libs.versions.processor.get()
-println("version: $version")
 
 extra["publishUser"] = buildProperty("PUBLISH_USER")
 extra["publishKey"] = buildProperty("PUBLISH_KEY")
