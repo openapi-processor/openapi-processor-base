@@ -17,12 +17,13 @@ class UriSpec: StringSpec({
 
     "converts string source to uri on windows os".config(tags = setOf(Windows)) {
         val current = Paths.get("").toAbsolutePath().toString().replace("\\", "/")
+        val currentDrive = current.first()
 
         forAll(
             row("file://some/path", "file://some/path"),
             row("https://some/path", "https://some/path"),
             row("some/path", "file:///$current/some/path"),
-            row("/some/path", "file:///C:/some/path"),
+            row("/some/path", "file:///$currentDrive:/some/path"),
             row("c:\\windows\\path", "file:///c:/windows/path"),
             row("c:\\windows\\path/mixed/with/slash/path", "file:///c:/windows/path/mixed/with/slash/path")
         ) { source, uri ->
