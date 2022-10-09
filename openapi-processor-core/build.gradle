@@ -7,8 +7,6 @@ plugins {
 
     id 'antlr'
     id 'groovy'
-//    id 'maven-publish'
-//    id 'signing'
     alias(libs.plugins.sonar)
 }
 
@@ -25,11 +23,6 @@ sourceSets {
             srcDirs 'build/antlr'
         }
     }
-}
-
-java {
-    withJavadocJar ()
-    withSourcesJar ()
 }
 
 tasks.named('generateGrammarSource') {
@@ -90,7 +83,7 @@ dependencies {
     implementation (libs.slf4j)
 
     testImplementation (libs.openapi.processor.api)
-    testImplementation (libs.openapi.processor.test)
+    testImplementation (project(":openapi-processor-test"))
     testImplementation (platform(libs.groovy.bom))
     testImplementation (platform(libs.kotest.bom))
     testImplementation (libs.kotest.runner)
@@ -164,10 +157,10 @@ publishing {
     publications {
         getByName/*<MavenPublication>*/("openapiprocessor") {
             pom {
-                description.set(projectDesc)
+                description.set("OpenAPI Processor Core")
             }
         }
     }
 }
 
-apply from: "${rootProject.rootDir}/gradle/publishing.tasks.gradle.kts"
+//apply from: "${rootProject.rootDir}/gradle/publishing.tasks.gradle.kts"

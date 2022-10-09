@@ -22,6 +22,14 @@ group = "io.openapiprocessor"
 version = projectVersion
 println("version: $projectVersion")
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(libs.versions.build.jdk.get()))
+    }
+
+    withJavadocJar ()
+    withSourcesJar ()
+}
 
 repositories {
     mavenCentral()

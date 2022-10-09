@@ -6,6 +6,9 @@ plugins {
     alias(libs.plugins.nexus)
 }
 
+// do not create jar for the root project
+tasks.named("jar") { enabled = false }
+
 repositories {
     mavenCentral()
 }
@@ -13,6 +16,10 @@ repositories {
 // check
 tasks.named("build") {
     dependsOn ("jacocoLogAggregatedCoverage")
+}
+
+tasks.named("jacocoLogAggregatedCoverage") {
+    dependsOn ("check")
 }
 
 group = "io.openapiprocessor"

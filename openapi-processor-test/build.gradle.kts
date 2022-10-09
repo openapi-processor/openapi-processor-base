@@ -1,36 +1,13 @@
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
+
 plugins {
+    id("openapiprocessor.library")
+    id("openapiprocessor.publish")
+
     groovy
-    id("java-library")
-    id("maven-publish")
-    id("signing")
-    alias(libs.plugins.nexus)
-    alias(libs.plugins.versions)
-}
-
-val projectGroupId: String by project
-val projectVersion: String by project
-
-group = projectGroupId
-version = projectVersion
-
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(libs.versions.build.jdk.get()))
-    }
-
-    withJavadocJar ()
-    withSourcesJar ()
 }
 
 repositories {
-    mavenCentral()
-    maven {
-        setUrl("https://oss.sonatype.org/content/repositories/snapshots")
-        mavenContent {
-            snapshotsOnly()
-        }
-    }
 }
 
 dependencies {
@@ -51,4 +28,12 @@ dependencies {
     implementation(libs.slf4j)
 }
 
-apply(from = "${rootProject.rootDir}/gradle/publishing.gradle")
+publishing {
+    publications {
+        getByName<MavenPublication>("openapiprocessor") {
+            pom {
+                description.set("OpenAPI Processor Test")
+            }
+        }
+    }
+}
