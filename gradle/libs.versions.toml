@@ -29,7 +29,7 @@ antlr = "org.antlr:antlr4:4.11.1"
 
 java-format = "com.google.googlejavaformat:google-java-format:1.15.0"
 guava = "com.google.guava:guava:31.1-jre"
-commons-text = "org.apache.commons:commons-text:1.10"
+commons-text = "org.apache.commons:commons-text:1.10.0"
 commonmark = "com.atlassian.commonmark:commonmark:0.17.0"
 json-schema-validator = "com.networknt:json-schema-validator:1.0.73"
 
