@@ -29,7 +29,7 @@ antlr = "org.antlr:antlr4:4.11.1"
 
 java-format = "com.google.googlejavaformat:google-java-format:1.15.0"
 guava = "com.google.guava:guava:31.1-jre"
-commons-text = "org.apache.commons:commons-text:1.9"
+commons-text = "org.apache.commons:commons-text:1.10"
 commonmark = "com.atlassian.commonmark:commonmark:0.17.0"
 json-schema-validator = "com.networknt:json-schema-validator:1.0.73"
 
@@ -38,7 +38,7 @@ jimfs = "com.google.jimfs:jimfs:1.2"
 slf4j = "org.slf4j:slf4j-api:2.0.3"
 logback = "ch.qos.logback:logback-classic:1.4.3"
 
-kotest-bom = "io.kotest:kotest-bom:5.4.2"
+kotest-bom = "io.kotest:kotest-bom:5.5.0"
 kotest-runner = { module = "io.kotest:kotest-runner-junit5" }
 kotest-datatest = { module = "io.kotest:kotest-framework-datatest" }
 mockk = "io.mockk:mockk:1.13.2"
@@ -46,7 +46,7 @@ mockk = "io.mockk:mockk:1.13.2"
 diff-utils = "io.github.java-diff-utils:java-diff-utils:4.12"
 
 groovy-bom = "org.apache.groovy:groovy-bom:4.0.5"
-spock = "org.spockframework:spock-core:2.2-groovy-4.0"
+spock = "org.spockframework:spock-core:2.3-groovy-4.0"
 
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 plugin-checker = "org.checkerframework:checkerframework-gradle-plugin:0.6.16"
