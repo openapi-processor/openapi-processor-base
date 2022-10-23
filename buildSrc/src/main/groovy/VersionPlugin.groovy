@@ -42,7 +42,7 @@ class VersionPlugin implements Plugin<Project> {
         project.plugins.withType (JavaPlugin) {
             def sourceSets = project.extensions.getByType (SourceSetContainer)
             def main = sourceSets.getByName (SourceSet.MAIN_SOURCE_SET_NAME)
-            main.java.setSrcDirs (["${project.buildDir}/version"])
+            main.java.srcDirs ("${project.buildDir}/version")
         }
 
         project.tasks.withType (AbstractCompile).configureEach {
