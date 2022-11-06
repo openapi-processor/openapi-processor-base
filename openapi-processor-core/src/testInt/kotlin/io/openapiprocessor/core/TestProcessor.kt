@@ -14,7 +14,6 @@ import io.openapiprocessor.core.parser.Parser
 import io.openapiprocessor.core.writer.java.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.time.OffsetDateTime
 
 /**
  *  Simple processor for testing.
