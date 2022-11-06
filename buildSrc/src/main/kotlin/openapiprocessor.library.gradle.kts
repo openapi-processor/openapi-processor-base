@@ -6,7 +6,6 @@ import org.gradle.accessors.dm.LibrariesForLibs
 plugins {
     `java-library`
     jacoco
-    kotlin("jvm")
 
     //id("org.checkerframework")
     id("com.github.ben-manes.versions")
