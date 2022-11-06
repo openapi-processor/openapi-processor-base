@@ -118,6 +118,7 @@ class  ApiConverter(
         val addMappings = getAdditionalParameter (ep)
         addMappings.forEach {
             ep.parameters.add (createAdditionalParameter (it, dataTypes, resolver))
+            
         }
     }
 

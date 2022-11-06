@@ -5,27 +5,20 @@
 
 package io.openapiprocessor.core.writer.java
 
-import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.data.blocking.forAll
-import io.kotest.data.row
-import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.verify
 import io.openapiprocessor.core.builder.api.`interface`
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.model.Api
 import io.openapiprocessor.core.model.DataTypes
-import io.openapiprocessor.core.model.Interface
 import io.openapiprocessor.core.model.datatypes.*
-import io.openapiprocessor.core.model.datatypes.ObjectDataType as ObjectDataTypeP
-import io.openapiprocessor.core.support.datatypes.ObjectDataType
-import io.openapiprocessor.core.support.text
 import io.openapiprocessor.core.tempFolder
+import io.openapiprocessor.core.writer.SourceFormatter
+import io.openapiprocessor.core.writer.WriterFactory
 import java.io.File
-import java.io.Writer
-import java.nio.file.Files
+import java.io.StringWriter
 import java.nio.file.Path
 import io.mockk.mockk as stub
 
@@ -35,169 +28,150 @@ class ApiWriterSpec: StringSpec({
     val target = tempFolder()
     val options = ApiOptions()
     val gwStub = SimpleGeneratedWriter(options)
+    val wfStub = stub<WriterFactory>()
+    val writer = StringWriter()
+    val nf = NullFormatter()
 
     beforeTest {
         options.packageName = "io.openapiprocessor.test"
         options.targetDir = listOf(target.toString(), "java", "src").joinToString(File.separator)
+
+        every { wfStub.createWriter(any(), any()) }
+            .answers { writer }
     }
 
-    fun textOf(name: String): String {
-        return options.getModelPath(name).text
+    "writes model enum data type sources" {
+        val dts = DataTypes()
+
+        val dtA = StringEnumDataType(DataTypeName("Foo", "Foo"), "${options.packageName}.model")
+        dts.add(dtA)
+        dts.addRef(dtA.getName())
+
+        val dtB = StringEnumDataType(DataTypeName("Fooo", "FoooX"), "${options.packageName}.model")
+        dts.add(dtB)
+        dts.addRef(dtB.getName())
+
+        val api = Api(dataTypes = dts)
+
+        val enumWriter = stub<StringEnumWriter>(relaxed = true)
+        ApiWriter(options, stub(relaxed = true), stub(), stub(), enumWriter, stub(), nf, wfStub)
+            .write(api)
+
+        verify(exactly = 1) { enumWriter.write(any(), dtA) }
+        verify(exactly = 1) { enumWriter.write(any(), dtB) }
     }
 
-    fun textOfApi(name: String): String {
-        return options.getApiPath(name).text
-    }
-
-    fun textOfSupport(name: String): String {
-        return options.getSupportPath(name).text
-    }
-
-    "generates @Generated source files in support target folder" {
-        val generatedWriter = stub<GeneratedWriterImpl>()
-            every { generatedWriter.writeSource(any()) }
-                .answers {
-                    firstArg<Writer>().write("public @interface Generated {}\n")
-                }
-
-        // when:
-        options.formatCode = false
-        ApiWriter(options, generatedWriter, stub(), stub(), stub(), stub())
-            .write(Api())
-
-        // then:
-        textOfSupport("Generated.java") shouldBe "public @interface Generated {}\n"
-    }
-
-    "generates model enum source files in model target folder" {
-        forAll(row("Foo", "Foo"), row("Fooo", "FoooX")) { id, type ->
-            val enumWriter = stub<StringEnumWriter>()
-            every { enumWriter.write(any(), any()) }
-                .answers {
-                    firstArg<Writer>().write("${arg<DataType>(1).getTypeName()} enum!\n")
-                }
-
-            val dts = DataTypes()
-            dts.add(StringEnumDataType(DataTypeName(id, type), "${options.packageName}.model"))
-            dts.addRef(id)
-            val api = Api(dataTypes = dts)
-
-            // when:
-            options.formatCode = false
-            ApiWriter(options, gwStub, stub(), stub(), enumWriter, stub()).write(api)
-
-            // then:
-            textOf("$type.java") shouldBe "$type enum!\n"
-        }
-    }
-
-    "re-formats model enum source file" {
-        val enumWriter = stub<StringEnumWriter>()
-        every { enumWriter.write(any(), any()) }
-            .answers {
-                firstArg<Writer>().write("    enum   Foo   {   }    ")
-            }
+    "re-formats enum data type source" {
+        val formatter = stub<SourceFormatter>(relaxed = true)
 
         val dts = DataTypes()
         dts.add (StringEnumDataType(DataTypeName("Foo"), "${options.packageName}.model"))
         dts.addRef("Foo")
         val api = Api(dataTypes = dts)
 
-        // when:
-        ApiWriter(options, gwStub, stub(), stub(), enumWriter, stub()).write(api)
+        ApiWriter(options, stub(relaxed = true), stub(), stub(), stub(relaxed = true), stub(), formatter, wfStub)
+            .write(api)
 
-        // then:
-        textOf("Foo.java") shouldBe """
-            |enum Foo {
-            |}
-            |
-            """.trimMargin()
+        verify (exactly = 2) { formatter.format(any()) }
     }
 
-    "creates package structure in target folder" {
-        // when:
-        ApiWriter(options, gwStub, stub(), stub(), stub(), stub()).write(Api())
+    "writes interface sources" {
+        val itfs = listOf(
+            `interface`("Foo", options.getSourceDir("model").toString()) {},
+            `interface`("Bar", options.getSourceDir("model").toString()) {}
+        )
+        val api = Api(itfs)
 
-        // then:
-        val api = options.getSourceDir("api")
-        val model = options.getSourceDir("model")
-        val support = options.getSourceDir("support")
+        val itfWriter = stub<InterfaceWriter>(relaxed = true)
+        ApiWriter(options, stub(relaxed = true), itfWriter, stub(), stub(), stub(), nf, wfStub)
+            .write (api)
 
-        Files.exists(api) shouldBe true
-        Files.isDirectory(api) shouldBe true
-        Files.exists(model) shouldBe true
-        Files.isDirectory(model) shouldBe true
-        Files.exists(support) shouldBe true
-        Files.isDirectory(support) shouldBe true
+        verify(exactly = 1) { itfWriter.write(any(), itfs[0]) }
+        verify(exactly = 1) { itfWriter.write(any(), itfs[1]) }
     }
 
-    @Suppress("BlockingMethodInNonBlockingContext")
-    "does not fail if target folder structure already exists" {
-        Files.createDirectories(options.getSourceDir("api"))
-        Files.createDirectories(options.getSourceDir("model"))
+    "re-formats interface source" {
+        val formatter = stub<SourceFormatter>(relaxed = true)
 
-        shouldNotThrowAny {
-            ApiWriter(options, gwStub, stub(), stub(), stub(), stub()).write (Api())
-        }
+        val itfs = listOf(
+            `interface`("Foo", options.getSourceDir("model").toString()) {}
+        )
+        val api = Api(itfs)
+
+        ApiWriter(options, stub(relaxed = true), stub(relaxed = true), stub(), stub(), stub(), formatter, wfStub)
+            .write(api)
+
+        verify (exactly = 2) { formatter.format(any()) }
     }
 
-    "generates interface sources in api target folder" {
-        val itfWriter = io.mockk.mockk<InterfaceWriter>()
-        every { itfWriter.write(any(), any()) } answers {
-            arg<Writer>(0).write("${arg<Interface>(1).name} interface!")
-        }
+    "writes model data type sources" {
+        val dts = DataTypes()
 
-        val api = Api(listOf(
-            `interface`("Foo", options.getSourceDir("api").toString()) {},
-            `interface`("Bar", options.getSourceDir("api").toString()) {}
-        ))
+        val dtA = ObjectDataType(DataTypeName("Foo", "Foo"), "${options.packageName}.model")
+        dts.add(dtA)
+        dts.addRef(dtA.getName())
 
-        // when:
-        options.formatCode = false
-        ApiWriter(options, gwStub, itfWriter, stub(), stub(), stub()).write (api)
+        val dtB = ObjectDataType(DataTypeName("Fooo", "FoooX"), "${options.packageName}.model")
+        dts.add(dtB)
+        dts.addRef(dtB.getName())
 
-        // then:
-        textOfApi("FooApi.java") shouldBe "Foo interface!"
-        textOfApi("BarApi.java") shouldBe "Bar interface!"
+        val api = Api(dataTypes = dts)
+
+        val dtWriter = stub<DataTypeWriter>(relaxed = true)
+        ApiWriter(options, stub(relaxed = true), stub(), dtWriter, stub(), stub(), nf, wfStub)
+            .write (api)
+
+        verify(exactly = 1) { dtWriter.write(any(), dtA) }
+        verify(exactly = 1) { dtWriter.write(any(), dtB) }
     }
 
-    "generates interface with valid java class name" {
-        val itfWriter = io.mockk.mockk<InterfaceWriter>()
-        every { itfWriter.write(any(), any()) } answers {
-            arg<Writer>(0).write("${arg<Interface>(1).name} interface!")
-        }
+    "re-formats model data type source" {
+        val formatter = stub<SourceFormatter>(relaxed = true)
 
-        val api = Api(listOf(
-            `interface`("foo-bar", options.getSourceDir("api").toString()) {}
-        ))
+        val dts = DataTypes()
+        dts.add (ObjectDataType(DataTypeName("Foo"), "${options.packageName}.model"))
+        dts.addRef("Foo")
+        val api = Api(dataTypes = dts)
 
-        // when:
-        options.formatCode = false
-        ApiWriter(options, gwStub, itfWriter, stub(), stub(), stub()).write (api)
+        ApiWriter(options, stub(relaxed = true), stub(), stub(relaxed = true), stub(), stub(), formatter, wfStub)
+            .write(api)
 
-        // then:
-        Files.exists(options.getApiPath("FooBarApi.java")) shouldBe true
+        verify (exactly = 2) { formatter.format(any()) }
     }
 
-    "generates model sources in model target folder" {
-        forAll(row("Foo", "Foo"), row("Fooo", "FoooX")) { id, type ->
-            val dtWriter = io.mockk.mockk<DataTypeWriter>()
-            every { dtWriter.write(any(), any()) } answers {
-                arg<Writer>(0).write("${arg<DataType>(1).getTypeName()} class!\n")
-            }
+    "writes interface data type sources" {
+        val dts = DataTypes()
 
-            val dts = DataTypes()
-            dts.add(ObjectDataTypeP(DataTypeName(id, type), "${options.packageName}.model"))
-            dts.addRef(id)
-            val api = Api(dataTypes = dts)
+        val dtA = InterfaceDataType(DataTypeName("Foo", "Foo"), "${options.packageName}.api")
+        dts.add(dtA)
+        dts.addRef(dtA.getName())
 
-            // when:
-            options.formatCode = false
-            ApiWriter(options, gwStub, stub(), dtWriter, stub(), stub()).write(api)
+        val dtB = InterfaceDataType(DataTypeName("Fooo", "FoooX"), "${options.packageName}.api")
+        dts.add(dtB)
+        dts.addRef(dtB.getName())
 
-            // then:
-            textOf("$type.java") shouldBe "$type class!\n"
-        }
+        val api = Api(dataTypes = dts)
+
+        val dtWriter = stub<InterfaceDataTypeWriter>(relaxed = true)
+        ApiWriter(options, stub(relaxed = true), stub(), stub(), stub(), dtWriter, nf, wfStub)
+            .write (api)
+
+        verify(exactly = 1) { dtWriter.write(any(), dtA) }
+        verify(exactly = 1) { dtWriter.write(any(), dtB) }
+    }
+
+    "re-formats interface data type source" {
+        val formatter = stub<SourceFormatter>(relaxed = true)
+
+        val dts = DataTypes()
+        dts.add (InterfaceDataType(DataTypeName("Foo"), "${options.packageName}.api"))
+        dts.addRef("Foo")
+        val api = Api(dataTypes = dts)
+
+        ApiWriter(options, stub(relaxed = true), stub(), stub(), stub(), stub(relaxed = true), formatter, wfStub)
+            .write(api)
+
+        verify (exactly = 2) { formatter.format(any()) }
     }
 
     "generates model for object data types only" {
@@ -217,85 +191,21 @@ class ApiWriterSpec: StringSpec({
         }
     }
 
-    "re-formats interface sources" {
-        val itfWriter = io.mockk.mockk<InterfaceWriter>()
-        every { itfWriter.write(any(), any()) } answers {
-            arg<Writer>(0).write("  interface  \n ${arg<Interface>(1).name}    {    }\n")
-        }
-
-        // when:
-        ApiWriter(options, gwStub, itfWriter, stub(), stub(), stub()).write (Api(listOf(
-                `interface`("Foo", options.getSourceDir("api").toString()) {}
-            )))
-
-        // then:
-        textOfApi("FooApi.java") shouldBe """
-        |interface Foo {
-        |}
-        |
-        """.trimMargin()
-    }
-
-    "re-formats model sources" {
-        val dtWriter = io.mockk.mockk<DataTypeWriter>()
-        every { dtWriter.write(any(), any()) } answers {
-            arg<Writer>(0).write("  class \n  ${arg<ModelDataType>(1).getName()} {   }\n")
-        }
-
-        val dt = DataTypes()
-        dt.add(ObjectDataType("Foo", "${options.packageName}.model"))
-        dt.addRef("Foo")
-        val api = Api(dataTypes = dt)
-
-        // when:
-        ApiWriter(options, gwStub, stub(), dtWriter, stub(), stub()).write (api)
-
-        // then:
-        textOf("Foo.java") shouldBe """
-        |class Foo {
-        |}
-        |
-        """.trimMargin()
-    }
-
     "does not re-format sources if code formatting is disabled" {
-        val itfWriter = io.mockk.mockk<InterfaceWriter>()
-        every { itfWriter.write(any(), any()) } answers {
-            arg<Writer>(0).write("  interface  \n ${arg<Interface>(1).name}    {    }\n")
-        }
+        val formatter = stub<SourceFormatter>(relaxed = true)
 
-        // when:
+        val dts = DataTypes()
+        dts.add (InterfaceDataType(DataTypeName("Foo"), "${options.packageName}.api"))
+        dts.addRef("Foo")
+        val api = Api(dataTypes = dts)
+
         options.formatCode = false
-        ApiWriter(options, gwStub, itfWriter, stub(), stub(), stub()).write (Api(listOf(
-                `interface`("Foo", options.getSourceDir("api").toString()) {}
-            )))
+        ApiWriter(options, stub(relaxed = true), stub(), stub(), stub(), stub(relaxed = true), formatter, wfStub)
+            .write(api)
 
-        // then:
-        textOfApi("FooApi.java") shouldBe """
-        |  interface  
-        | Foo    {    }
-        |
-        """.trimMargin()
+        verify (exactly = 0) { formatter.format(any()) }
     }
 })
-
-
-private fun ApiOptions.getApiPath(name: String): Path {
-    return getSourcePath("api", name)
-}
-
-private fun ApiOptions.getModelPath(name: String): Path {
-    return getSourcePath("model", name)
-}
-
-private fun ApiOptions.getSupportPath(name: String): Path {
-    return getSourcePath("support", name)
-}
-
-private fun ApiOptions.getSourcePath(pkg: String, name: String): Path {
-    return getSourceDir(pkg)
-        .resolve(name)
-}
 
 private fun ApiOptions.getSourceDir(pkg: String): Path {
     return Path.of(
