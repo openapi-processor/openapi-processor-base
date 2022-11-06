@@ -39,7 +39,7 @@ abstract class VersionTask extends DefaultTask {
     @TaskAction
     void generateVersion () {
         String[] parts = targetPackage.get ().split ("\\.")
-        def path = Path.of (targetDir, "version", *parts)
+        def path = Path.of (targetDir, *parts)
         Files.createDirectories(path)
 
         def target = path.resolve ("Version.java")
