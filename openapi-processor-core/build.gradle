@@ -7,11 +7,9 @@ plugins {
 
     id 'antlr'
     id 'groovy'
+    id "org.jetbrains.kotlin.jvm"
     alias(libs.plugins.sonar)
 }
-
-//group projectGroupId
-//version projectVersion
 
 repositories {
 //    mavenLocal()
@@ -44,7 +42,7 @@ kotlin {
 }
 
 tasks.named('compileKotlin') {
-    dependsOn 'generateGrammarSource', 'generateVersion'
+    dependsOn 'generateGrammarSource'
     kotlinOptions.jvmTarget = "1.8"
 }
 
