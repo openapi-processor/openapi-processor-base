@@ -14,9 +14,8 @@ import io.kotest.matchers.collections.shouldContainAll
 import io.openapiprocessor.test.FileSupport
 import java.nio.file.Path
 
-
 class ProcessorEndToEndRemoteSpec: StringSpec({
-    val repo = "https://raw.githubusercontent.com/openapi-processor/openapi-processor-core/master"
+    val repo = "https://raw.githubusercontent.com/openapi-processor/openapi-processor-base/main/openapi-processor-core"
 
     val pkg = "generated"
     val mapping = """
