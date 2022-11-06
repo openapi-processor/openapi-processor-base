@@ -4,8 +4,6 @@ import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceSetContainer
-import org.gradle.api.tasks.compile.AbstractCompile
-import org.gradle.jvm.tasks.Jar
 
 /**
  * provides a "generateVersion" task to a create a simple Version.java class:
@@ -34,7 +32,7 @@ class VersionPlugin implements Plugin<Project> {
             new Action<VersionTask> () {
                 @Override
                 void execute (VersionTask task) {
-                    task.targetDir = project.buildDir
+                    task.targetDir = "${project.buildDir}/version"
                     task.version = project.version
                 }
             })
@@ -42,16 +40,7 @@ class VersionPlugin implements Plugin<Project> {
         project.plugins.withType (JavaPlugin) {
             def sourceSets = project.extensions.getByType (SourceSetContainer)
             def main = sourceSets.getByName (SourceSet.MAIN_SOURCE_SET_NAME)
-            main.java.srcDirs ("${project.buildDir}/version")
-        }
-
-        project.tasks.withType (AbstractCompile).configureEach {
-            dependsOn (generateVersion)
-        }
-
-        // sourcesJar
-        project.tasks.withType (Jar).configureEach {
-            dependsOn (generateVersion)
+            main.java.srcDirs (generateVersion)
         }
     }
 }
