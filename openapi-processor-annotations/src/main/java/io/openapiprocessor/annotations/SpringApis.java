@@ -8,18 +8,21 @@ package io.openapiprocessor.annotations;
 import java.lang.annotation.*;
 
 /**
- * enable & configure multiple openapi-processor-spring. Alternatively multiple {@link SpringApi}
- * annotations can be used with multiple classes (one class, one {@link SpringApi}).
+ * Allows to place multiple {@link SpringApi} annotations on the same class. This annotation should
+ * not be used explicitly. Just use multiple {@link SpringApi} annotations.
+ * <p>
+ * Alternatively multiple {@link SpringApi} annotations can be used with multiple classes (one
+ * class, one {@link SpringApi}).
  *
  * <p>
  * Usage example:
- * <pre>
- * &#064;SpringApis({
- *   &#064;SpringApi(apiPath  = "src/api/apiA.yml", mapping = "src/api/mappingA.yml"),
- *   &#064;SpringApi(apiPath  = "src/api/apiB.yml", mapping = "src/api/mappingB.yml")
- * })
+ * <pre><code>
+ * &#064;SpringApi(apiPath = "src/api/apiA.yml", mapping = "src/api/mappingA.yml")
+ * &#064;SpringApi(apiPath = "src/api/apiB.yml", mapping = "src/api/mappingB.yml")
  * class OpenApiConfiguration {}
- * </pre>
+ * </code></pre>
+ *
+ * @see SpringApi
  */
 @Target (ElementType.TYPE)
 @Retention (RetentionPolicy.SOURCE)

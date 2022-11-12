@@ -6,11 +6,8 @@
 package io.openapiprocessor.samples;
 
 import io.openapiprocessor.annotations.SpringApi;
-import io.openapiprocessor.annotations.SpringApis;
 
-@SpringApis ({
-    @SpringApi(apiPath = "src/openapi/openapiA.yml", mapping = "src/openapi/mappingA.yml"),
-    @SpringApi(apiPath = "src/openapi/openapiB.yml", mapping = "src/openapi/mappingB.yml")
-})
+@SpringApi(apiPath = "src/openapi/openapiA.yml", mapping = "src/openapi/mappingA.yml")
+@SpringApi(apiPath = "src/openapi/openapiB.yml", mapping = "src/openapi/mappingB.yml")
 public class Multiple {
 }

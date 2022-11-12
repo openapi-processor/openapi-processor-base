@@ -12,10 +12,17 @@ import java.lang.annotation.*;
  *
  * <p>
  * recommended way is to create a configuration class with the annotation:
- * <pre>
+ * <pre><code>
  * &#064;SpringApi
  * class OpenApiConfiguration {}
- * </pre>
+ * </code></pre>
+ *
+ * The annotation can be used multiple times on the same class.
+ * <pre><code>
+ * &#064;SpringApi(apiPath = "src/api/apiA.yml", mapping = "src/api/mappingA.yml")
+ * &#064;SpringApi(apiPath = "src/api/apiB.yml", mapping = "src/api/mappingB.yml")
+ * class OpenApiConfiguration {}
+ * </code></pre>
  *
  * The parameters {@code apiPath} & {@code mapping} are <b>relative</b> to the <b>project root</b>.
  * Unfortunately an annotation processor does not know where the <b>project root</b> is. Therefore,
@@ -24,14 +31,16 @@ import java.lang.annotation.*;
  * {@code -Aio.openapiprocessor.project.root=${projectRoot}}
  * <p>
  * For example using gradle this can look like this:
- * <pre>
+ * <pre><code>
  * // build.gradle
  * compileJava {
  *   options.compilerArgs += [
  *     "-Aio.openapiprocessor.project.root=${projectDir}",
  *   ]
  * }
- * </pre>
+ * </code></pre>
+ *
+ * @see SpringApis
  */
 @Target (ElementType.TYPE)
 @Retention (RetentionPolicy.SOURCE)
