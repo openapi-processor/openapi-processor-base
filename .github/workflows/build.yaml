@@ -41,7 +41,7 @@ jobs:
 
     steps:
     - name: checkout
-      uses: actions/checkout@v1
+      uses: actions/checkout@v2
       with:
         submodules: true
 
@@ -82,7 +82,7 @@ jobs:
 
     steps:
     - name: checkout
-      uses: actions/checkout@v1
+      uses: actions/checkout@v2
 
     - name: cache
       uses: actions/cache@v3
@@ -126,7 +126,7 @@ jobs:
 
     steps:
     - name: checkout
-      uses: actions/checkout@v1
+      uses: actions/checkout@v2
 
     - name: cache
       uses: actions/cache@v3
