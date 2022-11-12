@@ -19,3 +19,5 @@ class FilerWriterFactory(private val filer: Filer): WriterFactory {
         return BufferedWriter(fileObject.openWriter())
     }
 }
+
+const val PROJECT_ROOT = "io.openapiprocessor.project.root"
