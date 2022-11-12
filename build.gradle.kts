@@ -17,13 +17,13 @@ repositories {
 // do not create jar for the root project
 tasks.named("jar") { enabled = false }
 
-// check
-tasks.named("build") {
-    dependsOn ("jacocoLogAggregatedCoverage")
-}
 
 tasks.named("jacocoLogAggregatedCoverage") {
     dependsOn ("check")
+}
+
+tasks.named("build") {
+    dependsOn ("jacocoLogAggregatedCoverage")
 }
 
 extra["publishUser"] = buildProperty("PUBLISH_USER")
