@@ -9,6 +9,9 @@ import java.io.BufferedWriter
 import java.io.Writer
 import javax.annotation.processing.Filer
 
+/**
+ * Writer factory for annotation processor.
+ */
 class FilerWriterFactory(private val filer: Filer): WriterFactory {
 
     override fun createWriter(packageName: String, className: String): Writer {
