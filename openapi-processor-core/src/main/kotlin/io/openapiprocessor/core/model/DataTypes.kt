@@ -5,9 +5,9 @@
 
 package io.openapiprocessor.core.model
 
+import io.openapiprocessor.core.logging.Logger
+import io.openapiprocessor.core.logging.LoggerFactory
 import io.openapiprocessor.core.model.datatypes.*
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 /**
  * Container of data types from OpenAPI '#/component/schemas'.

@@ -5,11 +5,11 @@
 
 package io.openapiprocessor.core.parser
 
+import io.openapiprocessor.core.logging.Logger
+import io.openapiprocessor.core.logging.LoggerFactory
 import io.openapiprocessor.core.parser.swagger.Parser as Swagger
 import io.openapiprocessor.core.parser.openapi.Parser as OpenApiParser
 import io.openapiprocessor.core.parser.openapi4j.Parser as OpenApi4J
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 /**
  * OpenAPI parser abstraction. Supports swagger or openapi4 parser.

@@ -5,13 +5,13 @@
 
 package io.openapiprocessor.core.converter
 
+import io.openapiprocessor.core.logging.Logger
+import io.openapiprocessor.core.logging.LoggerFactory
 import io.openapiprocessor.core.processor.MappingConverter
 import io.openapiprocessor.core.processor.MappingReader
 import io.openapiprocessor.core.processor.mapping.MappingVersion
 import io.openapiprocessor.core.processor.mapping.v1.Mapping as MappingV1
 import io.openapiprocessor.core.processor.mapping.v2.Mapping as MappingV2
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 /**
  * creates [ApiOptions] from processor options and mapping.yaml.

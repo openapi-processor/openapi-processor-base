@@ -5,10 +5,10 @@
 
 package io.openapiprocessor.core.writer
 
+import io.openapiprocessor.core.logging.Logger
+import io.openapiprocessor.core.logging.LoggerFactory
 import io.openapiprocessor.core.support.toURI
 import io.openapiprocessor.core.writer.java.PathWriter
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import java.io.BufferedWriter
 import java.io.Writer
 import java.nio.file.Files
