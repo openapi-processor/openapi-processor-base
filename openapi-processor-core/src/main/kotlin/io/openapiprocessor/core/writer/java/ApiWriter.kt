@@ -12,6 +12,7 @@ import io.openapiprocessor.core.model.datatypes.InterfaceDataType
 import io.openapiprocessor.core.model.datatypes.StringEnumDataType
 import io.openapiprocessor.core.model.datatypes.ModelDataType
 import io.openapiprocessor.core.writer.DefaultWriterFactory
+import io.openapiprocessor.core.writer.InitWriterTarget
 import io.openapiprocessor.core.writer.SourceFormatter
 import io.openapiprocessor.core.writer.WriterFactory
 import java.io.StringWriter
@@ -28,8 +29,15 @@ class ApiWriter(
     private val enumWriter: StringEnumWriter,
     private val interfaceDataTypeWriter: InterfaceDataTypeWriter,
     private val formatter: SourceFormatter = GoogleFormatter(),
-    private val writerFactory: WriterFactory = DefaultWriterFactory(options.targetDir, options.packageName)
+    private val writerFactory: WriterFactory = DefaultWriterFactory()
 ) {
+    init {
+        if (writerFactory is InitWriterTarget) {
+            writerFactory.init(options.targetDir!!, options.packageName)
+        }
+    }
+
+
     fun write(api: Api) {
         writeGenerated()
         writeInterfaces(api)

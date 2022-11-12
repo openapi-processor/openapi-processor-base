@@ -5,15 +5,15 @@
 
 package io.openapiprocessor.core.parser.openapi4j
 
+import io.openapiprocessor.core.logging.Logger
+import io.openapiprocessor.core.logging.LoggerFactory
 import io.openapiprocessor.core.parser.ParserException
 import io.openapiprocessor.core.support.toURL
 import org.openapi4j.core.exception.ResolutionException
 import org.openapi4j.core.validation.ValidationException
-import io.openapiprocessor.core.parser.OpenApi as ParserOpenApi
 import org.openapi4j.parser.OpenApi3Parser
 import org.openapi4j.parser.validation.v3.OpenApi3Validator
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import io.openapiprocessor.core.parser.OpenApi as ParserOpenApi
 
 /**
  * openapi4j parser.

@@ -29,7 +29,8 @@ class DefaultWriterFactorySpec : StringSpec({
     }
 
     "initializes package folders" {
-        DefaultWriterFactory(options.targetDir, options.packageName)
+        val writerFactory = DefaultWriterFactory()
+        writerFactory.init(options.targetDir!!, options.packageName)
 
         val api = options.getSourceDir("api")
         val model = options.getSourceDir("model")
@@ -49,7 +50,7 @@ class DefaultWriterFactorySpec : StringSpec({
         Files.createDirectories(options.getSourceDir("support"))
 
         shouldNotThrowAny {
-            DefaultWriterFactory(options.targetDir, options.packageName)
+            DefaultWriterFactory().init(options.targetDir!!, options.packageName)
         }
     }
 
@@ -58,7 +59,8 @@ class DefaultWriterFactorySpec : StringSpec({
             return options.getSourcePath("support", name).text
         }
 
-        val factory = DefaultWriterFactory(options.targetDir.toString(), options.packageName)
+        val factory = DefaultWriterFactory()
+        factory.init(options.targetDir!!, options.packageName)
 
         val writer = factory.createWriter("${options.packageName}.support", "Generated")
         writer.write("public @interface Generated {}\n")
@@ -72,7 +74,8 @@ class DefaultWriterFactorySpec : StringSpec({
             return options.getSourcePath("api", name).text
         }
 
-        val factory = DefaultWriterFactory(options.targetDir.toString(), options.packageName)
+        val factory = DefaultWriterFactory()
+        factory.init(options.targetDir!!, options.packageName)
 
         val writer = factory.createWriter("${options.packageName}.api", "Api")
         writer.write("public interface Api {}\n")
@@ -86,7 +89,8 @@ class DefaultWriterFactorySpec : StringSpec({
             return options.getSourcePath("model", name).text
         }
 
-        val factory = DefaultWriterFactory(options.targetDir.toString(), options.packageName)
+        val factory = DefaultWriterFactory()
+        factory.init(options.targetDir!!, options.packageName)
 
         val writer = factory.createWriter("${options.packageName}.model", "Model")
         writer.write("public class Model {}\n")

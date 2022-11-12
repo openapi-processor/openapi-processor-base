@@ -15,14 +15,15 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 
-class DefaultWriterFactory(private val targetDir: String?, val packageName: String): WriterFactory {
+/**
+ * Writer factory for local file system. Must be initialized via [InitWriterTarget].
+ */
+class DefaultWriterFactory: WriterFactory, InitWriterTarget {
     private var log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
+    private lateinit var targetDir: String
+    private lateinit var packageName: String
     private lateinit var paths: Map<String, Path>
-
-    init {
-        init()
-    }
 
     override fun createWriter(packageName: String, className: String): Writer {
         return createWriter(paths[packageName]!!, className)
@@ -32,7 +33,9 @@ class DefaultWriterFactory(private val targetDir: String?, val packageName: Stri
         return BufferedWriter(PathWriter(packagePath.resolve("${className}.java")))
     }
 
-    private fun init() {
+    override fun init(targetDir: String, packageName: String) {
+        this.targetDir = targetDir
+        this.packageName = packageName
         val pkgPaths = HashMap<String, Path>()
 
         log.debug ("initializing target folders")
