@@ -18,7 +18,7 @@ class MessagerLoggerConfiguration {
     private var initialized = false
     private val properties = Properties()
 
-    private var logLevel = Level.INFO
+    var logLevel = Level.INFO
 
     fun init() {
         if (initialized) {
