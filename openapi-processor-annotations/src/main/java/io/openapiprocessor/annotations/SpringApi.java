@@ -8,7 +8,7 @@ package io.openapiprocessor.annotations;
 import java.lang.annotation.*;
 
 /**
- * enable & configure openapi-processor-spring.
+ * enable/configure openapi-processor-spring.
  *
  * <p>
  * recommended way is to create a configuration class with the annotation:
@@ -24,7 +24,7 @@ import java.lang.annotation.*;
  * class OpenApiConfiguration {}
  * </code></pre>
  *
- * The parameters {@code apiPath} & {@code mapping} are <b>relative</b> to the <b>project root</b>.
+ * The parameters {@code apiPath} and {@code mapping} are <b>relative</b> to the <b>project root</b>.
  * Unfortunately an annotation processor does not know where the <b>project root</b> is. Therefore,
  * it is necessary to explicitly pass the <b>project root</b> path as option to the java compiler:
  * <p>
