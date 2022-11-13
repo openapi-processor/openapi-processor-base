@@ -20,7 +20,7 @@ publishing {
     publications {
         getByName<MavenPublication>("openapiprocessor") {
             pom {
-                description.set("OpenAPI Processor")
+                description.set("OpenAPI Processor Annotations")
             }
         }
     }
