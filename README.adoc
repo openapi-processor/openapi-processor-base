@@ -6,7 +6,7 @@
 :core-ci: https://github.com/openapi-processor/openapi-processor-core/actions?query=workflow%3Abuild
 :core-ci-badge: https://github.com/openapi-processor/openapi-processor-core/workflows/build/badge.svg
 
-:core-sonar: https://sonarcloud.io/dashboard?id=openapi-processor-base_openapi-processor-core
+:core-sonar: https://sonarcloud.io/dashboard?id=openapi-processor_openapi-processor-base-core
 :core-sonar-badge: https://sonarcloud.io/api/project_badges/measure?project=openapi-processor_openapi-processor-base-core&metric=coverage
 
 :central-search: https://search.maven.org/search?q=io.openapiprocessor
