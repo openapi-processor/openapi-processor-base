@@ -13,6 +13,9 @@
 :core-central-badge: https://img.shields.io/maven-central/v/io.openapiprocessor/openapi-processor-core?label=Maven%20Central
 
 
+// badges
+link:{core-ci}[image:{core-ci-badge}[]]
+
 == openapi-processor-base
 
 target framework independent code of openapi-processor.
@@ -26,7 +29,6 @@ contains the annotations to enable an openapi-processor-x annotation processor.
 === link:{core}[openapi-processor-core]
 
 // badges
-link:{core-ci}[image:{core-ci-badge}[]]
 link:{core-sonar}[image:{core-sonar-badge}[]]
 link:{central-search}[image:{core-central-badge}[]]
 
