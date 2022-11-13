@@ -5,12 +5,12 @@
 
 package io.openapiprocessor.core.parser.openapi.v31
 
-import io.openapiprocessor.core.logging.Logger
-import io.openapiprocessor.core.logging.LoggerFactory
 import io.openapiparser.model.v31.OpenApi as OpenApi31
 import io.openapiparser.model.v31.PathItem as PathItem31
 import io.openapiprocessor.core.parser.Path
 import io.openapiprocessor.core.parser.RefResolver as ParserRefResolver
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import io.openapiprocessor.core.parser.OpenApi as ParserOpenApi
 import io.openapiprocessor.core.parser.openapi.v31.Path as Path31
 

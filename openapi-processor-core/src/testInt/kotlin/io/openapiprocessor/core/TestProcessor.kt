@@ -10,10 +10,10 @@ import io.openapiprocessor.core.converter.ApiConverter
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.OptionsConverter
 import io.openapiprocessor.core.framework.FrameworkBase
-import io.openapiprocessor.core.logging.Logger
-import io.openapiprocessor.core.logging.LoggerFactory
 import io.openapiprocessor.core.parser.Parser
 import io.openapiprocessor.core.writer.java.*
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  *  Simple processor for testing.

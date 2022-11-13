@@ -11,8 +11,6 @@ import io.openapiprocessor.core.converter.wrapper.MultiDataTypeWrapper
 import io.openapiprocessor.core.converter.wrapper.ResultDataTypeWrapper
 import io.openapiprocessor.core.converter.wrapper.SingleDataTypeWrapper
 import io.openapiprocessor.core.framework.Framework
-import io.openapiprocessor.core.logging.Logger
-import io.openapiprocessor.core.logging.LoggerFactory
 import io.openapiprocessor.core.model.*
 import io.openapiprocessor.core.model.RequestBody as ModelRequestBody
 import io.openapiprocessor.core.model.Response as ModelResponse
@@ -22,6 +20,8 @@ import io.openapiprocessor.core.parser.*
 import io.openapiprocessor.core.parser.RequestBody
 import io.openapiprocessor.core.parser.Response
 import io.openapiprocessor.core.writer.java.toClass
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 const val MULTIPART = "multipart/"
 const val INTERFACE_DEFAULT_NAME = ""
@@ -34,7 +34,7 @@ class  ApiConverter(
     private val options: ApiOptions,
     private val framework: Framework
 ) {
-    var log: Logger = LoggerFactory.getLogger(this.javaClass.name)
+    val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     private val mappingFinder = MappingFinder(options.typeMappings)
     private val dataTypeWrapper = ResultDataTypeWrapper(options, mappingFinder)
@@ -118,7 +118,6 @@ class  ApiConverter(
         val addMappings = getAdditionalParameter (ep)
         addMappings.forEach {
             ep.parameters.add (createAdditionalParameter (it, dataTypes, resolver))
-
         }
     }
 

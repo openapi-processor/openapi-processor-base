@@ -14,8 +14,6 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 import com.fasterxml.jackson.module.kotlin.KotlinFeature
 import com.fasterxml.jackson.module.kotlin.KotlinModule
-import io.openapiprocessor.core.logging.Logger
-import io.openapiprocessor.core.logging.LoggerFactory
 import io.openapiprocessor.core.processor.mapping.v1.Mapping
 import io.openapiprocessor.core.processor.mapping.MappingVersion
 import io.openapiprocessor.core.processor.mapping.v1.Parameter
@@ -23,6 +21,8 @@ import io.openapiprocessor.core.processor.mapping.v1.ParameterDeserializer
 import io.openapiprocessor.core.processor.mapping.v2.Mapping as MappingV2
 import io.openapiprocessor.core.processor.mapping.v2.Parameter as ParameterV2
 import io.openapiprocessor.core.processor.mapping.v2.ParameterDeserializer as ParameterDeserializerV2
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.io.File
 import java.net.MalformedURLException
 import java.net.URL

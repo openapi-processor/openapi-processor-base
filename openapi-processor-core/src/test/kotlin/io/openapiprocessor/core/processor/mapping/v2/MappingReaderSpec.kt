@@ -10,9 +10,9 @@ import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import io.openapiprocessor.core.logging.Logger
 import io.openapiprocessor.core.processor.MappingReader
 import io.openapiprocessor.core.processor.MappingValidator
+import org.slf4j.Logger
 
 class MappingReaderSpec: StringSpec ({
     isolationMode = IsolationMode.InstancePerTest

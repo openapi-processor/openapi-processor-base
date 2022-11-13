@@ -5,13 +5,13 @@
 
 package io.openapiprocessor.core.parser.swagger
 
-import io.openapiprocessor.core.logging.Logger
-import io.openapiprocessor.core.logging.LoggerFactory
 import io.openapiprocessor.core.parser.OpenApi as ParserOpenApi
 import io.openapiprocessor.core.parser.Path as ParserPath
 import io.openapiprocessor.core.parser.RefResolver as ParserRefResolver
 import io.swagger.v3.oas.models.PathItem as SwaggerPath
 import io.swagger.v3.parser.core.models.SwaggerParseResult
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * Swagger parser result.

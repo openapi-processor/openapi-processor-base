@@ -11,13 +11,13 @@ import com.networknt.schema.JsonSchemaException
 import com.networknt.schema.JsonSchemaFactory
 import com.networknt.schema.SpecVersion
 import com.networknt.schema.ValidationMessage
-import io.openapiprocessor.core.logging.Logger
-import io.openapiprocessor.core.logging.LoggerFactory
 //import io.openapiparser.jackson.JacksonConverter
 //import io.openapiparser.reader.UriReader
 //import io.openapiparser.schema.*
 //import io.openapiparser.validator.Validator
 //import io.openapiparser.validator.ValidatorSettings
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.io.InputStream
 //import java.net.URI
 

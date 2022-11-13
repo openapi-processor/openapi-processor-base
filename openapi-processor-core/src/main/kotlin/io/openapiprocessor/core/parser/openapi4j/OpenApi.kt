@@ -5,12 +5,12 @@
 
 package io.openapiprocessor.core.parser.openapi4j
 
-import io.openapiprocessor.core.logging.Logger
-import io.openapiprocessor.core.logging.LoggerFactory
 import io.openapiprocessor.core.parser.OpenApi as ParserOpenApi
 import io.openapiprocessor.core.parser.Path as ParserPath
 import io.openapiprocessor.core.parser.RefResolver as ParserRefResolver
 import org.openapi4j.core.validation.ValidationResults
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.openapi4j.parser.model.v3.OpenApi3 as O4jOpenApi
 import org.openapi4j.parser.model.v3.Path as O4jPath
 

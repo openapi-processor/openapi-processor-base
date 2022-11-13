@@ -12,9 +12,9 @@ import io.openapiparser.schema.DocumentStore
 import io.openapiparser.schema.Resolver
 import io.openapiparser.schema.SchemaStore
 import io.openapiparser.validator.result.*
-import io.openapiprocessor.core.logging.Logger
-import io.openapiprocessor.core.logging.LoggerFactory
 import io.openapiprocessor.core.support.toURI
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.util.*
 import io.openapiparser.model.v30.OpenApi as OpenApi30
 import io.openapiparser.model.v31.OpenApi as OpenApi31

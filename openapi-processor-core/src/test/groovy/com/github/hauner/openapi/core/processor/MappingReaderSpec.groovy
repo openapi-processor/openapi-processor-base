@@ -18,8 +18,8 @@ package com.github.hauner.openapi.core.processor
 
 import com.google.common.jimfs.Configuration
 import com.google.common.jimfs.Jimfs
-import io.openapiprocessor.core.logging.Logger
 import io.openapiprocessor.core.processor.MappingReader
+import org.slf4j.Logger
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.TempDir
