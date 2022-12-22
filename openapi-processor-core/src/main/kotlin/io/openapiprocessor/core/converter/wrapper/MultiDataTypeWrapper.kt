@@ -24,7 +24,7 @@ class MultiDataTypeWrapper(
 ) {
 
     /**
-     * replaces an (converted) array data type with a multi data type (like {@code Flux< >})
+     * replaces a converted array data type with a multi data type (like {@code Flux< >})
      * wrapping the collection item.
      *
      * If the configuration for the result type is 'plain' or not defined the source data type

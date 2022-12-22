@@ -10,8 +10,8 @@ import io.openapiprocessor.core.model.Documentation
 /**
  * represents an OpenAPI object that is generated as interface.
  *
- * only used with onOf elements are all objects. It will represent the common interface that all
- * items implement.
+ * only used with onOf elements which are all objects. It will represent the common interface that
+ * all items implement.
  */
 class InterfaceDataType(
     private val name: DataTypeName,
