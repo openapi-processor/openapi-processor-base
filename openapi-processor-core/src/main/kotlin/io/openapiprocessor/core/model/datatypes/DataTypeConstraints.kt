@@ -9,7 +9,6 @@ package io.openapiprocessor.core.model.datatypes
  * OpenAPI constraint details of a data type.
  */
 class DataTypeConstraints(
-
     var /*val*/ defaultValue: Any? = null, // todo rename to default
     var /*val*/ nullable: Boolean = false,
     var /*val*/ minLength: Int = 0,
@@ -50,10 +49,8 @@ class DataTypeConstraints(
 }
 
 data class SizeConstraints(val min: Int, val max: Int?) {
-
     val hasMin = min > 0
     val hasMax = max != null
-
 }
 
 data class NumberConstraint(val value: Number, val exclusive: Boolean)
