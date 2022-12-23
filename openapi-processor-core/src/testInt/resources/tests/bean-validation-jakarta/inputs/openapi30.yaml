@@ -1,0 +1,25 @@
+openapi: 3.0.2
+info:
+  title: bean validation jakarta/v3
+  version: 1.0.0
+
+paths:
+  /foo:
+    get:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Foo'
+      responses:
+        '204':
+          description: empty
+
+components:
+  schemas:
+    Foo:
+      type: object
+      properties:
+        bar:
+          type: string
+          maxLength: 10
