@@ -74,10 +74,10 @@ class DataTypeConverter(
         return result
     }
 
-    fun createMappedDataType(
+    private fun createMappedDataType(
         targetType: TargetType,
-        schemaInfo: SchemaInfo? = null,
-        simpleDataType: Boolean = false): MappedDataType {
+        schemaInfo: SchemaInfo,
+        sourceDataType: DataType): MappedDataType {
 
         val genericDataTypeNames = mutableListOf<DataTypeName>()
 
@@ -98,8 +98,34 @@ class DataTypeConverter(
             targetType.getPkg(),
             genericDataTypeNames,
             null,
-            schemaInfo?.getDeprecated() ?: false,
-            simpleDataType
+            schemaInfo.getDeprecated(),
+            false,
+            sourceDataType
+        )
+    }
+
+    // used to add additional parameter
+    fun createMappedDataType(targetType: TargetType): MappedDataType {
+        val genericDataTypeNames = mutableListOf<DataTypeName>()
+
+        targetType.genericNames.forEach {
+            val dataTypeName = when {
+                it.startsWith(options.packageName) -> {
+                    DataTypeName(it, getTypeNameWithSuffix(it))
+                }
+                else -> {
+                    DataTypeName(it)
+                }
+            }
+            genericDataTypeNames.add(dataTypeName)
+        }
+
+        return MappedDataType(
+            targetType.getName(),
+            targetType.getPkg(),
+            genericDataTypeNames,
+            null,
+             false
         )
     }
 
@@ -110,9 +136,11 @@ class DataTypeConverter(
             items.add (itemType)
         }
 
+        val objectType: DataType = createComposedDataType(schemaInfo, items)
+
         val targetType = getMappedDataType(schemaInfo)
         if (targetType != null) {
-            return createMappedDataType(targetType, schemaInfo, false)
+            return createMappedDataType(targetType, schemaInfo, objectType)
         }
 
         val found = dataTypes.find(schemaInfo.getName())
@@ -120,14 +148,18 @@ class DataTypeConverter(
             return found
         }
 
-        val objectType: DataType
+        dataTypes.add (objectType)
+        return objectType
+    }
+
+    private fun createComposedDataType(schemaInfo: SchemaInfo, items: List<DataType>): DataType {
         if (schemaInfo.isComposedAllOf()) {
             val filtered = items.filterNot { item -> item is NoDataType }
             if (filtered.size == 1) {
                 return filtered.first()
             }
 
-            objectType = AllOfObjectDataType(
+            return AllOfObjectDataType(
                 DataTypeName(schemaInfo.getName(), getTypeNameWithSuffix(schemaInfo.getName())),
                 listOf(options.packageName, "model").joinToString("."),
                 items,
@@ -139,7 +171,7 @@ class DataTypeConverter(
                 required = schemaInfo.getRequired()
             )
 
-            objectType = InterfaceDataType (
+            val objectType = InterfaceDataType(
                 DataTypeName(schemaInfo.getName(), getTypeNameWithSuffix(schemaInfo.getName())),
                 listOf(options.packageName, "model").joinToString("."),
                 items,
@@ -151,19 +183,18 @@ class DataTypeConverter(
             items.forEach {
                 (it as ModelDataType).implementsDataType = objectType
             }
+
+            return objectType
         } else {
-            objectType = AnyOneOfObjectDataType(
+            return AnyOneOfObjectDataType(
                 schemaInfo.getName(),
-                listOf(options.packageName, "model").joinToString ("."),
+                listOf(options.packageName, "model").joinToString("."),
                 schemaInfo.itemOf()!!,
                 items,
                 null,
                 schemaInfo.getDeprecated()
             )
         }
-
-        dataTypes.add (objectType)
-        return objectType
     }
 
     private fun shouldGenerateOneOfInterface(items: List<DataType>): Boolean {
@@ -175,8 +206,6 @@ class DataTypeConverter(
         val itemSchemaInfo = schemaInfo.buildForItem()
         val item = convert(itemSchemaInfo, dataTypes)
 
-        val targetType = getMappedDataType (schemaInfo)
-
         val constraints = DataTypeConstraints(
             defaultValue = schemaInfo.getDefaultValue(),
             nullable = schemaInfo.getNullable(),
@@ -184,17 +213,21 @@ class DataTypeConverter(
             maxItems = schemaInfo.getMaxItems()
         )
 
+        val arrayDataType = ArrayDataType(item, constraints, schemaInfo.getDeprecated())
+
+        val targetType = getMappedDataType (schemaInfo)
         if (targetType != null) {
             return MappedCollectionDataType(
                 targetType.getName(),
                 targetType.getPkg(),
                 item,
                 constraints,
-                schemaInfo.getDeprecated()
+                schemaInfo.getDeprecated(),
+                arrayDataType
             )
         }
 
-        return ArrayDataType(item, constraints, schemaInfo.getDeprecated())
+        return arrayDataType
     }
 
     private fun createRefDataType (schemaInfo: SchemaInfo, dataTypes: DataTypes): DataType {
@@ -219,9 +252,11 @@ class DataTypeConverter(
             properties[propName] = propDataType
         }
 
+        val objectType = createObjectDataType(schemaInfo, properties)
+
         val targetType = getMappedDataType(schemaInfo)
         if (targetType != null) {
-            return createMappedDataType(targetType, schemaInfo, false)
+            return createMappedDataType(targetType, schemaInfo, objectType)
         }
 
         val found = dataTypes.find(schemaInfo.getName())
@@ -229,12 +264,20 @@ class DataTypeConverter(
             return found
         }
 
+        dataTypes.add (schemaInfo.getName(), objectType)
+        return objectType
+    }
+
+    private fun createObjectDataType(
+        schemaInfo: SchemaInfo,
+        properties: LinkedHashMap<String, PropertyDataType>
+    ): ObjectDataType {
         val constraints = DataTypeConstraints(
             nullable = schemaInfo.getNullable(),
             required = schemaInfo.getRequired()
         )
 
-        val objectType = ObjectDataType (
+        return ObjectDataType(
             DataTypeName(schemaInfo.getName(), getTypeNameWithSuffix(schemaInfo.getName())),
             listOf(options.packageName, "model").joinToString("."),
             properties = properties,
@@ -242,17 +285,20 @@ class DataTypeConverter(
             deprecated = schemaInfo.getDeprecated(),
             documentation = Documentation(description = schemaInfo.description)
         )
-
-        dataTypes.add (schemaInfo.getName(), objectType)
-        return objectType
     }
 
     private fun createSimpleDataType(schemaInfo: SchemaInfo, dataTypes: DataTypes): DataType {
+        val dataType = createSimpleDataTypeX(schemaInfo, dataTypes)
+
         val targetType = getMappedDataType(schemaInfo)
         if(targetType != null) {
-            return createMappedDataType(targetType, schemaInfo, true)
+            return createMappedDataType(targetType, schemaInfo, dataType)
         }
 
+        return dataType
+    }
+
+    private fun createSimpleDataTypeX(schemaInfo: SchemaInfo, dataTypes: DataTypes): DataType {
         var typeFormat = schemaInfo.getType()
         if (isSupportedFormat(schemaInfo.getFormat())) {
             typeFormat += ":" + schemaInfo.getFormat()
@@ -272,56 +318,81 @@ class DataTypeConverter(
             format = schemaInfo.getFormat()
         )
 
-        return when(typeFormat) {
+        return when (typeFormat) {
             "integer",
             "integer:int32" ->
-                IntegerDataType(constraints, schemaInfo.getDeprecated(),
-                    Documentation(description = schemaInfo.description))
+                IntegerDataType(
+                    constraints, schemaInfo.getDeprecated(),
+                    Documentation(description = schemaInfo.description)
+                )
+
             "integer:int64" ->
-                LongDataType(constraints, schemaInfo.getDeprecated(),
-                    Documentation(description = schemaInfo.description))
+                LongDataType(
+                    constraints, schemaInfo.getDeprecated(),
+                    Documentation(description = schemaInfo.description)
+                )
+
             "number",
             "number:float" ->
-                FloatDataType(constraints, schemaInfo.getDeprecated(),
-                    Documentation(description = schemaInfo.description))
+                FloatDataType(
+                    constraints, schemaInfo.getDeprecated(),
+                    Documentation(description = schemaInfo.description)
+                )
+
             "number:double" ->
-                DoubleDataType(constraints, schemaInfo.getDeprecated(),
-                    Documentation(description = schemaInfo.description))
+                DoubleDataType(
+                    constraints, schemaInfo.getDeprecated(),
+                    Documentation(description = schemaInfo.description)
+                )
+
             "boolean" ->
-                BooleanDataType(constraints, schemaInfo.getDeprecated(),
-                    Documentation(description = schemaInfo.description))
+                BooleanDataType(
+                    constraints, schemaInfo.getDeprecated(),
+                    Documentation(description = schemaInfo.description)
+                )
+
             "string" ->
                 createStringDataType(schemaInfo, constraints, dataTypes)
+
             "string:date" ->
-                LocalDateDataType(constraints, schemaInfo.getDeprecated(),
-                    Documentation(description = schemaInfo.description))
+                LocalDateDataType(
+                    constraints, schemaInfo.getDeprecated(),
+                    Documentation(description = schemaInfo.description)
+                )
+
             "string:date-time" ->
-                OffsetDateTimeDataType (constraints, schemaInfo.getDeprecated(),
-                    Documentation(description = schemaInfo.description))
+                OffsetDateTimeDataType(
+                    constraints, schemaInfo.getDeprecated(),
+                    Documentation(description = schemaInfo.description)
+                )
+
             else ->
                 throw UnknownDataTypeException(
-                    schemaInfo.getName(), schemaInfo.getType(), schemaInfo.getFormat())
+                    schemaInfo.getName(), schemaInfo.getType(), schemaInfo.getFormat()
+                )
         }
     }
 
     @Suppress("UNUSED_PARAMETER")
     private fun createNoDataType(schemaInfo: SchemaInfo, dataTypes: DataTypes): DataType {
-        val targetType = getMappedDataType(schemaInfo)
-        if (targetType != null) {
-            return createMappedDataType(targetType, schemaInfo, false)
-        }
-
         val constraints = DataTypeConstraints(
             nullable = schemaInfo.getNullable(),
             required = schemaInfo.getRequired()
         )
 
-        return NoDataType(
+        val dataType = NoDataType(
             DataTypeName(schemaInfo.getName(), getTypeNameWithSuffix(schemaInfo.getName())),
             listOf(options.packageName, "model").joinToString("."),
             constraints = constraints,
             deprecated = schemaInfo.getDeprecated()
         )
+
+        val targetType = getMappedDataType(schemaInfo)
+        if (targetType != null) {
+            return createMappedDataType(targetType, schemaInfo, dataType)
+        }
+
+        return dataType
     }
 
     private fun isSupportedFormat(format: String?): Boolean {

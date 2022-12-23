@@ -7,6 +7,7 @@ package io.openapiprocessor.core.support
 
 import io.openapiprocessor.core.parser.OpenApi as ParserOpenApi
 import io.openapiprocessor.core.parser.ParserType
+import io.openapiprocessor.core.parser.openapi.Parser
 import io.openapiprocessor.core.parser.openapi4j.OpenApi as O4jOpenApi
 import io.openapiprocessor.core.parser.swagger.OpenApi as SwaggerOpenApi
 import io.openapiprocessor.test.stream.Memory
@@ -24,8 +25,17 @@ fun parse(apiYaml: String, parserType: ParserType = ParserType.SWAGGER): ParserO
     return when (parserType) {
         ParserType.SWAGGER -> parseWithSwagger(apiYaml)
         ParserType.OPENAPI4J -> parseWithOpenApi4j(apiYaml)
-        ParserType.INTERNAL -> TODO()
+        ParserType.INTERNAL -> parseWithInternal(apiYaml)
     }
+}
+
+fun parseWithInternal(yaml: String): ParserOpenApi {
+    Memory.add("openapi.yaml", yaml)
+
+    val api = Parser()
+        .parse("memory:openapi.yaml")
+
+    return api
 }
 
 fun parseWithOpenApi4j(yaml: String): ParserOpenApi {

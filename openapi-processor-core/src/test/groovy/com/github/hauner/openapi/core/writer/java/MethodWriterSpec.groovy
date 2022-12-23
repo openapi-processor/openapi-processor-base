@@ -141,10 +141,10 @@ class MethodWriterSpec extends Specification {
 """
 
         where:
-        collection                                                                    | response
-        new ArrayDataType (new StringDataType (), null, false)                        | 'String[]'
-        new MappedCollectionDataType ('List', '', new StringDataType (), null, false) | 'List<String>'
-        new MappedCollectionDataType ('Set', '', new StringDataType (), null, false)  | 'Set<String>'
+        collection                                                                          | response
+        new ArrayDataType (new StringDataType (), null, false)                              | 'String[]'
+        new MappedCollectionDataType ('List', '', new StringDataType (), null, false, null) | 'List<String>'
+        new MappedCollectionDataType ('Set', '', new StringDataType (), null, false, null)  | 'Set<String>'
     }
 
     void "writes parameter annotation" () {
