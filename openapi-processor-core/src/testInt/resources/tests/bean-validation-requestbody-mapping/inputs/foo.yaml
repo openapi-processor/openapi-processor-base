@@ -1,0 +1,9 @@
+post:
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: 'model.yaml#/Foo'
+  responses:
+    200:
+      description: Description

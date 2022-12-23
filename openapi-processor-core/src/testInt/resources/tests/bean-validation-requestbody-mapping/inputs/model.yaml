@@ -1,0 +1,6 @@
+Foo:
+  type: object
+  properties:
+    foo:
+      type: integer
+      minimum: 0
