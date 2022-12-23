@@ -5,12 +5,18 @@
 
 package io.openapiprocessor.core.writer.java
 
-enum class BeanValidation(val typeName: String) {
-    DECIMAL_MAX("javax.validation.constraints.DecimalMax"),
-    DECIMAL_MIN("javax.validation.constraints.DecimalMin"),
-    EMAIL("javax.validation.constraints.Email"),
-    NOT_NULL("javax.validation.constraints.NotNull"),
-    PATTERN("javax.validation.constraints.Pattern"),
-    SIZE("javax.validation.constraints.Size"),
-    VALID("javax.validation.Valid");
+enum class BeanValidationFormat(val pkg: String) {
+    JAVAX("javax"),
+    JAKARTA("jarkata")
+}
+
+@Suppress("PropertyName")
+class BeanValidations(val format: BeanValidationFormat = BeanValidationFormat.JAVAX) {
+    val DECIMAL_MAX = "${format.pkg}.validation.constraints.DecimalMax"
+    val DECIMAL_MIN = "${format.pkg}.validation.constraints.DecimalMin"
+    val EMAIL = "${format.pkg}.validation.constraints.Email"
+    val NOT_NULL = "${format.pkg}.validation.constraints.NotNull"
+    val PATTERN = "${format.pkg}.validation.constraints.Pattern"
+    val SIZE = "${format.pkg}.validation.constraints.Size"
+    val VALID = "${format.pkg}.validation.Valid"
 }

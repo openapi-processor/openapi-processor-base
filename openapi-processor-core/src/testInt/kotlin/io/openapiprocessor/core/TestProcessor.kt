@@ -44,7 +44,7 @@ class TestProcessor: OpenApiProcessor {
             )
 
             val generatedWriter = GeneratedWriterImpl(generatedInfo, options)
-            val beanValidation = BeanValidationFactory()
+            val beanValidation = BeanValidationFactory(getValidationFormat(options))
             val javaDocWriter = JavaDocWriter()
 
             val writer = ApiWriter(
@@ -83,6 +83,14 @@ class TestProcessor: OpenApiProcessor {
             log.error ("processing failed!", e)
             throw e
         }
+    }
+
+    private fun getValidationFormat(options: ApiOptions): BeanValidationFormat {
+        val format = options.beanValidationFormat
+        return if (format != null)
+            BeanValidationFormat.valueOf(format.uppercase())
+        else
+            BeanValidationFormat.JAVAX
     }
 }
 

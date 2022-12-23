@@ -11,7 +11,10 @@ import org.apache.commons.text.StringEscapeUtils.escapeJava
 /**
  * creates bean validation imports and annotations.
  */
-open class BeanValidationFactory {
+open class BeanValidationFactory(
+    val format: BeanValidationFormat = BeanValidationFormat.JAVAX
+) {
+    val validations: BeanValidations = BeanValidations(format)
 
     /**
      * override to add annotations to the model object class.
@@ -39,12 +42,12 @@ open class BeanValidationFactory {
         val annotations = mutableListOf<Annotation>()
 
         if (dataType.shouldHaveValid()) {
-            annotations.add(Annotation(BeanValidation.VALID.typeName))
+            annotations.add(Annotation(validations.VALID))
         }
 
         val sourceDataType = getSourceDataType(dataType)
         if (required) {
-            annotations.add(Annotation(BeanValidation.NOT_NULL.typeName))
+            annotations.add(Annotation(validations.NOT_NULL))
         }
 
         if (sourceDataType.hasSizeConstraints()) {
@@ -88,7 +91,7 @@ open class BeanValidationFactory {
             parameters["inclusive"] = "false"
         }
 
-        return Annotation(BeanValidation.DECIMAL_MIN.typeName, parameters)
+        return Annotation(validations.DECIMAL_MIN, parameters)
     }
 
     private fun createDecimalMaxAnnotation(dataType: DataType): Annotation {
@@ -101,7 +104,7 @@ open class BeanValidationFactory {
             parameters["inclusive"] = "false"
         }
 
-        return Annotation(BeanValidation.DECIMAL_MAX.typeName, parameters)
+        return Annotation(validations.DECIMAL_MAX, parameters)
     }
 
     private fun createSizeAnnotation(dataType: DataType): Annotation {
@@ -123,17 +126,17 @@ open class BeanValidationFactory {
             parameters["max"] = "${size.max}"
         }
 
-        return Annotation(BeanValidation.SIZE.typeName, parameters)
+        return Annotation(validations.SIZE, parameters)
     }
 
     private fun createPatternAnnotation(dataType: DataType): Annotation {
         val parameters = linkedMapOf<String, String>()
         parameters["regexp"] = """"${escapeJava(dataType.constraints?.pattern!!)}""""
-        return Annotation(BeanValidation.PATTERN.typeName, parameters)
+        return Annotation(validations.PATTERN, parameters)
     }
 
     private fun createEmailAnnotation(): Annotation {
-        return Annotation(BeanValidation.EMAIL.typeName)
+        return Annotation(validations.EMAIL)
     }
 }
 

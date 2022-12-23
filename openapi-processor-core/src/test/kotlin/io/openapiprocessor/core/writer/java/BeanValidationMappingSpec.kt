@@ -13,10 +13,10 @@ import io.openapiprocessor.core.support.datatypes.ObjectDataType
 import io.openapiprocessor.core.support.datatypes.propertyDataTypeString
 
 class BeanValidationMappingSpec: StringSpec({
+    val validation = BeanValidationFactory()
+    val validations = validation.validations
 
     "applies @Valid to mapped object items" {
-        val validation = BeanValidationFactory()
-
         val dataType = MappedDataType(
             "Foo", "pkg",
             sourceDataType = ObjectDataType(
@@ -27,18 +27,16 @@ class BeanValidationMappingSpec: StringSpec({
 
         val prop = info.prop
         prop.dataTypeValue shouldBe "Foo"
-        prop.imports shouldBe setOf(BeanValidation.VALID.typeName)
+        prop.imports shouldBe setOf(validations.VALID)
         prop.annotations shouldBe listOf("@Valid")
 
         val io = info.inout
         io.dataTypeValue shouldBe "@Valid Foo"
-        io.imports shouldBe setOf(BeanValidation.VALID.typeName)
+        io.imports shouldBe setOf(validations.VALID)
         io.annotations.shouldBeEmpty()
     }
 
     "applies @Valid to mapped collection with object items" {
-        val validation = BeanValidationFactory()
-
         val dataType = MappedCollectionDataType(
             "List", "pkg",
             ObjectDataType(
@@ -54,18 +52,16 @@ class BeanValidationMappingSpec: StringSpec({
 
         val prop = info.prop
         prop.dataTypeValue shouldBe "List<@Valid Foo>"
-        prop.imports shouldBe setOf(BeanValidation.VALID.typeName)
+        prop.imports shouldBe setOf(validations.VALID)
         prop.annotations.shouldBeEmpty()
 
         val io = info.inout
         io.dataTypeValue shouldBe "List<@Valid Foo>"
-        io.imports shouldBe setOf(BeanValidation.VALID.typeName)
+        io.imports shouldBe setOf(validations.VALID)
         io.annotations.shouldBeEmpty()
     }
 
     "does not apply @Valid to mapped collection with simple items" {
-        val validation = BeanValidationFactory()
-
         val dataType = MappedCollectionDataType(
             "List", "pkg", StringDataType(),
             sourceDataType = ArrayDataType(StringDataType())
@@ -84,8 +80,6 @@ class BeanValidationMappingSpec: StringSpec({
     }
 
     "does not apply @Valid to mapped collection" {
-        val validation = BeanValidationFactory()
-
         val dataType = MappedCollectionDataType(
             "List", "pkg",
             ObjectDataType(
@@ -102,19 +96,17 @@ class BeanValidationMappingSpec: StringSpec({
 
         val prop = info.prop
         prop.dataTypeValue shouldBe "List<@Valid Foo>"
-        prop.imports shouldBe setOf(BeanValidation.VALID.typeName)
+        prop.imports shouldBe setOf(validations.VALID)
         prop.annotations.shouldBeEmpty()
 
         val io = info.inout
         io.dataTypeValue shouldBe "List<@Valid Foo>"
-        io.imports shouldBe setOf(BeanValidation.VALID.typeName)
+        io.imports shouldBe setOf(validations.VALID)
         io.annotations.shouldBeEmpty()
     }
 
     // does this make sense...?
     "applies constraint annotations to mapped simple item data type" {
-        val validation = BeanValidationFactory()
-
         val dataType = MappedCollectionDataType(
             "List", "java",
             MappedDataType(
@@ -137,12 +129,12 @@ class BeanValidationMappingSpec: StringSpec({
 
         val prop = info.prop
         prop.dataTypeValue shouldBe "List<@Size(min = 2, max = 3) Foo>"
-        prop.imports shouldBe setOf(BeanValidation.SIZE.typeName)
+        prop.imports shouldBe setOf(validations.SIZE)
         prop.annotations.shouldBeEmpty()
 
         val io = info.inout
         io.dataTypeValue shouldBe "List<@Size(min = 2, max = 3) Foo>"
-        io.imports shouldBe setOf(BeanValidation.SIZE.typeName)
+        io.imports shouldBe setOf(validations.SIZE)
         io.annotations.shouldBeEmpty()
     }
 
