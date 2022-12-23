@@ -5,6 +5,7 @@
 
 package io.openapiprocessor.core.support.datatypes
 
+import io.openapiprocessor.core.model.datatypes.ArrayDataType
 import io.openapiprocessor.core.model.datatypes.DataType
 import io.openapiprocessor.core.model.datatypes.DataTypeConstraints
 import io.openapiprocessor.core.model.datatypes.MappedCollectionDataType
@@ -19,5 +20,6 @@ class ListDataType(
     List::class.java.simpleName,
     List::class.java.packageName,
     item,
-    constraints
+    constraints,
+    sourceDataType = ArrayDataType(item)
 )

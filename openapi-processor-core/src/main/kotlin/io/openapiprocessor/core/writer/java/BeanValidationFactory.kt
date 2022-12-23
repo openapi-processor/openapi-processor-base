@@ -38,35 +38,44 @@ open class BeanValidationFactory {
     private fun collectAnnotations(dataType: DataType, required: Boolean = false): List<Annotation>  {
         val annotations = mutableListOf<Annotation>()
 
-        if (dataType.isModel() || dataType.isInterface() || dataType.isArrayOfModel()) {
+        if (dataType.shouldHaveValid()) {
             annotations.add(Annotation(BeanValidation.VALID.typeName))
         }
 
+        val sourceDataType = getSourceDataType(dataType)
         if (required) {
             annotations.add(Annotation(BeanValidation.NOT_NULL.typeName))
         }
 
-        if (dataType.hasSizeConstraints()) {
-            annotations.add(createSizeAnnotation(dataType))
+        if (sourceDataType.hasSizeConstraints()) {
+            annotations.add(createSizeAnnotation(sourceDataType))
         }
 
-        if (dataType.hasMinConstraint()) {
-            annotations.add(createDecimalMinAnnotation (dataType))
+        if (sourceDataType.hasMinConstraint()) {
+            annotations.add(createDecimalMinAnnotation (sourceDataType))
         }
 
-        if (dataType.hasMaxConstraint()) {
-            annotations.add(createDecimalMaxAnnotation (dataType))
+        if (sourceDataType.hasMaxConstraint()) {
+            annotations.add(createDecimalMaxAnnotation (sourceDataType))
         }
 
-        if (dataType.patternConstraint()) {
-            annotations.add(createPatternAnnotation(dataType))
+        if (sourceDataType.patternConstraint()) {
+            annotations.add(createPatternAnnotation(sourceDataType))
         }
 
-        if (dataType.emailConstraint()) {
+        if (sourceDataType.emailConstraint()) {
             annotations.add(createEmailAnnotation())
         }
 
         return annotations
+    }
+
+    private fun getSourceDataType(dataType: DataType): DataType {
+        if (dataType is MappedSourceDataType && dataType.sourceDataType != null) {
+            return dataType.sourceDataType!!
+        }
+
+        return dataType
     }
 
     private fun createDecimalMinAnnotation(dataType: DataType): Annotation {
@@ -128,15 +137,23 @@ open class BeanValidationFactory {
     }
 }
 
-private fun DataType.isModel(): Boolean = this is ModelDataType
+private fun DataType.shouldHaveValid(): Boolean {
+    if (this is ModelDataType)
+        return true
 
-private fun DataType.isInterface(): Boolean = this is InterfaceDataType
+    if (this is ArrayDataType)
+        return item is ModelDataType
 
-private fun DataType.isArrayOfModel(): Boolean {
-    if (this !is ArrayDataType)
+    if (this is InterfaceDataType)
+        return true
+
+    if (this is MappedCollectionDataType)
         return false
 
-    return item.isModel()
+    if (this is MappedSourceDataType)
+        return sourceDataType!!.shouldHaveValid()
+
+    return false
 }
 
 private fun DataType.isString(): Boolean = this is StringDataType

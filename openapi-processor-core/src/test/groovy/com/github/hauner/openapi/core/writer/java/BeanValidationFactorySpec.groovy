@@ -128,7 +128,9 @@ class BeanValidationFactorySpec extends Specification {
             Collection.packageName,
             new StringDataType (),
             constraints,
-            false)
+            false,
+            null
+        )
 
         when:
         def info = validation.validate (dataType, false)
@@ -295,7 +297,8 @@ class BeanValidationFactorySpec extends Specification {
                     Collection.packageName,
                     new StringDataType (),
                     constraints,
-                    false
+                    false,
+                    null
                 )
         }
         null

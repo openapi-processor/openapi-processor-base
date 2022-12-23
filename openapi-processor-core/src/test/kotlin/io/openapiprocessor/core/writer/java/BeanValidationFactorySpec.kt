@@ -58,45 +58,6 @@ class BeanValidationFactorySpec : StringSpec({
         io.annotations.shouldBeEmpty()
     }
 
-    "applies @Valid to mapped collection with object items" {
-        val validation = BeanValidationFactory()
-
-        val dataType = MappedCollectionDataType(
-            "List", "pkg",
-            ObjectDataType(
-                "Foo", "pkg", linkedMapOf("foo" to propertyDataTypeString())
-            )
-        )
-        val info = validation.validate(dataType)
-
-        val prop = info.prop
-        prop.dataTypeValue shouldBe "List<@Valid Foo>"
-        prop.imports shouldBe setOf(BeanValidation.VALID.typeName)
-        prop.annotations.shouldBeEmpty()
-
-        val io = info.inout
-        io.dataTypeValue shouldBe "List<@Valid Foo>"
-        io.imports shouldBe setOf(BeanValidation.VALID.typeName)
-        io.annotations.shouldBeEmpty()
-    }
-
-    "does not apply @Valid to mapped collection with simple items" {
-        val validation = BeanValidationFactory()
-
-        val dataType = MappedCollectionDataType("List", "pkg", StringDataType())
-        val info = validation.validate(dataType)
-
-        val prop = info.prop
-        prop.dataTypeValue shouldBe "List<String>"
-        prop.imports.shouldBeEmpty()
-        prop.annotations.shouldBeEmpty()
-
-        val io = info.inout
-        io.dataTypeValue shouldBe "List<String>"
-        io.imports.shouldBeEmpty()
-        io.annotations.shouldBeEmpty()
-    }
-
     "applies @Pattern to String" {
         val validation = BeanValidationFactory()
 
@@ -136,9 +97,7 @@ class BeanValidationFactorySpec : StringSpec({
         val validation = BeanValidationFactory()
 
         val dataType = ListDataType(
-            StringDataType(
-                constraints = DataTypeConstraints(minLength = 2, maxLength = 3)
-            ),
+            StringDataType(constraints = DataTypeConstraints(minLength = 2, maxLength = 3)),
             constraints = DataTypeConstraints()
         )
         val info = validation.validate(dataType, true)
