@@ -1,5 +1,5 @@
 [versions]
-processor = "2022.7-SNAPSHOT"
+processor = "2023.1-SNAPSHOT"
 
 kotlin = "1.7.20"
 build-jdk = "11"
@@ -35,7 +35,7 @@ json-schema-validator = "com.networknt:json-schema-validator:1.0.73"
 
 checker = "org.checkerframework:checker:3.25.0"
 jimfs = "com.google.jimfs:jimfs:1.2"
-slf4j = "org.slf4j:slf4j-api:2.0.3"
+slf4j = "org.slf4j:slf4j-api:2.0.6"
 logback = "ch.qos.logback:logback-classic:1.4.3"
 
 kotest-bom = "io.kotest:kotest-bom:5.5.0"
@@ -45,7 +45,7 @@ mockk = "io.mockk:mockk:1.13.2"
 
 diff-utils = "io.github.java-diff-utils:java-diff-utils:4.12"
 
-groovy-bom = "org.apache.groovy:groovy-bom:4.0.5"
+groovy-bom = "org.apache.groovy:groovy-bom:4.0.6"
 spock = "org.spockframework:spock-core:2.3-groovy-4.0"
 
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
