@@ -8,6 +8,7 @@ package io.openapiprocessor.core.converter
 import io.openapiprocessor.core.processor.MappingConverter
 import io.openapiprocessor.core.processor.MappingReader
 import io.openapiprocessor.core.processor.mapping.MappingVersion
+import io.openapiprocessor.core.processor.mapping.v2.Options
 import io.openapiprocessor.core.processor.mapping.v1.Mapping as MappingV1
 import io.openapiprocessor.core.processor.mapping.v2.Mapping as MappingV2
 import org.slf4j.Logger
@@ -54,7 +55,11 @@ class OptionsConverter(private val checkObsoleteProcessorOptions: Boolean = fals
             is MappingV2 -> {
                 options.packageName = mapping.options.packageName
                 options.modelNameSuffix = mapping.options.modelNameSuffix
-                options.beanValidation = mapping.options.beanValidation
+
+                val (enable, format) = checkBeanValidation(mapping.options)
+                options.beanValidation = enable
+                options.beanValidationFormat = format
+
                 options.javadoc = mapping.options.javadoc
                 options.oneOfInterface = mapping.options.oneOfInterface
                 options.formatCode = mapping.options.formatCode
@@ -67,6 +72,15 @@ class OptionsConverter(private val checkObsoleteProcessorOptions: Boolean = fals
         }
 
         options.typeMappings = MappingConverter().convert(mapping)
+    }
+
+    private fun checkBeanValidation(options: Options): Pair<Boolean, String?> {
+        return when (options.beanValidation) {
+            "true" -> Pair(true, "javax")
+            "javax" -> Pair(true, "javax")
+            "jakarta" -> Pair(true, "jakarta")
+            else -> Pair(false, null)
+        }
     }
 
     private fun checkDeprecatedMapOptions(processorOptions: Map<String, *>, options: ApiOptions) {

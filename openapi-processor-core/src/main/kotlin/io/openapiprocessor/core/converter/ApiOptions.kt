@@ -35,6 +35,11 @@ class ApiOptions {
     var beanValidation = false
 
     /**
+     * Bean Validation format: javax (v2) or jakarta (v3)
+     */
+    var beanValidationFormat: String? = null
+
+    /**
      * enable/disable generation of javadoc comments based on the `description` OpenAPI property.
      *
      * *experimental*

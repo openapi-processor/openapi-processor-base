@@ -25,7 +25,7 @@ data class Options(
     /**
      * bean validation (optional)
      */
-    val beanValidation: Boolean = false,
+    val beanValidation: String = "false",
 
     /**
      * generate javadoc (optional)

@@ -107,4 +107,27 @@ class OptionsConverterSpec: StringSpec({
         options.formatCode.shouldBeFalse()
     }
 
+    data class BeanData(val source: String, val enabled: Boolean, val format: String?)
+
+    for (bd in listOf(
+        BeanData("false", false, null),
+        BeanData("true", true, "javax"),
+        BeanData("javax", true, "javax"),
+        BeanData("jakarta", true, "jakarta")
+    )) {
+        "should read bean validation & format: ${bd.source}" {
+            val converter = OptionsConverter()
+
+            val options = converter.convertOptions(mapOf(
+                "mapping" to """
+                    openapi-processor-mapping: v2.2
+                    options:
+                      bean-validation: ${bd.source}
+                """.trimIndent()
+            ))
+
+            options.beanValidation shouldBe bd.enabled
+            options.beanValidationFormat shouldBe bd.format
+        }
+    }
 })
