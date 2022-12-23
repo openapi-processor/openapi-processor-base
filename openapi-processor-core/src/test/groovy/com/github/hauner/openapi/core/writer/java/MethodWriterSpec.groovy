@@ -107,7 +107,8 @@ class MethodWriterSpec extends Specification {
                             'InlineObjectResponse', '', [
                             foo1: new StringDataType (),
                             foo2: new StringDataType ()
-                        ], null, false, null)) {}
+                        ] as LinkedHashMap,
+                        null, false, null)) {}
                 }
             }
         }
