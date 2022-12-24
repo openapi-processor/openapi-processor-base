@@ -15,6 +15,7 @@ import io.openapiprocessor.core.converter.mapping.AnnotationTypeMapping
 import io.openapiprocessor.core.converter.mapping.EndpointTypeMapping
 import io.openapiprocessor.core.converter.mapping.ParameterAnnotationTypeMapping
 import io.openapiprocessor.core.model.datatypes.DataTypeName
+import io.openapiprocessor.core.model.datatypes.MappedDataType
 import io.openapiprocessor.core.model.datatypes.ObjectDataType
 import io.openapiprocessor.core.model.parameters.ParameterBase
 import io.openapiprocessor.core.support.TestMappingAnnotationWriter
@@ -101,6 +102,46 @@ class MethodWriterAnnotationSpec: StringSpec ({
             """    
             |    @CoreMapping
             |    void getFoo(@Parameter @Bar(bar = rab) Foo foo);
+            |
+            """.trimMargin()
+    }
+
+    "writes additional parameter annotation on mapped data type from annotation mapping" {
+        apiOptions.typeMappings = listOf(
+            ParameterAnnotationTypeMapping(
+                AnnotationTypeMapping("Foo", annotation = Annotation(
+                    "io.openapiprocessor.Bar", linkedMapOf("bar" to "rab"))
+                )
+            )
+        )
+
+        val endpoint = endpoint("/foo") {
+            parameters {
+                any(object : ParameterBase(
+                    "foo", MappedDataType(
+                        "MappedFoo", "pkg",
+                        sourceDataType = ObjectDataType(
+                            DataTypeName("Foo"), "pkg"
+                        )
+                    ),
+                    true
+                ) {})
+            }
+            responses {
+                status("204") {
+                    response()
+                }
+            }
+        }
+
+        // when:
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+
+        // then:
+        target.toString () shouldBe
+            """    
+            |    @CoreMapping
+            |    void getFoo(@Parameter @Bar(bar = rab) MappedFoo foo);
             |
             """.trimMargin()
     }

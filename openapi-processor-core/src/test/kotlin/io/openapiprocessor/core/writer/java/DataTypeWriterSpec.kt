@@ -5,6 +5,7 @@
 
 package io.openapiprocessor.core.writer.java
 
+import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.string.shouldContain
@@ -20,6 +21,7 @@ import io.openapiprocessor.core.support.datatypes.propertyDataTypeString
 import java.io.StringWriter
 
 class DataTypeWriterSpec: StringSpec({
+    this.isolationMode = IsolationMode.InstancePerTest
 
     val options = ApiOptions()
     val generatedWriter = SimpleGeneratedWriter(options)
@@ -228,6 +230,67 @@ class DataTypeWriterSpec: StringSpec({
             |@Generated
             |public class Foo {
             |
+            """.trimMargin()
+    }
+
+    "writes additional annotation import from annotation mapping for a mapped property data type" {
+        options.typeMappings = listOf(
+            AnnotationTypeMapping(
+                "Foo", annotation = MappingAnnotation("foo.Bar")
+            ))
+        writer = DataTypeWriter(options, generatedWriter, BeanValidationFactory())
+
+        val dataType = ObjectDataType("Object",
+            "pkg", linkedMapOf(
+                "foo" to propertyDataType(MappedDataType("MappedFoo", "pkg",
+                    sourceDataType = ObjectDataType("Foo", "pkg")))
+            ))
+
+        // when:
+        writer.write(target, dataType)
+
+        // then:
+        val imports = extractImports(target)
+        imports shouldContain "import foo.Bar;"
+    }
+
+    "writes additional annotation from annotation mapping for a mapped property data type" {
+        options.typeMappings = listOf(
+            AnnotationTypeMapping(
+                "Foo", annotation = MappingAnnotation(
+                    "foo.Bar", linkedMapOf("bar" to """"rab"""")
+                )
+            ))
+        writer = DataTypeWriter(options, generatedWriter, BeanValidationFactory())
+
+        val dataType = ObjectDataType("Object",
+            "pkg", linkedMapOf(
+                "foo" to propertyDataType(MappedDataType("MappedFoo", "pkg",
+                    sourceDataType = ObjectDataType("Foo", "pkg")))
+            ))
+
+        // when:
+        writer.write(target, dataType)
+
+        // then:
+        target.toString() shouldContain
+            """    
+            |@Generated
+            |public class Object {
+            |
+            |    @Bar(bar = "rab")
+            |    @JsonProperty("foo")
+            |    private MappedFoo foo;
+            |
+            |    public MappedFoo getFoo() {
+            |        return foo;
+            |    }
+            |
+            |    public void setFoo(MappedFoo foo) {
+            |        this.foo = foo;
+            |    }
+            |
+            |}
             """.trimMargin()
     }
 })

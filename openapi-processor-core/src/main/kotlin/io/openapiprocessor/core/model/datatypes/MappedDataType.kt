@@ -36,6 +36,10 @@ open class MappedDataType(
         }
     }
 
+    override fun getSourceName(): String {
+        return sourceDataType?.getName() ?: super.getSourceName()
+    }
+
     override fun getPackageName(): String {
         return pkg
     }

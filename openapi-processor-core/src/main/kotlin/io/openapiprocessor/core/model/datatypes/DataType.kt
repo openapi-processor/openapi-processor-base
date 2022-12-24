@@ -31,6 +31,14 @@ interface DataType {
     }
 
     /**
+     * the identifier used to reference this datatype in the mappings. This is usually the name
+     * from the openapi description. If it is an inline type it is a generated name.
+     */
+    fun getSourceName(): String {
+        return getName()
+    }
+
+    /**
      * The "package" of this type without [getTypeName].
      */
     fun getPackageName(): String

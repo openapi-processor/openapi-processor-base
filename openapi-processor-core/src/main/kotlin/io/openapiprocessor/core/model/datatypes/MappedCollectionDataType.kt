@@ -26,6 +26,10 @@ open class MappedCollectionDataType(
         return "${name}<${item.getTypeName()}>"
     }
 
+    override fun getSourceName(): String {
+        return sourceDataType?.getName() ?: super.getSourceName()
+    }
+
     override fun getTypeName(annotations: Set<String>, itemAnnotations: Set<String>): String {
         val sb = StringBuilder()
 

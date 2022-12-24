@@ -127,7 +127,7 @@ open class MethodWriter(
         parameterAnnotationWriter.write(target, parameter)
 
         val annotationTypeMappings = MappingFinder(apiOptions.typeMappings)
-            .findParameterAnnotations(endpoint.path, endpoint.method, parameter.dataType.getTypeName())
+            .findParameterAnnotations(endpoint.path, endpoint.method, parameter.dataType.getSourceName())
 
         annotationTypeMappings.forEach {
             target.write(" ")

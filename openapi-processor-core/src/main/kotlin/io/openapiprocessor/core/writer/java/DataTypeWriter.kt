@@ -7,11 +7,9 @@ package io.openapiprocessor.core.writer.java
 
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.MappingFinder
-import io.openapiprocessor.core.model.datatypes.DataType
-import io.openapiprocessor.core.model.datatypes.ModelDataType
-import io.openapiprocessor.core.model.datatypes.NullDataType
-import io.openapiprocessor.core.model.datatypes.PropertyDataType
+import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.support.capitalizeFirstChar
+import java.io.StringWriter
 import java.io.Writer
 
 @Suppress("ConstPropertyName")
@@ -127,6 +125,17 @@ class DataTypeWriter(
             propTypeName = prop.dataTypeValue
         }
 
+        if (propDataType.dataType is MappedSourceDataType) {
+            val annotationTypeMappings = MappingFinder(apiOptions.typeMappings)
+                .findTypeAnnotations(propDataType.dataType.getSourceName())
+
+            annotationTypeMappings.forEach {
+                val annotation = StringWriter()
+                annotationWriter.write(annotation, Annotation(it.annotation.type, it.annotation.parameters))
+                result += "    $annotation\n"
+            }
+        }
+
         result += "    ${getPropertyAnnotation(propertyName, propDataType)}\n"
         result += "    private $propTypeName $javaPropertyName"
 
@@ -208,8 +217,18 @@ class DataTypeWriter(
 
         imports.add(generatedWriter.getImport())
 
-        dataType.forEach { _, _ ->
+        dataType.forEach { propName, propDataType ->
             imports.add("com.fasterxml.jackson.annotation.JsonProperty")
+
+            val target = getTarget(propDataType)
+            if (target is MappedSourceDataType) {
+                val annotationTypeMappings = MappingFinder(apiOptions.typeMappings)
+                    .findTypeAnnotations(target.getSourceName())
+
+                annotationTypeMappings.forEach {
+                    imports.add(it.annotation.type)
+                }
+            }
         }
 
         imports.addAll(dataType.referencedImports)

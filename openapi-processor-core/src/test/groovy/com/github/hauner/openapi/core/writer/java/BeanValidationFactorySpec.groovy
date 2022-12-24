@@ -312,6 +312,11 @@ class BeanValidationFactorySpec extends Specification {
         }
 
         @Override
+        String getSourceName () {
+            'other'
+        }
+
+        @Override
         String getPackageName () {
             'other'
         }
