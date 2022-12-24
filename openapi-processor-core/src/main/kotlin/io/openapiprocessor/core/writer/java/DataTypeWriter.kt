@@ -14,7 +14,8 @@ import io.openapiprocessor.core.model.datatypes.PropertyDataType
 import io.openapiprocessor.core.support.capitalizeFirstChar
 import java.io.Writer
 
-private const val deprecated =  "@Deprecated"
+@Suppress("ConstPropertyName")
+private const val deprecated = "@Deprecated"
 
 /**
  * Writer for POJO classes.
