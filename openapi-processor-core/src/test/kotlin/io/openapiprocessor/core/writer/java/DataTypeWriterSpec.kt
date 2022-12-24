@@ -293,4 +293,45 @@ class DataTypeWriterSpec: StringSpec({
             |}
             """.trimMargin()
     }
+
+    "writes additional annotation from annotation mapping for a simple mapped property data type" {
+        options.typeMappings = listOf(
+            AnnotationTypeMapping(
+                "string:uuid", annotation = MappingAnnotation(
+                    "foo.Bar", linkedMapOf("bar" to """"rab"""")
+                )
+            ))
+        writer = DataTypeWriter(options, generatedWriter, BeanValidationFactory())
+
+        val dataType = ObjectDataType("Object",
+            "pkg", linkedMapOf(
+                "foo" to propertyDataType(
+                    MappedDataType("Uuid", "java.util",
+                        sourceDataType = StringDataType("string:uuid")))
+            ))
+
+        // when:
+        writer.write(target, dataType)
+
+        // then:
+        target.toString() shouldContain
+            """    
+            |@Generated
+            |public class Object {
+            |
+            |    @Bar(bar = "rab")
+            |    @JsonProperty("foo")
+            |    private Uuid foo;
+            |
+            |    public Uuid getFoo() {
+            |        return foo;
+            |    }
+            |
+            |    public void setFoo(Uuid foo) {
+            |        this.foo = foo;
+            |    }
+            |
+            |}
+            """.trimMargin()
+    }
 })
