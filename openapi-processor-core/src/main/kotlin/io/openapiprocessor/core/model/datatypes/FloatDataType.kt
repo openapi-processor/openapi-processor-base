@@ -11,14 +11,17 @@ import io.openapiprocessor.core.model.Documentation
  * OpenAPI type 'number' with format 'float' maps to java Float.
  */
 class FloatDataType(
-
+    private val typeFormat: String = "number:float",
     override val constraints: DataTypeConstraints? = null,
     override val deprecated: Boolean = false,
     override val documentation: Documentation? = null
-
 ): DataType {
 
     override fun getName(): String {
+        return typeFormat
+    }
+
+    override fun getTypeName(): String {
         return "Float"
     }
 

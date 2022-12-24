@@ -11,12 +11,17 @@ import io.openapiprocessor.core.model.Documentation
  * OpenAPI type 'number' with format 'double' maps to java Double.
  */
 class DoubleDataType(
+    private val typeFormat: String = "number:double",
     override val constraints: DataTypeConstraints? = null,
     override val deprecated: Boolean = false,
     override val documentation: Documentation? = null
 ): DataType {
 
     override fun getName(): String {
+        return typeFormat
+    }
+
+    override fun getTypeName(): String {
         return "Double"
     }
 

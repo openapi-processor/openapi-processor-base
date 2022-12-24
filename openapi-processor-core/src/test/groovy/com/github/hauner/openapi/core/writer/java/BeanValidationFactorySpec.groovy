@@ -250,7 +250,7 @@ class BeanValidationFactorySpec extends Specification {
         constraints.maximum = maximum
         constraints.exclusiveMaximum = exclusiveMaximum
 
-        DataType dataType = new DoubleDataType (constraints, false, null)
+        DataType dataType = new DoubleDataType ("number:double", constraints, false, null)
 
         when:
         def info = validation.validate (dataType, false)
@@ -272,16 +272,16 @@ class BeanValidationFactorySpec extends Specification {
     private DataType createDataType (Class clazz, DataTypeConstraints constraints) {
         switch (clazz) {
             case IntegerDataType:
-                return new IntegerDataType(constraints, false, null)
+                return new IntegerDataType("integer", constraints, false, null)
 
             case LongDataType:
-                return new LongDataType(constraints, false, null)
+                return new LongDataType("integer:int64", constraints, false, null)
 
             case FloatDataType:
-                return new FloatDataType(constraints, false, null)
+                return new FloatDataType("number:float", constraints, false, null)
 
             case DoubleDataType:
-                return new DoubleDataType(constraints, false, null)
+                return new DoubleDataType("number:double", constraints, false, null)
 
             case StringDataType:
                 return new StringDataType("string", constraints, false, null)

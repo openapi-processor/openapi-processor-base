@@ -323,32 +323,32 @@ class DataTypeConverter(
             "integer",
             "integer:int32" ->
                 IntegerDataType(
-                    constraints, schemaInfo.getDeprecated(),
+                    sourceTypeFormat, constraints, schemaInfo.getDeprecated(),
                     Documentation(description = schemaInfo.description)
                 )
 
             "integer:int64" ->
                 LongDataType(
-                    constraints, schemaInfo.getDeprecated(),
+                    sourceTypeFormat, constraints, schemaInfo.getDeprecated(),
                     Documentation(description = schemaInfo.description)
                 )
 
             "number",
             "number:float" ->
                 FloatDataType(
-                    constraints, schemaInfo.getDeprecated(),
+                    sourceTypeFormat, constraints, schemaInfo.getDeprecated(),
                     Documentation(description = schemaInfo.description)
                 )
 
             "number:double" ->
                 DoubleDataType(
-                    constraints, schemaInfo.getDeprecated(),
+                    sourceTypeFormat, constraints, schemaInfo.getDeprecated(),
                     Documentation(description = schemaInfo.description)
                 )
 
             "boolean" ->
                 BooleanDataType(
-                    constraints, schemaInfo.getDeprecated(),
+                    sourceTypeFormat, constraints, schemaInfo.getDeprecated(),
                     Documentation(description = schemaInfo.description)
                 )
 
@@ -357,13 +357,13 @@ class DataTypeConverter(
 
             "string:date" ->
                 LocalDateDataType(
-                    constraints, schemaInfo.getDeprecated(),
+                    sourceTypeFormat, constraints, schemaInfo.getDeprecated(),
                     Documentation(description = schemaInfo.description)
                 )
 
             "string:date-time" ->
                 OffsetDateTimeDataType(
-                    constraints, schemaInfo.getDeprecated(),
+                    sourceTypeFormat, constraints, schemaInfo.getDeprecated(),
                     Documentation(description = schemaInfo.description)
                 )
 

@@ -11,12 +11,17 @@ import io.openapiprocessor.core.model.Documentation
  * OpenAPI type 'integer' with format 'int64' maps to java Long.
  */
 class LongDataType(
+    private val typeFormat: String = "integer:int64",
     override val constraints: DataTypeConstraints? = null,
     override val deprecated: Boolean = false,
     override val documentation: Documentation? = null
 ): DataType {
 
     override fun getName(): String {
+        return typeFormat
+    }
+
+    override fun getTypeName(): String {
         return "Long"
     }
 

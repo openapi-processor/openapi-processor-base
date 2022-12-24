@@ -11,7 +11,7 @@ import io.openapiprocessor.core.model.Documentation
  * OpenAPI type 'integer' with format 'int32' maps to java Integer.
  */
 class IntegerDataType(
-
+    private val typeFormat: String = "integer",
     override val constraints: DataTypeConstraints? = null,
     override val deprecated: Boolean = false,
     override val documentation: Documentation? = null
@@ -19,6 +19,10 @@ class IntegerDataType(
 ): DataType {
 
     override fun getName(): String {
+        return typeFormat
+    }
+
+    override fun getTypeName(): String {
         return "Integer"
     }
 
