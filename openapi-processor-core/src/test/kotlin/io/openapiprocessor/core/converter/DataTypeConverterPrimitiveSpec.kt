@@ -42,7 +42,7 @@ class DataTypeConverterPrimitiveSpec: StringSpec({
             val datatype = converter.convert(info, DataTypes())
 
             // then:
-            datatype.getName() shouldBe dataTypeName
+            datatype.getTypeName() shouldBe dataTypeName
         }
 
     }

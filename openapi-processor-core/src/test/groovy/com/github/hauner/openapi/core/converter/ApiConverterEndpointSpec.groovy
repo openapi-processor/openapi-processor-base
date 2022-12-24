@@ -109,7 +109,7 @@ paths:
         ep.path == '/ping'
         ep.method == HttpMethod.GET
         rsp.contentType == 'text/plain'
-        rsp.responseType.name == 'String'
+        rsp.responseType.typeName == 'String'
     }
 
     void "creates model for an endpoint without parameters and without response content type" () {

@@ -65,7 +65,7 @@ paths:
         def itf = api.interfaces.first ()
         def ep = itf.endpoints.first ()
         def rsp = ep.getFirstResponse ('200')
-        rsp.responseType.name == responseTypeName
+        rsp.responseType.typeName == responseTypeName
 
         where:
         targetTypeName         | responseTypeName
@@ -235,7 +235,7 @@ paths:
         def itf = api.interfaces.first ()
         def ep = itf.endpoints.first ()
         def rsp = ep.getFirstResponse ('200')
-        rsp.responseType.name == responseTypeName
+        rsp.responseType.typeName == responseTypeName
         rsp.responseType.packageName == 'java.util'
 
         where:
@@ -279,7 +279,7 @@ paths:
         def itf = api.interfaces.first ()
         def ep = itf.endpoints.first ()
         def p = ep.parameters.first ()
-        p.dataType.name == 'Collection<String>'
+        p.dataType.typeName == 'Collection<String>'
         p.dataType.packageName == 'java.util'
 
         where:
@@ -339,7 +339,7 @@ paths:
         def itf = api.interfaces.first ()
         def ep = itf.endpoints.first ()
         def rsp = ep.getFirstResponse ('200')
-        rsp.responseType.name == 'Collection<String>'
+        rsp.responseType.typeName == 'Collection<String>'
         rsp.responseType.imports == ['java.util.Collection', 'java.lang.String'] as Set
 
         where:

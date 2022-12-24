@@ -123,7 +123,7 @@ paths:
         def ep = itf.endpoints.first ()
         def parameter = ep.parameters.first ()
         parameter.dataType.packageName == 'java.lang'
-        parameter.dataType.name == 'String[]'
+        parameter.dataType.typeName == 'String[]'
     }
 
     void "converts named primitive type to java type via global type mapping" () {

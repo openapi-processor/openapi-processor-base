@@ -45,7 +45,7 @@ class NullDataTypeWrapperSpec : StringSpec({
         val dataType = StringDataType()
 
         val result = wrapper.wrap(dataType, info)
-        result.getName().shouldBe("JsonNullable<String>")
+        result.getTypeName().shouldBe("JsonNullable<String>")
         result.getPackageName().shouldBe("org.openapitools.jackson.nullable")
     }
 

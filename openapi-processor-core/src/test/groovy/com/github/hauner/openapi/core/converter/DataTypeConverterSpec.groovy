@@ -54,7 +54,7 @@ class DataTypeConverterSpec extends Specification {
             new DataTypes())
 
         then:
-        datatype.name == javaType
+        datatype.typeName == javaType
 
         where:
         type      | format      | javaType
@@ -82,7 +82,7 @@ class DataTypeConverterSpec extends Specification {
             new DataTypes())
 
         then:
-        datatype.name == javaType
+        datatype.typeName == javaType
         datatype.constraints.default == dflt
 
         where:
@@ -148,7 +148,7 @@ class DataTypeConverterSpec extends Specification {
         then:
         assert dt.dataTypes.size () == 2
         def bar = dt.find ('Bar') as ObjectDataType
-        bar.properties['val'].name == 'String'
+        bar.properties['val'].typeName == 'String'
         def foo = dt.find ('Foo') as ObjectDataType
         foo.properties['bar'].dataType == bar
     }
@@ -183,7 +183,7 @@ paths:
         def itf = api.interfaces.first ()
         def ep = itf.endpoints.first ()
         def rsp = ep.getFirstResponse ('200')
-        rsp.responseType.name == 'String[]'
+        rsp.responseType.typeName == 'String[]'
     }
 
     void "creates model for inline response object with name {path}{method}Response{response code}"() {
@@ -220,11 +220,11 @@ paths:
         def ep = itf.endpoints.first ()
         def rsp = ep.getFirstResponse ('200')
         def props = (rsp.responseType as ObjectDataType).properties
-        rsp.responseType.name == 'InlineGetResponse200'
+        rsp.responseType.typeName == 'InlineGetResponse200'
         rsp.responseType.packageName == "${options.packageName}.model"
         props.size () == 2
-        props.get ('isbn').name == 'String'
-        props.get ('title').name == 'String'
+        props.get ('isbn').typeName == 'String'
+        props.get ('title').typeName == 'String'
 
         and:
         api.dataTypes.dataTypes.size () == 1
@@ -275,9 +275,9 @@ components:
         assert book.packageName == "${options.packageName}.model"
         assert book.properties.size () == 2
         def isbn = book.properties.get('isbn')
-        assert isbn.name == 'String'
+        assert isbn.typeName == 'String'
         def title = book.properties.get('title')
-        assert title.name == 'String'
+        assert title.typeName == 'String'
     }
 
     void "skips named simple data types from #/components/schemas" () {

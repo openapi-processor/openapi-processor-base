@@ -68,7 +68,7 @@ paths:
         def param = ep.parameters.first ()
         param.name == 'foo'
         param.required
-        param.dataType.name == 'String'
+        param.dataType.typeName == 'String'
     }
 
     void "converts simple path parameter"() {
@@ -107,7 +107,7 @@ paths:
         def param = ep.parameters.first ()
         param.name == 'foo'
         param.required
-        param.dataType.name == 'String'
+        param.dataType.typeName == 'String'
     }
 
     void "converts simple header parameter"() {
@@ -146,7 +146,7 @@ paths:
         def param = ep.parameters.first ()
         param.name == 'x-foo'
         param.required
-        param.dataType.name == 'String'
+        param.dataType.typeName == 'String'
     }
 
     void "converts simple cookie parameter"() {
@@ -185,7 +185,7 @@ paths:
         def param = ep.parameters.first ()
         param.name == 'foo'
         param.required
-        param.dataType.name == 'String'
+        param.dataType.typeName == 'String'
     }
 
     void "adds additional request parameter from endpoint mapping" () {

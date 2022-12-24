@@ -125,7 +125,7 @@ paths:
 
         other.name == 'other'
         other.required
-        other.dataType.name == 'String'
+        other.dataType.typeName == 'String'
     }
 
     void "throws when request body multipart/form-data schema is not an object schema" () {

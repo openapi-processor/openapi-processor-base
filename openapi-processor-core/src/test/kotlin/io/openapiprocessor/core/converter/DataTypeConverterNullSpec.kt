@@ -73,7 +73,7 @@ class DataTypeConverterNullSpec: StringSpec({
         // then:
         datatype.shouldBeInstanceOf<ObjectDataType>()
         val fooDataType = datatype.getObjectProperty("foo")
-        fooDataType.getName().shouldBe("JsonNullable<String>")
+        fooDataType.getTypeName().shouldBe("JsonNullable<String>")
     }
 
 })
