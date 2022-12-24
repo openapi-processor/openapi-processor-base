@@ -58,7 +58,7 @@ class BeanValidationFactorySpec : StringSpec({
     }
 
     "applies @Pattern to String" {
-        val dataType = StringDataType(DataTypeConstraints(pattern = "regex"))
+        val dataType = StringDataType(constraints = DataTypeConstraints(pattern = "regex"))
         val info = validation.validate(dataType)
         info.annotations.size shouldBe 1
 
@@ -74,7 +74,7 @@ class BeanValidationFactorySpec : StringSpec({
     }
 
     "applies @Pattern to String with escaping" {
-        val dataType = StringDataType(DataTypeConstraints(pattern = """\.\\"""))
+        val dataType = StringDataType(constraints = DataTypeConstraints(pattern = """\.\\"""))
         val info = validation.validate(dataType)
 
         val prop = info.prop

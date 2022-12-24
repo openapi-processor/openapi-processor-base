@@ -260,7 +260,7 @@ public class Bar {
 
         def dataType = objectDataType ('Book', pkg, [
             isbn: propertyDataType (
-                new StringDataType(null, true, null)
+                new StringDataType("string", null, true, null)
             )
         ])
 
@@ -280,7 +280,7 @@ public class Bar {
 
         def dataType = objectDataType ('Book', pkg, [
             isbn: propertyDataType (
-                new StringDataType (null, true, null)
+                new StringDataType ("string", null, true, null)
             )
         ])
 

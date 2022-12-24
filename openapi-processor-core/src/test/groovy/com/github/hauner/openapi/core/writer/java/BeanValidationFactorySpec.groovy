@@ -64,7 +64,7 @@ class BeanValidationFactorySpec extends Specification {
             maxLength: maxLength
         )
 
-        def dataType = new StringDataType(constraints, false, null)
+        def dataType = new StringDataType("string", constraints, false, null)
 
         when:
         def info = validation.validate (dataType, false)
@@ -284,7 +284,7 @@ class BeanValidationFactorySpec extends Specification {
                 return new DoubleDataType(constraints, false, null)
 
             case StringDataType:
-                return new StringDataType(constraints, false, null)
+                return new StringDataType("string", constraints, false, null)
 
             case MappedCollectionDataType:
                 return new MappedCollectionDataType(

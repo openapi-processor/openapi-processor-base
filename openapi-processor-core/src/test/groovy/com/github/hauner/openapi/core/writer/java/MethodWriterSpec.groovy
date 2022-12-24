@@ -155,7 +155,7 @@ class MethodWriterSpec extends Specification {
             }
             e.parameters { ps ->
                 ps.any (new ParameterBase (
-                    'foo', new StringDataType (null, false, null),
+                    'foo', new StringDataType ("string", null, false, null),
                     true,
                     false,
                     null) {})

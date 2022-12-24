@@ -92,6 +92,14 @@ open class SchemaInfo(
         return schema?.getFormat()
     }
 
+    fun getTypeFormat(): String {
+        var typeFormat = getType()!!
+        if (getFormat() != null) {
+            typeFormat += ":" + getFormat()
+        }
+        return typeFormat
+    }
+
     /**
      * get $ref from OpenAPI schema.
      *

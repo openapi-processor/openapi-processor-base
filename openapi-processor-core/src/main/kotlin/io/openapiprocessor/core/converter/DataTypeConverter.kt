@@ -298,6 +298,8 @@ class DataTypeConverter(
     }
 
     private fun createSimpleDataTypeX(schemaInfo: SchemaInfo, dataTypes: DataTypes): DataType {
+        var sourceTypeFormat = schemaInfo.getTypeFormat()
+
         var typeFormat = schemaInfo.getType()
         if (isSupportedFormat(schemaInfo.getFormat())) {
             typeFormat += ":" + schemaInfo.getFormat()
@@ -411,7 +413,10 @@ class DataTypeConverter(
         dataTypes: DataTypes): DataType {
 
         if (!schemaInfo.isEnum()) {
-            return StringDataType(constraints, schemaInfo.getDeprecated(),
+            return StringDataType(
+                schemaInfo.getTypeFormat(),
+                constraints,
+                schemaInfo.getDeprecated(),
                 Documentation(description = schemaInfo.description))
         }
 
