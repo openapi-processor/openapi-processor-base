@@ -20,10 +20,8 @@ import io.openapiprocessor.core.extractBody
 import io.openapiprocessor.core.extractImports
 import io.openapiprocessor.core.framework.FrameworkAnnotation
 import io.openapiprocessor.core.framework.FrameworkAnnotations
-import io.openapiprocessor.core.model.Api
 import io.openapiprocessor.core.model.Endpoint
 import io.openapiprocessor.core.model.HttpMethod
-import io.openapiprocessor.core.model.Interface
 import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.model.parameters.AdditionalParameter
 import io.openapiprocessor.core.model.parameters.Parameter
@@ -32,7 +30,6 @@ import io.openapiprocessor.core.support.datatypes.ObjectDataType
 import io.openapiprocessor.core.support.datatypes.propertyDataTypeString
 import java.io.StringWriter
 import java.io.Writer
-import java.nio.file.Files
 import io.mockk.mockk as stub
 
 
