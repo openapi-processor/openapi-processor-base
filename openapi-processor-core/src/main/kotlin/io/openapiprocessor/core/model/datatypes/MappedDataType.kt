@@ -9,14 +9,11 @@ package io.openapiprocessor.core.model.datatypes
  * OpenAPI schema mapped to a java type.
  */
 open class MappedDataType(
-//    private val name: DataTypeName
     private val type: String,
     private val pkg: String,
     val genericTypes: List<DataTypeName> = emptyList(),
     override val constraints: DataTypeConstraints? = null,
     override val deprecated: Boolean = false,
-    @Deprecated(message = "obsolete/unused")
-    val simpleDataType: Boolean = false,
     override val sourceDataType: DataType? = null
 ): DataType, MappedSourceDataType {
 

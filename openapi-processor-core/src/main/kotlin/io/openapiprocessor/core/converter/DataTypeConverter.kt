@@ -99,7 +99,6 @@ class DataTypeConverter(
             genericDataTypeNames,
             null,
             schemaInfo.getDeprecated(),
-            false,
             sourceDataType
         )
     }
