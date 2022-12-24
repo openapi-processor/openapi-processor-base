@@ -28,7 +28,7 @@ class NoDataType(
     }
 
     override fun getImports(): Set<String> {
-        return setOf("${getPackageName()}.${getName()}")
+        return setOf("${getPackageName()}.${getTypeName()}")
     }
 
 }
