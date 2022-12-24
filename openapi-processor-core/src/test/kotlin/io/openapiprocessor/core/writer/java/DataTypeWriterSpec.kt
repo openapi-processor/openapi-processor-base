@@ -154,8 +154,16 @@ class DataTypeWriterSpec: StringSpec({
 
     "writes properties with @JsonProperty access annotation" {
         val dataType = ObjectDataType ("Foo", "pkg", linkedMapOf(
-            "foo" to PropertyDataType (true, false, StringDataType ()),
-            "bar" to PropertyDataType (false, true, StringDataType ())
+            "foo" to PropertyDataType (
+                readOnly = true,
+                writeOnly = false,
+                dataType = StringDataType ()
+            ),
+            "bar" to PropertyDataType (
+                readOnly = false,
+                writeOnly = true,
+                dataType = StringDataType ()
+            )
         ))
 
         // when:
@@ -176,7 +184,11 @@ class DataTypeWriterSpec: StringSpec({
         options.oneOfInterface = true
 
         val dataType = ObjectDataType ("Foo", "pkg", linkedMapOf(
-            "foo" to PropertyDataType (false, false, StringDataType ())
+            "foo" to PropertyDataType (
+                readOnly = false,
+                writeOnly = false,
+                dataType = StringDataType ()
+            )
         ))
 
         val ifDataType = InterfaceDataType(
