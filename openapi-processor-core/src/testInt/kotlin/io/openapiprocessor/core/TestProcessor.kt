@@ -64,7 +64,7 @@ class TestProcessor: OpenApiProcessor {
                     beanValidation,
                     DefaultImportFilter()
                 ),
-                DataTypeWriter(
+                DataTypeWriterPojo(
                     options,
                     generatedWriter,
                     beanValidation,

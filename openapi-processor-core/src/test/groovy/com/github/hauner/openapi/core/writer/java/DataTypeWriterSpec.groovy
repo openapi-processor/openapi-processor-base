@@ -10,7 +10,7 @@ import io.openapiprocessor.core.model.datatypes.DataTypeName
 import io.openapiprocessor.core.model.datatypes.StringDataType
 import io.openapiprocessor.core.support.datatypes.ObjectDataType
 import io.openapiprocessor.core.writer.java.BeanValidationFactory
-import io.openapiprocessor.core.writer.java.DataTypeWriter
+import io.openapiprocessor.core.writer.java.DataTypeWriterPojo
 import io.openapiprocessor.core.writer.java.JavaDocWriter
 import io.openapiprocessor.core.writer.java.SimpleGeneratedWriter
 import spock.lang.Specification
@@ -25,7 +25,7 @@ class DataTypeWriterSpec extends Specification {
     def options = new ApiOptions()
     def generatedWriter = new SimpleGeneratedWriter (options)
 
-    def writer = new DataTypeWriter(
+    def writer = new DataTypeWriterPojo(
         options,
         generatedWriter,
         new BeanValidationFactory(),
