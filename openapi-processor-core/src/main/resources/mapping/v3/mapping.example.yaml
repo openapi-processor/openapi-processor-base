@@ -3,15 +3,15 @@
 ##
 
 # mapping format [required]
-openapi-processor-mapping: v2.1
+openapi-processor-mapping: v3
 
 options: # general processor options (optional)
 
   # target package (optional): io.openapiprocessor.generated (default)
   package-name: io.openapiprocessor.generated
 
-  # validation annotation (optional): true or false (default).
-  bean-validation: false
+  # validation annotation (optional): true or false (default), javax, jakarta.
+  bean-validation: jakarta
 
   # generate javadoc from OpenAPI 'description' properties.
   javadoc: true
