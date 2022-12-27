@@ -45,8 +45,5 @@ data class Mapping(
     val map: Map = Map()
 
 ): MappingVersion {
-
-    override val v2: Boolean
-        get() = version.startsWith("v2")
-
+    override val v2: Boolean = true
 }
