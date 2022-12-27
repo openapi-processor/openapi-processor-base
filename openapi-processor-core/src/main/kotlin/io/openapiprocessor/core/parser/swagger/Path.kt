@@ -14,7 +14,11 @@ import io.swagger.v3.oas.models.Operation as SwaggerOperation
 /**
  * Swagger Path abstraction.
  */
-class Path(private val path: String, private val info: SwaggerPath): ParserPath {
+class Path(
+    private val path: String,
+    private val info: SwaggerPath,
+    private val refResolver: RefResolverNative
+): ParserPath {
 
     override fun getPath(): String = path
 
@@ -24,7 +28,7 @@ class Path(private val path: String, private val info: SwaggerPath): ParserPath 
         HttpMethod.values().map {
             val op = info.getOperation(it.method)
             if (op != null) {
-                ops.add (Operation(it, op, info))
+                ops.add (Operation(it, op, info, refResolver))
             }
         }
 

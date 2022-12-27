@@ -21,7 +21,8 @@ import io.swagger.v3.oas.models.responses.ApiResponse as SwaggerResponse
 class Operation(
     private val method: HttpMethod,
     private val operation: SwaggerOperation,
-    private val path: SwaggerPath
+    private val path: SwaggerPath,
+    private val refResolver: RefResolverNative
 ): ParserOperation {
 
     override fun getMethod(): HttpMethod = method
@@ -47,11 +48,15 @@ class Operation(
     }
 
     override fun getRequestBody(): ParserRequestBody? {
-        if (operation.requestBody == null) {
+        var requestBody = operation.requestBody
+        if (requestBody == null) {
             return null
+
+        } else if (requestBody.`$ref` != null) {
+            requestBody = refResolver.resolve(requestBody)
         }
 
-        return RequestBody (operation.requestBody)
+        return RequestBody (requestBody)
     }
 
     override fun getResponses(): Map<String, ParserResponse> {

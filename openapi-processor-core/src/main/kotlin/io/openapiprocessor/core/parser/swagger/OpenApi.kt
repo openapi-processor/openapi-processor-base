@@ -23,7 +23,7 @@ class OpenApi(private val result: SwaggerParseResult): ParserOpenApi {
         val paths = linkedMapOf<String, ParserPath>()
 
         result.openAPI.paths.forEach { (name: String, value: SwaggerPath) ->
-            paths[name] = Path(name, value)
+            paths[name] = Path(name, value, RefResolverNative(result.openAPI))
         }
 
         return paths
