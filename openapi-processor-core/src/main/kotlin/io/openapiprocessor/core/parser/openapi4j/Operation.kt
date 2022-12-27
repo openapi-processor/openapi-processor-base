@@ -56,11 +56,15 @@ class Operation(
     }
 
     override fun getRequestBody(): ParserRequestBody? {
-        if (operation.requestBody == null) {
+        var requestBody = operation.requestBody
+        if (requestBody == null) {
             return null
+
+        } else if (requestBody.isRef) {
+            requestBody = refResolver.resolve(requestBody)
         }
 
-        return RequestBody (operation.requestBody)
+        return RequestBody (requestBody)
     }
 
     override fun getResponses(): Map<String, ParserResponse> {
