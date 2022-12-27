@@ -1,7 +1,7 @@
 [versions]
 processor = "2023.1-SNAPSHOT"
 
-kotlin = "1.7.20"
+kotlin = "1.7.21"
 build-jdk = "11"
 target-jdk = "8"
 
@@ -12,11 +12,11 @@ jacoco = "0.8.7"
 openapi-processor-api = "io.openapiprocessor:openapi-processor-api:2021.1"
 openapi-processor-test = "io.openapiprocessor:openapi-processor-test:2022.4"
 
-openapi-parser-bom = "io.openapiprocessor:openapi-parser-bom:2022.1.1"
+openapi-parser-bom = "io.openapiprocessor:openapi-parser-bom:2022.2-SNAPSHOT"
 openapi-parser-parser = { module = "io.openapiprocessor:openapi-parser" }
 openapi-parser-jackson = { module = "io.openapiprocessor:openapi-parser-jackson" }
 
-jackson-bom = "com.fasterxml.jackson:jackson-bom:2.13.4"
+jackson-bom = "com.fasterxml.jackson:jackson-bom:2.14.1"
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind" }
 jackson-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml" }
 jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
@@ -31,21 +31,21 @@ java-format = "com.google.googlejavaformat:google-java-format:1.15.0"
 guava = "com.google.guava:guava:31.1-jre"
 commons-text = "org.apache.commons:commons-text:1.10.0"
 commonmark = "com.atlassian.commonmark:commonmark:0.17.0"
-json-schema-validator = "com.networknt:json-schema-validator:1.0.73"
+json-schema-validator = "com.networknt:json-schema-validator:1.0.76"
 
 checker = "org.checkerframework:checker:3.25.0"
 jimfs = "com.google.jimfs:jimfs:1.2"
 slf4j = "org.slf4j:slf4j-api:2.0.6"
-logback = "ch.qos.logback:logback-classic:1.4.3"
+logback = "ch.qos.logback:logback-classic:1.4.5"
 
-kotest-bom = "io.kotest:kotest-bom:5.5.0"
+kotest-bom = "io.kotest:kotest-bom:5.5.4"
 kotest-runner = { module = "io.kotest:kotest-runner-junit5" }
 kotest-datatest = { module = "io.kotest:kotest-framework-datatest" }
-mockk = "io.mockk:mockk:1.13.2"
+mockk = "io.mockk:mockk:1.13.3"
 
 diff-utils = "io.github.java-diff-utils:java-diff-utils:4.12"
 
-groovy-bom = "org.apache.groovy:groovy-bom:4.0.6"
+groovy-bom = "org.apache.groovy:groovy-bom:4.0.7"
 spock = "org.spockframework:spock-core:2.3-groovy-4.0"
 
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -60,6 +60,6 @@ openapi-parser = ["openapi-parser-parser", "openapi-parser-jackson"]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 nexus = { id = "io.github.gradle-nexus.publish-plugin", version = "1.1.0" }
 jacoco = { id = "org.barfuin.gradle.jacocolog", version = "2.0.0" }
-sonar = { id = "org.sonarqube", version =  "3.4.0.2513" }
+sonar = { id = "org.sonarqube", version =  "3.5.0.2730" }
 
 #versions = { id = "com.github.ben-manes.versions", version = "0.42.0" }
