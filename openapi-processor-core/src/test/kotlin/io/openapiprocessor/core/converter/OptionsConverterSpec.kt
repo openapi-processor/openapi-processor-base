@@ -120,7 +120,7 @@ class OptionsConverterSpec: StringSpec({
 
             val options = converter.convertOptions(mapOf(
                 "mapping" to """
-                    openapi-processor-mapping: v2.2
+                    openapi-processor-mapping: v3
                     options:
                       bean-validation: ${bd.source}
                 """.trimIndent()
