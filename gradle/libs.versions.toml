@@ -24,6 +24,9 @@ snakeyaml = "org.yaml:snakeyaml:1.33"
 
 openapi4j = "org.openapi4j:openapi-parser:1.0.7"
 swagger = "io.swagger.parser.v3:swagger-parser:2.0.28"
+# breaks a test case
+#swagger = "io.swagger.parser.v3:swagger-parser:2.1.9"
+#swagger = "io.swagger.parser.v3:swagger-parser:2.0.29"
 
 antlr = "org.antlr:antlr4:4.11.1"
 
