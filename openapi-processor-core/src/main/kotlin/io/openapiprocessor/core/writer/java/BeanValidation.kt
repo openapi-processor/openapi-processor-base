@@ -7,7 +7,7 @@ package io.openapiprocessor.core.writer.java
 
 enum class BeanValidationFormat(val pkg: String) {
     JAVAX("javax"),
-    JAKARTA("jarkata")
+    JAKARTA("jakarta")
 }
 
 @Suppress("PropertyName")
