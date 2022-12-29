@@ -217,7 +217,7 @@ class DataTypeWriterPojo(
 
         imports.add(generatedWriter.getImport())
 
-        dataType.forEach { propName, propDataType ->
+        dataType.forEach { _, propDataType ->
             imports.add("com.fasterxml.jackson.annotation.JsonProperty")
 
             val target = getTarget(propDataType)
