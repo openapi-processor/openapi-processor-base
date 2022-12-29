@@ -15,7 +15,7 @@ class FloatDataType(
     override val constraints: DataTypeConstraints? = null,
     override val deprecated: Boolean = false,
     override val documentation: Documentation? = null
-): DataType {
+): DataType, SimpleDataType {
 
     override fun getName(): String {
         return typeFormat
