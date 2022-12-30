@@ -71,7 +71,7 @@ genericParameters
     ;
 
 genericParameter
-    : QualifiedType
+    : QualifiedType ('<' genericParameters '>')?
     ;
 
 sourceIdentifier

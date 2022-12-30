@@ -4,6 +4,8 @@
  */
 package io.openapiprocessor.core.processor.mapping.v2.parser
 
+class MappingType (val targetType: String, val targetGenericTypes: List<MappingType>) {}
+
 interface Mapping {
     enum class Kind {
         TYPE, MAP, ANNOTATE
@@ -14,6 +16,7 @@ interface Mapping {
     val sourceFormat: String?
     val targetType: String?
     val targetGenericTypes: List<String>
+    val targetGenericTypes2: List<MappingType>
     val annotationType: String?
     val annotationParameters: LinkedHashMap<String, String>  // preserves order
 }

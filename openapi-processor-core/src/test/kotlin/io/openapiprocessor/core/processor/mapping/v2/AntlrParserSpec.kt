@@ -218,4 +218,23 @@ class AntlrParserSpec: StringSpec({
 
         ex.message shouldStartWith "failed to parse mapping:"
     }
+
+    "java target type with multiple generics levels" {
+        val source = "kotlin.collections.Map<java.lang.String, kotlin.collections.Collection<java.lang.String>>"
+
+        val mapping = parseMapping(source)
+        mapping.kind shouldBe Mapping.Kind.TYPE
+        mapping.sourceType.shouldBeNull()
+        mapping.targetType shouldBe "kotlin.collections.Map"
+
+        mapping.targetGenericTypes2.size shouldBe 2
+        val level1First = mapping.targetGenericTypes2[0]
+        level1First.targetType shouldBe "java.lang.String"
+        val level1Second = mapping.targetGenericTypes2[1]
+        level1Second.targetType shouldBe "kotlin.collections.Collection"
+
+        level1Second.targetGenericTypes.size shouldBe 1
+        val level2First = mapping.targetGenericTypes2[0]
+        level2First.targetType shouldBe "java.lang.String"
+    }
 })

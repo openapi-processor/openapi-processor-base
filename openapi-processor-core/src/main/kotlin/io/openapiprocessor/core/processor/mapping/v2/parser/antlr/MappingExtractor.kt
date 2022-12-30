@@ -6,6 +6,7 @@
 package io.openapiprocessor.core.processor.mapping.v2.parser.antlr
 
 import io.openapiprocessor.core.processor.mapping.v2.parser.Mapping
+import io.openapiprocessor.core.processor.mapping.v2.parser.MappingType
 
 
 class MappingExtractor: MappingBaseListener(), Mapping {
@@ -16,6 +17,13 @@ class MappingExtractor: MappingBaseListener(), Mapping {
     override var annotationParameters = LinkedHashMap<String, String>()
     override var targetType: String? = null
     override var targetGenericTypes: MutableList<String> = mutableListOf()
+    override var targetGenericTypes2: List<MappingType> = mutableListOf()
+
+    private class Type(val targetType: String) {
+        val targetGenericTypes: MutableList<Type> = mutableListOf()
+    }
+
+    private var typeStack = ArrayDeque<Type>()
 
     override fun enterType(ctx: MappingParser.TypeContext) {
         kind = Mapping.Kind.TYPE
@@ -47,6 +55,21 @@ class MappingExtractor: MappingBaseListener(), Mapping {
 
     override fun enterQualifiedTargetType(ctx: MappingParser.QualifiedTargetTypeContext) {
         targetType = ctx.start.text
+        typeStack.addLast(Type(targetType!!))
+    }
+
+    override fun exitQualifiedTargetType(ctx: MappingParser.QualifiedTargetTypeContext?) {
+        val last = typeStack.last()
+
+        fun x(type: Type): MappingType {
+            val tt = type.targetType
+            val gt = type.targetGenericTypes
+                .map { x(it) }
+
+            return MappingType(tt, gt)
+        }
+
+        targetGenericTypes2 = x (last).targetGenericTypes
     }
 
     override fun enterContentType(ctx: MappingParser.ContentTypeContext) {
@@ -54,7 +77,17 @@ class MappingExtractor: MappingBaseListener(), Mapping {
     }
 
     override fun enterGenericParameter(ctx: MappingParser.GenericParameterContext) {
-        targetGenericTypes.add(ctx.text)
+        val genericType = ctx.start.text
+        targetGenericTypes.add(genericType)
+
+        val last = typeStack.last()
+        val type = Type(genericType!!)
+        last.targetGenericTypes.add(type)
+        typeStack.addLast(type)
+    }
+
+    override fun exitGenericParameter(ctx: MappingParser.GenericParameterContext?) {
+        typeStack.removeLast()
     }
 
     override fun enterAnnotationType(ctx: MappingParser.AnnotationTypeContext) {
