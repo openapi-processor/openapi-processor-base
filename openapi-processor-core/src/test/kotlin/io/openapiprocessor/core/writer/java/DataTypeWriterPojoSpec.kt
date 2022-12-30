@@ -309,7 +309,7 @@ class DataTypeWriterPojoSpec: StringSpec({
     "writes additional annotation from annotation mapping for a simple mapped property data type" {
         options.typeMappings = listOf(
             AnnotationTypeMapping(
-                "string:uuid", annotation = MappingAnnotation(
+                "string", "uuid", annotation = MappingAnnotation(
                     "foo.Bar", linkedMapOf("bar" to """"rab"""")
                 )
             ))
