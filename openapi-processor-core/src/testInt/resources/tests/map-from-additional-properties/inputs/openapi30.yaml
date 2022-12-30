@@ -1,0 +1,17 @@
+openapi: 3.0.2
+info:
+  title: dictionary
+  version: 1.0.0
+
+paths:
+  /foo:
+    get:
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
