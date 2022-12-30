@@ -56,17 +56,42 @@ class MappingFinder(private val typeMappings: List<Mapping> = emptyList()) {
     private fun findTypeAnnotations(typeMappings: List<Mapping>, typeName: String)
         : List<AnnotationTypeMapping> {
 
+        val (type, format) = splitTypeName(typeName)
         return typeMappings
             .filterIsInstance<AnnotationTypeMapping>()
-            .filter { it.sourceTypeName == typeName }
+            .filter {
+                val matchType = it.sourceTypeName == type
+                val matchFormat = it.sourceTypeFormat == format
+                matchType && matchFormat
+            }
     }
 
     private fun findParameterAnnotations(typeMappings: List<Mapping>, typeName: String)
         : List<AnnotationTypeMapping> {
 
+        val (type, format) = splitTypeName(typeName)
         return typeMappings
             .filterIsInstance<ParameterAnnotationTypeMapping>()
-            .filter { it.sourceTypeName == typeName }
+            .filter {
+                val matchType = it.sourceTypeName == type
+                val matchFormat = it.sourceTypeFormat == format
+                matchType && matchFormat
+            }
             .map { it.annotationTypeMapping }
     }
+
+    private fun splitTypeName(typeName: String): Pair<String, String?> {
+        val split = typeName
+                .split(":")
+                .map { it.trim() }
+
+        val type = split.component1()
+        var format: String? = null
+        if (split.size == 2) {
+            format = split.component2()
+        }
+
+        return Pair(type, format)
+    }
+
 }
