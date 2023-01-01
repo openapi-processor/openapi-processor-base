@@ -34,7 +34,7 @@ map: # the type mappings
   result: org.springframework.http.ResponseEntity
 
   # result style (optional, default "success")
-  resultStyle: all
+  result-style: all
 
   # reactive single wrapper (optional)
   single: reactor.core.publisher.Mono

@@ -106,7 +106,7 @@
         "result": {
           "$ref": "#/definitions/ResultMapping"
         },
-        "resultStyle": {
+        "result-style": {
           "$ref": "#/definitions/ResultStyleMapping"
         },
         "single": {
