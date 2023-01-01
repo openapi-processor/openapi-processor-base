@@ -47,11 +47,11 @@ class GeneratedWriterImpl(private val info: GeneratedInfo, private val options: 
 
                 /**
                  * The date &amp; time of generation (ISO 8601) or "-" if no date was set.
-                 *                 
+                 *
                  * @return date of generation
                  */
                 String date() default "-";
-                                
+
                 /**
                  * The url of the generator.
                  *
