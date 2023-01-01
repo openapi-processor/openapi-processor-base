@@ -115,7 +115,11 @@ open class MethodWriter(
             ps.add (param.trim())
         }
 
-        return ps.joinToString (", ")
+        if (ps.size <= 1) {
+            return ps.joinToString("")
+        } else {
+            return "\n            " + ps.joinToString (",\n            ")
+        }
     }
 
     private fun createParameterAnnotation(endpoint: Endpoint, parameter: Parameter): String {
