@@ -76,7 +76,8 @@ dependencies {
     implementation (libs.jackson.kotlin)
     implementation (libs.commons.text)
     implementation (libs.commonmark)
-    implementation (libs.java.format)
+    implementation (libs.format.java.google)
+    implementation (libs.format.java.eclipse)
     implementation (libs.json.schema.validator)
     implementation (libs.slf4j)
 

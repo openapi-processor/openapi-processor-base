@@ -28,7 +28,7 @@ class ApiWriter(
     private val dataTypeWriter: DataTypeWriter,
     private val enumWriter: StringEnumWriter,
     private val interfaceDataTypeWriter: InterfaceDataTypeWriter,
-    private val formatter: SourceFormatter = GoogleFormatter(),
+    private val formatter: SourceFormatter = EclipseFormatter(), //GoogleFormatter(),
     private val writerFactory: WriterFactory = DefaultWriterFactory()
 ) {
     init {
