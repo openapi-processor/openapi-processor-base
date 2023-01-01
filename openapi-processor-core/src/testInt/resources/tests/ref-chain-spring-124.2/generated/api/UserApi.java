@@ -17,7 +17,9 @@ public interface UserApi {
     ResponseEntity<User> getUserByUserId(@Parameter Long userId);
 
     @Mapping("/users/{userId}")
-    ResponseEntity<User> putUserByUserId(@Parameter Long userId, @Parameter User body);
+    ResponseEntity<User> putUserByUserId(
+            @Parameter Long userId,
+            @Parameter User body);
 
     @Mapping("/users/{userId}")
     ResponseEntity<Void> deleteUserByUserId(@Parameter Long userId);
@@ -30,6 +32,7 @@ public interface UserApi {
 
     @Mapping("/user-page")
     ResponseEntity<Page<User>> getUserPage(
-            @Parameter Pageable pageable, @Parameter UserSearch body);
+            @Parameter Pageable pageable,
+            @Parameter UserSearch body);
 
 }

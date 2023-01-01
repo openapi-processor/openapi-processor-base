@@ -10,15 +10,12 @@ public interface Api {
 
     /**
      * a <em>markdown</em> description with <strong>text</strong>
-     *
      * <ul>
-     *   <li>one list item
-     *   <li>second list item
+     * <li>one list item</li>
+     * <li>second list item</li>
      * </ul>
-     *
      * <pre><code>code block
      * </code></pre>
-     *
      * more
      *
      * @param fOO this is a <em>parameter</em> description

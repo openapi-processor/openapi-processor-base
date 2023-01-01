@@ -9,9 +9,13 @@ import http.Multipart;
 public interface Api {
 
     @Mapping("/multipart/single-file")
-    void postMultipartSingleFile(@Parameter Multipart file, @Parameter String other);
+    void postMultipartSingleFile(
+            @Parameter Multipart file,
+            @Parameter String other);
 
     @Mapping("/multipart/multiple-files")
-    void postMultipartMultipleFiles(@Parameter Multipart[] files, @Parameter String other);
+    void postMultipartMultipleFiles(
+            @Parameter Multipart[] files,
+            @Parameter String other);
 
 }

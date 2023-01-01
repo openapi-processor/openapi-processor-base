@@ -11,6 +11,8 @@ import generated.support.Generated;
 public interface Api {
 
     @Mapping("/foo")
-    FooResource getFoo(@Parameter ParamResource param, @Parameter BodyResource body);
+    FooResource getFoo(
+            @Parameter ParamResource param,
+            @Parameter BodyResource body);
 
 }

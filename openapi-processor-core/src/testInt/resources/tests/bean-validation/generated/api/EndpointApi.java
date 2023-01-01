@@ -17,7 +17,8 @@ public interface EndpointApi {
 
     @Mapping("/endpoint/required")
     void getEndpointRequired(
-            @Parameter String requiredFalse, @Parameter @NotNull String requiredTrue);
+            @Parameter String requiredFalse,
+            @Parameter @NotNull String requiredTrue);
 
     @Mapping("/endpoint/length")
     void getEndpointLength(
@@ -32,10 +33,7 @@ public interface EndpointApi {
             @Parameter @DecimalMax(value = "20") Integer max,
             @Parameter @DecimalMax(value = "20", inclusive = false) Integer maxEx,
             @Parameter @DecimalMin(value = "10") @DecimalMax(value = "20") Integer minMax,
-            @Parameter
-                    @DecimalMin(value = "10", inclusive = false)
-                    @DecimalMax(value = "20", inclusive = false)
-                    Integer minMaxEx);
+            @Parameter @DecimalMin(value = "10", inclusive = false) @DecimalMax(value = "20", inclusive = false) Integer minMaxEx);
 
     @Mapping("/endpoint/items")
     void getEndpointItems(

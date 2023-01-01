@@ -3,6 +3,7 @@ openapi-processor-mapping: v2
 options:
   package-name: generated
   bean-validation: true
+  format-code: false
 
 map:
   paths:

@@ -3,3 +3,4 @@ openapi-processor-mapping: v3
 options:
   package-name: generated
   bean-validation: jakarta
+  format-code: false

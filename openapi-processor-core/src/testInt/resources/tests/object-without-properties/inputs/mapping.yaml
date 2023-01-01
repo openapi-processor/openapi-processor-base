@@ -1,6 +1,5 @@
-openapi-processor-spring: v2
+openapi-processor-mapping: v2
 
 options:
   package-name: generated
-
-# map:
+  format-code: false

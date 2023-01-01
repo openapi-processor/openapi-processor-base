@@ -4,8 +4,4 @@ options:
   package-name: generated
   format-code: false
 
-map:
-
-  paths:
-    /endpoint-exclude/{foo}:
-      exclude: true
+# map:

@@ -3,3 +3,4 @@ items:
   - inputs/openapi31.yaml
   - inputs/book.api.yaml
   - inputs/book.yaml
+  - inputs/mapping.yaml

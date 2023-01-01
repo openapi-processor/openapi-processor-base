@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 public interface Api {
 
     @Mapping("/foo")
-    void getFoo(@Parameter String foo, @Parameter HttpServletRequest request);
+    void getFoo(
+            @Parameter String foo,
+            @Parameter HttpServletRequest request);
 
 }

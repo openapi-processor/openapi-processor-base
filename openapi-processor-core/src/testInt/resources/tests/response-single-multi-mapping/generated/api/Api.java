@@ -20,6 +20,8 @@ public interface Api {
     Mono<Book> getBooksIsbn(@Parameter String isbn);
 
     @Mapping("/books/{isbn}")
-    Mono<Void> putBooksIsbn(@Parameter String isbn, @Parameter Mono<Book> body);
+    Mono<Void> putBooksIsbn(
+            @Parameter String isbn,
+            @Parameter Mono<Book> body);
 
 }

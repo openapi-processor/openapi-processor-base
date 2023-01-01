@@ -34,5 +34,4 @@ public @interface Generated {
      * @return url of generator
      */
     String url() default "https://openapiprocessor.io";
-
 }

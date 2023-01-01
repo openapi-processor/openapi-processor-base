@@ -9,6 +9,8 @@ import java.util.UUID;
 public interface Api {
 
     @Mapping("/uuid")
-    void getUuid(@Parameter UUID uuid, @Parameter UUID uuidex);
+    void getUuid(
+            @Parameter UUID uuid,
+            @Parameter UUID uuidex);
 
 }

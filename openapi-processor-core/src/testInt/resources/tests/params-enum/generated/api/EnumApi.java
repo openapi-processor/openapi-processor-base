@@ -10,6 +10,8 @@ import generated.support.Generated;
 public interface EnumApi {
 
     @Mapping("/endpoint")
-    void getEndpoint(@Parameter Foo foo, @Parameter Bar bar);
+    void getEndpoint(
+            @Parameter Foo foo,
+            @Parameter Bar bar);
 
 }

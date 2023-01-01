@@ -2,4 +2,5 @@ openapi-processor-mapping: v2
 
 options:
   package-name: generated
+  format-code: false
   model-name-suffix: Resource
