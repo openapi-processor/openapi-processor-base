@@ -25,12 +25,12 @@
           "default": false
         },
         "javadoc": {
-          "description": "generate javadoc from OpenAPI 'description' properties (since core 2021.1).",
+          "description": "generate javadoc from OpenAPI 'description' properties.",
           "type": "boolean",
           "default": false
         },
         "model-name-suffix": {
-          "description": "suffix for model class names and enum names. Default is none, i.e. an empty string (since core 2021.4).",
+          "description": "suffix for model class names and enum names. Default is none, i.e. an empty string.",
           "type": "string",
           "default": "",
           "examples": [
@@ -39,12 +39,12 @@
           ]
         },
         "one-of-interface": {
-          "description": "generate common interface for an `oneOf` object list (since core 2022.3).",
+          "description": "generate common interface for an `oneOf` object list.",
           "type": "boolean",
           "default": false
         },
         "format-code": {
-          "description": "enable/disable code formatting (since core 2022.1.1).",
+          "description": "enable/disable code formatting.",
           "type": "boolean",
           "default": true
         }
@@ -62,8 +62,8 @@
             "org.springframework.http.ResponseEntity"
           ]
         },
-        "resultStyle": {
-          "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type (since core 2021.5).",
+        "result-style": {
+          "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
           "type": "string",
           "default": "success",
           "examples": [
@@ -86,7 +86,7 @@
           ]
         },
         "null": {
-          "description": "null wrapper of 'nullable' object properties (since core 2021.2).",
+          "description": "null wrapper of 'nullable' object properties.",
           "type": "string",
           "examples": [
             "org.openapitools.jackson.nullable.JsonNullable",
@@ -221,8 +221,8 @@
                     "org.springframework.http.ResponseEntity"
                   ]
                 },
-                "resultStyle": {
-                  "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type (since core 2021.5).",
+                "result-style": {
+                  "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                   "type": "string",
                   "default": "success",
                   "examples": [
@@ -245,7 +245,7 @@
                   ]
                 },
                 "null": {
-                  "description": "null wrapper of 'nullable' object properties (since core 2021.2).",
+                  "description": "null wrapper of 'nullable' object properties.",
                   "type": "string",
                   "examples": [
                     "org.openapitools.jackson.nullable.JsonNullable",
@@ -373,8 +373,8 @@
                         "org.springframework.http.ResponseEntity"
                       ]
                     },
-                    "resultStyle": {
-                      "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type (since core 2021.5).",
+                    "result-style": {
+                      "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                       "type": "string",
                       "default": "success",
                       "examples": [
@@ -397,7 +397,7 @@
                       ]
                     },
                     "null": {
-                      "description": "null wrapper of 'nullable' object properties (since core 2021.2).",
+                      "description": "null wrapper of 'nullable' object properties.",
                       "type": "string",
                       "examples": [
                         "org.openapitools.jackson.nullable.JsonNullable",
@@ -527,8 +527,8 @@
                         "org.springframework.http.ResponseEntity"
                       ]
                     },
-                    "resultStyle": {
-                      "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type (since core 2021.5).",
+                    "result-style": {
+                      "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                       "type": "string",
                       "default": "success",
                       "examples": [
@@ -551,7 +551,7 @@
                       ]
                     },
                     "null": {
-                      "description": "null wrapper of 'nullable' object properties (since core 2021.2).",
+                      "description": "null wrapper of 'nullable' object properties.",
                       "type": "string",
                       "examples": [
                         "org.openapitools.jackson.nullable.JsonNullable",
@@ -681,8 +681,8 @@
                         "org.springframework.http.ResponseEntity"
                       ]
                     },
-                    "resultStyle": {
-                      "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type (since core 2021.5).",
+                    "result-style": {
+                      "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                       "type": "string",
                       "default": "success",
                       "examples": [
@@ -705,7 +705,7 @@
                       ]
                     },
                     "null": {
-                      "description": "null wrapper of 'nullable' object properties (since core 2021.2).",
+                      "description": "null wrapper of 'nullable' object properties.",
                       "type": "string",
                       "examples": [
                         "org.openapitools.jackson.nullable.JsonNullable",
@@ -835,8 +835,8 @@
                         "org.springframework.http.ResponseEntity"
                       ]
                     },
-                    "resultStyle": {
-                      "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type (since core 2021.5).",
+                    "result-style": {
+                      "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                       "type": "string",
                       "default": "success",
                       "examples": [
@@ -859,7 +859,7 @@
                       ]
                     },
                     "null": {
-                      "description": "null wrapper of 'nullable' object properties (since core 2021.2).",
+                      "description": "null wrapper of 'nullable' object properties.",
                       "type": "string",
                       "examples": [
                         "org.openapitools.jackson.nullable.JsonNullable",
@@ -989,8 +989,8 @@
                         "org.springframework.http.ResponseEntity"
                       ]
                     },
-                    "resultStyle": {
-                      "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type (since core 2021.5).",
+                    "result-style": {
+                      "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                       "type": "string",
                       "default": "success",
                       "examples": [
@@ -1013,7 +1013,7 @@
                       ]
                     },
                     "null": {
-                      "description": "null wrapper of 'nullable' object properties (since core 2021.2).",
+                      "description": "null wrapper of 'nullable' object properties.",
                       "type": "string",
                       "examples": [
                         "org.openapitools.jackson.nullable.JsonNullable",
@@ -1143,8 +1143,8 @@
                         "org.springframework.http.ResponseEntity"
                       ]
                     },
-                    "resultStyle": {
-                      "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type (since core 2021.5).",
+                    "result-style": {
+                      "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                       "type": "string",
                       "default": "success",
                       "examples": [
@@ -1167,7 +1167,7 @@
                       ]
                     },
                     "null": {
-                      "description": "null wrapper of 'nullable' object properties (since core 2021.2).",
+                      "description": "null wrapper of 'nullable' object properties.",
                       "type": "string",
                       "examples": [
                         "org.openapitools.jackson.nullable.JsonNullable",
@@ -1297,8 +1297,8 @@
                         "org.springframework.http.ResponseEntity"
                       ]
                     },
-                    "resultStyle": {
-                      "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type (since core 2021.5).",
+                    "result-style": {
+                      "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                       "type": "string",
                       "default": "success",
                       "examples": [
@@ -1321,7 +1321,7 @@
                       ]
                     },
                     "null": {
-                      "description": "null wrapper of 'nullable' object properties (since core 2021.2).",
+                      "description": "null wrapper of 'nullable' object properties.",
                       "type": "string",
                       "examples": [
                         "org.openapitools.jackson.nullable.JsonNullable",
@@ -1451,8 +1451,8 @@
                         "org.springframework.http.ResponseEntity"
                       ]
                     },
-                    "resultStyle": {
-                      "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type (since core 2021.5).",
+                    "result-style": {
+                      "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                       "type": "string",
                       "default": "success",
                       "examples": [
@@ -1475,7 +1475,7 @@
                       ]
                     },
                     "null": {
-                      "description": "null wrapper of 'nullable' object properties (since core 2021.2).",
+                      "description": "null wrapper of 'nullable' object properties.",
                       "type": "string",
                       "examples": [
                         "org.openapitools.jackson.nullable.JsonNullable",
@@ -1618,8 +1618,8 @@
                 "org.springframework.http.ResponseEntity"
               ]
             },
-            "resultStyle": {
-              "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type (since core 2021.5).",
+            "result-style": {
+              "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
               "type": "string",
               "default": "success",
               "examples": [
@@ -1642,7 +1642,7 @@
               ]
             },
             "null": {
-              "description": "null wrapper of 'nullable' object properties (since core 2021.2).",
+              "description": "null wrapper of 'nullable' object properties.",
               "type": "string",
               "examples": [
                 "org.openapitools.jackson.nullable.JsonNullable",
@@ -1770,8 +1770,8 @@
                     "org.springframework.http.ResponseEntity"
                   ]
                 },
-                "resultStyle": {
-                  "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type (since core 2021.5).",
+                "result-style": {
+                  "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                   "type": "string",
                   "default": "success",
                   "examples": [
@@ -1794,7 +1794,7 @@
                   ]
                 },
                 "null": {
-                  "description": "null wrapper of 'nullable' object properties (since core 2021.2).",
+                  "description": "null wrapper of 'nullable' object properties.",
                   "type": "string",
                   "examples": [
                     "org.openapitools.jackson.nullable.JsonNullable",
@@ -1924,8 +1924,8 @@
                     "org.springframework.http.ResponseEntity"
                   ]
                 },
-                "resultStyle": {
-                  "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type (since core 2021.5).",
+                "result-style": {
+                  "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                   "type": "string",
                   "default": "success",
                   "examples": [
@@ -1948,7 +1948,7 @@
                   ]
                 },
                 "null": {
-                  "description": "null wrapper of 'nullable' object properties (since core 2021.2).",
+                  "description": "null wrapper of 'nullable' object properties.",
                   "type": "string",
                   "examples": [
                     "org.openapitools.jackson.nullable.JsonNullable",
@@ -2078,8 +2078,8 @@
                     "org.springframework.http.ResponseEntity"
                   ]
                 },
-                "resultStyle": {
-                  "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type (since core 2021.5).",
+                "result-style": {
+                  "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                   "type": "string",
                   "default": "success",
                   "examples": [
@@ -2102,7 +2102,7 @@
                   ]
                 },
                 "null": {
-                  "description": "null wrapper of 'nullable' object properties (since core 2021.2).",
+                  "description": "null wrapper of 'nullable' object properties.",
                   "type": "string",
                   "examples": [
                     "org.openapitools.jackson.nullable.JsonNullable",
@@ -2232,8 +2232,8 @@
                     "org.springframework.http.ResponseEntity"
                   ]
                 },
-                "resultStyle": {
-                  "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type (since core 2021.5).",
+                "result-style": {
+                  "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                   "type": "string",
                   "default": "success",
                   "examples": [
@@ -2256,7 +2256,7 @@
                   ]
                 },
                 "null": {
-                  "description": "null wrapper of 'nullable' object properties (since core 2021.2).",
+                  "description": "null wrapper of 'nullable' object properties.",
                   "type": "string",
                   "examples": [
                     "org.openapitools.jackson.nullable.JsonNullable",
@@ -2386,8 +2386,8 @@
                     "org.springframework.http.ResponseEntity"
                   ]
                 },
-                "resultStyle": {
-                  "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type (since core 2021.5).",
+                "result-style": {
+                  "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                   "type": "string",
                   "default": "success",
                   "examples": [
@@ -2410,7 +2410,7 @@
                   ]
                 },
                 "null": {
-                  "description": "null wrapper of 'nullable' object properties (since core 2021.2).",
+                  "description": "null wrapper of 'nullable' object properties.",
                   "type": "string",
                   "examples": [
                     "org.openapitools.jackson.nullable.JsonNullable",
@@ -2540,8 +2540,8 @@
                     "org.springframework.http.ResponseEntity"
                   ]
                 },
-                "resultStyle": {
-                  "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type (since core 2021.5).",
+                "result-style": {
+                  "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                   "type": "string",
                   "default": "success",
                   "examples": [
@@ -2564,7 +2564,7 @@
                   ]
                 },
                 "null": {
-                  "description": "null wrapper of 'nullable' object properties (since core 2021.2).",
+                  "description": "null wrapper of 'nullable' object properties.",
                   "type": "string",
                   "examples": [
                     "org.openapitools.jackson.nullable.JsonNullable",
@@ -2694,8 +2694,8 @@
                     "org.springframework.http.ResponseEntity"
                   ]
                 },
-                "resultStyle": {
-                  "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type (since core 2021.5).",
+                "result-style": {
+                  "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                   "type": "string",
                   "default": "success",
                   "examples": [
@@ -2718,7 +2718,7 @@
                   ]
                 },
                 "null": {
-                  "description": "null wrapper of 'nullable' object properties (since core 2021.2).",
+                  "description": "null wrapper of 'nullable' object properties.",
                   "type": "string",
                   "examples": [
                     "org.openapitools.jackson.nullable.JsonNullable",
@@ -2848,8 +2848,8 @@
                     "org.springframework.http.ResponseEntity"
                   ]
                 },
-                "resultStyle": {
-                  "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type (since core 2021.5).",
+                "result-style": {
+                  "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                   "type": "string",
                   "default": "success",
                   "examples": [
@@ -2872,7 +2872,7 @@
                   ]
                 },
                 "null": {
-                  "description": "null wrapper of 'nullable' object properties (since core 2021.2).",
+                  "description": "null wrapper of 'nullable' object properties.",
                   "type": "string",
                   "examples": [
                     "org.openapitools.jackson.nullable.JsonNullable",
@@ -3006,8 +3006,8 @@
             "org.springframework.http.ResponseEntity"
           ]
         },
-        "resultStyle": {
-          "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type (since core 2021.5).",
+        "result-style": {
+          "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
           "type": "string",
           "default": "success",
           "examples": [
@@ -3030,7 +3030,7 @@
           ]
         },
         "null": {
-          "description": "null wrapper of 'nullable' object properties (since core 2021.2).",
+          "description": "null wrapper of 'nullable' object properties.",
           "type": "string",
           "examples": [
             "org.openapitools.jackson.nullable.JsonNullable",
@@ -3149,7 +3149,7 @@
       }
     },
     "Methods": {
-      "description": "http method mapping rules (since core 2021.2).",
+      "description": "http method mapping rules.",
       "type": "object",
       "additionalProperties": false,
       "properties": {
@@ -3165,8 +3165,8 @@
                 "org.springframework.http.ResponseEntity"
               ]
             },
-            "resultStyle": {
-              "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type (since core 2021.5).",
+            "result-style": {
+              "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
               "type": "string",
               "default": "success",
               "examples": [
@@ -3189,7 +3189,7 @@
               ]
             },
             "null": {
-              "description": "null wrapper of 'nullable' object properties (since core 2021.2).",
+              "description": "null wrapper of 'nullable' object properties.",
               "type": "string",
               "examples": [
                 "org.openapitools.jackson.nullable.JsonNullable",
@@ -3319,8 +3319,8 @@
                 "org.springframework.http.ResponseEntity"
               ]
             },
-            "resultStyle": {
-              "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type (since core 2021.5).",
+            "result-style": {
+              "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
               "type": "string",
               "default": "success",
               "examples": [
@@ -3343,7 +3343,7 @@
               ]
             },
             "null": {
-              "description": "null wrapper of 'nullable' object properties (since core 2021.2).",
+              "description": "null wrapper of 'nullable' object properties.",
               "type": "string",
               "examples": [
                 "org.openapitools.jackson.nullable.JsonNullable",
@@ -3473,8 +3473,8 @@
                 "org.springframework.http.ResponseEntity"
               ]
             },
-            "resultStyle": {
-              "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type (since core 2021.5).",
+            "result-style": {
+              "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
               "type": "string",
               "default": "success",
               "examples": [
@@ -3497,7 +3497,7 @@
               ]
             },
             "null": {
-              "description": "null wrapper of 'nullable' object properties (since core 2021.2).",
+              "description": "null wrapper of 'nullable' object properties.",
               "type": "string",
               "examples": [
                 "org.openapitools.jackson.nullable.JsonNullable",
@@ -3627,8 +3627,8 @@
                 "org.springframework.http.ResponseEntity"
               ]
             },
-            "resultStyle": {
-              "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type (since core 2021.5).",
+            "result-style": {
+              "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
               "type": "string",
               "default": "success",
               "examples": [
@@ -3651,7 +3651,7 @@
               ]
             },
             "null": {
-              "description": "null wrapper of 'nullable' object properties (since core 2021.2).",
+              "description": "null wrapper of 'nullable' object properties.",
               "type": "string",
               "examples": [
                 "org.openapitools.jackson.nullable.JsonNullable",
@@ -3781,8 +3781,8 @@
                 "org.springframework.http.ResponseEntity"
               ]
             },
-            "resultStyle": {
-              "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type (since core 2021.5).",
+            "result-style": {
+              "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
               "type": "string",
               "default": "success",
               "examples": [
@@ -3805,7 +3805,7 @@
               ]
             },
             "null": {
-              "description": "null wrapper of 'nullable' object properties (since core 2021.2).",
+              "description": "null wrapper of 'nullable' object properties.",
               "type": "string",
               "examples": [
                 "org.openapitools.jackson.nullable.JsonNullable",
@@ -3935,8 +3935,8 @@
                 "org.springframework.http.ResponseEntity"
               ]
             },
-            "resultStyle": {
-              "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type (since core 2021.5).",
+            "result-style": {
+              "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
               "type": "string",
               "default": "success",
               "examples": [
@@ -3959,7 +3959,7 @@
               ]
             },
             "null": {
-              "description": "null wrapper of 'nullable' object properties (since core 2021.2).",
+              "description": "null wrapper of 'nullable' object properties.",
               "type": "string",
               "examples": [
                 "org.openapitools.jackson.nullable.JsonNullable",
@@ -4089,8 +4089,8 @@
                 "org.springframework.http.ResponseEntity"
               ]
             },
-            "resultStyle": {
-              "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type (since core 2021.5).",
+            "result-style": {
+              "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
               "type": "string",
               "default": "success",
               "examples": [
@@ -4113,7 +4113,7 @@
               ]
             },
             "null": {
-              "description": "null wrapper of 'nullable' object properties (since core 2021.2).",
+              "description": "null wrapper of 'nullable' object properties.",
               "type": "string",
               "examples": [
                 "org.openapitools.jackson.nullable.JsonNullable",
@@ -4243,8 +4243,8 @@
                 "org.springframework.http.ResponseEntity"
               ]
             },
-            "resultStyle": {
-              "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type (since core 2021.5).",
+            "result-style": {
+              "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
               "type": "string",
               "default": "success",
               "examples": [
@@ -4267,7 +4267,7 @@
               ]
             },
             "null": {
-              "description": "null wrapper of 'nullable' object properties (since core 2021.2).",
+              "description": "null wrapper of 'nullable' object properties.",
               "type": "string",
               "examples": [
                 "org.openapitools.jackson.nullable.JsonNullable",
@@ -4395,7 +4395,7 @@
       ]
     },
     "ResultStyleMapping": {
-      "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type (since core 2021.5).",
+      "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
       "type": "string",
       "default": "success",
       "examples": [
@@ -4418,7 +4418,7 @@
       ]
     },
     "NullMapping": {
-      "description": "null wrapper of 'nullable' object properties (since core 2021.2).",
+      "description": "null wrapper of 'nullable' object properties.",
       "type": "string",
       "examples": [
         "org.openapitools.jackson.nullable.JsonNullable",
@@ -4586,12 +4586,12 @@
           "default": false
         },
         "javadoc": {
-          "description": "generate javadoc from OpenAPI 'description' properties (since core 2021.1).",
+          "description": "generate javadoc from OpenAPI 'description' properties.",
           "type": "boolean",
           "default": false
         },
         "model-name-suffix": {
-          "description": "suffix for model class names and enum names. Default is none, i.e. an empty string (since core 2021.4).",
+          "description": "suffix for model class names and enum names. Default is none, i.e. an empty string.",
           "type": "string",
           "default": "",
           "examples": [
@@ -4600,12 +4600,12 @@
           ]
         },
         "one-of-interface": {
-          "description": "generate common interface for an `oneOf` object list (since core 2022.3).",
+          "description": "generate common interface for an `oneOf` object list.",
           "type": "boolean",
           "default": false
         },
         "format-code": {
-          "description": "enable/disable code formatting (since core 2022.1.1).",
+          "description": "enable/disable code formatting.",
           "type": "boolean",
           "default": true
         }
@@ -4623,8 +4623,8 @@
             "org.springframework.http.ResponseEntity"
           ]
         },
-        "resultStyle": {
-          "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type (since core 2021.5).",
+        "result-style": {
+          "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
           "type": "string",
           "default": "success",
           "examples": [
@@ -4647,7 +4647,7 @@
           ]
         },
         "null": {
-          "description": "null wrapper of 'nullable' object properties (since core 2021.2).",
+          "description": "null wrapper of 'nullable' object properties.",
           "type": "string",
           "examples": [
             "org.openapitools.jackson.nullable.JsonNullable",
@@ -4782,8 +4782,8 @@
                     "org.springframework.http.ResponseEntity"
                   ]
                 },
-                "resultStyle": {
-                  "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type (since core 2021.5).",
+                "result-style": {
+                  "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                   "type": "string",
                   "default": "success",
                   "examples": [
@@ -4806,7 +4806,7 @@
                   ]
                 },
                 "null": {
-                  "description": "null wrapper of 'nullable' object properties (since core 2021.2).",
+                  "description": "null wrapper of 'nullable' object properties.",
                   "type": "string",
                   "examples": [
                     "org.openapitools.jackson.nullable.JsonNullable",
@@ -4934,8 +4934,8 @@
                         "org.springframework.http.ResponseEntity"
                       ]
                     },
-                    "resultStyle": {
-                      "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type (since core 2021.5).",
+                    "result-style": {
+                      "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                       "type": "string",
                       "default": "success",
                       "examples": [
@@ -4958,7 +4958,7 @@
                       ]
                     },
                     "null": {
-                      "description": "null wrapper of 'nullable' object properties (since core 2021.2).",
+                      "description": "null wrapper of 'nullable' object properties.",
                       "type": "string",
                       "examples": [
                         "org.openapitools.jackson.nullable.JsonNullable",
@@ -5088,8 +5088,8 @@
                         "org.springframework.http.ResponseEntity"
                       ]
                     },
-                    "resultStyle": {
-                      "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type (since core 2021.5).",
+                    "result-style": {
+                      "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                       "type": "string",
                       "default": "success",
                       "examples": [
@@ -5112,7 +5112,7 @@
                       ]
                     },
                     "null": {
-                      "description": "null wrapper of 'nullable' object properties (since core 2021.2).",
+                      "description": "null wrapper of 'nullable' object properties.",
                       "type": "string",
                       "examples": [
                         "org.openapitools.jackson.nullable.JsonNullable",
@@ -5242,8 +5242,8 @@
                         "org.springframework.http.ResponseEntity"
                       ]
                     },
-                    "resultStyle": {
-                      "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type (since core 2021.5).",
+                    "result-style": {
+                      "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                       "type": "string",
                       "default": "success",
                       "examples": [
@@ -5266,7 +5266,7 @@
                       ]
                     },
                     "null": {
-                      "description": "null wrapper of 'nullable' object properties (since core 2021.2).",
+                      "description": "null wrapper of 'nullable' object properties.",
                       "type": "string",
                       "examples": [
                         "org.openapitools.jackson.nullable.JsonNullable",
@@ -5396,8 +5396,8 @@
                         "org.springframework.http.ResponseEntity"
                       ]
                     },
-                    "resultStyle": {
-                      "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type (since core 2021.5).",
+                    "result-style": {
+                      "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                       "type": "string",
                       "default": "success",
                       "examples": [
@@ -5420,7 +5420,7 @@
                       ]
                     },
                     "null": {
-                      "description": "null wrapper of 'nullable' object properties (since core 2021.2).",
+                      "description": "null wrapper of 'nullable' object properties.",
                       "type": "string",
                       "examples": [
                         "org.openapitools.jackson.nullable.JsonNullable",
@@ -5550,8 +5550,8 @@
                         "org.springframework.http.ResponseEntity"
                       ]
                     },
-                    "resultStyle": {
-                      "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type (since core 2021.5).",
+                    "result-style": {
+                      "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                       "type": "string",
                       "default": "success",
                       "examples": [
@@ -5574,7 +5574,7 @@
                       ]
                     },
                     "null": {
-                      "description": "null wrapper of 'nullable' object properties (since core 2021.2).",
+                      "description": "null wrapper of 'nullable' object properties.",
                       "type": "string",
                       "examples": [
                         "org.openapitools.jackson.nullable.JsonNullable",
@@ -5704,8 +5704,8 @@
                         "org.springframework.http.ResponseEntity"
                       ]
                     },
-                    "resultStyle": {
-                      "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type (since core 2021.5).",
+                    "result-style": {
+                      "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                       "type": "string",
                       "default": "success",
                       "examples": [
@@ -5728,7 +5728,7 @@
                       ]
                     },
                     "null": {
-                      "description": "null wrapper of 'nullable' object properties (since core 2021.2).",
+                      "description": "null wrapper of 'nullable' object properties.",
                       "type": "string",
                       "examples": [
                         "org.openapitools.jackson.nullable.JsonNullable",
@@ -5858,8 +5858,8 @@
                         "org.springframework.http.ResponseEntity"
                       ]
                     },
-                    "resultStyle": {
-                      "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type (since core 2021.5).",
+                    "result-style": {
+                      "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                       "type": "string",
                       "default": "success",
                       "examples": [
@@ -5882,7 +5882,7 @@
                       ]
                     },
                     "null": {
-                      "description": "null wrapper of 'nullable' object properties (since core 2021.2).",
+                      "description": "null wrapper of 'nullable' object properties.",
                       "type": "string",
                       "examples": [
                         "org.openapitools.jackson.nullable.JsonNullable",
@@ -6012,8 +6012,8 @@
                         "org.springframework.http.ResponseEntity"
                       ]
                     },
-                    "resultStyle": {
-                      "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type (since core 2021.5).",
+                    "result-style": {
+                      "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                       "type": "string",
                       "default": "success",
                       "examples": [
@@ -6036,7 +6036,7 @@
                       ]
                     },
                     "null": {
-                      "description": "null wrapper of 'nullable' object properties (since core 2021.2).",
+                      "description": "null wrapper of 'nullable' object properties.",
                       "type": "string",
                       "examples": [
                         "org.openapitools.jackson.nullable.JsonNullable",

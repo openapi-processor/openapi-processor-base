@@ -73,7 +73,7 @@
             "org.springframework.http.ResponseEntity"
           ]
         },
-        "resultStyle": {
+        "result-style": {
           "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
           "type": "string",
           "default": "success",
@@ -256,7 +256,7 @@
                     "org.springframework.http.ResponseEntity"
                   ]
                 },
-                "resultStyle": {
+                "result-style": {
                   "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                   "type": "string",
                   "default": "success",
@@ -432,7 +432,7 @@
                         "org.springframework.http.ResponseEntity"
                       ]
                     },
-                    "resultStyle": {
+                    "result-style": {
                       "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                       "type": "string",
                       "default": "success",
@@ -610,7 +610,7 @@
                         "org.springframework.http.ResponseEntity"
                       ]
                     },
-                    "resultStyle": {
+                    "result-style": {
                       "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                       "type": "string",
                       "default": "success",
@@ -788,7 +788,7 @@
                         "org.springframework.http.ResponseEntity"
                       ]
                     },
-                    "resultStyle": {
+                    "result-style": {
                       "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                       "type": "string",
                       "default": "success",
@@ -966,7 +966,7 @@
                         "org.springframework.http.ResponseEntity"
                       ]
                     },
-                    "resultStyle": {
+                    "result-style": {
                       "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                       "type": "string",
                       "default": "success",
@@ -1144,7 +1144,7 @@
                         "org.springframework.http.ResponseEntity"
                       ]
                     },
-                    "resultStyle": {
+                    "result-style": {
                       "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                       "type": "string",
                       "default": "success",
@@ -1322,7 +1322,7 @@
                         "org.springframework.http.ResponseEntity"
                       ]
                     },
-                    "resultStyle": {
+                    "result-style": {
                       "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                       "type": "string",
                       "default": "success",
@@ -1500,7 +1500,7 @@
                         "org.springframework.http.ResponseEntity"
                       ]
                     },
-                    "resultStyle": {
+                    "result-style": {
                       "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                       "type": "string",
                       "default": "success",
@@ -1678,7 +1678,7 @@
                         "org.springframework.http.ResponseEntity"
                       ]
                     },
-                    "resultStyle": {
+                    "result-style": {
                       "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                       "type": "string",
                       "default": "success",
@@ -1869,7 +1869,7 @@
                 "org.springframework.http.ResponseEntity"
               ]
             },
-            "resultStyle": {
+            "result-style": {
               "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
               "type": "string",
               "default": "success",
@@ -2045,7 +2045,7 @@
                     "org.springframework.http.ResponseEntity"
                   ]
                 },
-                "resultStyle": {
+                "result-style": {
                   "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                   "type": "string",
                   "default": "success",
@@ -2223,7 +2223,7 @@
                     "org.springframework.http.ResponseEntity"
                   ]
                 },
-                "resultStyle": {
+                "result-style": {
                   "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                   "type": "string",
                   "default": "success",
@@ -2401,7 +2401,7 @@
                     "org.springframework.http.ResponseEntity"
                   ]
                 },
-                "resultStyle": {
+                "result-style": {
                   "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                   "type": "string",
                   "default": "success",
@@ -2579,7 +2579,7 @@
                     "org.springframework.http.ResponseEntity"
                   ]
                 },
-                "resultStyle": {
+                "result-style": {
                   "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                   "type": "string",
                   "default": "success",
@@ -2757,7 +2757,7 @@
                     "org.springframework.http.ResponseEntity"
                   ]
                 },
-                "resultStyle": {
+                "result-style": {
                   "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                   "type": "string",
                   "default": "success",
@@ -2935,7 +2935,7 @@
                     "org.springframework.http.ResponseEntity"
                   ]
                 },
-                "resultStyle": {
+                "result-style": {
                   "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                   "type": "string",
                   "default": "success",
@@ -3113,7 +3113,7 @@
                     "org.springframework.http.ResponseEntity"
                   ]
                 },
-                "resultStyle": {
+                "result-style": {
                   "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                   "type": "string",
                   "default": "success",
@@ -3291,7 +3291,7 @@
                     "org.springframework.http.ResponseEntity"
                   ]
                 },
-                "resultStyle": {
+                "result-style": {
                   "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                   "type": "string",
                   "default": "success",
@@ -3473,7 +3473,7 @@
             "org.springframework.http.ResponseEntity"
           ]
         },
-        "resultStyle": {
+        "result-style": {
           "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
           "type": "string",
           "default": "success",
@@ -3656,7 +3656,7 @@
                 "org.springframework.http.ResponseEntity"
               ]
             },
-            "resultStyle": {
+            "result-style": {
               "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
               "type": "string",
               "default": "success",
@@ -3834,7 +3834,7 @@
                 "org.springframework.http.ResponseEntity"
               ]
             },
-            "resultStyle": {
+            "result-style": {
               "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
               "type": "string",
               "default": "success",
@@ -4012,7 +4012,7 @@
                 "org.springframework.http.ResponseEntity"
               ]
             },
-            "resultStyle": {
+            "result-style": {
               "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
               "type": "string",
               "default": "success",
@@ -4190,7 +4190,7 @@
                 "org.springframework.http.ResponseEntity"
               ]
             },
-            "resultStyle": {
+            "result-style": {
               "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
               "type": "string",
               "default": "success",
@@ -4368,7 +4368,7 @@
                 "org.springframework.http.ResponseEntity"
               ]
             },
-            "resultStyle": {
+            "result-style": {
               "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
               "type": "string",
               "default": "success",
@@ -4546,7 +4546,7 @@
                 "org.springframework.http.ResponseEntity"
               ]
             },
-            "resultStyle": {
+            "result-style": {
               "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
               "type": "string",
               "default": "success",
@@ -4724,7 +4724,7 @@
                 "org.springframework.http.ResponseEntity"
               ]
             },
-            "resultStyle": {
+            "result-style": {
               "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
               "type": "string",
               "default": "success",
@@ -4902,7 +4902,7 @@
                 "org.springframework.http.ResponseEntity"
               ]
             },
-            "resultStyle": {
+            "result-style": {
               "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
               "type": "string",
               "default": "success",
@@ -5351,7 +5351,7 @@
             "org.springframework.http.ResponseEntity"
           ]
         },
-        "resultStyle": {
+        "result-style": {
           "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
           "type": "string",
           "default": "success",
@@ -5534,7 +5534,7 @@
                     "org.springframework.http.ResponseEntity"
                   ]
                 },
-                "resultStyle": {
+                "result-style": {
                   "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                   "type": "string",
                   "default": "success",
@@ -5710,7 +5710,7 @@
                         "org.springframework.http.ResponseEntity"
                       ]
                     },
-                    "resultStyle": {
+                    "result-style": {
                       "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                       "type": "string",
                       "default": "success",
@@ -5888,7 +5888,7 @@
                         "org.springframework.http.ResponseEntity"
                       ]
                     },
-                    "resultStyle": {
+                    "result-style": {
                       "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                       "type": "string",
                       "default": "success",
@@ -6066,7 +6066,7 @@
                         "org.springframework.http.ResponseEntity"
                       ]
                     },
-                    "resultStyle": {
+                    "result-style": {
                       "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                       "type": "string",
                       "default": "success",
@@ -6244,7 +6244,7 @@
                         "org.springframework.http.ResponseEntity"
                       ]
                     },
-                    "resultStyle": {
+                    "result-style": {
                       "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                       "type": "string",
                       "default": "success",
@@ -6422,7 +6422,7 @@
                         "org.springframework.http.ResponseEntity"
                       ]
                     },
-                    "resultStyle": {
+                    "result-style": {
                       "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                       "type": "string",
                       "default": "success",
@@ -6600,7 +6600,7 @@
                         "org.springframework.http.ResponseEntity"
                       ]
                     },
-                    "resultStyle": {
+                    "result-style": {
                       "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                       "type": "string",
                       "default": "success",
@@ -6778,7 +6778,7 @@
                         "org.springframework.http.ResponseEntity"
                       ]
                     },
-                    "resultStyle": {
+                    "result-style": {
                       "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                       "type": "string",
                       "default": "success",
@@ -6956,7 +6956,7 @@
                         "org.springframework.http.ResponseEntity"
                       ]
                     },
-                    "resultStyle": {
+                    "result-style": {
                       "description": "result style of a http response. 'success' uses success (ok) response type, 'all' uses Object/? type.",
                       "type": "string",
                       "default": "success",
