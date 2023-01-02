@@ -49,7 +49,7 @@ class MappingReaderSpec extends Specification {
 
     void "reads mapping from url" () {
         def yaml = """\
-openapi-processor-spring: v1.0
+openapi-processor-mapping: v1.0
     
 map:
   types:
@@ -70,7 +70,7 @@ map:
 
     void "reads mapping from local file if the scheme is missing" () {
         def yaml = """\
-openapi-processor-spring: v1.0
+openapi-processor-mapping: v1.0
     
 map:
   types:
@@ -91,7 +91,7 @@ map:
 
     void "reads mapping from string" () {
         def yaml = """\
-openapi-processor-spring: v1.0
+openapi-processor-mapping: v1.0
     
 map:
   types:
