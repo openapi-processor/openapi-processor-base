@@ -107,7 +107,7 @@ class MappingConverterSpec: StringSpec({
 
     "read additional source type parameter annotation" {
         val yaml = """
-                   |openapi-processor-mapping: v2
+                   |openapi-processor-mapping: v2.1
                    |
                    |options:
                    |  package-name: io.openapiprocessor.somewhere
@@ -131,7 +131,7 @@ class MappingConverterSpec: StringSpec({
 
     "read additional source type parameter annotation of path" {
         val yaml = """
-                   |openapi-processor-mapping: v2
+                   |openapi-processor-mapping: v2.1
                    |
                    |options:
                    |  package-name: io.openapiprocessor.somewhere
@@ -159,7 +159,7 @@ class MappingConverterSpec: StringSpec({
 
     "read additional source type parameter annotation of path with method" {
         val yaml = """
-                   |openapi-processor-mapping: v2
+                   |openapi-processor-mapping: v2.1
                    |
                    |options:
                    |  package-name: io.openapiprocessor.somewhere
