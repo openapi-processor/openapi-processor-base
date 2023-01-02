@@ -39,7 +39,7 @@ class MappingConverterSpec extends Specification {
 
     void "reads global type mapping" () {
         String yaml = """\
-openapi-processor-spring: v1.0
+openapi-processor-mapping: v1.0
     
 map:
   types:
@@ -62,7 +62,7 @@ map:
 
     void "reads global type mapping with generic types" () {
         String yaml = """\
-openapi-processor-spring: v1.0
+openapi-processor-mapping: v1.0
     
 map:
   types:
@@ -100,7 +100,7 @@ map:
 
     void "reads global type mapping with format" () {
         String yaml = """\
-openapi-processor-spring: v1.0
+openapi-processor-mapping: v1.0
     
 map:
   types:
@@ -123,7 +123,7 @@ map:
 
     void "reads global response type mapping" () {
         String yaml = """\
-openapi-processor-spring: v1.0
+openapi-processor-mapping: v1.0
     
 map:
   responses:
@@ -148,7 +148,7 @@ map:
 
     void "reads endpoint response type mapping" () {
         String yaml = """\
-openapi-processor-spring: v1.0
+openapi-processor-mapping: v1.0
     
 map:
   paths:
@@ -179,7 +179,7 @@ map:
 
     void "reads global parameter type mapping" () {
         String yaml = """\
-openapi-processor-spring: v1.0
+openapi-processor-mapping: v1.0
     
 map:
   parameters:
@@ -204,7 +204,7 @@ map:
 
     void "reads endpoint parameter type mapping" () {
         String yaml = """\
-openapi-processor-spring: v1.0
+openapi-processor-mapping: v1.0
     
 map:
   paths:
@@ -234,7 +234,7 @@ map:
 
     void "reads endpoint type mapping" () {
         String yaml = """\
-openapi-processor-spring: v1.0
+openapi-processor-mapping: v1.0
     
 map:
   paths:
@@ -264,7 +264,7 @@ map:
 
     void "reads endpoint add mapping" () {
         String yaml = """\
-openapi-processor-spring: v1.0
+openapi-processor-mapping: v1.0
     
 map:
   paths:
@@ -298,7 +298,7 @@ map:
 
     void "reads endpoint exclude flag" () {
         String yaml = """\
-openapi-processor-spring: v1.0
+openapi-processor-mapping: v1.0
     
 map:
   paths:
@@ -335,7 +335,7 @@ map:
 
     void "reads global result mapping 'plain'" () {
         String yaml = """\
-openapi-processor-spring: v1.0
+openapi-processor-mapping: v1.0
     
 map:
   result:
@@ -354,7 +354,7 @@ map:
 
     void "reads global result mapping" () {
         String yaml = """\
-openapi-processor-spring: v1.0
+openapi-processor-mapping: v1.0
     
 map:
   result:
