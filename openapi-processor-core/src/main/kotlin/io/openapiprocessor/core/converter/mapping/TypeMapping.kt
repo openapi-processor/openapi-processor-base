@@ -33,7 +33,12 @@ class TypeMapping (
     /**
      * The fully qualified java type names of all generic parameters to {@link #targetTypeName}.
      */
-    val genericTypeNames: List<String> = emptyList()
+    val genericTypeNames: List<String> = emptyList(),
+
+    /**
+     * The fully qualified java type names of all generic parameters to {@link #targetTypeName}.
+     */
+    val genericTypes: List<TargetType> = emptyList()
 
 ): Mapping, TargetTypeMapping {
 

@@ -80,7 +80,7 @@ map:
                     'array',
                     null,
                     'java.util.Collection',
-                    [])
+                    [], [])
             ], [
                 // extra whitespaces
                 source: '  array   =>    java.util.Collection   ',
@@ -88,7 +88,7 @@ map:
                     'array',
                     null,
                     'java.util.Collection',
-                    [])
+                    [], [])
             ], [
                 // with format
                 source: 'string:date-time => java.time.ZonedDateTime',
@@ -96,7 +96,7 @@ map:
                     'string',
                     'date-time',
                     'java.time.ZonedDateTime',
-                    [])
+                    [], [])
             ], [
                 // extra whitespaces with format
                 source  : '"  string  :  date-time   =>    java.time.ZonedDateTime   "',
@@ -104,7 +104,7 @@ map:
                     'string',
                     'date-time',
                     'java.time.ZonedDateTime',
-                    [])
+                    [], [])
             ], [
                 // with inline generics
                 source: 'Foo => mapping.Bar<java.lang.String, java.lang.Boolean>',
@@ -112,7 +112,7 @@ map:
                     'Foo',
                     null,
                     'mapping.Bar',
-                    ['java.lang.String', 'java.lang.Boolean'])
+                    ['java.lang.String', 'java.lang.Boolean'], [])
             ], [
                 // with extracted generics
                 source: 'Foo => mapping.Bar',
@@ -121,7 +121,7 @@ map:
                     'Foo',
                     null,
                     'mapping.Bar',
-                    ['java.lang.String', 'java.lang.Boolean'])
+                    ['java.lang.String', 'java.lang.Boolean'], [])
             ],  [
                 // inline generics with extra whitespaces
                 source: 'Foo => mapping.Bar  <   java.lang.String  ,   java.lang.Boolean   >   ',
@@ -129,7 +129,7 @@ map:
                     'Foo',
                     null,
                     'mapping.Bar',
-                    ['java.lang.String', 'java.lang.Boolean'])
+                    ['java.lang.String', 'java.lang.Boolean'], [])
             ], [
                 // extracted generics with extra whitespaces
                 source: 'Foo => mapping.Bar',
@@ -138,7 +138,7 @@ map:
                     'Foo',
                     null,
                     'mapping.Bar',
-                    ['java.lang.String', 'java.lang.Boolean'])
+                    ['java.lang.String', 'java.lang.Boolean'], [])
             ]
         ]
     }
