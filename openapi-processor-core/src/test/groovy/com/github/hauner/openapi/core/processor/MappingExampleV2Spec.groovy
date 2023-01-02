@@ -31,7 +31,7 @@ class MappingExampleV2Spec extends Specification {
 
 
     String yaml = """
-openapi-processor-mapping: v2
+openapi-processor-mapping: v2.1
 
 options:
     package-name: com.github.hauner.openapi
