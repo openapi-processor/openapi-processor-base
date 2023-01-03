@@ -12,7 +12,7 @@ jacoco = "0.8.7"
 openapi-processor-api = "io.openapiprocessor:openapi-processor-api:2021.1"
 openapi-processor-test = "io.openapiprocessor:openapi-processor-test:2022.4"
 
-openapi-parser-bom = "io.openapiprocessor:openapi-parser-bom:2022.2-SNAPSHOT"
+openapi-parser-bom = "io.openapiprocessor:openapi-parser-bom:2023.1"
 openapi-parser-parser = { module = "io.openapiprocessor:openapi-parser" }
 openapi-parser-jackson = { module = "io.openapiprocessor:openapi-parser-jackson" }
 
