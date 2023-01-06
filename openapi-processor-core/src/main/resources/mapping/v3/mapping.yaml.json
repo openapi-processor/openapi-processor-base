@@ -36,8 +36,8 @@
         "bean-validation": {
           "description": "enable bean validation annotations for OpenAPI constraints.",
           "type": "string",
-          "default": "false",
-          "enum": ["false", "true", "javax", "jakarta"]
+          "default": false,
+          "enum": [false, true, "javax", "jakarta"]
         },
         "javadoc": {
           "description": "generate javadoc from OpenAPI 'description' properties.",
