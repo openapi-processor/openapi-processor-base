@@ -22,10 +22,10 @@
         "bean-validation": {
           "description": "enable bean validation annotations for OpenAPI constraints.",
           "type": "string",
-          "default": "false",
+          "default": false,
           "enum": [
-            "false",
-            "true",
+            false,
+            true,
             "javax",
             "jakarta"
           ]
@@ -5300,10 +5300,10 @@
         "bean-validation": {
           "description": "enable bean validation annotations for OpenAPI constraints.",
           "type": "string",
-          "default": "false",
+          "default": false,
           "enum": [
-            "false",
-            "true",
+            false,
+            true,
             "javax",
             "jakarta"
           ]
