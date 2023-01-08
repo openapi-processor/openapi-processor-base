@@ -22,6 +22,7 @@ import io.openapiprocessor.core.converter.mapping.OptionMapping
 import io.openapiprocessor.core.converter.mapping.ParameterTypeMapping
 import io.openapiprocessor.core.converter.mapping.ResponseTypeMapping
 import io.openapiprocessor.core.converter.mapping.ResultTypeMapping
+import io.openapiprocessor.core.converter.mapping.TargetType
 import io.openapiprocessor.core.converter.mapping.TypeMapping
 import io.openapiprocessor.core.processor.MappingConverter
 import io.openapiprocessor.core.processor.MappingReader
@@ -70,6 +71,7 @@ map:
         type.sourceTypeFormat == input.expected.sourceTypeFormat
         type.targetTypeName == input.expected.targetTypeName
         type.genericTypeNames == input.expected.genericTypeNames
+        assertGenericTypes(type.genericTypes, input.expected.genericTypes)
 
         where:
         input << [
@@ -80,7 +82,8 @@ map:
                     'array',
                     null,
                     'java.util.Collection',
-                    [], [])
+                    [],
+                    [])
             ], [
                 // extra whitespaces
                 source: '  array   =>    java.util.Collection   ',
@@ -88,7 +91,8 @@ map:
                     'array',
                     null,
                     'java.util.Collection',
-                    [], [])
+                    [],
+                    [])
             ], [
                 // with format
                 source: 'string:date-time => java.time.ZonedDateTime',
@@ -96,7 +100,8 @@ map:
                     'string',
                     'date-time',
                     'java.time.ZonedDateTime',
-                    [], [])
+                    [],
+                    [])
             ], [
                 // extra whitespaces with format
                 source  : '"  string  :  date-time   =>    java.time.ZonedDateTime   "',
@@ -104,7 +109,8 @@ map:
                     'string',
                     'date-time',
                     'java.time.ZonedDateTime',
-                    [], [])
+                    [],
+                    [])
             ], [
                 // with inline generics
                 source: 'Foo => mapping.Bar<java.lang.String, java.lang.Boolean>',
@@ -112,7 +118,11 @@ map:
                     'Foo',
                     null,
                     'mapping.Bar',
-                    ['java.lang.String', 'java.lang.Boolean'], [])
+                    ['java.lang.String', 'java.lang.Boolean'],
+                    [
+                        new TargetType("java.lang.String", [], []),
+                        new TargetType("java.lang.Boolean", [], [])
+                    ])
             ], [
                 // with extracted generics
                 source: 'Foo => mapping.Bar',
@@ -121,7 +131,11 @@ map:
                     'Foo',
                     null,
                     'mapping.Bar',
-                    ['java.lang.String', 'java.lang.Boolean'], [])
+                    ['java.lang.String', 'java.lang.Boolean'],
+                    [
+                        new TargetType("java.lang.String", [], []),
+                        new TargetType("java.lang.Boolean", [], [])
+                    ])
             ],  [
                 // inline generics with extra whitespaces
                 source: 'Foo => mapping.Bar  <   java.lang.String  ,   java.lang.Boolean   >   ',
@@ -129,7 +143,10 @@ map:
                     'Foo',
                     null,
                     'mapping.Bar',
-                    ['java.lang.String', 'java.lang.Boolean'], [])
+                    ['java.lang.String', 'java.lang.Boolean'], [
+                        new TargetType("java.lang.String", [], []),
+                        new TargetType("java.lang.Boolean", [], [])
+                    ])
             ], [
                 // extracted generics with extra whitespaces
                 source: 'Foo => mapping.Bar',
@@ -138,7 +155,10 @@ map:
                     'Foo',
                     null,
                     'mapping.Bar',
-                    ['java.lang.String', 'java.lang.Boolean'], [])
+                    ['java.lang.String', 'java.lang.Boolean'], [
+                        new TargetType("java.lang.String", [], []),
+                        new TargetType("java.lang.Boolean", [], [])
+                    ])
             ]
         ]
     }
@@ -527,4 +547,13 @@ openapi-processor-mapping: v2
         notThrown (Exception)
     }
 
+    void assertGenericTypes (List<TargetType> actualTargetTypes, List<TargetType> expectedTargetTypes) {
+        assert actualTargetTypes.size () == expectedTargetTypes.size()
+
+        if (!expectedTargetTypes.isEmpty ()) {
+            expectedTargetTypes.eachWithIndex { TargetType expected, int i ->
+                assert actualTargetTypes[i].typeName == expected.typeName
+            }
+        }
+    }
 }
