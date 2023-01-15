@@ -221,7 +221,10 @@ components:
         // when:
         val converter = DataTypeConverter(options)
         val datatype = converter.createMappedDataType(
-            TargetType("other.Foo", listOf("model.Bar")))
+            TargetType("other.Foo",
+                listOf("model.Bar"),
+                listOf(TargetType("model.Bar", emptyList())
+            )))
 
         // then:
         datatype.shouldBeInstanceOf<MappedDataType>()

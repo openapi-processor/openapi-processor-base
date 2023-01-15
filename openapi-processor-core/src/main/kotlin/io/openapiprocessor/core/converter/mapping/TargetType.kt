@@ -29,7 +29,7 @@ class TargetType(
     /**
      * generic parameters of typeName
      */
-    val genericNames: List<String>,
+    val genericNames: List<String> = emptyList(),
 
     /**
      * generic parameters of typeName
@@ -52,7 +52,10 @@ class TargetType(
      * @return the package name
      */
     fun getPkg(): String {
-        return typeName.substring(0, typeName.lastIndexOf('.'))
-    }
+        val dot = typeName.lastIndexOf('.')
+        if (dot == -1)
+            return ""
 
+        return typeName.substring(0, dot)
+    }
 }

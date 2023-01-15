@@ -22,6 +22,7 @@ import io.openapiprocessor.core.converter.mapping.AmbiguousTypeMappingException
 import io.openapiprocessor.core.converter.mapping.EndpointTypeMapping
 import io.openapiprocessor.core.converter.mapping.ParameterTypeMapping
 import io.openapiprocessor.core.converter.mapping.ResponseTypeMapping
+import io.openapiprocessor.core.converter.mapping.TargetType
 import io.openapiprocessor.core.converter.mapping.TypeMapping
 import io.openapiprocessor.core.framework.Framework
 import io.openapiprocessor.core.framework.FrameworkBase
@@ -104,8 +105,10 @@ components:
                     'org.springframework.data.domain.Pageable'),
                 new TypeMapping (
                     'StringPage',
+                    null,
                     'org.springframework.data.domain.Page',
-                    ['java.lang.String'])
+                    ['java.lang.String'],
+                    [new TargetType ('java.lang.String', [], [])])
             ])
 
         Api api = new ApiConverter (options, new FrameworkBase ())
@@ -359,36 +362,45 @@ paths:
                     new ResponseTypeMapping (
                         'application/vnd.any', new TypeMapping (
                         'object',
+                        null,
                         'pkg.TargetClass',
-                        ['java.lang.String'])
+                        ['java.lang.String'],
+                        [new TargetType ('java.lang.String', [], [])])
                     )]
                 )
             ], [
                 new ResponseTypeMapping (
                     'application/vnd.any', new TypeMapping (
                         'object',
+                        null,
                         'pkg.TargetClass',
-                        ['java.lang.String'])
+                        ['java.lang.String'],
+                        [new TargetType ('java.lang.String', [], [])])
                 )
             ], [
                 new EndpointTypeMapping ('/object', null, [
                     new ResponseTypeMapping (
                         'application/vnd.any', new TypeMapping (
                         'object',
+                        null,
                         'pkg.TargetClass',
-                        ['java.lang.String'])
-                    ),
+                        ['java.lang.String'],
+                        [new TargetType ('java.lang.String', [], [])])),
                     new TypeMapping (
                         'ObjectGetResponse200',
+                        null,
                         'pkg.TargetClassType',
-                        ['java.lang.StringType'])
+                        ['java.lang.StringType'],
+                        [new TargetType ('java.lang.StringType', [], [])])
                 ])
             ], [
                 new EndpointTypeMapping ('/object', null, [
                     new TypeMapping (
                         'ObjectGetResponse200',
+                        null,
                         'pkg.TargetClass',
-                        ['java.lang.String'])
+                        ['java.lang.String'],
+                        [new TargetType ('java.lang.String', [], [])])
                     ]
                 )
             ]
@@ -436,8 +448,13 @@ components:
                 new EndpointTypeMapping ('/endpoint-map', null, [
                     new TypeMapping (
                         'Props',
+                        null,
                         'java.util.Map',
-                        ['java.lang.String', 'java.lang.String'])
+                        ['java.lang.String', 'java.lang.String'],
+                        [
+                            new TargetType('java.lang.String', [], []),
+                            new TargetType('java.lang.String', [], [])
+                        ])
                 ])
             ])
 
@@ -492,8 +509,13 @@ components:
                 new EndpointTypeMapping ('/endpoint-map', null, [
                     new TypeMapping (
                         'Props',
+                        null,
                         'org.springframework.util.MultiValueMap',
-                        ['java.lang.String', 'java.lang.String'])
+                        ['java.lang.String', 'java.lang.String'],
+                    [
+                        new TargetType('java.lang.String', [], []),
+                        new TargetType('java.lang.String', [], [])
+                    ])
                 ])
             ])
 

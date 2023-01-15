@@ -7,7 +7,9 @@ package io.openapiprocessor.core.converter
 
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
+import io.openapiprocessor.core.converter.mapping.TargetType
 import io.openapiprocessor.core.converter.mapping.TypeMapping
 import io.openapiprocessor.core.model.DataTypes
 import io.openapiprocessor.core.model.HttpMethod
@@ -154,5 +156,52 @@ class DataTypeConverterMappingSpec: StringSpec({
         datatype.item.shouldBeInstanceOf<MappedDataType>()
         (datatype.item as MappedDataType).sourceDataType.shouldBeInstanceOf<ObjectDataType>()
     }
-})
 
+    "mapped data type has nested generics" {
+        val openApi = parse("""
+            openapi: 3.0.2
+            info:
+              title: nested generics
+              version: 1.0.0
+
+            paths:
+              /foo:
+                get:
+                  responses:
+                    '200':
+                      description: OK
+                      content:
+                        '*/*':
+                          schema:
+                            type: object
+                            additionalProperties:
+                              type: array
+                              items:
+                                type: string
+        """.trimIndent(), ParserType.INTERNAL)
+
+        val options = ApiOptions()
+        options.typeMappings = listOf(
+            TypeMapping("Dictionary", null,
+                "java.util.Map",
+                genericTypes = listOf(
+                    TargetType("java.lang.String", genericNames = emptyList()),
+                    TargetType("java.util.List", genericNames = emptyList(),
+                        genericTypes = listOf(
+                            TargetType("java.lang.String", genericNames = emptyList())
+                        ))
+                )),
+        )
+
+        val schemaInfo = openApi.getSchemaInfo("Dictionary",
+            "/foo", HttpMethod.GET, "200", "*/*")
+
+        // when:
+        val converter = DataTypeConverter(options)
+        val datatype = converter.convert(schemaInfo, dataTypes)
+
+        // then:
+        datatype.shouldBeInstanceOf<MappedDataType>()
+        datatype.getTypeName() shouldBe "Map<String, List<String>>"
+    }
+})

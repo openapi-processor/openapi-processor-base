@@ -77,7 +77,8 @@ class DataTypeConverter(
     private fun createMappedDataType(
         targetType: TargetType,
         schemaInfo: SchemaInfo,
-        sourceDataType: DataType): MappedDataType {
+        sourceDataType: DataType
+    ): MappedDataType {
 
         val genericDataTypeNames = mutableListOf<DataTypeName>()
 
@@ -97,6 +98,7 @@ class DataTypeConverter(
             targetType.getName(),
             targetType.getPkg(),
             genericDataTypeNames,
+            convertGenerics(targetType),
             null,
             schemaInfo.getDeprecated(),
             sourceDataType
@@ -123,9 +125,30 @@ class DataTypeConverter(
             targetType.getName(),
             targetType.getPkg(),
             genericDataTypeNames,
+            convertGenerics(targetType),
             null,
              false
         )
+    }
+
+    private fun convertGenerics(targetType: TargetType): List<GenericDataType> {
+        val genericDataTypes = mutableListOf<GenericDataType>()
+
+        targetType.genericTypes.forEach {
+            val typeName = it.getName()
+            val dataTypeName = when {
+                it.typeName.startsWith(options.packageName) -> {
+                    DataTypeName(typeName, getTypeNameWithSuffix(typeName))
+                }
+                else -> {
+                    DataTypeName(typeName)
+                }
+            }
+
+            genericDataTypes.add(GenericDataType(dataTypeName, it.getPkg(), convertGenerics(it)))
+        }
+
+        return genericDataTypes
     }
 
     private fun createComposedDataType(schemaInfo: SchemaInfo, dataTypes: DataTypes): DataType {

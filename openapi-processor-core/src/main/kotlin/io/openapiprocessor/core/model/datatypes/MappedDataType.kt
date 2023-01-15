@@ -12,24 +12,27 @@ open class MappedDataType(
     private val type: String,
     private val pkg: String,
     val genericTypes: List<DataTypeName> = emptyList(),
+    val genericTypes2: List<GenericDataType> = emptyList(),
     override val constraints: DataTypeConstraints? = null,
     override val deprecated: Boolean = false,
     override val sourceDataType: DataType? = null
 ): DataType, MappedSourceDataType {
 
     override fun getName(): String {
-        return if (genericTypes.isEmpty()) {
+        return if (genericTypes2.isEmpty()) {
             type
         } else {
-            "${type}<${genericIds.joinToString(", ")}>"
+            val generics = genericTypes2.map { it.getName() }
+            "${type}<${generics.joinToString()}>"
         }
     }
 
     override fun getTypeName(): String {
-        return if (genericTypes.isEmpty()) {
+        return if (genericTypes2.isEmpty()) {
             type
         } else {
-            "${type}<${genericTypeNames.joinToString(", ")}>"
+            val generics = genericTypes2.map { it.getTypeName() }
+            "${type}<${generics.joinToString()}>"
         }
     }
 
@@ -47,28 +50,29 @@ open class MappedDataType(
 
     private val genericImports: Set<String>
         get() {
-            return genericTypes
-                .map { it.type }
-                .filter { it != "?" }
+            return genericTypes2
+                .map { it.getImports() }
+                .flatten()
+//                .filter { it != "?" }  // todo try to remove
                 .toSet()
         }
 
-    private val genericIds: List<String>
-        get() {
-            return genericTypes.map {
-                getClassName(it.id)
-            }
-        }
-
-    private val genericTypeNames: List<String>
-        get() {
-            return genericTypes.map {
-                getClassName(it.type)
-            }
-        }
-
-    private fun getClassName(source: String): String {
-        return source.substringAfterLast('.')
-    }
+//    private val genericIds: List<String>
+//        get() {
+//            return genericTypes.map {
+//                getClassName(it.id)
+//            }
+//        }
+//
+//    private val genericTypeNames: List<String>
+//        get() {
+//            return genericTypes.map {
+//                getClassName(it.type)
+//            }
+//        }
+//
+//    private fun getClassName(source: String): String {
+//        return source.substringAfterLast('.')
+//    }
 
 }
