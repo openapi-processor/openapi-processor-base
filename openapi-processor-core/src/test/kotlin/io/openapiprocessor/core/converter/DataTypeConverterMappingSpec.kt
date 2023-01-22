@@ -7,8 +7,10 @@ package io.openapiprocessor.core.converter
 
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
+import io.openapiprocessor.core.converter.mapping.AddParameterTypeMapping
 import io.openapiprocessor.core.converter.mapping.TargetType
 import io.openapiprocessor.core.converter.mapping.TypeMapping
 import io.openapiprocessor.core.model.DataTypes
@@ -203,5 +205,25 @@ class DataTypeConverterMappingSpec: StringSpec({
         // then:
         datatype.shouldBeInstanceOf<MappedDataType>()
         datatype.getTypeName() shouldBe "Map<String, List<String>>"
+    }
+
+    "additional parameter has no source type" {
+        val options = ApiOptions()
+        options.typeMappings = listOf(
+            AddParameterTypeMapping("add",
+                TypeMapping(null, "additional.Parameter")
+        ))
+
+        // see ApiConvert.createAdditionalParameter()
+        val tm = options.typeMappings.first().getChildMappings().first() as TypeMapping
+
+        // when:
+        val converter = DataTypeConverter(options)
+        val datatype = converter.createAdditionalParameterMappedDataType(tm.getTargetType())
+
+        // then:
+        datatype.shouldBeInstanceOf<MappedDataType>()
+        datatype.getTypeName().shouldBe("Parameter")
+        datatype.sourceDataType.shouldBeNull()
     }
 })
