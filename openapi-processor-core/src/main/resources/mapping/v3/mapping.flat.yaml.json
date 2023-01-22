@@ -21,7 +21,6 @@
         },
         "bean-validation": {
           "description": "enable bean validation annotations for OpenAPI constraints.",
-          "type": "string",
           "default": false,
           "enum": [
             false,
@@ -5282,7 +5281,6 @@
   "properties": {
     "openapi-processor-mapping": {
       "description": "version of the mapping format.",
-      "type": "string",
       "enum": [
         "v3"
       ]
@@ -5299,7 +5297,6 @@
         },
         "bean-validation": {
           "description": "enable bean validation annotations for OpenAPI constraints.",
-          "type": "string",
           "default": false,
           "enum": [
             false,
