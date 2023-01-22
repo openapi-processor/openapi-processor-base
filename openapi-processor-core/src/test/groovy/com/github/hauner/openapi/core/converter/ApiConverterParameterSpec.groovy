@@ -234,7 +234,7 @@ paths:
 
         foo.name == 'foo'
         request.name == 'request'
-        request.required
+        !request.required
         request.dataType.name == 'HttpServletRequest'
         request.dataType.packageName == 'javax.servlet.http'
         !request.withAnnotation
