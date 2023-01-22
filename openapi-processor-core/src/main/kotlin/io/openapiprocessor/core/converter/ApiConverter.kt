@@ -157,7 +157,7 @@ class  ApiConverter(
     }
 
     private fun collectResponses(responses: Map<String, Response>, ep: Endpoint, dataTypes: DataTypes, resolver: RefResolver) {
-        responses.forEach { httpStatus, httpResponse ->
+        responses.forEach { (httpStatus, httpResponse) ->
             val results = createResponses(
                 ep,
                 httpStatus,
