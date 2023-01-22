@@ -199,7 +199,7 @@ class  ApiConverter(
         val tm = mapping.getChildMappings().first () as TypeMapping
         val tt = tm.getTargetType()
 
-        val addType = dataTypeConverter.createMappedDataType(tt)
+        val addType = dataTypeConverter.createAdditionalParameterMappedDataType(tt)
 
         var annotationType: AnnotationDataType? = null
         if (mapping.annotation != null) {

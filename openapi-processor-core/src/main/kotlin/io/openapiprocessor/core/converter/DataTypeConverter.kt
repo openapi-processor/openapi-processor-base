@@ -105,8 +105,7 @@ class DataTypeConverter(
         )
     }
 
-    // used to add additional parameter
-    fun createMappedDataType(targetType: TargetType): MappedDataType {
+    fun createAdditionalParameterMappedDataType(targetType: TargetType): MappedDataType {
         val genericDataTypeNames = mutableListOf<DataTypeName>()
 
         targetType.genericNames.forEach {

@@ -220,7 +220,7 @@ components:
 
         // when:
         val converter = DataTypeConverter(options)
-        val datatype = converter.createMappedDataType(
+        val datatype = converter.createAdditionalParameterMappedDataType(
             TargetType("other.Foo",
                 listOf("model.Bar"),
                 listOf(TargetType("model.Bar", emptyList())
