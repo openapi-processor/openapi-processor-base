@@ -227,7 +227,7 @@ class  ApiConverter(
             }
 
             override fun isRequired(): Boolean {
-                return true
+                return false
             }
 
             override fun isDeprecated(): Boolean {
