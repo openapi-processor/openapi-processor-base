@@ -138,4 +138,27 @@ class BeanValidationMappingSpec: StringSpec({
         io.annotations.shouldBeEmpty()
     }
 
+    "does not add @Valid to data type without source type (additional parameter)" {
+        val dataType = MappedDataType(
+            "Foo",
+            "foo",
+            emptyList(),
+            emptyList(),
+            null,
+            false,
+            null
+        )
+
+        val info = validation.validate(dataType, false)
+
+        val prop = info.prop
+        prop.dataTypeValue shouldBe "Foo"
+        prop.imports.shouldBeEmpty()
+        prop.annotations.shouldBeEmpty()
+
+        val io = info.inout
+        io.dataTypeValue shouldBe "Foo"
+        io.imports.shouldBeEmpty()
+        io.annotations.shouldBeEmpty()
+    }
 })
