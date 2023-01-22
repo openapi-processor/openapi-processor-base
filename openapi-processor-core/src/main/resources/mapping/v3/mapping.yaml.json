@@ -8,7 +8,6 @@
   "properties": {
     "openapi-processor-mapping": {
       "description": "version of the mapping format.",
-      "type": "string",
       "enum": ["v3"]
     },
     "options": {
@@ -35,7 +34,6 @@
         },
         "bean-validation": {
           "description": "enable bean validation annotations for OpenAPI constraints.",
-          "type": "string",
           "default": false,
           "enum": [false, true, "javax", "jakarta"]
         },
