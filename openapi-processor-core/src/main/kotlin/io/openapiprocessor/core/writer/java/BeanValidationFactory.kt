@@ -153,8 +153,9 @@ private fun DataType.shouldHaveValid(): Boolean {
     if (this is MappedCollectionDataType)
         return false
 
-    if (this is MappedSourceDataType)
-        return sourceDataType!!.shouldHaveValid()
+    if (this is MappedSourceDataType) {
+        return sourceDataType?.shouldHaveValid() ?: false
+    }
 
     return false
 }
