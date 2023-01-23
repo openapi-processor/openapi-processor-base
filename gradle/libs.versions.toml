@@ -1,5 +1,5 @@
 [versions]
-processor = "2023.1.2-SNAPSHOT"
+processor = "2023.1.2"
 
 kotlin = "1.7.21"
 build-jdk = "11"
