@@ -48,7 +48,7 @@ mockk = "io.mockk:mockk:1.13.3"
 
 diff-utils = "io.github.java-diff-utils:java-diff-utils:4.12"
 
-groovy-bom = "org.apache.groovy:groovy-bom:4.0.7"
+groovy-bom = "org.apache.groovy:groovy-bom:4.0.8"
 spock = "org.spockframework:spock-core:2.3-groovy-4.0"
 
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
