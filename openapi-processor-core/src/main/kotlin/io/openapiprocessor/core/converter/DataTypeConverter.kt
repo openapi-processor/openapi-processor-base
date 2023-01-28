@@ -79,7 +79,6 @@ class DataTypeConverter(
         schemaInfo: SchemaInfo,
         sourceDataType: DataType
     ): MappedDataType {
-
         val genericDataTypeNames = mutableListOf<DataTypeName>()
 
         targetType.genericNames.forEach {
