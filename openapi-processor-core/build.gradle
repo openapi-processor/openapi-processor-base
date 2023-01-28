@@ -50,10 +50,6 @@ tasks.named('compileTestKotlin') {
     dependsOn 'generateTestGrammarSource'
 }
 
-tasks.named('compileTestIntKotlin') {
-    dependsOn 'generateTestIntGrammarSource'
-}
-
 tasks.named('sourcesJar') {
     dependsOn 'generateGrammarSource'
 }
@@ -160,5 +156,3 @@ publishing {
         }
     }
 }
-
-//apply from: "${rootProject.rootDir}/gradle/publishing.tasks.gradle.kts"
