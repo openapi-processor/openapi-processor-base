@@ -7,11 +7,8 @@ package io.openapiprocessor.core.processor.mapping.v2
 
 /**
  * a "type:" entry in the "types:" list of the mapping yaml
- *
- *  @author Martin Hauner
  */
 data class Type(
-
     /**
      * the mapping from source to target, ie a mapping string like:
      *
