@@ -170,6 +170,20 @@ class MappingConverter(val mapping: MappingV2) {
         return AddParameterTypeMapping(mapping.sourceType!!, typeMapping, annotation)
     }
 
+    private fun convertResponse(source: Response): Mapping {
+        val (mapping, genericTypes, genericTypeNames) = parseMapping(source.content, source.generics)
+
+        val typeMapping = TypeMapping(
+            null,
+            null,
+            resolvePackageVariable(mapping.targetType!!),
+            resolvePackageVariable(genericTypeNames),
+            genericTypes
+        )
+
+        return ResponseTypeMapping (mapping.sourceType!!, typeMapping)
+    }
+
     data class ParsedMapping(
         val mapping: ParserMapping,
         val genericTypes: List<TargetType>,
@@ -216,24 +230,6 @@ class MappingConverter(val mapping: MappingV2) {
                 )
             }
             .collect(Collectors.toList())
-    }
-
-    private fun convertResponse(source: Response): Mapping {
-        val mapping = parseMapping(source.content)
-
-        val targetGenericTypes = mapping.targetGenericTypes.toMutableList()
-        if (targetGenericTypes.isEmpty() && source.generics != null) {
-            targetGenericTypes.addAll(source.generics)
-        }
-
-        val typeMapping = TypeMapping(
-            null,
-            null,
-            resolvePackageVariable(mapping.targetType!!),
-            resolvePackageVariable(targetGenericTypes)
-        )
-
-        return ResponseTypeMapping (mapping.sourceType!!, typeMapping)
     }
 
     private fun convertPath(path: String, source: Path): Mapping {
