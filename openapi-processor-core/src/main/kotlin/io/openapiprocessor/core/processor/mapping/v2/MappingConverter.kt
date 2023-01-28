@@ -104,6 +104,7 @@ class MappingConverter(val mapping: MappingV2) {
                 targetGenericTypes = convertExplicitGenerics(source.generics)
             }
 
+            // obsolete
             val targetGenericTypeNames = mapping.targetGenericTypes.toMutableList()
             if (targetGenericTypeNames.isEmpty() && source.generics != null) {
                 targetGenericTypeNames.addAll(source.generics)
@@ -146,13 +147,17 @@ class MappingConverter(val mapping: MappingV2) {
     }
 
     private fun convertParameter(source: Parameter): Mapping {
+        // parameters:
         return when (source) {
+            // - name: parameter name => target type
             is RequestParameter -> {
                 createParameterTypeMapping(source)
             }
+            // - add: parameter name => target type
             is AdditionalParameter -> {
                 createAddParameterTypeMapping(source)
             }
+            // - type: OpenAPI type => target type
             is Type -> {
                 when (val mapping = convertType(source)) {
                     is AnnotationTypeMapping -> ParameterAnnotationTypeMapping(mapping)
@@ -170,16 +175,23 @@ class MappingConverter(val mapping: MappingV2) {
     private fun createParameterTypeMapping(source: RequestParameter): ParameterTypeMapping {
         val mapping = parseMapping(source.name)
 
-        val targetGenericTypes = mapping.targetGenericTypes.toMutableList()
+        var targetGenericTypes = convertInlineGenerics(mapping.targetGenericTypes2)
         if (targetGenericTypes.isEmpty() && source.generics != null) {
-            targetGenericTypes.addAll(source.generics)
+            targetGenericTypes = convertExplicitGenerics(source.generics)
+        }
+
+        // obsolete
+        val targetGenericTypeNames = mapping.targetGenericTypes.toMutableList()
+        if (targetGenericTypeNames.isEmpty() && source.generics != null) {
+            targetGenericTypeNames.addAll(source.generics)
         }
 
         val typeMapping = TypeMapping(
-            null,
-            null,
+            null, // mapping.sourceType
+            null, // mapping.sourceFormat
             resolvePackageVariable(mapping.targetType!!),
-            resolvePackageVariable(targetGenericTypes)
+            resolvePackageVariable(targetGenericTypeNames),
+            targetGenericTypes
         )
 
         return ParameterTypeMapping(mapping.sourceType!!, typeMapping)
