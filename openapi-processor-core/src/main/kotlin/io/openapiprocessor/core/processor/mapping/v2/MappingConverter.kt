@@ -7,6 +7,7 @@ package io.openapiprocessor.core.processor.mapping.v2
 
 import io.openapiprocessor.core.converter.mapping.*
 import io.openapiprocessor.core.model.HttpMethod
+import io.openapiprocessor.core.processor.mapping.v2.parser.Mapping as ParserMapping
 import io.openapiprocessor.core.processor.mapping.v2.parser.Mapping.Kind.ANNOTATE
 import io.openapiprocessor.core.processor.mapping.v2.parser.MappingType
 import io.openapiprocessor.core.processor.mapping.v2.parser.antlr.parseMapping
@@ -90,7 +91,7 @@ class MappingConverter(val mapping: MappingV2) {
     }
 
     private fun convertType(source: Type): Mapping {
-        val mapping = parseMapping(source.type)
+        val (mapping, genericTypes, genericTypeNames) = parseMapping(source.type, source.generics)
 
         return if (mapping.kind == ANNOTATE) {
             AnnotationTypeMapping(
@@ -99,51 +100,28 @@ class MappingConverter(val mapping: MappingV2) {
                 Annotation(mapping.annotationType!!, mapping.annotationParameters)
             )
         } else {
-            var targetGenericTypes = convertInlineGenerics(mapping.targetGenericTypes2)
-            if (targetGenericTypes.isEmpty() && source.generics != null) {
-                targetGenericTypes = convertExplicitGenerics(source.generics)
-            }
-
-            // obsolete
-            val targetGenericTypeNames = mapping.targetGenericTypes.toMutableList()
-            if (targetGenericTypeNames.isEmpty() && source.generics != null) {
-                targetGenericTypeNames.addAll(source.generics)
-            }
-
             TypeMapping(
                 mapping.sourceType,
                 mapping.sourceFormat,
                 resolvePackageVariable(mapping.targetType!!),
-                resolvePackageVariable(targetGenericTypeNames),
-                targetGenericTypes
+                resolvePackageVariable(genericTypeNames),
+                genericTypes
             )
         }
     }
 
-    private fun convertExplicitGenerics(generics: List<String>): List<TargetType> =
-        generics
-            .stream()
-            .map {
-                val genericMapping = parseMapping(it)
-                TargetType(
-                    resolvePackageVariable(genericMapping.targetType!!),
-                    emptyList(),
-                    convertInlineGenerics(genericMapping.targetGenericTypes2)
-                )
-            }
-            .collect(Collectors.toList())
+    private fun createParameterTypeMapping(source: RequestParameter): ParameterTypeMapping {
+        val (mapping, genericTypes, genericTypeNames) = parseMapping(source.name, source.generics)
 
-    private fun convertInlineGenerics(targetGenericTypes: List<MappingType>): List<TargetType> {
-        return targetGenericTypes
-            .stream()
-            .map {
-                TargetType(
-                    resolvePackageVariable(it.targetType),
-                    emptyList(),
-                    convertInlineGenerics(it.targetGenericTypes)
-                )
-            }
-            .collect(Collectors.toList())
+        val typeMapping = TypeMapping(
+            null,
+            null,
+            resolvePackageVariable(mapping.targetType!!),
+            resolvePackageVariable(genericTypeNames),
+            genericTypes
+        )
+
+        return ParameterTypeMapping(mapping.sourceType!!, typeMapping)
     }
 
     private fun convertParameter(source: Parameter): Mapping {
@@ -172,29 +150,52 @@ class MappingConverter(val mapping: MappingV2) {
         }
     }
 
-    private fun createParameterTypeMapping(source: RequestParameter): ParameterTypeMapping {
-        val mapping = parseMapping(source.name)
+    data class ParsedMapping(
+        val mapping: ParserMapping,
+        val genericTypes: List<TargetType>,
+        val genericNames: List<String>)
 
-        var targetGenericTypes = convertInlineGenerics(mapping.targetGenericTypes2)
-        if (targetGenericTypes.isEmpty() && source.generics != null) {
-            targetGenericTypes = convertExplicitGenerics(source.generics)
+    private fun parseMapping(mapping: String, generics: List<String>?): ParsedMapping {
+        val parsedMapping = parseMapping(mapping)
+
+        var targetGenericTypes = convertInlineGenerics(parsedMapping.targetGenericTypes2)
+        if (targetGenericTypes.isEmpty() && generics != null) {
+            targetGenericTypes = convertExplicitGenerics(generics)
         }
 
-        // obsolete
-        val targetGenericTypeNames = mapping.targetGenericTypes.toMutableList()
-        if (targetGenericTypeNames.isEmpty() && source.generics != null) {
-            targetGenericTypeNames.addAll(source.generics)
+        // obsolete, names only
+        val targetGenericTypeNames = parsedMapping.targetGenericTypes.toMutableList()
+        if (targetGenericTypeNames.isEmpty() && generics != null) {
+            targetGenericTypeNames.addAll(generics)
         }
 
-        val typeMapping = TypeMapping(
-            null, // mapping.sourceType
-            null, // mapping.sourceFormat
-            resolvePackageVariable(mapping.targetType!!),
-            resolvePackageVariable(targetGenericTypeNames),
-            targetGenericTypes
-        )
+        return ParsedMapping(parsedMapping, targetGenericTypes, targetGenericTypeNames)
+    }
 
-        return ParameterTypeMapping(mapping.sourceType!!, typeMapping)
+    private fun convertExplicitGenerics(generics: List<String>): List<TargetType> =
+        generics
+            .stream()
+            .map {
+                val genericMapping = parseMapping(it)
+                TargetType(
+                    resolvePackageVariable(genericMapping.targetType!!),
+                    emptyList(),
+                    convertInlineGenerics(genericMapping.targetGenericTypes2)
+                )
+            }
+            .collect(Collectors.toList())
+
+    private fun convertInlineGenerics(targetGenericTypes: List<MappingType>): List<TargetType> {
+        return targetGenericTypes
+            .stream()
+            .map {
+                TargetType(
+                    resolvePackageVariable(it.targetType),
+                    emptyList(),
+                    convertInlineGenerics(it.targetGenericTypes)
+                )
+            }
+            .collect(Collectors.toList())
     }
 
     private fun createAddParameterTypeMapping(source: AdditionalParameter): AddParameterTypeMapping {
