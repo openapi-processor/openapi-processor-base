@@ -18,7 +18,7 @@ testing {
             testType.set(TestSuiteType.INTEGRATION_TEST)
 
             dependencies {
-                implementation(project)
+                implementation(project())
             }
 
             sources {
