@@ -110,20 +110,6 @@ class MappingConverter(val mapping: MappingV2) {
         }
     }
 
-    private fun createParameterTypeMapping(source: RequestParameter): ParameterTypeMapping {
-        val (mapping, genericTypes, genericTypeNames) = parseMapping(source.name, source.generics)
-
-        val typeMapping = TypeMapping(
-            null,
-            null,
-            resolvePackageVariable(mapping.targetType!!),
-            resolvePackageVariable(genericTypeNames),
-            genericTypes
-        )
-
-        return ParameterTypeMapping(mapping.sourceType!!, typeMapping)
-    }
-
     private fun convertParameter(source: Parameter): Mapping {
         // parameters:
         return when (source) {
@@ -148,6 +134,40 @@ class MappingConverter(val mapping: MappingV2) {
                 throw Exception("unknown parameter mapping $source")
             }
         }
+    }
+
+    private fun createParameterTypeMapping(source: RequestParameter): ParameterTypeMapping {
+        val (mapping, genericTypes, genericTypeNames) = parseMapping(source.name, source.generics)
+
+        val typeMapping = TypeMapping(
+            null,
+            null,
+            resolvePackageVariable(mapping.targetType!!),
+            resolvePackageVariable(genericTypeNames),
+            genericTypes
+        )
+
+        return ParameterTypeMapping(mapping.sourceType!!, typeMapping)
+    }
+
+    private fun createAddParameterTypeMapping(source: AdditionalParameter): AddParameterTypeMapping {
+        val (mapping, genericTypes, genericTypeNames) = parseMapping(source.add, source.generics)
+
+        val typeMapping = TypeMapping(
+            null,
+            null,
+            resolvePackageVariable(mapping.targetType!!),
+            resolvePackageVariable(genericTypeNames),
+            genericTypes
+        )
+
+        var annotation: io.openapiprocessor.core.converter.mapping.Annotation? = null
+        if(mapping.annotationType != null) {
+            annotation = Annotation(
+                mapping.annotationType!!, mapping.annotationParameters)
+        }
+
+        return AddParameterTypeMapping(mapping.sourceType!!, typeMapping, annotation)
     }
 
     data class ParsedMapping(
@@ -196,30 +216,6 @@ class MappingConverter(val mapping: MappingV2) {
                 )
             }
             .collect(Collectors.toList())
-    }
-
-    private fun createAddParameterTypeMapping(source: AdditionalParameter): AddParameterTypeMapping {
-        val mapping = parseMapping(source.add)
-
-        val targetGenericTypes = mapping.targetGenericTypes.toMutableList()
-        if (targetGenericTypes.isEmpty() && source.generics != null) {
-            targetGenericTypes.addAll(source.generics)
-        }
-
-        val typeMapping = TypeMapping(
-            null,
-            null,
-            resolvePackageVariable(mapping.targetType!!),
-            resolvePackageVariable(targetGenericTypes)
-        )
-
-        var annotation: io.openapiprocessor.core.converter.mapping.Annotation? = null
-        if(mapping.annotationType != null) {
-            annotation = Annotation(
-                mapping.annotationType!!, mapping.annotationParameters)
-        }
-
-        return AddParameterTypeMapping(mapping.sourceType!!, typeMapping, annotation)
     }
 
     private fun convertResponse(source: Response): Mapping {
