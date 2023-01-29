@@ -16,13 +16,7 @@
 
 package io.openapiprocessor.core.processor.mapping.v1
 
-import io.openapiprocessor.core.converter.mapping.AddParameterTypeMapping
-import io.openapiprocessor.core.converter.mapping.EndpointTypeMapping
-import io.openapiprocessor.core.converter.mapping.ParameterTypeMapping
-import io.openapiprocessor.core.converter.mapping.ResponseTypeMapping
-import io.openapiprocessor.core.converter.mapping.ResultTypeMapping
-import io.openapiprocessor.core.converter.mapping.TypeMapping
-import io.openapiprocessor.core.converter.mapping.Mapping
+import io.openapiprocessor.core.converter.mapping.*
 
 import io.openapiprocessor.core.processor.mapping.v1.Mapping as MappingV1
 
@@ -94,7 +88,8 @@ class MappingConverter {
             generics = type.generics
         }
 
-        return TypeMapping(from, format, to, generics)
+        val genericTypes = generics.map { TargetType(it) }
+        return TypeMapping(from, format, to, emptyList(), genericTypes)
     }
 
     private fun convertResult(result: Result): Mapping {

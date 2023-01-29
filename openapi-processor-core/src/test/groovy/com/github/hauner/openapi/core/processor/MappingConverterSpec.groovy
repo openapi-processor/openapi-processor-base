@@ -57,7 +57,7 @@ map:
         type.sourceTypeName == 'array'
         type.sourceTypeFormat == null
         type.targetTypeName == 'java.util.Collection'
-        type.genericTypeNames == []
+        type.genericTypes == []
     }
 
     void "reads global type mapping with generic types" () {
@@ -89,13 +89,15 @@ map:
         shortFormat.sourceTypeName == 'Foo'
         shortFormat.sourceTypeFormat == null
         shortFormat.targetTypeName == 'mapping.Bar'
-        shortFormat.genericTypeNames == ['java.lang.String', 'java.lang.Boolean']
+        shortFormat.genericTypes[0].typeName == 'java.lang.String'
+        shortFormat.genericTypes[1].typeName == 'java.lang.Boolean'
 
         def longFormat = mappings[1] as TypeMapping
         longFormat.sourceTypeName == 'Foo2'
         longFormat.sourceTypeFormat == null
         longFormat.targetTypeName == 'mapping.Bar2'
-        longFormat.genericTypeNames == ['java.lang.String2', 'java.lang.Boolean2']
+        longFormat.genericTypes[0].typeName == 'java.lang.String2'
+        longFormat.genericTypes[1].typeName == 'java.lang.Boolean2'
     }
 
     void "reads global type mapping with format" () {
@@ -118,7 +120,7 @@ map:
         type.sourceTypeName == 'string'
         type.sourceTypeFormat == 'date-time'
         type.targetTypeName == 'java.time.ZonedDateTime'
-        type.genericTypeNames == []
+        type.genericTypes == []
     }
 
     void "reads global response type mapping" () {
@@ -143,7 +145,7 @@ map:
         response.mapping.sourceTypeName == null
         response.mapping.sourceTypeFormat == null
         response.mapping.targetTypeName == 'java.util.List'
-        response.mapping.genericTypeNames == []
+        response.mapping.genericTypes == []
     }
 
     void "reads endpoint response type mapping" () {
@@ -174,7 +176,7 @@ map:
         response.mapping.sourceTypeName == null
         response.mapping.sourceTypeFormat == null
         response.mapping.targetTypeName == 'java.util.List'
-        response.mapping.genericTypeNames == []
+        response.mapping.genericTypes == []
     }
 
     void "reads global parameter type mapping" () {
@@ -199,7 +201,7 @@ map:
         parameter.mapping.sourceTypeName == null
         parameter.mapping.sourceTypeFormat == null
         parameter.mapping.targetTypeName == 'mapping.Foo'
-        parameter.mapping.genericTypeNames == []
+        parameter.mapping.genericTypes == []
     }
 
     void "reads endpoint parameter type mapping" () {
@@ -229,7 +231,7 @@ map:
         parameter.mapping.sourceTypeName == null
         parameter.mapping.sourceTypeFormat == null
         parameter.mapping.targetTypeName == 'mapping.Foo'
-        parameter.mapping.genericTypeNames == []
+        parameter.mapping.genericTypes == []
     }
 
     void "reads endpoint type mapping" () {
@@ -259,7 +261,7 @@ map:
         type.sourceTypeName == 'array'
         type.sourceTypeFormat == null
         type.targetTypeName == 'java.util.Collection'
-        type.genericTypeNames == []
+        type.genericTypes == []
     }
 
     void "reads endpoint add mapping" () {
@@ -293,7 +295,7 @@ map:
         parameter.mapping.sourceTypeName == null
         parameter.mapping.sourceTypeFormat == null
         parameter.mapping.targetTypeName == 'javax.servlet.http.HttpServletRequest'
-        parameter.mapping.genericTypeNames == []
+        parameter.mapping.genericTypes == []
     }
 
     void "reads endpoint exclude flag" () {
