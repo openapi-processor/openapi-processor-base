@@ -10,9 +10,7 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.builder.api.endpoint
 import io.openapiprocessor.core.converter.ApiOptions
-import io.openapiprocessor.core.model.datatypes.DataTypeName
-import io.openapiprocessor.core.model.datatypes.StringDataType
-import io.openapiprocessor.core.model.datatypes.ObjectDataType
+import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.model.parameters.ParameterBase
 import io.openapiprocessor.core.support.TestMappingAnnotationWriter
 import io.openapiprocessor.core.support.TestParameterAnnotationWriter
@@ -198,4 +196,68 @@ class MethodWriterSpec: StringSpec({
             """.trimMargin()
     }
 
+    "writes parameter with nested generics" {
+        val endpoint = endpoint("/foo") {
+            parameters {
+                any(object : ParameterBase("foo", MappedDataType(
+                    "Map",
+                    "java.util",
+                    emptyList(), listOf(
+                        GenericDataType(DataTypeName("String"), "java.lang"),
+                        GenericDataType(DataTypeName("Collection"), "java.util", listOf(
+                            GenericDataType(DataTypeName("String"), "java.lang" )
+                        ))
+                    )
+                )) {})
+            }
+            responses {
+                status("204") {
+                    response()
+                }
+            }
+        }
+
+        // when:
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+
+        // then:
+        target.toString () shouldBe
+            """    
+            |    @CoreMapping
+            |    void getFoo(@Parameter Map<String, Collection<String>> foo);
+            |
+            """.trimMargin()
+    }
+
+    "writes single response methods with nested generics" {
+        val endpoint = endpoint("/foo") {
+            responses {
+                status("200") {
+                    response (
+                        "application/json", MappedDataType(
+                            "Map",
+                            "java.util",
+                            emptyList(), listOf(
+                                GenericDataType(DataTypeName("String"), "java.lang"),
+                                GenericDataType(DataTypeName("Collection"), "java.util", listOf(
+                                    GenericDataType(DataTypeName("String"), "java.lang" )
+                                ))
+                            )
+                        )
+                    )
+                }
+            }
+        }
+
+        // when:
+        writer.write (target, endpoint, endpoint.endpointResponses.first())
+
+        // then:
+        target.toString () shouldBe
+            """    
+            |    @CoreMapping
+            |    Map<String, Collection<String>> getFoo();
+            |
+            """.trimMargin()
+    }
 })
