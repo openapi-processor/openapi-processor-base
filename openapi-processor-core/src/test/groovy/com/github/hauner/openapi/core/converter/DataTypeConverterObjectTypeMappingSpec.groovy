@@ -108,7 +108,7 @@ components:
                     null,
                     'org.springframework.data.domain.Page',
                     ['java.lang.String'],
-                    [new TargetType ('java.lang.String', [], [])])
+                    [new TargetType ('java.lang.String', [])])
             ])
 
         Api api = new ApiConverter (options, new FrameworkBase ())
@@ -365,7 +365,7 @@ paths:
                         null,
                         'pkg.TargetClass',
                         ['java.lang.String'],
-                        [new TargetType ('java.lang.String', [], [])])
+                        [new TargetType ('java.lang.String', [])])
                     )]
                 )
             ], [
@@ -375,7 +375,7 @@ paths:
                         null,
                         'pkg.TargetClass',
                         ['java.lang.String'],
-                        [new TargetType ('java.lang.String', [], [])])
+                        [new TargetType ('java.lang.String', [])])
                 )
             ], [
                 new EndpointTypeMapping ('/object', null, [
@@ -385,13 +385,13 @@ paths:
                         null,
                         'pkg.TargetClass',
                         ['java.lang.String'],
-                        [new TargetType ('java.lang.String', [], [])])),
+                        [new TargetType ('java.lang.String', [])])),
                     new TypeMapping (
                         'ObjectGetResponse200',
                         null,
                         'pkg.TargetClassType',
                         ['java.lang.StringType'],
-                        [new TargetType ('java.lang.StringType', [], [])])
+                        [new TargetType ('java.lang.StringType', [])])
                 ])
             ], [
                 new EndpointTypeMapping ('/object', null, [
@@ -400,7 +400,7 @@ paths:
                         null,
                         'pkg.TargetClass',
                         ['java.lang.String'],
-                        [new TargetType ('java.lang.String', [], [])])
+                        [new TargetType ('java.lang.String', [])])
                     ]
                 )
             ]
@@ -452,8 +452,8 @@ components:
                         'java.util.Map',
                         ['java.lang.String', 'java.lang.String'],
                         [
-                            new TargetType('java.lang.String', [], []),
-                            new TargetType('java.lang.String', [], [])
+                            new TargetType('java.lang.String', []),
+                            new TargetType('java.lang.String', [])
                         ])
                 ])
             ])
@@ -513,8 +513,8 @@ components:
                         'org.springframework.util.MultiValueMap',
                         ['java.lang.String', 'java.lang.String'],
                     [
-                        new TargetType('java.lang.String', [], []),
-                        new TargetType('java.lang.String', [], [])
+                        new TargetType('java.lang.String', []),
+                        new TargetType('java.lang.String', [])
                     ])
                 ])
             ])

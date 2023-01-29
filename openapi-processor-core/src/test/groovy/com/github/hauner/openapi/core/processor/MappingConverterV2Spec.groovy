@@ -120,8 +120,8 @@ map:
                     'mapping.Bar',
                     ['java.lang.String', 'java.lang.Boolean'],
                     [
-                        new TargetType("java.lang.String", [], []),
-                        new TargetType("java.lang.Boolean", [], [])
+                        new TargetType("java.lang.String", []),
+                        new TargetType("java.lang.Boolean", [])
                     ])
             ], [
                 // with extracted generics
@@ -133,8 +133,8 @@ map:
                     'mapping.Bar',
                     ['java.lang.String', 'java.lang.Boolean'],
                     [
-                        new TargetType("java.lang.String", [], []),
-                        new TargetType("java.lang.Boolean", [], [])
+                        new TargetType("java.lang.String", []),
+                        new TargetType("java.lang.Boolean", [])
                     ])
             ],  [
                 // inline generics with extra whitespaces
@@ -144,8 +144,8 @@ map:
                     null,
                     'mapping.Bar',
                     ['java.lang.String', 'java.lang.Boolean'], [
-                        new TargetType("java.lang.String", [], []),
-                        new TargetType("java.lang.Boolean", [], [])
+                        new TargetType("java.lang.String", []),
+                        new TargetType("java.lang.Boolean", [])
                     ])
             ], [
                 // extracted generics with extra whitespaces
@@ -156,8 +156,8 @@ map:
                     null,
                     'mapping.Bar',
                     ['java.lang.String', 'java.lang.Boolean'], [
-                        new TargetType("java.lang.String", [], []),
-                        new TargetType("java.lang.Boolean", [], [])
+                        new TargetType("java.lang.String", []),
+                        new TargetType("java.lang.Boolean", [])
                     ])
             ]
         ]

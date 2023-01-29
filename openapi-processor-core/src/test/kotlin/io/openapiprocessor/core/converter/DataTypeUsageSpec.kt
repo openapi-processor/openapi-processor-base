@@ -282,13 +282,7 @@ class DataTypeUsageSpec: StringSpec({
                 null,
                 "io.openapiprocessor.test.Mapped",
                 listOf("io.openapiprocessor.generated.model.Bar"),
-                listOf(
-                    TargetType(
-                        "io.openapiprocessor.generated.model.Bar",
-                        emptyList(),
-                        emptyList()
-                    )
-                )
+                listOf(TargetType("io.openapiprocessor.generated.model.Bar", emptyList()))
             )
         )
 

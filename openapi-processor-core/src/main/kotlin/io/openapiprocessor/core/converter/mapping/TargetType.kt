@@ -18,11 +18,6 @@ class TargetType(
     /**
      * generic parameters of typeName
      */
-    val genericNames: List<String> = emptyList(),
-
-    /**
-     * generic parameters of typeName
-     */
     val genericTypes: List<TargetType> = emptyList()
 ) {
 

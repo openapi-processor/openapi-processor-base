@@ -110,13 +110,7 @@ class ApiConverterSpec: StringSpec({
                 null,
                 "io.openapiprocessor.test.Wrapped",
                 listOf("io.openapiprocessor.generated.model.Foo"),
-                listOf(
-                    TargetType(
-                        "io.openapiprocessor.generated.model.Foo",
-                        emptyList(),
-                        emptyList()
-                    )
-                )
+                listOf(TargetType("io.openapiprocessor.generated.model.Foo", emptyList()))
             )
         )
 

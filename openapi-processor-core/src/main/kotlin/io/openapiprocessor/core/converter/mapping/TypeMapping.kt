@@ -73,7 +73,7 @@ class TypeMapping (
      * @return the target type
      */
     override fun getTargetType (): TargetType {
-        return TargetType(targetTypeName, genericTypeNames, genericTypes)
+        return TargetType(targetTypeName, genericTypes)
     }
 
     override fun getChildMappings(): List<Mapping> {

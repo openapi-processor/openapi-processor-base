@@ -216,7 +216,6 @@ class MappingConverter(val mapping: MappingV2) {
                 val genericMapping = parseMapping(it)
                 TargetType(
                     resolvePackageVariable(genericMapping.targetType!!),
-                    emptyList(),
                     convertInlineGenerics(genericMapping.targetGenericTypes2)
                 )
             }
@@ -228,7 +227,6 @@ class MappingConverter(val mapping: MappingV2) {
             .map {
                 TargetType(
                     resolvePackageVariable(it.targetType),
-                    emptyList(),
                     convertInlineGenerics(it.targetGenericTypes)
                 )
             }
