@@ -42,12 +42,15 @@ class TypeMapping (
 
 ): Mapping, TargetTypeMapping {
 
+    // used in tests only
     constructor(sourceTypeName: String?, targetTypeName: String):
             this (sourceTypeName, null, targetTypeName, emptyList())
 
+    // used in tests only
     constructor(sourceTypeName: String?, sourceTypeFormat: String?, targetTypeName: String):
             this (sourceTypeName, sourceTypeFormat, targetTypeName, emptyList())
 
+    // used in tests only
     constructor(sourceTypeName: String?, targetTypeName: String, genericTypeNames: List<String>):
             this (sourceTypeName, null, targetTypeName, genericTypeNames)
 

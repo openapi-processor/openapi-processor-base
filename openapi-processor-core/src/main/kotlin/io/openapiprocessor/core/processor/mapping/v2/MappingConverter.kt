@@ -87,7 +87,10 @@ class MappingConverter(val mapping: MappingV2) {
 
     private fun convertType (from: String, to: String): Mapping {
         val mapping = parseMapping(to)
-        return TypeMapping(from, resolvePackageVariable(mapping.targetType!!))
+        return TypeMapping(
+            from,
+            null,
+            resolvePackageVariable(mapping.targetType!!))
     }
 
     private fun convertType(source: Type): Mapping {
