@@ -143,7 +143,6 @@ class BeanValidationMappingSpec: StringSpec({
             "Foo",
             "foo",
             emptyList(),
-            emptyList(),
             null,
             false,
             null

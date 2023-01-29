@@ -35,10 +35,6 @@ class MappedDataTypeSpec: StringSpec ({
             "model",
             data.generics.map {
                 val tt = TargetType(it, emptyList())
-                DataTypeName(tt.getName())
-            },
-            data.generics.map {
-                val tt = TargetType(it, emptyList())
                 GenericDataType(DataTypeName(tt.getName()), tt.getPkg())
             })
 
@@ -69,10 +65,6 @@ class MappedDataTypeSpec: StringSpec ({
             "model",
             data.generics.map {
                 val tt = TargetType(it, emptyList())
-                DataTypeName(tt.getName())
-            },
-            data.generics.map {
-                val tt = TargetType(it, emptyList())
                 GenericDataType(DataTypeName(tt.getName()), tt.getPkg())
             })
 
@@ -95,10 +87,6 @@ class MappedDataTypeSpec: StringSpec ({
         val type = MappedDataType(
             "Foo",
             "model",
-            data.generics.map {
-                val tt = TargetType(it.id, emptyList())
-                DataTypeName(tt.getName(), it.type)
-            },
             data.generics.map {
                 val tt = TargetType(it.id, emptyList())
                 GenericDataType(it, tt.getPkg())
@@ -125,10 +113,6 @@ class MappedDataTypeSpec: StringSpec ({
         val type = MappedDataType(
             "Foo",
             "model",
-            data.generics.map {
-                val tt = TargetType(it.id, emptyList())
-                DataTypeName(tt.getName(), it.type)
-            },
             data.generics.map {
                 val tt = TargetType(it.id, emptyList())
                 GenericDataType(it, tt.getPkg())

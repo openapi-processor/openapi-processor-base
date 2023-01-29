@@ -82,7 +82,6 @@ class DataTypeConverter(
         return MappedDataType(
             targetType.getName(),
             targetType.getPkg(),
-            emptyList(),
             convertGenerics(targetType),
             null,
             schemaInfo.getDeprecated(),
@@ -94,10 +93,9 @@ class DataTypeConverter(
         return MappedDataType(
             targetType.getName(),
             targetType.getPkg(),
-            emptyList(),
             convertGenerics(targetType),
             null,
-             false
+            false
         )
     }
 

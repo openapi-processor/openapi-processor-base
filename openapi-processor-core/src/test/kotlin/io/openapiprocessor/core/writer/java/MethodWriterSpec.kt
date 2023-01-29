@@ -202,7 +202,7 @@ class MethodWriterSpec: StringSpec({
                 any(object : ParameterBase("foo", MappedDataType(
                     "Map",
                     "java.util",
-                    emptyList(), listOf(
+                    listOf(
                         GenericDataType(DataTypeName("String"), "java.lang"),
                         GenericDataType(DataTypeName("Collection"), "java.util", listOf(
                             GenericDataType(DataTypeName("String"), "java.lang" )
@@ -237,7 +237,7 @@ class MethodWriterSpec: StringSpec({
                         "application/json", MappedDataType(
                             "Map",
                             "java.util",
-                            emptyList(), listOf(
+                            listOf(
                                 GenericDataType(DataTypeName("String"), "java.lang"),
                                 GenericDataType(DataTypeName("Collection"), "java.util", listOf(
                                     GenericDataType(DataTypeName("String"), "java.lang" )

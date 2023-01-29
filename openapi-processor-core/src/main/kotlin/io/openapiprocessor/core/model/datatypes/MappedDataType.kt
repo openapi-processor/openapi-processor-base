@@ -11,7 +11,6 @@ package io.openapiprocessor.core.model.datatypes
 open class MappedDataType(
     private val type: String,
     private val pkg: String,
-    val genericTypes: List<DataTypeName> = emptyList(),
     val genericTypes2: List<GenericDataType> = emptyList(),
     override val constraints: DataTypeConstraints? = null,
     override val deprecated: Boolean = false,
