@@ -57,8 +57,9 @@ class ApiConverterSpec: StringSpec({
         options.typeMappings = listOf(
             TypeMapping(
                 "WrappedFoo",
+                null,
                 "io.openapiprocessor.test.Wrapped",
-                listOf("io.openapiprocessor.generated.model.Foo")
+                listOf(TargetType ("io.openapiprocessor.generated.model.Foo"))
             )
         )
 
@@ -109,8 +110,7 @@ class ApiConverterSpec: StringSpec({
                 "ComposedFoo",
                 null,
                 "io.openapiprocessor.test.Wrapped",
-                listOf("io.openapiprocessor.generated.model.Foo"),
-                listOf(TargetType("io.openapiprocessor.generated.model.Foo", emptyList()))
+                listOf(TargetType("io.openapiprocessor.generated.model.Foo"))
             )
         )
 

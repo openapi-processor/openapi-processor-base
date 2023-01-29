@@ -38,7 +38,6 @@ class MappingConverterSpec: StringSpec({
         // then:
         val type = mappings.first() as TypeMapping
         type.targetTypeName shouldBe "io.openapiprocessor.Foo"
-        type.genericTypeNames shouldBe listOf("io.openapiprocessor.somewhere.Bar")
         type.genericTypes.size shouldBe 1
         type.genericTypes[0].typeName shouldBe "io.openapiprocessor.somewhere.Bar"
     }

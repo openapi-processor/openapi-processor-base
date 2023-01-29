@@ -108,8 +108,9 @@ class DataTypeUsageSpec: StringSpec({
         options.typeMappings = listOf(
             TypeMapping(
                 "FooArray",
+                null,
                 "io.openapiprocessor.test.Mapped",
-                listOf("io.openapiprocessor.generated.model.Foo")
+                listOf(TargetType("io.openapiprocessor.generated.model.Foo"))
             )
         )
 
@@ -281,8 +282,7 @@ class DataTypeUsageSpec: StringSpec({
                 "Foo",
                 null,
                 "io.openapiprocessor.test.Mapped",
-                listOf("io.openapiprocessor.generated.model.Bar"),
-                listOf(TargetType("io.openapiprocessor.generated.model.Bar", emptyList()))
+                listOf(TargetType("io.openapiprocessor.generated.model.Bar"))
             )
         )
 

@@ -33,11 +33,6 @@ class TypeMapping (
     /**
      * The fully qualified java type names of all generic parameters to {@link #targetTypeName}.
      */
-    val genericTypeNames: List<String> = emptyList(),
-
-    /**
-     * The fully qualified java type names of all generic parameters to {@link #targetTypeName}.
-     */
     val genericTypes: List<TargetType> = emptyList()
 
 ): Mapping, TargetTypeMapping {
@@ -49,10 +44,6 @@ class TypeMapping (
     // used in tests only
     constructor(sourceTypeName: String?, sourceTypeFormat: String?, targetTypeName: String):
             this (sourceTypeName, sourceTypeFormat, targetTypeName, emptyList())
-
-    // used in tests only
-    constructor(sourceTypeName: String?, targetTypeName: String, genericTypeNames: List<String>):
-            this (sourceTypeName, null, targetTypeName, genericTypeNames)
 
     /**
      * Returns the full source type as {@link #sourceTypeName} and {@link #sourceTypeFormat} joined

@@ -89,7 +89,7 @@ class MappingConverter {
         }
 
         val genericTypes = generics.map { TargetType(it) }
-        return TypeMapping(from, format, to, emptyList(), genericTypes)
+        return TypeMapping(from, format, to, genericTypes)
     }
 
     private fun convertResult(result: Result): Mapping {

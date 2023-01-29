@@ -107,7 +107,6 @@ class MappingConverter(val mapping: MappingV2) {
                 mapping.sourceType,
                 mapping.sourceFormat,
                 resolvePackageVariable(mapping.targetType!!),
-                resolvePackageVariable(genericTypeNames),
                 genericTypes
             )
         }
@@ -146,7 +145,6 @@ class MappingConverter(val mapping: MappingV2) {
             null,
             null,
             resolvePackageVariable(mapping.targetType!!),
-            resolvePackageVariable(genericTypeNames),
             genericTypes
         )
 
@@ -160,7 +158,6 @@ class MappingConverter(val mapping: MappingV2) {
             null,
             null,
             resolvePackageVariable(mapping.targetType!!),
-            resolvePackageVariable(genericTypeNames),
             genericTypes
         )
 
@@ -180,7 +177,6 @@ class MappingConverter(val mapping: MappingV2) {
             null,
             null,
             resolvePackageVariable(mapping.targetType!!),
-            resolvePackageVariable(genericTypeNames),
             genericTypes
         )
 

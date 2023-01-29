@@ -70,7 +70,6 @@ map:
         type.sourceTypeName == input.expected.sourceTypeName
         type.sourceTypeFormat == input.expected.sourceTypeFormat
         type.targetTypeName == input.expected.targetTypeName
-        type.genericTypeNames == input.expected.genericTypeNames
         assertGenericTypes(type.genericTypes, input.expected.genericTypes)
 
         where:
@@ -82,7 +81,6 @@ map:
                     'array',
                     null,
                     'java.util.Collection',
-                    [],
                     [])
             ], [
                 // extra whitespaces
@@ -91,7 +89,6 @@ map:
                     'array',
                     null,
                     'java.util.Collection',
-                    [],
                     [])
             ], [
                 // with format
@@ -100,7 +97,6 @@ map:
                     'string',
                     'date-time',
                     'java.time.ZonedDateTime',
-                    [],
                     [])
             ], [
                 // extra whitespaces with format
@@ -109,7 +105,6 @@ map:
                     'string',
                     'date-time',
                     'java.time.ZonedDateTime',
-                    [],
                     [])
             ], [
                 // with inline generics
@@ -118,7 +113,6 @@ map:
                     'Foo',
                     null,
                     'mapping.Bar',
-                    ['java.lang.String', 'java.lang.Boolean'],
                     [
                         new TargetType("java.lang.String", []),
                         new TargetType("java.lang.Boolean", [])
@@ -131,7 +125,6 @@ map:
                     'Foo',
                     null,
                     'mapping.Bar',
-                    ['java.lang.String', 'java.lang.Boolean'],
                     [
                         new TargetType("java.lang.String", []),
                         new TargetType("java.lang.Boolean", [])
@@ -143,7 +136,7 @@ map:
                     'Foo',
                     null,
                     'mapping.Bar',
-                    ['java.lang.String', 'java.lang.Boolean'], [
+                    [
                         new TargetType("java.lang.String", []),
                         new TargetType("java.lang.Boolean", [])
                     ])
@@ -155,7 +148,7 @@ map:
                     'Foo',
                     null,
                     'mapping.Bar',
-                    ['java.lang.String', 'java.lang.Boolean'], [
+                    [
                         new TargetType("java.lang.String", []),
                         new TargetType("java.lang.Boolean", [])
                     ])
@@ -184,7 +177,7 @@ map:
         response.mapping.sourceTypeName == null
         response.mapping.sourceTypeFormat == null
         response.mapping.targetTypeName == 'java.util.List'
-        response.mapping.genericTypeNames == []
+        response.mapping.genericTypes == []
     }
 
     void "reads global parameter type mapping" () {
@@ -209,14 +202,14 @@ map:
         parameter.mapping.sourceTypeName == null
         parameter.mapping.sourceTypeFormat == null
         parameter.mapping.targetTypeName == 'mapping.Foo'
-        parameter.mapping.genericTypeNames == []
+        parameter.mapping.genericTypes == []
 
         def additional = mappings[1] as AddParameterTypeMapping
         additional.parameterName == 'bar'
         additional.mapping.sourceTypeName == null
         additional.mapping.sourceTypeFormat == null
         additional.mapping.targetTypeName == 'mapping.Bar'
-        additional.mapping.genericTypeNames == []
+        additional.mapping.genericTypes == []
     }
 
     void "reads endpoint exclude flag" () {
@@ -271,7 +264,7 @@ map:
         parameter.mapping.sourceTypeName == null
         parameter.mapping.sourceTypeFormat == null
         parameter.mapping.targetTypeName == 'mapping.Foo'
-        parameter.mapping.genericTypeNames == []
+        parameter.mapping.genericTypes == []
     }
 
     void "reads endpoint add mapping" () {
@@ -301,7 +294,7 @@ map:
         parameter.mapping.sourceTypeName == null
         parameter.mapping.sourceTypeFormat == null
         parameter.mapping.targetTypeName == 'javax.servlet.http.HttpServletRequest'
-        parameter.mapping.genericTypeNames == []
+        parameter.mapping.genericTypes == []
     }
 
     void "reads endpoint add mapping with annotation" () {
@@ -331,7 +324,7 @@ map:
         parameter.mapping.sourceTypeName == null
         parameter.mapping.sourceTypeFormat == null
         parameter.mapping.targetTypeName == 'java.lang.String'
-        parameter.mapping.genericTypeNames == []
+        parameter.mapping.genericTypes == []
         parameter.annotation.type == 'io.micronaut.http.annotation.RequestAttribute'
         parameter.annotation.parameters.size () == 1
         parameter.annotation.parameters[""] == "ANY"
@@ -364,7 +357,7 @@ map:
         response.mapping.sourceTypeName == null
         response.mapping.sourceTypeFormat == null
         response.mapping.targetTypeName == 'java.util.List'
-        response.mapping.genericTypeNames == []
+        response.mapping.genericTypes == []
     }
 
     void "reads global result mapping #result" () {
