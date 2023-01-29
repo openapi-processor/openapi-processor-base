@@ -35,11 +35,9 @@ class ProcessorPendingSpec: StringSpec({
 
 private fun sources(): Collection<TestSet> {
     return listOf(
-        testSet("bean-validation-requestbody-mapping", INTERNAL, API_30),
-        testSet("bean-validation-requestbody-mapping", INTERNAL, API_31),
+        testSet("map-from-additional-properties", INTERNAL, API_30),
+        testSet("map-from-additional-properties", INTERNAL, API_31),
 //        testSet("params-additional-global", INTERNAL, API_30),
 //        testSet("params-additional-global", INTERNAL, API_31)
     )
 }
-
-
