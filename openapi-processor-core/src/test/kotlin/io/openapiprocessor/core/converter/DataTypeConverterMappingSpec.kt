@@ -187,10 +187,10 @@ class DataTypeConverterMappingSpec: StringSpec({
             TypeMapping("Dictionary", null,
                 "java.util.Map",
                 genericTypes = listOf(
-                    TargetType("java.lang.String", genericNames = emptyList()),
-                    TargetType("java.util.List", genericNames = emptyList(),
+                    TargetType("java.lang.String"),
+                    TargetType("java.util.List",
                         genericTypes = listOf(
-                            TargetType("java.lang.String", genericNames = emptyList())
+                            TargetType("java.lang.String")
                         ))
                 )),
         )

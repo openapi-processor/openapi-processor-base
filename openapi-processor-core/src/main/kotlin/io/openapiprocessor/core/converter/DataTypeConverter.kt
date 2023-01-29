@@ -79,24 +79,10 @@ class DataTypeConverter(
         schemaInfo: SchemaInfo,
         sourceDataType: DataType
     ): MappedDataType {
-        val genericDataTypeNames = mutableListOf<DataTypeName>()
-
-        targetType.genericNames.forEach {
-            val dataTypeName = when {
-                it.startsWith(options.packageName) -> {
-                    DataTypeName(it, getTypeNameWithSuffix(it))
-                }
-                else -> {
-                    DataTypeName(it)
-                }
-            }
-            genericDataTypeNames.add(dataTypeName)
-        }
-
         return MappedDataType(
             targetType.getName(),
             targetType.getPkg(),
-            genericDataTypeNames,
+            emptyList(),
             convertGenerics(targetType),
             null,
             schemaInfo.getDeprecated(),
@@ -105,24 +91,10 @@ class DataTypeConverter(
     }
 
     fun createAdditionalParameterMappedDataType(targetType: TargetType): MappedDataType {
-        val genericDataTypeNames = mutableListOf<DataTypeName>()
-
-        targetType.genericNames.forEach {
-            val dataTypeName = when {
-                it.startsWith(options.packageName) -> {
-                    DataTypeName(it, getTypeNameWithSuffix(it))
-                }
-                else -> {
-                    DataTypeName(it)
-                }
-            }
-            genericDataTypeNames.add(dataTypeName)
-        }
-
         return MappedDataType(
             targetType.getName(),
             targetType.getPkg(),
-            genericDataTypeNames,
+            emptyList(),
             convertGenerics(targetType),
             null,
              false
