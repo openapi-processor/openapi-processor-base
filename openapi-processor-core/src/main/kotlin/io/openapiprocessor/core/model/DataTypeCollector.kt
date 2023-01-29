@@ -29,15 +29,22 @@ class DataTypeCollector(
                 }
             }
             is MappedDataType -> {
-                dataType.genericTypes
-                    .filter { it.id.startsWith(generatedPackageName) }
+                dataType.genericTypes2
                     .forEach {
-                        val name = it.id.substringAfterLast(".")
-                        val found = dataTypes.find(name)
-                        if (found != null) {
-                            collect(found)
-                        }
+                        collect(it)
                     }
+            }
+            is GenericDataType -> {
+                val name = dataType.getName()
+                val found = dataTypes.find(name)
+                val generated = dataType.getPackageName().startsWith(generatedPackageName)
+                if (generated && found != null) {
+                    dataTypes.addRef(name)
+                }
+
+                dataType.generics.forEach {
+                    collect(it)
+                }
             }
             is AllOfObjectDataType -> {
                 dataTypes.addRef(dataType.getName())

@@ -8,6 +8,7 @@ package io.openapiprocessor.core.converter
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
+import io.openapiprocessor.core.converter.mapping.TargetType
 import io.openapiprocessor.core.converter.mapping.TypeMapping
 import io.openapiprocessor.core.framework.FrameworkBase
 import io.openapiprocessor.core.model.Api
@@ -106,8 +107,16 @@ class ApiConverterSpec: StringSpec({
         options.typeMappings = listOf(
             TypeMapping(
                 "ComposedFoo",
+                null,
                 "io.openapiprocessor.test.Wrapped",
-                listOf("io.openapiprocessor.generated.model.Foo")
+                listOf("io.openapiprocessor.generated.model.Foo"),
+                listOf(
+                    TargetType(
+                        "io.openapiprocessor.generated.model.Foo",
+                        emptyList(),
+                        emptyList()
+                    )
+                )
             )
         )
 

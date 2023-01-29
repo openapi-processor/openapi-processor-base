@@ -8,7 +8,7 @@ package io.openapiprocessor.core.model.datatypes
 class GenericDataType(
     private val name: DataTypeName,
     private val pkg: String,
-    private val generics: List<GenericDataType> = emptyList()
+    val generics: List<GenericDataType> = emptyList()
 ): DataType {
     override fun getName(): String {
         return if (generics.isEmpty()) {

@@ -8,6 +8,7 @@ package io.openapiprocessor.core.converter
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
+import io.openapiprocessor.core.converter.mapping.TargetType
 import io.openapiprocessor.core.converter.mapping.TypeMapping
 import io.openapiprocessor.core.model.DataTypes
 import io.openapiprocessor.core.model.HttpMethod.GET
@@ -278,9 +279,18 @@ class DataTypeUsageSpec: StringSpec({
         options.typeMappings = listOf(
             TypeMapping(
                 "Foo",
+                null,
                 "io.openapiprocessor.test.Mapped",
-                listOf("io.openapiprocessor.generated.model.Bar"))
+                listOf("io.openapiprocessor.generated.model.Bar"),
+                listOf(
+                    TargetType(
+                        "io.openapiprocessor.generated.model.Bar",
+                        emptyList(),
+                        emptyList()
+                    )
+                )
             )
+        )
 
         val schemaInfo = openApi.getSchemaInfo("FooResponse200",
             "/foo", GET, "200", "application/json")
