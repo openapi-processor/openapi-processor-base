@@ -291,7 +291,7 @@ class DataTypeConverter(
     }
 
     private fun createSimpleDataTypeX(schemaInfo: SchemaInfo, dataTypes: DataTypes): DataType {
-        var sourceTypeFormat = schemaInfo.getTypeFormat()
+        val sourceTypeFormat = schemaInfo.getTypeFormat()
 
         var typeFormat = schemaInfo.getType()
         if (isSupportedFormat(schemaInfo.getFormat())) {
