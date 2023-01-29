@@ -15,3 +15,17 @@ paths:
                 type: object
                 additionalProperties:
                   type: string
+
+  /foo2:
+    get:
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: array
+                  items:
+                    type: string

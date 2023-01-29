@@ -3,3 +3,14 @@ openapi-processor-mapping: v2
 options:
   package-name: generated
   format-code: false
+
+map:
+
+  paths:
+    /foo:
+      responses:
+        - content: application/json => java.util.Map<java.lang.String, java.lang.String>
+
+    /foo2:
+      responses:
+        - content: application/json => java.util.Map<java.lang.String, java.util.List<java.lang.String>>
