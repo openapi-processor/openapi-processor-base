@@ -11,26 +11,26 @@ package io.openapiprocessor.core.model.datatypes
 open class MappedDataType(
     private val type: String,
     private val pkg: String,
-    val genericTypes2: List<GenericDataType> = emptyList(),
+    val genericTypes: List<GenericDataType> = emptyList(),
     override val constraints: DataTypeConstraints? = null,
     override val deprecated: Boolean = false,
     override val sourceDataType: DataType? = null
 ): DataType, MappedSourceDataType {
 
     override fun getName(): String {
-        return if (genericTypes2.isEmpty()) {
+        return if (genericTypes.isEmpty()) {
             type
         } else {
-            val generics = genericTypes2.map { it.getName() }
+            val generics = genericTypes.map { it.getName() }
             "${type}<${generics.joinToString()}>"
         }
     }
 
     override fun getTypeName(): String {
-        return if (genericTypes2.isEmpty()) {
+        return if (genericTypes.isEmpty()) {
             type
         } else {
-            val generics = genericTypes2.map { it.getTypeName() }
+            val generics = genericTypes.map { it.getTypeName() }
             "${type}<${generics.joinToString()}>"
         }
     }
@@ -49,7 +49,7 @@ open class MappedDataType(
 
     private val genericImports: Set<String>
         get() {
-            return genericTypes2
+            return genericTypes
                 .map { it.getImports() }
                 .flatten()
 //                .filter { it != "?" }  // todo try to remove

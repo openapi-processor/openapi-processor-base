@@ -29,7 +29,7 @@ class DataTypeCollector(
                 }
             }
             is MappedDataType -> {
-                dataType.genericTypes2
+                dataType.genericTypes
                     .forEach {
                         collect(it)
                     }
