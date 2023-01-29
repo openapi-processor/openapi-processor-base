@@ -52,26 +52,6 @@ open class MappedDataType(
             return genericTypes
                 .map { it.getImports() }
                 .flatten()
-//                .filter { it != "?" }  // todo try to remove
                 .toSet()
         }
-
-//    private val genericIds: List<String>
-//        get() {
-//            return genericTypes.map {
-//                getClassName(it.id)
-//            }
-//        }
-//
-//    private val genericTypeNames: List<String>
-//        get() {
-//            return genericTypes.map {
-//                getClassName(it.type)
-//            }
-//        }
-//
-//    private fun getClassName(source: String): String {
-//        return source.substringAfterLast('.')
-//    }
-
 }
