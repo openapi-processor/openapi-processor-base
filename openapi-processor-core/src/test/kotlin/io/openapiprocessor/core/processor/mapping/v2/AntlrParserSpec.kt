@@ -209,6 +209,18 @@ class AntlrParserSpec: StringSpec({
         mapping.annotationParameters.shouldBeEmpty()
     }
 
+    "annotate source type with fully qualified java annotation and class parameter" {
+        val source = """SourceType @ io.oap.Annotation (value = io.oap.Foo.class)"""
+
+        val mapping = parseMapping(source)
+        mapping.kind shouldBe Mapping.Kind.ANNOTATE
+        mapping.sourceType shouldBe "SourceType"
+        mapping.targetType.shouldBeNull()
+        mapping.targetGenericTypes.shouldBeEmpty()
+        mapping.annotationType shouldBe "io.oap.Annotation"
+        mapping.annotationParameters["value"] shouldBe "io.oap.Foo.class"
+    }
+
     "reports parsing error" {
         val source = """SourceType =X io.oap.TargetType"""
 

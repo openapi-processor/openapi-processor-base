@@ -1,0 +1,9 @@
+openapi-processor-mapping: v3
+
+options:
+  package-name: generated
+  format-code: false
+
+map:
+  types:
+    - type: string:foo @ io.oap.Annotation (value = io.oap.Bar.class)

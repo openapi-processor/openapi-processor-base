@@ -51,11 +51,11 @@ annotationParameters
     ;
 
 annotationParameterUnnamed
-    : (Identifier | Boolean | String | Number)
+    : (Identifier | Boolean | String | Number | QualifiedTypeClass)
     ;
 
 annotationParameterNamed
-    : Identifier '=' (Identifier | Boolean | String | Number)
+    : Identifier '=' (Identifier | Boolean | String | Number | QualifiedTypeClass)
     ;
 
 qualifiedTargetType
@@ -104,10 +104,13 @@ Identifier
   : JavaLetter JavaLetterOrDigit*
   ;
 
+QualifiedTypeClass
+    : (Identifier) ('.' Identifier)* '.class'
+    ;
+
 QualifiedType
     : (Identifier | Package) ('.' Identifier)*
     ;
-
 
 Format
     : FormatLetter FormatLetterOrDigit*

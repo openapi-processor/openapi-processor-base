@@ -8,6 +8,7 @@ package io.openapiprocessor.core
 data class TestSet(val name: String, val openapi: String)
 
 val ALL_30: List<TestSet> = listOf(
+    TestSet("annotation-mapping-class", API_30),
     TestSet("bean-validation", API_30),
     TestSet("bean-validation-allof-required", API_30),
     TestSet("bean-validation-iterable", API_30),
@@ -69,6 +70,7 @@ val ALL_30: List<TestSet> = listOf(
 )
 
 val ALL_31: List<TestSet> = listOf(
+    TestSet("annotation-mapping-class", API_31),
     TestSet("bean-validation", API_31),
     TestSet("bean-validation-allof-required", API_31),
     TestSet("bean-validation-iterable", API_31),
