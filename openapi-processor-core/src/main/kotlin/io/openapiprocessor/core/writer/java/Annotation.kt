@@ -5,9 +5,11 @@
 
 package io.openapiprocessor.core.writer.java
 
+import io.openapiprocessor.core.converter.mapping.ParameterValue
+
 class Annotation(
     val qualifiedName: String,
-    val parameters: LinkedHashMap<String, String> = linkedMapOf()
+    val parameters: LinkedHashMap<String, ParameterValue> = linkedMapOf()
 ) {
     val typeName: String
         get() {

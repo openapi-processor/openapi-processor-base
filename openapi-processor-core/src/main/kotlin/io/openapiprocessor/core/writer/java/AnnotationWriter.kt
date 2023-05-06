@@ -16,9 +16,9 @@ class AnnotationWriter {
         val parameters = mutableListOf<String>()
         annotation.parameters.forEach {
             if (it.key == "") {
-                parameters.add(it.value)
+                parameters.add(it.value.value)
             } else {
-                parameters.add("${it.key} = ${it.value}")
+                parameters.add("${it.key} = ${it.value.value}")
             }
         }
 

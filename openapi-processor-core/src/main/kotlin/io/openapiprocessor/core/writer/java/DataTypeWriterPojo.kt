@@ -12,7 +12,6 @@ import io.openapiprocessor.core.support.capitalizeFirstChar
 import java.io.StringWriter
 import java.io.Writer
 
-@Suppress("ConstPropertyName")
 private const val deprecated = "@Deprecated"
 
 /**
@@ -125,15 +124,13 @@ class DataTypeWriterPojo(
             propTypeName = prop.dataTypeValue
         }
 
-        if (propDataType.dataType is MappedSourceDataType) {
-            val annotationTypeMappings = MappingFinder(apiOptions.typeMappings)
-                .findTypeAnnotations(propDataType.dataType.getSourceName())
+        val annotationTypeMappings = MappingFinder(apiOptions.typeMappings)
+            .findTypeAnnotations(propDataType.dataType.getSourceName())
 
-            annotationTypeMappings.forEach {
-                val annotation = StringWriter()
-                annotationWriter.write(annotation, Annotation(it.annotation.type, it.annotation.parameters))
-                result += "    $annotation\n"
-            }
+        annotationTypeMappings.forEach {
+            val annotation = StringWriter()
+            annotationWriter.write(annotation, Annotation(it.annotation.type, it.annotation.parameters))
+            result += "    $annotation\n"
         }
 
         result += "    ${getPropertyAnnotation(propertyName, propDataType)}\n"
@@ -251,6 +248,23 @@ class DataTypeWriterPojo(
 
         annotationTypeMappings.forEach {
             imports.add(it.annotation.type)
+        }
+
+        dataType.forEach { propName, propDataType ->
+            val target = getTarget(propDataType)
+
+            val propAnnotationTypeMappings = MappingFinder(apiOptions.typeMappings).findTypeAnnotations(
+                target.getSourceName())
+
+            propAnnotationTypeMappings.forEach { atm ->
+                imports.add(atm.annotation.type)
+
+                atm.annotation.parameters.forEach {
+                    val import = it.value.import
+                    if (import != null)
+                        imports.add(import)
+                }
+            }
         }
 
         return DefaultImportFilter()

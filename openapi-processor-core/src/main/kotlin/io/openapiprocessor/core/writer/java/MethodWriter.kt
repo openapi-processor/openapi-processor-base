@@ -147,9 +147,9 @@ open class MethodWriter(
 
                 parametersX.forEach {
                     if (it.key == "") {
-                        parameters.add(it.value)
+                        parameters.add(it.value.value)
                     } else {
-                        parameters.add("${it.key} = ${it.value}")
+                        parameters.add("${it.key} = ${it.value.value}")
                     }
                 }
 

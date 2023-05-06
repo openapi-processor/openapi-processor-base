@@ -8,6 +8,7 @@ package com.github.hauner.openapi.core.writer.java
 import com.github.hauner.openapi.core.test.TestMappingAnnotationWriter
 import com.github.hauner.openapi.core.test.TestParameterAnnotationWriter
 import io.openapiprocessor.core.converter.ApiOptions
+import io.openapiprocessor.core.converter.mapping.SimpleParameterValue
 import io.openapiprocessor.core.model.HttpMethod
 import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.model.parameters.Parameter
@@ -228,7 +229,7 @@ class MethodWriterSpec extends Specification {
             e.parameters { ps ->
                 ps.add ('foo', new StringDataType()) { a ->
                     a.annotation = new AnnotationDataType ('Foo', 'oap', [
-                        "": '"bar"'
+                        "": new SimpleParameterValue('"bar"', null)
                     ])
                 }
             }
@@ -252,8 +253,8 @@ class MethodWriterSpec extends Specification {
             e.parameters { ps ->
                 ps.add ('foo', new StringDataType()) { a ->
                     a.annotation = new AnnotationDataType ('Foo', 'oap', [
-                        foo: '"bar"',
-                        oof: '"rab"'
+                        foo: new SimpleParameterValue('"bar"', null),
+                        oof: new SimpleParameterValue('"rab"', null)
                     ])
                 }
             }

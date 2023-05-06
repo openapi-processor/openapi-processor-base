@@ -12,6 +12,7 @@ import io.kotest.matchers.string.shouldContain
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.mapping.Annotation as MappingAnnotation
 import io.openapiprocessor.core.converter.mapping.AnnotationTypeMapping
+import io.openapiprocessor.core.converter.mapping.SimpleParameterValue
 import io.openapiprocessor.core.extractImports
 import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.support.datatypes.ObjectDataType
@@ -224,7 +225,7 @@ class DataTypeWriterPojoSpec: StringSpec({
         options.typeMappings = listOf(
             AnnotationTypeMapping(
                 "Foo", annotation = MappingAnnotation(
-                    "foo.Bar", linkedMapOf("bar" to """"rab"""")
+                    "foo.Bar", linkedMapOf("bar" to SimpleParameterValue(""""rab""""))
                 )
             ))
         writer = DataTypeWriterPojo(options, generatedWriter, BeanValidationFactory())
@@ -270,7 +271,7 @@ class DataTypeWriterPojoSpec: StringSpec({
         options.typeMappings = listOf(
             AnnotationTypeMapping(
                 "Foo", annotation = MappingAnnotation(
-                    "foo.Bar", linkedMapOf("bar" to """"rab"""")
+                    "foo.Bar", linkedMapOf("bar" to SimpleParameterValue(""""rab""""))
                 )
             ))
         writer = DataTypeWriterPojo(options, generatedWriter, BeanValidationFactory())
@@ -310,7 +311,7 @@ class DataTypeWriterPojoSpec: StringSpec({
         options.typeMappings = listOf(
             AnnotationTypeMapping(
                 "string", "uuid", annotation = MappingAnnotation(
-                    "foo.Bar", linkedMapOf("bar" to """"rab"""")
+                    "foo.Bar", linkedMapOf("bar" to SimpleParameterValue(""""rab""""))
                 )
             ))
         writer = DataTypeWriterPojo(options, generatedWriter, BeanValidationFactory())

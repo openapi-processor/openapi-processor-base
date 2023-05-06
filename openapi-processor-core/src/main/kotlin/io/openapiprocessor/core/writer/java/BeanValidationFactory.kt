@@ -5,6 +5,8 @@
 
 package io.openapiprocessor.core.writer.java
 
+import io.openapiprocessor.core.converter.mapping.ParameterValue
+import io.openapiprocessor.core.converter.mapping.SimpleParameterValue
 import io.openapiprocessor.core.model.datatypes.*
 import org.apache.commons.text.StringEscapeUtils.escapeJava
 
@@ -82,26 +84,26 @@ open class BeanValidationFactory(
     }
 
     private fun createDecimalMinAnnotation(dataType: DataType): Annotation {
-        val parameters = linkedMapOf<String, String>()
+        val parameters = linkedMapOf<String, ParameterValue>()
 
         val minimum = dataType.constraints?.minimumConstraint!!
-        parameters["value"] = """"${minimum.value}""""
+        parameters["value"] = SimpleParameterValue(""""${minimum.value}"""")
 
         if (minimum.exclusive) {
-            parameters["inclusive"] = "false"
+            parameters["inclusive"] = SimpleParameterValue("false")
         }
 
         return Annotation(validations.DECIMAL_MIN, parameters)
     }
 
     private fun createDecimalMaxAnnotation(dataType: DataType): Annotation {
-        val parameters = linkedMapOf<String, String>()
+        val parameters = linkedMapOf<String, ParameterValue>()
 
         val maximum = dataType.constraints?.maximumConstraint!!
-        parameters["value"] = """"${maximum.value}""""
+        parameters["value"] = SimpleParameterValue(""""${maximum.value}"""")
 
         if (maximum.exclusive) {
-            parameters["inclusive"] = "false"
+            parameters["inclusive"] = SimpleParameterValue("false")
         }
 
         return Annotation(validations.DECIMAL_MAX, parameters)
@@ -116,22 +118,22 @@ open class BeanValidationFactory(
     }
 
     private fun createSizeAnnotation(size: SizeConstraints): Annotation {
-        val parameters = linkedMapOf<String, String>()
+        val parameters = linkedMapOf<String, ParameterValue>()
 
         if (size.hasMin) {
-            parameters["min"] = "${size.min}"
+            parameters["min"] = SimpleParameterValue("${size.min}")
         }
 
         if (size.hasMax) {
-            parameters["max"] = "${size.max}"
+            parameters["max"] = SimpleParameterValue("${size.max}")
         }
 
         return Annotation(validations.SIZE, parameters)
     }
 
     private fun createPatternAnnotation(dataType: DataType): Annotation {
-        val parameters = linkedMapOf<String, String>()
-        parameters["regexp"] = """"${escapeJava(dataType.constraints?.pattern!!)}""""
+        val parameters = linkedMapOf<String, ParameterValue>()
+        parameters["regexp"] = SimpleParameterValue(""""${escapeJava(dataType.constraints?.pattern!!)}"""")
         return Annotation(validations.PATTERN, parameters)
     }
 

@@ -10,10 +10,8 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.builder.api.endpoint
 import io.openapiprocessor.core.converter.ApiOptions
+import io.openapiprocessor.core.converter.mapping.*
 import io.openapiprocessor.core.converter.mapping.Annotation
-import io.openapiprocessor.core.converter.mapping.AnnotationTypeMapping
-import io.openapiprocessor.core.converter.mapping.EndpointTypeMapping
-import io.openapiprocessor.core.converter.mapping.ParameterAnnotationTypeMapping
 import io.openapiprocessor.core.model.datatypes.DataTypeName
 import io.openapiprocessor.core.model.datatypes.MappedDataType
 import io.openapiprocessor.core.model.datatypes.ObjectDataType
@@ -41,7 +39,7 @@ class MethodWriterAnnotationSpec: StringSpec ({
         apiOptions.typeMappings = listOf(
             ParameterAnnotationTypeMapping(
                 AnnotationTypeMapping("Foo", annotation = Annotation(
-                    "io.openapiprocessor.Bar", linkedMapOf("bar" to "rab"))
+                    "io.openapiprocessor.Bar", linkedMapOf("bar" to SimpleParameterValue("rab")))
                 )
             )
         )
@@ -76,7 +74,7 @@ class MethodWriterAnnotationSpec: StringSpec ({
                 "/foo", null, listOf(
                     ParameterAnnotationTypeMapping(
                         AnnotationTypeMapping("Foo", annotation = Annotation(
-                            "io.openapiprocessor.Bar", linkedMapOf("bar" to "rab"))
+                            "io.openapiprocessor.Bar", linkedMapOf("bar" to SimpleParameterValue("rab")))
                         )
                     )
                 )
@@ -110,7 +108,7 @@ class MethodWriterAnnotationSpec: StringSpec ({
         apiOptions.typeMappings = listOf(
             ParameterAnnotationTypeMapping(
                 AnnotationTypeMapping("Foo", annotation = Annotation(
-                    "io.openapiprocessor.Bar", linkedMapOf("bar" to "rab"))
+                    "io.openapiprocessor.Bar", linkedMapOf("bar" to SimpleParameterValue("rab")))
                 )
             )
         )

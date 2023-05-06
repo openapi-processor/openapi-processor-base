@@ -3,11 +3,12 @@ package generated.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import generated.support.Generated;
 import io.oap.Annotation;
+import io.oap.Bar;
 
 @Generated(value = "openapi-processor-core", version = "test")
 public class Foo {
 
-    @Annotation(value = io.oap.Bar.class)
+    @Annotation(value = Bar.class)
     @JsonProperty("bar")
     private String bar;
 

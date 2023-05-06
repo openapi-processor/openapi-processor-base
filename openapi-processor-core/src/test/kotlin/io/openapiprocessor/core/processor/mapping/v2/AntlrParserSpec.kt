@@ -100,7 +100,7 @@ class AntlrParserSpec: StringSpec({
         mapping.targetGenericTypes.shouldBeEmpty()
         mapping.annotationType shouldBe "io.oap.Annotation"
         mapping.annotationParameters.size shouldBe 1
-        mapping.annotationParameters[""] shouldBe "42"
+        mapping.annotationParameters[""]!!.value shouldBe "42"
     }
 
     "map source type to fully qualified java target type with annotation & default string parameter" {
@@ -113,7 +113,7 @@ class AntlrParserSpec: StringSpec({
         mapping.targetGenericTypes.shouldBeEmpty()
         mapping.annotationType shouldBe "io.oap.Annotation"
         mapping.annotationParameters.size shouldBe 1
-        mapping.annotationParameters[""] shouldBe """"42""""
+        mapping.annotationParameters[""]!!.value shouldBe """"42""""
     }
 
     "map source type to fully qualified java target type with annotation & multiple named parameters" {
@@ -126,8 +126,8 @@ class AntlrParserSpec: StringSpec({
         mapping.targetGenericTypes.shouldBeEmpty()
         mapping.annotationType shouldBe "io.oap.Annotation"
         mapping.annotationParameters.size shouldBe 2
-        mapping.annotationParameters["a"] shouldBe "42"
-        mapping.annotationParameters["bb"] shouldBe """"foo""""
+        mapping.annotationParameters["a"]!!.value shouldBe "42"
+        mapping.annotationParameters["bb"]!!.value shouldBe """"foo""""
     }
 
     "map source type to fully qualified java target type with annotation & boolean parameter" {
@@ -140,7 +140,7 @@ class AntlrParserSpec: StringSpec({
         mapping.targetGenericTypes.shouldBeEmpty()
         mapping.annotationType shouldBe "io.oap.Annotation"
         mapping.annotationParameters.size shouldBe 1
-        mapping.annotationParameters[""] shouldBe "true"
+        mapping.annotationParameters[""]!!.value shouldBe "true"
     }
 
     "map source type to fully qualified java target type with annotation & named boolean parameter" {
@@ -153,7 +153,7 @@ class AntlrParserSpec: StringSpec({
         mapping.targetGenericTypes.shouldBeEmpty()
         mapping.annotationType shouldBe "io.oap.Annotation"
         mapping.annotationParameters.size shouldBe 1
-        mapping.annotationParameters["value"] shouldBe "true"
+        mapping.annotationParameters["value"]!!.value shouldBe "true"
     }
 
     // the parser does not detect exact number format
@@ -169,7 +169,7 @@ class AntlrParserSpec: StringSpec({
         mapping.targetGenericTypes.shouldBeEmpty()
         mapping.annotationType shouldBe "io.oap.Annotation"
         mapping.annotationParameters.size shouldBe 1
-        mapping.annotationParameters[""] shouldBe anyNumber
+        mapping.annotationParameters[""]!!.value shouldBe anyNumber
     }
 
     "map source type to fully qualified java target type with annotation & named number parameter" {
@@ -182,7 +182,7 @@ class AntlrParserSpec: StringSpec({
         mapping.targetGenericTypes.shouldBeEmpty()
         mapping.annotationType shouldBe "io.oap.Annotation"
         mapping.annotationParameters.size shouldBe 1
-        mapping.annotationParameters["value"] shouldBe anyNumber
+        mapping.annotationParameters["value"]!!.value shouldBe anyNumber
     }
 
     "map content type to fully qualified java target type with annotation" {
@@ -218,7 +218,8 @@ class AntlrParserSpec: StringSpec({
         mapping.targetType.shouldBeNull()
         mapping.targetGenericTypes.shouldBeEmpty()
         mapping.annotationType shouldBe "io.oap.Annotation"
-        mapping.annotationParameters["value"] shouldBe "io.oap.Foo.class"
+        mapping.annotationParameters["value"]!!.value shouldBe "Foo.class"
+        mapping.annotationParameters["value"]!!.import shouldBe "io.oap.Foo"
     }
 
     "reports parsing error" {

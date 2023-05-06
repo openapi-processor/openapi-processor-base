@@ -4,6 +4,8 @@
  */
 package io.openapiprocessor.core.processor.mapping.v2.parser
 
+import io.openapiprocessor.core.converter.mapping.ParameterValue
+
 class MappingType (val targetType: String, val targetGenericTypes: List<MappingType>) {}
 
 interface Mapping {
@@ -18,5 +20,5 @@ interface Mapping {
     val targetGenericTypes: List<String>
     val targetGenericTypes2: List<MappingType>
     val annotationType: String?
-    val annotationParameters: LinkedHashMap<String, String>  // preserves order
+    val annotationParameters: LinkedHashMap<String, ParameterValue>  // preserves order
 }

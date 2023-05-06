@@ -18,5 +18,20 @@ class Annotation(
     /**
      * parameter key/value map.
      */
-    val parameters: LinkedHashMap<String, String> = linkedMapOf()
+    val parameters: LinkedHashMap<String, ParameterValue> = linkedMapOf()
 )
+
+interface ParameterValue {
+    val value: String
+    val import: String?
+}
+
+class SimpleParameterValue(override val value: String, override val import: String? = null): ParameterValue
+
+class ClassParameterValue(private val clazz: String): ParameterValue {
+    override val value: String
+        get() = clazz.substring(import.substringBeforeLast('.').length + 1)
+
+    override val import: String
+        get() = clazz.substringBeforeLast('.')
+}

@@ -5,13 +5,15 @@
 
 package io.openapiprocessor.core.model.datatypes
 
+import io.openapiprocessor.core.converter.mapping.ParameterValue
+
 /**
  * additional annotation type.
  */
 class AnnotationDataType(
     private val name: String,
     private val pkg: String,
-    private val parameters: LinkedHashMap<String, String>?
+    private val parameters: LinkedHashMap<String, ParameterValue>?
 ): DataType {
 
     override fun getName(): String {
@@ -26,7 +28,7 @@ class AnnotationDataType(
         return setOf("${getPackageName()}.${getTypeName()}")
     }
 
-    fun getParameters(): LinkedHashMap<String, String>? {
+    fun getParameters(): LinkedHashMap<String, ParameterValue>? {
         return parameters;
     }
 }

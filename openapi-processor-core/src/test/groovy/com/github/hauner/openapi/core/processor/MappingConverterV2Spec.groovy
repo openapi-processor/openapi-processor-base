@@ -16,14 +16,7 @@
 
 package com.github.hauner.openapi.core.processor
 
-import io.openapiprocessor.core.converter.mapping.AddParameterTypeMapping
-import io.openapiprocessor.core.converter.mapping.EndpointTypeMapping
-import io.openapiprocessor.core.converter.mapping.OptionMapping
-import io.openapiprocessor.core.converter.mapping.ParameterTypeMapping
-import io.openapiprocessor.core.converter.mapping.ResponseTypeMapping
-import io.openapiprocessor.core.converter.mapping.ResultTypeMapping
-import io.openapiprocessor.core.converter.mapping.TargetType
-import io.openapiprocessor.core.converter.mapping.TypeMapping
+import io.openapiprocessor.core.converter.mapping.*
 import io.openapiprocessor.core.processor.MappingConverter
 import io.openapiprocessor.core.processor.MappingReader
 import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
@@ -327,7 +320,7 @@ map:
         parameter.mapping.genericTypes == []
         parameter.annotation.type == 'io.micronaut.http.annotation.RequestAttribute'
         parameter.annotation.parameters.size () == 1
-        parameter.annotation.parameters[""] == "ANY"
+        parameter.annotation.parameters[""].value == "ANY"
     }
 
     void "reads endpoint response type mapping" () {

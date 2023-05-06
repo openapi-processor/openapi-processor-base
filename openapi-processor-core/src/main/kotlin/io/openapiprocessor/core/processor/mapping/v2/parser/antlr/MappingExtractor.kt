@@ -5,6 +5,9 @@
 
 package io.openapiprocessor.core.processor.mapping.v2.parser.antlr
 
+import io.openapiprocessor.core.converter.mapping.ClassParameterValue
+import io.openapiprocessor.core.converter.mapping.ParameterValue
+import io.openapiprocessor.core.converter.mapping.SimpleParameterValue
 import io.openapiprocessor.core.processor.mapping.v2.parser.Mapping
 import io.openapiprocessor.core.processor.mapping.v2.parser.MappingType
 
@@ -14,7 +17,7 @@ class MappingExtractor: MappingBaseListener(), Mapping {
     override var sourceType: String? = null
     override var sourceFormat: String? = null
     override var annotationType: String? = null
-    override var annotationParameters = LinkedHashMap<String, String>()
+    override var annotationParameters = LinkedHashMap<String, ParameterValue>()
     override var targetType: String? = null
     override var targetGenericTypes: MutableList<String> = mutableListOf()
     override var targetGenericTypes2: List<MappingType> = mutableListOf()
@@ -95,10 +98,26 @@ class MappingExtractor: MappingBaseListener(), Mapping {
     }
 
     override fun enterAnnotationParameterUnnamed(ctx: MappingParser.AnnotationParameterUnnamedContext) {
-        annotationParameters.put("", ctx.text)
+        val parameterName = ""
+        val parameterValue = ctx.text
+
+        val clazz = ctx.stop.type == MappingLexer.QualifiedTypeClass
+        if (clazz) {
+            annotationParameters.put(parameterName, ClassParameterValue(parameterValue))
+        } else {
+            annotationParameters.put(parameterName, SimpleParameterValue(parameterValue))
+        }
     }
 
     override fun enterAnnotationParameterNamed(ctx: MappingParser.AnnotationParameterNamedContext) {
-        annotationParameters.put(ctx.getChild(0).text, ctx.getChild(2).text)
+        val parameterName = ctx.getChild(0).text
+        val parameterValue = ctx.getChild(2).text
+
+        val clazz = ctx.stop.type == MappingLexer.QualifiedTypeClass
+        if (clazz) {
+            annotationParameters.put(parameterName, ClassParameterValue(parameterValue))
+        } else {
+            annotationParameters.put(parameterName, SimpleParameterValue(parameterValue))
+        }
     }
 }
