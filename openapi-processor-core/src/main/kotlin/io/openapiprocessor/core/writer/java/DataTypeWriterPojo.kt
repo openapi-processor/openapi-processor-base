@@ -26,8 +26,29 @@ class DataTypeWriterPojo(
     private val annotationWriter = AnnotationWriter()
 
     override fun write(target: Writer, dataType: ModelDataType) {
-        target.write("package ${dataType.getPackageName()};\n\n")
+        // file header
+        writePackage(target, dataType)
+        writeImports(target, dataType)
 
+        // pre class
+        writeJavaDoc(target, dataType)
+        writeDeprecated(target, dataType)
+        writeAnnotationsBeanValidation(target, dataType)
+        writeAnnotationsMappings(target, dataType)
+        writeAnnotationsGenerated(target)
+
+        // class
+        writeClassOpen(target, dataType)
+        writeClassProperties(target, dataType)
+        writeClassMethods(dataType, target)
+        writeClassClose(target)
+    }
+
+    private fun writePackage(target: Writer, dataType: ModelDataType) {
+        target.write("package ${dataType.getPackageName()};\n\n")
+    }
+
+    private fun writeImports(target: Writer, dataType: ModelDataType) {
         val imports: List<String> = collectImports(dataType.getPackageName(), dataType)
         imports.forEach {
             target.write("import ${it};\n")
@@ -36,22 +57,30 @@ class DataTypeWriterPojo(
         if (imports.isNotEmpty()) {
             target.write("\n")
         }
+    }
 
+    private fun writeJavaDoc(target: Writer, dataType: ModelDataType) {
         if (apiOptions.javadoc) {
             target.write(javadocWriter.convert(dataType))
         }
+    }
 
+    private fun writeDeprecated(target: Writer, dataType: ModelDataType) {
         if (dataType.deprecated) {
             target.write("$deprecated\n")
         }
+    }
 
+    private fun writeAnnotationsBeanValidation(target: Writer, dataType: ModelDataType) {
         if (apiOptions.beanValidation) {
             val objectInfo = validationAnnotations.validate(dataType)
             objectInfo.annotations.forEach {
                 target.write("${buildAnnotation(it)}\n")
             }
         }
+    }
 
+    private fun writeAnnotationsMappings(target: Writer, dataType: ModelDataType) {
         val annotationTypeMappings = MappingFinder(apiOptions.typeMappings)
             .findTypeAnnotations(dataType.getTypeName())
 
@@ -59,30 +88,44 @@ class DataTypeWriterPojo(
             annotationWriter.write(target, Annotation(it.annotation.type, it.annotation.parameters))
             target.write("\n")
         }
+    }
 
+    private fun writeAnnotationsGenerated(target: Writer) {
         generatedWriter.writeUse(target)
         target.write("\n")
+    }
 
+    private fun writeClassOpen(target: Writer, dataType: ModelDataType) {
         val implements: DataType? = dataType.implementsDataType
         if (implements != null) {
             writeClassImplementsHeader(target, dataType, implements)
         } else {
             writeClassHeader(target, dataType)
         }
+    }
 
+    private fun writeClassProperties(target: Writer, dataType: ModelDataType) {
         dataType.forEach { propName, propDataType ->
             val javaPropertyName = toCamelCase(propName)
-            target.write(getProp(propName, javaPropertyName, propDataType as PropertyDataType,
-                dataType.isRequired(propName)))
+            target.write(
+                getProp(
+                    propName, javaPropertyName, propDataType as PropertyDataType,
+                    dataType.isRequired(propName)
+                )
+            )
         }
+    }
 
+    private fun writeClassMethods(dataType: ModelDataType, target: Writer) {
         dataType.forEach { propName, propDataType ->
             val javaPropertyName = toCamelCase(propName)
             target.write(getGetter(javaPropertyName, propDataType))
             target.write(getSetter(javaPropertyName, propDataType))
         }
+    }
 
-        target.write ("}\n")
+    private fun writeClassClose(target: Writer) {
+        target.write("}\n")
     }
 
     private fun writeClassImplementsHeader(
