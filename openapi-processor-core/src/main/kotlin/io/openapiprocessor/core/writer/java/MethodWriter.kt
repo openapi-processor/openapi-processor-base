@@ -141,11 +141,11 @@ open class MethodWriter(
         if (parameter is AdditionalParameter && parameter.annotationDataType != null) {
             target.write(" @${parameter.annotationDataType.getName()}")
 
-            val parametersX = parameter.annotationDataType.getParameters()
-            if (parametersX != null) {
+            val annotationParameters = parameter.annotationDataType.getParameters()
+            if (annotationParameters != null) {
                 val parameters = mutableListOf<String>()
 
-                parametersX.forEach {
+                annotationParameters.forEach {
                     if (it.key == "") {
                         parameters.add(it.value.value)
                     } else {
