@@ -218,12 +218,16 @@ class DataTypeWriterPojo(
             imports.add("com.fasterxml.jackson.annotation.JsonProperty")
 
             val target = getTarget(propDataType)
-            if (target is MappedSourceDataType) {
-                val annotationTypeMappings = MappingFinder(apiOptions.typeMappings)
-                    .findTypeAnnotations(target.getSourceName())
+            val annotationTypeMappings = MappingFinder(apiOptions.typeMappings)
+                .findTypeAnnotations(target.getSourceName())
 
-                annotationTypeMappings.forEach {
-                    imports.add(it.annotation.type)
+            annotationTypeMappings.forEach {
+                imports.add(it.annotation.type)
+
+                it.annotation.parameters.forEach {
+                    val import = it.value.import
+                    if (import != null)
+                        imports.add(import)
                 }
             }
         }
@@ -248,23 +252,6 @@ class DataTypeWriterPojo(
 
         annotationTypeMappings.forEach {
             imports.add(it.annotation.type)
-        }
-
-        dataType.forEach { propName, propDataType ->
-            val target = getTarget(propDataType)
-
-            val propAnnotationTypeMappings = MappingFinder(apiOptions.typeMappings).findTypeAnnotations(
-                target.getSourceName())
-
-            propAnnotationTypeMappings.forEach { atm ->
-                imports.add(atm.annotation.type)
-
-                atm.annotation.parameters.forEach {
-                    val import = it.value.import
-                    if (import != null)
-                        imports.add(import)
-                }
-            }
         }
 
         return DefaultImportFilter()
