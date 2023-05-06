@@ -213,6 +213,52 @@ class DataTypeWriterPojo(
         val imports = mutableSetOf<String>()
 
         imports.add(generatedWriter.getImport())
+        imports.addAll(collectDataTypeImports(dataType))
+        imports.addAll(collectBeanValidationImports(dataType))
+        imports.addAll(collectDataTypePropertiesImports(dataType))
+
+        return DefaultImportFilter()
+            .filter(packageName, imports)
+            .sorted()
+    }
+
+    private fun collectDataTypeImports(dataType: ModelDataType): Set<String> {
+        val imports = mutableSetOf<String>()
+
+        imports.addAll(dataType.referencedImports)
+
+        val annotationTypeMappings = MappingFinder(apiOptions.typeMappings)
+            .findTypeAnnotations(dataType.getTypeName())
+
+        annotationTypeMappings.forEach {
+            imports.add(it.annotation.type)
+        }
+
+        return imports
+    }
+
+    private fun collectBeanValidationImports(dataType: ModelDataType): Set<String> {
+        if (!apiOptions.beanValidation)
+            return emptySet()
+
+        val imports = mutableSetOf<String>()
+
+        val info = validationAnnotations.validate(dataType)
+        val prop = info.prop
+        imports.addAll(prop.imports)
+
+        dataType.forEach { propName, propDataType ->
+            val target = getTarget(propDataType)
+            val propInfo = validationAnnotations.validate(target, dataType.isRequired(propName))
+            val propProp = propInfo.prop
+            imports.addAll(propProp.imports)
+        }
+
+        return imports
+    }
+
+    private fun collectDataTypePropertiesImports(dataType: ModelDataType): Set<String> {
+        val imports = mutableSetOf<String>()
 
         dataType.forEach { _, propDataType ->
             imports.add("com.fasterxml.jackson.annotation.JsonProperty")
@@ -221,10 +267,10 @@ class DataTypeWriterPojo(
             val annotationTypeMappings = MappingFinder(apiOptions.typeMappings)
                 .findTypeAnnotations(target.getSourceName())
 
-            annotationTypeMappings.forEach {
-                imports.add(it.annotation.type)
+            annotationTypeMappings.forEach { atm ->
+                imports.add(atm.annotation.type)
 
-                it.annotation.parameters.forEach {
+                atm.annotation.parameters.forEach {
                     val import = it.value.import
                     if (import != null)
                         imports.add(import)
@@ -232,31 +278,7 @@ class DataTypeWriterPojo(
             }
         }
 
-        imports.addAll(dataType.referencedImports)
-
-        if (apiOptions.beanValidation) {
-            val info = validationAnnotations.validate(dataType)
-            val prop = info.prop
-            imports.addAll(prop.imports)
-
-            dataType.forEach { propName, propDataType ->
-                val target = getTarget(propDataType)
-                val propInfo = validationAnnotations.validate(target, dataType.isRequired(propName))
-                val propProp = propInfo.prop
-                imports.addAll(propProp.imports)
-            }
-        }
-
-        val annotationTypeMappings = MappingFinder(apiOptions.typeMappings).findTypeAnnotations(
-            dataType.getTypeName())
-
-        annotationTypeMappings.forEach {
-            imports.add(it.annotation.type)
-        }
-
-        return DefaultImportFilter()
-            .filter(packageName, imports)
-            .sorted()
+        return imports
     }
 
     private fun getTarget(dataType: DataType): DataType {
