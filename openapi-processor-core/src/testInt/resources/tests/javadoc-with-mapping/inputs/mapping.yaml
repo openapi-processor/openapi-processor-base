@@ -1,0 +1,10 @@
+openapi-processor-mapping: v3
+
+options:
+  package-name: generated
+  bean-validation: true
+  javadoc: true
+
+map:
+  types:
+   - type: string:bar => java.lang.String
