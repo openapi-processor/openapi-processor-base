@@ -5,6 +5,8 @@
 
 package io.openapiprocessor.core.model.datatypes
 
+import io.openapiprocessor.core.model.Documentation
+
 /**
  * OpenAPI schema mapped to a java type.
  */
@@ -54,4 +56,7 @@ open class MappedDataType(
                 .flatten()
                 .toSet()
         }
+
+    override val documentation: Documentation?
+        get() = sourceDataType?.documentation
 }

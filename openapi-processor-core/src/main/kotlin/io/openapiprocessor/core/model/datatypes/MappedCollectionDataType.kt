@@ -5,6 +5,8 @@
 
 package io.openapiprocessor.core.model.datatypes
 
+import io.openapiprocessor.core.model.Documentation
+
 /**
  * OpenAPI schema collection mapped to a java type. The java type is expected to have a single
  * generic parameter.
@@ -54,4 +56,6 @@ open class MappedCollectionDataType(
         return setOf("${getPackageName()}.${name}") + item.getImports()
     }
 
+    override val documentation: Documentation?
+        get() = sourceDataType?.documentation
 }
