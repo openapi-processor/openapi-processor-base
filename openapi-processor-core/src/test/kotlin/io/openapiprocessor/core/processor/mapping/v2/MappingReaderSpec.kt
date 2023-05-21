@@ -10,8 +10,10 @@ import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import io.mockk.verifySequence
 import io.openapiprocessor.core.processor.MappingReader
 import io.openapiprocessor.core.processor.MappingValidator
+import io.openapiprocessor.jsonschema.ouput.OutputUnitFlag
 import org.slf4j.Logger
 
 class MappingReaderSpec: StringSpec ({
@@ -23,7 +25,7 @@ class MappingReaderSpec: StringSpec ({
         """.trimMargin()
 
         val validator = mockk<MappingValidator>()
-        every { validator.validate(any(), any()) } returns emptySet()
+        every { validator.validate(any(), any()) } returns OutputUnitFlag(true)
 
         val log = mockk<Logger>(relaxed = true)
 
@@ -46,7 +48,7 @@ class MappingReaderSpec: StringSpec ({
         """.trimMargin()
 
         val validator = mockk<MappingValidator>()
-        every { validator.validate(any(), any()) } returns emptySet()
+        every { validator.validate(any(), any()) } returns OutputUnitFlag(true)
 
         MappingReader(validator).read(yaml)
 
@@ -82,8 +84,11 @@ class MappingReaderSpec: StringSpec ({
         // when:
         reader.read (yaml)
 
-        // then:
-        verify(exactly = 1) { log.warn("\$.options: is missing but it is required") }
+        // then:  // don't know how to check,
+        verifySequence {
+            log.warn("mapping is not valid!")
+            log.warn("{} at {}", "should have a property 'options'", "/")
+        }
     }
 
     "reads model-name-suffix" {

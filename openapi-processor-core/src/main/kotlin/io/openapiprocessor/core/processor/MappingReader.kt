@@ -74,8 +74,18 @@ class MappingReader(private val validator: MappingValidator = MappingValidator()
     }
 
     private fun validate(mapping: String, version: String) {
-        validator.validate(mapping, version).forEach {
-            log.warn(it.message)
+        val output = validator.validate(mapping, version)
+        if (output.isValid)
+            return
+
+        log.warn("mapping is not valid!")
+        val error = output.error
+        if(error != null) {
+            log.warn(error)
+        }
+
+        output.errors?.forEach {
+            log.warn("{} at {}", it.error, it.instanceLocation.ifEmpty { "/" })
         }
     }
 

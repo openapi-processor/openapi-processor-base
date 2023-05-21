@@ -73,11 +73,11 @@ dependencies {
     implementation (libs.commons.text)
     implementation (libs.commonmark)
     implementation (libs.java.format)
-    implementation (libs.json.schema.validator)
     implementation (libs.slf4j)
 
-    testImplementation (libs.openapi.processor.api)
+
     testImplementation (project(":openapi-processor-test"))
+    testImplementation (libs.openapi.processor.api)
     testImplementation (platform(libs.groovy.bom))
     testImplementation (platform(libs.kotest.bom))
     testImplementation (libs.kotest.runner)

@@ -5,17 +5,17 @@
 
 package io.openapiprocessor.core.parser.openapi
 
-import io.openapiparser.*
-import io.openapiparser.jackson.JacksonConverter
-import io.openapiparser.reader.UriReader
-import io.openapiparser.schema.DocumentStore
-import io.openapiparser.schema.Resolver
-import io.openapiparser.schema.SchemaStore
-import io.openapiparser.validator.result.*
+import io.openapiparser.OpenApiParser
+import io.openapiparser.OpenApiResult
+import io.openapiparser.ValidationErrorTextBuilder
 import io.openapiprocessor.core.support.toURI
+import io.openapiprocessor.jackson.JacksonConverter
+import io.openapiprocessor.jsonschema.reader.UriReader
+import io.openapiprocessor.jsonschema.schema.*
+import io.openapiprocessor.jsonschema.validator.Validator
+import io.openapiprocessor.jsonschema.validator.ValidatorSettings
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.util.*
 import io.openapiparser.model.v30.OpenApi as OpenApi30
 import io.openapiparser.model.v31.OpenApi as OpenApi31
 import io.openapiprocessor.core.parser.OpenApi as ParserOpenApi
@@ -30,8 +30,13 @@ class Parser {
 
 
     fun parse(apiPath: String): ParserOpenApi {
-        val resolver = Resolver(UriReader(), JacksonConverter(), DocumentStore())
-        val store = SchemaStore(resolver)
+        val reader = UriReader ()
+        val converter = JacksonConverter ()
+        val loader = DocumentLoader (reader, converter)
+
+        val documents = DocumentStore ()
+        val settings = Resolver.Settings (SchemaVersion.Draft4)
+        val resolver = Resolver (documents, loader, settings)
 
         val parser = OpenApiParser(resolver)
 
@@ -40,21 +45,23 @@ class Parser {
 
         return when (result.version) {
             OpenApiResult.Version.V30 -> {
-                store.loadDraft4()
-                val validator = io.openapiparser.validator.Validator()
+                val store = SchemaStore (loader)
+                store.registerDraft4()
+
+                val validator = Validator(ValidatorSettings().setOutput(Output.BASIC))
                 val valid = result.validate(validator, store)
+
                 if (!valid) {
-                    val collector = MessageCollector(result.validationMessages)
-                    val messages: LinkedList<Message> = collector.collect()
-                    val builder = MessageTextBuilder()
+                    val builder = ValidationErrorTextBuilder()
 
                     log.warn("OpenAPI description '{}' does not pass schema validation:", apiPath)
-                    for (message in messages) {
-                        log.warn(builder.getText(message))
+                    for (error in result.validationErrors) {
+                        log.warn(builder.getText(error))
                     }
                 }
 
-                ParserOpenApi30(result.getModel(OpenApi30::class.java))
+                val model = result.getModel(OpenApi30::class.java)
+                ParserOpenApi30(model)
             }
             OpenApiResult.Version.V31 -> {
                 ParserOpenApi31(result.getModel(OpenApi31::class.java))
@@ -63,6 +70,5 @@ class Parser {
                 TODO() // unsupported openapi version
             }
         }
-
     }
 }

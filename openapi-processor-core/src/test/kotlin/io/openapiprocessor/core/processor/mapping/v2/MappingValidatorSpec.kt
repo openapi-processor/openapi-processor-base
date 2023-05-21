@@ -9,7 +9,9 @@ import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.data.blocking.forAll
 import io.kotest.data.row
-import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.booleans.shouldBeFalse
+import io.kotest.matchers.booleans.shouldBeTrue
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.processor.MappingValidator
 
@@ -28,7 +30,8 @@ class MappingValidatorSpec: StringSpec({
     "validates mapping.yaml with matching schema version" {
         forAll(
             row("v2"),
-            row("v2.1")
+            row("v2.1"),
+            row("v3")
         ) { v ->
             val yaml = """
                 |openapi-processor-mapping: $v
@@ -38,10 +41,10 @@ class MappingValidatorSpec: StringSpec({
             """.trimMargin()
 
             // when:
-            val errors = validator.validate (yaml, v)
+            val output = validator.validate (yaml, v)
 
             // then:
-            errors.shouldBeEmpty()
+            output.isValid.shouldBeTrue()
         }
     }
 
@@ -54,10 +57,10 @@ class MappingValidatorSpec: StringSpec({
                    """.trimMargin()
 
         // when:
-        val errors = validator.validate (yaml, "v2")
+        val output = validator.validate (yaml, "v2")
 
         // then:
-        errors.shouldBeEmpty()
+        output.isValid.shouldBeTrue()
     }
 
     "detects unknown top level property" {
@@ -71,19 +74,36 @@ class MappingValidatorSpec: StringSpec({
                    """.trimMargin()
 
         // when:
-        val errors = validator.validate (yaml, "v2")
+        val output = validator.validate (yaml, "v2")
 
         // then:
-        errors.size shouldBe 1
-        val error = errors.first()
-        error.message shouldBe "\$.bad: is not defined in the schema and the schema does not allow additional properties"
+        output.isValid.shouldBeFalse()
+        output.errors?.shouldHaveSize(1)
+        val error = output.errors!!.first()
+        error.instanceLocation.shouldBe("/bad")
+        error.error shouldBe "the value does not validate against the 'false' schema"
     }
 
     "validates example mapping v2" {
-        validator.validate("/mapping/v2/mapping.example.yaml".fromResource(), "v2").shouldBeEmpty()
+        val output = validator.validate("/mapping/v2/mapping.example.yaml".fromResource(), "v2")
+
+        val error = output.error
+        if(error != null) {
+            println(error)
+        }
+
+        output.errors?.forEach {
+            println("'${it.error}': at instance ${it.instanceLocation} (schema ${it.absoluteKeywordLocation.substringAfter("#")})")
+        }
+
+        output.isValid.shouldBeTrue()
     }
 
     "validates example mapping v2.1" {
-        validator.validate("/mapping/v2.1/mapping.example.yaml".fromResource(), "v2.1").shouldBeEmpty()
+        validator.validate("/mapping/v2.1/mapping.example.yaml".fromResource(), "v2.1").isValid.shouldBeTrue()
+    }
+
+    "validates example mapping v3" {
+        validator.validate("/mapping/v3/mapping.example.yaml".fromResource(), "v3").isValid.shouldBeTrue()
     }
 })
