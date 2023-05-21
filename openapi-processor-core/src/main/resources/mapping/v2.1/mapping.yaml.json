@@ -70,7 +70,7 @@
     },
     "Map": {
       "description": "global & path specific mapping rules.",
-      "allOf": [{
+      "anyOf": [{
           "$ref": "#/definitions/Mappings"
         }, {
           "additionalProperties": false,
@@ -88,7 +88,7 @@
       "patternProperties": {
         "^/": {
           "description": "a path.",
-          "allOf": [{
+          "anyOf": [{
               "$ref": "#/definitions/Exclude"
             }, {
               "$ref": "#/definitions/Mappings"
@@ -126,6 +126,9 @@
         },
         "responses": {
           "$ref": "#/definitions/ResponseMappings"
+        },
+        "paths": {
+          "$ref": "#/definitions/Paths"
         }
       }
     },
