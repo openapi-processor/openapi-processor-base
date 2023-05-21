@@ -6,6 +6,7 @@ items:
   - inputs/minmax.yaml
   - inputs/items.yaml
   - inputs/obj.yaml
+  - inputs/obj-components.yaml
   - inputs/pattern.yaml
   - inputs/email.yaml
   - inputs/mapping.yaml
