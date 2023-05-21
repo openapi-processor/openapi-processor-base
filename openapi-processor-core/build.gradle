@@ -67,7 +67,7 @@ dependencies {
 
     implementation (platform(libs.openapi.parser.bom))
     implementation (libs.openapi.parser.parser)
-    implementation (libs.openapi.parser.jackson)
+    implementation (libs.io.jackson)
     implementation (platform(libs.jackson.bom))
     implementation (libs.jackson.kotlin)
     implementation (libs.commons.text)

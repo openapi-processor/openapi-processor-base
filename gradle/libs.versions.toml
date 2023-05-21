@@ -1,54 +1,57 @@
 [versions]
 processor = "2023.2-SNAPSHOT"
 
-kotlin = "1.7.21"
+kotlin = "1.8.21"
 build-jdk = "11"
-target-jdk = "8"
+target-jdk = "11"
 
-junit = "5.9.1"
+junit = "5.9.3"
 jacoco = "0.8.7"
 
 [libraries]
 openapi-processor-api = "io.openapiprocessor:openapi-processor-api:2021.1"
-openapi-processor-test = "io.openapiprocessor:openapi-processor-test:2022.4"
+openapi-processor-test = "io.openapiprocessor:openapi-processor-test:2023.1.2"
 
-openapi-parser-bom = "io.openapiprocessor:openapi-parser-bom:2023.1"
+openapi-parser-bom = "io.openapiprocessor:openapi-parser-bom:2023.2-SNAPSHOT"
 openapi-parser-parser = { module = "io.openapiprocessor:openapi-parser" }
-openapi-parser-jackson = { module = "io.openapiprocessor:openapi-parser-jackson" }
+json-schema-validator-bom = "io.openapiprocessor:json-schema-validator-bom:2023.2-SNAPSHOT"
+json-schema-validator-validator = { module = "io.openapiprocessor:json-schema-validator" }
+io-jackson = { module = "io.openapiprocessor:io-jackson" }
+#io-snakeyaml = { module = "io.openapiprocessor:io-snakeyaml" }
 
-jackson-bom = "com.fasterxml.jackson:jackson-bom:2.14.1"
+jackson-bom = "com.fasterxml.jackson:jackson-bom:2.15.1"
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind" }
 jackson-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml" }
 jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
 snakeyaml = "org.yaml:snakeyaml:1.33"
 
 openapi4j = "org.openapi4j:openapi-parser:1.0.7"
-swagger = "io.swagger.parser.v3:swagger-parser:2.0.28"
+swagger = "io.swagger.parser.v3:swagger-parser:2.1.14"
 # breaks a test case
 #swagger = "io.swagger.parser.v3:swagger-parser:2.1.9"
 #swagger = "io.swagger.parser.v3:swagger-parser:2.0.29"
 
-antlr = "org.antlr:antlr4:4.11.1"
+antlr = "org.antlr:antlr4:4.12.0"
 
-java-format = "com.google.googlejavaformat:google-java-format:1.15.0"
+java-format = "com.google.googlejavaformat:google-java-format:1.17.0"
 guava = "com.google.guava:guava:31.1-jre"
 commons-text = "org.apache.commons:commons-text:1.10.0"
 commonmark = "com.atlassian.commonmark:commonmark:0.17.0"
-json-schema-validator = "com.networknt:json-schema-validator:1.0.76"
+#json-schema-validator = "com.networknt:json-schema-validator:1.0.76"
 
 checker = "org.checkerframework:checker:3.25.0"
 jimfs = "com.google.jimfs:jimfs:1.2"
-slf4j = "org.slf4j:slf4j-api:2.0.6"
-logback = "ch.qos.logback:logback-classic:1.4.5"
+slf4j = "org.slf4j:slf4j-api:2.0.7"
+logback = "ch.qos.logback:logback-classic:1.4.7"
 
-kotest-bom = "io.kotest:kotest-bom:5.5.4"
+kotest-bom = "io.kotest:kotest-bom:5.6.2"
 kotest-runner = { module = "io.kotest:kotest-runner-junit5" }
 kotest-datatest = { module = "io.kotest:kotest-framework-datatest" }
-mockk = "io.mockk:mockk:1.13.3"
+mockk = "io.mockk:mockk:1.13.5"
 
 diff-utils = "io.github.java-diff-utils:java-diff-utils:4.12"
 
-groovy-bom = "org.apache.groovy:groovy-bom:4.0.8"
+groovy-bom = "org.apache.groovy:groovy-bom:4.0.12"
 spock = "org.spockframework:spock-core:2.3-groovy-4.0"
 
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -57,7 +60,7 @@ plugin-outdated = "com.github.ben-manes:gradle-versions-plugin:0.42.0"
 
 [bundles]
 jackson = ["jackson-databind", "jackson-yaml", "jackson-kotlin"]
-openapi-parser = ["openapi-parser-parser", "openapi-parser-jackson"]
+openapi-parser = ["openapi-parser-parser", "io-jackson"]
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
