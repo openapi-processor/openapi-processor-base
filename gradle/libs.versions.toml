@@ -31,7 +31,7 @@ swagger = "io.swagger.parser.v3:swagger-parser:2.1.14"
 #swagger = "io.swagger.parser.v3:swagger-parser:2.1.9"
 #swagger = "io.swagger.parser.v3:swagger-parser:2.0.29"
 
-antlr = "org.antlr:antlr4:4.12.0"
+antlr = "org.antlr:antlr4:4.13.0"
 
 java-format = "com.google.googlejavaformat:google-java-format:1.17.0"
 guava = "com.google.guava:guava:31.1-jre"
