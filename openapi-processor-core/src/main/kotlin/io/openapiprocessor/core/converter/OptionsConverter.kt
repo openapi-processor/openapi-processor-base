@@ -41,37 +41,42 @@ class OptionsConverter(private val checkObsoleteProcessorOptions: Boolean = fals
     }
 
     private fun readMapping(mappingSource: String, options: ApiOptions) {
-        val mapping: MappingVersion? = MappingReader().read(mappingSource)
-        if (mapping == null) {
-            log.warn("missing 'mapping.yaml' configuration!")
-            return
-        }
-
-        when (mapping) {
-            is MappingV1 -> {
-                options.packageName = mapping.options.packageName
-                options.beanValidation = mapping.options.beanValidation
+        try {
+            val mapping: MappingVersion? = MappingReader().read(mappingSource)
+            if (mapping == null) {
+                log.warn("missing 'mapping.yaml' configuration!")
+                return
             }
-            is MappingV2 -> {
-                options.packageName = mapping.options.packageName
-                options.modelNameSuffix = mapping.options.modelNameSuffix
 
-                val (enable, format) = checkBeanValidation(mapping.options)
-                options.beanValidation = enable
-                options.beanValidationFormat = format
+            when (mapping) {
+                is MappingV1 -> {
+                    options.packageName = mapping.options.packageName
+                    options.beanValidation = mapping.options.beanValidation
+                }
 
-                options.javadoc = mapping.options.javadoc
-                options.oneOfInterface = mapping.options.oneOfInterface
-                options.formatCode = mapping.options.formatCode
-                options.generatedDate = mapping.options.generatedDate
+                is MappingV2 -> {
+                    options.packageName = mapping.options.packageName
+                    options.modelNameSuffix = mapping.options.modelNameSuffix
+
+                    val (enable, format) = checkBeanValidation(mapping.options)
+                    options.beanValidation = enable
+                    options.beanValidationFormat = format
+
+                    options.javadoc = mapping.options.javadoc
+                    options.oneOfInterface = mapping.options.oneOfInterface
+                    options.formatCode = mapping.options.formatCode
+                    options.generatedDate = mapping.options.generatedDate
+                }
             }
-        }
 
-        if (options.packageName == "io.openapiprocessor.generated") {
-            log.warn("is 'options.package-name' set in mapping? found default: '{}'.", options.packageName)
-        }
+            if (options.packageName == "io.openapiprocessor.generated") {
+                log.warn("is 'options.package-name' set in mapping? found default: '{}'.", options.packageName)
+            }
 
-        options.typeMappings = MappingConverter().convert(mapping)
+            options.typeMappings = MappingConverter().convert(mapping)
+        } catch (t: Throwable) {
+            throw InvalidMappingException("failed to parse 'mapping.yaml' configuration!", t)
+        }
     }
 
     private fun checkBeanValidation(options: Options): Pair<Boolean, String?> {
