@@ -148,7 +148,7 @@ generateVersion {
 
 publishing {
     publications {
-        getByName/*<MavenPublication>*/("openapiprocessor") {
+        named/*<MavenPublication>*/("openapiprocessor") {
             pom {
                 description.set("OpenAPI Processor Core")
             }
