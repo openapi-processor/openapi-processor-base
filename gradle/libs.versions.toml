@@ -12,9 +12,9 @@ jacoco = "0.8.7"
 openapi-processor-api = "io.openapiprocessor:openapi-processor-api:2021.1"
 openapi-processor-test = "io.openapiprocessor:openapi-processor-test:2023.1.2"
 
-openapi-parser-bom = "io.openapiprocessor:openapi-parser-bom:2023.2-SNAPSHOT"
+openapi-parser-bom = "io.openapiprocessor:openapi-parser-bom:2023.2"
 openapi-parser-parser = { module = "io.openapiprocessor:openapi-parser" }
-json-schema-validator-bom = "io.openapiprocessor:json-schema-validator-bom:2023.2-SNAPSHOT"
+json-schema-validator-bom = "io.openapiprocessor:json-schema-validator-bom:2023.2"
 json-schema-validator-validator = { module = "io.openapiprocessor:json-schema-validator" }
 io-jackson = { module = "io.openapiprocessor:io-jackson" }
 #io-snakeyaml = { module = "io.openapiprocessor:io-snakeyaml" }
@@ -62,6 +62,8 @@ openapi-parser = ["openapi-parser-parser", "io-jackson"]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 nexus = { id = "io.github.gradle-nexus.publish-plugin", version = "1.3.0" }
 jacoco = { id = "org.barfuin.gradle.jacocolog", version = "3.1.0" }
-sonar = { id = "org.sonarqube", version =  "4.1.0.3113" }
+#sonar = { id = "org.sonarqube", version =  "3.5.0.2730" }
+sonar = { id = "org.sonarqube", version =  "4.0.0.2929" }
+#sonar = { id = "org.sonarqube", version =  "4.1.0.3113" }
 
 #versions = { id = "com.github.ben-manes.versions", version = "0.42.0" }
