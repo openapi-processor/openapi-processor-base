@@ -49,6 +49,10 @@ tasks.named('compileTestKotlin') {
     dependsOn 'generateTestGrammarSource'
 }
 
+tasks.named('compileTestIntKotlin') {
+    dependsOn 'generateTestIntGrammarSource'
+}
+
 tasks.named('sourcesJar') {
     dependsOn 'generateGrammarSource'
 }
