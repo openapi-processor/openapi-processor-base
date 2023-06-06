@@ -79,4 +79,9 @@ class TestSchema implements Schema {
     boolean getWriteOnly () {
         return false
     }
+
+    @Override
+    Schema getAdditionalProperties() {
+        return null
+    }
 }

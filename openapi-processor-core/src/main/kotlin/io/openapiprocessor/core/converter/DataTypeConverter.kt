@@ -242,6 +242,12 @@ class DataTypeConverter(
             properties[propName] = propDataType
         }
 
+        // navigate additionalProperties to find nested schemas
+        val additionalSchemaInfo = schemaInfo.buildForAdditionalProperties()
+        if (additionalSchemaInfo != null) {
+            convert(additionalSchemaInfo, dataTypes)
+        }
+
         val objectType = createObjectDataType(schemaInfo, properties)
 
         val targetType = getMappedDataType(schemaInfo)

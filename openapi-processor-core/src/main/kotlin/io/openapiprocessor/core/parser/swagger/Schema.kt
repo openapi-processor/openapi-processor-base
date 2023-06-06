@@ -45,6 +45,17 @@ class Schema(private val schema: SwaggerSchema<*>): ParserSchema {
         return props
     }
 
+    override fun getAdditionalProperties(): ParserSchema? {
+        val additional = schema.additionalProperties
+
+        // null, boolean, schema
+        if(additional is SwaggerSchema<*>) {
+            return Schema(additional)
+        }
+
+        return null;
+    }
+
     override fun getItems(): List<ParserSchema> {
         val result: MutableList<ParserSchema> = mutableListOf()
 

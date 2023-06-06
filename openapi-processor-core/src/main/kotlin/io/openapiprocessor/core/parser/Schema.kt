@@ -24,6 +24,7 @@ interface Schema {
 
     // object
     fun getProperties(): Map<String, Schema>
+    fun getAdditionalProperties(): Schema?
 
     // composed object
     fun getItems(): List<Schema>
