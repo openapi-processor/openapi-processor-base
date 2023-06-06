@@ -1,0 +1,13 @@
+openapi-processor-mapping: v3
+
+options:
+  generated-date: false
+  package-name: generated
+  bean-validation: javax
+  javadoc: true
+
+map:
+  types:
+    - type: array => java.util.List
+    - type: Values => java.util.Map<java.lang.String, {package-name}.model.Value>>
+    - type: MultiValues => java.util.Map<java.lang.String, java.util.List<{package-name}.model.Value>>>

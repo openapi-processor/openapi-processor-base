@@ -1,0 +1,51 @@
+openapi: 3.0.3
+info:
+  title: test API
+  version: 1.0.0
+
+paths:
+
+  /values:
+    get:
+      description: query object dictionary
+      responses:
+        '200':
+          description: dictionary response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Values'
+
+  /multi-values:
+    get:
+      description: query object dictionary
+      responses:
+        '200':
+          description: dictionary response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MultiValues'
+
+components:
+  schemas:
+
+    Values:
+      description: key is string, value is a Value object
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/Value'
+
+    MultiValues:
+      description: key is string, value is a Value array
+      type: object
+      additionalProperties:
+        type: array
+        items:
+          $ref: '#/components/schemas/Value'
+
+    Value:
+      type: object
+      properties:
+        text:
+          type: string
