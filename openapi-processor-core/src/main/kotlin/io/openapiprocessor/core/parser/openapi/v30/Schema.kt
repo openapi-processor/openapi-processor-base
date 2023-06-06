@@ -72,6 +72,17 @@ class Schema(val schema: Schema30) : ParserSchema {
         return props
     }
 
+    override fun getAdditionalProperties(): Schema? {
+        val additional = schema.additionalProperties
+
+        // null, boolean, schema
+        if(additional is Schema30) {
+            return Schema(additional)
+        }
+
+        return null;
+    }
+
     override fun getItems(): List<ParserSchema> {
         val result: MutableList<ParserSchema> = mutableListOf()
 

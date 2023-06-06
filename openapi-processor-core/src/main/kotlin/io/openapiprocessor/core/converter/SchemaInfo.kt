@@ -328,6 +328,21 @@ open class SchemaInfo(
         )
     }
 
+    /**
+     * Factory method to create an {@link SchemaInfo} of additionalProperties.
+     *
+     * @return a new {@link SchemaInfo}
+     */
+    fun buildForAdditionalProperties(): SchemaInfo? {
+        val additionalProperties = schema?.getAdditionalProperties() ?: return null
+
+        return SchemaInfo(
+            endpoint = endpoint,
+            name = getNestedTypeName("additionalProperties"),
+            schema = additionalProperties,
+            resolver = resolver)
+    }
+
     override fun isPrimitive(): Boolean {
         return listOf("boolean", "integer", "number", "string").contains(schema?.getType())
     }

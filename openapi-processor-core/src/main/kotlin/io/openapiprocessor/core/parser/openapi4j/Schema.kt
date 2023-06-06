@@ -43,6 +43,17 @@ class Schema(val schema: O4jSchema) : ParserSchema {
         return props
     }
 
+    override fun getAdditionalProperties(): Schema? {
+        val additional = schema.additionalProperties
+
+        // null, boolean, schema
+        if(additional is O4jSchema) {
+            return Schema(additional)
+        }
+
+        return null;
+    }
+
     override fun getItems(): List<ParserSchema> {
         val result: MutableList<ParserSchema> = mutableListOf()
 
