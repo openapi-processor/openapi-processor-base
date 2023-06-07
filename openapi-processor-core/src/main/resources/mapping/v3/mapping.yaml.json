@@ -125,9 +125,6 @@
         },
         "responses": {
           "$ref": "#/definitions/ResponseMappings"
-        },
-        "paths": {
-          "$ref": "#/definitions/Paths"
         }
       }
     },
