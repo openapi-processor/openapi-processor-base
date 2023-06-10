@@ -30,6 +30,25 @@ paths:
         '204':
           description: empty
 
+  /endpoint-dashed:
+    get:
+      tags:
+        - enum
+      parameters:
+        - name: foo-foo
+          description: enum parameter
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - foo
+              - foo-2
+              - foo-foo
+      responses:
+        '204':
+          description: empty
+
 components:
   schemas:
 
