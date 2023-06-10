@@ -56,7 +56,7 @@ class Endpoint(
         if (!responses.containsKey (status)) {
             return emptyList()
         }
-        return responses[status]!!
+        return responses.getOrDefault(status, emptyList())
     }
 
     /**
