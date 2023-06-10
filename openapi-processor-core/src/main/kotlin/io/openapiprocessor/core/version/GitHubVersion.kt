@@ -8,7 +8,8 @@ package io.openapiprocessor.core.version
 import io.openapiprocessor.api.v2.Version
 import java.time.Instant
 
-class GitHubVersion(val name: String, val publishedAt: Instant, val text: String) : Version {
+class GitHubVersion(@JvmField val name: String, @JvmField val publishedAt: Instant, @JvmField val text: String)
+    : Version {
 
     override fun getName(): String {
         return name
