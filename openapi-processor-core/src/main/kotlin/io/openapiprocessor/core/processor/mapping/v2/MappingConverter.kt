@@ -94,7 +94,7 @@ class MappingConverter(val mapping: MappingV2) {
     }
 
     private fun convertType(source: Type): Mapping {
-        val (mapping, genericTypes, genericTypeNames) = parseMapping(source.type, source.generics)
+        val (mapping, genericTypes) = parseMapping(source.type, source.generics)
 
         return if (mapping.kind == ANNOTATE) {
             AnnotationTypeMapping(
@@ -139,7 +139,7 @@ class MappingConverter(val mapping: MappingV2) {
     }
 
     private fun createParameterTypeMapping(source: RequestParameter): ParameterTypeMapping {
-        val (mapping, genericTypes, genericTypeNames) = parseMapping(source.name, source.generics)
+        val (mapping, genericTypes) = parseMapping(source.name, source.generics)
 
         val typeMapping = TypeMapping(
             null,
@@ -152,7 +152,7 @@ class MappingConverter(val mapping: MappingV2) {
     }
 
     private fun createAddParameterTypeMapping(source: AdditionalParameter): AddParameterTypeMapping {
-        val (mapping, genericTypes, genericTypeNames) = parseMapping(source.add, source.generics)
+        val (mapping, genericTypes) = parseMapping(source.add, source.generics)
 
         val typeMapping = TypeMapping(
             null,
@@ -171,7 +171,7 @@ class MappingConverter(val mapping: MappingV2) {
     }
 
     private fun convertResponse(source: Response): Mapping {
-        val (mapping, genericTypes, genericTypeNames) = parseMapping(source.content, source.generics)
+        val (mapping, genericTypes) = parseMapping(source.content, source.generics)
 
         val typeMapping = TypeMapping(
             null,
