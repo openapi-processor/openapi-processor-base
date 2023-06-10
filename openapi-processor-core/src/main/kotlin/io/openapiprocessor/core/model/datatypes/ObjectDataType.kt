@@ -47,7 +47,7 @@ open class ObjectDataType(
     }
 
     fun getObjectProperty(name: String): PropertyDataType {
-        return properties[name]!!
+        return properties.getValue(name)
     }
 
     fun getProperties(): Map<String, PropertyDataType> {
