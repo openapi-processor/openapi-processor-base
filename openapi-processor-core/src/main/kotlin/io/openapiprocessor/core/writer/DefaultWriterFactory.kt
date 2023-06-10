@@ -26,7 +26,7 @@ class DefaultWriterFactory: WriterFactory, InitWriterTarget {
     private lateinit var paths: Map<String, Path>
 
     override fun createWriter(packageName: String, className: String): Writer {
-        return createWriter(paths[packageName]!!, className)
+        return createWriter(paths.getValue(packageName), className)
     }
 
     private fun createWriter(packagePath: Path, className: String): Writer {
