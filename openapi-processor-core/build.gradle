@@ -95,7 +95,7 @@ dependencies {
     testImplementation (libs.jimfs)
 
     testIntImplementation (libs.openapi.processor.api)
-    testIntImplementation (libs.openapi.processor.test)
+    testIntImplementation (project(":openapi-processor-test"))
     testIntImplementation (platform(libs.groovy.bom))
     testIntImplementation (platform(libs.kotest.bom))
     testIntImplementation (libs.kotest.runner)
