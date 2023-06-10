@@ -20,4 +20,8 @@ class ModelClassNameCreatorSpec : StringSpec({
         creator.createName("FooX") shouldBe "FooX"
     }
 
+    "create valid java class name" {
+        val creator = ModelClassNameCreator("")
+        creator.createName("foo-foo") shouldBe "FooFoo"
+    }
 })
