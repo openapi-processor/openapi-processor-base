@@ -7,7 +7,8 @@
 :core-ci-badge: https://github.com/openapi-processor/openapi-processor-core/workflows/build/badge.svg
 
 :core-sonar: https://sonarcloud.io/dashboard?id=openapi-processor_openapi-processor-base-core
-:core-sonar-badge: https://sonarcloud.io/api/project_badges/measure?project=openapi-processor_openapi-processor-base-core&metric=coverage
+:core-sonar-coverage: https://sonarcloud.io/api/project_badges/measure?project=openapi-processor_openapi-processor-base-core&metric=coverage
+:core-sonar-tecdeb: https://sonarcloud.io/api/project_badges/measure?project=openapi-processor_openapi-processor-base-core&metric=sqale_index
 
 :central-search: https://search.maven.org/search?q=io.openapiprocessor
 :core-central-badge: https://img.shields.io/maven-central/v/io.openapiprocessor/openapi-processor-core?label=Maven%20Central
@@ -25,7 +26,8 @@ target framework independent code of openapi-processor.
 
 // badges
 link:{central-search}[image:{core-central-badge}[]]
-link:{core-sonar}[image:{core-sonar-badge}[]]
+link:{core-sonar}[image:{core-sonar-coverage}[]]
+link:{core-sonar}[image:{core-sonar-tecdeb}[]]
 
 re-usable core of the openapi-processors that generates java code.
 
