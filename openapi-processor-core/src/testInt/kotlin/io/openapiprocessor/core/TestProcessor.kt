@@ -5,7 +5,6 @@
 
 package io.openapiprocessor.core
 
-import io.openapiprocessor.api.v1.OpenApiProcessor
 import io.openapiprocessor.core.converter.ApiConverter
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.OptionsConverter
@@ -18,8 +17,11 @@ import org.slf4j.LoggerFactory
 /**
  *  Simple processor for testing.
  */
-class TestProcessor: OpenApiProcessor {
-    val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
+class TestProcessor:
+    io.openapiprocessor.api.v2.OpenApiProcessor,
+    io.openapiprocessor.api.v1.OpenApiProcessor
+{
+    private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     override fun getName(): String {
         return "test"
