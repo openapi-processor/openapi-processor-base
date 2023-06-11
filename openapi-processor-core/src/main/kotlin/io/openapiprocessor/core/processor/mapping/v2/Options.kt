@@ -33,6 +33,11 @@ data class Options(
     val javadoc: Boolean = false,
 
     /**
+     * generate pojo|record model classes (optional)
+     */
+    val modelType: String = "default",
+
+    /**
      * generate model source files with suffix (optional)
      */
     val modelNameSuffix: String = String.Empty,

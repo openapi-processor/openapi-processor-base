@@ -47,6 +47,11 @@ class ApiOptions {
     var javadoc = false
 
     /**
+     * model type. pojo or record.
+     */
+    var modelType = "default"
+
+    /**
      * suffix for model class names and enum names. Default is none, i.e. an empty string.
      */
     var modelNameSuffix = String.Empty

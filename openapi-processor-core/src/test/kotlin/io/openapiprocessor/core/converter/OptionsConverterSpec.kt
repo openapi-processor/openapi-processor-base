@@ -23,6 +23,7 @@ class OptionsConverterSpec: StringSpec({
         options.packageName shouldBe "io.openapiprocessor.generated"
         options.beanValidation shouldBe false
         options.javadoc shouldBe false
+        options.modelType shouldBe "default"
         options.modelNameSuffix shouldBe String.Empty
         options.typeMappings shouldHaveSize 0
         options.formatCode.shouldBeTrue()
