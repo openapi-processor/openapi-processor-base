@@ -1,0 +1,4 @@
+items:
+  - outputs/api/EndpointApi.java
+  - outputs/<model>/Obj1.java
+  - outputs/<model>/Obj2.java

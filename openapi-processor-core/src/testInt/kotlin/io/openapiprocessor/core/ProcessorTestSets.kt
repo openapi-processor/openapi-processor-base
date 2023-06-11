@@ -14,7 +14,7 @@ data class TestSet(
 
 val ALL_30: List<TestSet> = listOf(
     TestSet("annotation-mapping-class", API_30, outputs = "outputs.yaml", expected = "outputs"),
-    TestSet("bean-validation", API_30),
+    TestSet("bean-validation", API_30, outputs = "outputs.yaml", expected = "outputs"),
     TestSet("bean-validation-allof-required", API_30),
     TestSet("bean-validation-iterable", API_30),
     TestSet("bean-validation-jakarta", API_30),
@@ -78,7 +78,7 @@ val ALL_30: List<TestSet> = listOf(
 
 val ALL_31: List<TestSet> = listOf(
     TestSet("annotation-mapping-class", API_31, outputs = "outputs.yaml", expected = "outputs"),
-    TestSet("bean-validation", API_31),
+    TestSet("bean-validation", API_31, outputs = "outputs.yaml", expected = "outputs"),
     TestSet("bean-validation-allof-required", API_31),
     TestSet("bean-validation-iterable", API_31),
     TestSet("bean-validation-jakarta", API_31),
