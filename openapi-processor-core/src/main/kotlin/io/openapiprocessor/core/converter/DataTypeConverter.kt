@@ -143,47 +143,51 @@ class DataTypeConverter(
     }
 
     private fun createComposedDataType(schemaInfo: SchemaInfo, items: List<DataType>): DataType {
-        if (schemaInfo.isComposedAllOf()) {
-            val filtered = items.filterNot { item -> item is NoDataType }
-            if (filtered.size == 1) {
-                return filtered.first()
+        return when {
+            schemaInfo.isComposedAllOf() -> {
+                val filtered = items.filterNot { item -> item is NoDataType }
+                if (filtered.size == 1) {
+                    return filtered.first()
+                }
+
+                AllOfObjectDataType(
+                    DataTypeName(schemaInfo.getName(), getTypeNameWithSuffix(schemaInfo.getName())),
+                    listOf(options.packageName, "model").joinToString("."),
+                    items,
+                    schemaInfo.getDeprecated()
+                )
             }
+            shouldGenerateOneOfInterface(items) && schemaInfo.isComposedOneOf() -> {
+                val constraints = DataTypeConstraints(
+                    nullable = schemaInfo.getNullable(),
+                    required = schemaInfo.getRequired()
+                )
 
-            return AllOfObjectDataType(
-                DataTypeName(schemaInfo.getName(), getTypeNameWithSuffix(schemaInfo.getName())),
-                listOf(options.packageName, "model").joinToString("."),
-                items,
-                schemaInfo.getDeprecated()
-            )
-        } else if (shouldGenerateOneOfInterface(items) && schemaInfo.isComposedOneOf()) {
-            val constraints = DataTypeConstraints(
-                nullable = schemaInfo.getNullable(),
-                required = schemaInfo.getRequired()
-            )
+                val objectType = InterfaceDataType(
+                    DataTypeName(schemaInfo.getName(), getTypeNameWithSuffix(schemaInfo.getName())),
+                    listOf(options.packageName, "model").joinToString("."),
+                    items,
+                    constraints,
+                    schemaInfo.getDeprecated(),
+                    Documentation(description = schemaInfo.description)
+                )
 
-            val objectType = InterfaceDataType(
-                DataTypeName(schemaInfo.getName(), getTypeNameWithSuffix(schemaInfo.getName())),
-                listOf(options.packageName, "model").joinToString("."),
-                items,
-                constraints,
-                schemaInfo.getDeprecated(),
-                Documentation(description = schemaInfo.description)
-            )
+                items.forEach {
+                    (it as ModelDataType).implementsDataType = objectType
+                }
 
-            items.forEach {
-                (it as ModelDataType).implementsDataType = objectType
+                objectType
             }
-
-            return objectType
-        } else {
-            return AnyOneOfObjectDataType(
-                schemaInfo.getName(),
-                listOf(options.packageName, "model").joinToString("."),
-                schemaInfo.itemOf()!!,
-                items,
-                null,
-                schemaInfo.getDeprecated()
-            )
+            else -> {
+                AnyOneOfObjectDataType(
+                    schemaInfo.getName(),
+                    listOf(options.packageName, "model").joinToString("."),
+                    schemaInfo.itemOf()!!,
+                    items,
+                    null,
+                    schemaInfo.getDeprecated()
+                )
+            }
         }
     }
 
