@@ -23,7 +23,8 @@ class ProcessorEndToEndJimfsSpec: StringSpec({
         "jimfs - $testSet".config(enabled = true) {
             val support = FileSupport(
                 ProcessorPendingSpec::class.java,
-                testSet.inputs, testSet.generated)
+                testSet.inputs, testSet.outputs
+            )
 
             TestSetRunner(testSet, support)
             .runOnCustomFileSystem(Jimfs.newFileSystem (Configuration.unix ()))

@@ -20,7 +20,7 @@ fun testSet(
     openapi: String = "openapi.yaml",
     model: String = "default",
     inputs: String = "inputs.yaml",
-    generated: String = "generated.yaml",
+    outputs: String = "generated.yaml",
     expected: String = "generated"
 ): TestSet {
 
@@ -31,7 +31,7 @@ fun testSet(
     testSet.modelType = model
     testSet.openapi = openapi
     testSet.inputs = inputs
-    testSet.generated = generated
+    testSet.outputs = outputs
     testSet.expected = expected
     return testSet
 }

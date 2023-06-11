@@ -56,7 +56,7 @@ options:
     /**
      * the generated.yaml
      */
-    String generated = "generated.yaml"
+    String outputs = "generated.yaml"
 
     /**
      * folder with expected files

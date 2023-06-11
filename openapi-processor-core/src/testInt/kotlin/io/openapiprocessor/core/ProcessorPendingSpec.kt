@@ -21,12 +21,13 @@ import io.openapiprocessor.test.TestSetRunner
 class ProcessorPendingSpec: StringSpec({
 
     for (testSet in sources()) {
-        "native - $testSet".config(enabled = false) {
+        "native - $testSet".config(enabled = true) {
             val folder = tempdir()
 
             val support = FileSupport(
                 ProcessorPendingSpec::class.java,
-                testSet.inputs, testSet.generated)
+                testSet.inputs, testSet.outputs
+            )
 
             TestSetRunner(testSet, support)
             .runOnNativeFileSystem(folder)
@@ -35,10 +36,11 @@ class ProcessorPendingSpec: StringSpec({
     }
 
     for (testSet in sources()) {
-        "jimfs - $testSet".config(enabled = false) {
+        "jimfs - $testSet".config(enabled = true) {
             val support = FileSupport(
                 ProcessorPendingSpec::class.java,
-                testSet.inputs, testSet.generated)
+                testSet.inputs, testSet.outputs
+            )
 
             TestSetRunner(testSet, support)
             .runOnCustomFileSystem(Jimfs.newFileSystem (Configuration.unix ()))
@@ -49,8 +51,8 @@ class ProcessorPendingSpec: StringSpec({
 
 private fun sources(): Collection<TestSet> {
     return listOf(
-        testSet("annotation-mapping-class", INTERNAL, API_30, model = "record"),
-        testSet("annotation-mapping-class", INTERNAL, API_30, model = "default"),
+        testSet("annotation-mapping-class", INTERNAL, API_30, model = "record", expected = "outputs"),
+        testSet("annotation-mapping-class", INTERNAL, API_30, model = "default", expected = "outputs"),
 //        testSet("map-from-additional-properties-with-package-name", SWAGGER, API_31),
 //        testSet("map-from-additional-properties-with-package-name", OPENAPI4J, API_30),
 //        testSet("map-from-additional-properties-with-package-name", INTERNAL, API_30),
