@@ -49,8 +49,14 @@ class ProcessorPendingSpec: StringSpec({
 
 private fun sources(): Collection<TestSet> {
     return listOf(
-        testSet("map-from-additional-properties", INTERNAL, API_30),
-        testSet("map-from-additional-properties", INTERNAL, API_31),
+        testSet("annotation-mapping-class", INTERNAL, API_30, model = "record"),
+        testSet("annotation-mapping-class", INTERNAL, API_30, model = "default"),
+//        testSet("map-from-additional-properties-with-package-name", SWAGGER, API_31),
+//        testSet("map-from-additional-properties-with-package-name", OPENAPI4J, API_30),
+//        testSet("map-from-additional-properties-with-package-name", INTERNAL, API_30),
+//        testSet("map-from-additional-properties-with-package-name", INTERNAL, API_31),
+//        testSet("map-from-additional-properties-with-package-name", SWAGGER, API_30),
+//        testSet("javadoc-with-mapping", INTERNAL, API_31),
 //        testSet("params-additional-global", INTERNAL, API_30),
 //        testSet("params-additional-global", INTERNAL, API_31)
     )
