@@ -5,10 +5,12 @@
 
 package io.openapiprocessor.core
 
+import com.google.common.jimfs.Configuration
+import com.google.common.jimfs.Jimfs
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.booleans.shouldBeTrue
-import io.openapiprocessor.core.parser.ParserType.INTERNAL
+import io.openapiprocessor.core.parser.ParserType.*
 import io.openapiprocessor.test.FileSupport
 import io.openapiprocessor.test.TestSet
 import io.openapiprocessor.test.TestSetRunner
@@ -28,6 +30,18 @@ class ProcessorPendingSpec: StringSpec({
 
             TestSetRunner(testSet, support)
             .runOnNativeFileSystem(folder)
+            .shouldBeTrue()
+        }
+    }
+
+    for (testSet in sources()) {
+        "jimfs - $testSet".config(enabled = false) {
+            val support = FileSupport(
+                ProcessorPendingSpec::class.java,
+                testSet.inputs, testSet.generated)
+
+            TestSetRunner(testSet, support)
+            .runOnCustomFileSystem(Jimfs.newFileSystem (Configuration.unix ()))
             .shouldBeTrue()
         }
     }
