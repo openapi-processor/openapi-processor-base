@@ -18,6 +18,7 @@ fun testSet(
     name: String,
     parser: ParserType,
     openapi: String = "openapi.yaml",
+    model: String = "default",
     inputs: String = "inputs.yaml",
     generated: String = "generated.yaml"): TestSet {
 
@@ -25,6 +26,7 @@ fun testSet(
     testSet.name = name
     testSet.processor = TestProcessor()
     testSet.parser = parser.name
+    testSet.modelType = model
     testSet.openapi = openapi
     testSet.inputs = inputs
     testSet.generated = generated

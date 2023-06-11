@@ -64,12 +64,20 @@ class TestProcessor: OpenApiProcessor {
                     beanValidation,
                     DefaultImportFilter()
                 ),
-                DataTypeWriterPojo(
-                    options,
-                    generatedWriter,
-                    beanValidation,
-                    javaDocWriter
-                ),
+                when (options.modelType) {
+                    "record" -> DataTypeWriterRecord(
+                        options,
+                        generatedWriter,
+                        beanValidation,
+                        javaDocWriter
+                    )
+                    else -> DataTypeWriterPojo(
+                        options,
+                        generatedWriter,
+                        beanValidation,
+                        javaDocWriter
+                    )
+                },
                 StringEnumWriter(generatedWriter),
                 InterfaceDataTypeWriter(
                     options,

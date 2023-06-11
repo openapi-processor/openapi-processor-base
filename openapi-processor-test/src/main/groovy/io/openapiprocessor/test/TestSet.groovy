@@ -39,6 +39,11 @@ options:
     String parser
 
     /**
+     * model type
+     */
+    String modelType
+
+    /**
      * root openapi file
      */
     String openapi = "openapi.yaml"
@@ -61,7 +66,7 @@ options:
 
     @Override
     String toString () {
-        "${parser.toLowerCase ()} - $name ($openapi)"
+        "${parser.toLowerCase ()} - $name ($openapi, $modelType)"
     }
 
 }

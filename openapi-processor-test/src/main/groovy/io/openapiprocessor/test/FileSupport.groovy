@@ -244,6 +244,9 @@ class FileSupport {
             4
         )
 
+        if (!patch.deltas.isEmpty()) {
+            println "$expected"
+        }
         diff.each {
             println it
         }
@@ -259,7 +262,7 @@ class FileSupport {
      *
      * @return true if there is a difference
      */
-    boolean printUnifiedDiff (Path expected, Path generated) {
+    static boolean printUnifiedDiffFs (Path expected, Path generated) {
         def patch = DiffUtils.diff (
             expected.readLines (),
             generated.readLines ())
@@ -269,9 +272,12 @@ class FileSupport {
             generated.toString (),
             expected.readLines (),
             patch,
-            2
+            4
         )
 
+        if (!patch.deltas.isEmpty()) {
+            println "$expected"
+        }
         diff.each {
             println it
         }
