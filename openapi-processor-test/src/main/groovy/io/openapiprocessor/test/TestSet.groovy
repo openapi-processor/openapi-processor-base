@@ -5,7 +5,7 @@
 
 package io.openapiprocessor.test
 
-import io.openapiprocessor.api.v1.OpenApiProcessor
+import io.openapiprocessor.api.v2.OpenApiProcessor
 
 
 class TestSet {
@@ -58,7 +58,10 @@ options:
      */
     String generated = "generated.yaml"
 
-
+    /**
+     * folder with expected files
+     */
+    String expected = "generated"
 
     static String getDefaultOptions() {
         DEFAULT_MAPPING

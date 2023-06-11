@@ -162,17 +162,17 @@ class FileSupport {
     }
 
     /**
-     *get the expected files (from generated.yaml) and strip package name.
+     *get the expected files (from generated.yaml) and strips the prefix.
      *
      * @param path the resource path of the test
-     * @param packageName stripped package name
+     * @param stripPrefix prefix to strip
      * @return the expected files
      */
-    SortedSet<String> getExpectedFiles (String path, String packageName) {
+    SortedSet<String> getExpectedFiles (String path, String stripPrefix) {
         def items = readTestItems (path, generated)
 
         def wanted = items.items.collect {
-            it.substring (packageName.size () + 1)
+            it.substring (stripPrefix.size () + 1)
         }
 
         def result = new TreeSet<String> ()

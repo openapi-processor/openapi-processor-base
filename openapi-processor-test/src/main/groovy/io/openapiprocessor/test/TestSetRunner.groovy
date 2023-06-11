@@ -47,17 +47,17 @@ class TestSetRunner {
     /**
      * runs test set on the native file system
      *
-     * @param folder temp folder
+     * @param targetFolder temp folder
      * @return true on success, false on failure, ie. if there were any differences
      */
-    boolean runOnNativeFileSystem (File folder) {
+    boolean runOnNativeFileSystem (File targetFolder) {
         def source = testSet.name
 
         def processor = testSet.processor
         def options = [
             parser: testSet.parser,
             apiPath: "resource:/tests/${source}/inputs/${testSet.openapi}",
-            targetDir: folder.absolutePath
+            targetDir: targetFolder.absolutePath
         ]
 
         def mappingYaml = files.getResource ("/tests/${source}/inputs/mapping.yaml")
@@ -72,12 +72,14 @@ class TestSetRunner {
         processor.run (options)
 
         then:
-        def packageName = testSet.packageName
-        def sourcePath = "/tests/${source}"
-        def expectedPath = "${sourcePath}/${packageName}"
-        def generatedPath = Path.of (folder.absolutePath).resolve (packageName)
+        def mapping = getMapping(options.mapping)
 
-        def expectedFiles = files.getExpectedFiles (sourcePath, packageName)
+        def packageName = mapping.options["package-name"] as String
+        def sourcePath = "/tests/${source}"
+        def expectedPath = "${sourcePath}/${testSet.expected}"
+        def generatedPath = Path.of (targetFolder.absolutePath).resolve (packageName)
+
+        def expectedFiles = files.getExpectedFiles (sourcePath, testSet.expected)
         def generatedFiles = files.getGeneratedFiles (generatedPath)
 
         // even if not expected, check that the annotation was generated
@@ -134,15 +136,17 @@ class TestSetRunner {
         }
         options.mapping = setMappingModelType(options.mapping)
 
-        def packageName = testSet.packageName
-        def expectedPath = root.resolve (packageName)
-        def generatedPath = target.resolve (packageName)
-
         when:
         processor.run (options)
 
         then:
-        def expectedFiles = files.getExpectedFiles (path, packageName)
+        def mapping = getMapping(options.mapping)
+
+        def packageName = mapping.options["package-name"] as String
+        def expectedPath = root.resolve (testSet.expected)
+        def generatedPath = target.resolve (packageName)
+
+        def expectedFiles = files.getExpectedFiles (path, testSet.expected)
         def generatedFiles = files.getGeneratedFiles (generatedPath)
 
         // even if not expected, check that the annotation was generated
@@ -163,9 +167,13 @@ class TestSetRunner {
     }
 
     private String setMappingModelType(String source) {
-        def mapping = mapper.readValue(source, Map<String,Object>)
+        def mapping = getMapping(source)
         mapping['options']['model-type'] = testSet.modelType
         return mapper.writeValueAsString(mapping)
+    }
+
+    private Map<String, ?> getMapping(String source) {
+        mapper.readValue(source, Map<String,?>)
     }
 
     private SortedSet<String> resolveFileNames(Collection<String> paths, ResolveType type) {

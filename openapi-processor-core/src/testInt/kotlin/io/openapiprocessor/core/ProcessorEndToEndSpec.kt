@@ -36,19 +36,19 @@ class ProcessorEndToEndSpec: StringSpec({
 
 private fun sources(): Collection<TestSet> {
     val swagger = ALL_30.map {
-        testSet(it.name, SWAGGER, it.openapi)
+        testSet(it.name, SWAGGER, it.openapi, expected = it.expected)
     }
 
     val openapi4j = ALL_30.map {
-        testSet(it.name, OPENAPI4J, it.openapi)
+        testSet(it.name, OPENAPI4J, it.openapi, expected = it.expected)
     }
 
     val openapi30 = ALL_30.map {
-        testSet(it.name, INTERNAL, it.openapi)
+        testSet(it.name, INTERNAL, it.openapi, expected = it.expected)
     }
 
     val openapi31 = ALL_31.map {
-        testSet(it.name, INTERNAL, it.openapi)
+        testSet(it.name, INTERNAL, it.openapi, expected = it.expected)
     }
 
     return swagger + openapi4j + openapi30 + openapi31

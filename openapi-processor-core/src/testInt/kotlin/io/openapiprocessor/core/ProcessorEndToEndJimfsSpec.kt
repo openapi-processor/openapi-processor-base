@@ -38,15 +38,15 @@ private fun sources(): Collection<TestSet> {
     // the swagger parser does not work with a custom FileSystem
 
     val openapi4j = ALL_30.map {
-        testSet(it.name, ParserType.OPENAPI4J, it.openapi)
+        testSet(it.name, ParserType.OPENAPI4J, it.openapi, expected = it.expected)
     }
 
     val openapi30 = ALL_30.map {
-        testSet(it.name, ParserType.INTERNAL, it.openapi)
+        testSet(it.name, ParserType.INTERNAL, it.openapi, expected = it.expected)
     }
 
     val openapi31 = ALL_31.map {
-        testSet(it.name, ParserType.INTERNAL, it.openapi)
+        testSet(it.name, ParserType.INTERNAL, it.openapi, expected = it.expected)
     }
 
     return openapi4j + openapi30 + openapi31
