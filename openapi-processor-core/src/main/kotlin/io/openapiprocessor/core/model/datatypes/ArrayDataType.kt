@@ -12,7 +12,7 @@ class ArrayDataType(
     override val item: DataType,
     override val constraints: DataTypeConstraints? = null,
     override val deprecated: Boolean = false
-): DataType, CollectionDataType {
+): DataType by item, CollectionDataType {
 
     override fun getName(): String {
         return "${item.getName()}[]"
@@ -31,14 +31,6 @@ class ArrayDataType(
         sb.append(getTypeName())
 
         return sb.toString()
-    }
-
-    override fun getPackageName(): String {
-        return item.getPackageName()
-    }
-
-    override fun getImports(): Set<String> {
-        return item.getImports()
     }
 
     override val referencedImports: Set<String>
