@@ -30,22 +30,24 @@ class ResultDataTypeWrapper(
      * @param schemaInfo the open api type with context information
      * @return the resulting java data type
      */
-    fun wrap(dataType: DataType, schemaInfo: SchemaInfo): DataType{
+    fun wrap(dataType: DataType, schemaInfo: SchemaInfo): DataType {
         val targetType = getMappedResultDataType(schemaInfo)
         if (targetType == null) {
             return dataType
         }
 
-        if (targetType.typeName == "plain") {
-            return dataType
+        return when (targetType.typeName) {
+            "plain" -> {
+                dataType
 
-        } else {
-            val resultType = ResultDataType (
-                targetType.getName(),
-                targetType.getPkg(),
-                checkNone (dataType)
-            )
-            return resultType
+            }
+            else -> {
+                ResultDataType (
+                    targetType.getName(),
+                    targetType.getPkg(),
+                    checkNone (dataType)
+                )
+            }
         }
     }
 
