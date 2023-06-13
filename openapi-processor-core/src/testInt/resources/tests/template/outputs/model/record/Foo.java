@@ -6,5 +6,5 @@ import generated.support.Generated;
 @Generated(value = "openapi-processor-core", version = "test")
 public record Foo(
     @JsonProperty("bar")
-    private String bar;
+    String bar
 ) {}
