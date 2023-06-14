@@ -1,17 +1,6 @@
 /*
- * Copyright 2019-2020 the original authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2019 https://github.com/openapi-processor/openapi-processor-core
+ * PDX-License-Identifier: Apache-2.0
  */
 
 @file:JvmName("Identifier")
@@ -22,11 +11,12 @@ import io.openapiprocessor.core.support.capitalizeFirstChar
 import java.lang.Character.isJavaIdentifierPart
 import java.lang.Character.isJavaIdentifierStart
 import java.util.*
+import javax.lang.model.SourceVersion
 import kotlin.collections.ArrayList
 
 /**
- * converts a source string to a valid (camel case) java identifier. One way, ie it is not
- * reversible.
+ * converts a source string to a syntactically valid (camel case) java identifier. One way,
+ * ie it is not reversible. It does not check if the identifier is a java keyword.
  *
  * conversion rules:
  * create camel case from word breaks. A word break is any invalid character (i.e. it is not
@@ -34,15 +24,31 @@ import kotlin.collections.ArrayList
  * are dropped.
  *
  * All words are converted to lowercase and are capitalized and joined except the first word
- * that is no capitalized.
+ * that is no capitalized. It does not handle java keywords.
  *
  * @param src the source "string"
  * @return a valid camel case java identifier
- *
- * @author Martin Hauner
  */
 fun toCamelCase(src: String): String {
     return joinCamelCase(splitAtWordBreaks(src))
+}
+
+/**
+ * converts a source string to a valid (camel case) java identifier. One way, i.e. it is not
+ * reversible. It adds an "a" prefix if the identifier is a java keyword (e.g. aClass instead
+ * of class).
+ *
+ * @param src the source "string"
+ * @return a valid camel case java identifier
+ */
+fun toIdentifier(src: String): String {
+    val identifier = joinCamelCase(splitAtWordBreaks(src))
+
+    if (SourceVersion.isKeyword(identifier)) {
+        return joinCamelCase(splitAtWordBreaks("a_$identifier"))
+    }
+
+    return identifier
 }
 
 /**
@@ -59,8 +65,6 @@ fun toCamelCase(src: String): String {
  * @param src the source string
  *
  * @return a valid camel case java class identifier
- *
- * @author Martin Hauner
  */
 fun toClass(src: String): String {
     return toCamelCase(src).capitalizeFirstChar()
@@ -80,8 +84,6 @@ fun toClass(src: String): String {
  * @param src the source "string"
  *
  * @return a valid upper case enum java identifier
- *
- * @author Martin Hauner
  */
 fun toEnum(src: String): String {
     return joinEnum(splitAtWordBreaks(src))
@@ -94,8 +96,6 @@ fun toEnum(src: String): String {
  *
  * @param words a list of words
  * @return a came case string
- *
- * @author Martin Hauner
  */
 private fun joinCamelCase(words: List<String>): String {
     val sb = StringBuilder()
@@ -120,8 +120,6 @@ private fun joinCamelCase(words: List<String>): String {
  *
  * @param words a list of words
  * @return an uppercase string
- *
- * @author Martin Hauner
  */
 private fun joinEnum(words: List<String>): String {
     val result = words.joinToString("_") { it.uppercase(Locale.getDefault()) }
@@ -138,8 +136,6 @@ private fun joinEnum(words: List<String>): String {
  *
  * @param src the source "string"
  * @return a list of split words
- *
- * @author Martin Hauner
  */
 private fun splitAtWordBreaks(src: String): List<String> {
     val words = ArrayList<String>()

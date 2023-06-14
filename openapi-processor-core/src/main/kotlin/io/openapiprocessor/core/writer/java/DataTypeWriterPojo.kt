@@ -106,7 +106,7 @@ class DataTypeWriterPojo(
 
     private fun writeClassProperties(target: Writer, dataType: ModelDataType) {
         dataType.forEach { propName, propDataType ->
-            val javaPropertyName = toCamelCase(propName)
+            val javaPropertyName = toIdentifier(propName)
             target.write(
                 getProp(
                     propName, javaPropertyName, propDataType as PropertyDataType,
@@ -220,7 +220,7 @@ class DataTypeWriterPojo(
 
         result += """
             |    public ${propDataType.getTypeName()} get${propertyName.capitalizeFirstChar()}() {
-            |        return ${propertyName};
+            |        return ${toIdentifier(propertyName)};
             |    }
             |
             |
@@ -233,9 +233,11 @@ class DataTypeWriterPojo(
         var result = ""
         result += ifDeprecated(propDataType)
 
+        val property = toIdentifier(propertyName)
+
         result += """
-            |    public void set${propertyName.capitalizeFirstChar()}(${propDataType.getTypeName()} ${propertyName}) {
-            |        this.${propertyName} = ${propertyName};
+            |    public void set${propertyName.capitalizeFirstChar()}(${propDataType.getTypeName()} ${property}) {
+            |        this.${property} = ${property};
             |    }
             |
             |

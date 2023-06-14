@@ -103,7 +103,7 @@ class DataTypeWriterRecord(
     private fun writeRecordParameter(target: Writer, dataType: ModelDataType) {
         val props = mutableListOf<String>()
         dataType.forEach { propName, propDataType ->
-            val javaPropertyName = toCamelCase(propName)
+            val javaPropertyName = toIdentifier(propName)
             val propSource = getProp(
                 propName,
                 javaPropertyName,

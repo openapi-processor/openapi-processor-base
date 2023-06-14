@@ -98,7 +98,8 @@ open class MethodWriter(
                 it.dataType.getTypeName()
             }
 
-             "${createParameterAnnotation(endpoint, it)} $dataTypeValue ${toCamelCase (it.name)}".trim()
+             "${createParameterAnnotation(endpoint, it)} $dataTypeValue ${toIdentifier (it.name)}"
+                 .trim()
         }.toMutableList()
 
         if (endpoint.requestBodies.isNotEmpty()) {
@@ -111,7 +112,7 @@ open class MethodWriter(
                 body.dataType.getTypeName()
             }
 
-            val param = "${createParameterAnnotation(endpoint, body)} $dataTypeValue ${body.name}"
+            val param = "${createParameterAnnotation(endpoint, body)} $dataTypeValue ${toIdentifier(body.name)}"
             ps.add (param.trim())
         }
 
