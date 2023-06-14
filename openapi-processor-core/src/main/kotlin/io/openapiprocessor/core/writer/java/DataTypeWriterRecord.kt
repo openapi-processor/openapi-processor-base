@@ -11,7 +11,6 @@ import io.openapiprocessor.core.model.datatypes.*
 import java.io.StringWriter
 import java.io.Writer
 
-@Suppress("ConstPropertyName")
 private const val deprecated = "@Deprecated"
 
 /**
