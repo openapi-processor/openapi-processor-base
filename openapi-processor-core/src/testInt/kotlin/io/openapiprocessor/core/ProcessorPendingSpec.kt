@@ -21,7 +21,7 @@ import io.openapiprocessor.test.TestSetRunner
 class ProcessorPendingSpec: StringSpec({
 
     for (testSet in sources()) {
-        "native - $testSet".config(enabled = true) {
+        "native - $testSet".config(enabled = false) {
             val folder = tempdir()
 
             val support = FileSupport(
@@ -36,7 +36,7 @@ class ProcessorPendingSpec: StringSpec({
     }
 
     for (testSet in sources()) {
-        "jimfs - $testSet".config(enabled = true) {
+        "jimfs - $testSet".config(enabled = false) {
             val support = FileSupport(
                 ProcessorPendingSpec::class.java,
                 testSet.inputs, testSet.outputs
@@ -51,15 +51,9 @@ class ProcessorPendingSpec: StringSpec({
 
 private fun sources(): Collection<TestSet> {
     return listOf(
-        testSet("annotation-mapping-class", INTERNAL, API_30, model = "record", outputs = "outputs.yaml", expected = "outputs"),
-        testSet("annotation-mapping-class", INTERNAL, API_30, model = "default", outputs = "outputs.yaml", expected = "outputs"),
-//        testSet("map-from-additional-properties-with-package-name", SWAGGER, API_31),
-//        testSet("map-from-additional-properties-with-package-name", OPENAPI4J, API_30),
-//        testSet("map-from-additional-properties-with-package-name", INTERNAL, API_30),
-//        testSet("map-from-additional-properties-with-package-name", INTERNAL, API_31),
-//        testSet("map-from-additional-properties-with-package-name", SWAGGER, API_30),
-//        testSet("javadoc-with-mapping", INTERNAL, API_31),
-//        testSet("params-additional-global", INTERNAL, API_30),
-//        testSet("params-additional-global", INTERNAL, API_31)
+        testSet("keyword-identifier", INTERNAL, API_30, model = "record", outputs = "outputs.yaml", expected = "outputs"),
+        testSet("keyword-identifier", INTERNAL, API_30, model = "default", outputs = "outputs.yaml", expected = "outputs"),
+//        testSet("bean-validation", INTERNAL, API_31, model = "record", outputs = "outputs.yaml", expected = "outputs"),
+//        testSet("bean-validation", INTERNAL, API_31, model = "default", outputs = "outputs.yaml", expected = "outputs"),
     )
 }
