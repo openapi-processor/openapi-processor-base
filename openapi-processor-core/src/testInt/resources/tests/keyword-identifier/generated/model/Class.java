@@ -9,11 +9,11 @@ public class Class {
     @JsonProperty("class")
     private String aClass;
 
-    public String getClass() {
+    public String getAClass() {
         return aClass;
     }
 
-    public void setClass(String aClass) {
+    public void setAClass(String aClass) {
         this.aClass = aClass;
     }
 
