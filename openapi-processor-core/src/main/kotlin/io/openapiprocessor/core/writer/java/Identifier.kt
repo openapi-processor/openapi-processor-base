@@ -52,6 +52,20 @@ fun toIdentifier(src: String): String {
 }
 
 /**
+ * convert an invalid property accessor to a valid property accessor by adding an "A" prefix.
+ * This is used to avoid generating a getClass() method that conflicts with Object::getClass().
+ *
+ * @param src the source property name without get/set prefix
+ * @return a valid accessor name  without get/set prefix
+ */
+fun toAccessor(src: String): String {
+    return when (src) {
+        "Class" -> "AClass"
+        else -> src
+    }
+}
+
+/**
  * converts a source string to a valid (camel case) java *class* identifier. One way, ie it is
  * not reversible.
  *
@@ -82,7 +96,6 @@ fun toClass(src: String): String {
  * All words are converted to uppercase and joined by an underscore.
  *
  * @param src the source "string"
- *
  * @return a valid upper case enum java identifier
  */
 fun toEnum(src: String): String {
