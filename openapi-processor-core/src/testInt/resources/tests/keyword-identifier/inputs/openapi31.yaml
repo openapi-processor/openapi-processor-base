@@ -1,0 +1,31 @@
+openapi: 3.1.0
+info:
+  title: keyword identifier
+  version: 1.0.0
+
+paths:
+
+  /keywords:
+    get:
+      parameters:
+        - name: class
+          description: parameter
+          in: query
+          schema:
+            $ref: '#/components/schemas/class'
+      responses:
+        '200':
+          description: the foo result
+          content:
+            application/json:
+                schema:
+                  $ref: '#/components/schemas/class'
+
+components:
+  schemas:
+
+    class:
+      type: object
+      properties:
+        class:
+          type: string
