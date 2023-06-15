@@ -85,6 +85,10 @@ open class MethodWriter(
         val tail = camel.subList(1, camel.count())
             .joinToString("") { it.capitalizeFirstChar() }
 
+        if(endpoint.parameters.isEmpty() || endpoint.requestBodies.isNotEmpty()) {
+            return head + toMethodTail(tail)
+        }
+
         return head + tail
     }
 

@@ -58,7 +58,7 @@ fun toIdentifier(src: String): String {
  * @param src the source property name without get/set prefix
  * @return a valid accessor name  without get/set prefix
  */
-fun toAccessor(src: String): String {
+fun toMethodTail(src: String): String {
     return when (src) {
         "Class" -> "AClass"
         else -> src

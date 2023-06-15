@@ -219,7 +219,7 @@ class DataTypeWriterPojo(
         result += ifDeprecated(propDataType)
 
         result += """
-            |    public ${propDataType.getTypeName()} get${toAccessor(propertyName.capitalizeFirstChar())}() {
+            |    public ${propDataType.getTypeName()} get${toMethodTail(propertyName.capitalizeFirstChar())}() {
             |        return ${toIdentifier(propertyName)};
             |    }
             |
@@ -236,7 +236,7 @@ class DataTypeWriterPojo(
         val property = toIdentifier(propertyName)
 
         result += """
-            |    public void set${toAccessor(propertyName.capitalizeFirstChar())}(${propDataType.getTypeName()} ${property}) {
+            |    public void set${toMethodTail(propertyName.capitalizeFirstChar())}(${propDataType.getTypeName()} ${property}) {
             |        this.${property} = ${property};
             |    }
             |
