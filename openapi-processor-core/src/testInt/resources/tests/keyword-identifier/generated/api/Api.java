@@ -8,7 +8,10 @@ import generated.support.Generated;
 @Generated(value = "openapi-processor-core", version = "test")
 public interface Api {
 
-    @Mapping("/keywords")
-    Class getKeywords(@Parameter Class aClass);
+    @Mapping("/class")
+    Class getAClass();
+
+    @Mapping("/class")
+    Class postClass(@Parameter Class aClass);
 
 }

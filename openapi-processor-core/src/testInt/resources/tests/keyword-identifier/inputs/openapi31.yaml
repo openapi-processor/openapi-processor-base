@@ -5,8 +5,17 @@ info:
 
 paths:
 
-  /keywords:
+  /class:
     get:
+      responses:
+        '200':
+          description: the foo result
+          content:
+            application/json:
+                schema:
+                  $ref: '#/components/schemas/class'
+
+    post:
       parameters:
         - name: class
           description: parameter
@@ -20,6 +29,7 @@ paths:
             application/json:
                 schema:
                   $ref: '#/components/schemas/class'
+
 
 components:
   schemas:
