@@ -65,12 +65,11 @@ class ApiOptions {
     /**
      * enable/disable the code formatter (optional).
      */
-    var formatCode = true
+    var formatCode = false
 
     /**
      *  enable/disable the @Generated date (optional).
      */
-
     var generatedDate = true
 
     /**

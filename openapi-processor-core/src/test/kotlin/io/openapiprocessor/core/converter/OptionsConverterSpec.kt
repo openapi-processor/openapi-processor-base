@@ -26,7 +26,7 @@ class OptionsConverterSpec: StringSpec({
         options.modelType shouldBe "default"
         options.modelNameSuffix shouldBe String.Empty
         options.typeMappings shouldHaveSize 0
-        options.formatCode.shouldBeTrue()
+        options.formatCode.shouldBeFalse()
     }
 
     "should set target dir" {

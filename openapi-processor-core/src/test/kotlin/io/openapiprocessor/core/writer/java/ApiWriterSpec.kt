@@ -35,6 +35,7 @@ class ApiWriterSpec: StringSpec({
     beforeTest {
         options.packageName = "io.openapiprocessor.test"
         options.targetDir = listOf(target.toString(), "java", "src").joinToString(File.separator)
+        options.formatCode = true
 
         every { wfStub.createWriter(any(), any()) }
             .answers { writer }
