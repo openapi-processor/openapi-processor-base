@@ -37,7 +37,7 @@ commonmark = "com.atlassian.commonmark:commonmark:0.17.0"
 checker = "org.checkerframework:checker:3.35.0"
 jimfs = "com.google.jimfs:jimfs:1.2"
 slf4j = "org.slf4j:slf4j-api:2.0.7"
-logback = "ch.qos.logback:logback-classic:1.4.7"
+logback = "ch.qos.logback:logback-classic:1.4.8"
 
 kotest-bom = "io.kotest:kotest-bom:5.6.2"
 kotest-runner = { module = "io.kotest:kotest-runner-junit5" }
