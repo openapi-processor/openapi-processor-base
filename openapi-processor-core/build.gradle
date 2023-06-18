@@ -79,7 +79,7 @@ dependencies {
     implementation (libs.jackson.kotlin)
     implementation (libs.commons.text)
     implementation (libs.commonmark)
-    implementation (libs.java.format)
+    implementation (libs.format.java.google)
     implementation (libs.slf4j)
 
 
