@@ -1,4 +1,4 @@
-openapi-processor-mapping: v3
+openapi-processor-mapping: v4
 
 options:
   package-name: generated
