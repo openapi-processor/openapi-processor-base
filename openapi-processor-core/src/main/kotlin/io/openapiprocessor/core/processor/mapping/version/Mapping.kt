@@ -30,6 +30,7 @@ data class Mapping(
         val version = getSafeVersion()
         return version.startsWith("v2")
             || version.startsWith("v3")
+            || version.startsWith("v4")
     }
 
     fun isDeprecatedVersionKey (): Boolean {

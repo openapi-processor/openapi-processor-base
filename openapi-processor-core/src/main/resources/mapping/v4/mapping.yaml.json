@@ -1,14 +1,14 @@
 {
-  "$id": "https://openapiprocessor.io/schemas/mapping/mapping-v3.json",
+  "$id": "https://openapiprocessor.io/schemas/mapping/mapping-v4.json",
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "JSON Schema for openapi-processor mapping.yaml v3",
+  "title": "JSON Schema for openapi-processor mapping.yaml v4",
   "description": "openapi-processor configuration and type mappings",
   "type": "object",
   "additionalProperties": false,
   "properties": {
     "openapi-processor-mapping": {
       "description": "version of the mapping format.",
-      "enum": ["v3"]
+      "enum": ["v4"]
     },
     "options": {
       "$ref": "#/definitions/Options"

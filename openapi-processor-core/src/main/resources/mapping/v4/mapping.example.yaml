@@ -3,7 +3,7 @@
 ##
 
 # mapping format [required]
-openapi-processor-mapping: v3
+openapi-processor-mapping: v4
 
 options: # general processor options (optional)
 
