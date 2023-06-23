@@ -11,7 +11,7 @@ import io.openapiprocessor.api.v2.OpenApiProcessor
 class TestSet {
 
     static String DEFAULT_MAPPING = """\
-openapi-processor-mapping: v3.1
+openapi-processor-mapping: v4
 
 options:
   package-name: generated

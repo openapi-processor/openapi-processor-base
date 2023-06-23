@@ -37,20 +37,28 @@ class ProcessorEndToEndSpec: StringSpec({
 
 private fun sources(): Collection<TestSet> {
     val swagger = ALL_30.map {
-        testSet(it.name, SWAGGER, it.openapi, outputs = it.outputs, expected = it.expected)
+        testSet(it.name, SWAGGER, it.openapi, model = "default", outputs = it.outputs, expected = it.expected)
     }
 
     val openapi4j = ALL_30.map {
-        testSet(it.name, OPENAPI4J, it.openapi, outputs = it.outputs, expected = it.expected)
+        testSet(it.name, OPENAPI4J, it.openapi, model = "default", outputs = it.outputs, expected = it.expected)
     }
 
     val openapi30 = ALL_30.map {
-        testSet(it.name, INTERNAL, it.openapi, outputs = it.outputs, expected = it.expected)
+        testSet(it.name, INTERNAL, it.openapi, model = "default", outputs = it.outputs, expected = it.expected)
     }
 
     val openapi31 = ALL_31.map {
-        testSet(it.name, INTERNAL, it.openapi, outputs = it.outputs, expected = it.expected)
+        testSet(it.name, INTERNAL, it.openapi, model = "default", outputs = it.outputs, expected = it.expected)
     }
 
-    return swagger + openapi4j + openapi30 + openapi31
+    val openapi30r = ALL_30.filter { it.records }.map {
+        testSet(it.name, INTERNAL, it.openapi, model = "record", outputs = it.outputs, expected = it.expected)
+    }
+
+    val openapi31r = ALL_31.filter { it.records }.map {
+        testSet(it.name, INTERNAL, it.openapi, model = "record", outputs = it.outputs, expected = it.expected)
+    }
+
+    return swagger + openapi4j + openapi30 + openapi30r + openapi31 + openapi31r
 }

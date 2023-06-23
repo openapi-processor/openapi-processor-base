@@ -23,7 +23,6 @@ fun testSet(
     outputs: String = "generated.yaml",
     expected: String = "generated"
 ): TestSet {
-
     val testSet = TestSet()
     testSet.name = name
     testSet.processor = TestProcessor()
