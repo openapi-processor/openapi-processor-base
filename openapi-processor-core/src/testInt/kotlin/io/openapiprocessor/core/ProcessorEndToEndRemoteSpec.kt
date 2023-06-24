@@ -23,6 +23,7 @@ class ProcessorEndToEndRemoteSpec: StringSpec({
     
         options:
           package-name: $pkg
+          format-code: false
     """.trimIndent()
 
     "processes remote openapi with ref's" {
@@ -34,13 +35,15 @@ class ProcessorEndToEndRemoteSpec: StringSpec({
         ) { parser, source, api ->
             val folder = tempdir()
 
-            val processor = TestProcessor()
-            processor.run(mutableMapOf(
+            val options = mutableMapOf(
                 "apiPath" to "$repo/src/testInt/resources/tests/$source/inputs/$api",
                 "targetDir" to folder.canonicalPath,
                 "parser" to parser,
                 "mapping" to mapping
-            ))
+            )
+
+            val processor = TestProcessor()
+            processor.run(options)
 
             val sourcePath = "/tests/$source"
             val expectedPath = "$sourcePath/$pkg"
