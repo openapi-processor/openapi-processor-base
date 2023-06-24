@@ -38,7 +38,7 @@ class GoogleFormatter: SourceFormatter {
         formatter = Formatter(
             JavaFormatterOptions
                 .builder()
-                .style(JavaFormatterOptions.Style.AOSP)
+                .style(JavaFormatterOptions.Style.GOOGLE)
                 .build()
         )
     }
