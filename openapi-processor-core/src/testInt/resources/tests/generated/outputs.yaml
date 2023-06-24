@@ -1,0 +1,4 @@
+items:
+  - outputs/api/Api.java
+  - outputs/<model>/Foo.java
+  - outputs/support/Generated.java

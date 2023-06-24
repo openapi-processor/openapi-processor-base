@@ -13,43 +13,45 @@ data class TestParams(
     val records: Boolean = false
 )
 
-fun testParams30(
+fun test30(
     name: String,
     openapi: String = API_30,
     outputs: String = "outputs.yaml",
-    expected: String = "outputs"
+    expected: String = "outputs",
+    models: Boolean = true
 ): TestParams {
-    return TestParams(name, openapi, outputs, expected, true)
+    return TestParams(name, openapi, outputs, expected, models)
 }
 
-fun testParams31(
+fun test31(
     name: String,
     openapi: String = API_31,
     outputs: String = "outputs.yaml",
-    expected: String = "outputs"
+    expected: String = "outputs",
+    models: Boolean = true
 ): TestParams {
-    return TestParams(name, openapi, outputs, expected, true)
+    return TestParams(name, openapi, outputs, expected, models)
 }
 
 val ALL_30: List<TestParams> = listOf(
-    testParams30("annotation-mapping-class"),
-    testParams30("bean-validation"),
-    testParams30("bean-validation-allof-required"),
-    testParams30("bean-validation-iterable"),
-    testParams30("bean-validation-jakarta"),
-    TestParams("bean-validation-list-item-import", API_30),
-    TestParams("bean-validation-requestbody", API_30),
-    TestParams("bean-validation-requestbody-mapping", API_30),
-    TestParams("components-requestbodies", API_30),
-    TestParams("deprecated", API_30),
-    TestParams("endpoint-exclude", API_30),
-    TestParams("endpoint-http-mapping", API_30), // framework specific
-    TestParams("generated", API_30),
-    TestParams("javadoc", API_30),
-    TestParams("javadoc-with-mapping", API_30),
-    TestParams("keyword-identifier", API_30, outputs = "outputs.yaml", expected = "outputs"),
-    TestParams("map-from-additional-properties", API_30),
-    TestParams("map-from-additional-properties-with-package-name", API_30),
+    test30("annotation-mapping-class"),
+    test30("bean-validation"),
+    test30("bean-validation-allof-required"),
+    test30("bean-validation-iterable"),
+    test30("bean-validation-jakarta"),
+    test30("bean-validation-list-item-import", models = false),
+    test30("bean-validation-requestbody", models = false),
+    test30("bean-validation-requestbody-mapping", models = false),
+    test30("components-requestbodies"),
+    test30("deprecated"),
+    test30("endpoint-exclude", models = false),
+    test30("endpoint-http-mapping"), // framework specific
+    test30("generated"),
+    test30("javadoc"),
+    test30("javadoc-with-mapping"),
+    test30("keyword-identifier"),
+    test30("map-from-additional-properties", models = false),
+    test30("map-from-additional-properties-with-package-name"),
     TestParams("method-operation-id", API_30),
     TestParams("model-name-suffix", API_30),
     TestParams("model-name-suffix-with-package-name", API_30),
@@ -97,24 +99,24 @@ val ALL_30: List<TestParams> = listOf(
 )
 
 val ALL_31: List<TestParams> = listOf(
-    testParams31("annotation-mapping-class"),
-    testParams31("bean-validation"),
-    testParams31("bean-validation-allof-required"),
-    testParams31("bean-validation-iterable"),
-    testParams31("bean-validation-jakarta"),
-    TestParams("bean-validation-list-item-import", API_31),
-    TestParams("bean-validation-requestbody", API_31),
-    TestParams("bean-validation-requestbody-mapping", API_31),
-    TestParams("components-requestbodies", API_31),
-    TestParams("deprecated", API_31),
-    TestParams("endpoint-exclude", API_31),
-    TestParams("endpoint-http-mapping", API_31), // framework specific
-    TestParams("generated", API_31),
-    TestParams("javadoc", API_31),
-    TestParams("javadoc-with-mapping", API_31),
-    TestParams("keyword-identifier", API_31, outputs = "outputs.yaml", expected = "outputs"),
-    TestParams("map-from-additional-properties", API_31),
-    TestParams("map-from-additional-properties-with-package-name", API_31),
+    test31("annotation-mapping-class"),
+    test31("bean-validation"),
+    test31("bean-validation-allof-required"),
+    test31("bean-validation-iterable"),
+    test31("bean-validation-jakarta"),
+    test31("bean-validation-list-item-import", models = false),
+    test31("bean-validation-requestbody", models = false),
+    test31("bean-validation-requestbody-mapping", models = false),
+    test31("components-requestbodies"),
+    test31("deprecated"),
+    test31("endpoint-exclude", models = false),
+    test31("endpoint-http-mapping"), // framework specific
+    test31("generated"),
+    test31("javadoc"),
+    test31("javadoc-with-mapping"),
+    test31("keyword-identifier"),
+    test31("map-from-additional-properties", models = false),
+    test31("map-from-additional-properties-with-package-name"),
     TestParams("method-operation-id", API_31),
     TestParams("model-name-suffix", API_31),
     TestParams("model-name-suffix-with-package-name", API_31),
