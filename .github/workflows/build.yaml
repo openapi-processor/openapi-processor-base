@@ -62,7 +62,9 @@ jobs:
       uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
-        java-version: '11'
+        java-version: |
+          17
+          11
 
     - name: gradle check
       run: |
@@ -101,7 +103,9 @@ jobs:
       uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
-        java-version: '11'
+        java-version: |
+          17
+          11
 
     - name: publish snapshot
       env:
@@ -156,7 +160,9 @@ jobs:
       uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
-        java-version: '11'
+        java-version: |
+          17
+          11
 
     - name: sonarqube
       env:
