@@ -16,6 +16,7 @@ class Memory {
             return contents[path]
         }
 
+        @JvmStatic
         fun add(path: String, data: String) {
             add(path, data.toByteArray())
         }
