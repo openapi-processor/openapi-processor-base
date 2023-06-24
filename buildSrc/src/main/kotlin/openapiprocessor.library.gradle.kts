@@ -68,7 +68,7 @@ tasks.withType<Test>().configureEach {
     ))
 
     javaLauncher.set(javaToolchains.launcherFor {
-        languageVersion.set(JavaLanguageVersion.of(17))
+        languageVersion.set(JavaLanguageVersion.of(libs.versions.test.jdk.get()))
     })
 
     finalizedBy(tasks.named("jacocoTestReport"))
