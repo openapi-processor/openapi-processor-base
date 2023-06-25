@@ -37,42 +37,50 @@ items:
 the expected files:
 
 ```
- resources/tests/my-test
- +--- generated.yaml
- \--- generated
+ outputs/tests/my-test
+ +--- outputs.yaml
+ \--- outputs
       +--- api
       |    \--- EndpointApi.java
       \--- model
-           \--- Foo.java
+           +--- default
+           |    \--- Foo.java          
+           +--- record
+                \--- Foo.java
 ```
 
-the `generated.yaml` file lists the input files in the `generated` folder.
+the `outputs.yaml` file lists the input files in the `outputs` folder.
+
+`model/defaults` contains the model classes as pojos and `model/record` contains them as java records.  
 
 ```yaml
 items:
-  - generated/api/EndpointApi.java
-  - generated/model/Foo.java
+  - outputs/api/EndpointApi.java
+  - outputs/<model>/Foo.java
 ```
+
+the `<model>` is placeholder that gets replaced by `default` and `record` at test runtime. 
+
 
 #### mapping
 
 The `mapping.yaml` contains the type mapping information and is an optional file, but it is recommended to provide one. If there is no `mapping.yaml` the test runner will use a minimal version: 
 
 ```yaml
-openapi-processor-spring: v2
+openapi-processor-spring: v4
 
 options:
   package-name: generated
 ```
 
-IMPORTANT: even if you provide an explicit `mapping.yaml` the `package-name` must be `generated`. 
+IMPORTANT: even if you provide an explicit `mapping.yaml` the `package-name` should be `generated`. 
 
 
 ## working on the code
 
 ### jdk
 
-the minimum jdk is currently JDK 8
+the minimum jdk is currently JDK 11, although most code still JDK 8 compatible.
 
 ### ide setup
 
