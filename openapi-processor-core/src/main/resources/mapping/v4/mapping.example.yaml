@@ -20,7 +20,7 @@ options: # general processor options (optional)
   model-name-suffix: Resource
 
   # default (i.e pojo) or record
-  model-type: pojo
+  model-type: default
 
   # generate common interface for an `oneOf` object list (optional): true or false (default)
   one-of-interface: true
