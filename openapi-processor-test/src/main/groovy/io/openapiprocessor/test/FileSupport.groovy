@@ -162,7 +162,7 @@ class FileSupport {
     }
 
     /**
-     *get the expected files (from generated.yaml) and strips the prefix.
+     * get the expected files (from generated.yaml) and strips the prefix.
      *
      * @param path the resource path of the test
      * @param stripPrefix prefix to strip
