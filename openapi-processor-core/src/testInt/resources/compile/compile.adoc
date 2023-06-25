@@ -1,0 +1,3 @@
+== compile test
+
+`CompileExpectedSpec` compiles all expected files of the integration tests. This folder contains dummy implementations of classes & annotations the expected files depend on.
