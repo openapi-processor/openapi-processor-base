@@ -119,7 +119,7 @@ class DataTypeWriterRecord(
     private fun writeRecordImplements(target: Writer, dataType: ModelDataType) {
         val implements: DataType? = dataType.implementsDataType
         if (implements != null) {
-            target.write(" implements ${implements.getTypeName()} ")
+            target.write(" implements ${implements.getTypeName()}")
         }
     }
 
