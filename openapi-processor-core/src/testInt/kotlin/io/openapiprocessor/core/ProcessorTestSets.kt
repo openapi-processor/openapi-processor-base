@@ -5,65 +5,88 @@
 
 package io.openapiprocessor.core
 
+enum class ModelTypes {DEFAULT, RECORD}
+
 data class TestParams(
     val name: String,
     val openapi: String,
     val outputs: String = "generated.yaml",
     val expected: String = "generated",
-    val records: Boolean = false
+    val modelTypes: List<ModelTypes> = listOf(ModelTypes.DEFAULT)
 )
 
-fun test30(
+fun test30_D_(
     name: String,
     openapi: String = API_30,
     outputs: String = "outputs.yaml",
     expected: String = "outputs",
-    models: Boolean = true
+    modelTypes: List<ModelTypes> = listOf(ModelTypes.DEFAULT)
 ): TestParams {
-    return TestParams(name, openapi, outputs, expected, models)
+    return TestParams(name, openapi, outputs, expected, modelTypes)
 }
 
-fun test31(
+fun test30_DR(
+    name: String,
+    openapi: String = API_30,
+    outputs: String = "outputs.yaml",
+    expected: String = "outputs",
+    modelTypes: List<ModelTypes> = listOf(ModelTypes.DEFAULT, ModelTypes.RECORD)
+): TestParams {
+    return TestParams(name, openapi, outputs, expected, modelTypes)
+}
+
+fun test31_D_(
     name: String,
     openapi: String = API_31,
     outputs: String = "outputs.yaml",
     expected: String = "outputs",
-    models: Boolean = true
+    modelTypes: List<ModelTypes> = listOf(ModelTypes.DEFAULT)
 ): TestParams {
-    return TestParams(name, openapi, outputs, expected, models)
+    return TestParams(name, openapi, outputs, expected, modelTypes)
+}
+
+fun test31_DR(
+    name: String,
+    openapi: String = API_31,
+    outputs: String = "outputs.yaml",
+    expected: String = "outputs",
+    modelTypes: List<ModelTypes> = listOf(ModelTypes.DEFAULT, ModelTypes.RECORD)
+): TestParams {
+    return TestParams(name, openapi, outputs, expected, modelTypes)
 }
 
 val ALL_30: List<TestParams> = listOf(
-    test30("annotation-mapping-class"),
-    test30("bean-validation"),
-    test30("bean-validation-allof-required"),
-    test30("bean-validation-iterable"),
-    test30("bean-validation-jakarta"),
-    test30("bean-validation-list-item-import", models = false),
-    test30("bean-validation-requestbody", models = false),
-    test30("bean-validation-requestbody-mapping", models = false),
-    test30("components-requestbodies"),
-    test30("deprecated"),
-    test30("endpoint-exclude", models = false),
-    test30("endpoint-http-mapping"), // framework specific
-    test30("generated"),
-    test30("javadoc"),
-    test30("javadoc-with-mapping"),
-    test30("keyword-identifier"),
-    test30("map-from-additional-properties", models = false),
-    test30("map-from-additional-properties-with-package-name"),
-    TestParams("method-operation-id", API_30),
-    TestParams("model-name-suffix", API_30),
-    TestParams("model-name-suffix-with-package-name", API_30),
-    TestParams("object-empty", API_30),
-    TestParams("object-nullable-properties", API_30),
-    TestParams("object-read-write-properties", API_30),
-    TestParams("object-without-properties", API_30),
-    TestParams("params-additional", API_30),
-    TestParams("params-additional-global", API_30),
-    TestParams("params-complex-data-types", API_30), // framework specific
-    TestParams("params-endpoint", API_30),
-    TestParams("params-enum", API_30),
+    test30_DR("annotation-mapping-class"),
+    test30_DR("bean-validation"),
+    test30_DR("bean-validation-allof-required"),
+    test30_DR("bean-validation-iterable"),
+    test30_DR("bean-validation-jakarta"),
+    test30_D_("bean-validation-list-item-import"),
+    test30_D_("bean-validation-requestbody"),
+    test30_D_("bean-validation-requestbody-mapping"),
+    test30_DR("components-requestbodies"),
+    test30_DR("deprecated"),
+    test30_D_("endpoint-exclude"),
+    test30_D_("endpoint-http-mapping"), // framework specific
+    test30_DR("generated"),
+    test30_DR("javadoc"),
+    test30_DR("javadoc-with-mapping"),
+    test30_DR("keyword-identifier"),
+    test30_D_("map-from-additional-properties"),
+    test30_DR("map-from-additional-properties-with-package-name"),
+    test30_D_("method-operation-id"),
+    test30_DR("model-name-suffix"),
+    test30_DR("model-name-suffix-with-package-name"),
+    test30_D_("object-empty"),
+    test30_DR("object-nullable-properties"),
+    test30_DR("object-read-write-properties"),
+    test30_DR("object-without-properties"),
+    test30_D_("params-additional"),
+    test30_D_("params-additional-global"),
+    test30_DR("params-complex-data-types"), // framework specific
+    test30_D_("params-endpoint"),
+    test30_D_("params-enum"),
+
     TestParams("params-path-simple-data-types", API_30), // framework specific
     TestParams("params-request-body", API_30), // framework specific
     TestParams("params-request-body-multipart-form-data", API_30), // framework specific
@@ -99,36 +122,37 @@ val ALL_30: List<TestParams> = listOf(
 )
 
 val ALL_31: List<TestParams> = listOf(
-    test31("annotation-mapping-class"),
-    test31("bean-validation"),
-    test31("bean-validation-allof-required"),
-    test31("bean-validation-iterable"),
-    test31("bean-validation-jakarta"),
-    test31("bean-validation-list-item-import", models = false),
-    test31("bean-validation-requestbody", models = false),
-    test31("bean-validation-requestbody-mapping", models = false),
-    test31("components-requestbodies"),
-    test31("deprecated"),
-    test31("endpoint-exclude", models = false),
-    test31("endpoint-http-mapping"), // framework specific
-    test31("generated"),
-    test31("javadoc"),
-    test31("javadoc-with-mapping"),
-    test31("keyword-identifier"),
-    test31("map-from-additional-properties", models = false),
-    test31("map-from-additional-properties-with-package-name"),
-    TestParams("method-operation-id", API_31),
-    TestParams("model-name-suffix", API_31),
-    TestParams("model-name-suffix-with-package-name", API_31),
-    TestParams("object-empty", API_31),
-    TestParams("object-nullable-properties", API_31),
-    TestParams("object-read-write-properties", API_31),
-    TestParams("object-without-properties", API_31),
-    TestParams("params-additional", API_31),
-    TestParams("params-additional-global", API_31),
-    TestParams("params-complex-data-types", API_31), // framework specific
-    TestParams("params-endpoint", API_31),
-    TestParams("params-enum", API_31),
+    test31_DR("annotation-mapping-class"),
+    test31_DR("bean-validation"),
+    test31_DR("bean-validation-allof-required"),
+    test31_DR("bean-validation-iterable"),
+    test31_DR("bean-validation-jakarta"),
+    test31_D_("bean-validation-list-item-import"),
+    test31_D_("bean-validation-requestbody"),
+    test31_D_("bean-validation-requestbody-mapping"),
+    test31_DR("components-requestbodies"),
+    test31_DR("deprecated"),
+    test31_D_("endpoint-exclude"),
+    test31_D_("endpoint-http-mapping"), // framework specific
+    test31_DR("generated"),
+    test31_DR("javadoc"),
+    test31_DR("javadoc-with-mapping"),
+    test31_DR("keyword-identifier"),
+    test31_D_("map-from-additional-properties"),
+    test31_DR("map-from-additional-properties-with-package-name"),
+    test31_D_("method-operation-id"),
+    test31_DR("model-name-suffix"),
+    test31_DR("model-name-suffix-with-package-name"),
+    test31_D_("object-empty"),
+    test31_DR("object-nullable-properties"),
+    test31_DR("object-read-write-properties"),
+    test31_DR("object-without-properties"),
+    test31_D_("params-additional"),
+    test31_D_("params-additional-global"),
+    test31_DR("params-complex-data-types"), // framework specific
+    test31_D_("params-endpoint"),
+    test31_D_("params-enum"),
+
     TestParams("params-path-simple-data-types", API_31), // framework specific
     TestParams("params-request-body", API_31), // framework specific
     TestParams("params-request-body-multipart-form-data", API_31), // framework specific

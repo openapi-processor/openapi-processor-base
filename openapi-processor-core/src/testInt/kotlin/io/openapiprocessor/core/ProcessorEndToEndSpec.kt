@@ -52,11 +52,11 @@ private fun sources(): Collection<TestSet> {
         testSet(it.name, INTERNAL, it.openapi, model = "default", outputs = it.outputs, expected = it.expected)
     }
 
-    val openapi30r = ALL_30.filter { it.records }.map {
+    val openapi30r = ALL_30.filter { it.modelTypes.contains(ModelTypes.RECORD) }.map {
         testSet(it.name, INTERNAL, it.openapi, model = "record", outputs = it.outputs, expected = it.expected)
     }
 
-    val openapi31r = ALL_31.filter { it.records }.map {
+    val openapi31r = ALL_31.filter { it.modelTypes.contains(ModelTypes.RECORD) }.map {
         testSet(it.name, INTERNAL, it.openapi, model = "record", outputs = it.outputs, expected = it.expected)
     }
 

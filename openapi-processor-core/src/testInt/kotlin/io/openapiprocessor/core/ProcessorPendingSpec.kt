@@ -36,7 +36,7 @@ class ProcessorPendingSpec: StringSpec({
     }
 
     for (testSet in sources()) {
-        "jimfs - $testSet".config(enabled = false) {
+        "jimfs - $testSet".config(enabled = true) {
             val support = FileSupport(
                 ProcessorPendingSpec::class.java,
                 testSet.inputs, testSet.outputs
@@ -51,8 +51,8 @@ class ProcessorPendingSpec: StringSpec({
 
 private fun sources(): Collection<TestSet> {
     return listOf(
-        testSet("keyword-identifier", INTERNAL, API_30, model = "record", outputs = "outputs.yaml", expected = "outputs"),
-        testSet("keyword-identifier", INTERNAL, API_30, model = "default", outputs = "outputs.yaml", expected = "outputs"),
+        testSet("deprecated", INTERNAL, API_30, model = "record", outputs = "outputs.yaml", expected = "outputs"),
+//        testSet("keyword-identifier", INTERNAL, API_30, model = "default", outputs = "outputs.yaml", expected = "outputs"),
 //        testSet("bean-validation", INTERNAL, API_31, model = "record", outputs = "outputs.yaml", expected = "outputs"),
 //        testSet("bean-validation", INTERNAL, API_31, model = "default", outputs = "outputs.yaml", expected = "outputs"),
     )

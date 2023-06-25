@@ -1,0 +1,7 @@
+items:
+  - outputs/api/Api.java
+  - outputs/<model>/FooResource.java
+  - outputs/<model>/FooInlineResource.java
+  - outputs/<model>/BarResource.java
+  - outputs/<model>/ParamResource.java
+  - outputs/<model>/BodyResource.java

@@ -1,0 +1,5 @@
+items:
+  - outputs/api/EnumApi.java
+  - outputs/<model>/Bar.java
+  - outputs/<model>/Foo.java
+  - outputs/<model>/FooFoo.java
