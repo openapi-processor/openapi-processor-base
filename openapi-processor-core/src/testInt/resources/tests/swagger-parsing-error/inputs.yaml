@@ -3,4 +3,5 @@ items:
   - inputs/openapi31.yaml
   - inputs/apis/foo.yaml
   - inputs/examples/foo.example.yaml
+  - inputs/models/foo.model.yaml
   - inputs/mapping.yaml

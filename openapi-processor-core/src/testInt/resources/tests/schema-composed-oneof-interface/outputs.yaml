@@ -1,0 +1,6 @@
+items:
+  - outputs/api/Api.java
+  - outputs/<model>/Foo.java
+  - outputs/<model>/GenericProperties.java
+  - outputs/<model>/SpecificPropertiesOne.java
+  - outputs/<model>/SpecificPropertiesTwo.java

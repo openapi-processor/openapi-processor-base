@@ -1,0 +1,4 @@
+items:
+  - outputs/api/UserApi.java
+  - outputs/<model>/User.java
+  - outputs/<model>/UserSearch.java

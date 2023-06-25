@@ -1,0 +1,5 @@
+items:
+  - outputs/api/Api.java
+  - outputs/<model>/Bar.java
+  - outputs/<model>/Foo.java
+  - outputs/<model>/Self.java

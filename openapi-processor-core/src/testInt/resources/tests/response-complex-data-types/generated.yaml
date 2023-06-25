@@ -1,6 +1,0 @@
-items:
-  - generated/api/Api.java
-  - generated/model/Author.java
-  - generated/model/Book.java
-  - generated/model/BookInlineGetResponse200.java
-  - generated/model/BookNested.java

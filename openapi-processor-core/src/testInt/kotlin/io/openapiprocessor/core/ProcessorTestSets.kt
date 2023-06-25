@@ -86,39 +86,39 @@ val ALL_30: List<TestParams> = listOf(
     test30_DR("params-complex-data-types"), // framework specific
     test30_D_("params-endpoint"),
     test30_D_("params-enum"),
-
-    TestParams("params-path-simple-data-types", API_30), // framework specific
-    TestParams("params-request-body", API_30), // framework specific
-    TestParams("params-request-body-multipart-form-data", API_30), // framework specific
-    TestParams("params-simple-data-types", API_30), // framework specific
-    TestParams("ref-array-items-nested", API_30),
-    TestParams("ref-chain-spring-124.1", API_30),
-    TestParams("ref-chain-spring-124.2", API_30),
-    TestParams("ref-into-another-file", API_30),
-    TestParams("ref-into-another-file-path", API_30),
-    TestParams("ref-is-relative-to-current-file", API_30),
-    TestParams("ref-loop", API_30),
-    TestParams("ref-loop-array", API_30),
-    TestParams("ref-parameter", API_30),
-    TestParams("ref-parameter-with-primitive-mapping", API_30),
-    TestParams("ref-to-escaped-path-name", API_30),
-    TestParams("response-array-data-type-mapping", API_30),
-    TestParams("response-complex-data-types", API_30),
-    TestParams("response-content-multiple-no-content", API_30),
-    TestParams("response-content-multiple-style-all", API_30),
-    TestParams("response-content-multiple-style-success", API_30),
-    TestParams("response-content-single", API_30),
-    TestParams("response-multi-mapping-with-array-type-mapping", API_30),
-    TestParams("response-result-mapping", API_30),
-    TestParams("response-simple-data-types", API_30),
-    TestParams("response-single-multi-mapping", API_30),
-    TestParams("schema-composed", API_30),
-    TestParams("schema-composed-allof", API_30),
-    TestParams("schema-composed-allof-notype", API_30),
-    TestParams("schema-composed-allof-properties", API_30),
-    TestParams("schema-composed-allof-ref-sibling", API_30),
-    TestParams("schema-composed-nested", API_30),
-    TestParams("schema-composed-oneof-interface", API_30)
+    test30_D_("params-path-simple-data-types"), // framework specific
+    test30_DR("params-request-body"), // framework specific
+    test30_D_("params-request-body-multipart-form-data"), // framework specific
+    test30_D_("params-simple-data-types"), // framework specific
+    test30_DR("ref-array-items-nested"),
+    test30_DR("ref-chain-spring-124.1"),
+    test30_DR("ref-chain-spring-124.2"),
+    test30_DR("ref-into-another-file"),
+    test30_DR("ref-into-another-file-path"),
+    test30_DR("ref-is-relative-to-current-file"),
+    test30_DR("ref-loop"),
+    test30_DR("ref-loop-array"),
+    test30_D_("ref-parameter"),
+    test30_D_("ref-parameter-with-primitive-mapping"),
+    test30_DR("ref-to-escaped-path-name"),
+    test30_D_("response-array-data-type-mapping"),
+    test30_DR("response-complex-data-types"),
+    test30_DR("response-content-multiple-no-content"),
+    test30_DR("response-content-multiple-style-all"),
+    test30_DR("response-content-multiple-style-success"),
+    test30_D_("response-content-single"),
+    test30_DR("response-multi-mapping-with-array-type-mapping"),
+    test30_D_("response-result-mapping"),
+    test30_D_("response-simple-data-types"),
+    test30_DR("response-single-multi-mapping"),
+    test30_DR("schema-composed"),
+    test30_DR("schema-composed-allof"),
+    test30_DR("schema-composed-allof-notype"),
+    test30_DR("schema-composed-allof-properties"),
+    test30_DR("schema-composed-allof-ref-sibling"),
+    test30_DR("schema-composed-nested"),
+    test30_DR("schema-composed-oneof-interface"),
+    test30_DR("swagger-parsing-error")
 )
 
 val ALL_31: List<TestParams> = listOf(
@@ -152,37 +152,37 @@ val ALL_31: List<TestParams> = listOf(
     test31_DR("params-complex-data-types"), // framework specific
     test31_D_("params-endpoint"),
     test31_D_("params-enum"),
-
-    TestParams("params-path-simple-data-types", API_31), // framework specific
-    TestParams("params-request-body", API_31), // framework specific
-    TestParams("params-request-body-multipart-form-data", API_31), // framework specific
-    TestParams("params-simple-data-types", API_31), // framework specific
-    TestParams("ref-array-items-nested", API_31),
-    TestParams("ref-chain-spring-124.1", API_31),
-    TestParams("ref-chain-spring-124.2", API_31),
-    TestParams("ref-into-another-file", API_31),
-    TestParams("ref-into-another-file-path", API_31),
-    TestParams("ref-is-relative-to-current-file", API_31),
-    TestParams("ref-loop", API_31),
-    TestParams("ref-loop-array", API_31),
-    TestParams("ref-parameter", API_31),
-    TestParams("ref-parameter-with-primitive-mapping", API_31),
-    TestParams("ref-to-escaped-path-name", API_31),
-    TestParams("response-array-data-type-mapping", API_31),
-    TestParams("response-complex-data-types", API_31),
-    TestParams("response-content-multiple-no-content", API_31),
-    TestParams("response-content-multiple-style-all", API_31),
-    TestParams("response-content-multiple-style-success", API_31),
-    TestParams("response-content-single", API_31),
-    TestParams("response-multi-mapping-with-array-type-mapping", API_31),
-    TestParams("response-result-mapping", API_31),
-    TestParams("response-simple-data-types", API_31),
-    TestParams("response-single-multi-mapping", API_31),
-    TestParams("schema-composed", API_31),
-    TestParams("schema-composed-allof", API_31),
-    TestParams("schema-composed-allof-notype", API_31),
-    TestParams("schema-composed-allof-properties", API_31),
-    TestParams("schema-composed-allof-ref-sibling", API_31),
-    TestParams("schema-composed-nested", API_31),
-    TestParams("schema-composed-oneof-interface", API_31)
+    test31_D_("params-path-simple-data-types"), // framework specific
+    test31_DR("params-request-body"), // framework specific
+    test31_D_("params-request-body-multipart-form-data"), // framework specific
+    test31_D_("params-simple-data-types"), // framework specific
+    test31_DR("ref-array-items-nested"),
+    test31_DR("ref-chain-spring-124.1"),
+    test31_DR("ref-chain-spring-124.2"),
+    test31_DR("ref-into-another-file"),
+    test31_DR("ref-into-another-file-path"),
+    test31_DR("ref-is-relative-to-current-file"),
+    test31_DR("ref-loop"),
+    test31_DR("ref-loop-array"),
+    test31_D_("ref-parameter"),
+    test31_D_("ref-parameter-with-primitive-mapping"),
+    test31_DR("ref-to-escaped-path-name"),
+    test31_D_("response-array-data-type-mapping"),
+    test31_DR("response-complex-data-types"),
+    test31_DR("response-content-multiple-no-content"),
+    test31_DR("response-content-multiple-style-all"),
+    test31_DR("response-content-multiple-style-success"),
+    test31_D_("response-content-single"),
+    test31_DR("response-multi-mapping-with-array-type-mapping"),
+    test31_D_("response-result-mapping"),
+    test31_D_("response-simple-data-types"),
+    test31_DR("response-single-multi-mapping"),
+    test31_DR("schema-composed"),
+    test31_DR("schema-composed-allof"),
+    test31_DR("schema-composed-allof-notype"),
+    test31_DR("schema-composed-allof-properties"),
+    test31_DR("schema-composed-allof-ref-sibling"),
+    test31_DR("schema-composed-nested"),
+    test31_DR("schema-composed-oneof-interface"),
+    test31_DR("swagger-parsing-error")
 )

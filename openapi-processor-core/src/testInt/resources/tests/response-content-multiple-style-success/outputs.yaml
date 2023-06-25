@@ -1,0 +1,6 @@
+items:
+  - outputs/api/Api.java
+  - outputs/api/MixedApi.java
+  - outputs/api/NoneApi.java
+  - outputs/<model>/Error.java
+  - outputs/<model>/Foo.java

@@ -1,0 +1,5 @@
+items:
+  - outputs/api/Api.java
+  - outputs/<model>/Foo.java
+  - outputs/<model>/AllOfNoTypeGetResponse200.java
+#  - generated/model/AllOfNoTypeGetResponse200Foo.java

@@ -1,0 +1,6 @@
+items:
+  - outputs/api/Api.java
+  - outputs/<model>/One.java
+  - outputs/<model>/Two.java
+  - outputs/<model>/Three.java
+  - outputs/<model>/FooAllOf.java

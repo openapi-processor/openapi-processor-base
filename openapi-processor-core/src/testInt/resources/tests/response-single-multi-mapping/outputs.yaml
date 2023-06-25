@@ -1,0 +1,4 @@
+items:
+  - outputs/api/Api.java
+  - outputs/<model>/Author.java
+  - outputs/<model>/Book.java
