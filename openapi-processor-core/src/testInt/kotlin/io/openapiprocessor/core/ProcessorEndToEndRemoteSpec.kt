@@ -19,7 +19,7 @@ class ProcessorEndToEndRemoteSpec: StringSpec({
 
     val pkg = "generated"
     val mapping = """
-        openapi-processor-mapping: v2
+        openapi-processor-mapping: v4
     
         options:
           package-name: $pkg
@@ -46,19 +46,20 @@ class ProcessorEndToEndRemoteSpec: StringSpec({
             processor.run(options)
 
             val sourcePath = "/tests/$source"
-            val expectedPath = "$sourcePath/$pkg"
+            val expectedPath = "$sourcePath/outputs"
             val generatedPath = Path.of (folder.canonicalPath).resolve (pkg)
 
-            val files = FileSupport(ProcessorEndToEndRemoteSpec::class.java)
-            val expectedFiles = files.collectRelativeOutputPaths (sourcePath, pkg)
+            val files = FileSupport(ProcessorEndToEndRemoteSpec::class.java, "inputs.yaml", "outputs.yaml")
+            val expectedFiles = files.getExpectedFiles(sourcePath, "outputs")
+            val expectedFileNames = expectedFiles.map { it.replaceFirst("<model>", "model") }
             val generatedFiles = FileSupport.collectPaths (generatedPath)
 
-            generatedFiles.shouldContainAll(expectedFiles)
+            generatedFiles.shouldContainAll(expectedFileNames)
 
             var success = true
             expectedFiles.forEach {
-                val expected = "$expectedPath/$it"
-                val generated = generatedPath.resolve (it)
+                val expected = "$expectedPath/${it.replaceFirst("<model>", "model/default")}"
+                val generated = generatedPath.resolve (it.replaceFirst("<model>", "model"))
 
                 val hasDiff = !files.printUnifiedDiff (expected, generated)
 
