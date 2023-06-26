@@ -3,8 +3,8 @@ package generated.api;
 import annotation.Mapping;
 import annotation.Parameter;
 import generated.support.Generated;
+import io.oap.Bar;
 import javax.validation.Valid;
-import openapiprocessor.Bar;
 import reactor.core.publisher.Flux;
 
 @Generated(value = "openapi-processor-core", version = "test")

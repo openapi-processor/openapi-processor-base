@@ -9,4 +9,4 @@ map:
   multi: reactor.core.publisher.Flux
 
   types:
-    - type: Foo => openapiprocessor.Bar
+    - type: Foo => io.oap.Bar

@@ -2,7 +2,7 @@ package generated.api;
 
 import annotation.Mapping;
 import generated.support.Generated;
-import http.ResponseWrapper;
+import io.oap.Wrap;
 
 @Generated(value = "openapi-processor-core", version = "test")
 public interface Api {
@@ -11,6 +11,6 @@ public interface Api {
     String getFoo();
 
     @Mapping("/bar")
-    ResponseWrapper<String> getBar();
+    Wrap<String> getBar();
 
 }

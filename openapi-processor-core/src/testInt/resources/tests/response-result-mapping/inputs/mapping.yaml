@@ -9,4 +9,4 @@ map:
 
   paths:
     /bar:
-      result: http.ResponseWrapper
+      result: io.opa.Wrap

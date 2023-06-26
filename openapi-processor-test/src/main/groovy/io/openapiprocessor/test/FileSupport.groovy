@@ -205,6 +205,17 @@ class FileSupport {
     */
 
     /**
+     * check existence test items yaml
+     *
+     * @param resource path
+     * @param name of test items yaml file
+     * @return true if it exists, else false
+     */
+    boolean checkTestItems (String path, String itemsYaml) {
+        getResource ("${path}/${itemsYaml}") != null
+    }
+
+    /**
      * read test items yaml
      *
      * @param resource path

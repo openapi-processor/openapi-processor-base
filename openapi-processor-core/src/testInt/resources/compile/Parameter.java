@@ -1,15 +1,13 @@
-package io.oap;
+package annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.CLASS;
 
 @Documented
 @Retention(CLASS)
-@Target({FIELD})
-public @interface Annotation {
-    Class<?> value();
-}
+@Target({PARAMETER})
+public @interface Parameter {}

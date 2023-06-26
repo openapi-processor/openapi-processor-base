@@ -2,6 +2,7 @@
  * Copyright 2023 https://github.com/openapi-processor/openapi-processor-core
  * PDX-License-Identifier: Apache-2.0
  */
+
 package io.openapiprocessor.core
 
 import io.kotest.core.spec.style.StringSpec
@@ -45,30 +46,41 @@ class CompileExpectedSpec: StringSpec({
     }
 
     for (testSet in sources()) {
-        "compile - $testSet".config(enabled = false) {
+        "compile - $testSet".config(enabled = true) {
             val support = FileSupport(
                 CompileExpectedSpec::class.java,
                 testSet.inputs, testSet.outputs
             )
 
-            val diagnostics = DiagnosticCollector<JavaFileObject>()
-            val compiler = ToolProvider.getSystemJavaCompiler()
-            val manager = MemoryFileManager(compiler.getStandardFileManager(diagnostics, null, null))
-
             val source = testSet.name
             val sourcePath = "/tests/$source"
-            val expected = support.readTestItems(sourcePath, "outputs.yaml").items
-
-            val expectedFileNames = expected.map { it.replaceFirst("<model>", "model/${testSet.modelType}") }
-            val additionalFileNames = support.readTestItems(sourcePath, "compile.yaml").items
 
             val compilePaths = mutableListOf<Path>()
+            if (source != "generated") {
+                compilePaths.add(Path.of("src/testInt/resources/compile/Generated.java"))
+            }
+            compilePaths.add(Path.of("src/testInt/resources/compile/Mapping.java"))
+            compilePaths.add(Path.of("src/testInt/resources/compile/Parameter.java"))
+            compilePaths.add(Path.of("src/testInt/resources/compile/jakarta/Valid.java"))
+            compilePaths.add(Path.of("src/testInt/resources/compile/jakarta/Size.java"))
+            compilePaths.add(Path.of("src/testInt/resources/compile/javax/Valid.java"))
+
+            val expected = support.readTestItems(sourcePath, "outputs.yaml").items
+            val expectedFileNames = expected.map { it.replaceFirst("<model>", "model/${testSet.modelType}") }
             expectedFileNames.forEach {
                 compilePaths.add(Path.of("src/testInt/resources${sourcePath}/$it"))
             }
-            additionalFileNames.forEach {
-                compilePaths.add(Path.of("src/testInt/resources/$it"))
+
+            if (support.checkTestItems(sourcePath, "compile.yaml")) {
+                val additionalFileNames = support.readTestItems(sourcePath, "compile.yaml").items
+                additionalFileNames.forEach {
+                    compilePaths.add(Path.of("src/testInt/resources/$it"))
+                }
             }
+
+            val diagnostics = DiagnosticCollector<JavaFileObject>()
+            val compiler = ToolProvider.getSystemJavaCompiler()
+            val manager = MemoryFileManager(compiler.getStandardFileManager(diagnostics, null, null))
 
             val options = listOf<String>()
             val compilationUnit = manager.getJavaFileObjectsFromPaths(compilePaths)
@@ -83,7 +95,6 @@ class CompileExpectedSpec: StringSpec({
             success.shouldBeTrue()
         }
     }
-
 })
 
 private fun sources(): Collection<TestSet> {
