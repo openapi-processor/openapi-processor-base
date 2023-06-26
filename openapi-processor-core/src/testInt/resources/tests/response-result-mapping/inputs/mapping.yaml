@@ -9,4 +9,4 @@ map:
 
   paths:
     /bar:
-      result: io.opa.Wrap
+      result: io.oap.Wrap
