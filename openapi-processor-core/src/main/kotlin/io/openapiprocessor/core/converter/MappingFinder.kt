@@ -60,9 +60,11 @@ class MappingFinder(private val typeMappings: List<Mapping> = emptyList()) {
         return typeMappings
             .filterIsInstance<AnnotationTypeMapping>()
             .filter {
+                val matchObject = it.sourceTypeName == "object"
                 val matchType = it.sourceTypeName == type
                 val matchFormat = it.sourceTypeFormat == format
-                matchType && matchFormat
+
+                (matchType && matchFormat) || (matchObject && matchFormat)
             }
     }
 

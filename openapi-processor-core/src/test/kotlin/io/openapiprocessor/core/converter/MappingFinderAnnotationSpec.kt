@@ -26,6 +26,19 @@ class MappingFinderAnnotationSpec: StringSpec({
         mapping.first().sourceTypeName shouldBe "Foo"
     }
 
+    "find 'object' type annotation mapping" {
+        val finder = MappingFinder(listOf(
+            AnnotationTypeMapping(
+                "object", null,
+                Annotation("annotation.Bar"))
+        ))
+
+        val mapping = finder.findTypeAnnotations("Foo")
+
+        mapping.size shouldBe 1
+        mapping.first().sourceTypeName shouldBe "object"
+    }
+
     "find type:format annotation mapping" {
         val finder = MappingFinder(listOf(
             AnnotationTypeMapping(
