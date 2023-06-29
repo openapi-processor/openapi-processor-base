@@ -82,7 +82,7 @@ class DataTypeWriterPojo(
 
     private fun writeAnnotationsMappings(target: Writer, dataType: ModelDataType) {
         val annotationTypeMappings = MappingFinder(apiOptions.typeMappings)
-            .findTypeAnnotations(dataType.getTypeName())
+            .findTypeAnnotations(dataType.getTypeName(), true)
 
         annotationTypeMappings.forEach {
             annotationWriter.write(target, Annotation(it.annotation.type, it.annotation.parameters))
@@ -273,7 +273,7 @@ class DataTypeWriterPojo(
         imports.addAll(dataType.referencedImports)
 
         val annotationTypeMappings = MappingFinder(apiOptions.typeMappings)
-            .findTypeAnnotations(dataType.getTypeName())
+            .findTypeAnnotations(dataType.getTypeName(), true)
 
         annotationTypeMappings.forEach {
             imports.add(it.annotation.type)

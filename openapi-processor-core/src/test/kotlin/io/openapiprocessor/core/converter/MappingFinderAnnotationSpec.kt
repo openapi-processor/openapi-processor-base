@@ -6,10 +6,15 @@
 package io.openapiprocessor.core.converter
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.converter.mapping.Annotation
 import io.openapiprocessor.core.converter.mapping.AnnotationTypeMapping
 import io.openapiprocessor.core.converter.mapping.ParameterAnnotationTypeMapping
+import io.openapiprocessor.core.model.datatypes.ArrayDataType
+import io.openapiprocessor.core.model.datatypes.StringDataType
+import io.openapiprocessor.core.support.datatypes.ObjectDataType
+import io.openapiprocessor.core.support.datatypes.propertyDataTypeString
 
 class MappingFinderAnnotationSpec: StringSpec({
 
@@ -26,17 +31,35 @@ class MappingFinderAnnotationSpec: StringSpec({
         mapping.first().sourceTypeName shouldBe "Foo"
     }
 
-    "find 'object' type annotation mapping" {
+    "find 'object' type annotation mapping for model data type" {
         val finder = MappingFinder(listOf(
             AnnotationTypeMapping(
                 "object", null,
                 Annotation("annotation.Bar"))
         ))
 
-        val mapping = finder.findTypeAnnotations("Foo")
+        val dataType = ObjectDataType("Foo", "pkg", linkedMapOf(
+            Pair("foo", propertyDataTypeString())
+        ))
+
+        val mapping = finder.findTypeAnnotations(dataType.getTypeName(), true)
 
         mapping.size shouldBe 1
         mapping.first().sourceTypeName shouldBe "object"
+    }
+
+    "ignore 'object' type annotation mapping for non model data types" {
+        val finder = MappingFinder(listOf(
+            AnnotationTypeMapping(
+                "object", null,
+                Annotation("annotation.Bar"))
+        ))
+
+        val mappingSimple = finder.findTypeAnnotations(StringDataType().getTypeName())
+        mappingSimple.shouldBeEmpty()
+
+        val mappingCollection = finder.findTypeAnnotations(ArrayDataType(StringDataType()).getTypeName())
+        mappingCollection.shouldBeEmpty()
     }
 
     "find type:format annotation mapping" {

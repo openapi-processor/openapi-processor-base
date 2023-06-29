@@ -347,4 +347,45 @@ class DataTypeWriterPojoSpec: StringSpec({
             |}
             """.trimMargin()
     }
+
+    "writes additional annotation from 'object' annotation mapping" {
+        options.typeMappings = listOf(
+            AnnotationTypeMapping(
+                "object", annotation = MappingAnnotation("foo.Bar", linkedMapOf())
+            )
+        )
+
+        writer = DataTypeWriterPojo(options, generatedWriter, BeanValidationFactory())
+
+        val dataType = ObjectDataType("Object",
+            "pkg", linkedMapOf(
+                "foo" to propertyDataType(ObjectDataType("Foo", "model")))
+            )
+
+        // when:
+        writer.write(target, dataType)
+
+        // then:
+        target.toString() shouldContain
+            """    
+            |@Bar
+            |@Generated
+            |public class Object {
+            |
+            |    @JsonProperty("foo")
+            |    private Foo foo;
+            |
+            |    public Foo getFoo() {
+            |        return foo;
+            |    }
+            |
+            |    public void setFoo(Foo foo) {
+            |        this.foo = foo;
+            |    }
+            |
+            |}
+            """.trimMargin()
+    }
+
+
 })
