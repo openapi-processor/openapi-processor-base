@@ -8,6 +8,7 @@ package io.openapiprocessor.core.writer.java
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContain
+import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.mapping.Annotation as MappingAnnotation
@@ -20,6 +21,7 @@ import io.openapiprocessor.core.support.datatypes.ListDataType
 import io.openapiprocessor.core.support.datatypes.propertyDataType
 import io.openapiprocessor.core.support.datatypes.propertyDataTypeString
 import java.io.StringWriter
+import java.util.*
 
 class DataTypeWriterPojoSpec: StringSpec({
     this.isolationMode = IsolationMode.InstancePerTest
@@ -387,5 +389,51 @@ class DataTypeWriterPojoSpec: StringSpec({
             """.trimMargin()
     }
 
+    "skips additional annotation from annotation mapping for un-mapped object datatype property" {
+        options.typeMappings = listOf(
+            AnnotationTypeMapping(
+                "Foo", annotation = MappingAnnotation("foo.Bar", linkedMapOf())
+            )
+        )
+
+        writer = DataTypeWriterPojo(options, generatedWriter, BeanValidationFactory())
+
+        val dataType = ObjectDataType("Object",
+            "pkg", linkedMapOf(
+                "foo" to propertyDataType(ObjectDataType("Foo", "model")))
+            )
+
+        // when:
+        writer.write(target, dataType)
+
+        // then:
+        val t1 = target.toString()
+        val t2 =
+            """package pkg;
+            |
+            |import com.fasterxml.jackson.annotation.JsonProperty;
+            |import io.openapiprocessor.generated.support.Generated;
+            |import model.Foo;
+            |
+            |@Generated
+            |public class Object {
+            |
+            |    @JsonProperty("foo")
+            |    private Foo foo;
+            |
+            |    public Foo getFoo() {
+            |        return foo;
+            |    }
+            |
+            |    public void setFoo(Foo foo) {
+            |        this.foo = foo;
+            |    }
+            |
+            |}
+            |
+            """.trimMargin()
+
+        Arrays.mismatch(t1.toByteArray(), t2.toByteArray()).shouldBe(-1)
+    }
 
 })

@@ -167,13 +167,15 @@ class DataTypeWriterPojo(
             propTypeName = prop.dataTypeValue
         }
 
-        val annotationTypeMappings = MappingFinder(apiOptions.typeMappings)
-            .findTypeAnnotations(propDataType.dataType.getSourceName())
+        if (propDataType.dataType !is ObjectDataType) {
+            val annotationTypeMappings = MappingFinder(apiOptions.typeMappings)
+                .findTypeAnnotations(propDataType.dataType.getSourceName())
 
-        annotationTypeMappings.forEach {
-            val annotation = StringWriter()
-            annotationWriter.write(annotation, Annotation(it.annotation.type, it.annotation.parameters))
-            result += "    $annotation\n"
+            annotationTypeMappings.forEach {
+                val annotation = StringWriter()
+                annotationWriter.write(annotation, Annotation(it.annotation.type, it.annotation.parameters))
+                result += "    $annotation\n"
+            }
         }
 
         result += "    ${getPropertyAnnotation(propertyName, propDataType)}\n"
@@ -307,6 +309,11 @@ class DataTypeWriterPojo(
 
         dataType.forEach { _, propDataType ->
             imports.add("com.fasterxml.jackson.annotation.JsonProperty")
+
+            // do not annotate unmapped, i.e. generated pojo property
+            if ((propDataType is PropertyDataType) && (propDataType.dataType is ObjectDataType)) {
+                return@forEach
+            }
 
             val target = getTarget(propDataType)
             val annotationTypeMappings = MappingFinder(apiOptions.typeMappings)
