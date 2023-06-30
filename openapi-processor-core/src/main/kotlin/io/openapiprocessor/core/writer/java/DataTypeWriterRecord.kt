@@ -26,8 +26,10 @@ class DataTypeWriterRecord(
     override fun write(target: Writer, dataType: ModelDataType) {
         writeFileHeader(target, dataType)
         writePreClass(target, dataType)
+        writeRecord(target, dataType)
+    }
 
-        // class
+    private fun writeRecord(target: Writer, dataType: ModelDataType) {
         writeRecordOpen(target, dataType)
         writeRecordParameter(target, dataType)
         writeRecordImplements(target, dataType)

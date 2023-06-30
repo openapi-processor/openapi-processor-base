@@ -27,8 +27,10 @@ class DataTypeWriterPojo(
     override fun write(target: Writer, dataType: ModelDataType) {
         writeFileHeader(target, dataType)
         writePreClass(target, dataType)
+        writeClass(target, dataType)
+    }
 
-        // class
+    private fun writeClass(target: Writer, dataType: ModelDataType) {
         writeClassOpen(target, dataType)
         writeClassProperties(target, dataType)
         writeClassMethods(dataType, target)
