@@ -6,12 +6,10 @@
 package io.openapiprocessor.core.writer.java
 
 import io.openapiprocessor.core.converter.ApiOptions
-import io.openapiprocessor.core.converter.MappingFinder
-import io.openapiprocessor.core.model.datatypes.*
-import java.io.StringWriter
+import io.openapiprocessor.core.model.datatypes.DataType
+import io.openapiprocessor.core.model.datatypes.ModelDataType
+import io.openapiprocessor.core.model.datatypes.PropertyDataType
 import java.io.Writer
-
-private const val deprecated = "@Deprecated"
 
 /**
  * Writer for POJO classes with java 14 records.
@@ -48,7 +46,8 @@ class DataTypeWriterRecord(
                 propName,
                 javaPropertyName,
                 propDataType as PropertyDataType,
-                dataType.isRequired(propName))
+                dataType.isRequired(propName),
+                Access.NONE)
 
             // todo can't init record parameter here
             // null (JsonNullable) may have an init value
@@ -82,77 +81,4 @@ class DataTypeWriterRecord(
     ) {
         target.write("public record ${dataType.getTypeName()}")
     }
-
-    private fun getProp(
-        propertyName: String,
-        javaPropertyName: String,
-        propDataType: PropertyDataType,
-        required: Boolean): String {
-
-        var result = ""
-
-        if (apiOptions.javadoc) {
-            result += javadocWriter.convert(propDataType)
-        }
-
-        result += ifDeprecated(propDataType)
-
-        var propTypeName = propDataType.getTypeName()
-        if(apiOptions.beanValidation) {
-            val info = validationAnnotations.validate(propDataType.dataType, required)
-            val prop = info.prop
-            prop.annotations.forEach {
-                result += "    ${it}\n"
-            }
-            propTypeName = prop.dataTypeValue
-        }
-
-        val annotationTypeMappings = MappingFinder(apiOptions.typeMappings)
-            .findTypeAnnotations(propDataType.dataType.getSourceName())
-
-        annotationTypeMappings.forEach {
-            val annotation = StringWriter()
-            annotationWriter.write(annotation, Annotation(it.annotation.type, it.annotation.parameters))
-            result += "    $annotation\n"
-        }
-
-        result += "    ${getPropertyAnnotation(propertyName, propDataType)}\n"
-        result += "    $propTypeName $javaPropertyName"
-
-        return result
-    }
-
-    private fun getPropertyAnnotation(propertyName: String, propDataType: PropertyDataType): String {
-        val access = getAccess(propDataType)
-
-        var result = "@JsonProperty("
-        if (access != null) {
-            result += "value = \"$propertyName\", access = JsonProperty.Access.${access.value}"
-        } else {
-            result += "\"$propertyName\""
-        }
-
-        result += ")"
-        return result
-    }
-
-    private fun getAccess(propDataType: PropertyDataType): PropertyAccess? {
-        if (!propDataType.readOnly && !propDataType.writeOnly)
-            return null
-
-        return when {
-            propDataType.readOnly -> PropertyAccess("READ_ONLY")
-            propDataType.writeOnly -> PropertyAccess("WRITE_ONLY")
-            else -> throw IllegalStateException()
-        }
-    }
-
-    private fun ifDeprecated(propDataType: DataType): String {
-        return if (propDataType.deprecated) {
-            "    $deprecated\n"
-        } else {
-            ""
-        }
-    }
 }
-
