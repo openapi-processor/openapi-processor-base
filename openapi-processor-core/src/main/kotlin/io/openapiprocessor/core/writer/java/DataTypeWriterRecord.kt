@@ -49,6 +49,14 @@ class DataTypeWriterRecord(
                 javaPropertyName,
                 propDataType as PropertyDataType,
                 dataType.isRequired(propName))
+
+            // todo can't init record parameter here
+            // null (JsonNullable) may have an init value
+            // val dataType = propDataType.dataType
+            // if (dataType is NullDataType && dataType.init != null) {
+            //     result += " = ${dataType.init}"
+            // }
+
             props.add(propSource)
         }
 
@@ -110,13 +118,6 @@ class DataTypeWriterRecord(
 
         result += "    ${getPropertyAnnotation(propertyName, propDataType)}\n"
         result += "    $propTypeName $javaPropertyName"
-
-        // todo can't init record parameter
-        // null (JsonNullable) may have an init value
-//        val dataType = propDataType.dataType
-//        if (dataType is NullDataType && dataType.init != null) {
-//            result += " = ${dataType.init}"
-//        }
 
         return result
     }

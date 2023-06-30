@@ -50,11 +50,18 @@ class DataTypeWriterPojo(
         val props = mutableListOf<String>()
         dataType.forEach { propName, propDataType ->
             val javaPropertyName = toIdentifier(propName)
-            val propSource = getProp(
+            var propSource = getProp(
                 propName,
                 javaPropertyName,
                 propDataType as PropertyDataType,
                 dataType.isRequired(propName))
+
+            // null (JsonNullable) may have an init value
+            val pDataType = propDataType.dataType
+            if (pDataType is NullDataType && pDataType.init != null) {
+                propSource += " = ${pDataType.init}"
+            }
+
             props.add(propSource)
         }
 
@@ -128,12 +135,6 @@ class DataTypeWriterPojo(
 
         result += "    ${getPropertyAnnotation(propertyName, propDataType)}\n"
         result += "    private $propTypeName $javaPropertyName"
-
-        // null (JsonNullable) may have an init value
-        val dataType = propDataType.dataType
-        if (dataType is NullDataType && dataType.init != null) {
-            result += " = ${dataType.init}"
-        }
 
         return result
     }
