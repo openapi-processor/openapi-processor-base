@@ -47,14 +47,20 @@ class DataTypeWriterPojo(
     }
 
     private fun writeClassProperties(target: Writer, dataType: ModelDataType) {
+        val props = mutableListOf<String>()
         dataType.forEach { propName, propDataType ->
             val javaPropertyName = toIdentifier(propName)
-            target.write(
-                getProp(
-                    propName, javaPropertyName, propDataType as PropertyDataType,
-                    dataType.isRequired(propName)
-                )
-            )
+            val propSource = getProp(
+                propName,
+                javaPropertyName,
+                propDataType as PropertyDataType,
+                dataType.isRequired(propName))
+            props.add(propSource)
+        }
+
+        target.write(props.joinToString(";\n\n"))
+        if (props.isNotEmpty()) {
+            target.write(";\n\n")
         }
     }
 
@@ -129,7 +135,6 @@ class DataTypeWriterPojo(
             result += " = ${dataType.init}"
         }
 
-        result += ";\n\n"
         return result
     }
 
