@@ -11,6 +11,8 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.openapiprocessor.core.parser.ParserType.*
+import io.openapiprocessor.test.API_30
+import io.openapiprocessor.test.API_31
 import io.openapiprocessor.test.FileSupport
 import io.openapiprocessor.test.TestSet
 import io.openapiprocessor.test.TestSetRunner
@@ -51,7 +53,7 @@ class ProcessorPendingSpec: StringSpec({
 
 private fun sources(): Collection<TestSet> {
     return listOf(
-        testSet("deprecated", INTERNAL, API_30, model = "record", outputs = "outputs.yaml", expected = "outputs"),
+        testSet("annotation-mapping-class", INTERNAL, API_30, model = "record", outputs = "outputs.yaml", expected = "outputs"),
 //        testSet("keyword-identifier", INTERNAL, API_30, model = "default", outputs = "outputs.yaml", expected = "outputs"),
 //        testSet("bean-validation", INTERNAL, API_31, model = "record", outputs = "outputs.yaml", expected = "outputs"),
 //        testSet("bean-validation", INTERNAL, API_31, model = "default", outputs = "outputs.yaml", expected = "outputs"),

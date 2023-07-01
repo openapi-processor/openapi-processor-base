@@ -10,6 +10,7 @@ import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.openapiprocessor.core.parser.ParserType.*
 import io.openapiprocessor.test.FileSupport
+import io.openapiprocessor.test.ModelTypes
 import io.openapiprocessor.test.TestSet
 import io.openapiprocessor.test.TestSetRunner
 

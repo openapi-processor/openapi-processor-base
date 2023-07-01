@@ -9,6 +9,7 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.openapiprocessor.core.parser.ParserType
 import io.openapiprocessor.test.FileSupport
+import io.openapiprocessor.test.ModelTypes
 import io.openapiprocessor.test.TestSet
 import java.io.ByteArrayOutputStream
 import java.io.OutputStream

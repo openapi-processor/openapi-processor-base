@@ -5,55 +5,7 @@
 
 package io.openapiprocessor.core
 
-enum class ModelTypes {DEFAULT, RECORD}
-
-data class TestParams(
-    val name: String,
-    val openapi: String,
-    val outputs: String = "generated.yaml",
-    val expected: String = "generated",
-    val modelTypes: List<ModelTypes> = listOf(ModelTypes.DEFAULT)
-)
-
-fun test30_D_(
-    name: String,
-    openapi: String = API_30,
-    outputs: String = "outputs.yaml",
-    expected: String = "outputs",
-    modelTypes: List<ModelTypes> = listOf(ModelTypes.DEFAULT)
-): TestParams {
-    return TestParams(name, openapi, outputs, expected, modelTypes)
-}
-
-fun test30_DR(
-    name: String,
-    openapi: String = API_30,
-    outputs: String = "outputs.yaml",
-    expected: String = "outputs",
-    modelTypes: List<ModelTypes> = listOf(ModelTypes.DEFAULT, ModelTypes.RECORD)
-): TestParams {
-    return TestParams(name, openapi, outputs, expected, modelTypes)
-}
-
-fun test31_D_(
-    name: String,
-    openapi: String = API_31,
-    outputs: String = "outputs.yaml",
-    expected: String = "outputs",
-    modelTypes: List<ModelTypes> = listOf(ModelTypes.DEFAULT)
-): TestParams {
-    return TestParams(name, openapi, outputs, expected, modelTypes)
-}
-
-fun test31_DR(
-    name: String,
-    openapi: String = API_31,
-    outputs: String = "outputs.yaml",
-    expected: String = "outputs",
-    modelTypes: List<ModelTypes> = listOf(ModelTypes.DEFAULT, ModelTypes.RECORD)
-): TestParams {
-    return TestParams(name, openapi, outputs, expected, modelTypes)
-}
+import io.openapiprocessor.test.*
 
 val ALL_30: List<TestParams> = listOf(
     test30_DR("annotation-mapping-class"),

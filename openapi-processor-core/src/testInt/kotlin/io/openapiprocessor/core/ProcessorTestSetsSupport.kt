@@ -9,10 +9,6 @@ import io.openapiprocessor.core.parser.ParserType
 import io.openapiprocessor.test.TestSet
 
 
-const val API_30 = "openapi30.yaml"
-const val API_31 = "openapi31.yaml"
-
-
 @Suppress("SameParameterValue")
 fun testSet(
     name: String,
