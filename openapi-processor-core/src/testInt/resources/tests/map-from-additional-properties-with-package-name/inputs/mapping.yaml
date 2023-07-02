@@ -4,6 +4,7 @@ options:
   generated-date: false
   package-name: generated
   bean-validation: javax
+  format-code: true
   javadoc: true
 
 map:
