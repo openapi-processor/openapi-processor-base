@@ -50,7 +50,7 @@ data class Options(
     /**
      * enable/disable the code formatter (optional)
      */
-    val formatCode: Boolean = true,
+    val formatCode: Boolean = false,
 
     /**
      * enable/disable the @Generated date (optional)
