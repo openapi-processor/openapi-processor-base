@@ -10,7 +10,7 @@ junit = "5.9.3"
 jacoco = "0.8.7"
 
 [libraries]
-openapi-processor-api = "io.openapiprocessor:openapi-processor-api:2023.1-SNAPSHOT"
+openapi-processor-api = "io.openapiprocessor:openapi-processor-api:2023.1"
 
 openapi-parser-bom = "io.openapiprocessor:openapi-parser-bom:2023.2"
 openapi-parser-parser = { module = "io.openapiprocessor:openapi-parser" }
