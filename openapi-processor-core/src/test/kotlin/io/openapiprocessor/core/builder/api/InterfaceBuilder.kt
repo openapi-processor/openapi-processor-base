@@ -6,7 +6,7 @@
 package io.openapiprocessor.core.builder.api
 
 import io.openapiprocessor.core.model.Endpoint
-import io.openapiprocessor.core.model.HttpMethod
+import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.model.Interface
 import io.openapiprocessor.core.builder.api.endpoint as ep
 

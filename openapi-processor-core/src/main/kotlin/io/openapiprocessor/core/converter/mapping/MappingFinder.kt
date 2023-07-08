@@ -7,7 +7,7 @@ package io.openapiprocessor.core.converter.mapping
 
 import io.openapiprocessor.core.converter.SchemaInfo
 import io.openapiprocessor.core.converter.mapping.matcher.*
-import io.openapiprocessor.core.model.HttpMethod
+import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
 
 /**

@@ -6,7 +6,7 @@
 package io.openapiprocessor.core.support
 
 import io.openapiprocessor.core.converter.SchemaInfo
-import io.openapiprocessor.core.model.HttpMethod
+import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.parser.OpenApi
 import io.openapiprocessor.core.parser.Schema
 
@@ -110,7 +110,7 @@ fun OpenApi.getParameterSchemaInfo(path: String, method: HttpMethod, name: Strin
  * @return the [SchemaInfo]
  */
 fun OpenApi.getSchemaInfo(name: String, path: String, method: HttpMethod, status: String,
-          mediaType: String): SchemaInfo {
+                          mediaType: String): SchemaInfo {
     val schema = getSchema(path, method, status, mediaType)
     return SchemaInfo(SchemaInfo.Endpoint(path, method), name, mediaType, schema, getRefResolver())
 }

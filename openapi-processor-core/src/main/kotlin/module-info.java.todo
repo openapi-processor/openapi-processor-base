@@ -1,0 +1,8 @@
+module io.openapiprocessor.core {
+    requires org.antlr.antlr4.runtime;
+    requires io.openapiprocessor.test;
+
+    exports io.openapiprocessor.core;
+
+    uses java.net.spi.URLStreamHandlerProvider;
+}

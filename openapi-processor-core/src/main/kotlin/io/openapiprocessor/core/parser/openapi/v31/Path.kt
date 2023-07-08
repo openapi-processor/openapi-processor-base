@@ -7,7 +7,7 @@ package io.openapiprocessor.core.parser.openapi.v31
 
 import io.openapiparser.model.v31.PathItem
 import io.openapiparser.model.v31.Operation
-import io.openapiprocessor.core.model.HttpMethod
+import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.parser.Operation as ParserOperation
 import io.openapiprocessor.core.parser.Path as ParserPath
 

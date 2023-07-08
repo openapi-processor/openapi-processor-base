@@ -11,7 +11,7 @@ import io.kotest.matchers.types.shouldBeInstanceOf
 import io.openapiprocessor.core.converter.mapping.EndpointTypeMapping
 import io.openapiprocessor.core.converter.mapping.NullTypeMapping
 import io.openapiprocessor.core.model.DataTypes
-import io.openapiprocessor.core.model.HttpMethod
+import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.model.datatypes.ObjectDataType
 import io.openapiprocessor.core.support.getBodySchemaInfo
 import io.openapiprocessor.core.support.parse

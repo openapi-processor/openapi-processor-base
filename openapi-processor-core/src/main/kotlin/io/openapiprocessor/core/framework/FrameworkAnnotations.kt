@@ -17,7 +17,7 @@
 package io.openapiprocessor.core.framework
 
 import io.openapiprocessor.core.model.parameters.Parameter
-import io.openapiprocessor.core.model.HttpMethod
+import io.openapiprocessor.core.parser.HttpMethod
 
 /**
  * provides annotation details of the framework.

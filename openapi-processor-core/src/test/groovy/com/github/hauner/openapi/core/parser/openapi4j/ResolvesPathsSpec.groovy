@@ -19,7 +19,7 @@ package com.github.hauner.openapi.core.parser.openapi4j
 import com.github.hauner.openapi.core.test.parser.OpenApi4jParser
 import com.google.common.jimfs.Configuration
 import com.google.common.jimfs.Jimfs
-import io.openapiprocessor.core.model.HttpMethod
+import io.openapiprocessor.core.parser.HttpMethod
 import spock.lang.Specification
 
 import java.nio.file.Files

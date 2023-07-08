@@ -6,7 +6,7 @@
 package io.openapiprocessor.core.converter.mapping.matcher
 
 import io.openapiprocessor.core.converter.mapping.EndpointTypeMapping
-import io.openapiprocessor.core.model.HttpMethod
+import io.openapiprocessor.core.parser.HttpMethod
 
 /**
  * [io.openapiprocessor.core.converter.mapping.MappingFinder] matcher for endpoint type mappings.

@@ -6,7 +6,7 @@
 package io.openapiprocessor.core.parser.swagger
 
 import io.openapiprocessor.core.parser.Path as ParserPath
-import io.openapiprocessor.core.model.HttpMethod
+import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.parser.Operation as ParserOperation
 import io.swagger.v3.oas.models.PathItem as SwaggerPath
 import io.swagger.v3.oas.models.Operation as SwaggerOperation

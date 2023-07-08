@@ -8,6 +8,7 @@ package io.openapiprocessor.core.model
 
 import io.openapiprocessor.core.model.parameters.MultipartParameter
 import io.openapiprocessor.core.model.parameters.Parameter
+import io.openapiprocessor.core.parser.HttpMethod
 
 /**
  * Endpoint properties.

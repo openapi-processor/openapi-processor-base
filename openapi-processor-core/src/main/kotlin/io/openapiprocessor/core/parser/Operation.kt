@@ -5,8 +5,6 @@
 
 package io.openapiprocessor.core.parser
 
-import io.openapiprocessor.core.model.HttpMethod
-
 /**
  * OpenAPI Operation abstraction.
  */

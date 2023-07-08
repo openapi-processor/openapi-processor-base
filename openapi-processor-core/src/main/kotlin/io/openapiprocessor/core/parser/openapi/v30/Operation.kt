@@ -5,7 +5,7 @@
 
 package io.openapiprocessor.core.parser.openapi.v30
 
-import io.openapiprocessor.core.model.HttpMethod
+import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiparser.model.v30.Operation as Operation30
 import io.openapiparser.model.v30.Parameter as Parameter30
 import io.openapiparser.model.v30.PathItem as Path30

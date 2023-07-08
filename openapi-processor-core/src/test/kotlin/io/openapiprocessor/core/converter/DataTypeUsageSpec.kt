@@ -11,7 +11,7 @@ import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.converter.mapping.TargetType
 import io.openapiprocessor.core.converter.mapping.TypeMapping
 import io.openapiprocessor.core.model.DataTypes
-import io.openapiprocessor.core.model.HttpMethod.GET
+import io.openapiprocessor.core.parser.HttpMethod.GET
 import io.openapiprocessor.core.support.getSchemaInfo
 import io.openapiprocessor.core.support.parse
 

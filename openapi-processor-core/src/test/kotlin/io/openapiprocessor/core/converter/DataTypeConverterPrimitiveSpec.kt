@@ -14,7 +14,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.openapiprocessor.core.converter.mapping.MappingFinder
 import io.openapiprocessor.core.model.DataTypes
-import io.openapiprocessor.core.model.HttpMethod
+import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.parser.RefResolver
 import io.openapiprocessor.core.parser.Schema
 

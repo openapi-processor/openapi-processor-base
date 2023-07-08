@@ -7,7 +7,7 @@ package io.openapiprocessor.core
 
 import io.openapiprocessor.core.framework.FrameworkAnnotation
 import io.openapiprocessor.core.framework.FrameworkAnnotations
-import io.openapiprocessor.core.model.HttpMethod
+import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.model.parameters.Parameter
 
 val MAPPING = FrameworkAnnotation("Mapping", "annotation")

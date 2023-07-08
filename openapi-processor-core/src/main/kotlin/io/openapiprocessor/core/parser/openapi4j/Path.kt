@@ -6,7 +6,7 @@
 package io.openapiprocessor.core.parser.openapi4j
 
 import io.openapiprocessor.core.parser.Path as ParserPath
-import io.openapiprocessor.core.model.HttpMethod
+import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.parser.Operation as ParserOperation
 import org.openapi4j.parser.model.v3.Path as Oa4jPath
 

@@ -8,7 +8,7 @@ package io.openapiprocessor.core.builder.api
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
-import io.openapiprocessor.core.model.HttpMethod
+import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.model.datatypes.StringDataType
 
 class EndpointBuilderSpec: StringSpec({

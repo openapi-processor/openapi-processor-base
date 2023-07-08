@@ -5,7 +5,7 @@
 
 package io.openapiprocessor.core.converter.mapping
 
-import io.openapiprocessor.core.model.HttpMethod
+import io.openapiprocessor.core.parser.HttpMethod
 
 /**
  * Used with [io.openapiprocessor.core.converter.ApiOptions] to store endpoint specific type

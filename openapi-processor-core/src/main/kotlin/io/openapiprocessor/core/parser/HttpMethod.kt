@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.openapiprocessor.core.model
+package io.openapiprocessor.core.parser
 
 /**
  * Mapping of http methods to Spring annotations.
