@@ -72,6 +72,7 @@ dependencies {
         exclude group: 'io.swagger.core.v3', module: 'swagger-annotations'
     }
 
+    implementation (project(":openapi-processor-core-parser-api"))
     implementation (platform(libs.openapi.parser.bom))
     implementation (libs.openapi.parser.parser)
     implementation (libs.io.jackson)
@@ -81,7 +82,6 @@ dependencies {
     implementation (libs.commonmark)
     implementation (libs.format.java.google)
     implementation (libs.slf4j)
-
 
     testImplementation (project(":openapi-processor-test"))
     testImplementation (libs.openapi.processor.api)
@@ -94,6 +94,7 @@ dependencies {
     testImplementation (libs.logback)
     testImplementation (libs.jimfs)
 
+    testIntImplementation (project(":openapi-processor-core-parser-api"))
     testIntImplementation (libs.openapi.processor.api)
     testIntImplementation (project(":openapi-processor-test"))
     testIntImplementation (platform(libs.groovy.bom))
