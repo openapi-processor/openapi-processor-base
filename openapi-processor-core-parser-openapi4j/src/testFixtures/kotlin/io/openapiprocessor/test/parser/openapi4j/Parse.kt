@@ -3,13 +3,13 @@
  * PDX-License-Identifier: Apache-2.0
  */
 
-package io.openapiprocessor.core.parser.openapi4j
+package io.openapiprocessor.test.parser.openapi4j
 
 import io.openapiprocessor.core.parser.OpenApi
+import io.openapiprocessor.core.parser.openapi4j.OpenApi as OpenApi4j
 import io.openapiprocessor.test.stream.Memory
 import org.openapi4j.parser.OpenApi3Parser
 import org.openapi4j.parser.validation.v3.OpenApi3Validator
-
 import java.net.URL
 
 fun parse(yaml: String): OpenApi {
@@ -22,5 +22,5 @@ fun parse(yaml: String): OpenApi {
         .instance()
         .validate(api)
 
-    return OpenApi(api, results)
+    return OpenApi4j(api, results)
 }
