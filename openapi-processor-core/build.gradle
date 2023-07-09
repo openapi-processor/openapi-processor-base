@@ -98,8 +98,8 @@ dependencies {
     testImplementation (libs.jimfs)
 
     testIntImplementation (project(":openapi-processor-core-parser-api"))
-    testIntImplementation (libs.openapi.processor.api)
     testIntImplementation (project(":openapi-processor-test"))
+    testIntImplementation (libs.openapi.processor.api)
     testIntImplementation (platform(libs.groovy.bom))
     testIntImplementation (platform(libs.kotest.bom))
     testIntImplementation (libs.kotest.runner)
