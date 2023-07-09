@@ -9,7 +9,7 @@ import io.openapiprocessor.core.converter.ApiConverter
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.OptionsConverter
 import io.openapiprocessor.core.framework.FrameworkBase
-import io.openapiprocessor.core.parser.Parser
+import io.openapiprocessor.core.parser.OpenApiParser
 import io.openapiprocessor.core.writer.java.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -29,7 +29,7 @@ class TestProcessor:
 
     override fun run(processorOptions: MutableMap<String, *>) {
         try {
-            val parser = Parser ()
+            val parser = OpenApiParser ()
             val openapi = parser.parse(processorOptions)
             if (processorOptions.containsKey("showWarnings")) {
                 openapi.printWarnings()

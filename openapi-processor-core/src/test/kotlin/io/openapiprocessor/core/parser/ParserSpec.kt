@@ -11,7 +11,7 @@ import io.kotest.core.spec.style.StringSpec
 class ParserSpec: StringSpec({
 
     "throws if apiPath is not set" {
-        val parser = Parser()
+        val parser = OpenApiParser()
 
         shouldThrow<NoOpenApiException> {
             parser.parse(emptyMap<String, Any>())

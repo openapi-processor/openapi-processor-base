@@ -5,16 +5,17 @@
 
 package io.openapiprocessor.core.parser
 
-import io.openapiprocessor.core.parser.swagger.Parser as Swagger
+import io.openapiprocessor.core.parser.Parser as ApiParser
 import io.openapiprocessor.core.parser.openapi.Parser as OpenApiParser
-import io.openapiprocessor.core.parser.openapi4j.Parser as OpenApi4J
+import io.openapiprocessor.core.parser.swagger.Parser as Swagger
+import java.util.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 /**
  * OpenAPI parser abstraction. Supports swagger or openapi4 parser.
  */
-class Parser {
+class OpenApiParser {
     private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     fun parse(processorOptions: Map<String, *>): OpenApi {
@@ -27,7 +28,8 @@ class Parser {
             }
             ParserType.OPENAPI4J.name -> {
                 log.info("using (deprecated) OPENAPI4J parser")
-                return OpenApi4J().parse(apiPath)
+                val openapi4j = load(ParserType.OPENAPI4J.name)
+                return openapi4j.parse(apiPath)
             }
             ParserType.INTERNAL.name -> {
                 log.info("using INTERNAL parser")
@@ -36,10 +38,17 @@ class Parser {
             else -> {
                 if (parser != null) {
                     log.warn("unknown parser type: {}", parser)
-                    log.warn("available parsers: SWAGGER, OPENAPI4J, INTERNAL")
+                    log.warn("available parsers: INTERNAL, SWAGGER, OPENAPI4J")
                 }
                 return Swagger().parse(apiPath)
             }
         }
+    }
+
+    private fun load(name: String): ApiParser {
+        val provider = ServiceLoader.load(ParserProvider::class.java)
+            .find { p -> p.getName() == name } ?: throw NoParserException(name)
+
+        return provider.getParser()
     }
 }

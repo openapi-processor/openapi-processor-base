@@ -10,6 +10,6 @@
     <appender-ref ref="STDOUT" />
   </root>
 
-  <logger name="io.openapiprocessor.core.parser.Parser" level="WARN" />
+  <logger name="io.openapiprocessor.core.parser.OpenApiParser" level="WARN" />
   <logger name="io.openapiprocessor.core.processor.MappingReader" level="ERROR" />
 </configuration>
