@@ -6,21 +6,22 @@
 package io.openapiprocessor.core.parser.openapi4j
 
 import io.openapiprocessor.core.parser.ParserException
+import io.openapiprocessor.core.parser.Parser as ApiParser
+import io.openapiprocessor.core.parser.OpenApi as ApiOpenApi
 import org.openapi4j.core.exception.ResolutionException
 import org.openapi4j.core.validation.ValidationException
 import org.openapi4j.parser.OpenApi3Parser
 import org.openapi4j.parser.validation.v3.OpenApi3Validator
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import io.openapiprocessor.core.parser.OpenApi as ParserOpenApi
 
 /**
  * openapi4j parser.
  */
-open class Parser {
+open class Parser : ApiParser {
     private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
-    fun parse(apiPath: String): ParserOpenApi {
+    override fun parse(apiPath: String): ApiOpenApi {
         try {
             return run(apiPath)
         } catch (ex: ResolutionException) {
@@ -34,7 +35,7 @@ open class Parser {
         }
     }
 
-    private fun run(apiPath: String): ParserOpenApi {
+    private fun run(apiPath: String): ApiOpenApi {
         val api = OpenApi3Parser()
             .parse(toURL(apiPath), true)
 
@@ -44,5 +45,4 @@ open class Parser {
 
         return OpenApi(api, results)
     }
-
 }
