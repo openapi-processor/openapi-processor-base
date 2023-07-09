@@ -8,16 +8,13 @@ package io.openapiprocessor.core.support
 import io.openapiprocessor.core.parser.OpenApi as ParserOpenApi
 import io.openapiprocessor.core.parser.ParserType
 import io.openapiprocessor.core.parser.openapi.Parser
-import io.openapiprocessor.core.parser.openapi4j.OpenApi as O4jOpenApi
+import io.openapiprocessor.core.parser.openapi4j.parse as parseWithOpenApi4j
 import io.openapiprocessor.core.parser.swagger.OpenApi as SwaggerOpenApi
 import io.openapiprocessor.test.stream.Memory
 import io.swagger.v3.parser.OpenAPIV3Parser
-import org.openapi4j.parser.OpenApi3Parser
-import org.openapi4j.parser.validation.v3.OpenApi3Validator
-import java.net.URL
 
 /**
- * OpenAPI parser to read yaml from memory (swagger or openapi4j).
+ * OpenAPI parser to read yaml from memory using the given parser.
  *
  * extract individual Schemas with the get...Schema() functions on the [ParserOpenApi] result.
  */
@@ -36,19 +33,6 @@ fun parseWithInternal(yaml: String): ParserOpenApi {
         .parse("memory:openapi.yaml")
 
     return api
-}
-
-fun parseWithOpenApi4j(yaml: String): ParserOpenApi {
-    Memory.add("openapi.yaml", yaml)
-
-    val api = OpenApi3Parser()
-        .parse(URL("memory:openapi.yaml"), true)
-
-    val results = OpenApi3Validator
-        .instance()
-        .validate(api)
-
-    return O4jOpenApi(api, results)
 }
 
 fun parseWithSwagger(yaml: String): ParserOpenApi {

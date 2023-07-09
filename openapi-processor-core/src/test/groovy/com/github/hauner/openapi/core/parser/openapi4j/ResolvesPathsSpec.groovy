@@ -16,10 +16,10 @@
 
 package com.github.hauner.openapi.core.parser.openapi4j
 
-import com.github.hauner.openapi.core.test.parser.OpenApi4jParser
 import com.google.common.jimfs.Configuration
 import com.google.common.jimfs.Jimfs
 import io.openapiprocessor.core.parser.HttpMethod
+import io.openapiprocessor.core.parser.openapi4j.Parser
 import spock.lang.Specification
 
 import java.nio.file.Files
@@ -29,7 +29,7 @@ class ResolvesPathsSpec extends Specification {
 
     def fs = Jimfs.newFileSystem (Configuration.unix ())
 
-    void "resolves ref path" () {
+    void "resolves ref path on jimfs" () {
 
         def main = """\
         openapi: 3.0.2
@@ -59,8 +59,8 @@ get:
         copy (ref, refYaml)
 
         when:
-        def parser = new OpenApi4jParser ()
-        def api = parser.parse (mainYaml.toUri ().toString ())
+        def openapi4j = new Parser()
+        def api = openapi4j.parse (mainYaml.toUri ().toString ())
 
         then:
         def foo = api.paths.get ('/foo')
