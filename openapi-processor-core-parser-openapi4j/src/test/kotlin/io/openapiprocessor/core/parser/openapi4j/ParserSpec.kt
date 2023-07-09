@@ -41,4 +41,3 @@ class ParserSpec : StringSpec({
     }
 
 })
-

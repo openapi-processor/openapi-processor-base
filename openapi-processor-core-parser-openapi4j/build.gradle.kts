@@ -13,6 +13,14 @@ dependencies {
     implementation (libs.openapi4j)
     implementation (libs.slf4j)
 
+    testImplementation (project(":openapi-processor-test"))
+    testImplementation (platform(libs.kotest.bom))
+    testImplementation (libs.kotest.runner)
+    testImplementation (libs.kotest.datatest)
+    testImplementation (libs.mockk)
+    testImplementation (libs.jimfs)
+    testImplementation (libs.logback)
+
     testFixturesImplementation (project(":openapi-processor-core-parser-api"))
     testFixturesImplementation (project(":openapi-processor-test"))
     testFixturesImplementation (libs.openapi4j)
