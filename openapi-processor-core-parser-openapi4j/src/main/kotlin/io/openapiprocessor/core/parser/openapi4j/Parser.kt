@@ -6,7 +6,6 @@
 package io.openapiprocessor.core.parser.openapi4j
 
 import io.openapiprocessor.core.parser.ParserException
-import io.openapiprocessor.core.support.toURL
 import org.openapi4j.core.exception.ResolutionException
 import org.openapi4j.core.validation.ValidationException
 import org.openapi4j.parser.OpenApi3Parser
