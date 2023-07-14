@@ -14,3 +14,9 @@ map:
     - type: Pageable => org.springframework.data.domain.Pageable
     - type: UserPage => org.springframework.data.domain.Page<{package-name}.model.User>
     - type: TopicPage => org.springframework.data.domain.Page<{package-name}.model.Topic>
+
+  paths:
+    /foo:
+      result: fooBar
+      post:
+        single: klökölk
