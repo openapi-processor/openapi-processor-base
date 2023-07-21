@@ -51,7 +51,7 @@ open class MappingValidator {
     }
 
     private fun getSchemaUri(version: String): URI {
-        return URI("https://openapiprocessor.io/schemas/mapping/mapping-v${version}.json")
+        return URI("https://openapiprocessor.io/schemas/mapping/mapping-${version}.json")
     }
 
     private fun getSchema(version: String): String {
