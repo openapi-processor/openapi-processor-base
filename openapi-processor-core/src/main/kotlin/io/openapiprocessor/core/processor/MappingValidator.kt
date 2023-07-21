@@ -31,6 +31,7 @@ open class MappingValidator {
             val loader = DocumentLoader(reader, converter)
 
             val store = SchemaStore(loader)
+            store.registerDraft7()
             store.register(getSchemaUri(version), getSchema(version))
 
             val schema = store.getSchema(getSchemaUri(version))
