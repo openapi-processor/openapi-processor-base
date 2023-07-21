@@ -9,10 +9,10 @@ tags:
 
 paths:
   '/user':
-    $ref: ./apis/user.v1.yaml#/paths/~1user
+    $ref: './apis/user.v1.yaml#/paths/~1user'
   '/users/{userId}':
-    $ref: ./apis/user.v1.yaml#/paths/~1users~1{userId}
+    $ref: './apis/user.v1.yaml#/paths/~1users~1{userId}'
   /users:
-    $ref: ./apis/user.v1.yaml#/paths/~1users
+    $ref: './apis/user.v1.yaml#/paths/~1users'
   /user-page:
-    $ref: ./apis/user.v1.yaml#/paths/~1user-page
+    $ref: './apis/user.v1.yaml#/paths/~1user-page'

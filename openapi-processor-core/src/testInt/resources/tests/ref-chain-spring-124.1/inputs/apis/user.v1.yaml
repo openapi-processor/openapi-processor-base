@@ -157,17 +157,17 @@ paths:
 components:
   schemas:
     Pageable:
-      $ref: ../models/pageable.model.v1.yaml
+      $ref: '../models/pageable.model.v1.yaml'
     Page:
-      $ref: ../models/page.model.v1.yaml
+      $ref: '../models/page.model.v1.yaml'
     UserContent:
-      $ref: ../models/user-content.model.v1.yaml
+      $ref: '../models/user-content.model.v1.yaml'
     UserPage:
-      $ref: ../models/user-page.model.v1.yaml
+      $ref: '../models/user-page.model.v1.yaml'
     User:
-      $ref: ../models/user.model.v1.yaml
+      $ref: '../models/user.model.v1.yaml'
     UserSearch:
-      $ref: ../models/user-search.model.v1.yaml
+      $ref: '../models/user-search.model.v1.yaml'
   examples:
     UserExample:
-      $ref: ../examples/user.example.v1.yaml
+      $ref: '../examples/user.example.v1.yaml'
