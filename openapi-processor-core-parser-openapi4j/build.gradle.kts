@@ -26,9 +26,13 @@ dependencies {
     testFixturesImplementation (libs.openapi4j)
 
     constraints {
-        implementation(libs.jackson.bom) { because("use latest jackson") }
-        testImplementation(libs.jackson.bom) { because("use latest jackson") }
-        testFixturesImplementation(libs.jackson.bom) { because("use latest jackson") }
+        implementation(libs.jackson.bom) { because("use same jackson") }
+
+        testImplementation(libs.junit.bom) { because("use same junit") }
+        testImplementation(libs.jackson.bom) { because("use same jackson") }
+
+        testFixturesImplementation(libs.junit.bom) { because("use same junit") }
+        testFixturesImplementation(libs.jackson.bom) { because("use same jackson") }
     }
 }
 
