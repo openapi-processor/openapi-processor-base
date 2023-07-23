@@ -27,6 +27,8 @@ dependencies {
 
     constraints {
         implementation(libs.jackson.bom) { because("use latest jackson") }
+        testImplementation(libs.jackson.bom) { because("use latest jackson") }
+        testFixturesImplementation(libs.jackson.bom) { because("use latest jackson") }
     }
 }
 
