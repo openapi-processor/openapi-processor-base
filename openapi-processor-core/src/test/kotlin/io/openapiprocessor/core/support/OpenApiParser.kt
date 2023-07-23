@@ -8,10 +8,9 @@ package io.openapiprocessor.core.support
 import io.openapiprocessor.core.parser.OpenApi as ParserOpenApi
 import io.openapiprocessor.core.parser.ParserType
 import io.openapiprocessor.core.parser.openapi.Parser
-import io.openapiprocessor.core.parser.swagger.OpenApi as SwaggerOpenApi
+import io.openapiprocessor.test.parser.swagger.parse as parseWithSwagger
 import io.openapiprocessor.test.parser.openapi4j.parse as parseWithOpenApi4j
 import io.openapiprocessor.test.stream.Memory
-import io.swagger.v3.parser.OpenAPIV3Parser
 
 /**
  * OpenAPI parser to read yaml from memory using the given parser.
@@ -33,13 +32,6 @@ fun parseWithInternal(yaml: String): ParserOpenApi {
         .parse("memory:openapi.yaml")
 
     return api
-}
-
-fun parseWithSwagger(yaml: String): ParserOpenApi {
-    val result = OpenAPIV3Parser()
-        .readContents (yaml)
-
-    return SwaggerOpenApi(result)
 }
 
 fun printWarnings(warnings: List<String>) {

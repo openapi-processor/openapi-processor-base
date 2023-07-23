@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 https://github.com/openapi-processor/openapi-processor-core
+ * Copyright 2020 https://github.com/openapi-processor/openapi-processor-base
  * PDX-License-Identifier: Apache-2.0
  */
 
@@ -7,13 +7,12 @@ package io.openapiprocessor.core.parser
 
 import io.openapiprocessor.core.parser.Parser as ApiParser
 import io.openapiprocessor.core.parser.openapi.Parser as OpenApiParser
-import io.openapiprocessor.core.parser.swagger.Parser as Swagger
 import java.util.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 /**
- * OpenAPI parser abstraction. Supports swagger or openapi4 parser.
+ * OpenAPI parser abstraction. Supports internal, swagger or openapi4 parser.
  */
 class OpenApiParser {
     private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
@@ -24,7 +23,8 @@ class OpenApiParser {
         when(val parser = processorOptions["parser"]?.toString()) {
             ParserType.SWAGGER.name -> {
                 log.info("using SWAGGER parser")
-                return Swagger().parse(apiPath)
+                val swagger = load(ParserType.SWAGGER.name)
+                return swagger.parse(apiPath)
             }
             ParserType.OPENAPI4J.name -> {
                 log.info("using (deprecated) OPENAPI4J parser")
@@ -40,7 +40,7 @@ class OpenApiParser {
                     log.warn("unknown parser type: {}", parser)
                     log.warn("available parsers: INTERNAL, SWAGGER, OPENAPI4J")
                 }
-                return Swagger().parse(apiPath)
+                return OpenApiParser().parse(apiPath)
             }
         }
     }

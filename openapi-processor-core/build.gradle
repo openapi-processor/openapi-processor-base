@@ -66,25 +66,23 @@ dependencies {
 
     compileOnly (libs.openapi.processor.api)
 
-    implementation (libs.swagger) {
-        exclude group: 'io.swagger.parser.v3', module: 'swagger-parser-v2-converter'
-        exclude group: 'io.swagger.core.v3', module: 'swagger-annotations'
-    }
-
     implementation (project(":openapi-processor-core-parser-api"))
-    implementation (project(":openapi-processor-core-parser-openapi4j"))
     implementation (platform(libs.openapi.parser.bom))
     implementation (libs.openapi.parser.parser)
     implementation (libs.io.jackson)
+
     implementation (platform(libs.jackson.bom))
     implementation (libs.jackson.kotlin)
+    implementation (libs.jackson.yaml)
     implementation (libs.commons.text)
     implementation (libs.commonmark)
     implementation (libs.format.java.google)
     implementation (libs.slf4j)
 
     testImplementation (project(":openapi-processor-core-parser-api"))
+    testImplementation (project(":openapi-processor-core-parser-swagger"))
     testImplementation (project(":openapi-processor-core-parser-openapi4j"))
+    testImplementation (testFixtures(project(":openapi-processor-core-parser-swagger")))
     testImplementation (testFixtures(project(":openapi-processor-core-parser-openapi4j")))
     testImplementation (project(":openapi-processor-test"))
     testImplementation (libs.openapi.processor.api)
@@ -98,6 +96,10 @@ dependencies {
     testImplementation (libs.jimfs)
 
     testIntImplementation (project(":openapi-processor-core-parser-api"))
+    testIntImplementation (project(":openapi-processor-core-parser-swagger"))
+    testIntImplementation (project(":openapi-processor-core-parser-openapi4j"))
+    testIntImplementation (testFixtures(project(":openapi-processor-core-parser-swagger")))
+    testIntImplementation (testFixtures(project(":openapi-processor-core-parser-openapi4j")))
     testIntImplementation (project(":openapi-processor-test"))
     testIntImplementation (libs.openapi.processor.api)
     testIntImplementation (platform(libs.groovy.bom))
@@ -110,30 +112,35 @@ dependencies {
     testIntImplementation (libs.jimfs)
 
     constraints {
+        testImplementation(libs.junit.bom) { because("use same junit") }
+        testIntImplementation(libs.junit.bom) { because("use same junit") }
+    }
+
+//    constraints {
         //implementation(libs.jackson.bom)
 
 
-        implementation(libs.guava) {
-            because("avoid the android version")
-        }
-        implementation(libs.snakeyaml) {
-            because("vulnerabilities in 1.31")
-        }
-
-        testImplementation(libs.guava) {
-            because("avoid the android version")
-        }
-        testImplementation(libs.snakeyaml) {
-            because("vulnerabilities in 1.31")
-        }
-
-        testIntImplementation(libs.guava) {
-            because("avoid the android version")
-        }
-        testIntImplementation(libs.snakeyaml) {
-            because("vulnerabilities in 1.31")
-        }
-    }
+//        implementation(libs.guava) {
+//            because("avoid the android version")
+//        }
+//        implementation(libs.snakeyaml) {
+//            because("vulnerabilities in 1.31")
+//        }
+//
+//        testImplementation(libs.guava) {
+//            because("avoid the android version")
+//        }
+//        testImplementation(libs.snakeyaml) {
+//            because("vulnerabilities in 1.31")
+//        }
+//
+//        testIntImplementation(libs.guava) {
+//            because("avoid the android version")
+//        }
+//        testIntImplementation(libs.snakeyaml) {
+//            because("vulnerabilities in 1.31")
+//        }
+//    }
 }
 
 tasks.named("dependencyUpdates").configure {
