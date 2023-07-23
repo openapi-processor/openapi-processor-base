@@ -10,10 +10,13 @@ import io.openapiprocessor.core.writer.java.PathWriter
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.BufferedWriter
+import java.io.IOException
 import java.io.Writer
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
+import kotlin.io.path.ExperimentalPathApi
+import kotlin.io.path.deleteRecursively
 
 /**
  * Writer factory for local file system. Must be initialized via [InitWriterTarget].
@@ -39,6 +42,7 @@ class DefaultWriterFactory: WriterFactory, InitWriterTarget {
         val pkgPaths = HashMap<String, Path>()
 
         log.debug ("initializing target folders")
+        clearTargetDir()
 
         val (apiName, apiPath) = initTargetPackage("api")
         pkgPaths[apiName] = apiPath
@@ -53,6 +57,15 @@ class DefaultWriterFactory: WriterFactory, InitWriterTarget {
         log.debug ("initialized target folder: {}", supportPath.toAbsolutePath ().toString ())
 
         paths = pkgPaths
+    }
+
+    @OptIn(ExperimentalPathApi::class)
+    private fun clearTargetDir() {
+        try {
+            Path.of(targetDir).deleteRecursively()
+        } catch (ex: IOException) {
+            log.error("failed to clean target directory: {}", targetDir, ex)
+        }
     }
 
     private fun initTargetPackage(subPackageName: String): Pair<String, Path> {

@@ -15,6 +15,7 @@ import io.openapiprocessor.core.tempFolder
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
+import kotlin.io.path.createFile
 
 @Suppress("BlockingMethodInNonBlockingContext")
 class DefaultWriterFactorySpec : StringSpec({
@@ -97,6 +98,31 @@ class DefaultWriterFactorySpec : StringSpec({
         writer.close()
 
         textOfSupport("Model.java") shouldBe "public class Model {}\n"
+    }
+
+    "deletes target directory to clear old files" {
+        val api = options.getSourceDir("api")
+        val model = options.getSourceDir("model")
+        val support = options.getSourceDir("support")
+
+        Files.createDirectories(api)
+        Files.createDirectories(model)
+        Files.createDirectories(support)
+
+        api.resolve("Old.java").createFile()
+        model.resolve("Old.java").createFile()
+        support.resolve("Old.java").createFile()
+
+        Files.exists(api.resolve("Old.java")) shouldBe true
+        Files.exists(model.resolve("Old.java")) shouldBe true
+        Files.exists(support.resolve("Old.java")) shouldBe true
+
+        val factory = DefaultWriterFactory()
+        factory.init(options.targetDir!!, options.packageName)
+
+        Files.exists(api.resolve("Old.java")) shouldBe false
+        Files.exists(model.resolve("Old.java")) shouldBe false
+        Files.exists(support.resolve("Old.java")) shouldBe false
     }
 })
 
