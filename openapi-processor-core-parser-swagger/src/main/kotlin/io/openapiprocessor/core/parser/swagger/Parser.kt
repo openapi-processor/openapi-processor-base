@@ -6,7 +6,7 @@
 package io.openapiprocessor.core.parser.swagger
 
 import io.openapiprocessor.core.parser.ParserException
-import io.openapiprocessor.core.support.toURL
+import io.openapiprocessor.core.parser.Parser as ApiParser
 import io.swagger.v3.parser.OpenAPIV3Parser
 import io.swagger.v3.parser.core.models.ParseOptions
 import org.slf4j.Logger
@@ -18,12 +18,12 @@ const val SCHEME_RESOURCE = "resource:"
 /**
  * swagger parser.
  */
-open class Parser {
+open class Parser: ApiParser {
     private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     private enum class Source {URL, STRING}
 
-    fun parse(apiPath: String): ParserOpenApi {
+    override fun parse(apiPath: String): ParserOpenApi {
         try {
             return run(apiPath, Source.URL)
         } catch (ex: Exception) {
