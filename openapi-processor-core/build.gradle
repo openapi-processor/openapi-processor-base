@@ -112,35 +112,14 @@ dependencies {
     testIntImplementation (libs.jimfs)
 
     constraints {
-        testImplementation(libs.junit.bom) { because("use same junit") }
-        testIntImplementation(libs.junit.bom) { because("use same junit") }
+        implementation(libs.guava) { because("avoid multiple versions") }
+
+        testImplementation(libs.guava) { because("avoid multiple versions") }
+        testImplementation(libs.junit.bom) { because("avoid multiple versions") }
+
+        testIntImplementation(libs.guava) { because("avoid multiple versions") }
+        testIntImplementation(libs.junit.bom) { because("avoid multiple versions") }
     }
-
-//    constraints {
-        //implementation(libs.jackson.bom)
-
-
-//        implementation(libs.guava) {
-//            because("avoid the android version")
-//        }
-//        implementation(libs.snakeyaml) {
-//            because("vulnerabilities in 1.31")
-//        }
-//
-//        testImplementation(libs.guava) {
-//            because("avoid the android version")
-//        }
-//        testImplementation(libs.snakeyaml) {
-//            because("vulnerabilities in 1.31")
-//        }
-//
-//        testIntImplementation(libs.guava) {
-//            because("avoid the android version")
-//        }
-//        testIntImplementation(libs.snakeyaml) {
-//            because("vulnerabilities in 1.31")
-//        }
-//    }
 }
 
 tasks.named("dependencyUpdates").configure {
