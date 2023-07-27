@@ -277,4 +277,29 @@ class MappingConverterGenericsSpec: StringSpec({
         coll.typeName shouldBe "java.util.Collection"
         coll.genericTypes[0].typeName shouldBe "generated.String"
     }
+
+    "read additional parameter with generic parameter ?" {
+        val yaml = """
+                   |openapi-processor-mapping: v4
+                   |
+                   |options:
+                   |  package-name: generated
+                   |
+                   |map:
+                   |  parameters:
+                   |    - add: foo => io.openapiprocessor.GenericType<?>
+                   """.trimMargin()
+
+        // when:
+        val mapping = reader.read (yaml)
+        val mappings = converter.convert (mapping)
+
+        // then:
+        val type = mappings.first() as AddParameterTypeMapping
+        type.parameterName shouldBe "foo"
+        val tm = type.mapping
+        tm.targetTypeName shouldBe "io.openapiprocessor.GenericType"
+        tm.genericTypes.size shouldBe 1
+        tm.genericTypes[0].typeName shouldBe "?"
+    }
 })

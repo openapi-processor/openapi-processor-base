@@ -93,6 +93,20 @@ class MappingExtractor: MappingBaseListener(), Mapping {
         typeStack.removeLast()
     }
 
+    override fun enterGenericParameterAny(ctx: MappingParser.GenericParameterAnyContext) {
+        val genericType = ctx.start.text
+        targetGenericTypes.add(genericType)
+
+        val last = typeStack.last()
+        val type = Type(genericType!!)
+        last.targetGenericTypes.add(type)
+        typeStack.addLast(type)
+    }
+
+    override fun exitGenericParameterAny(ctx: MappingParser.GenericParameterAnyContext?) {
+        typeStack.removeLast()
+    }
+
     override fun enterAnnotationType(ctx: MappingParser.AnnotationTypeContext) {
         annotationType = ctx.start.text
     }

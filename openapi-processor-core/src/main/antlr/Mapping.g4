@@ -67,11 +67,15 @@ qualifiedType
     ;
 
 genericParameters
-    : genericParameter (',' genericParameter)*
+    : (genericParameter | genericParameterAny) (',' genericParameter)*
     ;
 
 genericParameter
     : QualifiedType ('<' genericParameters '>')?
+    ;
+
+genericParameterAny
+    : GenericAny
     ;
 
 sourceIdentifier
@@ -95,6 +99,7 @@ Boolean: 'true' | 'false';
 Package: '{package-name}';
 
 DoubleQuote: '"';
+GenericAny: '?';
 
 Whitespace
   : [ \t] -> skip
