@@ -17,6 +17,7 @@ import io.openapiprocessor.core.model.Response as ModelResponse
 import io.openapiprocessor.core.model.parameters.Parameter as ModelParameter
 import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.parser.*
+import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.parser.RequestBody
 import io.openapiprocessor.core.parser.Response
 import io.openapiprocessor.core.writer.java.toClass
