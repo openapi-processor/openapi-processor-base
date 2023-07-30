@@ -260,4 +260,30 @@ class MethodWriterSpec: StringSpec({
             |
             """.trimMargin()
     }
+
+    "writes generic wildcard parameter from mapping" {
+        val endpoint = endpoint("/foo") {
+            parameters {
+                any(object : ParameterBase("foo", MappedDataType(
+                    "Bar", "bar", listOf(GenericDataType(DataTypeName("?"), ""))
+                )) {})
+            }
+            responses {
+                status("204") {
+                    response()
+                }
+            }
+        }
+
+        // when:
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+
+        // then:
+        target.toString () shouldBe
+            """
+            |    @CoreMapping
+            |    void getFoo(@Parameter Bar<?> foo);
+            |
+            """.trimMargin()
+    }
 })

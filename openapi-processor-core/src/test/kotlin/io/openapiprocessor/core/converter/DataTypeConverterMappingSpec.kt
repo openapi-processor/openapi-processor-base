@@ -7,6 +7,9 @@ package io.openapiprocessor.core.converter
 
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.collections.shouldHaveSingleElement
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
@@ -17,6 +20,7 @@ import io.openapiprocessor.core.model.DataTypes
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.parser.ParserType
+import io.openapiprocessor.core.support.getParameterSchemaInfo
 import io.openapiprocessor.core.support.getSchemaInfo
 import io.openapiprocessor.core.support.parse
 
@@ -225,5 +229,50 @@ class DataTypeConverterMappingSpec: StringSpec({
         datatype.shouldBeInstanceOf<MappedDataType>()
         datatype.getTypeName().shouldBe("Parameter")
         datatype.sourceDataType.shouldBeNull()
+    }
+
+    "mapped data type has wildcard generic parameter" {
+        val openApi = parse("""
+            openapi: 3.1.0
+            info:
+              title: wildcard generic parameter
+              version: 1.0.0
+
+            paths:
+              /foo:
+                get:
+                  parameters:
+                    - in: query
+                      name: foo
+                      schema:
+                        type: string
+                  responses:
+                    '204':
+                      description: none
+        """.trimIndent(), ParserType.INTERNAL)
+
+        val options = ApiOptions()
+        options.typeMappings = listOf(
+            TypeMapping("string", null, "bar.Bar",
+                genericTypes = listOf(
+                    TargetType("?")
+                ))
+        )
+
+        val schemaInfo = openApi.getParameterSchemaInfo("/foo", HttpMethod.GET, "foo")
+
+        // when:
+        val converter = DataTypeConverter(options)
+        val datatype = converter.convert(schemaInfo, dataTypes)
+
+        // then:
+        datatype.shouldBeInstanceOf<MappedDataType>()
+        datatype.getTypeName() shouldBe "Bar<?>"
+        datatype.getPackageName() shouldBe "bar"
+        datatype.getImports() shouldHaveSingleElement "bar.Bar"
+        datatype.genericTypes.shouldHaveSize(1)
+        val generic = datatype.genericTypes.first()
+        generic.getImports().shouldBeEmpty()
+        generic.getPackageName() shouldBe ""
     }
 })
