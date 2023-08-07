@@ -5,9 +5,9 @@
 # mapping format [required]
 openapi-processor-mapping: v4
 
-options: # general processor options (optional)
+options: # general processor options [required]
 
-  # target package (optional): io.openapiprocessor.generated (default)
+  # target package [required]: io.openapiprocessor.generated (default)
   package-name: io.openapiprocessor.generated
 
   # validation annotation (optional): true or false (default), javax, jakarta.
@@ -76,10 +76,11 @@ map: # the type mappings
 
     /second: # another path/endpoint from the openapi.yaml
 
-      # path mappings, allow the same mappings as on the global level (except paths)
-      # all mappings apply only to the parent path & override any matching global mapping
+      # path mappings, allow the same mappings as on the global level (except the "paths" property)
+      # all mappings apply only to the parent path overriding any matching global mapping
 
-      result: org.springframework.http.ResponseEntity
+      # override top level "result" property, "plain" means no wrapper
+      result: plain
       single: reactor.core.publisher.Mono
       multi: reactor.core.publisher.Flux
 
@@ -96,5 +97,12 @@ map: # the type mappings
         - content: application/json => java.util.Map
 
     /third:
+      result: plain#
+
+      # path mappings can be limited to a specific http method
+
       patch:
+        # path method mappings, allow the same mappings as on the global level (except the "paths" property)
+        # all mappings apply only to the parent path and method overriding any matching global mapping
+
         null: org.openapitools.jackson.nullable.JsonNullable = JsonNullable.undefined()

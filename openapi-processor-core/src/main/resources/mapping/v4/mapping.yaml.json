@@ -4,7 +4,6 @@
   "title": "JSON Schema for openapi-processor mapping.yaml v4",
   "description": "openapi-processor configuration and type mappings",
   "type": "object",
-  "additionalProperties": false,
   "properties": {
     "openapi-processor-mapping": {
       "description": "version of the mapping format.",
@@ -25,7 +24,6 @@
     "Options": {
       "description": "general processor configuration options.",
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "package-name": {
           "description": "java root package name to use in the generated source files.",
@@ -70,31 +68,31 @@
           "type": "boolean",
           "default": true
         }
-      }
+      },
+      "additionalProperties": false,
+      "required": [
+        "package-name"
+      ]
     },
     "Map": {
       "description": "global & path specific mapping rules.",
-      "unevaluatedProperties": false,
-      "anyOf": [{
+      "allOf": [{
           "$ref": "#/definitions/Mappings"
         }, {
-          "additionalProperties": false,
           "properties": {
             "paths": {
               "$ref": "#/definitions/Paths"
             }
           }
-        }
-      ]
+      }]
     },
     "Paths": {
       "description": "path specific mappings.",
       "type": "object",
-      "additionalProperties": false,
       "patternProperties": {
         "^/": {
           "description": "a path.",
-          "anyOf": [{
+          "allOf": [{
               "$ref": "#/definitions/Exclude"
             }, {
               "$ref": "#/definitions/Mappings"
@@ -107,7 +105,6 @@
     "Mappings": {
       "description": "mapping rules.",
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "result": {
           "$ref": "#/definitions/ResultMapping"
@@ -132,16 +129,12 @@
         },
         "responses": {
           "$ref": "#/definitions/ResponseMappings"
-        },
-        "paths": {
-          "$ref": "#/definitions/Paths"
         }
       }
     },
     "Methods": {
       "description": "http method mapping rules.",
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "get": {
           "$ref": "#/definitions/Mappings"
@@ -173,7 +166,7 @@
       "description": "wrapper object of a http response.",
       "type": "string",
       "examples": [
-        "org.springframework.http.ResponseEntity"
+        "org.springframework.http.ResponseEntity", "plain"
       ]
     },
     "ResultStyleMapping": {
@@ -286,7 +279,6 @@
     "Exclude": {
       "description": "generate endpoint to a separate 'Excluded' interface.",
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "exclude": {
           "type": "boolean"
