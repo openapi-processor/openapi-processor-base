@@ -111,4 +111,9 @@ class MappingValidatorSpec: StringSpec({
     "validates example mapping v4" {
         validator.validate("/mapping/v4/mapping.example.yaml".fromResource(), "v4").isValid.shouldBeTrue()
     }
+
+    "validates mapping with result key on multiple levels" {
+        val output = validator.validate("/mapping/v4/mapping-result.yaml".fromResource(), "v4")
+        output.isValid.shouldBeTrue()
+    }
 })

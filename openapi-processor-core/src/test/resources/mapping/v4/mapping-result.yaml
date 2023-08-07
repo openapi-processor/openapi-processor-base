@@ -1,0 +1,14 @@
+openapi-processor-mapping: v4
+
+options:
+  package-name: io.openapiprocessor
+
+map:
+  result: plain
+
+  paths:
+    /foo:
+      result: plain
+
+      post:
+        result: plain
