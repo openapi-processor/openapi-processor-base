@@ -27,11 +27,7 @@ fun parse(apiYaml: String, parserType: ParserType = ParserType.SWAGGER): ParserO
 
 fun parseWithInternal(yaml: String): ParserOpenApi {
     Memory.add("openapi.yaml", yaml)
-
-    val api = Parser()
-        .parse("memory:openapi.yaml")
-
-    return api
+    return Parser().parse("memory:openapi.yaml")
 }
 
 fun printWarnings(warnings: List<String>) {
