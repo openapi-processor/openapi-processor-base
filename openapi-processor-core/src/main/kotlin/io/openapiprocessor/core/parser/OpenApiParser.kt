@@ -5,14 +5,13 @@
 
 package io.openapiprocessor.core.parser
 
-import io.openapiprocessor.core.parser.Parser as ApiParser
 import io.openapiprocessor.core.parser.openapi.Parser as OpenApiParser
 import java.util.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 /**
- * OpenAPI parser abstraction. Supports internal, swagger or openapi4 parser.
+ * OpenAPI parser abstraction. Supports internal, swagger or openapi4j parser.
  */
 class OpenApiParser {
     private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
@@ -45,7 +44,7 @@ class OpenApiParser {
         }
     }
 
-    private fun load(name: String): ApiParser {
+    private fun load(name: String): Parser {
         val provider = ServiceLoader.load(ParserProvider::class.java)
             .find { p -> p.getName() == name } ?: throw NoParserException(name)
 
