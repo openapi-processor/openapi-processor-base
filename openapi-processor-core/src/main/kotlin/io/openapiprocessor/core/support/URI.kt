@@ -24,6 +24,7 @@ fun toURI(source: String): URI {
             return uri
         }
     } catch (ignore: Exception) {
+        // ignore
     }
 
     // no scheme, assume file path
