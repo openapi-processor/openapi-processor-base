@@ -19,27 +19,27 @@ class OpenApiParser {
     fun parse(processorOptions: Map<String, *>): OpenApi {
         val apiPath: String = processorOptions["apiPath"]?.toString() ?: throw NoOpenApiException()
 
-        when(val parser = processorOptions["parser"]?.toString()) {
+        return when(val parser = processorOptions["parser"]?.toString()) {
             ParserType.SWAGGER.name -> {
                 log.info("using SWAGGER parser")
                 val swagger = load(ParserType.SWAGGER.name)
-                return swagger.parse(apiPath)
+                swagger.parse(apiPath)
             }
             ParserType.OPENAPI4J.name -> {
                 log.info("using (deprecated) OPENAPI4J parser")
                 val openapi4j = load(ParserType.OPENAPI4J.name)
-                return openapi4j.parse(apiPath)
+                openapi4j.parse(apiPath)
             }
             ParserType.INTERNAL.name -> {
                 log.info("using INTERNAL parser")
-                return OpenApiParser().parse(apiPath)
+                OpenApiParser().parse(apiPath)
             }
             else -> {
                 if (parser != null) {
                     log.warn("unknown parser type: {}", parser)
                     log.warn("available parsers: INTERNAL, SWAGGER, OPENAPI4J")
                 }
-                return OpenApiParser().parse(apiPath)
+                OpenApiParser().parse(apiPath)
             }
         }
     }
