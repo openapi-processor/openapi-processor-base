@@ -26,7 +26,7 @@ class LazyDataTypeSpec : StringSpec({
         )
 
         val info = SchemaInfo(any, "Foo", "", null, resolver)
-        val dt = LazyDataType(info, dataTypes)
+        val dt = dataTypes.lazy(info.getName())
 
         dt.getName() shouldBe "Foo"
         dt.getTypeName() shouldBe "FooX"
@@ -41,7 +41,7 @@ class LazyDataTypeSpec : StringSpec({
             )
 
             val info = SchemaInfo(any, id, "", null, resolver)
-            val dt = LazyDataType(info, dataTypes)
+            val dt = dataTypes.lazy(info.getName())
 
             dt.getImports() shouldBe setOf(
                 "pkg.$type"

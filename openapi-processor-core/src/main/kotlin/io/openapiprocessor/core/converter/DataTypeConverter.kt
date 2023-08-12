@@ -38,7 +38,7 @@ class DataTypeConverter(
      */
     fun convert(schemaInfo: SchemaInfo, dataTypes: DataTypes): DataType {
         if (isLoop(schemaInfo)) {
-            return LazyDataType(schemaInfo, dataTypes)
+            return dataTypes.lazy(schemaInfo.getName())
         }
 
         push(schemaInfo)

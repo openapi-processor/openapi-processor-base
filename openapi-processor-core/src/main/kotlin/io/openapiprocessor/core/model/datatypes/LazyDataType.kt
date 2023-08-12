@@ -5,14 +5,14 @@
 
 package io.openapiprocessor.core.model.datatypes
 
-import io.openapiprocessor.core.converter.SchemaInfo
 import io.openapiprocessor.core.model.DataTypes
+
 /**
  * OpenAPI $ref type that is lazily evaluated. It is used to break loops in the schema definitions.
  */
 class LazyDataType(
-    private val info: SchemaInfo,
-    private val dataTypes: DataTypes
+    private val dataTypes: DataTypes,
+    private val name: String
 ): DataType {
 
     override fun getName(): String {
@@ -34,7 +34,6 @@ class LazyDataType(
     override val referencedImports: Set<String>
         get() = dataType.referencedImports
 
-    private val dataType: DataType
-        get() = dataTypes.find(info.getName())!!
-
+    val dataType: DataType
+        get() = dataTypes.find(name)!!
 }

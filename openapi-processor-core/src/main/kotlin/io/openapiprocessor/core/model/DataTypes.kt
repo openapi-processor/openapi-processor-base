@@ -114,6 +114,16 @@ class DataTypes {
     }
 
     /**
+     * create "lazy" data type by name.
+     *
+     * @param name the data type name
+     * @return the lazy data type
+     */
+    fun lazy(name: String): DataType {
+        return LazyDataType(this, name)
+    }
+
+    /**
      * increment usage count of data type.
      *
      * @param name the data type name
