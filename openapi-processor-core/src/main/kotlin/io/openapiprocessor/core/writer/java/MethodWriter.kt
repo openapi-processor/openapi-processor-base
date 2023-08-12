@@ -120,10 +120,10 @@ open class MethodWriter(
             ps.add (param.trim())
         }
 
-        if (ps.size <= 1) {
-            return ps.joinToString("")
+        return if (ps.size <= 1) {
+            ps.joinToString("")
         } else {
-            return "\n            " + ps.joinToString (",\n            ")
+            "\n            " + ps.joinToString (",\n            ")
         }
     }
 
