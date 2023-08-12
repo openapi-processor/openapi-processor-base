@@ -15,23 +15,7 @@ open class PropertyDataType(
     val readOnly: Boolean,
     val writeOnly: Boolean,
     val dataType: DataType
-): DataType {
-
-    override fun getName(): String {
-        return dataType.getName()
-    }
-
-    override fun getTypeName(): String {
-        return dataType.getTypeName()
-    }
-
-    override fun getPackageName(): String {
-        return dataType.getPackageName()
-    }
-
-    override fun getImports(): Set<String> {
-        return dataType.getImports()
-    }
+): DataType by dataType {
 
     override val referencedImports: Set<String>
         get() = dataType.referencedImports
@@ -44,6 +28,4 @@ open class PropertyDataType(
 
     override val documentation: Documentation?
         get() = dataType.documentation
-
 }
-
