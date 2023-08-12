@@ -103,13 +103,10 @@ abstract class DataTypeWriterBase(
     }
 
     private fun getAccess(propDataType: PropertyDataType): PropertyAccess? {
-        if (!propDataType.readOnly && !propDataType.writeOnly)
-            return null
-
         return when {
             propDataType.readOnly -> PropertyAccess("READ_ONLY")
             propDataType.writeOnly -> PropertyAccess("WRITE_ONLY")
-            else -> throw IllegalStateException()
+            else -> null
         }
     }
 
