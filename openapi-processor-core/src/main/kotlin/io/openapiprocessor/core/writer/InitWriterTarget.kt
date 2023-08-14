@@ -5,6 +5,6 @@
 
 package io.openapiprocessor.core.writer
 
-interface InitWriterTarget {
+fun interface InitWriterTarget {
     fun init(targetDir: String, packageName: String)
 }

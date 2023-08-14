@@ -8,6 +8,6 @@ package io.openapiprocessor.core.writer.java
 import io.openapiprocessor.core.model.datatypes.ModelDataType
 import java.io.Writer
 
-interface DataTypeWriter {
+fun interface DataTypeWriter {
     fun write(target: Writer, dataType: ModelDataType)
 }

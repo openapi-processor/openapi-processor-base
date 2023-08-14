@@ -5,6 +5,6 @@
 
 package io.openapiprocessor.core.writer
 
-interface SourceFormatter {
+fun interface SourceFormatter {
     fun format(raw: String): String
 }
