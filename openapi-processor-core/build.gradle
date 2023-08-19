@@ -143,12 +143,6 @@ sonarqube {
   }
 }
 
-tasks.named("sonarqube") {
-    javaLauncher = javaToolchains.launcherFor {
-        languageVersion = JavaLanguageVersion.of(17)
-    }
-}
-
 generateVersion {
     targetPackage = "io.openapiprocessor.core"
 }
