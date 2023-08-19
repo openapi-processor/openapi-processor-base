@@ -71,17 +71,17 @@ jobs:
     - name: setup gradle
       uses: gradle/gradle-build-action@v2.7.1
 
+    - name: gradle check
+      run: |
+        ./gradlew javaToolchains check --warning-mode all --stacktrace
+        ./gradlew --stop
+
     - name: upload build
       uses: actions/upload-artifact@v3
       with:
         name: build-${{ runner.os }}
         path: '*/build'
         retention-days: 3
-
-    - name: gradle check
-      run: |
-        ./gradlew javaToolchains check --warning-mode all --stacktrace
-        ./gradlew --stop
 
 #    - name: archive test results
 #      uses: actions/upload-artifact@v3
