@@ -169,11 +169,13 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: |
-        ./gradlew test sonar --stacktrace
+        env
+        ./gradlew test --stacktrace
+        ./gradlew -Dorg.gradle.java.home=${JAVA_HOME_17} sonar --stacktrace
         ./gradlew --stop
 
     - name: sonarqube results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v3}
       if: always()
       with:
         name: sonarqube results
