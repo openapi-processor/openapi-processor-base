@@ -50,16 +50,6 @@ jobs:
       with:
         submodules: true
 
-#    - name: cache
-#      uses: actions/cache@v3
-#      with:
-#        path: |
-#          ~/.gradle/caches
-#          ~/.gradle/wrapper
-#        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-#        restore-keys: |
-#          ${{ runner.os }}-gradle-
-
     - name: set up jdk
       uses: actions/setup-java@v3
       with:
@@ -74,21 +64,20 @@ jobs:
     - name: gradle check
       run: |
         ./gradlew javaToolchains check --warning-mode all --stacktrace
-#        ./gradlew --stop
 
-    - name: upload artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: build-${{ runner.os }}
-        path: '*/build/libs'
-        retention-days: 3
-
-#    - name: archive test results
+#    - name: upload artifacts
 #      uses: actions/upload-artifact@v3
-#      if: always()
 #      with:
-#        name: test results
-#        path: '*/build/reports'
+#        name: build-${{ runner.os }}
+#        path: '*/build/libs'
+#        retention-days: 3
+#
+    - name: upload test results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: test results
+        path: '*/build/reports'
 
   publish:
     if: contains(needs.version.outputs.BUILD_VERSION, 'SNAPSHOT') && github.actor == 'hauner'
@@ -101,16 +90,6 @@ jobs:
     - name: checkout
       uses: actions/checkout@v3
 
-#    - name: cache
-#      uses: actions/cache@v3
-#      with:
-#        path: |
-#          ~/.gradle/caches
-#          ~/.gradle/wrapper
-#        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-#        restore-keys: |
-#          ${{ runner.os }}-gradle-
-
     - name: set up jdk
       uses: actions/setup-java@v3
       with:
@@ -122,10 +101,10 @@ jobs:
     - name: setup gradle
       uses: gradle/gradle-build-action@v2.7.1
 
-    - name: download artifacts
-      uses: actions/download-artifact@v3
-      with:
-        name: build-${{ runner.os }}
+#    - name: download artifacts
+#      uses: actions/download-artifact@v3
+#      with:
+#        name: build-${{ runner.os }}
 
     - name: publish snapshot
       env:
@@ -136,7 +115,6 @@ jobs:
         PUBLISH_KEY: ${{ secrets.PUBLISH_KEY }}
       run: |
         ./gradlew publishToSonatype --stacktrace
-#        ./gradlew --stop
 
 #    - name: archive test results
 #      uses: actions/upload-artifact@v3
@@ -197,11 +175,12 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: |
-        ./gradlew -Dorg.gradle.java.home=${{env.JAVA_HOME_17_X64}} sonar --stacktrace
+        ./gradlew check sonar --stacktrace
 
-    - name: sonar results
-      uses: actions/upload-artifact@v3
-      if: always()
-      with:
-        name: sonar results
-        path:  '*/build'
+# -Dorg.gradle.java.home=${{env.JAVA_HOME_17_X64}}
+#    - name: sonar results
+#      uses: actions/upload-artifact@v3
+#      if: always()
+#      with:
+#        name: sonar results
+#        path:  '*/build'
