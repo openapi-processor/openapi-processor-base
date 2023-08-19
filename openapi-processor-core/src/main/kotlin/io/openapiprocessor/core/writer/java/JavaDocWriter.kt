@@ -126,10 +126,10 @@ open class JavaDocWriter {
         val indented = javadoc
             .lineSequence()
             .map {
-                if (it.isEmpty())
-                    return@map it
+                return@map if (it.isEmpty())
+                    it
                 else
-                    return@map "    $it"
+                    "    $it"
             }
             .joinToString("\n")
 
