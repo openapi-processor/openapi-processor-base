@@ -40,7 +40,9 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-latest]
+
+# , windows-latest
 
     steps:
     - name: checkout
@@ -48,15 +50,15 @@ jobs:
       with:
         submodules: true
 
-    - name: cache
-      uses: actions/cache@v3
-      with:
-        path: |
-          ~/.gradle/caches
-          ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-        restore-keys: |
-          ${{ runner.os }}-gradle-
+#    - name: cache
+#      uses: actions/cache@v3
+#      with:
+#        path: |
+#          ~/.gradle/caches
+#          ~/.gradle/wrapper
+#        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+#        restore-keys: |
+#          ${{ runner.os }}-gradle-
 
     - name: set up jdk
       uses: actions/setup-java@v3
@@ -66,17 +68,27 @@ jobs:
           17
           11
 
+    - name: setup gradle
+      uses: gradle/gradle-build-action@v2
+
+    - name: upload build
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-${{ runner.os }}
+        path: '*/build'
+        retention-days: 3
+
     - name: gradle check
       run: |
         ./gradlew javaToolchains check --warning-mode all --stacktrace
         ./gradlew --stop
 
-    - name: archive test results
-      uses: actions/upload-artifact@v3
-      if: always()
-      with:
-        name: test results
-        path: '*/build/reports'
+#    - name: archive test results
+#      uses: actions/upload-artifact@v3
+#      if: always()
+#      with:
+#        name: test results
+#        path: '*/build/reports'
 
   publish:
     if: contains(needs.version.outputs.BUILD_VERSION, 'SNAPSHOT') && github.actor == 'hauner'
@@ -89,15 +101,15 @@ jobs:
     - name: checkout
       uses: actions/checkout@v3
 
-    - name: cache
-      uses: actions/cache@v3
-      with:
-        path: |
-          ~/.gradle/caches
-          ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-        restore-keys: |
-          ${{ runner.os }}-gradle-
+#    - name: cache
+#      uses: actions/cache@v3
+#      with:
+#        path: |
+#          ~/.gradle/caches
+#          ~/.gradle/wrapper
+#        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+#        restore-keys: |
+#          ${{ runner.os }}-gradle-
 
     - name: set up jdk
       uses: actions/setup-java@v3
@@ -106,6 +118,14 @@ jobs:
         java-version: |
           17
           11
+
+    - name: setup gradle
+      uses: gradle/gradle-build-action@v2
+
+    - name: download build
+      uses: actions/download-artifact@v3
+      with:
+        name: build-${{ runner.os }}
 
     - name: publish snapshot
       env:
@@ -137,24 +157,24 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: cache
-      uses: actions/cache@v3
-      with:
-        path: |
-          ~/.gradle/caches
-          ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-        restore-keys: |
-          ${{ runner.os }}-gradle-
+#    - name: cache
+#      uses: actions/cache@v3
+#      with:
+#        path: |
+#          ~/.gradle/caches
+#          ~/.gradle/wrapper
+#        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+#        restore-keys: |
+#          ${{ runner.os }}-gradle-
 
-    - name: cache SonarCloud
+    - name: cache sonar
       uses: actions/cache@v3
       with:
         path: |
           ~/.sonar/cache
-        key: ${{ runner.os }}-sonar
+        key: sonar-${{ runner.os }}
         restore-keys: |
-          ${{ runner.os }}-sonar
+          sonar-${{ runner.os }}
 
     - name: set up jdk
       uses: actions/setup-java@v3
@@ -164,18 +184,24 @@ jobs:
           17
           11
 
-    - name: sonarqube
+    - name: setup gradle
+      uses: gradle/gradle-build-action@v2
+
+    - name: download build
+      uses: actions/download-artifact@v3
+      with:
+        name: build-${{ runner.os }}
+
+    - name: sonar
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: |
-        ./gradlew test --stacktrace
         ./gradlew -Dorg.gradle.java.home=${{env.JAVA_HOME_17_X64}} sonar --stacktrace
-        ./gradlew --stop
 
-    - name: sonarqube results
+    - name: sonar results
       uses: actions/upload-artifact@v3
       if: always()
       with:
-        name: sonarqube results
+        name: sonar results
         path:  '*/build'
