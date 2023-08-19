@@ -69,7 +69,7 @@ jobs:
           11
 
     - name: setup gradle
-      uses: gradle/gradle-build-action@v2
+      uses: gradle/gradle-build-action@v2.7.1
 
     - name: upload build
       uses: actions/upload-artifact@v3
@@ -120,7 +120,7 @@ jobs:
           11
 
     - name: setup gradle
-      uses: gradle/gradle-build-action@v2
+      uses: gradle/gradle-build-action@v2.7.1
 
     - name: download build
       uses: actions/download-artifact@v3
@@ -185,7 +185,7 @@ jobs:
           11
 
     - name: setup gradle
-      uses: gradle/gradle-build-action@v2
+      uses: gradle/gradle-build-action@v2.7.1
 
     - name: download build
       uses: actions/download-artifact@v3
