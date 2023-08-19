@@ -74,13 +74,13 @@ jobs:
     - name: gradle check
       run: |
         ./gradlew javaToolchains check --warning-mode all --stacktrace
-        ./gradlew --stop
+#        ./gradlew --stop
 
-    - name: upload build
+    - name: upload artifacts
       uses: actions/upload-artifact@v3
       with:
         name: build-${{ runner.os }}
-        path: '*/build'
+        path: '*/build/libs'
         retention-days: 3
 
 #    - name: archive test results
@@ -122,7 +122,7 @@ jobs:
     - name: setup gradle
       uses: gradle/gradle-build-action@v2.7.1
 
-    - name: download build
+    - name: download artifacts
       uses: actions/download-artifact@v3
       with:
         name: build-${{ runner.os }}
@@ -136,14 +136,14 @@ jobs:
         PUBLISH_KEY: ${{ secrets.PUBLISH_KEY }}
       run: |
         ./gradlew publishToSonatype --stacktrace
-        ./gradlew --stop
+#        ./gradlew --stop
 
-    - name: archive test results
-      uses: actions/upload-artifact@v3
-      if: always()
-      with:
-        name: publish results
-        path: '*/build'
+#    - name: archive test results
+#      uses: actions/upload-artifact@v3
+#      if: always()
+#      with:
+#        name: publish results
+#        path: '*/build'
 
   sonarqube:
     needs: [publish]
@@ -186,11 +186,11 @@ jobs:
 
     - name: setup gradle
       uses: gradle/gradle-build-action@v2.7.1
-
-    - name: download build
-      uses: actions/download-artifact@v3
-      with:
-        name: build-${{ runner.os }}
+#
+#    - name: download build
+#      uses: actions/download-artifact@v3
+#      with:
+#        name: build-${{ runner.os }}
 
     - name: sonar
       env:
