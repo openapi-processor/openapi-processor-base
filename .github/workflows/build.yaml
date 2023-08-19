@@ -170,7 +170,7 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: |
         ./gradlew test --stacktrace
-        ./gradlew -Dorg.gradle.java.home=${{env.JAVA_HOME_17_X64}} test sonar --stacktrace
+        ./gradlew -Dorg.gradle.java.home=${{env.JAVA_HOME_17_X64}} sonar --stacktrace
         ./gradlew --stop
 
     - name: sonarqube results
