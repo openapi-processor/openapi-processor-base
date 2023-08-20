@@ -1,6 +1,3 @@
-@file:Suppress("UnstableApiUsage")
-
-import org.checkerframework.gradle.plugin.CheckerFrameworkExtension
 import org.gradle.accessors.dm.LibrariesForLibs
 
 plugins {
