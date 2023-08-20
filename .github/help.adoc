@@ -1,0 +1,3 @@
+= snippets
+
+* `JAVA_HOME`: env.JAVA_HOME_17_X64
