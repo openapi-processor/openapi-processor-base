@@ -59,7 +59,7 @@ items:
   - outputs/<model>/Foo.java
 ```
 
-the `<model>` is placeholder that gets replaced by `default` and `record` at test runtime. 
+the `<model>` is placeholder that gets replaced by `default` or `record` at test runtime. 
 
 
 #### mapping
@@ -80,7 +80,7 @@ IMPORTANT: even if you provide an explicit `mapping.yaml` the `package-name` sho
 
 ### jdk
 
-the minimum jdk is currently JDK 11, although most code still JDK 8 compatible.
+the minimum jdk is currently JDK 11, although most code still is JDK 8 compatible.
 
 ### ide setup
 
