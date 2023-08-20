@@ -63,7 +63,7 @@ class DefaultWriterFactory: WriterFactory, InitWriterTarget {
     @OptIn(ExperimentalPathApi::class)
     private fun clearTargetDir() {
         try {
-            Path.of(URI.create(targetDir)).deleteRecursively()
+            Path.of(toURI(targetDir)).deleteRecursively()
         } catch (ex: IOException) {
             log.error("failed to clean target directory: {}", targetDir, ex)
         }
