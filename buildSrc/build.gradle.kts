@@ -21,10 +21,6 @@ dependencies {
     implementation(libs.plugin.outdated)
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "11"
-}
-
 gradlePlugin {
     plugins {
         create("VersionPlugin") {

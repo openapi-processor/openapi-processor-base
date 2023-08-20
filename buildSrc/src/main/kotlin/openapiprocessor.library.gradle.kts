@@ -20,12 +20,12 @@ version = projectVersion
 println("version: $projectVersion")
 
 java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(libs.versions.build.jdk.get()))
-    }
-
     withJavadocJar ()
     withSourcesJar ()
+}
+
+kotlin {
+    jvmToolchain(libs.versions.build.jdk.get().toInt())
 }
 
 repositories {
