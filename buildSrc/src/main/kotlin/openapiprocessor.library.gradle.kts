@@ -4,8 +4,9 @@ plugins {
     `java-library`
     jacoco
 
-    //id("org.checkerframework")
+    id("org.jetbrains.kotlin.jvm")
     id("com.github.ben-manes.versions")
+    //id("org.checkerframework")
 }
 
 // see buildSrc/build.gradle.kts

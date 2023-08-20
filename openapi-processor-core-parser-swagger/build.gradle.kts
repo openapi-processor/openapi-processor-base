@@ -1,7 +1,6 @@
 plugins {
     id("openapiprocessor.library")
     id("openapiprocessor.publish")
-    id("org.jetbrains.kotlin.jvm")
     `java-test-fixtures`
 }
 

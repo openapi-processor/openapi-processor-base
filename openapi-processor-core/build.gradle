@@ -7,7 +7,6 @@ plugins {
 
     id 'antlr'
     id 'groovy'
-    id "org.jetbrains.kotlin.jvm"
     alias(libs.plugins.sonar)
 }
 
