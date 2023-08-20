@@ -40,9 +40,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest]
-
-# , windows-latest
+        os: [ubuntu-latest, windows-latest]
 
     steps:
     - name: checkout
@@ -65,13 +63,6 @@ jobs:
       run: |
         ./gradlew javaToolchains check --warning-mode all --stacktrace
 
-#    - name: upload artifacts
-#      uses: actions/upload-artifact@v3
-#      with:
-#        name: build-${{ runner.os }}
-#        path: '*/build/libs'
-#        retention-days: 3
-#
     - name: upload test results
       uses: actions/upload-artifact@v3
       if: always()
@@ -101,11 +92,6 @@ jobs:
     - name: setup gradle
       uses: gradle/gradle-build-action@v2.7.1
 
-#    - name: download artifacts
-#      uses: actions/download-artifact@v3
-#      with:
-#        name: build-${{ runner.os }}
-
     - name: publish snapshot
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -116,16 +102,9 @@ jobs:
       run: |
         ./gradlew publishToSonatype --stacktrace
 
-#    - name: archive test results
-#      uses: actions/upload-artifact@v3
-#      if: always()
-#      with:
-#        name: publish results
-#        path: '*/build'
-
-  sonarqube:
+  sonar:
     needs: [publish]
-    name: sonarqube
+    name: sonar
 
     runs-on: ubuntu-latest
 
@@ -134,16 +113,6 @@ jobs:
       uses: actions/checkout@v3
       with:
         fetch-depth: 0
-
-#    - name: cache
-#      uses: actions/cache@v3
-#      with:
-#        path: |
-#          ~/.gradle/caches
-#          ~/.gradle/wrapper
-#        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-#        restore-keys: |
-#          ${{ runner.os }}-gradle-
 
     - name: cache sonar
       uses: actions/cache@v3
@@ -158,17 +127,12 @@ jobs:
       uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
+        # sonar requires at least java 17
         java-version: |
           17
-          11
 
     - name: setup gradle
       uses: gradle/gradle-build-action@v2.7.1
-#
-#    - name: download build
-#      uses: actions/download-artifact@v3
-#      with:
-#        name: build-${{ runner.os }}
 
     - name: sonar
       env:
@@ -176,11 +140,3 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: |
         ./gradlew check sonar --stacktrace
-
-# -Dorg.gradle.java.home=${{env.JAVA_HOME_17_X64}}
-#    - name: sonar results
-#      uses: actions/upload-artifact@v3
-#      if: always()
-#      with:
-#        name: sonar results
-#        path:  '*/build'
