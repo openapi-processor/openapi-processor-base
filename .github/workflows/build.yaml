@@ -53,8 +53,8 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: |
-          17
           11
+          17
 
     - name: setup gradle
       uses: gradle/gradle-build-action@v2.7.1
@@ -86,8 +86,8 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: |
-          17
           11
+          17
 
     - name: setup gradle
       uses: gradle/gradle-build-action@v2.7.1
@@ -127,8 +127,8 @@ jobs:
       uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
-        # sonar requires at least java 17
         java-version: |
+          11
           17
 
     - name: setup gradle
