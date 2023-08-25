@@ -1,7 +1,7 @@
 [versions]
 processor = "2023.4-SNAPSHOT"
 
-kotlin = "1.9.0"
+kotlin = "1.9.10"
 build-jdk = "11"
 target-jdk = "11"
 test-jdk = "17"
