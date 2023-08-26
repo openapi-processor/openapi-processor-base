@@ -11,7 +11,10 @@ import io.openapiparser.ValidationErrorTextBuilder
 import io.openapiprocessor.core.support.toURI
 import io.openapiprocessor.jackson.JacksonConverter
 import io.openapiprocessor.jsonschema.reader.UriReader
-import io.openapiprocessor.jsonschema.schema.*
+import io.openapiprocessor.jsonschema.schema.DocumentLoader
+import io.openapiprocessor.jsonschema.schema.DocumentStore
+import io.openapiprocessor.jsonschema.schema.Output
+import io.openapiprocessor.jsonschema.schema.SchemaStore
 import io.openapiprocessor.jsonschema.validator.Validator
 import io.openapiprocessor.jsonschema.validator.ValidatorSettings
 import org.slf4j.Logger
@@ -35,39 +38,58 @@ class Parser {
         val loader = DocumentLoader (reader, converter)
 
         val documents = DocumentStore ()
-        val settings = Resolver.Settings (SchemaVersion.Draft4)
-        val resolver = Resolver (documents, loader, settings)
+        val parser = OpenApiParser(documents, loader)
 
-        val parser = OpenApiParser(resolver)
-
-        val apiUri = toURI(apiPath)
-        val result = parser.parse(apiUri)
+        val baseUri = toURI(apiPath)
+        val result = parser.parse(baseUri)
 
         return when (result.version) {
-            OpenApiResult.Version.V30 -> {
-                val store = SchemaStore (loader)
-                store.registerDraft4()
-
-                val validator = Validator(ValidatorSettings().setOutput(Output.BASIC))
-                val valid = result.validate(validator, store)
-
-                if (!valid) {
-                    val builder = ValidationErrorTextBuilder()
-
-                    log.warn("OpenAPI description '{}' does not pass schema validation:", apiPath)
-                    for (error in result.validationErrors) {
-                        log.warn(builder.getText(error))
-                    }
-                }
-
-                val model = result.getModel(OpenApi30::class.java)
-                ParserOpenApi30(model)
-            }
             OpenApiResult.Version.V31 -> {
-                ParserOpenApi31(result.getModel(OpenApi31::class.java))
+                validate31(loader, apiPath, result)
+                createApi31(result)
+            }
+            OpenApiResult.Version.V30 -> {
+                validate30(loader, apiPath, result)
+                createApi30(result)
             }
             else -> {
-                TODO() // unsupported openapi version
+                TODO() // unknown openapi version
+            }
+        }
+    }
+
+    private fun createApi30(result: OpenApiResult): ParserOpenApi {
+        val model = result.getModel(OpenApi30::class.java)
+        return ParserOpenApi30(model)
+    }
+
+    private fun createApi31(result: OpenApiResult): ParserOpenApi {
+        val model = result.getModel(OpenApi31::class.java)
+        return ParserOpenApi31(model)
+    }
+
+    private fun validate30(loader: DocumentLoader, apiPath: String, result: OpenApiResult) {
+        val store = SchemaStore(loader)
+        store.registerDraft4()
+        validate(apiPath, result, store)
+    }
+
+    private fun validate31(loader: DocumentLoader, apiPath: String, result: OpenApiResult) {
+        val store = SchemaStore(loader)
+        store.registerDraft202012()
+        validate(apiPath, result, store)
+    }
+
+    private fun validate(apiPath: String, result: OpenApiResult, store: SchemaStore) {
+        val validator = Validator(ValidatorSettings().setOutput(Output.BASIC))
+        val valid = result.validate(validator, store)
+
+        if (!valid) {
+            val builder = ValidationErrorTextBuilder()
+
+            log.warn("OpenAPI description '{}' does not pass schema validation:", apiPath)
+            for (error in result.validationErrors) {
+                log.warn(builder.getText(error))
             }
         }
     }
