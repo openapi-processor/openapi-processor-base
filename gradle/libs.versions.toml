@@ -24,7 +24,7 @@ jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind" }
 jackson-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml" }
 jackson-xml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-xml" }
 jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
-snakeyaml = "org.yaml:snakeyaml:1.33"
+snakeyaml = "org.yaml:snakeyaml:2.2"
 
 openapi4j = "org.openapi4j:openapi-parser:1.0.7"
 swagger = "io.swagger.parser.v3:swagger-parser:2.1.16"
