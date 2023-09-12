@@ -59,6 +59,12 @@ jobs:
     - name: set up gradle
       uses: gradle/gradle-build-action@v2.8.0
 
+    - name: free disk space
+      run: |
+        df -h
+        sudo rm -rf /usr/local/lib/android
+        df -h
+
     - name: run tests
       run: |
         ./gradlew javaToolchains check --warning-mode all --stacktrace
