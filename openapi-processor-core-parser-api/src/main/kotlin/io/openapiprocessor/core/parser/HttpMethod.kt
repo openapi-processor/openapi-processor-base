@@ -9,12 +9,12 @@ package io.openapiprocessor.core.parser
  * http methods.
  */
 enum class HttpMethod(val method: String) {
-    GET ("get"),
-    PUT ("put"),
-    POST ("post"),
     DELETE ("delete"),
-    OPTIONS ("options"),
+    GET ("get"),
     HEAD ("head"),
+    OPTIONS ("options"),
     PATCH ("patch"),
+    POST ("post"),
+    PUT ("put"),
     TRACE ("trace")
 }

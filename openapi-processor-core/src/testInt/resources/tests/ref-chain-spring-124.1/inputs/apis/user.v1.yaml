@@ -18,6 +18,16 @@ paths:
         required: true
         description: Id of an existing user.
 
+    delete:
+      summary: Delete User by User ID
+      description: Delete the user with the matching user ID.
+      operationId: delete-user-by-userId
+      tags:
+        - user
+      responses:
+        '200':
+          description: OK
+
     get:
       summary: Get User by User ID
       description: Retrieve the information of the user with the matching user ID.
@@ -70,16 +80,6 @@ paths:
             examples:
               Put User Alice Smith:
                 $ref: '#/components/examples/UserExample'
-
-    delete:
-      summary: Delete User by User ID
-      description: Delete the user with the matching user ID.
-      operationId: delete-user-by-userId
-      tags:
-        - user
-      responses:
-        '200':
-          description: OK
 
   '/user':
     post:

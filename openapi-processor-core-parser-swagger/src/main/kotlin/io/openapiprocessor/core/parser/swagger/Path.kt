@@ -39,13 +39,13 @@ class Path(
 
 fun SwaggerPath.getOperation(method: String): SwaggerOperation? {
     return when(method) {
-        HttpMethod.GET.method -> this.get
-        HttpMethod.PUT.method -> this.put
-        HttpMethod.POST.method -> this.post
         HttpMethod.DELETE.method -> this.delete
-        HttpMethod.OPTIONS.method -> this.options
+        HttpMethod.GET.method -> this.get
         HttpMethod.HEAD.method -> this.head
+        HttpMethod.OPTIONS.method -> this.options
         HttpMethod.PATCH.method -> this.patch
+        HttpMethod.POST.method -> this.post
+        HttpMethod.PUT.method -> this.put
         HttpMethod.TRACE.method -> this.trace
         else -> null
     }

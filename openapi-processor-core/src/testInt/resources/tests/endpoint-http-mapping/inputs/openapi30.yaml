@@ -6,12 +6,12 @@ info:
 paths:
   /endpoint:
 
-    get:
+    delete:
       responses:
         '204':
           description: empty
 
-    delete:
+    get:
       responses:
         '204':
           description: empty

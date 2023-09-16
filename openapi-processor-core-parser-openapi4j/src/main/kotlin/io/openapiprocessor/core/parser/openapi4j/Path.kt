@@ -22,16 +22,8 @@ class Path(
     override fun getPath(): String = path
 
     override fun getOperations(): List<ParserOperation> {
-        val ops: MutableList<ParserOperation> = mutableListOf()
-
-        HttpMethod.entries.map {
-            val op = info.getOperation(it.method)
-            if (op != null) {
-                ops.add (Operation(it, op, info, refResolver))
-            }
-        }
-
-        return ops
+        return info
+            .operations
+            .map { Operation(HttpMethod.valueOf(it.key.uppercase()), it.value, info, refResolver) }
     }
-
 }

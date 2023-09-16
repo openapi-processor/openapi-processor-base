@@ -14,15 +14,15 @@ import org.springframework.http.ResponseEntity;
 public interface UserApi {
 
     @Mapping("/users/{userId}")
+    ResponseEntity<Void> deleteUserByUserId(@Parameter Long userId);
+
+    @Mapping("/users/{userId}")
     ResponseEntity<User> getUserByUserId(@Parameter Long userId);
 
     @Mapping("/users/{userId}")
     ResponseEntity<User> putUserByUserId(
             @Parameter Long userId,
             @Parameter User body);
-
-    @Mapping("/users/{userId}")
-    ResponseEntity<Void> deleteUserByUserId(@Parameter Long userId);
 
     @Mapping("/user")
     ResponseEntity<User> postUser(@Parameter User body);
