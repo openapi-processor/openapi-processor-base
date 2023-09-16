@@ -84,7 +84,7 @@ class  ApiConverter(
 
         itf = Interface(targetInterfaceName, listOf(options.packageName, "api").joinToString("."))
 
-        interfaces.put (targetInterfaceName, itf)
+        interfaces[targetInterfaceName] = itf
         return itf
     }
 
