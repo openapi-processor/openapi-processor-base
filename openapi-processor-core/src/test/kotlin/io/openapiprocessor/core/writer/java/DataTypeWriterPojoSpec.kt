@@ -15,6 +15,7 @@ import io.openapiprocessor.core.converter.mapping.Annotation as MappingAnnotatio
 import io.openapiprocessor.core.converter.mapping.AnnotationTypeMapping
 import io.openapiprocessor.core.converter.mapping.SimpleParameterValue
 import io.openapiprocessor.core.extractImports
+import io.openapiprocessor.core.model.Annotation
 import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.support.datatypes.ObjectDataType
 import io.openapiprocessor.core.support.datatypes.ListDataType

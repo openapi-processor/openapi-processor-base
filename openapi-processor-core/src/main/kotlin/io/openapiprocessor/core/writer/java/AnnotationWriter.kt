@@ -3,8 +3,9 @@
  * PDX-License-Identifier: Apache-2.0
  */
 
-package io.openapiprocessor.core.writer.java;
+package io.openapiprocessor.core.writer.java
 
+import io.openapiprocessor.core.model.Annotation
 import java.io.StringWriter
 import java.io.Writer
 

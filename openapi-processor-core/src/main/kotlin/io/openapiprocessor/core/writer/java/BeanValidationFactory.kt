@@ -7,6 +7,7 @@ package io.openapiprocessor.core.writer.java
 
 import io.openapiprocessor.core.converter.mapping.ParameterValue
 import io.openapiprocessor.core.converter.mapping.SimpleParameterValue
+import io.openapiprocessor.core.model.Annotation
 import io.openapiprocessor.core.model.datatypes.*
 import org.apache.commons.text.StringEscapeUtils.escapeJava
 

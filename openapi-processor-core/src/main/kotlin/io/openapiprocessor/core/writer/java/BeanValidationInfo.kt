@@ -5,6 +5,7 @@
 
 package io.openapiprocessor.core.writer.java
 
+import io.openapiprocessor.core.model.Annotation
 import io.openapiprocessor.core.model.datatypes.*
 
 data class BeanValidationValue(
@@ -40,7 +41,7 @@ class BeanValidationInfoSimple(
         )
 
     private val annotationImports: Set<String>
-        get() = annotations.map { it.import }.toSet()
+        get() = annotations.map { it.imports }.flatten().toSet()
 
     private val annotationValues: List<String>
         get() = annotations.map { buildAnnotation(it) }.toList()
@@ -147,13 +148,13 @@ class BeanValidationInfoCollection(
         }
 
     private val annotationImports: Set<String>
-        get() = annotations.map { it.import }.toSet()
+        get() = annotations.map { it.imports }.flatten().toSet()
 
     private val annotationValues: List<String>
         get() = annotations.map { buildAnnotation(it) }.toList()
 
     private val itemAnnotationImports: Set<String>
-        get() = item.annotations.map { it.import }.toSet()
+        get() = item.annotations.map { it.imports }.flatten().toSet()
 
     private val itemAnnotationValues: List<String>
         get() = item.annotations.map { buildAnnotation(it) }.toList()

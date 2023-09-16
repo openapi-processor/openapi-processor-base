@@ -8,6 +8,7 @@ package io.openapiprocessor.core.writer.java
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.MappingFinder
 import io.openapiprocessor.core.converter.resultStyle
+import io.openapiprocessor.core.model.Annotation
 import io.openapiprocessor.core.model.Endpoint
 import io.openapiprocessor.core.model.EndpointResponse
 import io.openapiprocessor.core.model.parameters.AdditionalParameter

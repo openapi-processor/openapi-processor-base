@@ -56,7 +56,7 @@ class InterfaceWriter(
         imports.add(generatedWriter.getImport())
 
         endpoints.forEach { ep ->
-            imports.add(annotations.getAnnotation (ep.method).fullyQualifiedName)
+            imports.addAll(annotations.getAnnotation (ep.method).imports)
 
             if (ep.deprecated) {
                 imports.add (java.lang.Deprecated::class.java.canonicalName)
@@ -87,7 +87,7 @@ class InterfaceWriter(
         }
 
         if (parameter.withAnnotation) {
-            imports.add(annotations.getAnnotation(parameter).fullyQualifiedName)
+            imports.addAll(annotations.getAnnotation(parameter).imports)
         }
 
         if (parameter is AdditionalParameter && parameter.annotationDataType != null) {

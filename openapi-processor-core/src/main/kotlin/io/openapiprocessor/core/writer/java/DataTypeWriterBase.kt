@@ -7,6 +7,7 @@ package io.openapiprocessor.core.writer.java
 
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.MappingFinder
+import io.openapiprocessor.core.model.Annotation
 import io.openapiprocessor.core.model.datatypes.DataType
 import io.openapiprocessor.core.model.datatypes.ModelDataType
 import io.openapiprocessor.core.model.datatypes.ObjectDataType

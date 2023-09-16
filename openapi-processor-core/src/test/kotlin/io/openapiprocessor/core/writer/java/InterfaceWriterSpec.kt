@@ -13,24 +13,24 @@ import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.openapiprocessor.core.builder.api.`interface`
 import io.openapiprocessor.core.converter.ApiOptions
-import io.openapiprocessor.core.converter.mapping.Annotation
 import io.openapiprocessor.core.converter.mapping.AnnotationTypeMapping
 import io.openapiprocessor.core.converter.mapping.ParameterAnnotationTypeMapping
 import io.openapiprocessor.core.extractBody
 import io.openapiprocessor.core.extractImports
-import io.openapiprocessor.core.framework.FrameworkAnnotation
 import io.openapiprocessor.core.framework.FrameworkAnnotations
+import io.openapiprocessor.core.model.Annotation
 import io.openapiprocessor.core.model.Endpoint
-import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.model.parameters.AdditionalParameter
 import io.openapiprocessor.core.model.parameters.Parameter
 import io.openapiprocessor.core.model.parameters.ParameterBase
+import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.support.datatypes.ObjectDataType
 import io.openapiprocessor.core.support.datatypes.propertyDataTypeString
 import java.io.StringWriter
 import java.io.Writer
 import io.mockk.mockk as stub
+import io.openapiprocessor.core.converter.mapping.Annotation as AnnotationMapping
 
 
 class InterfaceWriterSpec: StringSpec({
@@ -49,8 +49,7 @@ class InterfaceWriterSpec: StringSpec({
     }
 
     "writes mapping import" {
-        every { annotations.getAnnotation(any<HttpMethod>()) } returns FrameworkAnnotation(
-            "Mapping", "annotation")
+        every { annotations.getAnnotation(any<HttpMethod>()) } returns Annotation("annotation.Mapping")
 
         val itf = `interface` {
             endpoint("/foo") {
@@ -67,9 +66,9 @@ class InterfaceWriterSpec: StringSpec({
 
     "writes multiple mapping imports" {
         every { annotations.getAnnotation(any<HttpMethod>()) } returnsMany listOf(
-            FrameworkAnnotation("MappingA", "annotation"),
-            FrameworkAnnotation("MappingB", "annotation"),
-            FrameworkAnnotation("MappingC", "annotation"))
+            Annotation("annotation.MappingA"),
+            Annotation("annotation.MappingB"),
+            Annotation("annotation.MappingC"))
 
         val itf = `interface` {
             endpoint("/foo", HttpMethod.GET) {
@@ -113,10 +112,8 @@ class InterfaceWriterSpec: StringSpec({
     }
 
     "writes parameter annotation import" {
-        every { annotations.getAnnotation(any<HttpMethod>()) } returns FrameworkAnnotation(
-            "Mapping", "annotation")
-        every { annotations.getAnnotation(any<Parameter>()) } returns FrameworkAnnotation(
-            "Parameter", "annotation")
+        every { annotations.getAnnotation(any<HttpMethod>()) } returns Annotation("annotation.Mapping")
+        every { annotations.getAnnotation(any<Parameter>()) } returns Annotation("annotation.Parameter")
 
         val itf = `interface` {
             endpoint("/foo") {
@@ -139,10 +136,8 @@ class InterfaceWriterSpec: StringSpec({
     "writes parameter @NotNull validation annotation import" {
         options.beanValidation = true
 
-        every { annotations.getAnnotation(any<HttpMethod>()) } returns FrameworkAnnotation(
-            "Mapping", "annotation")
-        every { annotations.getAnnotation(any<Parameter>()) } returns FrameworkAnnotation(
-            "Parameter", "annotation")
+        every { annotations.getAnnotation(any<HttpMethod>()) } returns Annotation("annotation.Mapping")
+        every { annotations.getAnnotation(any<Parameter>()) } returns Annotation("annotation.Parameter")
 
         val itf = `interface` {
             endpoint("/foo") {
@@ -209,7 +204,7 @@ class InterfaceWriterSpec: StringSpec({
     "writes additional annotation mapping import" {
         options.typeMappings = listOf(
             ParameterAnnotationTypeMapping(
-                AnnotationTypeMapping("Foo", annotation = Annotation(
+                AnnotationTypeMapping("Foo", annotation = AnnotationMapping(
                     "io.openapiprocessor.Bar")
             )))
 
@@ -233,8 +228,7 @@ class InterfaceWriterSpec: StringSpec({
     }
 
     "writes additional parameter annotation import" {
-        every { annotations.getAnnotation(any<Parameter>()) } returns FrameworkAnnotation(
-            "Parameter", "annotation")
+        every { annotations.getAnnotation(any<Parameter>()) } returns Annotation("annotation.Parameter")
 
         val itf = `interface` {
             endpoint ("/foo") {
@@ -257,8 +251,7 @@ class InterfaceWriterSpec: StringSpec({
     }
 
     "writes request body annotation import" {
-        every { annotations.getAnnotation(any<Parameter>()) } returns FrameworkAnnotation(
-            "Body", "annotation")
+        every { annotations.getAnnotation(any<Parameter>()) } returns Annotation("annotation.Body")
 
         val itf = `interface` {
             endpoint("/foo") {
@@ -363,9 +356,9 @@ class InterfaceWriterSpec: StringSpec({
 
     "sorts imports alphabetically" {
         every { annotations.getAnnotation(any<HttpMethod>()) } returnsMany listOf(
-            FrameworkAnnotation("MappingC", "annotation"),
-            FrameworkAnnotation("MappingA", "annotation"),
-            FrameworkAnnotation("MappingB", "annotation"))
+            Annotation("annotation.MappingC"),
+            Annotation("annotation.MappingA"),
+            Annotation("annotation.MappingB"))
 
         val itf = `interface` {
             endpoint("/foo") {

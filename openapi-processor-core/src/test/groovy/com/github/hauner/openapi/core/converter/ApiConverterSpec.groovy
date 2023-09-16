@@ -1,24 +1,17 @@
 /*
- * Copyright © 2019 https://github.com/openapi-processor/openapi-processor-core
+ * Copyright 2019 https://github.com/openapi-processor/openapi-processor-core
  * PDX-License-Identifier: Apache-2.0
  */
 
 package com.github.hauner.openapi.core.converter
 
+import com.github.hauner.openapi.core.test.ModelAsserts
 import io.openapiprocessor.core.converter.ApiConverter
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.mapping.EndpointTypeMapping
 import io.openapiprocessor.core.framework.Framework
-import io.openapiprocessor.core.framework.FrameworkAnnotations
-import io.openapiprocessor.core.writer.java.BeanValidationFactory
-import io.openapiprocessor.core.writer.java.DefaultImportFilter
-import io.openapiprocessor.core.writer.java.GeneratedWriter
-import io.openapiprocessor.core.writer.java.JavaDocWriter
-import io.openapiprocessor.core.writer.java.MappingAnnotationWriter
-import io.openapiprocessor.core.writer.java.ParameterAnnotationWriter
-import com.github.hauner.openapi.core.test.ModelAsserts
-import io.openapiprocessor.core.writer.java.InterfaceWriter
-import io.openapiprocessor.core.writer.java.MethodWriter
+import io.openapiprocessor.core.support.TestFrameworkAnnotations
+import io.openapiprocessor.core.writer.java.*
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -138,7 +131,7 @@ paths:
                 Stub (ParameterAnnotationWriter),
                 Stub (BeanValidationFactory),
                 Stub (JavaDocWriter)),
-            Stub (FrameworkAnnotations),
+            new TestFrameworkAnnotations(),
             new BeanValidationFactory(),
             new DefaultImportFilter())
         def writer = new StringWriter()

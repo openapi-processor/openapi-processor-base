@@ -70,7 +70,7 @@ class BeanValidationFactorySpec extends Specification {
         def info = validation.validate (dataType, false)
 
         then:
-        info.annotations.collect {it.import }.containsAll (resultImports)
+        info.annotations.collect {it.imports }.flatten().containsAll (resultImports)
         info.annotations.collect { buildAnnotation (it)}.containsAll (resultAnnotations)
 
         where:
@@ -97,7 +97,7 @@ class BeanValidationFactorySpec extends Specification {
         def info = validation.validate (dataType, false)
 
         then:
-        info.annotations.collect {it.import }.containsAll (resultImports)
+        info.annotations.collect {it.imports }.flatten().containsAll (resultImports)
         info.annotations.collect {buildAnnotation (it)}.containsAll (resultAnnotations)
 
         where:
@@ -131,7 +131,7 @@ class BeanValidationFactorySpec extends Specification {
         def info = validation.validate (dataType, false)
 
         then:
-        info.annotations.collect {it.import }.containsAll (resultImports)
+        info.annotations.collect {it.imports }.flatten().containsAll (resultImports)
         info.annotations.collect {buildAnnotation (it)}.containsAll (resultAnnotations)
 
         where:
@@ -153,7 +153,7 @@ class BeanValidationFactorySpec extends Specification {
         def info = validation.validate (dataType, required)
 
         then:
-        info.annotations.collect {it.import }.containsAll (resultImports)
+        info.annotations.collect {it.imports }.flatten().containsAll (resultImports)
         info.annotations.collect {buildAnnotation (it)}.containsAll (resultAnnotations)
 
         where:
@@ -179,7 +179,7 @@ class BeanValidationFactorySpec extends Specification {
         def info = validation.validate (dataType, false)
 
         then:
-        info.annotations.collect {it.import }.containsAll (resultImports)
+        info.annotations.collect {it.imports }.flatten().containsAll (resultImports)
         info.annotations.collect {buildAnnotation (it)}.containsAll (resultAnnotations)
 
         where:
@@ -217,7 +217,7 @@ class BeanValidationFactorySpec extends Specification {
         def info = validation.validate (dataType, false)
 
         then:
-        info.annotations.collect {it.import }.containsAll (resultImports)
+        info.annotations.collect {it.imports }.flatten().containsAll (resultImports)
         info.annotations.collect {buildAnnotation (it)}.containsAll (resultAnnotations)
 
         where:
@@ -256,7 +256,7 @@ class BeanValidationFactorySpec extends Specification {
         def info = validation.validate (dataType, false)
 
         then:
-        info.annotations.collect {it.import }.containsAll (resultImports)
+        info.annotations.collect {it.imports }.flatten().containsAll (resultImports)
         info.annotations.collect {buildAnnotation (it)}.containsAll (resultAnnotations)
 
         where:
