@@ -56,7 +56,9 @@ class InterfaceWriter(
         imports.add(generatedWriter.getImport())
 
         endpoints.forEach { ep ->
-            imports.addAll(annotations.getAnnotation (ep.method).imports)
+            val annotation = annotations.getAnnotation (ep.method)
+            imports.addAll(annotation.imports)
+            imports.addAll(annotation.referencedImports)
 
             if (ep.deprecated) {
                 imports.add (java.lang.Deprecated::class.java.canonicalName)

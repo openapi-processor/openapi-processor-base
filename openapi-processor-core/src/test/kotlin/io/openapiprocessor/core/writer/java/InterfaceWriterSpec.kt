@@ -15,6 +15,7 @@ import io.openapiprocessor.core.builder.api.`interface`
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.mapping.AnnotationTypeMapping
 import io.openapiprocessor.core.converter.mapping.ParameterAnnotationTypeMapping
+import io.openapiprocessor.core.converter.mapping.SimpleParameterValue
 import io.openapiprocessor.core.extractBody
 import io.openapiprocessor.core.extractImports
 import io.openapiprocessor.core.framework.FrameworkAnnotations
@@ -29,6 +30,10 @@ import io.openapiprocessor.core.support.datatypes.ObjectDataType
 import io.openapiprocessor.core.support.datatypes.propertyDataTypeString
 import java.io.StringWriter
 import java.io.Writer
+import kotlin.Boolean
+import kotlin.Pair
+import kotlin.String
+import kotlin.to
 import io.mockk.mockk as stub
 import io.openapiprocessor.core.converter.mapping.Annotation as AnnotationMapping
 
@@ -62,6 +67,27 @@ class InterfaceWriterSpec: StringSpec({
 
         // then:
         extractImports(target) shouldContain "import annotation.Mapping;"
+    }
+
+    "writes mapping parameter import" {
+        every { annotations.getAnnotation(any<HttpMethod>()) } returns Annotation(
+            "annotation.Mapping", linkedMapOf(
+                "parameter" to SimpleParameterValue("Parameter", "parameter.Parameter")
+            )
+        )
+
+        val itf = `interface` {
+            endpoint("/foo") {
+                responses { status("200") }
+            }
+        }
+
+        // when:
+        writer.write(target, itf)
+
+        // then:
+        extractImports(target) shouldContain "import annotation.Mapping;"
+        extractImports(target) shouldContain "import parameter.Parameter;"
     }
 
     "writes multiple mapping imports" {
