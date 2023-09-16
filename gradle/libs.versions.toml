@@ -12,7 +12,7 @@ jacoco = "0.8.7"
 [libraries]
 openapi-processor-api = "io.openapiprocessor:openapi-processor-api:2023.1"
 
-openapi-parser-bom = "io.openapiprocessor:openapi-parser-bom:2023.3"
+openapi-parser-bom = "io.openapiprocessor:openapi-parser-bom:2023.4-SNAPSHOT"
 openapi-parser-parser = { module = "io.openapiprocessor:openapi-parser" }
 json-schema-validator-bom = "io.openapiprocessor:json-schema-validator-bom:2023.3"
 json-schema-validator-validator = { module = "io.openapiprocessor:json-schema-validator" }

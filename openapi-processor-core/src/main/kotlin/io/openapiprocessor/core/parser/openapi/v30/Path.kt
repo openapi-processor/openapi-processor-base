@@ -6,7 +6,6 @@
 package io.openapiprocessor.core.parser.openapi.v30
 
 import io.openapiparser.model.v30.PathItem
-import io.openapiparser.model.v30.Operation
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.parser.Operation as ParserOperation
 import io.openapiprocessor.core.parser.Path as ParserPath
@@ -27,22 +26,8 @@ class Path(
             pathItem = info.refObject
         }
 
-        val result: MutableList<ParserOperation> = mutableListOf()
-        collectNotNull(HttpMethod.GET, pathItem.get, pathItem, result)
-        collectNotNull(HttpMethod.PUT, pathItem.put, pathItem, result)
-        collectNotNull(HttpMethod.POST, pathItem.post, pathItem, result)
-        collectNotNull(HttpMethod.DELETE, pathItem.delete, pathItem, result)
-        collectNotNull(HttpMethod.OPTIONS, pathItem.options, pathItem, result)
-        collectNotNull(HttpMethod.PATCH, pathItem.patch, pathItem, result)
-        collectNotNull(HttpMethod.TRACE, pathItem.trace, pathItem, result)
-        collectNotNull(HttpMethod.HEAD, pathItem.head, pathItem, result)
-        return result
-    }
-
-    private fun collectNotNull(method: HttpMethod, operation: Operation?, pathItem: PathItem, target: MutableList<ParserOperation>) {
-        if (operation == null)
-            return
-
-        target.add(Operation(method, operation, pathItem))
+        return pathItem
+            .operations
+            .map { Operation(HttpMethod.valueOf(it.key.uppercase()), it.value, pathItem) }
     }
 }
