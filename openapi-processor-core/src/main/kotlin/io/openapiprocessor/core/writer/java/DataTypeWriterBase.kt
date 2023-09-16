@@ -92,10 +92,10 @@ abstract class DataTypeWriterBase(
         val access = getAccess(propDataType)
 
         var result = "@JsonProperty("
-        if (access != null) {
-            result += "value = \"$propertyName\", access = JsonProperty.Access.${access.value}"
+        result += if (access != null) {
+            "value = \"$propertyName\", access = JsonProperty.Access.${access.value}"
         } else {
-            result += "\"$propertyName\""
+            "\"$propertyName\""
         }
 
         result += ")"
