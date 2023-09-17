@@ -120,7 +120,7 @@ tasks.named("dependencyUpdates").configure {
     rejectVersionIf {
         String v = it.candidate.version
         println "candidate ${it.candidate}:$v"
-        return v.endsWith ("-M1") || v.contains ("alpha")
+        return v.endsWith ("-SNAPSHOT") || v.endsWith ("-M1") || v.contains ("alpha")
     }
 }
 
