@@ -11,19 +11,23 @@ mapping
     ;
 
 type
-    : plainType | targetType
+    : anyType
     ;
 
 map
-    : sourceType Arrow targetType
+    : sourceType Arrow anyType
     ;
 
 content
-    : contentType Arrow targetType
+    : contentType Arrow anyType
     ;
 
 annotate
     : sourceType Annotate annotationType
+    ;
+
+anyType
+    : plainType | targetType
     ;
 
 plainType

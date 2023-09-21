@@ -13,7 +13,7 @@ import io.openapiprocessor.core.processor.mapping.v2.parser.MappingType
 
 
 class MappingExtractor: MappingBaseListener(), Mapping {
-    override var kind: Mapping.Kind? = null
+    override var kind: Mapping.Kind? = Mapping.Kind.TYPE
     override var sourceType: String? = null
     override var sourceFormat: String? = null
     override var annotationType: String? = null
@@ -27,10 +27,6 @@ class MappingExtractor: MappingBaseListener(), Mapping {
     }
 
     private var typeStack = ArrayDeque<Type>()
-
-    override fun enterType(ctx: MappingParser.TypeContext) {
-        kind = Mapping.Kind.TYPE
-    }
 
     override fun enterMap(ctx: MappingParser.MapContext) {
         kind = Mapping.Kind.MAP

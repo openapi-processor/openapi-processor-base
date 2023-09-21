@@ -250,4 +250,13 @@ class AntlrParserSpec: StringSpec({
         val level2First = mapping.targetGenericTypes2[0]
         level2First.targetType shouldBe "java.lang.String"
     }
+
+    "map array type to java array" {
+        val source = "array => plain"
+
+        val mapping = parseMapping(source)
+        mapping.kind shouldBe Mapping.Kind.MAP
+        mapping.sourceType shouldBe "array"
+        mapping.targetType shouldBe "plain"
+    }
 })
