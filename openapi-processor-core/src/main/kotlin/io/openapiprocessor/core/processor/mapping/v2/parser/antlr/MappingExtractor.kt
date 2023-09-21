@@ -44,6 +44,10 @@ class MappingExtractor: MappingBaseListener(), Mapping {
         targetType = ctx.text
     }
 
+    override fun enterPrimitiveType(ctx: MappingParser.PrimitiveTypeContext) {
+        targetType = ctx.text
+    }
+
     override fun enterSourceIdentifier(ctx: MappingParser.SourceIdentifierContext) {
         sourceType = ctx.text
     }

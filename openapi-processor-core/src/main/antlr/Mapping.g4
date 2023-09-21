@@ -27,11 +27,15 @@ annotate
     ;
 
 anyType
-    : plainType | targetType
+    : plainType | primitiveType | targetType
     ;
 
 plainType
     : Plain
+    ;
+
+primitiveType
+    : Primitive
     ;
 
 sourceType
@@ -99,6 +103,7 @@ Arrow: '=>';
 Annotate: '@';
 
 Plain: 'plain';
+Primitive: 'byte' | 'short' | 'int' | 'long' | 'float' | 'double' | 'boolean' | 'char';
 Boolean: 'true' | 'false';
 Package: '{package-name}';
 
