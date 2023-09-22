@@ -260,12 +260,21 @@ class AntlrParserSpec: StringSpec({
         mapping.targetType shouldBe "plain"
     }
 
-    "primitive byte array" {
+    "primitive byte" {
         val type = "byte"
 
         val mapping = parseMapping(type)
         mapping.kind shouldBe Mapping.Kind.TYPE
         mapping.sourceType.shouldBeNull()
         mapping.targetType shouldBe "byte"
+    }
+
+    "primitive byte[]" {
+        val type = "byte[]"
+
+        val mapping = parseMapping(type)
+        mapping.kind shouldBe Mapping.Kind.TYPE
+        mapping.sourceType.shouldBeNull()
+        mapping.targetType shouldBe "byte[]"
     }
 })

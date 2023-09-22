@@ -35,7 +35,7 @@ plainType
     ;
 
 primitiveType
-    : Primitive
+    : Primitive | PrimitiveArray
     ;
 
 sourceType
@@ -109,14 +109,20 @@ Package: '{package-name}';
 
 DoubleQuote: '"';
 GenericAny: '?';
+OpenArray: '[';
+CloseArray: ']';
 
 Whitespace
   : [ \t] -> skip
   ;
 
+PrimitiveArray
+    : Primitive OpenArray CloseArray
+    ;
+
 Identifier
-  : JavaLetter JavaLetterOrDigit*
-  ;
+    : JavaLetter JavaLetterOrDigit*
+    ;
 
 QualifiedTypeClass
     : (Identifier) ('.' Identifier)* '.class'
