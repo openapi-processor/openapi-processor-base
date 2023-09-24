@@ -1,0 +1,9 @@
+openapi-processor-mapping: v4
+
+options:
+  package-name: generated
+  format-code: false
+
+map:
+  types:
+    - type: string:binary => byte[]
