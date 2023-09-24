@@ -107,7 +107,8 @@ components:
                     'StringPage',
                     null,
                     'org.springframework.data.domain.Page',
-                    [new TargetType ('java.lang.String', [])])
+                    [new TargetType ('java.lang.String', [])],
+                    false, false)
             ])
 
         Api api = new ApiConverter (options, new FrameworkBase ())
@@ -363,7 +364,8 @@ paths:
                         'object',
                         null,
                         'pkg.TargetClass',
-                        [new TargetType ('java.lang.String', [])])
+                        [new TargetType ('java.lang.String', [])],
+                        false, false)
                     )]
                 )
             ], [
@@ -372,7 +374,8 @@ paths:
                         'object',
                         null,
                         'pkg.TargetClass',
-                        [new TargetType ('java.lang.String', [])])
+                        [new TargetType ('java.lang.String', [])],
+                        false, false)
                 )
             ], [
                 new EndpointTypeMapping ('/object', null, [
@@ -381,12 +384,14 @@ paths:
                         'object',
                         null,
                         'pkg.TargetClass',
-                        [new TargetType ('java.lang.String', [])])),
+                        [new TargetType ('java.lang.String', [])],
+                        false, false)),
                     new TypeMapping (
                         'ObjectGetResponse200',
                         null,
                         'pkg.TargetClassType',
-                        [new TargetType ('java.lang.StringType', [])])
+                        [new TargetType ('java.lang.StringType', [])],
+                        false, false)
                 ])
             ], [
                 new EndpointTypeMapping ('/object', null, [
@@ -394,7 +399,8 @@ paths:
                         'ObjectGetResponse200',
                         null,
                         'pkg.TargetClass',
-                        [new TargetType ('java.lang.String', [])])
+                        [new TargetType ('java.lang.String', [])],
+                        false, false)
                     ]
                 )
             ]
@@ -447,7 +453,9 @@ components:
                         [
                             new TargetType('java.lang.String', []),
                             new TargetType('java.lang.String', [])
-                        ])
+                        ],
+                        false,
+                        false)
                 ])
             ])
 
@@ -507,7 +515,9 @@ components:
                     [
                         new TargetType('java.lang.String', []),
                         new TargetType('java.lang.String', [])
-                    ])
+                    ],
+                    false,
+                    false)
                 ])
             ])
 

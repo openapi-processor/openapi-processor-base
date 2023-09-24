@@ -198,9 +198,8 @@ class  ApiConverter(
     @Suppress("UNUSED_PARAMETER")
     private fun createAdditionalParameter(mapping: AddParameterTypeMapping, dataTypes: DataTypes, resolver: RefResolver): ModelParameter {
         val tm = mapping.getChildMappings().first () as TypeMapping
-        val tt = tm.getTargetType()
 
-        val addType = dataTypeConverter.createAdditionalParameterMappedDataType(tt)
+        val addType = dataTypeConverter.createAdditionalParameterDataType(tm)
 
         var annotationType: AnnotationDataType? = null
         if (mapping.annotation != null) {
@@ -237,7 +236,6 @@ class  ApiConverter(
 
             override val description: String?
                 get() = null
-
         }
 
         return framework.createAdditionalParameter (parameter, addType, annotationType)

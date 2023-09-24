@@ -74,29 +74,8 @@ class DataTypeConverter(
         return result
     }
 
-    private fun createMappedDataType(
-        targetType: TargetType,
-        schemaInfo: SchemaInfo,
-        sourceDataType: DataType
-    ): MappedDataType {
-        return MappedDataType(
-            targetType.getName(),
-            targetType.getPkg(),
-            convertGenerics(targetType),
-            null,
-            schemaInfo.getDeprecated(),
-            sourceDataType
-        )
-    }
-
-    fun createAdditionalParameterMappedDataType(targetType: TargetType): MappedDataType {
-        return MappedDataType(
-            targetType.getName(),
-            targetType.getPkg(),
-            convertGenerics(targetType),
-            null,
-            false
-        )
+    fun createAdditionalParameterDataType(typeMapping: TypeMapping): DataType {
+        return createMappedDataType(typeMapping, null, null)
     }
 
     private fun convertGenerics(targetType: TargetType): List<GenericDataType> {
@@ -128,9 +107,9 @@ class DataTypeConverter(
 
         val objectType: DataType = createComposedDataType(schemaInfo, items)
 
-        val targetType = getMappedDataType(schemaInfo)
-        if (targetType != null) {
-            return createMappedDataType(targetType, schemaInfo, objectType)
+        val typeMapping = getDataTypeMapping(schemaInfo)
+        if (typeMapping != null) {
+            return createMappedDataType(typeMapping, schemaInfo, objectType)
         }
 
         val found = dataTypes.find(schemaInfo.getName())
@@ -209,16 +188,9 @@ class DataTypeConverter(
 
         val arrayDataType = ArrayDataType(item, constraints, schemaInfo.getDeprecated())
 
-        val targetType = getMappedDataType (schemaInfo)
-        if (targetType != null) {
-            return MappedCollectionDataType(
-                targetType.getName(),
-                targetType.getPkg(),
-                item,
-                constraints,
-                schemaInfo.getDeprecated(),
-                arrayDataType
-            )
+        val typeMapping = getDataTypeMapping (schemaInfo)
+        if (typeMapping != null) {
+            return createMappedDataType(typeMapping, item, constraints, schemaInfo, arrayDataType)
         }
 
         return arrayDataType
@@ -254,9 +226,9 @@ class DataTypeConverter(
 
         val objectType = createObjectDataType(schemaInfo, properties)
 
-        val targetType = getMappedDataType(schemaInfo)
-        if (targetType != null) {
-            return createMappedDataType(targetType, schemaInfo, objectType)
+        val typeMapping = getDataTypeMapping(schemaInfo)
+        if (typeMapping != null) {
+            return createMappedDataType(typeMapping, schemaInfo, objectType)
         }
 
         val found = dataTypes.find(schemaInfo.getName())
@@ -290,9 +262,9 @@ class DataTypeConverter(
     private fun createSimpleDataType(schemaInfo: SchemaInfo, dataTypes: DataTypes): DataType {
         val dataType = createSimpleDataTypeX(schemaInfo, dataTypes)
 
-        val targetType = getMappedDataType(schemaInfo)
-        if(targetType != null) {
-            return createMappedDataType(targetType, schemaInfo, dataType)
+        val typeMapping = getDataTypeMapping(schemaInfo)
+        if (typeMapping != null) {
+            return createMappedDataType(typeMapping, schemaInfo, dataType)
         }
 
         return dataType
@@ -389,9 +361,9 @@ class DataTypeConverter(
             deprecated = schemaInfo.getDeprecated()
         )
 
-        val targetType = getMappedDataType(schemaInfo)
-        if (targetType != null) {
-            return createMappedDataType(targetType, schemaInfo, dataType)
+        val typeMapping = getDataTypeMapping(schemaInfo)
+        if (typeMapping != null) {
+            return createMappedDataType(typeMapping, schemaInfo, dataType)
         }
 
         return dataType
@@ -441,6 +413,76 @@ class DataTypeConverter(
         return enumType
     }
 
+    private fun createMappedDataType(
+        typeMapping: TypeMapping,
+        item: DataType,
+        constraints: DataTypeConstraints,
+        schemaInfo: SchemaInfo?,
+        sourceDataType: DataType?
+    ): DataType {
+        val targetType = typeMapping.getTargetType()
+
+        return when {
+            typeMapping.primitive && typeMapping.primitiveArray -> {
+                MappedCollectionDataTypePrimitive(
+                    targetType.getName(),
+                    null,
+                    schemaInfo?.getDeprecated() ?: false,
+                    sourceDataType)
+            }
+            typeMapping.primitive -> {
+                MappedDataTypePrimitive(
+                    targetType.getName(),
+                    null,
+                    schemaInfo?.getDeprecated() ?: false,
+                    sourceDataType)
+            }
+            else -> {
+                MappedCollectionDataType(
+                    targetType.getName(),
+                    targetType.getPkg(),
+                    item,
+                    constraints,
+                    schemaInfo?.getDeprecated() ?: false,
+                    sourceDataType)
+            }
+        }
+    }
+
+    private fun createMappedDataType(
+        typeMapping: TypeMapping,
+        schemaInfo: SchemaInfo?,
+        sourceDataType: DataType?
+    ): DataType {
+        val targetType = typeMapping.getTargetType()
+
+        return when {
+            typeMapping.primitive && typeMapping.primitiveArray -> {
+                MappedCollectionDataTypePrimitive(
+                    targetType.getName(),
+                    null,
+                    schemaInfo?.getDeprecated() ?: false,
+                    sourceDataType)
+            }
+            typeMapping.primitive -> {
+                MappedDataTypePrimitive(
+                    targetType.getName(),
+                    null,
+                    schemaInfo?.getDeprecated() ?: false,
+                    sourceDataType)
+            }
+            else -> {
+                MappedDataType(
+                    targetType.getName(),
+                    targetType.getPkg(),
+                    convertGenerics(targetType),
+                    null,
+                    schemaInfo?.getDeprecated() ?: false,
+                    sourceDataType)
+            }
+        }
+    }
+
     /**
      * the mappings are checked in the following order and the first match wins:
      *
@@ -449,22 +491,22 @@ class DataTypeConverter(
      * - global io (parameter/response)
      * - global type
      */
-    private fun getMappedDataType(info: SchemaInfo): TargetType? {
+    private fun getDataTypeMapping(info: SchemaInfo): TypeMapping? {
         // check endpoint mappings
         val epMatch = finder.findEndpointTypeMapping(info)
         if (epMatch != null) {
-            return epMatch.getTargetType()
+            return epMatch
         }
 
         // check global io (parameter & response) mappings
         val ioMatch = finder.findIoTypeMapping(info)
         if (ioMatch != null)
-            return ioMatch.getTargetType()
+            return ioMatch
 
         // check global type mapping
         val typeMatch = finder.findTypeMapping(info)
         if (typeMatch != null)
-            return typeMatch.getTargetType()
+            return typeMatch
 
         return null
     }

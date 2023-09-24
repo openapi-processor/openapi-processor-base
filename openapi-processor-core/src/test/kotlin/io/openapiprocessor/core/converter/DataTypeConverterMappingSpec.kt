@@ -223,7 +223,7 @@ class DataTypeConverterMappingSpec: StringSpec({
 
         // when:
         val converter = DataTypeConverter(options)
-        val datatype = converter.createAdditionalParameterMappedDataType(tm.getTargetType())
+        val datatype = converter.createAdditionalParameterDataType(tm)
 
         // then:
         datatype.shouldBeInstanceOf<MappedDataType>()

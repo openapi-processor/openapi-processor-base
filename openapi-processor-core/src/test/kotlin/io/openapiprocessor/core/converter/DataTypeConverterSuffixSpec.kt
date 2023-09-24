@@ -10,6 +10,7 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import io.kotest.matchers.types.shouldBeSameInstanceAs
 import io.openapiprocessor.core.converter.mapping.TargetType
+import io.openapiprocessor.core.converter.mapping.TypeMapping
 import io.openapiprocessor.core.model.DataTypes
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.model.datatypes.*
@@ -220,10 +221,14 @@ components:
 
         // when:
         val converter = DataTypeConverter(options)
-        val datatype = converter.createAdditionalParameterMappedDataType(
-            TargetType("other.Foo",
-                listOf(TargetType("model.Bar")
-            )))
+        val datatype = converter.createAdditionalParameterDataType(
+            TypeMapping(
+                null,
+                null,
+                "other.Foo",
+                listOf(TargetType("model.Bar"))
+            )
+        )
 
         // then:
         datatype.shouldBeInstanceOf<MappedDataType>()
