@@ -19,6 +19,8 @@ class MappingExtractor: MappingBaseListener(), Mapping {
     override var annotationType: String? = null
     override var annotationParameters = LinkedHashMap<String, ParameterValue>()
     override var targetType: String? = null
+    override var targetTypePrimitive: Boolean = false
+    override var targetTypePrimitiveArray: Boolean = false
     override var targetGenericTypes: MutableList<String> = mutableListOf()
     override var targetGenericTypes2: List<MappingType> = mutableListOf()
 
@@ -45,7 +47,15 @@ class MappingExtractor: MappingBaseListener(), Mapping {
     }
 
     override fun enterPrimitiveType(ctx: MappingParser.PrimitiveTypeContext) {
-        targetType = ctx.text
+        targetTypePrimitive = true
+        targetTypePrimitiveArray = ctx.childCount == 3
+
+        targetType = if (!targetTypePrimitiveArray) {
+            ctx.text
+
+        } else {
+            ctx.start.text
+        }
     }
 
     override fun enterSourceIdentifier(ctx: MappingParser.SourceIdentifierContext) {

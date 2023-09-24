@@ -90,7 +90,10 @@ class MappingConverter(val mapping: MappingV2) {
         return TypeMapping(
             from,
             null,
-            resolvePackageVariable(mapping.targetType!!))
+            resolvePackageVariable(mapping.targetType!!),
+            emptyList(),
+            mapping.targetTypePrimitive,
+            mapping.targetTypePrimitiveArray)
     }
 
     private fun convertType(source: Type): Mapping {
@@ -107,7 +110,9 @@ class MappingConverter(val mapping: MappingV2) {
                 mapping.sourceType,
                 mapping.sourceFormat,
                 resolvePackageVariable(mapping.targetType!!),
-                genericTypes
+                genericTypes,
+                mapping.targetTypePrimitive,
+                mapping.targetTypePrimitiveArray
             )
         }
     }
@@ -145,7 +150,9 @@ class MappingConverter(val mapping: MappingV2) {
             null,
             null,
             resolvePackageVariable(mapping.targetType!!),
-            genericTypes
+            genericTypes,
+            mapping.targetTypePrimitive,
+            mapping.targetTypePrimitiveArray
         )
 
         return ParameterTypeMapping(mapping.sourceType!!, typeMapping)
@@ -158,7 +165,9 @@ class MappingConverter(val mapping: MappingV2) {
             null,
             null,
             resolvePackageVariable(mapping.targetType!!),
-            genericTypes
+            genericTypes,
+            mapping.targetTypePrimitive,
+            mapping.targetTypePrimitiveArray
         )
 
         var annotation: io.openapiprocessor.core.converter.mapping.Annotation? = null
@@ -177,7 +186,9 @@ class MappingConverter(val mapping: MappingV2) {
             null,
             null,
             resolvePackageVariable(mapping.targetType!!),
-            genericTypes
+            genericTypes,
+            mapping.targetTypePrimitive,
+            mapping.targetTypePrimitiveArray
         )
 
         return ResponseTypeMapping (mapping.sourceType!!, typeMapping)

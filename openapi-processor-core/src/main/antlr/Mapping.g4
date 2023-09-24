@@ -35,7 +35,7 @@ plainType
     ;
 
 primitiveType
-    : Primitive | PrimitiveArray
+    : Primitive | Primitive OpenArray CloseArray
     ;
 
 sourceType
@@ -115,10 +115,6 @@ CloseArray: ']';
 Whitespace
   : [ \t] -> skip
   ;
-
-PrimitiveArray
-    : Primitive OpenArray CloseArray
-    ;
 
 Identifier
     : JavaLetter JavaLetterOrDigit*

@@ -33,7 +33,17 @@ class TypeMapping (
     /**
      * The fully qualified java type names of all generic parameters to {@link #targetTypeName}.
      */
-    val genericTypes: List<TargetType> = emptyList()
+    val genericTypes: List<TargetType> = emptyList(),
+
+    /**
+     * is a primitive target type, i.e. byte, short int etc. ?
+     */
+    val primitive: Boolean = false,
+
+    /**
+     * is an array, i.e. type []?
+     */
+    val primitiveArray: Boolean = false
 
 ): Mapping, TargetTypeMapping {
 
@@ -44,19 +54,6 @@ class TypeMapping (
     // used in tests only
     constructor(sourceTypeName: String?, sourceTypeFormat: String?, targetTypeName: String):
             this (sourceTypeName, sourceTypeFormat, targetTypeName, emptyList())
-
-    /**
-     * Returns the full source type as {@link #sourceTypeName} and {@link #sourceTypeFormat} joined
-     * by a ':' separator.
-     *
-     * @return the full source type
-     */
-    /*
-    @Deprecated("do not use in new code", ReplaceWith("no replacement"))
-    fun getFullSourceType(): String {
-        return sourceTypeName + (sourceTypeFormat ? ":$sourceTypeFormat" : "")
-    }
-    */
 
     /**
      * Returns the target type of this type mapping.

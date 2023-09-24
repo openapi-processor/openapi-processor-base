@@ -7,6 +7,8 @@ package io.openapiprocessor.core.processor.mapping.v2
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.booleans.shouldBeFalse
+import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.maps.shouldBeEmpty
 import io.kotest.matchers.nulls.shouldBeNull
@@ -265,6 +267,8 @@ class AntlrParserSpec: StringSpec({
 
         val mapping = parseMapping(type)
         mapping.kind shouldBe Mapping.Kind.TYPE
+        mapping.targetTypePrimitive.shouldBeTrue()
+        mapping.targetTypePrimitiveArray.shouldBeFalse()
         mapping.sourceType.shouldBeNull()
         mapping.targetType shouldBe "byte"
     }
@@ -274,7 +278,9 @@ class AntlrParserSpec: StringSpec({
 
         val mapping = parseMapping(type)
         mapping.kind shouldBe Mapping.Kind.TYPE
+        mapping.targetTypePrimitive.shouldBeTrue()
+        mapping.targetTypePrimitiveArray.shouldBeTrue()
         mapping.sourceType.shouldBeNull()
-        mapping.targetType shouldBe "byte[]"
+        mapping.targetType shouldBe "byte"
     }
 })

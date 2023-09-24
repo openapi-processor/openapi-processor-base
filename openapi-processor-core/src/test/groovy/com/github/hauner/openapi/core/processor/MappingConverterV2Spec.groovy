@@ -74,7 +74,9 @@ map:
                     'array',
                     null,
                     'java.util.Collection',
-                    [])
+                    [],
+                    false,
+                    false)
             ], [
                 // extra whitespaces
                 source: '  array   =>    java.util.Collection   ',
@@ -82,7 +84,9 @@ map:
                     'array',
                     null,
                     'java.util.Collection',
-                    [])
+                    [],
+                    false,
+                    false)
             ], [
                 // with format
                 source: 'string:date-time => java.time.ZonedDateTime',
@@ -90,7 +94,9 @@ map:
                     'string',
                     'date-time',
                     'java.time.ZonedDateTime',
-                    [])
+                    [],
+                    false,
+                    false)
             ], [
                 // extra whitespaces with format
                 source  : '"  string  :  date-time   =>    java.time.ZonedDateTime   "',
@@ -98,7 +104,9 @@ map:
                     'string',
                     'date-time',
                     'java.time.ZonedDateTime',
-                    [])
+                    [],
+                    false,
+                    false)
             ], [
                 // with inline generics
                 source: 'Foo => mapping.Bar<java.lang.String, java.lang.Boolean>',
@@ -109,7 +117,9 @@ map:
                     [
                         new TargetType("java.lang.String", []),
                         new TargetType("java.lang.Boolean", [])
-                    ])
+                    ],
+                    false,
+                    false)
             ], [
                 // with extracted generics
                 source: 'Foo => mapping.Bar',
@@ -121,7 +131,9 @@ map:
                     [
                         new TargetType("java.lang.String", []),
                         new TargetType("java.lang.Boolean", [])
-                    ])
+                    ],
+                    false,
+                    false)
             ],  [
                 // inline generics with extra whitespaces
                 source: 'Foo => mapping.Bar  <   java.lang.String  ,   java.lang.Boolean   >   ',
@@ -132,7 +144,9 @@ map:
                     [
                         new TargetType("java.lang.String", []),
                         new TargetType("java.lang.Boolean", [])
-                    ])
+                    ],
+                    false,
+                    false)
             ], [
                 // extracted generics with extra whitespaces
                 source: 'Foo => mapping.Bar',
@@ -144,7 +158,29 @@ map:
                     [
                         new TargetType("java.lang.String", []),
                         new TargetType("java.lang.Boolean", [])
-                    ])
+                    ],
+                    false,
+                    false)
+            ], [
+                // primitive
+                source: 'Foo => byte',
+                expected: new TypeMapping (
+                    'Foo',
+                    null,
+                    'byte',
+                    [],
+                    true,
+                    false)
+            ], [
+                // primitive array
+                source: 'Foo => byte',
+                expected: new TypeMapping (
+                    'Foo',
+                    null,
+                    'byte',
+                    [],
+                    true,
+                    true)
             ]
         ]
     }

@@ -17,6 +17,8 @@ interface Mapping {
     val sourceType: String?
     val sourceFormat: String?
     val targetType: String?
+    val targetTypePrimitive: Boolean
+    val targetTypePrimitiveArray: Boolean
     val targetGenericTypes: List<String>
     val targetGenericTypes2: List<MappingType>
     val annotationType: String?
