@@ -67,7 +67,6 @@ open class StringEnumWriter(private val generatedWriter: GeneratedWriter) {
             |        throw new IllegalArgumentException(value);
             |    }
             |
-            |
             """.trimMargin())
 
         target.write ("}\n")

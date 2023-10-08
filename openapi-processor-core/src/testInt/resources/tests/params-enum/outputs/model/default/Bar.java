@@ -30,5 +30,4 @@ public enum Bar {
         }
         throw new IllegalArgumentException(value);
     }
-
 }

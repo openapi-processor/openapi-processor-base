@@ -30,5 +30,4 @@ public enum FooFoo {
         }
         throw new IllegalArgumentException(value);
     }
-
 }
