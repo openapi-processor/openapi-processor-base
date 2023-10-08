@@ -352,7 +352,14 @@ open class SchemaInfo(
     }
 
     fun isObject(): Boolean {
-        return getType().equals("object")
+        if (getType().equals("object"))
+            return true
+
+        val properties = schema?.getProperties()
+        if (!properties.isNullOrEmpty())
+            return true
+
+        return false
     }
 
     fun isComposedObject(): Boolean {
