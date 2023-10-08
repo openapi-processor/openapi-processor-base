@@ -38,7 +38,7 @@ class ProcessorPendingSpec: StringSpec({
     }
 
     for (testSet in sources()) {
-        "jimfs - $testSet".config(enabled = true) {
+        "jimfs - $testSet".config(enabled = false) {
             val support = FileSupport(
                 ProcessorPendingSpec::class.java,
                 testSet.inputs, testSet.outputs
@@ -53,7 +53,10 @@ class ProcessorPendingSpec: StringSpec({
 
 private fun sources(): Collection<TestSet> {
     return listOf(
-        testSet("annotation-mapping-class", INTERNAL, API_30, model = "record", outputs = "outputs.yaml", expected = "outputs"),
+        testSet("map-to-primitive-data-types", INTERNAL, API_30, model = "record", outputs = "outputs.yaml", expected = "outputs"),
+        //testSet("endpoint-http-mapping", INTERNAL, API_30, model = "record", outputs = "outputs.yaml", expected = "outputs"),
+        //testSet("endpoint-http-mapping", OPENAPI4J, API_30, model = "record", outputs = "outputs.yaml", expected = "outputs"),
+//        testSet("endpoint-http-mapping", SWAGGER, API_30, model = "record", outputs = "outputs.yaml", expected = "outputs"),
 //        testSet("keyword-identifier", INTERNAL, API_30, model = "default", outputs = "outputs.yaml", expected = "outputs"),
 //        testSet("bean-validation", INTERNAL, API_31, model = "record", outputs = "outputs.yaml", expected = "outputs"),
 //        testSet("bean-validation", INTERNAL, API_31, model = "default", outputs = "outputs.yaml", expected = "outputs"),
