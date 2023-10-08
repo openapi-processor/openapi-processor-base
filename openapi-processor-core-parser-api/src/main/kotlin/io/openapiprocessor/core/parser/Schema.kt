@@ -10,7 +10,7 @@ package io.openapiprocessor.core.parser
  */
 interface Schema {
 
-    // type, ie. array, string, etc.
+    // type, i.e. array, string, etc.
     fun getType(): String?
 
     // format
