@@ -1,5 +1,6 @@
 [versions]
 processor = "2023.4-SNAPSHOT"
+parser = "2023.5-SNAPSHOT"
 
 kotlin = "1.9.10"
 build-jdk = "11"
@@ -12,9 +13,9 @@ jacoco = "0.8.7"
 [libraries]
 openapi-processor-api = "io.openapiprocessor:openapi-processor-api:2023.1"
 
-openapi-parser-bom = "io.openapiprocessor:openapi-parser-bom:2023.4"
+openapi-parser-bom = { module = "io.openapiprocessor:openapi-parser-bom", version.ref = "parser" }
 openapi-parser-parser = { module = "io.openapiprocessor:openapi-parser" }
-json-schema-validator-bom = "io.openapiprocessor:json-schema-validator-bom:2023.4"
+json-schema-validator-bom = { module = "io.openapiprocessor:json-schema-validator-bom", version.ref = "parser" }
 json-schema-validator-validator = { module = "io.openapiprocessor:json-schema-validator" }
 io-jackson = { module = "io.openapiprocessor:io-jackson" }
 #io-snakeyaml = { module = "io.openapiprocessor:io-snakeyaml" }
