@@ -164,7 +164,6 @@ public enum Foo {
         }
         throw new IllegalArgumentException(value);
     }
-
 """)
 
         where:
