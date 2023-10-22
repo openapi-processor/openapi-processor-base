@@ -12,12 +12,9 @@ plugins {
 // see buildSrc/build.gradle.kts
 val libs = the<LibrariesForLibs>()
 
-// gradle.properties
-val projectVersion: String by project
-
 group = "io.openapiprocessor"
-version = projectVersion
-println("version: $projectVersion")
+version = libs.versions.processor.get()
+println("version: $version")
 
 java {
     withJavadocJar ()
