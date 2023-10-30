@@ -27,15 +27,17 @@ class DefaultWriterFactorySpec : StringSpec({
     beforeTest {
         options.packageName = "io.openapiprocessor"
         options.targetDir = listOf(target.toString(), "java", "src").joinToString(File.separator)
+        options.beanValidation = false
     }
 
     "initializes package folders" {
-        val writerFactory = DefaultWriterFactory()
-        writerFactory.init(options.targetDir!!, options.packageName)
+        val writerFactory = DefaultWriterFactory(options)
+        writerFactory.init()
 
         val api = options.getSourceDir("api")
         val model = options.getSourceDir("model")
         val support = options.getSourceDir("support")
+        val validation = options.getSourceDir("validation")
 
         Files.exists(api) shouldBe true
         Files.isDirectory(api) shouldBe true
@@ -43,15 +45,38 @@ class DefaultWriterFactorySpec : StringSpec({
         Files.isDirectory(model) shouldBe true
         Files.exists(support) shouldBe true
         Files.isDirectory(support) shouldBe true
+        Files.exists(validation) shouldBe false
+        Files.isDirectory(validation) shouldBe false
+    }
+
+    "initializes package folders with validation" {
+        options.beanValidation = true
+        val writerFactory = DefaultWriterFactory(options)
+        writerFactory.init()
+
+        val api = options.getSourceDir("api")
+        val model = options.getSourceDir("model")
+        val support = options.getSourceDir("support")
+        val validation = options.getSourceDir("validation")
+
+        Files.exists(api) shouldBe true
+        Files.isDirectory(api) shouldBe true
+        Files.exists(model) shouldBe true
+        Files.isDirectory(model) shouldBe true
+        Files.exists(support) shouldBe true
+        Files.isDirectory(support) shouldBe true
+        Files.exists(validation) shouldBe true
+        Files.isDirectory(validation) shouldBe true
     }
 
     "does not fail if target folder structure already exists" {
         Files.createDirectories(options.getSourceDir("api"))
         Files.createDirectories(options.getSourceDir("model"))
         Files.createDirectories(options.getSourceDir("support"))
+        Files.createDirectories(options.getSourceDir("validation"))
 
         shouldNotThrowAny {
-            DefaultWriterFactory().init(options.targetDir!!, options.packageName)
+            DefaultWriterFactory(options).init()
         }
     }
 
@@ -60,8 +85,8 @@ class DefaultWriterFactorySpec : StringSpec({
             return options.getSourcePath("support", name).text
         }
 
-        val factory = DefaultWriterFactory()
-        factory.init(options.targetDir!!, options.packageName)
+        val factory = DefaultWriterFactory(options)
+        factory.init()
 
         val writer = factory.createWriter("${options.packageName}.support", "Generated")
         writer.write("public @interface Generated {}\n")
@@ -75,8 +100,8 @@ class DefaultWriterFactorySpec : StringSpec({
             return options.getSourcePath("api", name).text
         }
 
-        val factory = DefaultWriterFactory()
-        factory.init(options.targetDir!!, options.packageName)
+        val factory = DefaultWriterFactory(options)
+        factory.init()
 
         val writer = factory.createWriter("${options.packageName}.api", "Api")
         writer.write("public interface Api {}\n")
@@ -90,8 +115,8 @@ class DefaultWriterFactorySpec : StringSpec({
             return options.getSourcePath("model", name).text
         }
 
-        val factory = DefaultWriterFactory()
-        factory.init(options.targetDir!!, options.packageName)
+        val factory = DefaultWriterFactory(options)
+        factory.init()
 
         val writer = factory.createWriter("${options.packageName}.model", "Model")
         writer.write("public class Model {}\n")
@@ -104,25 +129,30 @@ class DefaultWriterFactorySpec : StringSpec({
         val api = options.getSourceDir("api")
         val model = options.getSourceDir("model")
         val support = options.getSourceDir("support")
+        val validation = options.getSourceDir("validation")
 
         Files.createDirectories(api)
         Files.createDirectories(model)
         Files.createDirectories(support)
+        Files.createDirectories(validation)
 
         api.resolve("Old.java").createFile()
         model.resolve("Old.java").createFile()
         support.resolve("Old.java").createFile()
+        validation.resolve("Old.java").createFile()
 
         Files.exists(api.resolve("Old.java")) shouldBe true
         Files.exists(model.resolve("Old.java")) shouldBe true
         Files.exists(support.resolve("Old.java")) shouldBe true
+        Files.exists(validation.resolve("Old.java")) shouldBe true
 
-        val factory = DefaultWriterFactory()
-        factory.init(options.targetDir!!, options.packageName)
+        val factory = DefaultWriterFactory(options)
+        factory.init()
 
         Files.exists(api.resolve("Old.java")) shouldBe false
         Files.exists(model.resolve("Old.java")) shouldBe false
         Files.exists(support.resolve("Old.java")) shouldBe false
+        Files.exists(validation.resolve("Old.java")) shouldBe false
     }
 })
 

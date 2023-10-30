@@ -5,6 +5,7 @@
 
 package io.openapiprocessor.core.writer
 
+import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.support.toURI
 import io.openapiprocessor.core.writer.java.PathWriter
 import org.slf4j.Logger
@@ -21,11 +22,9 @@ import kotlin.io.path.deleteRecursively
 /**
  * Writer factory for local file system. Must be initialized via [InitWriterTarget].
  */
-class DefaultWriterFactory: WriterFactory, InitWriterTarget {
+class DefaultWriterFactory(val options: ApiOptions) : WriterFactory, InitWriterTarget {
     private var log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
-    private lateinit var targetDir: String
-    private lateinit var packageName: String
     private lateinit var paths: Map<String, Path>
 
     override fun createWriter(packageName: String, className: String): Writer {
@@ -36,9 +35,7 @@ class DefaultWriterFactory: WriterFactory, InitWriterTarget {
         return BufferedWriter(PathWriter(packagePath.resolve("${className}.java")))
     }
 
-    override fun init(targetDir: String, packageName: String) {
-        this.targetDir = targetDir
-        this.packageName = packageName
+    override fun init() {
         val pkgPaths = HashMap<String, Path>()
 
         log.debug ("initializing target folders")
@@ -56,22 +53,28 @@ class DefaultWriterFactory: WriterFactory, InitWriterTarget {
         pkgPaths[supportName] = supportPath
         log.debug ("initialized target folder: {}", supportPath.toAbsolutePath ().toString ())
 
+        if (options.beanValidation) {
+            val (validationName, validationPath) = initTargetPackage("validation")
+            pkgPaths[validationName] = validationPath
+            log.debug("initialized target folder: {}", validationPath.toAbsolutePath().toString())
+        }
+
         paths = pkgPaths
     }
 
     @OptIn(ExperimentalPathApi::class)
     private fun clearTargetDir() {
         try {
-            Path.of(toURI(targetDir)).deleteRecursively()
+            Path.of(toURI(options.targetDir!!)).deleteRecursively()
         } catch (ex: IOException) {
-            log.error("failed to clean target directory: {}", targetDir, ex)
+            log.error("failed to clean target directory: {}", options.targetDir, ex)
         }
     }
 
     private fun initTargetPackage(subPackageName: String): Pair<String, Path> {
-        val rootPackageFolder = packageName.replace(".", "/")
+        val rootPackageFolder = options.packageName.replace(".", "/")
 
-        val apiPackage = packageName.plus(".$subPackageName")
+        val apiPackage = options.packageName.plus(".$subPackageName")
         val apiFolder = listOf(rootPackageFolder, subPackageName).joinToString("/")
         val apiPath = createTargetPackage(apiFolder)
 
@@ -79,7 +82,7 @@ class DefaultWriterFactory: WriterFactory, InitWriterTarget {
     }
 
     private fun createTargetPackage(apiPkg: String): Path {
-        val pkg = listOf(targetDir, apiPkg).joinToString("/")
+        val pkg = listOf(options.targetDir, apiPkg).joinToString("/")
 
         val target = Paths.get (toURI(pkg))
         Files.createDirectories(target)

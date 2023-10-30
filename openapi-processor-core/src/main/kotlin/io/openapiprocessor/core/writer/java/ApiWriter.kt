@@ -29,11 +29,11 @@ class ApiWriter(
     private val enumWriter: StringEnumWriter,
     private val interfaceDataTypeWriter: InterfaceDataTypeWriter,
     private val formatter: SourceFormatter = GoogleFormatter(),
-    private val writerFactory: WriterFactory = DefaultWriterFactory()
+    private val writerFactory: WriterFactory = DefaultWriterFactory(options)
 ) {
     init {
         if (writerFactory is InitWriterTarget) {
-            writerFactory.init(options.targetDir!!, options.packageName)
+            writerFactory.init()
         }
     }
 
