@@ -24,7 +24,7 @@ class DataTypeWriterRecordSpec: StringSpec({
 
     val options = ApiOptions()
     val generatedWriter = SimpleGeneratedWriter(options)
-    val writer = DataTypeWriterRecord(options, generatedWriter, BeanValidationFactory())
+    val writer = DataTypeWriterRecord(options, generatedWriter, BeanValidationFactory(options))
     val target = StringWriter()
 
     "writes 'package'" {

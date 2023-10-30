@@ -5,6 +5,7 @@
 
 package com.github.hauner.openapi.core.writer.java
 
+import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.model.Documentation
 import io.openapiprocessor.core.model.datatypes.MappedCollectionDataType
 import io.openapiprocessor.core.model.datatypes.NoneDataType
@@ -24,7 +25,8 @@ import spock.lang.Unroll
 import static io.openapiprocessor.core.writer.java.AnnotationWriterKt.buildAnnotation
 
 class BeanValidationFactorySpec extends Specification {
-    static def validation = new BeanValidationFactory ()
+    static def options = new ApiOptions()
+    static def validation = new BeanValidationFactory (options)
     static def validations = validation.validations
 
     void "applies @Valid to Object" () {

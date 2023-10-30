@@ -132,7 +132,7 @@ paths:
                 Stub (BeanValidationFactory),
                 Stub (JavaDocWriter)),
             new TestFrameworkAnnotations(),
-            new BeanValidationFactory(),
+            new BeanValidationFactory(opts),
             new DefaultImportFilter())
         def writer = new StringWriter()
         w.write (writer, api.interfaces.get (0))

@@ -24,7 +24,7 @@ enum class Access {
 abstract class DataTypeWriterBase(
     protected val apiOptions: ApiOptions,
     protected val generatedWriter: GeneratedWriter,
-    protected val validationAnnotations: BeanValidationFactory = BeanValidationFactory(),
+    protected val validationAnnotations: BeanValidationFactory = BeanValidationFactory(apiOptions),
     protected val javadocWriter: JavaDocWriter = JavaDocWriter()
 ): DataTypeWriter {
     protected val annotationWriter = AnnotationWriter()

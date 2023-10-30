@@ -24,7 +24,7 @@ class InterfaceWriter(
     private val generatedWriter: GeneratedWriter,
     private val methodWriter: MethodWriter,
     private val annotations: FrameworkAnnotations,
-    private val validationAnnotations: BeanValidationFactory = BeanValidationFactory(),
+    private val validationAnnotations: BeanValidationFactory = BeanValidationFactory(apiOptions),
     private val importFilter: ImportFilter = DefaultImportFilter()
 ) {
     fun write(target: Writer, itf: Interface) {

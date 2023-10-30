@@ -29,7 +29,7 @@ class DataTypeWriterPojoSpec: StringSpec({
 
     val options = ApiOptions()
     val generatedWriter = SimpleGeneratedWriter(options)
-    var writer = DataTypeWriterPojo(options, generatedWriter, BeanValidationFactory())
+    var writer = DataTypeWriterPojo(options, generatedWriter, BeanValidationFactory(options))
     val target = StringWriter()
 
     "writes @Generated annotation import" {
@@ -112,7 +112,7 @@ class DataTypeWriterPojoSpec: StringSpec({
 
     "writes additional bean validation object annotation import" {
         options.beanValidation = true
-        val validation = object : BeanValidationFactory() {
+        val validation = object : BeanValidationFactory(options) {
             override fun validate(dataType: ModelDataType): BeanValidationInfo {
                 return BeanValidationInfoSimple(dataType, listOf(Annotation("foo.Foo")))
             }
@@ -133,7 +133,7 @@ class DataTypeWriterPojoSpec: StringSpec({
 
     "writes additional bean validation object annotation" {
         options.beanValidation = true
-        val validation = object : BeanValidationFactory() {
+        val validation = object : BeanValidationFactory(options) {
             override fun validate(dataType: ModelDataType): BeanValidationInfo {
                 return BeanValidationInfoSimple(dataType, listOf(Annotation("foo.Foo")))
             }
@@ -211,7 +211,7 @@ class DataTypeWriterPojoSpec: StringSpec({
             AnnotationTypeMapping(
                 "Foo", annotation = MappingAnnotation("foo.Bar")
             ))
-        writer = DataTypeWriterPojo(options, generatedWriter, BeanValidationFactory())
+        writer = DataTypeWriterPojo(options, generatedWriter, BeanValidationFactory(options))
 
         val dataType = ObjectDataType("Foo",
             "pkg", linkedMapOf("foo" to propertyDataTypeString()))
@@ -231,7 +231,7 @@ class DataTypeWriterPojoSpec: StringSpec({
                     "foo.Bar", linkedMapOf("bar" to SimpleParameterValue(""""rab""""))
                 )
             ))
-        writer = DataTypeWriterPojo(options, generatedWriter, BeanValidationFactory())
+        writer = DataTypeWriterPojo(options, generatedWriter, BeanValidationFactory(options))
 
         val dataType = ObjectDataType("Foo",
             "pkg", linkedMapOf("foo" to propertyDataTypeString()))
@@ -254,7 +254,7 @@ class DataTypeWriterPojoSpec: StringSpec({
             AnnotationTypeMapping(
                 "Foo", annotation = MappingAnnotation("foo.Bar")
             ))
-        writer = DataTypeWriterPojo(options, generatedWriter, BeanValidationFactory())
+        writer = DataTypeWriterPojo(options, generatedWriter, BeanValidationFactory(options))
 
         val dataType = ObjectDataType("Object",
             "pkg", linkedMapOf(
@@ -277,7 +277,7 @@ class DataTypeWriterPojoSpec: StringSpec({
                     "foo.Bar", linkedMapOf("bar" to SimpleParameterValue(""""rab""""))
                 )
             ))
-        writer = DataTypeWriterPojo(options, generatedWriter, BeanValidationFactory())
+        writer = DataTypeWriterPojo(options, generatedWriter, BeanValidationFactory(options))
 
         val dataType = ObjectDataType("Object",
             "pkg", linkedMapOf(
@@ -317,7 +317,7 @@ class DataTypeWriterPojoSpec: StringSpec({
                     "foo.Bar", linkedMapOf("bar" to SimpleParameterValue(""""rab""""))
                 )
             ))
-        writer = DataTypeWriterPojo(options, generatedWriter, BeanValidationFactory())
+        writer = DataTypeWriterPojo(options, generatedWriter, BeanValidationFactory(options))
 
         val dataType = ObjectDataType("Object",
             "pkg", linkedMapOf(
@@ -358,7 +358,7 @@ class DataTypeWriterPojoSpec: StringSpec({
             )
         )
 
-        writer = DataTypeWriterPojo(options, generatedWriter, BeanValidationFactory())
+        writer = DataTypeWriterPojo(options, generatedWriter, BeanValidationFactory(options))
 
         val dataType = ObjectDataType("Object",
             "pkg", linkedMapOf(
@@ -397,7 +397,7 @@ class DataTypeWriterPojoSpec: StringSpec({
             )
         )
 
-        writer = DataTypeWriterPojo(options, generatedWriter, BeanValidationFactory())
+        writer = DataTypeWriterPojo(options, generatedWriter, BeanValidationFactory(options))
 
         val dataType = ObjectDataType("Object",
             "pkg", linkedMapOf(

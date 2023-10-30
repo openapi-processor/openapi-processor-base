@@ -28,7 +28,7 @@ class DataTypeWriterSpec extends Specification {
     def writer = new DataTypeWriterPojo(
         options,
         generatedWriter,
-        new BeanValidationFactory(),
+        new BeanValidationFactory(options),
         new JavaDocWriter())
     def target = new StringWriter ()
 

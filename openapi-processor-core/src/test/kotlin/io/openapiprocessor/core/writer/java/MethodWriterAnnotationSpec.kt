@@ -30,7 +30,7 @@ class MethodWriterAnnotationSpec: StringSpec ({
         //AnnotationWriter()
         TestMappingAnnotationWriter(),
         TestParameterAnnotationWriter(),
-        BeanValidationFactory())
+        BeanValidationFactory(apiOptions))
 
     val target = StringWriter()
 

@@ -19,7 +19,7 @@ import java.io.Writer
 class DataTypeWriterPojo(
     apiOptions: ApiOptions,
     generatedWriter: GeneratedWriter,
-    validationAnnotations: BeanValidationFactory = BeanValidationFactory(),
+    validationAnnotations: BeanValidationFactory = BeanValidationFactory(apiOptions),
     javadocWriter: JavaDocWriter = JavaDocWriter()
 ) : DataTypeWriterBase(apiOptions, generatedWriter, validationAnnotations, javadocWriter) {
 

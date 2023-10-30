@@ -8,12 +8,14 @@ package io.openapiprocessor.core.writer.java
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.shouldBe
+import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.support.datatypes.ObjectDataType
 import io.openapiprocessor.core.support.datatypes.propertyDataTypeString
 
 class BeanValidationMappingSpec: StringSpec({
-    val validation = BeanValidationFactory()
+    val apiOptions = ApiOptions()
+    val validation = BeanValidationFactory(apiOptions)
     val validations = validation.validations
 
     "applies @Valid to mapped object items" {
