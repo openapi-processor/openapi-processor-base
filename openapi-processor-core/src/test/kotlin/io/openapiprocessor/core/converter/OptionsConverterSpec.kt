@@ -23,6 +23,7 @@ class OptionsConverterSpec: StringSpec({
         options.beanValidation shouldBe false
         options.javadoc shouldBe false
         options.modelType shouldBe "default"
+        options.enumType shouldBe "default"
         options.modelNameSuffix shouldBe String.Empty
         options.typeMappings shouldHaveSize 0
         options.formatCode.shouldBeFalse()
@@ -94,6 +95,8 @@ class OptionsConverterSpec: StringSpec({
                 options:
                   package-name: generated
                   model-name-suffix: Suffix
+                  model-type: record
+                  enum-type: string
                   bean-validation: true
                   javadoc: true
                   format-code: false
@@ -102,6 +105,8 @@ class OptionsConverterSpec: StringSpec({
 
         options.packageName shouldBe "generated"
         options.modelNameSuffix shouldBe "Suffix"
+        options.modelType shouldBe "record"
+        options.enumType shouldBe "string"
         options.beanValidation shouldBe true
         options.javadoc shouldBe true
         options.formatCode.shouldBeFalse()

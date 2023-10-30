@@ -57,6 +57,7 @@ class OptionsConverter(private val checkObsoleteProcessorOptions: Boolean = fals
                 is MappingV2 -> {
                     options.packageName = mapping.options.packageName
                     options.modelType = mapping.options.modelType
+                    options.enumType = mapping.options.enumType
                     options.modelNameSuffix = mapping.options.modelNameSuffix
 
                     val (enable, format) = checkBeanValidation(mapping.options)

@@ -52,6 +52,11 @@ class ApiOptions {
     var modelType = "default"
 
     /**
+     * enum type. default|string|framework.
+     */
+    var enumType = "default"
+
+    /**
      * suffix for model class names and enum names. Default is none, i.e. an empty string.
      */
     var modelNameSuffix = String.Empty
