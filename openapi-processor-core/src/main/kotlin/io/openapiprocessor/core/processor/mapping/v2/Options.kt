@@ -38,6 +38,11 @@ data class Options(
     val modelType: String = "default",
 
     /**
+     * generate enum default|string|framework (optional)
+     */
+    val enumType: String = "default",
+
+    /**
      * generate model source files with suffix (optional)
      */
     val modelNameSuffix: String = String.Empty,

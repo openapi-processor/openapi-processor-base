@@ -138,4 +138,21 @@ class MappingReaderSpec: StringSpec ({
         // then:
         mapping.options.generatedDate shouldBe false
     }
+
+    "reads enum-type" {
+        val yaml = """
+            |openapi-processor-mapping: v5
+            |options:
+            |  package-name: no.warning
+            |  enum-type: string
+        """.trimMargin()
+
+        val reader = MappingReader()
+
+        // when:
+        val mapping = reader.read (yaml) as Mapping
+
+        // then:
+        mapping.options.enumType shouldBe "string"
+    }
 })
