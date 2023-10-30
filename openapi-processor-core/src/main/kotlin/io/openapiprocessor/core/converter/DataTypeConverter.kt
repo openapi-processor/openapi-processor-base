@@ -382,17 +382,39 @@ class DataTypeConverter(
             "date-time")
     }
 
-    private fun createStringDataType(schemaInfo: SchemaInfo, constraints: DataTypeConstraints,
-        dataTypes: DataTypes): DataType {
-
+    private fun createStringDataType(
+        schemaInfo: SchemaInfo,
+        constraints: DataTypeConstraints,
+        dataTypes: DataTypes
+    ): DataType {
         if (!schemaInfo.isEnum()) {
-            return StringDataType(
-                schemaInfo.getTypeFormat(),
-                constraints,
-                schemaInfo.getDeprecated(),
-                Documentation(description = schemaInfo.description))
+            return createString(schemaInfo, constraints)
         }
 
+        return when(options.enumType) {
+            "string" -> {
+                createString(schemaInfo, constraints)
+            }
+            else -> {
+                createStringEnum(schemaInfo, dataTypes, constraints)
+            }
+        }
+    }
+
+    private fun createString(schemaInfo: SchemaInfo, constraints: DataTypeConstraints): StringDataType {
+        return StringDataType(
+            schemaInfo.getTypeFormat(),
+            constraints,
+            schemaInfo.getDeprecated(),
+            Documentation(description = schemaInfo.description)
+        )
+    }
+
+    private fun createStringEnum(
+        schemaInfo: SchemaInfo,
+        dataTypes: DataTypes,
+        constraints: DataTypeConstraints
+    ): DataType {
         // in case of an inline definition the name may be lowercase, make sure the enum
         // class gets an uppercase name!
         val enumName = schemaInfo.getName().capitalizeFirstChar()
@@ -402,14 +424,15 @@ class DataTypeConverter(
             return found
         }
 
-        @Suppress("UNCHECKED_CAST") val enumType = StringEnumDataType (
+        @Suppress("UNCHECKED_CAST")
+        val enumType = StringEnumDataType(
             DataTypeName(enumName, getTypeNameWithSuffix(enumName)),
             listOf(options.packageName, "model").joinToString("."),
             schemaInfo.getEnumValues() as List<String>,
             constraints,
             schemaInfo.getDeprecated())
 
-        dataTypes.add (enumName, enumType)
+        dataTypes.add(enumName, enumType)
         return enumType
     }
 

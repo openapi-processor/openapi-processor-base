@@ -20,6 +20,7 @@ import io.openapiprocessor.core.converter.ApiConverter
 import io.openapiprocessor.core.framework.Framework
 import io.openapiprocessor.core.framework.FrameworkBase
 import io.openapiprocessor.core.converter.ApiOptions
+import io.openapiprocessor.core.model.datatypes.StringDataType
 import spock.lang.Specification
 
 import static com.github.hauner.openapi.core.test.OpenApiParser.parse
@@ -123,4 +124,45 @@ components:
         api.dataTypes.dataTypes[1].name == 'Bar'
     }
 
+    void "converts enum query parameter to string"() {
+        def openApi = parse (
+"""\
+openapi: 3.0.2
+info:
+  title: test enum parameters
+  version: 1.0.0
+
+paths:
+
+  /endpoint:
+    get:
+      tags:
+        - enum
+      parameters:
+        - name: foo
+          description: enum parameter
+          in: query
+          schema:
+            type: string
+            enum:
+              - foo
+              - bar
+              - foo-bar
+      responses:
+        '204':
+          description: empty
+""")
+
+        when:
+        def api = new ApiConverter (new ApiOptions(enumType: "string"), new FrameworkBase ())
+            .convert (openApi)
+
+        then:
+        def itf = api.interfaces.first ()
+        def ep = itf.endpoints.first ()
+        def param = ep.parameters.first ()
+        param.name == 'foo'
+        param.dataType.typeName == 'String'
+        param.dataType instanceof StringDataType
+    }
 }
