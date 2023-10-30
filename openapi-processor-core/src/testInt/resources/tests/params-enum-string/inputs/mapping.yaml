@@ -3,4 +3,5 @@ openapi-processor-mapping: v5
 options:
   package-name: generated
   format-code: false
+  bean-validation: jakarta
   enum-type: string
