@@ -3,7 +3,7 @@ package generated.api;
 import annotation.Mapping;
 import annotation.Parameter;
 import generated.support.Generated;
-import generated.support.validation.Values;
+import generated.validation.Values;
 import jakarta.validation.constraints.NotNull;
 
 @Generated(value = "openapi-processor-core", version = "test")

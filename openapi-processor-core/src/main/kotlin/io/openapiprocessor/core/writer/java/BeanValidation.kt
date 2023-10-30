@@ -19,5 +19,5 @@ class BeanValidations(val format: BeanValidationFormat = BeanValidationFormat.JA
     val PATTERN = "${format.pkg}.validation.constraints.Pattern"
     val SIZE = "${format.pkg}.validation.constraints.Size"
     val VALID = "${format.pkg}.validation.Valid"
-    val VALUES = "support.validation.Values"
+    val VALUES = "validation.Values"
 }

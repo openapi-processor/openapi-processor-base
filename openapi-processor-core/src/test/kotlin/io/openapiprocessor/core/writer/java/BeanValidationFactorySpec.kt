@@ -186,12 +186,12 @@ class BeanValidationFactorySpec : StringSpec({
 
         val prop = info.prop
         prop.dataTypeValue shouldBe "String"
-        prop.imports shouldBe setOf("${apiOptions.packageName}.support.validation.Values")
+        prop.imports shouldBe setOf("${apiOptions.packageName}.validation.Values")
         prop.annotations shouldBe setOf("""@Values(values = {"foo", "bar"})""")
 
         val io = info.inout
         io.dataTypeValue shouldBe """@Values(values = {"foo", "bar"}) String"""
-        io.imports shouldBe setOf("${apiOptions.packageName}.support.validation.Values")
+        io.imports shouldBe setOf("${apiOptions.packageName}.validation.Values")
         io.annotations.shouldBeEmpty()
     }
 })
