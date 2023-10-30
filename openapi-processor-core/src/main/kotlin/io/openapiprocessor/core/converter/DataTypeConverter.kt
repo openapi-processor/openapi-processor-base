@@ -278,19 +278,7 @@ class DataTypeConverter(
             typeFormat += ":" + schemaInfo.getFormat()
         }
 
-        // todo factory method in SchemaInfo
-        val constraints = DataTypeConstraints(
-            schemaInfo.getDefaultValue(),
-            schemaInfo.getNullable(),
-            schemaInfo.getMinLength(),
-            schemaInfo.getMaxLength(),
-            schemaInfo.getMinimum(),
-            schemaInfo.getExclusiveMinimum(),
-            schemaInfo.getMaximum(),
-            schemaInfo.getExclusiveMaximum(),
-            pattern = schemaInfo.pattern,
-            format = schemaInfo.getFormat()
-        )
+        val constraints = schemaInfo.constraints
 
         return when (typeFormat) {
             "integer",

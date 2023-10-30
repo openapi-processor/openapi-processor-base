@@ -1,5 +1,5 @@
 /*
- * Copyright © 2019-2020 https://github.com/openapi-processor/openapi-processor-core
+ * Copyright 2019 https://github.com/openapi-processor/openapi-processor-base
  * PDX-License-Identifier: Apache-2.0
  */
 
@@ -21,7 +21,8 @@ class DataTypeConstraints(
     var /*val*/ maxItems: Int? = null,
     var pattern: String? = null,
     var /*val*/ required: List<String> = emptyList(),
-    val format: String? = null
+    var format: String? = null,
+    val values: List<String> = emptyList()
 ) {
 
     fun getDefault(): Any? = defaultValue

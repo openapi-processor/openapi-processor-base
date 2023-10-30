@@ -6,6 +6,7 @@
 package io.openapiprocessor.core.converter
 
 import io.openapiprocessor.core.converter.mapping.MappingSchema
+import io.openapiprocessor.core.model.datatypes.DataTypeConstraints
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.parser.RefResolver as ParserRefResolver
 import io.openapiprocessor.core.parser.Schema
@@ -342,6 +343,25 @@ open class SchemaInfo(
             schema = additionalProperties,
             resolver = resolver)
     }
+
+    /**
+     * all constraints
+     */
+    @Suppress("UNCHECKED_CAST")
+    val constraints: DataTypeConstraints
+        get() = DataTypeConstraints(
+            defaultValue = getDefaultValue(),
+            nullable = getNullable(),
+            minLength = getMinLength(),
+            maxLength = getMaxLength(),
+            minimum = getMinimum(),
+            exclusiveMinimum = getExclusiveMinimum(),
+            maximum = getMaximum(),
+            exclusiveMaximum = getExclusiveMaximum(),
+            pattern = pattern,
+            format = getFormat(),
+            values = getEnumValues() as List<String>
+        )
 
     override fun isPrimitive(): Boolean {
         return listOf("boolean", "integer", "number", "string").contains(schema?.getType())
