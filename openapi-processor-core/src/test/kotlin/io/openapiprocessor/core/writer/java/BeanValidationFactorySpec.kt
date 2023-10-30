@@ -9,6 +9,7 @@ import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.shouldBe
+import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.support.datatypes.ListDataType
 import io.openapiprocessor.core.support.datatypes.ObjectDataType
@@ -18,7 +19,8 @@ import io.openapiprocessor.core.support.datatypes.propertyDataTypeString
 class BeanValidationFactorySpec : StringSpec({
     isolationMode = IsolationMode.InstancePerTest
 
-    val validation = BeanValidationFactory()
+    val apiOptions = ApiOptions()
+    val validation = BeanValidationFactory(apiOptions)
     val validations = validation.validations
 
     "applies @Valid to 'array' with object items" {
@@ -173,6 +175,23 @@ class BeanValidationFactorySpec : StringSpec({
         val io = info.inout
         io.dataTypeValue shouldBe "@Email String"
         io.imports shouldBe setOf(validations.EMAIL)
+        io.annotations.shouldBeEmpty()
+    }
+
+    "applies @Values to String" {
+        apiOptions.packageName = "package.name"
+
+        val dataType = StringDataType(constraints = DataTypeConstraints(values = listOf("foo", "bar")))
+        val info = validation.validate(dataType)
+
+        val prop = info.prop
+        prop.dataTypeValue shouldBe "String"
+        prop.imports shouldBe setOf("${apiOptions.packageName}.support.validation.Values")
+        prop.annotations shouldBe setOf("""@Values(values = {"foo", "bar"})""")
+
+        val io = info.inout
+        io.dataTypeValue shouldBe """@Values(values = {"foo", "bar"}) String"""
+        io.imports shouldBe setOf("${apiOptions.packageName}.support.validation.Values")
         io.annotations.shouldBeEmpty()
     }
 })

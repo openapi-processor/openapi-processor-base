@@ -5,6 +5,7 @@
 
 package io.openapiprocessor.core.writer.java
 
+import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.mapping.ParameterValue
 import io.openapiprocessor.core.converter.mapping.SimpleParameterValue
 import io.openapiprocessor.core.model.Annotation
@@ -15,9 +16,9 @@ import org.apache.commons.text.StringEscapeUtils.escapeJava
  * creates bean validation imports and annotations.
  */
 open class BeanValidationFactory(
-    val format: BeanValidationFormat = BeanValidationFormat.JAVAX
+    private val options: ApiOptions
 ) {
-    val validations: BeanValidations = BeanValidations(format)
+    val validations: BeanValidations = BeanValidations(getValidationFormat())
 
     /**
      * override to add annotations to the model object class.
@@ -71,6 +72,10 @@ open class BeanValidationFactory(
 
         if (sourceDataType.emailConstraint()) {
             annotations.add(createEmailAnnotation())
+        }
+
+        if (sourceDataType.valuesConstraint()) {
+            annotations.add(createValuesAnnotation(dataType))
         }
 
         return annotations
@@ -141,6 +146,26 @@ open class BeanValidationFactory(
     private fun createEmailAnnotation(): Annotation {
         return Annotation(validations.EMAIL)
     }
+
+    private fun createValuesAnnotation(dataType: DataType): Annotation {
+        val parameters = linkedMapOf<String, ParameterValue>()
+
+        val params = StringBuilder()
+        params.append("{")
+        params.append(dataType.constraints!!.values.joinToString(", ") { """"$it"""" })
+        params.append("}")
+
+        parameters["values"] = SimpleParameterValue(params.toString())
+        return Annotation("${options.packageName}.${validations.VALUES}", parameters)
+    }
+
+    private fun getValidationFormat(): BeanValidationFormat {
+        val format = options.beanValidationFormat
+        return if (format != null)
+            BeanValidationFormat.valueOf(format.uppercase())
+        else
+            BeanValidationFormat.JAVAX
+    }
 }
 
 private fun DataType.shouldHaveValid(): Boolean {
@@ -194,3 +219,5 @@ private fun DataType.itemConstraints(): SizeConstraints = constraints?.itemConst
 private fun DataType.patternConstraint(): Boolean = constraints?.pattern != null
 
 private fun DataType.emailConstraint(): Boolean = "email" == constraints?.format
+
+private fun DataType.valuesConstraint(): Boolean = isString() && constraints?.values?.isNotEmpty() == true
