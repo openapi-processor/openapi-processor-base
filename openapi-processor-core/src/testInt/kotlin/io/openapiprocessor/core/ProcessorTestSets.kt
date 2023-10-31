@@ -39,6 +39,7 @@ val ALL_30: List<TestParams> = listOf(
     test30_DR("params-complex-data-types"), // framework specific
     test30_D_("params-endpoint"),
     test30_D_("params-enum"),
+    test30_D_("params-enum-string"),
     test30_D_("params-path-simple-data-types"), // framework specific
     test30_DR("params-request-body"), // framework specific
     test30_D_("params-request-body-multipart-form-data"), // framework specific
@@ -106,6 +107,7 @@ val ALL_31: List<TestParams> = listOf(
     test31_DR("params-complex-data-types"), // framework specific
     test31_D_("params-endpoint"),
     test31_D_("params-enum"),
+    test31_D_("params-enum-string"),
     test31_D_("params-path-simple-data-types"), // framework specific
     test31_DR("params-request-body"), // framework specific
     test31_D_("params-request-body-multipart-form-data"), // framework specific
