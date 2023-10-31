@@ -62,8 +62,13 @@ class CompileExpectedSpec: StringSpec({
             }
             compilePaths.add(Path.of("src/testInt/resources/compile/Mapping.java"))
             compilePaths.add(Path.of("src/testInt/resources/compile/Parameter.java"))
-            compilePaths.add(Path.of("src/testInt/resources/compile/jakarta/Valid.java"))
+            compilePaths.add(Path.of("src/testInt/resources/compile/jakarta/Constraint.java"))
+            compilePaths.add(Path.of("src/testInt/resources/compile/jakarta/ConstraintValidator.java"))
+            compilePaths.add(Path.of("src/testInt/resources/compile/jakarta/ConstraintValidatorContext.java"))
+            compilePaths.add(Path.of("src/testInt/resources/compile/jakarta/NotNull.java"))
+            compilePaths.add(Path.of("src/testInt/resources/compile/jakarta/Payload.java"))
             compilePaths.add(Path.of("src/testInt/resources/compile/jakarta/Size.java"))
+            compilePaths.add(Path.of("src/testInt/resources/compile/jakarta/Valid.java"))
             compilePaths.add(Path.of("src/testInt/resources/compile/javax/Valid.java"))
 
             val expected = support.readTestItems(sourcePath, "outputs.yaml").items
