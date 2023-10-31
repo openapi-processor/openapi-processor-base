@@ -24,6 +24,7 @@ import java.io.Writer
 class ApiWriter(
     private val options: ApiOptions,
     private val generatedWriter: GeneratedWriter,
+    private val validationWriter: ValidationWriter,
     private val interfaceWriter: InterfaceWriter,
     private val dataTypeWriter: DataTypeWriter,
     private val enumWriter: StringEnumWriter,
@@ -37,9 +38,9 @@ class ApiWriter(
         }
     }
 
-
     fun write(api: Api) {
         writeGenerated()
+        writeValidation()
         writeInterfaces(api)
         writeObjectDataTypes(api)
         writeInterfaceDataTypes(api)
@@ -50,6 +51,19 @@ class ApiWriter(
         val writer = getWriter("${options.packageName}.support", "Generated")
         writeGenerated(writer)
         writer.close()
+    }
+
+    private fun writeValidation() {
+        if (!options.beanValidation)
+            return
+
+        val vWriter = getWriter("${options.packageName}.validation", "Values")
+        writeValues(vWriter)
+        vWriter.close()
+
+        val vvWriter = getWriter("${options.packageName}.validation", "ValueValidator")
+        writeValueValidator(vvWriter)
+        vvWriter.close()
     }
 
     private fun writeInterfaces(api: Api) {
@@ -111,6 +125,18 @@ class ApiWriter(
     private fun writeGenerated(writer: Writer) {
         val raw = StringWriter()
         generatedWriter.writeSource(raw)
+        writer.write(format(raw.toString()))
+    }
+
+    private fun writeValues(writer: Writer) {
+        val raw = StringWriter()
+        validationWriter.writeValues(raw)
+        writer.write(format(raw.toString()))
+    }
+
+    private fun writeValueValidator(writer: Writer) {
+        val raw = StringWriter()
+        validationWriter.writeValueValidator(raw)
         writer.write(format(raw.toString()))
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 https://github.com/openapi-processor/openapi-processor-core
+ * Copyright 2020 https://github.com/openapi-processor/openapi-processor-base
  * PDX-License-Identifier: Apache-2.0
  */
 
@@ -55,7 +55,7 @@ class ApiWriterSpec: StringSpec({
         val api = Api(dataTypes = dts)
 
         val enumWriter = stub<StringEnumWriter>(relaxed = true)
-        ApiWriter(options, stub(relaxed = true), stub(), stub(), enumWriter, stub(), nf, wfStub)
+        ApiWriter(options, stub(relaxed = true), stub(), stub(), stub(), enumWriter, stub(), nf, wfStub)
             .write(api)
 
         verify(exactly = 1) { enumWriter.write(any(), dtA) }
@@ -70,7 +70,7 @@ class ApiWriterSpec: StringSpec({
         dts.addRef("Foo")
         val api = Api(dataTypes = dts)
 
-        ApiWriter(options, stub(relaxed = true), stub(), stub(), stub(relaxed = true), stub(), formatter, wfStub)
+        ApiWriter(options, stub(relaxed = true), stub(), stub(), stub(), stub(relaxed = true), stub(), formatter, wfStub)
             .write(api)
 
         verify (exactly = 2) { formatter.format(any()) }
@@ -84,7 +84,7 @@ class ApiWriterSpec: StringSpec({
         val api = Api(itfs)
 
         val itfWriter = stub<InterfaceWriter>(relaxed = true)
-        ApiWriter(options, stub(relaxed = true), itfWriter, stub(), stub(), stub(), nf, wfStub)
+        ApiWriter(options, stub(relaxed = true), stub(), itfWriter, stub(), stub(), stub(), nf, wfStub)
             .write (api)
 
         verify(exactly = 1) { itfWriter.write(any(), itfs[0]) }
@@ -99,7 +99,7 @@ class ApiWriterSpec: StringSpec({
         )
         val api = Api(itfs)
 
-        ApiWriter(options, stub(relaxed = true), stub(relaxed = true), stub(), stub(), stub(), formatter, wfStub)
+        ApiWriter(options, stub(relaxed = true), stub(), stub(relaxed = true), stub(), stub(), stub(), formatter, wfStub)
             .write(api)
 
         verify (exactly = 2) { formatter.format(any()) }
@@ -119,7 +119,7 @@ class ApiWriterSpec: StringSpec({
         val api = Api(dataTypes = dts)
 
         val dtWriter = stub<DataTypeWriter>(relaxed = true)
-        ApiWriter(options, stub(relaxed = true), stub(), dtWriter, stub(), stub(), nf, wfStub)
+        ApiWriter(options, stub(relaxed = true), stub(), stub(), dtWriter, stub(), stub(), nf, wfStub)
             .write (api)
 
         verify(exactly = 1) { dtWriter.write(any(), dtA) }
@@ -134,7 +134,7 @@ class ApiWriterSpec: StringSpec({
         dts.addRef("Foo")
         val api = Api(dataTypes = dts)
 
-        ApiWriter(options, stub(relaxed = true), stub(), stub(relaxed = true), stub(), stub(), formatter, wfStub)
+        ApiWriter(options, stub(relaxed = true), stub(), stub(), stub(relaxed = true), stub(), stub(), formatter, wfStub)
             .write(api)
 
         verify (exactly = 2) { formatter.format(any()) }
@@ -154,7 +154,7 @@ class ApiWriterSpec: StringSpec({
         val api = Api(dataTypes = dts)
 
         val dtWriter = stub<InterfaceDataTypeWriter>(relaxed = true)
-        ApiWriter(options, stub(relaxed = true), stub(), stub(), stub(), dtWriter, nf, wfStub)
+        ApiWriter(options, stub(relaxed = true), stub(), stub(), stub(), stub(), dtWriter, nf, wfStub)
             .write (api)
 
         verify(exactly = 1) { dtWriter.write(any(), dtA) }
@@ -169,7 +169,7 @@ class ApiWriterSpec: StringSpec({
         dts.addRef("Foo")
         val api = Api(dataTypes = dts)
 
-        ApiWriter(options, stub(relaxed = true), stub(), stub(), stub(), stub(relaxed = true), formatter, wfStub)
+        ApiWriter(options, stub(relaxed = true), stub(), stub(), stub(), stub(), stub(relaxed = true), formatter, wfStub)
             .write(api)
 
         verify (exactly = 2) { formatter.format(any()) }
@@ -184,7 +184,7 @@ class ApiWriterSpec: StringSpec({
         val api = Api(dataTypes = dt)
 
         // when:
-        ApiWriter(options, gwStub, stub(), dtWriter, stub(), stub()).write (api)
+        ApiWriter(options, gwStub, stub(), stub(), dtWriter, stub(), stub()).write (api)
 
         // then:
         verify(exactly = 0) {
@@ -201,10 +201,24 @@ class ApiWriterSpec: StringSpec({
         val api = Api(dataTypes = dts)
 
         options.formatCode = false
-        ApiWriter(options, stub(relaxed = true), stub(), stub(), stub(), stub(relaxed = true), formatter, wfStub)
+        ApiWriter(options, stub(relaxed = true), stub(), stub(), stub(), stub(), stub(relaxed = true), formatter, wfStub)
             .write(api)
 
         verify (exactly = 0) { formatter.format(any()) }
+    }
+
+    "writes custom validation sources" {
+        val validation = stub<ValidationWriter>(relaxed = true)
+
+        val dts = DataTypes()
+        options.beanValidation = true
+        val api = Api(dataTypes = dts)
+
+        ApiWriter(options, stub(relaxed = true), validation, stub(), stub(), stub(), stub(), nf, wfStub)
+            .write(api)
+
+        verify(exactly = 1) { validation.writeValues(any()) }
+        verify(exactly = 1) { validation.writeValueValidator(any()) }
     }
 })
 

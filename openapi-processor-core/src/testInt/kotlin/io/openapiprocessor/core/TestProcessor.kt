@@ -52,6 +52,7 @@ class TestProcessor:
             val writer = ApiWriter(
                 options,
                 generatedWriter,
+                ValidationWriter(options),
                 InterfaceWriter(
                     options,
                     generatedWriter,
