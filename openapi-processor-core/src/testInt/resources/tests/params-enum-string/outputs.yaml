@@ -1,2 +1,4 @@
 items:
   - outputs/api/EnumApi.java
+  - outputs/validation/Values.java
+  - outputs/validation/ValueValidator.java
