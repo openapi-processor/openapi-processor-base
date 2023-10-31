@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 https://github.com/openapi-processor/openapi-processor-test
+ * Copyright 2020 https://github.com/openapi-processor/openapi-processor-base
  * PDX-License-Identifier: Apache-2.0
  */
 
@@ -82,10 +82,13 @@ class TestSetRunner {
         def expectedFiles = files.getExpectedFiles (sourcePath, testSet.expected)
         def generatedFiles = files.getGeneratedFiles (generatedPath)
 
-        // even if not expected, check that the annotation was generated
-        def expectedFilesPlus = expectedFiles + ["support/Generated.java"]
+        generatedFiles = filterUnexpectedFiles(expectedFiles, generatedFiles, [
+            "support/Generated.java",
+            "validation/Values.java",
+            "validation/ValueValidator.java"
+        ] as Set<String>)
 
-        def expectedFileNames = resolveFileNames(expectedFilesPlus, PATH_GENERATED)
+        def expectedFileNames = resolveFileNames(expectedFiles, PATH_GENERATED)
         assert expectedFileNames == generatedFiles
 
         // compare expected files with the generated files
@@ -149,10 +152,13 @@ class TestSetRunner {
         def expectedFiles = files.getExpectedFiles (path, testSet.expected)
         def generatedFiles = files.getGeneratedFiles (generatedPath)
 
-        // even if not expected, check that the annotation was generated
-        def expectedFilesPlus = expectedFiles + ["support/Generated.java"]
+        generatedFiles = filterUnexpectedFiles(expectedFiles, generatedFiles, [
+            "support/Generated.java",
+            "validation/Values.java",
+            "validation/ValueValidator.java"
+        ] as Set<String>)
 
-        def expectedFileNames = resolveFileNames(expectedFilesPlus, PATH_GENERATED)
+        def expectedFileNames = resolveFileNames(expectedFiles, PATH_GENERATED)
         assert expectedFileNames == generatedFiles
 
         def success = true
@@ -164,6 +170,22 @@ class TestSetRunner {
         }
 
         success
+    }
+
+    private static Set<String> filterUnexpectedFiles(
+            Set<String> expectedFiles,
+            Set<String> generatedFiles,
+            Set<String> unexpectedFiles
+    ) {
+        def generated = new TreeSet<String>()
+        generatedFiles.each {
+            if (!expectedFiles.contains(it) && unexpectedFiles.contains(it)) {
+                return
+            }
+
+            generated.add(it)
+        }
+        return generated as SortedSet<String>
     }
 
     private String setMappingModelType(String source) {

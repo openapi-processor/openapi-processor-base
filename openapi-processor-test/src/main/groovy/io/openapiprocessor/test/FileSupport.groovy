@@ -241,7 +241,13 @@ class FileSupport {
      * @return true if there is a difference
      */
     boolean printUnifiedDiff (String expected, Path generated) {
-        def expectedLines = getResource (expected).readLines ()
+        def expectedStream = getResource (expected)
+        if (expectedStream == null) {
+            log.error ("failed to find {}", expected)
+            return true
+        }
+
+        def expectedLines = expectedStream.readLines ()
 
         def patch = DiffUtils.diff (
             expectedLines,
