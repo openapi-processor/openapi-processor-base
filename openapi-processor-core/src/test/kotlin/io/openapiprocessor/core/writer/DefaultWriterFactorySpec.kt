@@ -154,6 +154,22 @@ class DefaultWriterFactorySpec : StringSpec({
         Files.exists(support.resolve("Old.java")) shouldBe false
         Files.exists(validation.resolve("Old.java")) shouldBe false
     }
+
+    "initializes additional package folders" {
+        val writerFactory = object : DefaultWriterFactory(options) {
+            override fun initAdditionalPackages(options: ApiOptions): Map<String, Path> {
+                val pkgPaths = HashMap<String, Path>()
+                val (name, path) = initTargetPackage("foo/bar")
+                return pkgPaths
+            }
+        }
+        writerFactory.init()
+
+        val additional = options.getSourceDir("foo/bar")
+
+        Files.exists(additional) shouldBe true
+        Files.isDirectory(additional) shouldBe true
+    }
 })
 
 

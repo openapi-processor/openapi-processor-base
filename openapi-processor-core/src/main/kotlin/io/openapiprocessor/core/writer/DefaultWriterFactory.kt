@@ -22,7 +22,8 @@ import kotlin.io.path.deleteRecursively
 /**
  * Writer factory for local file system. Must be initialized via [InitWriterTarget].
  */
-class DefaultWriterFactory(val options: ApiOptions) : WriterFactory, InitWriterTarget {
+open class DefaultWriterFactory(val options: ApiOptions): WriterFactory, InitWriterTarget
+{
     private var log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     private lateinit var paths: Map<String, Path>
@@ -59,7 +60,13 @@ class DefaultWriterFactory(val options: ApiOptions) : WriterFactory, InitWriterT
             log.debug("initialized target folder: {}", validationPath.toAbsolutePath().toString())
         }
 
+        pkgPaths.putAll(initAdditionalPackages(options))
+
         paths = pkgPaths
+    }
+
+    open fun initAdditionalPackages(options: ApiOptions): Map<String, Path> {
+        return emptyMap()
     }
 
     @OptIn(ExperimentalPathApi::class)
@@ -71,7 +78,7 @@ class DefaultWriterFactory(val options: ApiOptions) : WriterFactory, InitWriterT
         }
     }
 
-    private fun initTargetPackage(subPackageName: String): Pair<String, Path> {
+    protected fun initTargetPackage(subPackageName: String): Pair<String, Path> {
         val rootPackageFolder = options.packageName.replace(".", "/")
 
         val apiPackage = options.packageName.plus(".$subPackageName")
