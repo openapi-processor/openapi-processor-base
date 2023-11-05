@@ -54,9 +54,9 @@
           "enum": ["default", "record"]
         },
         "enum-type": {
-          "description": "generate default, string or framework specific enum. Default is default.",
+          "description": "generate default enum, string or supplier enum. Default is default.",
           "default": "default",
-          "enum": ["default", "string", "framework"]
+          "enum": ["default", "string", "supplier"]
         },
         "one-of-interface": {
           "description": "generate common interface for a `oneOf` object list.",

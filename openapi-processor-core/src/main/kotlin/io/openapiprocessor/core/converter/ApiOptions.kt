@@ -52,7 +52,7 @@ class ApiOptions {
     var modelType = "default"
 
     /**
-     * enum type. default|string|framework.
+     * enum type. default|string|supplier.
      */
     var enumType = "default"
 

@@ -5,6 +5,7 @@
 
 package io.openapiprocessor.core.writer.java
 
+import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.model.datatypes.DataType
 import io.openapiprocessor.core.model.datatypes.StringEnumDataType
 import java.io.Writer
@@ -12,7 +13,7 @@ import java.io.Writer
 /**
  * Writer for String enum.
  */
-open class StringEnumWriter(private val generatedWriter: GeneratedWriter) {
+open class StringEnumWriter(private val apiOptions: ApiOptions, private val generatedWriter: GeneratedWriter) {
 
     fun write(target: Writer, dataType: StringEnumDataType) {
         target.write("package ${dataType.getPackageName()};\n\n")
@@ -27,7 +28,11 @@ open class StringEnumWriter(private val generatedWriter: GeneratedWriter) {
 
         generatedWriter.writeUse(target)
         target.write("\n")
-        target.write("public enum ${dataType.getTypeName()} {\n")
+        target.write("public enum ${dataType.getTypeName()}")
+        if (isSupplier()) {
+            target.write(" implements Supplier<String>")
+        }
+        target.write(" {\n")
 
         val values = mutableListOf<String>()
         dataType.values.forEach {
@@ -45,15 +50,29 @@ open class StringEnumWriter(private val generatedWriter: GeneratedWriter) {
             |
             """.trimMargin())
 
-        target.write(
-            """
-            |    @JsonValue
-            |    public String getValue() {
-            |        return this.value;
-            |    }
-            |
-            |
-            """.trimMargin())
+        if(isSupplier()) {
+            target.write(
+                """
+                |    @JsonValue
+                |    public String get() {
+                |        return this.value;
+                |    }
+                |
+                |
+                """.trimMargin())
+
+        } else {
+            // default
+            target.write(
+                """
+                |    @JsonValue
+                |    public String getValue() {
+                |        return this.value;
+                |    }
+                |
+                |
+                """.trimMargin())
+        }
 
         target.write(
             """
@@ -78,10 +97,16 @@ open class StringEnumWriter(private val generatedWriter: GeneratedWriter) {
         imports.add ("com.fasterxml.jackson.annotation.JsonValue")
         imports.add(generatedWriter.getImport())
         imports.addAll (dataType.referencedImports)
+        if (isSupplier()) {
+            imports.add ("java.util.function.Supplier")
+        }
 
         return DefaultImportFilter ()
             .filter(packageName, imports)
             .sorted()
     }
 
+    private fun isSupplier(): Boolean {
+        return apiOptions.enumType == "supplier"
+    }
 }

@@ -25,7 +25,7 @@ options: # general processor options [required]
   # default (i.e pojo) or record
   model-type: default
 
-  # default, string, framework
+  # default, string, supplier
   enum-type: default
 
   # generate common interface for an `oneOf` object list (optional): true or false (default)

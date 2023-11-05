@@ -15,7 +15,7 @@ import spock.lang.Specification
 class StringEnumWriterSpec extends Specification {
     def options = new ApiOptions()
     def generatedWriter = new SimpleGeneratedWriter(options)
-    def writer = new StringEnumWriter(generatedWriter)
+    def writer = new StringEnumWriter(options, generatedWriter)
     def target = new StringWriter ()
 
     void "writes 'package'" () {
@@ -58,6 +58,46 @@ import io.openapiprocessor.generated.support.Generated;
         target.toString ().contains ("""\
 @Generated
 public enum $type {
+""")
+        target.toString ().contains ("""\
+}
+""")
+
+        where:
+        id    | type
+        'Foo' | 'Foo'
+        'Foo' | 'FooX'
+    }
+
+    void "writes Supplier import" () {
+        options.enumType = "supplier"
+
+        def dataType = new StringEnumDataType(
+            new DataTypeName('Foo'), 'pkg', [], null, false)
+
+        when:
+        writer.write (target, dataType)
+
+        then:
+        target.toString ().contains ("""\
+import java.util.function.Supplier;
+""")
+    }
+
+    void "writes enum class implementing Supplier<String>"() {
+        options.enumType = "supplier"
+
+        def pkg = 'com.github.hauner.openapi'
+        def dataType = new StringEnumDataType(
+            new DataTypeName(id, type), pkg, [], null, false)
+
+        when:
+        writer.write (target, dataType)
+
+        then:
+        target.toString ().contains ("""\
+@Generated
+public enum $type implements Supplier<String> {
 """)
         target.toString ().contains ("""\
 }
@@ -138,6 +178,27 @@ public enum Foo {
 
     @JsonValue
     public String getValue() {
+        return this.value;
+    }
+
+""")
+    }
+
+    void "writes @JsonValue & Supplier<> method for serialization"() {
+        options.enumType = "supplier"
+
+        def pkg = 'com.github.hauner.openapi'
+        def dataType = new StringEnumDataType (
+            new DataTypeName('Foo'), pkg, ['foo', '_foo-2', 'foo-foo'], null, false)
+
+        when:
+        writer.write (target, dataType)
+
+        then:
+        target.toString ().contains ("""\
+
+    @JsonValue
+    public String get() {
         return this.value;
     }
 
