@@ -160,6 +160,7 @@ class DefaultWriterFactorySpec : StringSpec({
             override fun initAdditionalPackages(options: ApiOptions): Map<String, Path> {
                 val pkgPaths = HashMap<String, Path>()
                 val (name, path) = initTargetPackage("foo/bar")
+                pkgPaths[name] = path
                 return pkgPaths
             }
         }
