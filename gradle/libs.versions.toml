@@ -2,7 +2,7 @@
 processor = "2023.6-SNAPSHOT"
 parser = "2023.5"
 
-kotlin = "1.9.10"
+kotlin = "1.9.20"
 build-jdk = "11"
 target-jdk = "11"
 test-jdk = "17"
