@@ -9,12 +9,9 @@ import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.model.Api
 import io.openapiprocessor.core.model.Interface
 import io.openapiprocessor.core.model.datatypes.InterfaceDataType
-import io.openapiprocessor.core.model.datatypes.StringEnumDataType
 import io.openapiprocessor.core.model.datatypes.ModelDataType
-import io.openapiprocessor.core.writer.DefaultWriterFactory
-import io.openapiprocessor.core.writer.InitWriterTarget
-import io.openapiprocessor.core.writer.SourceFormatter
-import io.openapiprocessor.core.writer.WriterFactory
+import io.openapiprocessor.core.model.datatypes.StringEnumDataType
+import io.openapiprocessor.core.writer.*
 import java.io.StringWriter
 import java.io.Writer
 
@@ -53,19 +50,6 @@ class ApiWriter(
         writer.close()
     }
 
-    private fun writeValidation() {
-        if (!options.beanValidation)
-            return
-
-        val vWriter = getWriter("${options.packageName}.validation", "Values")
-        writeValues(vWriter)
-        vWriter.close()
-
-        val vvWriter = getWriter("${options.packageName}.validation", "ValueValidator")
-        writeValueValidator(vvWriter)
-        vvWriter.close()
-    }
-
     private fun writeInterfaces(api: Api) {
         api.forEachInterface {
             val writer = getWriter(it.getPackageName(), it.getInterfaceName())
@@ -95,6 +79,16 @@ class ApiWriter(
             val writer = getWriter(it.getPackageName(), it.getTypeName())
             writeEnumDataType(writer, it)
             writer.close()
+        }
+    }
+
+    private fun writeValidation() {
+        validationWriter.write({ format(it) }, writerFactory)
+    }
+
+    private fun writeAdditionalFiles() {
+        additionalWriter.forEach {
+            it(options, { format(it) }, writerFactory)
         }
     }
 
@@ -128,18 +122,6 @@ class ApiWriter(
         writer.write(format(raw.toString()))
     }
 
-    private fun writeValues(writer: Writer) {
-        val raw = StringWriter()
-        validationWriter.writeValues(raw)
-        writer.write(format(raw.toString()))
-    }
-
-    private fun writeValueValidator(writer: Writer) {
-        val raw = StringWriter()
-        validationWriter.writeValueValidator(raw)
-        writer.write(format(raw.toString()))
-    }
-
     private fun getWriter(packageName: String, className: String): Writer {
         return writerFactory.createWriter(packageName, className)
     }
@@ -148,7 +130,6 @@ class ApiWriter(
         if (!options.formatCode) {
             return raw
         }
-
         return formatter.format(raw)
     }
 }

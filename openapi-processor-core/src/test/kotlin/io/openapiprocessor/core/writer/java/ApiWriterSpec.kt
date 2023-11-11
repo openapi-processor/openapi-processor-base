@@ -8,6 +8,7 @@ package io.openapiprocessor.core.writer.java
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.StringSpec
 import io.mockk.every
+import io.mockk.mockk
 import io.mockk.verify
 import io.openapiprocessor.core.builder.api.`interface`
 import io.openapiprocessor.core.converter.ApiOptions
@@ -27,17 +28,39 @@ class ApiWriterSpec: StringSpec({
 
     val target = tempFolder()
     val options = ApiOptions()
-    val gwStub = SimpleGeneratedWriter(options)
-    val wfStub = stub<WriterFactory>()
     val writer = StringWriter()
-    val nf = NullFormatter()
+    val factoryStub = stub<WriterFactory>()
+
+    fun createApiWriter(
+        generatedWriter: GeneratedWriter = stub(relaxed = true),
+        validationWriter: ValidationWriter = stub(relaxed = true),
+        interfaceWriter: InterfaceWriter = stub(),
+        dataTypeWriter: DataTypeWriter = stub(),
+        enumWriter: StringEnumWriter = stub(),
+        interfaceDataTypeWriter: InterfaceDataTypeWriter = stub(),
+        additionalWriters: List<AdditionalWriter> = emptyList(),
+        formatter: SourceFormatter = NullFormatter()
+    ): ApiWriter {
+        return ApiWriter(
+            options,
+            generatedWriter,
+            validationWriter,
+            interfaceWriter,
+            dataTypeWriter,
+            enumWriter,
+            interfaceDataTypeWriter,
+            additionalWriters,
+            formatter,
+            factoryStub
+        )
+    }
 
     beforeTest {
         options.packageName = "io.openapiprocessor.test"
         options.targetDir = listOf(target.toString(), "java", "src").joinToString(File.separator)
         options.formatCode = true
 
-        every { wfStub.createWriter(any(), any()) }
+        every { factoryStub.createWriter(any(), any()) }
             .answers { writer }
     }
 
@@ -55,23 +78,21 @@ class ApiWriterSpec: StringSpec({
         val api = Api(dataTypes = dts)
 
         val enumWriter = stub<StringEnumWriter>(relaxed = true)
-        ApiWriter(options, stub(relaxed = true), stub(), stub(), stub(), enumWriter, stub(), nf, wfStub)
-            .write(api)
+        createApiWriter(enumWriter = enumWriter).write(api)
 
         verify(exactly = 1) { enumWriter.write(any(), dtA) }
         verify(exactly = 1) { enumWriter.write(any(), dtB) }
     }
 
     "re-formats enum data type source" {
-        val formatter = stub<SourceFormatter>(relaxed = true)
-
         val dts = DataTypes()
         dts.add (StringEnumDataType(DataTypeName("Foo"), "${options.packageName}.model"))
         dts.addRef("Foo")
         val api = Api(dataTypes = dts)
 
-        ApiWriter(options, stub(relaxed = true), stub(), stub(), stub(), stub(relaxed = true), stub(), formatter, wfStub)
-            .write(api)
+        val enumWriter = stub<StringEnumWriter>(relaxed = true)
+        val formatter = stub<SourceFormatter>(relaxed = true)
+        createApiWriter(enumWriter = enumWriter, formatter = formatter).write(api)
 
         verify (exactly = 2) { formatter.format(any()) }
     }
@@ -83,24 +104,22 @@ class ApiWriterSpec: StringSpec({
         )
         val api = Api(itfs)
 
-        val itfWriter = stub<InterfaceWriter>(relaxed = true)
-        ApiWriter(options, stub(relaxed = true), stub(), itfWriter, stub(), stub(), stub(), nf, wfStub)
-            .write (api)
+        val interfaceWriter = stub<InterfaceWriter>(relaxed = true)
+        createApiWriter(interfaceWriter = interfaceWriter).write(api)
 
-        verify(exactly = 1) { itfWriter.write(any(), itfs[0]) }
-        verify(exactly = 1) { itfWriter.write(any(), itfs[1]) }
+        verify(exactly = 1) { interfaceWriter.write(any(), itfs[0]) }
+        verify(exactly = 1) { interfaceWriter.write(any(), itfs[1]) }
     }
 
     "re-formats interface source" {
-        val formatter = stub<SourceFormatter>(relaxed = true)
-
         val itfs = listOf(
             `interface`("Foo", options.getSourceDir("model").toString()) {}
         )
         val api = Api(itfs)
 
-        ApiWriter(options, stub(relaxed = true), stub(), stub(relaxed = true), stub(), stub(), stub(), formatter, wfStub)
-            .write(api)
+        val interfaceWriter = stub<InterfaceWriter>(relaxed = true)
+        val formatter = stub<SourceFormatter>(relaxed = true)
+        createApiWriter(interfaceWriter = interfaceWriter, formatter = formatter).write(api)
 
         verify (exactly = 2) { formatter.format(any()) }
     }
@@ -118,24 +137,22 @@ class ApiWriterSpec: StringSpec({
 
         val api = Api(dataTypes = dts)
 
-        val dtWriter = stub<DataTypeWriter>(relaxed = true)
-        ApiWriter(options, stub(relaxed = true), stub(), stub(), dtWriter, stub(), stub(), nf, wfStub)
-            .write (api)
+        val dataTypeWriter = stub<DataTypeWriter>(relaxed = true)
+        createApiWriter(dataTypeWriter = dataTypeWriter).write(api)
 
-        verify(exactly = 1) { dtWriter.write(any(), dtA) }
-        verify(exactly = 1) { dtWriter.write(any(), dtB) }
+        verify(exactly = 1) { dataTypeWriter.write(any(), dtA) }
+        verify(exactly = 1) { dataTypeWriter.write(any(), dtB) }
     }
 
     "re-formats model data type source" {
-        val formatter = stub<SourceFormatter>(relaxed = true)
-
         val dts = DataTypes()
         dts.add (ObjectDataType(DataTypeName("Foo"), "${options.packageName}.model"))
         dts.addRef("Foo")
         val api = Api(dataTypes = dts)
 
-        ApiWriter(options, stub(relaxed = true), stub(), stub(), stub(relaxed = true), stub(), stub(), formatter, wfStub)
-            .write(api)
+        val dataTypeWriter = stub<DataTypeWriter>(relaxed = true)
+        val formatter = stub<SourceFormatter>(relaxed = true)
+        createApiWriter(dataTypeWriter = dataTypeWriter, formatter = formatter).write(api)
 
         verify (exactly = 2) { formatter.format(any()) }
     }
@@ -153,56 +170,50 @@ class ApiWriterSpec: StringSpec({
 
         val api = Api(dataTypes = dts)
 
-        val dtWriter = stub<InterfaceDataTypeWriter>(relaxed = true)
-        ApiWriter(options, stub(relaxed = true), stub(), stub(), stub(), stub(), dtWriter, nf, wfStub)
-            .write (api)
+        val interfaceDataTypeWriter = stub<InterfaceDataTypeWriter>(relaxed = true)
+        createApiWriter(interfaceDataTypeWriter = interfaceDataTypeWriter).write(api)
 
-        verify(exactly = 1) { dtWriter.write(any(), dtA) }
-        verify(exactly = 1) { dtWriter.write(any(), dtB) }
+        verify(exactly = 1) { interfaceDataTypeWriter.write(any(), dtA) }
+        verify(exactly = 1) { interfaceDataTypeWriter.write(any(), dtB) }
     }
 
     "re-formats interface data type source" {
-        val formatter = stub<SourceFormatter>(relaxed = true)
-
         val dts = DataTypes()
         dts.add (InterfaceDataType(DataTypeName("Foo"), "${options.packageName}.api"))
         dts.addRef("Foo")
         val api = Api(dataTypes = dts)
 
-        ApiWriter(options, stub(relaxed = true), stub(), stub(), stub(), stub(), stub(relaxed = true), formatter, wfStub)
-            .write(api)
+        val interfaceDataTypeWriter = stub<InterfaceDataTypeWriter>(relaxed = true)
+        val formatter = stub<SourceFormatter>(relaxed = true)
+        createApiWriter(interfaceDataTypeWriter = interfaceDataTypeWriter, formatter = formatter).write(api)
 
         verify (exactly = 2) { formatter.format(any()) }
     }
 
     "generates model for object data types only" {
-        val dtWriter = io.mockk.mockk<DataTypeWriter>()
-
         val dt = DataTypes()
         dt.add(MappedDataType("Type", "${options.packageName}.model"))
         dt.add("simple", StringDataType())
         val api = Api(dataTypes = dt)
 
-        // when:
-        ApiWriter(options, gwStub, stub(), stub(), dtWriter, stub(), stub()).write (api)
+        val dataTypeWriter = io.mockk.mockk<DataTypeWriter>()
+        createApiWriter(dataTypeWriter = dataTypeWriter).write(api)
 
-        // then:
         verify(exactly = 0) {
-            dtWriter.write (any(), any())
+            dataTypeWriter.write (any(), any())
         }
     }
 
     "does not re-format sources if code formatting is disabled" {
-        val formatter = stub<SourceFormatter>(relaxed = true)
-
         val dts = DataTypes()
         dts.add (InterfaceDataType(DataTypeName("Foo"), "${options.packageName}.api"))
         dts.addRef("Foo")
         val api = Api(dataTypes = dts)
 
         options.formatCode = false
-        ApiWriter(options, stub(relaxed = true), stub(), stub(), stub(), stub(), stub(relaxed = true), formatter, wfStub)
-            .write(api)
+        val interfaceDataTypeWriter = stub<InterfaceDataTypeWriter>(relaxed = true)
+        val formatter = stub<SourceFormatter>(relaxed = true)
+        createApiWriter(interfaceDataTypeWriter = interfaceDataTypeWriter, formatter = formatter).write(api)
 
         verify (exactly = 0) { formatter.format(any()) }
     }
@@ -214,11 +225,21 @@ class ApiWriterSpec: StringSpec({
         options.beanValidation = true
         val api = Api(dataTypes = dts)
 
-        ApiWriter(options, stub(relaxed = true), validation, stub(), stub(), stub(), stub(), nf, wfStub)
-            .write(api)
+        createApiWriter(validationWriter = validation).write(api)
 
-        verify(exactly = 1) { validation.writeValues(any()) }
-        verify(exactly = 1) { validation.writeValueValidator(any()) }
+        verify(exactly = 1) { validation.write(any(), any()) }
+    }
+
+    "writes additional sources" {
+        val dts = DataTypes()
+        val api = Api(dataTypes = dts)
+
+        val additionalWriterA: AdditionalWriter = mockk(relaxed = true)
+        val additionalWriterB: AdditionalWriter = mockk(relaxed = true)
+        createApiWriter(additionalWriters = listOf(additionalWriterA, additionalWriterB)).write(api)
+
+        verify(exactly = 1) { additionalWriterA.invoke(any(), any(), any()) }
+        verify(exactly = 1) { additionalWriterB.invoke(any(), any(), any()) }
     }
 })
 

@@ -6,55 +6,45 @@
 package io.openapiprocessor.core.writer.java
 
 import io.openapiprocessor.core.converter.ApiOptions
+import io.openapiprocessor.core.writer.SourceFormatter
+import io.openapiprocessor.core.writer.WriterFactory
+import java.io.StringWriter
 import java.io.Writer
 
-class ValidationWriter(val options: ApiOptions) {
+class ValidationWriter(
+    private val options: ApiOptions,
+    private val stringValuesWriter: StringValuesWriter = StringValuesWriter(options)
+) {
+    fun write(formatter: SourceFormatter, writerFactory: WriterFactory) {
+        if (!options.beanValidation)
+            return
 
-    fun writeValues(target: Writer) {
-        target.write("""
-            package ${options.packageName}.validation;
+        val annotationWriter = createAnnotationWriter(writerFactory)
+        writeValues(annotationWriter, formatter)
+        annotationWriter.close()
 
-            import ${options.beanValidationFormat}.validation.Constraint;
-            import ${options.beanValidationFormat}.validation.Payload;
-            import java.lang.annotation.*;
-    
-            @Target({ElementType.FIELD, ElementType.PARAMETER})
-            @Retention(RetentionPolicy.RUNTIME)
-            @Constraint(validatedBy = ValueValidator.class)
-            @Documented
-            public @interface Values {
-                String message() default "Invalid value. Should be one of values.";
-                Class<?>[] groups() default {};
-                Class<? extends Payload>[] payload() default {};
-                String[] values() default {};
-            }
-            
-            """.trimIndent())
+        val validatorWriter = createValidatorWriter(writerFactory)
+        writeValueValidator(validatorWriter, formatter)
+        validatorWriter.close()
     }
 
-    fun writeValueValidator(target: Writer) {
-        target.write("""
-            package ${options.packageName}.validation;
+    private fun createAnnotationWriter(writerFactory: WriterFactory): Writer {
+        return writerFactory.createWriter("${options.packageName}.validation", "Values")
+    }
 
-            import jakarta.validation.ConstraintValidator;
-            import jakarta.validation.ConstraintValidatorContext;
-            
-            import java.util.Arrays;
+    private fun createValidatorWriter(writerFactory: WriterFactory): Writer {
+        return writerFactory.createWriter("${options.packageName}.validation", "ValueValidator")
+    }
 
-            public class ValueValidator implements ConstraintValidator<Values, String> {
-                private String[] values;
+    private fun writeValues(writer: Writer, formatter: SourceFormatter) {
+        val raw = StringWriter()
+        stringValuesWriter.writeValues(raw)
+        writer.write(formatter.format(raw.toString()))
+    }
 
-                @Override
-                public void initialize (Values constraintAnnotation) {
-                    values = constraintAnnotation.values();
-                }
-
-                @Override
-                public boolean isValid (String value, ConstraintValidatorContext context) {
-                    return value != null && Arrays.asList(values).contains(value);
-                }
-            }
-
-            """.trimIndent())
+    private fun writeValueValidator(writer: Writer, formatter: SourceFormatter) {
+        val raw = StringWriter()
+        stringValuesWriter.writeValueValidator(raw)
+        writer.write(formatter.format(raw.toString()))
     }
 }
