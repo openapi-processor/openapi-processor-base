@@ -46,13 +46,15 @@ class TestProcessor:
             )
 
             val generatedWriter = GeneratedWriterImpl(generatedInfo, options)
+            val validationWriter = ValidationWriter(options)
             val beanValidation = BeanValidationFactory(options)
             val javaDocWriter = JavaDocWriter()
+            val formatter = GoogleFormatter()
 
             val writer = ApiWriter(
                 options,
                 generatedWriter,
-                ValidationWriter(options),
+                validationWriter,
                 InterfaceWriter(
                     options,
                     generatedWriter,
@@ -86,7 +88,9 @@ class TestProcessor:
                     options,
                     generatedWriter,
                     javaDocWriter
-                )
+                ),
+                listOf(),
+                formatter
             )
 
             writer.write(api)

@@ -15,6 +15,8 @@ import io.openapiprocessor.core.writer.*
 import java.io.StringWriter
 import java.io.Writer
 
+typealias AdditionalWriter = (ApiOptions, SourceFormatter, WriterFactory) -> Unit
+
 /**
  * Root writer for the generated api files.
  */
@@ -26,6 +28,7 @@ class ApiWriter(
     private val dataTypeWriter: DataTypeWriter,
     private val enumWriter: StringEnumWriter,
     private val interfaceDataTypeWriter: InterfaceDataTypeWriter,
+    private val additionalWriter: List<AdditionalWriter> = emptyList(),
     private val formatter: SourceFormatter = GoogleFormatter(),
     private val writerFactory: WriterFactory = DefaultWriterFactory(options)
 ) {
@@ -42,6 +45,7 @@ class ApiWriter(
         writeObjectDataTypes(api)
         writeInterfaceDataTypes(api)
         writeEnumDataTypes(api)
+        writeAdditionalFiles()
     }
 
     private fun writeGenerated () {
