@@ -107,6 +107,6 @@ open class StringEnumWriter(private val apiOptions: ApiOptions, private val gene
     }
 
     private fun isSupplier(): Boolean {
-        return apiOptions.enumType == "supplier"
+        return apiOptions.enumType == "framework"
     }
 }
