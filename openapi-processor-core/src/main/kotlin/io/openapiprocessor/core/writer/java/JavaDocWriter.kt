@@ -59,7 +59,7 @@ open class JavaDocWriter {
         }
 
         if (endpoint.description != null) {
-            comment += convert(endpoint.description) + "\n"
+            comment += convert(endpoint.description)
         }
 
         if (endpoint.parameters.isNotEmpty() || endpointResponse.description != null)
@@ -67,7 +67,6 @@ open class JavaDocWriter {
 
         endpoint.parameters.forEach {
             comment += convert(it.description, "@param ${toCamelCase (it.name)}")
-            comment += "\n"
         }
 
         val response = convert(endpointResponse.description, "@return")
@@ -148,8 +147,7 @@ open class JavaDocWriter {
             result += " "
         }
 
-        result += renderer
-            .render(doc)
+        result += renderer.render(doc) + "\n"
 
         return result
     }
