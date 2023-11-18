@@ -70,7 +70,7 @@ public enum $type {
     }
 
     void "writes Supplier import" () {
-        options.enumType = "supplier"
+        options.enumType = "framework"
 
         def dataType = new StringEnumDataType(
             new DataTypeName('Foo'), 'pkg', [], null, false)
@@ -85,7 +85,7 @@ import java.util.function.Supplier;
     }
 
     void "writes enum class implementing Supplier<String>"() {
-        options.enumType = "supplier"
+        options.enumType = "framework"
 
         def pkg = 'com.github.hauner.openapi'
         def dataType = new StringEnumDataType(
@@ -185,7 +185,7 @@ public enum Foo {
     }
 
     void "writes @JsonValue & Supplier<> method for serialization"() {
-        options.enumType = "supplier"
+        options.enumType = "framework"
 
         def pkg = 'com.github.hauner.openapi'
         def dataType = new StringEnumDataType (
