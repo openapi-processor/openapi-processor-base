@@ -49,3 +49,11 @@ components:
       properties:
         text:
           type: string
+        nested:
+          $ref: '#/components/schemas/NestedValue'
+
+    NestedValue:
+      type: object
+      properties:
+        text:
+          type: string
