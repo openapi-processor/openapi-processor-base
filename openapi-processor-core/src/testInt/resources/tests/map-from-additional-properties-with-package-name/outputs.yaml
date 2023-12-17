@@ -1,3 +1,4 @@
 items:
   - outputs/api/Api.java
   - outputs/<model>/Value.java
+  - outputs/<model>/NestedValue.java
