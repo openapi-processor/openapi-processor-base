@@ -39,7 +39,7 @@ class DataTypeCollector(
                 val found = dataTypes.find(name)
                 val generated = dataType.getPackageName().startsWith(generatedPackageName)
                 if (generated && found != null) {
-                    dataTypes.addRef(name)
+                    collect(found)
                 }
 
                 dataType.generics.forEach {
