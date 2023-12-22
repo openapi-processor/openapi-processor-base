@@ -22,7 +22,7 @@ jobs:
           java-version: 11
 
       - name: setup gradle
-        uses: gradle/gradle-build-action@v2.11.0
+        uses: gradle/gradle-build-action@v2.11.1
 
       - name: publish release
         env:
