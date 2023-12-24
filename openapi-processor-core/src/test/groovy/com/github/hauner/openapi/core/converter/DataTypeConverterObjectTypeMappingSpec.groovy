@@ -20,8 +20,8 @@ import io.openapiprocessor.core.converter.ApiConverter
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.mapping.AmbiguousTypeMappingException
 import io.openapiprocessor.core.converter.mapping.EndpointTypeMapping
-import io.openapiprocessor.core.converter.mapping.ParameterTypeMapping
-import io.openapiprocessor.core.converter.mapping.ResponseTypeMapping
+import io.openapiprocessor.core.converter.mapping.NameTypeMapping
+import io.openapiprocessor.core.converter.mapping.ContentTypeMapping
 import io.openapiprocessor.core.converter.mapping.TargetType
 import io.openapiprocessor.core.converter.mapping.TypeMapping
 import io.openapiprocessor.core.framework.Framework
@@ -294,14 +294,14 @@ paths:
         mappings << [
             [
                 new EndpointTypeMapping ('/foobar', null, [
-                        new ParameterTypeMapping (
+                        new NameTypeMapping (
                             'foobar', new TypeMapping (
                                 null,
                                 'pkg.TargetClass')
                         )
                     ])
             ], [
-                new ParameterTypeMapping (
+                new NameTypeMapping (
                     'foobar', new TypeMapping (
                         null,
                         'pkg.TargetClass')
@@ -359,7 +359,7 @@ paths:
         mappings << [
             [
                 new EndpointTypeMapping ('/object', null, [
-                    new ResponseTypeMapping (
+                    new ContentTypeMapping (
                         'application/vnd.any', new TypeMapping (
                         'object',
                         null,
@@ -369,7 +369,7 @@ paths:
                     )]
                 )
             ], [
-                new ResponseTypeMapping (
+                new ContentTypeMapping (
                     'application/vnd.any', new TypeMapping (
                         'object',
                         null,
@@ -379,7 +379,7 @@ paths:
                 )
             ], [
                 new EndpointTypeMapping ('/object', null, [
-                    new ResponseTypeMapping (
+                    new ContentTypeMapping (
                         'application/vnd.any', new TypeMapping (
                         'object',
                         null,

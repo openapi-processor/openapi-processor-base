@@ -104,7 +104,7 @@ class MappingConverter {
                 source.to,
                 source.generics
             ))
-            return ParameterTypeMapping(name, mapping)
+            return NameTypeMapping(name, mapping)
 
         } else if (source is AdditionalParameter) {
             val name = source.add
@@ -120,14 +120,14 @@ class MappingConverter {
         }
     }
 
-    private fun convertResponse(source: Response): ResponseTypeMapping  {
+    private fun convertResponse(source: Response): ContentTypeMapping  {
         val content = source.content
         val mapping = convertType (Type(
             null,
             source.to,
             source.generics
         ))
-        return ResponseTypeMapping(content, mapping)
+        return ContentTypeMapping(content, mapping)
     }
 
     private fun convertPath(path: String, source: Path): EndpointTypeMapping {

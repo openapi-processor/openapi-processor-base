@@ -6,14 +6,14 @@
 package io.openapiprocessor.core.converter.mapping.matcher
 
 import io.openapiprocessor.core.converter.mapping.MappingSchema
-import io.openapiprocessor.core.converter.mapping.ResponseTypeMapping
+import io.openapiprocessor.core.converter.mapping.ContentTypeMapping
 
 /**
  * [io.openapiprocessor.core.converter.mapping.MappingFinder] matcher for response type mappings.
  */
-class ResponseTypeMatcher(private val schema: MappingSchema): (ResponseTypeMapping) -> Boolean {
+class ResponseTypeMatcher(private val schema: MappingSchema): (ContentTypeMapping) -> Boolean {
 
-    override fun invoke(mapping: ResponseTypeMapping): Boolean {
+    override fun invoke(mapping: ContentTypeMapping): Boolean {
         return mapping.contentType == schema.getContentType()
     }
 

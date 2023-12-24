@@ -43,11 +43,11 @@ class MappingFinderEndpointMethodSpec: StringSpec({
             listOf(
                 EndpointTypeMapping("/foo", null, emptyList()),
                 EndpointTypeMapping("/foo", HttpMethod.GET, listOf(
-                    ParameterTypeMapping("foo param",
+                    NameTypeMapping("foo param",
                         TypeMapping("Foo", "io.openapiprocessor.Foo")),
-                    ParameterTypeMapping("far param",
+                    NameTypeMapping("far param",
                         TypeMapping("far", "io.openapiprocessor.Far")),
-                    ParameterTypeMapping("bar param",
+                    NameTypeMapping("bar param",
                         TypeMapping("Bar", "io.openapiprocessor.Bar"))
             )))
         )
@@ -65,11 +65,11 @@ class MappingFinderEndpointMethodSpec: StringSpec({
             listOf(
                 EndpointTypeMapping("/foo", null, emptyList()),
                 EndpointTypeMapping("/foo", HttpMethod.GET, listOf(
-                    ResponseTypeMapping("application/json",
+                    ContentTypeMapping("application/json",
                         TypeMapping("Foo", "io.openapiprocessor.Foo")),
-                    ResponseTypeMapping("application/json-2",
+                    ContentTypeMapping("application/json-2",
                         TypeMapping("far", "io.openapiprocessor.Far")),
-                    ResponseTypeMapping("application/json-3",
+                    ContentTypeMapping("application/json-3",
                         TypeMapping("Bar", "io.openapiprocessor.Bar"))
             )))
         )

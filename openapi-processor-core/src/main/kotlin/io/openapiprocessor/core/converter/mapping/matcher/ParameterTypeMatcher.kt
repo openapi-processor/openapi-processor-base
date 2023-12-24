@@ -6,14 +6,14 @@
 package io.openapiprocessor.core.converter.mapping.matcher
 
 import io.openapiprocessor.core.converter.mapping.MappingSchema
-import io.openapiprocessor.core.converter.mapping.ParameterTypeMapping
+import io.openapiprocessor.core.converter.mapping.NameTypeMapping
 
 /**
  * [io.openapiprocessor.core.converter.mapping.MappingFinder] matcher for parameter type mappings.
  */
-class ParameterTypeMatcher(private val schema: MappingSchema): (ParameterTypeMapping) -> Boolean {
+class ParameterTypeMatcher(private val schema: MappingSchema): (NameTypeMapping) -> Boolean {
 
-    override fun invoke(mapping: ParameterTypeMapping): Boolean {
+    override fun invoke(mapping: NameTypeMapping): Boolean {
         return mapping.parameterName == schema.getName()
     }
 

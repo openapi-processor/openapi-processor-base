@@ -10,8 +10,8 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.converter.mapping.AddParameterTypeMapping
-import io.openapiprocessor.core.converter.mapping.ParameterTypeMapping
-import io.openapiprocessor.core.converter.mapping.ResponseTypeMapping
+import io.openapiprocessor.core.converter.mapping.NameTypeMapping
+import io.openapiprocessor.core.converter.mapping.ContentTypeMapping
 import io.openapiprocessor.core.converter.mapping.TypeMapping
 import io.openapiprocessor.core.processor.MappingConverter
 import io.openapiprocessor.core.processor.MappingReader
@@ -171,7 +171,7 @@ class MappingConverterGenericsSpec: StringSpec({
         val mappings = converter.convert (mapping)
 
         // then:
-        val type = mappings.first() as ParameterTypeMapping
+        val type = mappings.first() as NameTypeMapping
         type.parameterName shouldBe "foo"
         val tm = type.mapping
         tm.targetTypeName shouldBe "java.util.Map"
@@ -200,7 +200,7 @@ class MappingConverterGenericsSpec: StringSpec({
         val mappings = converter.convert (mapping)
 
         // then:
-        val type = mappings.first() as ParameterTypeMapping
+        val type = mappings.first() as NameTypeMapping
         type.parameterName shouldBe "foo"
         val tm = type.mapping
         tm.targetTypeName shouldBe "java.util.Map"
@@ -264,7 +264,7 @@ class MappingConverterGenericsSpec: StringSpec({
         val mappings = converter.convert (mapping)
 
         // then:
-        val type = mappings.first() as ResponseTypeMapping
+        val type = mappings.first() as ContentTypeMapping
         type.contentType shouldBe "foo/bar"
         val tm = type.mapping
         tm.sourceTypeName.shouldBeNull()

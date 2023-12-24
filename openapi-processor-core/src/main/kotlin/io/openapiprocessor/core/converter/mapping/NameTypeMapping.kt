@@ -9,7 +9,7 @@ package io.openapiprocessor.core.converter.mapping
  * Used with [EndpointTypeMapping] to configure the java type that should represent the schema
  * of the given endpoint parameter.
  */
-class ParameterTypeMapping(
+class NameTypeMapping(
 
     /**
      * The parameter name of this mapping. Must match 1:1 with what is written in the api.

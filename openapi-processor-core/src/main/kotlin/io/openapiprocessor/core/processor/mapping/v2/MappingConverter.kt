@@ -100,7 +100,7 @@ class MappingConverter(val mapping: MappingV2) {
         val (mapping, genericTypes) = parseMapping(source.type, source.generics)
 
         return if (mapping.kind == ANNOTATE) {
-            AnnotationTypeMapping(
+            AnnotationTypeMappingDefault(
                 mapping.sourceType!!,
                 mapping.sourceFormat,
                 Annotation(mapping.annotationType!!, mapping.annotationParameters)
@@ -121,21 +121,18 @@ class MappingConverter(val mapping: MappingV2) {
         // parameters:
         return when (source) {
             // - name: parameter name => target type
+            // - name: parameter name @ annotation
             is RequestParameter -> {
                 createParameterTypeMapping(source)
             }
-            // - add: parameter name => target type
+            // - add: parameter name => annotation target type
             is AdditionalParameter -> {
                 createAddParameterTypeMapping(source)
             }
             // - type: OpenAPI type => target type
+            // - type: OpenAPI type @ annotation
             is Type -> {
-                when (val mapping = convertType(source)) {
-                    is AnnotationTypeMapping -> ParameterAnnotationTypeMapping(mapping)
-                    else -> {
-                        throw Exception("invalid parameter mapping $source")
-                    }
-                }
+                convertType(source)
             }
             else -> {
                 throw Exception("unknown parameter mapping $source")
@@ -143,7 +140,7 @@ class MappingConverter(val mapping: MappingV2) {
         }
     }
 
-    private fun createParameterTypeMapping(source: RequestParameter): ParameterTypeMapping {
+    private fun createParameterTypeMapping(source: RequestParameter): NameTypeMapping {
         val (mapping, genericTypes) = parseMapping(source.name, source.generics)
 
         val typeMapping = TypeMapping(
@@ -155,7 +152,7 @@ class MappingConverter(val mapping: MappingV2) {
             mapping.targetTypePrimitiveArray
         )
 
-        return ParameterTypeMapping(mapping.sourceType!!, typeMapping)
+        return NameTypeMapping(mapping.sourceType!!, typeMapping)
     }
 
     private fun createAddParameterTypeMapping(source: AdditionalParameter): AddParameterTypeMapping {
@@ -191,7 +188,7 @@ class MappingConverter(val mapping: MappingV2) {
             mapping.targetTypePrimitiveArray
         )
 
-        return ResponseTypeMapping (mapping.sourceType!!, typeMapping)
+        return ContentTypeMapping (mapping.sourceType!!, typeMapping)
     }
 
     data class ParsedMapping(

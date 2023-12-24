@@ -201,7 +201,7 @@ map:
         then:
         mappings.size() == 1
 
-        def response = mappings.first () as ResponseTypeMapping
+        def response = mappings.first () as ContentTypeMapping
         response.contentType == 'application/vnd.array'
         response.mapping.sourceTypeName == null
         response.mapping.sourceTypeFormat == null
@@ -226,7 +226,7 @@ map:
         then:
         mappings.size() == 2
 
-        def parameter = mappings.first () as ParameterTypeMapping
+        def parameter = mappings.first () as NameTypeMapping
         parameter.parameterName == 'foo'
         parameter.mapping.sourceTypeName == null
         parameter.mapping.sourceTypeFormat == null
@@ -288,7 +288,7 @@ map:
         def endpoint = mappings.first () as EndpointTypeMapping
         endpoint.path == '/foo'
         endpoint.typeMappings.size () == 1
-        def parameter = endpoint.typeMappings.first () as ParameterTypeMapping
+        def parameter = endpoint.typeMappings.first () as NameTypeMapping
         parameter.parameterName == 'foo'
         parameter.mapping.sourceTypeName == null
         parameter.mapping.sourceTypeFormat == null
@@ -381,7 +381,7 @@ map:
         endpoint.path == '/foo'
         endpoint.typeMappings.size () == 1
 
-        def response = endpoint.typeMappings.first () as ResponseTypeMapping
+        def response = endpoint.typeMappings.first () as ContentTypeMapping
         response.contentType == 'application/vnd.array'
         response.mapping.sourceTypeName == null
         response.mapping.sourceTypeFormat == null

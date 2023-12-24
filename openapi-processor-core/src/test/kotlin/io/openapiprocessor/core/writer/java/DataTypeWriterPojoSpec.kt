@@ -12,7 +12,7 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.mapping.Annotation as MappingAnnotation
-import io.openapiprocessor.core.converter.mapping.AnnotationTypeMapping
+import io.openapiprocessor.core.converter.mapping.AnnotationTypeMappingDefault
 import io.openapiprocessor.core.converter.mapping.SimpleParameterValue
 import io.openapiprocessor.core.extractImports
 import io.openapiprocessor.core.model.Annotation
@@ -208,7 +208,7 @@ class DataTypeWriterPojoSpec: StringSpec({
 
     "writes additional object annotation import from annotation mapping" {
         options.typeMappings = listOf(
-            AnnotationTypeMapping(
+            AnnotationTypeMappingDefault(
                 "Foo", annotation = MappingAnnotation("foo.Bar")
             ))
         writer = DataTypeWriterPojo(options, generatedWriter, BeanValidationFactory(options))
@@ -226,7 +226,7 @@ class DataTypeWriterPojoSpec: StringSpec({
 
     "writes additional object annotation from annotation mapping" {
         options.typeMappings = listOf(
-            AnnotationTypeMapping(
+            AnnotationTypeMappingDefault(
                 "Foo", annotation = MappingAnnotation(
                     "foo.Bar", linkedMapOf("bar" to SimpleParameterValue(""""rab""""))
                 )
@@ -251,7 +251,7 @@ class DataTypeWriterPojoSpec: StringSpec({
 
     "writes additional annotation import from annotation mapping for a mapped property data type" {
         options.typeMappings = listOf(
-            AnnotationTypeMapping(
+            AnnotationTypeMappingDefault(
                 "Foo", annotation = MappingAnnotation("foo.Bar")
             ))
         writer = DataTypeWriterPojo(options, generatedWriter, BeanValidationFactory(options))
@@ -272,7 +272,7 @@ class DataTypeWriterPojoSpec: StringSpec({
 
     "writes additional annotation from annotation mapping for a mapped property data type" {
         options.typeMappings = listOf(
-            AnnotationTypeMapping(
+            AnnotationTypeMappingDefault(
                 "Foo", annotation = MappingAnnotation(
                     "foo.Bar", linkedMapOf("bar" to SimpleParameterValue(""""rab""""))
                 )
@@ -312,7 +312,7 @@ class DataTypeWriterPojoSpec: StringSpec({
 
     "writes additional annotation from annotation mapping for a simple mapped property data type" {
         options.typeMappings = listOf(
-            AnnotationTypeMapping(
+            AnnotationTypeMappingDefault(
                 "string", "uuid", annotation = MappingAnnotation(
                     "foo.Bar", linkedMapOf("bar" to SimpleParameterValue(""""rab""""))
                 )
@@ -353,7 +353,7 @@ class DataTypeWriterPojoSpec: StringSpec({
 
     "writes additional annotation from 'object' annotation mapping" {
         options.typeMappings = listOf(
-            AnnotationTypeMapping(
+            AnnotationTypeMappingDefault(
                 "object", annotation = MappingAnnotation("foo.Bar", linkedMapOf())
             )
         )
@@ -392,7 +392,7 @@ class DataTypeWriterPojoSpec: StringSpec({
 
     "skips additional annotation from annotation mapping for un-mapped object datatype property" {
         options.typeMappings = listOf(
-            AnnotationTypeMapping(
+            AnnotationTypeMappingDefault(
                 "Foo", annotation = MappingAnnotation("foo.Bar", linkedMapOf())
             )
         )

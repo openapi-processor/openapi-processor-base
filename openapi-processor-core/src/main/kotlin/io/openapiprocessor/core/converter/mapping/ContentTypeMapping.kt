@@ -6,11 +6,9 @@
 package io.openapiprocessor.core.converter.mapping
 
 /**
- * Used with [EndpointTypeMapping] to configure the java type that should represent the response
- * schema for the given endpoint content type.
+ * Mapping of a content type to a java type.
  */
-class ResponseTypeMapping(
-
+class ContentTypeMapping(
     /**
      * The content type of this mapping. Must match 1:1 with what is written in the api.
      */

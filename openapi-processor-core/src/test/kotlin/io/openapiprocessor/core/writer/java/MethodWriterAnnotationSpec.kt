@@ -37,12 +37,10 @@ class MethodWriterAnnotationSpec: StringSpec ({
 
     "writes additional parameter annotation from annotation mapping" {
         apiOptions.typeMappings = listOf(
-            ParameterAnnotationTypeMapping(
-                AnnotationTypeMapping("Foo", annotation = Annotation(
+            AnnotationTypeMappingDefault(
+                "Foo", annotation = Annotation(
                     "io.openapiprocessor.Bar", linkedMapOf("bar" to SimpleParameterValue("rab")))
-                )
-            )
-        )
+            ))
 
         val endpoint = endpoint("/foo") {
             parameters {
@@ -72,12 +70,8 @@ class MethodWriterAnnotationSpec: StringSpec ({
         apiOptions.typeMappings = listOf(
             EndpointTypeMapping(
                 "/foo", null, listOf(
-                    ParameterAnnotationTypeMapping(
-                        AnnotationTypeMapping("Foo", annotation = Annotation(
-                            "io.openapiprocessor.Bar", linkedMapOf("bar" to SimpleParameterValue("rab")))
-                        )
-                    )
-                )
+                    AnnotationTypeMappingDefault("Foo", annotation = Annotation(
+                            "io.openapiprocessor.Bar", linkedMapOf("bar" to SimpleParameterValue("rab")))))
             ))
 
         val endpoint = endpoint("/foo") {
@@ -106,10 +100,8 @@ class MethodWriterAnnotationSpec: StringSpec ({
 
     "writes additional parameter annotation on mapped data type from annotation mapping" {
         apiOptions.typeMappings = listOf(
-            ParameterAnnotationTypeMapping(
-                AnnotationTypeMapping("Foo", annotation = Annotation(
-                    "io.openapiprocessor.Bar", linkedMapOf("bar" to SimpleParameterValue("rab")))
-                )
+            AnnotationTypeMappingDefault("Foo", annotation = Annotation(
+                "io.openapiprocessor.Bar", linkedMapOf("bar" to SimpleParameterValue("rab")))
             )
         )
 

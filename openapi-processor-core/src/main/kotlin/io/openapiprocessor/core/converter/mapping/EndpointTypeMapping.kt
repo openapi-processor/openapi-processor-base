@@ -8,9 +8,7 @@ package io.openapiprocessor.core.converter.mapping
 import io.openapiprocessor.core.parser.HttpMethod
 
 /**
- * Used with [io.openapiprocessor.core.converter.ApiOptions] to store endpoint specific type
- * mappings. It can also be used to add parameters that are not defined in the api. For example
- * to pass a [javax.servlet.http.HttpServletRequest] to the controller method.
+ * container for endpoint specific type/annotation mappings.
  */
 class EndpointTypeMapping @JvmOverloads constructor(
 

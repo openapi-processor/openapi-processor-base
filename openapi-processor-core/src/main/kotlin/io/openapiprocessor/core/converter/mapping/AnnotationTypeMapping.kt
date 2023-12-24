@@ -6,28 +6,21 @@
 package io.openapiprocessor.core.converter.mapping
 
 /**
- * an additional annotation of a type. Result of a `type @ annotation` mapping.
+ * Mapping of an OpenAPI type to a java annotation, i.e. `OpenAPI type @ annotation`.
  */
-open class AnnotationTypeMapping(
-
+interface AnnotationTypeMapping {
     /**
      * the OpenAPI schema type that should be annotated with [annotation].
      */
-    override val sourceTypeName: String,
+    val sourceTypeName: String
 
     /**
      * The OpenAPI format of [sourceTypeName], if any.
      */
-    override val sourceTypeFormat: String? = null,
+    val sourceTypeFormat: String?
 
     /**
      * additional annotation of the type.
      */
-    override val annotation: Annotation
-
-): Mapping, AnnotationMapping {
-
-    override fun getChildMappings(): List<Mapping> {
-        return listOf(this)
-    }
+    val annotation: Annotation
 }

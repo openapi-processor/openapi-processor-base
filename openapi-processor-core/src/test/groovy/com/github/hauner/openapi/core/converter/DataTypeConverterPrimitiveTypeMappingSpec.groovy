@@ -20,7 +20,7 @@ import io.openapiprocessor.core.converter.ApiConverter
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.mapping.AmbiguousTypeMappingException
 import io.openapiprocessor.core.converter.mapping.EndpointTypeMapping
-import io.openapiprocessor.core.converter.mapping.ParameterTypeMapping
+import io.openapiprocessor.core.converter.mapping.NameTypeMapping
 import io.openapiprocessor.core.converter.mapping.TypeMapping
 import io.openapiprocessor.core.framework.Framework
 import io.openapiprocessor.core.framework.FrameworkBase
@@ -264,14 +264,14 @@ paths:
         mappings << [
             [
                 new EndpointTypeMapping ('/foo', null, [
-                        new ParameterTypeMapping (
+                        new NameTypeMapping (
                             'bar', new TypeMapping (
                                 'string',
                                 'date-time',
                                 'java.time.ZonedDateTime'))
                     ])
             ], [
-                new ParameterTypeMapping (
+                new NameTypeMapping (
                     'bar', new TypeMapping (
                         'string',
                         'date-time',

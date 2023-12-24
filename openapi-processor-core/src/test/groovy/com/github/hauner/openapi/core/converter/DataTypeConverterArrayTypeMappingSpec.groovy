@@ -20,8 +20,8 @@ import io.openapiprocessor.core.converter.ApiConverter
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.mapping.AmbiguousTypeMappingException
 import io.openapiprocessor.core.converter.mapping.EndpointTypeMapping
-import io.openapiprocessor.core.converter.mapping.ParameterTypeMapping
-import io.openapiprocessor.core.converter.mapping.ResponseTypeMapping
+import io.openapiprocessor.core.converter.mapping.NameTypeMapping
+import io.openapiprocessor.core.converter.mapping.ContentTypeMapping
 import io.openapiprocessor.core.converter.mapping.TypeMapping
 import io.openapiprocessor.core.framework.Framework
 import io.openapiprocessor.core.framework.FrameworkBase
@@ -170,12 +170,12 @@ paths:
                     'java.util.Collection')
             ],
             [
-                new ParameterTypeMapping (
+                new NameTypeMapping (
                     'param', new TypeMapping (
                         'array',
                         'java.util.Collection')
                 ),
-                new ParameterTypeMapping (
+                new NameTypeMapping (
                     'param', new TypeMapping (
                         'array',
                         'java.util.Collection')
@@ -183,12 +183,12 @@ paths:
             ],
             [
                 new EndpointTypeMapping ('/foo', null, [
-                        new ParameterTypeMapping (
+                        new NameTypeMapping (
                             'param', new TypeMapping (
                                 'array',
                                 'java.util.Collection')
                         ),
-                        new ParameterTypeMapping (
+                        new NameTypeMapping (
                             'param', new TypeMapping (
                                 'array',
                                 'java.util.Collection')
@@ -291,14 +291,14 @@ paths:
         mappings << [
             [
                 new EndpointTypeMapping ('/foobar', null, [
-                    new ParameterTypeMapping (
+                    new NameTypeMapping (
                         'foobar', new TypeMapping (
                         'array',
                         'java.util.Collection')
                     )
                 ])
             ], [
-                new ParameterTypeMapping (
+                new NameTypeMapping (
                     'foobar', new TypeMapping (
                         'array',
                         'java.util.Collection')
@@ -353,21 +353,21 @@ paths:
         mappings << [
             [
                 new EndpointTypeMapping ('/array-string', null, [
-                    new ResponseTypeMapping (
+                    new ContentTypeMapping (
                         'application/vnd.any', new TypeMapping (
                         'array',
                         'java.util.Collection')
                     )
                 ])
             ], [
-                new ResponseTypeMapping (
+                new ContentTypeMapping (
                     'application/vnd.any', new TypeMapping (
                         'array',
                         'java.util.Collection')
                 )
             ], [
                 new EndpointTypeMapping ('/array-string', null, [
-                    new ResponseTypeMapping (
+                    new ContentTypeMapping (
                         'application/vnd.any', new TypeMapping (
                         'array',
                         'java.util.Collection')

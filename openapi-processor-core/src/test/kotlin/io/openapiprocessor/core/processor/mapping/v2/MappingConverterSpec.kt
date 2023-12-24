@@ -124,7 +124,7 @@ class MappingConverterSpec: StringSpec({
 
         // then:
         mappings.size.shouldBe(1)
-        val annotation = mappings.first() as ParameterAnnotationTypeMapping
+        val annotation = mappings.first() as AnnotationTypeMapping
         annotation.sourceTypeName shouldBe "Foo"
         annotation.sourceTypeFormat.shouldBeNull()
         annotation.annotation.type shouldBe "io.openapiprocessor.Annotation"
@@ -152,7 +152,7 @@ class MappingConverterSpec: StringSpec({
         mappings.size.shouldBe(1)
         val ep = mappings[0] as EndpointTypeMapping
 
-        val annotation = ep.typeMappings.first() as ParameterAnnotationTypeMapping
+        val annotation = ep.typeMappings.first() as AnnotationTypeMapping
         annotation.sourceTypeName shouldBe "Foo"
         annotation.sourceTypeFormat.shouldBeNull()
         annotation.annotation.type shouldBe "io.openapiprocessor.Annotation"
@@ -181,7 +181,7 @@ class MappingConverterSpec: StringSpec({
         mappings.size.shouldBe(2)
         val ep = mappings[1] as EndpointTypeMapping
 
-        val annotation = ep.typeMappings.first() as ParameterAnnotationTypeMapping
+        val annotation = ep.typeMappings.first() as AnnotationTypeMapping
         annotation.sourceTypeName shouldBe "Foo"
         annotation.sourceTypeFormat.shouldBeNull()
         annotation.annotation.type shouldBe "io.openapiprocessor.Annotation"

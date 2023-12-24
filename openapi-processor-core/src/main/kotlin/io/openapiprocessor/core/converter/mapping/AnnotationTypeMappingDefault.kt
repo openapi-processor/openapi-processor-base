@@ -5,20 +5,20 @@
 
 package io.openapiprocessor.core.converter.mapping
 
-interface AnnotationMapping {
-
+open class AnnotationTypeMappingDefault(
     /**
      * the OpenAPI schema type that should be annotated with [annotation].
      */
-    val sourceTypeName: String
+    override val sourceTypeName: String,
 
     /**
      * The OpenAPI format of [sourceTypeName], if any.
      */
-    val sourceTypeFormat: String?
+    override val sourceTypeFormat: String? = null,
 
     /**
      * additional annotation of the type.
      */
-    val annotation: Annotation
-}
+    override val annotation: Annotation
+
+): Mapping, AnnotationTypeMapping

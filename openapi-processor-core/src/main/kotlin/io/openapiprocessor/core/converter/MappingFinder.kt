@@ -5,10 +5,7 @@
 
 package io.openapiprocessor.core.converter
 
-import io.openapiprocessor.core.converter.mapping.AnnotationTypeMapping
-import io.openapiprocessor.core.converter.mapping.EndpointTypeMapping
-import io.openapiprocessor.core.converter.mapping.Mapping
-import io.openapiprocessor.core.converter.mapping.ParameterAnnotationTypeMapping
+import io.openapiprocessor.core.converter.mapping.*
 import io.openapiprocessor.core.parser.HttpMethod
 
 /**
@@ -20,9 +17,7 @@ class MappingFinder(private val typeMappings: List<Mapping> = emptyList()) {
         return findTypeAnnotations(typeMappings, typeName, allowObject)
     }
 
-    fun findParameterAnnotations(path: String, method: HttpMethod?, typeName: String)
-    : List<AnnotationTypeMapping> {
-
+    fun findParameterAnnotations(path: String, method: HttpMethod?, typeName: String): List<AnnotationTypeMapping> {
         val epMappings = findEndpointMappings(typeMappings, path, method)
         if (epMappings.isNotEmpty()) {
             val am = findParameterAnnotations(epMappings, typeName)
@@ -33,9 +28,7 @@ class MappingFinder(private val typeMappings: List<Mapping> = emptyList()) {
         return findParameterAnnotations(typeMappings, typeName)
     }
 
-    private fun findEndpointMappings(typeMappings: List<Mapping>, path: String, method: HttpMethod?)
-        : List<Mapping> {
-
+    private fun findEndpointMappings(typeMappings: List<Mapping>, path: String, method: HttpMethod?): List<Mapping> {
         // find with method
         var epMappings = typeMappings
             .filterIsInstance<EndpointTypeMapping>()
@@ -68,18 +61,15 @@ class MappingFinder(private val typeMappings: List<Mapping> = emptyList()) {
             }
     }
 
-    private fun findParameterAnnotations(typeMappings: List<Mapping>, typeName: String)
-        : List<AnnotationTypeMapping> {
-
+    private fun findParameterAnnotations(typeMappings: List<Mapping>, typeName: String): List<AnnotationTypeMapping> {
         val (type, format) = splitTypeName(typeName)
         return typeMappings
-            .filterIsInstance<ParameterAnnotationTypeMapping>()
+            .filterIsInstance<AnnotationTypeMapping>()
             .filter {
                 val matchType = it.sourceTypeName == type
                 val matchFormat = it.sourceTypeFormat == format
                 matchType && matchFormat
             }
-            .map { it.annotationTypeMapping }
     }
 
     private fun splitTypeName(typeName: String): Pair<String, String?> {
@@ -95,5 +85,4 @@ class MappingFinder(private val typeMappings: List<Mapping> = emptyList()) {
 
         return Pair(type, format)
     }
-
 }
