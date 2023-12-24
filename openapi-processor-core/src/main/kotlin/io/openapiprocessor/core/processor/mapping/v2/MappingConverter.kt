@@ -140,19 +140,24 @@ class MappingConverter(val mapping: MappingV2) {
         }
     }
 
-    private fun createParameterTypeMapping(source: RequestParameter): NameTypeMapping {
+    private fun createParameterTypeMapping(source: RequestParameter): Mapping {
         val (mapping, genericTypes) = parseMapping(source.name, source.generics)
 
-        val typeMapping = TypeMapping(
-            null,
-            null,
-            resolvePackageVariable(mapping.targetType!!),
-            genericTypes,
-            mapping.targetTypePrimitive,
-            mapping.targetTypePrimitiveArray
-        )
-
-        return NameTypeMapping(mapping.sourceType!!, typeMapping)
+        return if (mapping.kind == ANNOTATE) {
+            AnnotationNameMappingDefault(mapping.sourceType!!, Annotation(
+                mapping.annotationType!!,
+                mapping.annotationParameters)
+                )
+        } else {
+            NameTypeMapping(mapping.sourceType!!, TypeMapping(
+                null,
+                null,
+                resolvePackageVariable(mapping.targetType!!),
+                genericTypes,
+                mapping.targetTypePrimitive,
+                mapping.targetTypePrimitiveArray
+            ))
+        }
     }
 
     private fun createAddParameterTypeMapping(source: AdditionalParameter): AddParameterTypeMapping {
