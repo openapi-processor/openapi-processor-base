@@ -5,10 +5,10 @@
 
 package io.openapiprocessor.core.writer.java
 
-import io.openapiprocessor.core.framework.FrameworkAnnotations
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.MappingFinder
 import io.openapiprocessor.core.converter.resultStyle
+import io.openapiprocessor.core.framework.FrameworkAnnotations
 import io.openapiprocessor.core.model.Endpoint
 import io.openapiprocessor.core.model.EndpointResponse
 import io.openapiprocessor.core.model.Interface
@@ -96,21 +96,26 @@ class InterfaceWriter(
             imports.addAll(parameter.annotationDataType.getImports())
         }
 
-        val annotationTypeMappings = MappingFinder(apiOptions.typeMappings).findParameterTypeAnnotations(
-            endpoint.path, endpoint.method, parameter.dataType.getSourceName())
-
-        annotationTypeMappings.forEach {
-            imports.add(it.annotation.type)
-        }
-
-        val annotationNameMappings = MappingFinder(apiOptions.typeMappings).findParameterNameAnnotations(
-            endpoint.path, endpoint.method, parameter.name)
-
-        annotationNameMappings.forEach {
-            imports.add(it.annotation.type)
-        }
-
+        imports.addAll(getMappingAnnotationsImports(endpoint, parameter))
         imports.addAll(parameter.dataTypeImports)
+    }
+
+    private fun getMappingAnnotationsImports(endpoint: Endpoint, parameter: Parameter): Set<String> {
+        val mappingFinder = MappingFinder(apiOptions.typeMappings)
+
+        val mappingAnnotations = mutableSetOf<String>()
+
+        mappingAnnotations.addAll(
+            mappingFinder
+                .findParameterTypeAnnotations(endpoint.path, endpoint.method, parameter.dataType.getSourceName())
+                .map { it.annotation.type })
+
+        mappingAnnotations.addAll(
+            mappingFinder
+                .findParameterNameAnnotations(endpoint.path, endpoint.method, parameter.name)
+                .map { it.annotation.type })
+
+        return mappingAnnotations
     }
 
     private fun addImports(response: EndpointResponse, imports: MutableSet<String>) {
@@ -121,5 +126,4 @@ class InterfaceWriter(
             imports.addAll(responseImports)
         }
     }
-
 }

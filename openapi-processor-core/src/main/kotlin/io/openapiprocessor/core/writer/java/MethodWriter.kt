@@ -135,9 +135,7 @@ open class MethodWriter(
         }
 
         parameterAnnotationWriter.write(target, parameter)
-
-        addAnnotationsByType(endpoint, parameter, target)
-        addAnnotationsByName(endpoint, parameter, target)
+        addAnnotations(endpoint, parameter, target)
 
         if (parameter is AdditionalParameter && parameter.annotationDataType != null) {
             target.write(" @${parameter.annotationDataType.getName()}")
@@ -165,23 +163,24 @@ open class MethodWriter(
         return target.toString()
     }
 
-    private fun addAnnotationsByName(endpoint: Endpoint, parameter: Parameter, target: StringWriter) {
-        val annotationNameMappings = MappingFinder(apiOptions.typeMappings)
-            .findParameterNameAnnotations(endpoint.path, endpoint.method, parameter.name)
+    private fun addAnnotations(endpoint: Endpoint, parameter: Parameter, target: StringWriter) {
+        val mappingFinder = MappingFinder(apiOptions.typeMappings)
 
-        annotationNameMappings.forEach {
+        val mappingAnnotations = mutableListOf<io.openapiprocessor.core.converter.mapping.Annotation>()
+
+        mappingAnnotations.addAll(
+            mappingFinder
+                .findParameterTypeAnnotations(endpoint.path, endpoint.method, parameter.dataType.getSourceName())
+                .map { it.annotation })
+
+        mappingAnnotations.addAll(
+            mappingFinder
+                .findParameterNameAnnotations(endpoint.path, endpoint.method, parameter.name)
+                .map { it.annotation })
+
+        mappingAnnotations.forEach {
             target.write(" ")
-            annotationWriter.write(target, Annotation(it.annotation.type, it.annotation.parameters))
-        }
-    }
-
-    private fun addAnnotationsByType(endpoint: Endpoint, parameter: Parameter, target: StringWriter) {
-        val annotationTypeMappings = MappingFinder(apiOptions.typeMappings)
-            .findParameterTypeAnnotations(endpoint.path, endpoint.method, parameter.dataType.getSourceName())
-
-        annotationTypeMappings.forEach {
-            target.write(" ")
-            annotationWriter.write(target, Annotation(it.annotation.type, it.annotation.parameters))
+            annotationWriter.write(target, Annotation(it.type, it.parameters))
         }
     }
 }
