@@ -28,6 +28,17 @@ class MappingFinder(private val typeMappings: List<Mapping> = emptyList()) {
         return findParameterAnnotations(typeMappings, typeName)
     }
 
+    fun findParameterNameAnnotations(path: String, method: HttpMethod?, parameterName: String): List<AnnotationNameMapping> {
+        val epMappings = findEndpointMappings(typeMappings, path, method)
+        if (epMappings.isNotEmpty()) {
+            val am = findParameterNameAnnotations(epMappings, parameterName)
+            if (am.isNotEmpty())
+                return am
+        }
+
+        return findParameterNameAnnotations(typeMappings, parameterName)
+    }
+
     private fun findEndpointMappings(typeMappings: List<Mapping>, path: String, method: HttpMethod?): List<Mapping> {
         // find with method
         var epMappings = typeMappings
@@ -69,6 +80,14 @@ class MappingFinder(private val typeMappings: List<Mapping> = emptyList()) {
                 val matchType = it.sourceTypeName == type
                 val matchFormat = it.sourceTypeFormat == format
                 matchType && matchFormat
+            }
+    }
+
+    private fun findParameterNameAnnotations(typeMappings: List<Mapping>, parameterName: String): List<AnnotationNameMapping> {
+        return typeMappings
+            .filterIsInstance<AnnotationNameMapping>()
+            .filter {
+                parameterName == it.parameterName
             }
     }
 

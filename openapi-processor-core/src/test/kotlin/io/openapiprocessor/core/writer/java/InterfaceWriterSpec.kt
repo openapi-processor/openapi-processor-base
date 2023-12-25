@@ -13,6 +13,7 @@ import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.openapiprocessor.core.builder.api.`interface`
 import io.openapiprocessor.core.converter.ApiOptions
+import io.openapiprocessor.core.converter.mapping.AnnotationNameMappingDefault
 import io.openapiprocessor.core.converter.mapping.AnnotationTypeMappingDefault
 import io.openapiprocessor.core.converter.mapping.SimpleParameterValue
 import io.openapiprocessor.core.extractBody
@@ -229,8 +230,10 @@ class InterfaceWriterSpec: StringSpec({
     "writes additional annotation mapping import" {
         options.typeMappings = listOf(
                 AnnotationTypeMappingDefault("Foo", annotation = AnnotationMapping(
-                    "io.openapiprocessor.Bar")
-            ))
+                    "io.openapiprocessor.Type")),
+                AnnotationNameMappingDefault("foo", annotation = AnnotationMapping(
+                    "io.openapiprocessor.Name"))
+                )
 
         val itf = `interface` {
             endpoint("/foo") {
@@ -248,7 +251,8 @@ class InterfaceWriterSpec: StringSpec({
 
         // then:
         val imports = extractImports(target)
-        imports shouldContain "import io.openapiprocessor.Bar;"
+        imports shouldContain "import io.openapiprocessor.Type;"
+        imports shouldContain "import io.openapiprocessor.Name;"
     }
 
     "writes additional parameter annotation import" {

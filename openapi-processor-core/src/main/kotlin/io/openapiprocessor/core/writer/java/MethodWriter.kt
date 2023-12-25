@@ -136,13 +136,8 @@ open class MethodWriter(
 
         parameterAnnotationWriter.write(target, parameter)
 
-        val annotationTypeMappings = MappingFinder(apiOptions.typeMappings)
-            .findParameterAnnotations(endpoint.path, endpoint.method, parameter.dataType.getSourceName())
-
-        annotationTypeMappings.forEach {
-            target.write(" ")
-            annotationWriter.write(target, Annotation(it.annotation.type, it.annotation.parameters))
-        }
+        addAnnotationsByType(endpoint, parameter, target)
+        addAnnotationsByName(endpoint, parameter, target)
 
         if (parameter is AdditionalParameter && parameter.annotationDataType != null) {
             target.write(" @${parameter.annotationDataType.getName()}")
@@ -168,5 +163,25 @@ open class MethodWriter(
         }
 
         return target.toString()
+    }
+
+    private fun addAnnotationsByName(endpoint: Endpoint, parameter: Parameter, target: StringWriter) {
+        val annotationNameMappings = MappingFinder(apiOptions.typeMappings)
+            .findParameterNameAnnotations(endpoint.path, endpoint.method, parameter.name)
+
+        annotationNameMappings.forEach {
+            target.write(" ")
+            annotationWriter.write(target, Annotation(it.annotation.type, it.annotation.parameters))
+        }
+    }
+
+    private fun addAnnotationsByType(endpoint: Endpoint, parameter: Parameter, target: StringWriter) {
+        val annotationTypeMappings = MappingFinder(apiOptions.typeMappings)
+            .findParameterAnnotations(endpoint.path, endpoint.method, parameter.dataType.getSourceName())
+
+        annotationTypeMappings.forEach {
+            target.write(" ")
+            annotationWriter.write(target, Annotation(it.annotation.type, it.annotation.parameters))
+        }
     }
 }

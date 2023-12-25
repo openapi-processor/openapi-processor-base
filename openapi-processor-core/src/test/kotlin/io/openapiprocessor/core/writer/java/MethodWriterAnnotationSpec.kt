@@ -16,6 +16,8 @@ import io.openapiprocessor.core.model.datatypes.DataTypeName
 import io.openapiprocessor.core.model.datatypes.MappedDataType
 import io.openapiprocessor.core.model.datatypes.ObjectDataType
 import io.openapiprocessor.core.model.parameters.ParameterBase
+import io.openapiprocessor.core.processor.MappingConverter
+import io.openapiprocessor.core.processor.MappingReader
 import io.openapiprocessor.core.support.TestMappingAnnotationWriter
 import io.openapiprocessor.core.support.TestParameterAnnotationWriter
 import java.io.StringWriter
@@ -24,6 +26,8 @@ class MethodWriterAnnotationSpec: StringSpec ({
     isolationMode = IsolationMode.InstancePerTest
 
     val apiOptions = ApiOptions()
+    val reader = MappingReader()
+    val converter = MappingConverter()
 
     val writer = MethodWriter (
         apiOptions,
@@ -94,6 +98,42 @@ class MethodWriterAnnotationSpec: StringSpec ({
             """    
             |    @CoreMapping
             |    void getFoo(@Parameter @Bar(bar = rab) Foo foo);
+            |
+            """.trimMargin()
+    }
+
+    "writes additional parameter annotation from path annotation name mapping" {
+        val yaml = """
+           |openapi-processor-mapping: v6
+           |options:
+           |  package-name: io.openapiprocessor
+           |map:
+           |  parameters:
+           |    - name: foo @ io.openapiprocessor.Bar(bar = "rab")
+           """.trimMargin()
+
+        apiOptions.typeMappings = converter.convert(reader.read(yaml))
+
+        val endpoint = endpoint("/foo") {
+            parameters {
+                any(object : ParameterBase("foo", ObjectDataType(
+                    DataTypeName("Foo"), "pkg"), true) {})
+            }
+            responses {
+                status("204") {
+                    response()
+                }
+            }
+        }
+
+        // when:
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+
+        // then:
+        target.toString () shouldBe
+            """    
+            |    @CoreMapping
+            |    void getFoo(@Parameter @Bar(bar = "rab") Foo foo);
             |
             """.trimMargin()
     }

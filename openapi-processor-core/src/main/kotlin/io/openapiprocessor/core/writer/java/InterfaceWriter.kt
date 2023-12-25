@@ -97,9 +97,16 @@ class InterfaceWriter(
         }
 
         val annotationTypeMappings = MappingFinder(apiOptions.typeMappings).findParameterAnnotations(
-            endpoint.path, endpoint.method, parameter.dataType.getTypeName())
+            endpoint.path, endpoint.method, parameter.dataType.getSourceName())
 
         annotationTypeMappings.forEach {
+            imports.add(it.annotation.type)
+        }
+
+        val annotationNameMappings = MappingFinder(apiOptions.typeMappings).findParameterNameAnnotations(
+            endpoint.path, endpoint.method, parameter.name)
+
+        annotationNameMappings.forEach {
             imports.add(it.annotation.type)
         }
 

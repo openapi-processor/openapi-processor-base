@@ -9,6 +9,7 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.converter.mapping.Annotation
+import io.openapiprocessor.core.converter.mapping.AnnotationNameMappingDefault
 import io.openapiprocessor.core.converter.mapping.AnnotationTypeMappingDefault
 import io.openapiprocessor.core.model.datatypes.ArrayDataType
 import io.openapiprocessor.core.model.datatypes.StringDataType
@@ -17,7 +18,7 @@ import io.openapiprocessor.core.support.datatypes.propertyDataTypeString
 
 class MappingFinderAnnotationSpec: StringSpec({
 
-    "find type annotation mapping" {
+    "find global annotation type mapping" {
         val finder = MappingFinder(listOf(
             AnnotationTypeMappingDefault(
                 "Foo", null,
@@ -30,7 +31,7 @@ class MappingFinderAnnotationSpec: StringSpec({
         mapping.first().sourceTypeName shouldBe "Foo"
     }
 
-    "find 'object' type annotation mapping for model data type" {
+    "find 'object' annotation type mapping for model data type" {
         val finder = MappingFinder(listOf(
             AnnotationTypeMappingDefault(
                 "object", null,
@@ -47,7 +48,7 @@ class MappingFinderAnnotationSpec: StringSpec({
         mapping.first().sourceTypeName shouldBe "object"
     }
 
-    "ignore 'object' type annotation mapping for non model data types" {
+    "ignore 'object' annotation type mapping for non model data types" {
         val finder = MappingFinder(listOf(
             AnnotationTypeMappingDefault(
                 "object", null,
@@ -61,7 +62,7 @@ class MappingFinderAnnotationSpec: StringSpec({
         mappingCollection.shouldBeEmpty()
     }
 
-    "find type:format annotation mapping" {
+    "find type:format annotation type mapping" {
         val finder = MappingFinder(listOf(
             AnnotationTypeMappingDefault(
                 "string", "uuid",
@@ -75,7 +76,7 @@ class MappingFinderAnnotationSpec: StringSpec({
         mapping.first().sourceTypeFormat shouldBe "uuid"
     }
 
-    "find parameter annotation mapping" {
+    "find parameter annotation type mapping" {
         val finder = MappingFinder(listOf(
                 AnnotationTypeMappingDefault(
                     "Foo",
@@ -89,7 +90,7 @@ class MappingFinderAnnotationSpec: StringSpec({
         mapping.first().sourceTypeName shouldBe "Foo"
     }
 
-    "find parameter type:format annotation mapping" {
+    "find parameter type:format annotation type mapping" {
         val finder = MappingFinder(listOf(
                 AnnotationTypeMappingDefault(
                     "string",
@@ -103,5 +104,19 @@ class MappingFinderAnnotationSpec: StringSpec({
         mapping.first().sourceTypeName shouldBe "string"
         mapping.first().sourceTypeFormat shouldBe "uuid"
     }
+
+    "find parameter annotation name mapping" {
+        val finder = MappingFinder(listOf(
+                AnnotationNameMappingDefault(
+                    "foo",
+                    Annotation("annotation.Bar")))
+        )
+
+        val mapping = finder.findParameterNameAnnotations("/any", null, "foo")
+
+        mapping.size shouldBe 1
+        mapping.first().parameterName shouldBe "foo"
+    }
+
 })
 
