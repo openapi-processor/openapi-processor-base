@@ -84,7 +84,7 @@ class MappingFinderAnnotationSpec: StringSpec({
                     Annotation("annotation.Bar")))
         )
 
-        val mapping = finder.findParameterAnnotations("/any", null, "Foo")
+        val mapping = finder.findParameterTypeAnnotations("/any", null, "Foo")
 
         mapping.size shouldBe 1
         mapping.first().sourceTypeName shouldBe "Foo"
@@ -98,7 +98,7 @@ class MappingFinderAnnotationSpec: StringSpec({
                 Annotation("annotation.Foo")))
         )
 
-        val mapping = finder.findParameterAnnotations("/any", null, "string:uuid")
+        val mapping = finder.findParameterTypeAnnotations("/any", null, "string:uuid")
 
         mapping.size shouldBe 1
         mapping.first().sourceTypeName shouldBe "string"
