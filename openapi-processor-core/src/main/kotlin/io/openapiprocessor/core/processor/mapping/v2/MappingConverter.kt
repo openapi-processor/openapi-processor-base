@@ -60,6 +60,10 @@ class MappingConverter(val mapping: MappingV2) {
             result.addAll(convertPathMethods(it.key, it.value))
         }
 
+        mapping.map.extensions.forEach {
+            result.add(convertExtension (it.key, it.value))
+        }
+
         return result
     }
 
@@ -348,10 +352,23 @@ class MappingConverter(val mapping: MappingV2) {
         return EndpointTypeMapping(path, method, result, source.exclude)
     }
 
-    private fun resolvePackageVariable(source: List<String>): List<String> {
-        return source.map {
-            resolvePackageVariable(it)
+    private fun convertExtension(extension: String, values: List<Type>): Mapping {
+        val mappings = values.map {
+            createExtensionMapping(it)
         }
+
+        return ExtensionMapping(extension, mappings)
+    }
+
+    private fun createExtensionMapping(source: Type): Mapping {
+        val (mapping, genericTypes) = parseMapping(source.type, source.generics)
+        if (mapping.kind != ANNOTATE) {
+            // todo throw
+        }
+
+        return AnnotationNameMappingDefault(mapping.sourceType!!, Annotation(
+                        mapping.annotationType!!,
+                        mapping.annotationParameters))
     }
 
     private fun resolvePackageVariable(source: String): String {
