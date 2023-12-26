@@ -1,0 +1,5 @@
+items:
+  - inputs/openapi30.json
+  - inputs/openapi31.json
+  - inputs/foo.json
+  - inputs/mapping.yaml

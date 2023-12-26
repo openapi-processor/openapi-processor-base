@@ -1,0 +1,10 @@
+{
+  "Foo": {
+    "type": "object",
+    "properties": {
+      "bar": {
+        "type": "string"
+      }
+    }
+  }
+}
