@@ -221,6 +221,7 @@ class DataTypeUsageSpec: StringSpec({
         options.typeMappings = listOf(
             TypeMapping(
                 "Foo",
+                null,
                 "io.openapiprocessor.test.Mapped")
             )
 

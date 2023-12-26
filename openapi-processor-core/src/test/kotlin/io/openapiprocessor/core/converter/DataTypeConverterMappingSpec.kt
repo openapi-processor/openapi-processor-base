@@ -55,7 +55,7 @@ class DataTypeConverterMappingSpec: StringSpec({
 
         val options = ApiOptions()
         options.typeMappings = listOf(
-            TypeMapping("Foo", "package.Bar")
+            TypeMapping("Foo", null, "package.Bar")
         )
 
         val schemaInfo = openApi.getSchemaInfo("Foo",
@@ -103,7 +103,7 @@ class DataTypeConverterMappingSpec: StringSpec({
 
         val options = ApiOptions()
         options.typeMappings = listOf(
-            TypeMapping("Foo", "package.Bar")
+            TypeMapping("Foo", null, "package.Bar")
         )
 
         val schemaInfo = openApi.getSchemaInfo("Foo",
@@ -145,8 +145,8 @@ class DataTypeConverterMappingSpec: StringSpec({
 
         val options = ApiOptions()
         options.typeMappings = listOf(
-            TypeMapping("array", "java.util.List"),
-            TypeMapping("ArrayFoo", "package.Bar"),
+            TypeMapping("array", null, "java.util.List"),
+            TypeMapping("ArrayFoo", null, "package.Bar"),
         )
 
         val schemaInfo = openApi.getSchemaInfo("Foo",
@@ -215,7 +215,7 @@ class DataTypeConverterMappingSpec: StringSpec({
         val options = ApiOptions()
         options.typeMappings = listOf(
             AddParameterTypeMapping("add",
-                TypeMapping(null, "additional.Parameter")
+                TypeMapping(null, null, "additional.Parameter")
         ))
 
         // see ApiConvert.createAdditionalParameter()

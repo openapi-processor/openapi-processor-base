@@ -24,9 +24,9 @@ class MappingFinderEndpointMethodSpec: StringSpec({
             listOf(
                 EndpointTypeMapping("/foo", null, emptyList()),
                 EndpointTypeMapping("/foo", HttpMethod.GET, listOf(
-                    TypeMapping("Foo", "io.openapiprocessor.Foo"),
-                    TypeMapping("Far", "io.openapiprocessor.Far"),
-                    TypeMapping("Bar", "io.openapiprocessor.Bar")
+                    TypeMapping("Foo", null, "io.openapiprocessor.Foo"),
+                    TypeMapping("Far", null, "io.openapiprocessor.Far"),
+                    TypeMapping("Bar", null, "io.openapiprocessor.Bar")
             )))
         )
 
@@ -44,11 +44,11 @@ class MappingFinderEndpointMethodSpec: StringSpec({
                 EndpointTypeMapping("/foo", null, emptyList()),
                 EndpointTypeMapping("/foo", HttpMethod.GET, listOf(
                     NameTypeMapping("foo param",
-                        TypeMapping("Foo", "io.openapiprocessor.Foo")),
+                        TypeMapping("Foo", null, "io.openapiprocessor.Foo")),
                     NameTypeMapping("far param",
-                        TypeMapping("far", "io.openapiprocessor.Far")),
+                        TypeMapping("far", null, "io.openapiprocessor.Far")),
                     NameTypeMapping("bar param",
-                        TypeMapping("Bar", "io.openapiprocessor.Bar"))
+                        TypeMapping("Bar", null,"io.openapiprocessor.Bar"))
             )))
         )
 
@@ -66,11 +66,11 @@ class MappingFinderEndpointMethodSpec: StringSpec({
                 EndpointTypeMapping("/foo", null, emptyList()),
                 EndpointTypeMapping("/foo", HttpMethod.GET, listOf(
                     ContentTypeMapping("application/json",
-                        TypeMapping("Foo", "io.openapiprocessor.Foo")),
+                        TypeMapping("Foo", null, "io.openapiprocessor.Foo")),
                     ContentTypeMapping("application/json-2",
-                        TypeMapping("far", "io.openapiprocessor.Far")),
+                        TypeMapping("far", null, "io.openapiprocessor.Far")),
                     ContentTypeMapping("application/json-3",
-                        TypeMapping("Bar", "io.openapiprocessor.Bar"))
+                        TypeMapping("Bar", null, "io.openapiprocessor.Bar"))
             )))
         )
 
@@ -88,8 +88,8 @@ class MappingFinderEndpointMethodSpec: StringSpec({
                 EndpointTypeMapping("/foo", null, emptyList()),
                 EndpointTypeMapping("/foo", HttpMethod.PATCH, listOf(
                     NullTypeMapping("null", "org.openapitools.jackson.nullable.JsonNullable"),
-                    TypeMapping("Far", "io.openapiprocessor.Far"),
-                    TypeMapping("Bar", "io.openapiprocessor.Bar")
+                    TypeMapping("Far", null, "io.openapiprocessor.Far"),
+                    TypeMapping("Bar", null, "io.openapiprocessor.Bar")
             )))
         )
 
@@ -109,9 +109,9 @@ class MappingFinderEndpointMethodSpec: StringSpec({
                 EndpointTypeMapping("/foo", null, emptyList()),
                 EndpointTypeMapping("/foo", HttpMethod.GET, listOf(
                     AddParameterTypeMapping("foo param",
-                        TypeMapping(null, "io.openapiprocessor.Foo")),
+                        TypeMapping(null, null, "io.openapiprocessor.Foo")),
                     AddParameterTypeMapping("bar param",
-                        TypeMapping(null, "io.openapiprocessor.Foo"))
+                        TypeMapping(null, null, "io.openapiprocessor.Foo"))
             )))
         )
 
@@ -144,7 +144,10 @@ class MappingFinderEndpointMethodSpec: StringSpec({
             listOf(
                 EndpointTypeMapping("/foo", null, emptyList()),
                 EndpointTypeMapping("/foo", HttpMethod.GET, listOf(
-                    TypeMapping("single", "io.openapiprocessor.SingleWrapper")
+                    TypeMapping(
+                        "single",
+                        null,
+                        "io.openapiprocessor.SingleWrapper")
             )))
         )
 
@@ -159,7 +162,10 @@ class MappingFinderEndpointMethodSpec: StringSpec({
         val finder = MappingFinder(
             listOf(
                 EndpointTypeMapping("/foo", null, listOf(
-                    TypeMapping("single", "io.openapiprocessor.SingleWrapper")
+                    TypeMapping(
+                        "single",
+                        null,
+                        "io.openapiprocessor.SingleWrapper")
             )))
         )
 
@@ -175,7 +181,10 @@ class MappingFinderEndpointMethodSpec: StringSpec({
             listOf(
                 EndpointTypeMapping("/foo", null, emptyList()),
                 EndpointTypeMapping("/foo", HttpMethod.GET, listOf(
-                    TypeMapping("multi", "io.openapiprocessor.MultiWrapper")
+                    TypeMapping(
+                        "multi",
+                        null,
+                        "io.openapiprocessor.MultiWrapper")
             )))
         )
 
@@ -190,7 +199,10 @@ class MappingFinderEndpointMethodSpec: StringSpec({
         val finder = MappingFinder(
             listOf(
                 EndpointTypeMapping("/foo", null, listOf(
-                    TypeMapping("multi", "io.openapiprocessor.MultiWrapper")
+                    TypeMapping(
+                        "multi",
+                        null,
+                        "io.openapiprocessor.MultiWrapper")
             )))
         )
 

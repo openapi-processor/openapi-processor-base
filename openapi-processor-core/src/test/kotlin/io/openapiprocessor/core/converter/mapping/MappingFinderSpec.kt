@@ -34,9 +34,9 @@ class MappingFinderSpec: StringSpec({
     "type mapping matches single mapping" {
         val finder = MappingFinder(
             listOf(
-                TypeMapping("Foo", "io.openapiprocessor.Foo"),
-                TypeMapping("Far", "io.openapiprocessor.Far"),
-                TypeMapping("Bar", "io.openapiprocessor.Bar")
+                TypeMapping("Foo", null, "io.openapiprocessor.Foo"),
+                TypeMapping("Far", null, "io.openapiprocessor.Far"),
+                TypeMapping("Bar", null, "io.openapiprocessor.Bar")
             )
         )
 
@@ -51,8 +51,8 @@ class MappingFinderSpec: StringSpec({
     "throws on duplicate type mapping" {
         val finder = MappingFinder(
             listOf(
-                TypeMapping("Foo", "io.openapiprocessor.Foo"),
-                TypeMapping("Foo", "io.openapiprocessor.Foo")
+                TypeMapping("Foo", null, "io.openapiprocessor.Foo"),
+                TypeMapping("Foo", null, "io.openapiprocessor.Foo")
             )
         )
 
@@ -79,11 +79,11 @@ class MappingFinderSpec: StringSpec({
         val finder = MappingFinder(
             listOf(
                 NameTypeMapping("foo param",
-                    TypeMapping("Foo", "io.openapiprocessor.Foo")),
+                    TypeMapping("Foo", null, "io.openapiprocessor.Foo")),
                 NameTypeMapping("far param",
-                    TypeMapping("far", "io.openapiprocessor.Far")),
+                    TypeMapping("far", null, "io.openapiprocessor.Far")),
                 NameTypeMapping("bar param",
-                    TypeMapping("Bar", "io.openapiprocessor.Bar"))
+                    TypeMapping("Bar", null, "io.openapiprocessor.Bar"))
             )
         )
 
@@ -99,11 +99,11 @@ class MappingFinderSpec: StringSpec({
         val finder = MappingFinder(
             listOf(
                 ContentTypeMapping("application/json",
-                    TypeMapping("Foo", "io.openapiprocessor.Foo")),
+                    TypeMapping("Foo", null, "io.openapiprocessor.Foo")),
                 ContentTypeMapping("application/json-2",
-                    TypeMapping("far", "io.openapiprocessor.Far")),
+                    TypeMapping("far", null, "io.openapiprocessor.Far")),
                 ContentTypeMapping("application/json-3",
-                    TypeMapping("Bar", "io.openapiprocessor.Bar"))
+                    TypeMapping("Bar", null, "io.openapiprocessor.Bar"))
             )
         )
 
@@ -119,9 +119,9 @@ class MappingFinderSpec: StringSpec({
         val finder = MappingFinder(
             listOf(
                 NameTypeMapping("foo param",
-                    TypeMapping("Foo A", "io.openapiprocessor.Foo A")),
+                    TypeMapping("Foo A", null, "io.openapiprocessor.Foo A")),
                 NameTypeMapping("foo param",
-                    TypeMapping("Foo B", "io.openapiprocessor.Foo B"))
+                    TypeMapping("Foo B", null, "io.openapiprocessor.Foo B"))
             )
         )
 
@@ -136,9 +136,9 @@ class MappingFinderSpec: StringSpec({
         val finder = MappingFinder(
             listOf(
                 ContentTypeMapping("application/json",
-                    TypeMapping("Foo", "io.openapiprocessor.Foo")),
+                    TypeMapping("Foo", null, "io.openapiprocessor.Foo")),
                 ContentTypeMapping("application/json",
-                    TypeMapping("far", "io.openapiprocessor.Far"))
+                    TypeMapping("far", null, "io.openapiprocessor.Far"))
             )
         )
 
@@ -163,11 +163,11 @@ class MappingFinderSpec: StringSpec({
             listOf(
                 EndpointTypeMapping("/foo", null, listOf(
                     NameTypeMapping("foo param",
-                        TypeMapping("Foo", "io.openapiprocessor.Foo")),
+                        TypeMapping("Foo", null, "io.openapiprocessor.Foo")),
                     NameTypeMapping("far param",
-                        TypeMapping("far", "io.openapiprocessor.Far")),
+                        TypeMapping("far", null, "io.openapiprocessor.Far")),
                     NameTypeMapping("bar param",
-                        TypeMapping("Bar", "io.openapiprocessor.Bar"))
+                        TypeMapping("Bar", null, "io.openapiprocessor.Bar"))
             )))
         )
 
@@ -184,11 +184,11 @@ class MappingFinderSpec: StringSpec({
             listOf(
                 EndpointTypeMapping("/foo", null, listOf(
                     ContentTypeMapping("application/json",
-                        TypeMapping("Foo", "io.openapiprocessor.Foo")),
+                        TypeMapping("Foo", null, "io.openapiprocessor.Foo")),
                     ContentTypeMapping("application/json-2",
-                        TypeMapping("far", "io.openapiprocessor.Far")),
+                        TypeMapping("far", null, "io.openapiprocessor.Far")),
                     ContentTypeMapping("application/json-3",
-                        TypeMapping("Bar", "io.openapiprocessor.Bar"))
+                        TypeMapping("Bar", null, "io.openapiprocessor.Bar"))
             )))
         )
 
@@ -204,9 +204,9 @@ class MappingFinderSpec: StringSpec({
         val finder = MappingFinder(listOf(
             EndpointTypeMapping("/foo", null, listOf(
                     NameTypeMapping("foo param",
-                        TypeMapping("Foo A", "io.openapiprocessor.Foo A")),
+                        TypeMapping("Foo A", null, "io.openapiprocessor.Foo A")),
                     NameTypeMapping("foo param",
-                        TypeMapping("Foo B", "io.openapiprocessor.Foo B"))
+                        TypeMapping("Foo B", null, "io.openapiprocessor.Foo B"))
                 )))
         )
 
@@ -222,9 +222,9 @@ class MappingFinderSpec: StringSpec({
             listOf(
                 EndpointTypeMapping("/foo", null, listOf(
                     ContentTypeMapping("application/json",
-                        TypeMapping("Foo", "io.openapiprocessor.Foo")),
+                        TypeMapping("Foo", null, "io.openapiprocessor.Foo")),
                     ContentTypeMapping("application/json",
-                        TypeMapping("far", "io.openapiprocessor.Far"))
+                        TypeMapping("far", null, "io.openapiprocessor.Far"))
             )))
         )
 
@@ -239,9 +239,9 @@ class MappingFinderSpec: StringSpec({
         val finder = MappingFinder(
             listOf(
                 EndpointTypeMapping("/foo", null, listOf(
-                    TypeMapping("Foo", "io.openapiprocessor.Foo"),
-                    TypeMapping("Far", "io.openapiprocessor.Far"),
-                    TypeMapping("Bar", "io.openapiprocessor.Bar")
+                    TypeMapping("Foo", null, "io.openapiprocessor.Foo"),
+                    TypeMapping("Far", null, "io.openapiprocessor.Far"),
+                    TypeMapping("Bar", null, "io.openapiprocessor.Bar")
             )))
         )
 
@@ -267,8 +267,8 @@ class MappingFinderSpec: StringSpec({
             listOf(
                 EndpointTypeMapping("/foo", null, listOf(
                     NullTypeMapping("null", "org.openapitools.jackson.nullable.JsonNullable"),
-                    TypeMapping("Far", "io.openapiprocessor.Far"),
-                    TypeMapping("Bar", "io.openapiprocessor.Bar")
+                    TypeMapping("Far", null, "io.openapiprocessor.Far"),
+                    TypeMapping("Bar", null, "io.openapiprocessor.Bar")
             )))
         )
 
