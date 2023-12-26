@@ -37,7 +37,6 @@ class MappingConverterExtensionsSpec: StringSpec({
 
         val mappings = converter.convert(reader.read(yaml))
 
-        // then:
         mappings shouldHaveSize 1
         val xFoo = mappings.first() as ExtensionMapping
         xFoo.extension shouldBe "x-foo"
@@ -63,8 +62,6 @@ class MappingConverterExtensionsSpec: StringSpec({
            |      - foo => annotation.Foo
            """.trimMargin()
 
-
-        // then:
         shouldThrow<BadMappingException> {
             converter.convert(reader.read(yaml))
         }
