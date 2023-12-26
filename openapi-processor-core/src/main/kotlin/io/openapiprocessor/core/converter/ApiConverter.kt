@@ -243,10 +243,11 @@ class  ApiConverter(
 
     private fun createRequestBody(contentType: String, info: SchemaInfo, required: Boolean, dataTypes: DataTypes): ModelRequestBody {
         val dataType = convertDataType(info, dataTypes)
-        val changedType = if (!info.isArray ()) {
-            singleDataTypeWrapper.wrap(dataType, info)
-        } else {
+
+        val changedType = if (dataType.isCollection()) {
             multiDataTypeWrapper.wrap(dataType, info)
+        } else {
+            singleDataTypeWrapper.wrap(dataType, info)
         }
 
         return framework.createRequestBody(contentType, required, changedType)

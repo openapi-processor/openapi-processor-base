@@ -10,3 +10,7 @@ interface CollectionDataType {
 
     fun getTypeName(annotations: Set<String>, itemAnnotations: Set<String>): String
 }
+
+fun DataType.isCollection(): Boolean {
+    return this is CollectionDataType
+}
