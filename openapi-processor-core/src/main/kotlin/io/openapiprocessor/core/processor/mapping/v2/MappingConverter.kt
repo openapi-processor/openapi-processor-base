@@ -7,6 +7,7 @@ package io.openapiprocessor.core.processor.mapping.v2
 
 import io.openapiprocessor.core.converter.mapping.*
 import io.openapiprocessor.core.parser.HttpMethod
+import io.openapiprocessor.core.processor.BadMappingException
 import io.openapiprocessor.core.processor.mapping.v2.parser.Mapping as ParserMapping
 import io.openapiprocessor.core.processor.mapping.v2.parser.Mapping.Kind.ANNOTATE
 import io.openapiprocessor.core.processor.mapping.v2.parser.MappingType
@@ -363,7 +364,7 @@ class MappingConverter(val mapping: MappingV2) {
     private fun createExtensionMapping(source: Type): Mapping {
         val (mapping, genericTypes) = parseMapping(source.type, source.generics)
         if (mapping.kind != ANNOTATE) {
-            // todo throw
+            throw BadMappingException(source.type)
         }
 
         return AnnotationNameMappingDefault(mapping.sourceType!!, Annotation(

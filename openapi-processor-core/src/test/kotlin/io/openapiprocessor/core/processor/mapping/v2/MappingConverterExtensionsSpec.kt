@@ -5,12 +5,14 @@
 
 package io.openapiprocessor.core.processor.mapping.v2
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.converter.mapping.AnnotationNameMapping
 import io.openapiprocessor.core.converter.mapping.ExtensionMapping
+import io.openapiprocessor.core.processor.BadMappingException
 import io.openapiprocessor.core.processor.MappingConverter
 import io.openapiprocessor.core.processor.MappingReader
 
@@ -47,5 +49,24 @@ class MappingConverterExtensionsSpec: StringSpec({
         val xFoo2 = xFoo.typeMappings[1] as AnnotationNameMapping
         xFoo2.name shouldBe "bar"
         xFoo2.annotation.type shouldBe "annotation.Bar"
+    }
+
+    "read extension mappings throws if no annotation mapping" {
+        val yaml = """
+           |openapi-processor-mapping: v6
+           |options:
+           |  package-name: some.package
+           |
+           |map:
+           |  extensions:
+           |    x-foo:
+           |      - foo => annotation.Foo
+           """.trimMargin()
+
+
+        // then:
+        shouldThrow<BadMappingException> {
+            converter.convert(reader.read(yaml))
+        }
     }
 })
