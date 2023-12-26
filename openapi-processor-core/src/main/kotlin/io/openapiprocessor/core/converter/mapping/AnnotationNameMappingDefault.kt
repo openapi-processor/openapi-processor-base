@@ -9,7 +9,7 @@ open class AnnotationNameMappingDefault(
     /**
      * The parameter name of this mapping. Must match 1:1 with what is written in the api.
      */
-    override val parameterName: String,
+    override val name: String,
 
     /**
      * additional annotation of the type.

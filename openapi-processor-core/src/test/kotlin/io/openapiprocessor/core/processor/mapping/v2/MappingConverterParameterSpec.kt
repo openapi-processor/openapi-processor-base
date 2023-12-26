@@ -52,7 +52,7 @@ class MappingConverterParameterSpec: StringSpec({
 
         mappings.size.shouldBe(1)
         val annotation = mappings.first() as AnnotationNameMapping
-        annotation.parameterName shouldBe "foo"
+        annotation.name shouldBe "foo"
         annotation.annotation.type shouldBe "annotation.Foo"
     }
 })

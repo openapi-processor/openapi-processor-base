@@ -87,7 +87,7 @@ class MappingFinder(private val typeMappings: List<Mapping> = emptyList()) {
         return typeMappings
             .filterIsInstance<AnnotationNameMapping>()
             .filter {
-                parameterName == it.parameterName
+                parameterName == it.name
             }
     }
 

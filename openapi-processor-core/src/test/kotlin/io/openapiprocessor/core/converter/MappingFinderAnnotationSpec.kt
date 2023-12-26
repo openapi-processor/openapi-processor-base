@@ -115,7 +115,7 @@ class MappingFinderAnnotationSpec: StringSpec({
         val mapping = finder.findParameterNameAnnotations("/any", null, "foo")
 
         mapping.size shouldBe 1
-        mapping.first().parameterName shouldBe "foo"
+        mapping.first().name shouldBe "foo"
     }
 
 })

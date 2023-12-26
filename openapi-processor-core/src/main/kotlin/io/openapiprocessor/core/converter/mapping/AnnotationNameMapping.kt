@@ -10,9 +10,9 @@ package io.openapiprocessor.core.converter.mapping
  */
 interface AnnotationNameMapping {
     /**
-     * The parameter name of this mapping. Must match 1:1 with what is written in the api.
+     * The property/parameter name of this mapping. Must match 1:1 with what is written in the api.
      */
-    val parameterName: String
+    val name: String
 
     /**
      * additional annotation of the type.
