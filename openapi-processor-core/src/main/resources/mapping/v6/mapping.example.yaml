@@ -3,7 +3,7 @@
 ##
 
 # mapping format [required]
-openapi-processor-mapping: v5
+openapi-processor-mapping: v6
 
 options: # general processor options [required]
 
@@ -114,3 +114,9 @@ map: # the type mappings
         # all mappings apply only to the parent path and method overriding any matching global mapping
 
         null: org.openapitools.jackson.nullable.JsonNullable = JsonNullable.undefined()
+
+  extensions:
+    - x-something: foo @ some.Annotation
+    - x-something-else:
+      - foo @ some.custom.FooAnnotation
+      - bar @ some.custom.BarAnnotation
