@@ -6,6 +6,8 @@ package io.openapiprocessor.core.processor.mapping.v2
 
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.maps.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
@@ -154,5 +156,32 @@ class MappingReaderSpec: StringSpec ({
 
         // then:
         mapping.options.enumType shouldBe "string"
+    }
+
+    "reads extensions mappings" {
+        val yaml = """
+            |openapi-processor-mapping: v6
+            |options:
+            |  package-name: no.warning
+            |extensions:
+            |  x-single: foo @ custom.Annotation
+            |  x-list:
+            |   - fooA @ custom.Annotation
+            |   - fooB @ custom.Annotation
+        """.trimMargin()
+
+        val reader = MappingReader()
+
+        val mapping = reader.read (yaml) as Mapping
+
+        mapping.extensions shouldHaveSize 2
+        val extSingle = mapping.extensions["x-single"] as List<Type>
+        extSingle shouldHaveSize 1
+        extSingle[0].type shouldBe "foo @ custom.Annotation"
+
+        val extList = mapping.extensions["x-list"] as List<Type>
+        extList shouldHaveSize 2
+        extList[0].type shouldBe "fooA @ custom.Annotation"
+        extList[1].type shouldBe "fooB @ custom.Annotation"
     }
 })

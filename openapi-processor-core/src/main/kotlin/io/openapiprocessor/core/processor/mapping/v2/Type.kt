@@ -5,10 +5,13 @@
 
 package io.openapiprocessor.core.processor.mapping.v2
 
+import com.fasterxml.jackson.annotation.JsonCreator
+
 /**
  * a "type:" entry in the "types:" list of the mapping yaml
  */
-data class Type(
+
+data class Type @JvmOverloads @JsonCreator constructor(
     /**
      * the mapping from source to target, ie a mapping string like:
      *
@@ -19,6 +22,6 @@ data class Type(
     /**
      * (optional) generic parameters of {@link #type} target
      */
-    val generics: List<String>?
+    val generics: List<String>? = null
 
 ) : Parameter
