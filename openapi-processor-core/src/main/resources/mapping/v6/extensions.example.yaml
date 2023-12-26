@@ -1,0 +1,23 @@
+##
+## mapping example with keys & values
+##
+
+# mapping format [required]
+openapi-processor-mapping: v6
+
+options: # general processor options [required]
+
+  # target package [required]: io.openapiprocessor.generated (default)
+  package-name: io.openapiprocessor.generated
+
+
+map: # the type mappings
+
+  # global mappings, apply to all paths/endpoints
+
+  # extension mappings
+  extensions:
+    x-something: foo @ some.Annotation
+    x-something-else:
+      - foo @ some.custom.FooAnnotation
+      - bar @ some.custom.BarAnnotation

@@ -14,9 +14,6 @@
     },
     "map": {
       "$ref": "#/definitions/Map"
-    },
-    "extensions": {
-      "$ref": "#/definitions/Extensions"
     }
   },
   "required": [
@@ -92,40 +89,13 @@
               "$ref": "#/definitions/Paths"
             }
           }
-      }]
-    },
-    "Extensions": {
-      "description": "x-extensions annotation mapping rules.",
-      "type": "object",
-      "patternProperties": {
-        "^x-": {
-          "anyOf": [{
-            "$ref": "#/definitions/AnnotationMappingFormat"
-          }, {
-            "type": "array",
-            "minItems": 1,
-            "items": {
-              "$ref": "#/definitions/AnnotationMappingFormat"
+        }, {
+          "properties": {
+            "extensions": {
+              "$ref": "#/definitions/Extensions"
             }
-          }]
-        }
-      }
-    },
-    "Paths": {
-      "description": "path specific mappings.",
-      "type": "object",
-      "patternProperties": {
-        "^/": {
-          "description": "a path.",
-          "allOf": [{
-              "$ref": "#/definitions/Exclude"
-            }, {
-              "$ref": "#/definitions/Mappings"
-            }, {
-              "$ref": "#/definitions/Methods"
-          }]
-        }
-      }
+          }
+      }]
     },
     "Mappings": {
       "description": "mapping rules.",
@@ -154,6 +124,40 @@
         },
         "responses": {
           "$ref": "#/definitions/ResponseMappings"
+        }
+      }
+    },
+    "Paths": {
+      "description": "path specific mappings.",
+      "type": "object",
+      "patternProperties": {
+        "^/": {
+          "description": "a path.",
+          "allOf": [{
+              "$ref": "#/definitions/Exclude"
+            }, {
+              "$ref": "#/definitions/Mappings"
+            }, {
+              "$ref": "#/definitions/Methods"
+          }]
+        }
+      }
+    },
+    "Extensions": {
+      "description": "x-extensions annotation mapping rules.",
+      "type": "object",
+      "patternProperties": {
+        "^x-": {
+          "description": "an extension with a single value or a list of values.",
+          "anyOf": [{
+            "$ref": "#/definitions/AnnotationMappingFormat"
+          }, {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/definitions/AnnotationMappingFormat"
+            }
+          }]
         }
       }
     },

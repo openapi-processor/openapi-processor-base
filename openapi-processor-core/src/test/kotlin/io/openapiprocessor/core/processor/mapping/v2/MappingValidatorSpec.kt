@@ -118,6 +118,10 @@ class MappingValidatorSpec: StringSpec({
         validator.validate("/mapping/v5/mapping.example.yaml".fromResource(), "v5").isValid.shouldBeTrue()
     }
 
+    "validates extensions mapping v6" {
+        validator.validate("/mapping/v6/extensions.example.yaml".fromResource(), "v6").isValid.shouldBeTrue()
+    }
+
     "validates example mapping v6" {
         validator.validate("/mapping/v6/mapping.example.yaml".fromResource(), "v6").isValid.shouldBeTrue()
     }

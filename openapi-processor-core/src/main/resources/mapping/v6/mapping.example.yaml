@@ -116,7 +116,7 @@ map: # the type mappings
         null: org.openapitools.jackson.nullable.JsonNullable = JsonNullable.undefined()
 
   extensions:
-    - x-something: foo @ some.Annotation
-    - x-something-else:
+    x-something: foo @ some.Annotation
+    x-something-else:
       - foo @ some.custom.FooAnnotation
       - bar @ some.custom.BarAnnotation
