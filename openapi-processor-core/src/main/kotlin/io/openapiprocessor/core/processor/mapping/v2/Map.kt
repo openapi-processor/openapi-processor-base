@@ -5,6 +5,8 @@
 
 package io.openapiprocessor.core.processor.mapping.v2
 
+import com.fasterxml.jackson.annotation.JsonFormat
+
 /**
  * the "map:" entry in the mapping yaml
  */
@@ -60,6 +62,11 @@ data class Map(
      *
      * the LinkedHashMap preserves order
      */
-    val paths: LinkedHashMap<String, Path> = LinkedHashMap()
+    val paths: LinkedHashMap<String, Path> = LinkedHashMap(),
 
+    /**
+     * the extension mappings
+     */
+    @JsonFormat(with = [JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY])
+    val extensions: LinkedHashMap<String, List<Type>> = LinkedHashMap()
 )

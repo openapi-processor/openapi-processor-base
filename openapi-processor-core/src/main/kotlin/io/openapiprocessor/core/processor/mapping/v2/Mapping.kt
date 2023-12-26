@@ -6,7 +6,6 @@
 package io.openapiprocessor.core.processor.mapping.v2
 
 import com.fasterxml.jackson.annotation.JsonAlias
-import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty
 import io.openapiprocessor.core.processor.mapping.MappingVersion
 
@@ -30,13 +29,7 @@ data class Mapping(
     /**
      * the type mappings
      */
-    val map: Map = Map(),
-
-    /**
-     * the extension mappings
-     */
-    @JsonFormat(with = [JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY])
-    val extensions: LinkedHashMap<String, List<Type>> = LinkedHashMap()
+    val map: Map = Map()
 
 ): MappingVersion {
     override val v2: Boolean = true

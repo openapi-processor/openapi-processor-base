@@ -163,23 +163,24 @@ class MappingReaderSpec: StringSpec ({
             |openapi-processor-mapping: v6
             |options:
             |  package-name: no.warning
-            |extensions:
-            |  x-single: foo @ custom.Annotation
-            |  x-list:
-            |   - fooA @ custom.Annotation
-            |   - fooB @ custom.Annotation
+            |map:
+            |  extensions:
+            |    x-single: foo @ custom.Annotation
+            |    x-list:
+            |      - fooA @ custom.Annotation
+            |      - fooB @ custom.Annotation
         """.trimMargin()
 
         val reader = MappingReader()
 
         val mapping = reader.read (yaml) as Mapping
 
-        mapping.extensions shouldHaveSize 2
-        val extSingle = mapping.extensions["x-single"] as List<Type>
+        mapping.map.extensions shouldHaveSize 2
+        val extSingle = mapping.map.extensions["x-single"] as List<Type>
         extSingle shouldHaveSize 1
         extSingle[0].type shouldBe "foo @ custom.Annotation"
 
-        val extList = mapping.extensions["x-list"] as List<Type>
+        val extList = mapping.map.extensions["x-list"] as List<Type>
         extList shouldHaveSize 2
         extList[0].type shouldBe "fooA @ custom.Annotation"
         extList[1].type shouldBe "fooB @ custom.Annotation"
