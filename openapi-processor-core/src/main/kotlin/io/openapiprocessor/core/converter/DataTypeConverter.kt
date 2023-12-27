@@ -212,7 +212,8 @@ class DataTypeConverter(
             propDataType = PropertyDataType(
                 propSchemaInfo.readOnly,
                 propSchemaInfo.writeOnly,
-                propDataType
+                propDataType,
+                propSchemaInfo.getExtensions()
             )
 
             properties[propName] = propDataType

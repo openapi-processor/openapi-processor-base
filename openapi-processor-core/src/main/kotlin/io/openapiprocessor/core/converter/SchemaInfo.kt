@@ -273,6 +273,13 @@ open class SchemaInfo(
         return schema?.itemsOf()
     }
 
+    fun getExtensions(): Map<String, *> {
+        if (schema == null)
+            return emptyMap<String, Any>()
+
+        return schema.extensions
+    }
+
     /**
      * Factory method to create a {@link SchemaInfo} of the $ref'erenced schema.
      *

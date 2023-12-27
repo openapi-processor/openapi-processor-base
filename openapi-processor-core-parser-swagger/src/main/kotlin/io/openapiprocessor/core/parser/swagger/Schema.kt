@@ -134,5 +134,5 @@ class Schema(private val schema: SwaggerSchema<*>): ParserSchema {
         get() = schema.writeOnly ?: false
 
     override val extensions: Map<String, *>
-        get() = schema.extensions
+        get() = schema.extensions ?: emptyMap<String, Any>()
 }

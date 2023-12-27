@@ -14,7 +14,8 @@ import io.openapiprocessor.core.model.Documentation
 open class PropertyDataType(
     val readOnly: Boolean,
     val writeOnly: Boolean,
-    val dataType: DataType
+    val dataType: DataType,
+    val extensions: Map<String, *> = emptyMap<String, Any>()
 ): DataType by dataType {
 
     override val referencedImports: Set<String>

@@ -87,6 +87,6 @@ class TestSchema implements Schema {
 
     @Override
     Map<String, ?> getExtensions() {
-        return null
+        return [:]
     }
 }
