@@ -152,4 +152,6 @@ class Schema(val schema: Schema30) : ParserSchema {
     override val writeOnly: Boolean
         get() = schema.writeOnly
 
+    override val extensions: Map<String, *>
+        get() = schema.extensions
 }

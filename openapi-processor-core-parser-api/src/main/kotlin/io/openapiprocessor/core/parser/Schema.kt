@@ -61,4 +61,6 @@ interface Schema {
 
     val readOnly: Boolean
     val writeOnly: Boolean
+
+    val extensions: Map<String, *>
 }

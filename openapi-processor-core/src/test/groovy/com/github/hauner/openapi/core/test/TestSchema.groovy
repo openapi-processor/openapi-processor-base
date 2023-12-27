@@ -84,4 +84,9 @@ class TestSchema implements Schema {
     Schema getAdditionalProperties() {
         return null
     }
+
+    @Override
+    Map<String, ?> getExtensions() {
+        return null
+    }
 }

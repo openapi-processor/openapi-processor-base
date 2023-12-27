@@ -111,4 +111,7 @@ class Schema(
         get() = TODO("Not yet implemented")
     override val writeOnly: Boolean
         get() = TODO("Not yet implemented")
+
+    override val extensions: Map<String, *>
+        get() = TODO("Not yet implemented")
 }

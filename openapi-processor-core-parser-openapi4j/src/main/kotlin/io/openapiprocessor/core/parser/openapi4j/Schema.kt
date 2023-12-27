@@ -123,4 +123,7 @@ class Schema(val schema: O4jSchema) : ParserSchema {
     override val writeOnly: Boolean
         get() = schema.writeOnly ?: false
 
+    override val extensions: Map<String, *>
+        get() = schema.extensions
+
 }
