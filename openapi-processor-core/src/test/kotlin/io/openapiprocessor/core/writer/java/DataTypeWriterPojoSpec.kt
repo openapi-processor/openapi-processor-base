@@ -8,12 +8,12 @@ package io.openapiprocessor.core.writer.java
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContain
+import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import io.openapiprocessor.core.converter.ApiOptions
+import io.openapiprocessor.core.converter.mapping.*
 import io.openapiprocessor.core.converter.mapping.Annotation as MappingAnnotation
-import io.openapiprocessor.core.converter.mapping.AnnotationTypeMappingDefault
-import io.openapiprocessor.core.converter.mapping.SimpleParameterValue
 import io.openapiprocessor.core.extractImports
 import io.openapiprocessor.core.model.Annotation
 import io.openapiprocessor.core.model.datatypes.*
@@ -437,4 +437,52 @@ class DataTypeWriterPojoSpec: StringSpec({
         Arrays.mismatch(t1.toByteArray(), t2.toByteArray()).shouldBe(-1)
     }
 
+    "writes additional property annotation from extension mapping" {
+        options.typeMappings = listOf(
+            ExtensionMapping("x-foo", listOf(
+                AnnotationNameMappingDefault(
+                    "ext", annotation = MappingAnnotation("annotation.Extension", linkedMapOf())
+                )
+            ))
+        )
+
+        writer = DataTypeWriterPojo(options, generatedWriter, BeanValidationFactory(options))
+
+        val dataType = ObjectDataType("Object", "pkg", linkedMapOf(
+                "foo" to propertyDataType(StringDataType(), mapOf("x-foo" to "ext"))))
+
+        // when:
+        writer.write(target, dataType)
+
+        // then:
+        val t1 = target.toString()
+        val t2 =
+            """package pkg;
+            |
+            |import annotation.Extension;
+            |import com.fasterxml.jackson.annotation.JsonProperty;
+            |import io.openapiprocessor.generated.support.Generated;
+            |
+            |@Generated
+            |public class Object {
+            |
+            |    @Extension
+            |    @JsonProperty("foo")
+            |    private String foo;
+            |
+            |    public String getFoo() {
+            |        return foo;
+            |    }
+            |
+            |    public void setFoo(String foo) {
+            |        this.foo = foo;
+            |    }
+            |
+            |}
+            |
+            """.trimMargin()
+
+        t1 shouldBeEqual t2
+        Arrays.mismatch(t1.toByteArray(), t2.toByteArray()).shouldBe(-1)
+    }
 })

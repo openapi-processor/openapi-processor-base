@@ -68,15 +68,14 @@ abstract class DataTypeWriterBase(
         }
 
         if (propDataType.dataType !is ObjectDataType) {
-            val annotationTypeMappings = MappingFinder(apiOptions.typeMappings)
-                .findTypeAnnotations(propDataType.dataType.getSourceName())
-
-            annotationTypeMappings.forEach {
-                val annotation = StringWriter()
-                annotationWriter.write(annotation, Annotation(it.annotation.type, it.annotation.parameters))
-                result += "    $annotation\n"
-            }
+            val builder = StringBuilder()
+            writeAnnotations(builder, collectTypeAnnotations(propDataType.dataType.getSourceName()))
+            result += builder.toString()
         }
+
+        val extBuilder = StringBuilder()
+        writeAnnotations(extBuilder, collectExtensionAnnotations(propDataType.extensions))
+        result += extBuilder.toString()
 
         result += "    ${getPropertyAnnotation(propertyName, propDataType)}\n"
 
@@ -87,6 +86,37 @@ abstract class DataTypeWriterBase(
         }
 
         return result
+    }
+
+    private fun collectTypeAnnotations(sourceName: String): Collection<Annotation> {
+        val mappingFinder = MappingFinder(apiOptions.typeMappings)
+        return  mappingFinder
+            .findTypeAnnotations(sourceName)
+            .map { Annotation(it.annotation.type, it.annotation.parameters) }
+    }
+
+    private fun collectExtensionAnnotations(extensions: Map<String, *>): Collection<Annotation> {
+        val mappingFinder = MappingFinder(apiOptions.typeMappings)
+
+        extensions.forEach { ext ->
+            when (val extVal = ext.value) {
+                is String -> {
+                    return mappingFinder
+                        .findExtensionAnnotations(ext.key, extVal)
+                        .map { Annotation(it.annotation.type, it.annotation.parameters) }
+                }
+            }
+        }
+
+        return emptyList()
+    }
+
+    private fun writeAnnotations(target: StringBuilder, annotations: Collection<Annotation>) {
+        annotations.forEach {
+            val annotation = StringWriter()
+            annotationWriter.write(annotation, Annotation(it.typeName, it.parameters))
+            target.append("    $annotation\n")
+        }
     }
 
     private fun getPropertyAnnotation(propertyName: String, propDataType: PropertyDataType): String {
@@ -230,16 +260,28 @@ abstract class DataTypeWriterBase(
             }
 
             val target = getTarget(propDataType)
-            val annotationTypeMappings = MappingFinder(apiOptions.typeMappings)
-                .findTypeAnnotations(target.getSourceName())
 
-            annotationTypeMappings.forEach { atm ->
-                imports.add(atm.annotation.type)
+            val typeAnnotations = collectTypeAnnotations(target.getSourceName())
+            typeAnnotations.forEach { annotation ->
+                imports.addAll(annotation.imports)
 
-                atm.annotation.parameters.forEach {
+                annotation.parameters.forEach {
                     val import = it.value.import
                     if (import != null)
                         imports.add(import)
+                }
+            }
+
+            if (propDataType is PropertyDataType) {
+                val extAnnotations = collectExtensionAnnotations(propDataType.extensions)
+                extAnnotations.forEach { annotation ->
+                    imports.addAll(annotation.imports)
+
+                    annotation.parameters.forEach {
+                        val import = it.value.import
+                        if (import != null)
+                            imports.add(import)
+                    }
                 }
             }
         }

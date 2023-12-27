@@ -11,6 +11,10 @@ fun propertyDataType(dataType: DataType): PropertyDataType {
     return PropertyDataType(readOnly = false, writeOnly = false, dataType = dataType)
 }
 
+fun propertyDataType(dataType: DataType, extensions: Map<String, *>): PropertyDataType {
+    return PropertyDataType(readOnly = false, writeOnly = false, dataType = dataType, extensions)
+}
+
 fun propertyDataTypeString(): PropertyDataType {
     return PropertyDataType(readOnly = false, writeOnly = false, dataType = StringDataType())
 }
