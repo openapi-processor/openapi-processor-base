@@ -11,6 +11,7 @@ import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.converter.mapping.Annotation
 import io.openapiprocessor.core.converter.mapping.AnnotationNameMappingDefault
 import io.openapiprocessor.core.converter.mapping.AnnotationTypeMappingDefault
+import io.openapiprocessor.core.converter.mapping.ExtensionMapping
 import io.openapiprocessor.core.model.datatypes.ArrayDataType
 import io.openapiprocessor.core.model.datatypes.StringDataType
 import io.openapiprocessor.core.support.datatypes.ObjectDataType
@@ -118,5 +119,29 @@ class MappingFinderAnnotationSpec: StringSpec({
         mapping.first().name shouldBe "foo"
     }
 
+    "find extension name/value annotation mapping" {
+        val finder = MappingFinder(listOf(
+            ExtensionMapping("x-foo", listOf(
+                AnnotationNameMappingDefault("foo", Annotation("annotation.Foo"))))))
+
+        val mapping = finder.findExtensionAnnotations("x-foo", "foo")
+
+        mapping.size shouldBe 1
+        mapping.first().name shouldBe "foo"
+    }
+
+    "find extension name/value annotation mappings" {
+        val finder = MappingFinder(listOf(
+            ExtensionMapping("x-foo", listOf(
+                AnnotationNameMappingDefault("fooA", Annotation("annotation.FooA")),
+                AnnotationNameMappingDefault("fooB", Annotation("annotation.FooB"))
+            ))))
+
+        val mapping = finder.findExtensionAnnotations("x-foo", listOf("fooA", "fooB"))
+
+        mapping.size shouldBe 2
+        mapping[0].name shouldBe "fooA"
+        mapping[1].name shouldBe "fooB"
+    }
 })
 
