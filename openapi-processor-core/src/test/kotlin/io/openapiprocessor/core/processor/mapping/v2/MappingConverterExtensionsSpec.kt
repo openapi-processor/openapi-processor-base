@@ -41,11 +41,11 @@ class MappingConverterExtensionsSpec: StringSpec({
         val xFoo = mappings.first() as ExtensionMapping
         xFoo.extension shouldBe "x-foo"
 
-        xFoo.typeMappings shouldHaveSize 2
-        val xFoo1 = xFoo.typeMappings[0] as AnnotationNameMapping
+        xFoo.mappings shouldHaveSize 2
+        val xFoo1 = xFoo.mappings[0] as AnnotationNameMapping
         xFoo1.name shouldBe "foo"
         xFoo1.annotation.type shouldBe "annotation.Foo"
-        val xFoo2 = xFoo.typeMappings[1] as AnnotationNameMapping
+        val xFoo2 = xFoo.mappings[1] as AnnotationNameMapping
         xFoo2.name shouldBe "bar"
         xFoo2.annotation.type shouldBe "annotation.Bar"
     }

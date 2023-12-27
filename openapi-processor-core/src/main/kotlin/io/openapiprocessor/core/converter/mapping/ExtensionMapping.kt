@@ -14,11 +14,11 @@ class ExtensionMapping(
     /**
      * provides mappings for the extension.
      */
-    val typeMappings: List<Mapping> = emptyList()
+    val mappings: List<Mapping> = emptyList()
 
 ): Mapping {
     override fun getChildMappings(): List<Mapping> {
-        return typeMappings
+        return mappings
     }
 }
 
