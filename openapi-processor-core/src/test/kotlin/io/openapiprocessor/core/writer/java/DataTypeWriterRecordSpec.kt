@@ -8,15 +8,21 @@ package io.openapiprocessor.core.writer.java
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContain
+import io.kotest.matchers.equals.shouldBeEqual
+import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldStartWith
 import io.openapiprocessor.core.converter.ApiOptions
+import io.openapiprocessor.core.converter.mapping.Annotation
+import io.openapiprocessor.core.converter.mapping.AnnotationNameMappingDefault
+import io.openapiprocessor.core.converter.mapping.ExtensionMapping
 import io.openapiprocessor.core.extractImports
 import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.support.datatypes.ListDataType
 import io.openapiprocessor.core.support.datatypes.propertyDataType
 import io.openapiprocessor.core.support.datatypes.propertyDataTypeString
 import java.io.StringWriter
+import java.util.*
 import io.openapiprocessor.core.support.datatypes.ObjectDataType as ObjectDataTypeId
 
 class DataTypeWriterRecordSpec: StringSpec({
@@ -300,6 +306,63 @@ class DataTypeWriterRecordSpec: StringSpec({
             |    JsonNullable<String> foo
             |) {}
             """.trimMargin()
+    }
+
+    "writes additional property annotation from extension mapping" {
+        options.typeMappings = listOf(
+            ExtensionMapping("x-foo", listOf(
+                AnnotationNameMappingDefault(
+                    "ext", annotation = Annotation("annotation.Extension", linkedMapOf())
+                )
+            )),
+            ExtensionMapping("x-bar", listOf(
+                AnnotationNameMappingDefault(
+                    "barA", annotation = Annotation("annotation.BarA", linkedMapOf())
+                ),
+                AnnotationNameMappingDefault(
+                    "barB", annotation = Annotation("annotation.BarB", linkedMapOf())
+                )
+            ))
+        )
+
+        val dataType = io.openapiprocessor.core.support.datatypes.ObjectDataType(
+            "Foo", "pkg", linkedMapOf(
+                "foo" to propertyDataType(
+                    StringDataType(), mapOf(
+                        "x-foo" to "ext",
+                        "x-bar" to listOf("barA", "barB")
+                    )
+                )
+            )
+        )
+
+        // when:
+        writer.write(target, dataType)
+
+        // then:
+        val t1 = target.toString()
+        val t2 =
+            """package pkg;
+            |
+            |import annotation.BarA;
+            |import annotation.BarB;
+            |import annotation.Extension;
+            |import com.fasterxml.jackson.annotation.JsonProperty;
+            |import io.openapiprocessor.generated.support.Generated;
+            |
+            |@Generated
+            |public record Foo(
+            |    @Extension
+            |    @BarA
+            |    @BarB
+            |    @JsonProperty("foo")
+            |    String foo
+            |) {}
+            |
+            """.trimMargin()
+
+        t1 shouldBeEqual t2
+        Arrays.mismatch(t1.toByteArray(), t2.toByteArray()).shouldBe(-1)
     }
 })
 

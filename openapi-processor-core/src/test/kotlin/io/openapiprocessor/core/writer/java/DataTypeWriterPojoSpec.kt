@@ -456,7 +456,7 @@ class DataTypeWriterPojoSpec: StringSpec({
 
         writer = DataTypeWriterPojo(options, generatedWriter, BeanValidationFactory(options))
 
-        val dataType = ObjectDataType("Object", "pkg", linkedMapOf(
+        val dataType = ObjectDataType("Foo", "pkg", linkedMapOf(
                 "foo" to propertyDataType(StringDataType(), mapOf(
                     "x-foo" to "ext",
                     "x-bar" to listOf("barA", "barB")
@@ -477,7 +477,7 @@ class DataTypeWriterPojoSpec: StringSpec({
             |import io.openapiprocessor.generated.support.Generated;
             |
             |@Generated
-            |public class Object {
+            |public class Foo {
             |
             |    @Extension
             |    @BarA
