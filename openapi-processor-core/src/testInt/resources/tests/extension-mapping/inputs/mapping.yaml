@@ -1,0 +1,12 @@
+openapi-processor-mapping: v6
+
+options:
+  package-name: generated
+  format-code: false
+
+map:
+  extensions:
+    x-foo: single @ io.oap.FooA(value = "any")
+    x-bar:
+      - listA @ io.oap.FooB
+      - listB @ io.oap.FooC

@@ -70,6 +70,9 @@ class CompileExpectedSpec: StringSpec({
             compilePaths.add(Path.of("src/testInt/resources/compile/jakarta/Size.java"))
             compilePaths.add(Path.of("src/testInt/resources/compile/jakarta/Valid.java"))
             compilePaths.add(Path.of("src/testInt/resources/compile/javax/Valid.java"))
+            compilePaths.add(Path.of("src/testInt/resources/compile/oap/FooA.java"))
+            compilePaths.add(Path.of("src/testInt/resources/compile/oap/FooB.java"))
+            compilePaths.add(Path.of("src/testInt/resources/compile/oap/FooC.java"))
 
             val expected = support.readTestItems(sourcePath, "outputs.yaml").items
             val expectedFileNames = expected.map { it.replaceFirst("<model>", "model/${testSet.modelType}") }

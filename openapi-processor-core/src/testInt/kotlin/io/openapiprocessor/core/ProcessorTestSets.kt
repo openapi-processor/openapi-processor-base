@@ -17,6 +17,7 @@ val ALL_30: List<TestParams> = listOf(
     test30_D_("bean-validation-requestbody"),
     test30_D_("bean-validation-requestbody-mapping"),
     test30_DR("components-requestbodies"),
+    test30_DR("extension-mapping"),
     test30_DR("deprecated"),
     test30_D_("endpoint-exclude"),
     test30_D_("endpoint-http-mapping"), // framework specific
@@ -86,6 +87,7 @@ val ALL_31: List<TestParams> = listOf(
     test31_D_("bean-validation-requestbody"),
     test31_D_("bean-validation-requestbody-mapping"),
     test31_DR("components-requestbodies"),
+    test31_DR("extension-mapping"),
     test31_DR("deprecated"),
     test31_D_("endpoint-exclude"),
     test31_D_("endpoint-http-mapping"), // framework specific
