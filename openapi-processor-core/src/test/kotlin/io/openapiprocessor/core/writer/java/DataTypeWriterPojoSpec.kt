@@ -443,13 +443,24 @@ class DataTypeWriterPojoSpec: StringSpec({
                 AnnotationNameMappingDefault(
                     "ext", annotation = MappingAnnotation("annotation.Extension", linkedMapOf())
                 )
+            )),
+            ExtensionMapping("x-bar", listOf(
+                AnnotationNameMappingDefault(
+                    "barA", annotation = MappingAnnotation("annotation.BarA", linkedMapOf())
+                ),
+                AnnotationNameMappingDefault(
+                    "barB", annotation = MappingAnnotation("annotation.BarB", linkedMapOf())
+                )
             ))
         )
 
         writer = DataTypeWriterPojo(options, generatedWriter, BeanValidationFactory(options))
 
         val dataType = ObjectDataType("Object", "pkg", linkedMapOf(
-                "foo" to propertyDataType(StringDataType(), mapOf("x-foo" to "ext"))))
+                "foo" to propertyDataType(StringDataType(), mapOf(
+                    "x-foo" to "ext",
+                    "x-bar" to listOf("barA", "barB")
+                ))))
 
         // when:
         writer.write(target, dataType)
@@ -459,6 +470,8 @@ class DataTypeWriterPojoSpec: StringSpec({
         val t2 =
             """package pkg;
             |
+            |import annotation.BarA;
+            |import annotation.BarB;
             |import annotation.Extension;
             |import com.fasterxml.jackson.annotation.JsonProperty;
             |import io.openapiprocessor.generated.support.Generated;
@@ -467,6 +480,8 @@ class DataTypeWriterPojoSpec: StringSpec({
             |public class Object {
             |
             |    @Extension
+            |    @BarA
+            |    @BarB
             |    @JsonProperty("foo")
             |    private String foo;
             |
