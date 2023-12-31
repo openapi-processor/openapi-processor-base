@@ -36,8 +36,8 @@ class StringValuesWriter(val options: ApiOptions) {
         target.write("""
             package ${options.packageName}.validation;
 
-            import jakarta.validation.ConstraintValidator;
-            import jakarta.validation.ConstraintValidatorContext;
+            import ${options.beanValidationFormat}.validation.ConstraintValidator;
+            import ${options.beanValidationFormat}.validation.ConstraintValidatorContext;
             
             import java.util.Arrays;
 
