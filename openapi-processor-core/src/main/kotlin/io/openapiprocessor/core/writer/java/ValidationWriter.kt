@@ -13,7 +13,7 @@ import java.io.Writer
 
 class ValidationWriter(
     private val options: ApiOptions,
-    private val stringValuesWriter: StringValuesWriter = StringValuesWriter(options)
+    private val writer: StringValuesWriter = StringValuesWriter(options)
 ) {
     fun write(formatter: SourceFormatter, writerFactory: WriterFactory) {
         if (!options.beanValidation)
@@ -38,13 +38,13 @@ class ValidationWriter(
 
     private fun writeValues(writer: Writer, formatter: SourceFormatter) {
         val raw = StringWriter()
-        stringValuesWriter.writeValues(raw)
+        this.writer.writeValues(raw)
         writer.write(formatter.format(raw.toString()))
     }
 
     private fun writeValueValidator(writer: Writer, formatter: SourceFormatter) {
         val raw = StringWriter()
-        stringValuesWriter.writeValueValidator(raw)
+        this.writer.writeValueValidator(raw)
         writer.write(formatter.format(raw.toString()))
     }
 }
