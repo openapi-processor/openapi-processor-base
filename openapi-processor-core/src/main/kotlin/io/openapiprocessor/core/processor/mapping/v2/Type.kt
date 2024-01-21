@@ -11,11 +11,12 @@ import com.fasterxml.jackson.annotation.JsonCreator
  * a "type:" entry in the "types:" list of the mapping yaml
  */
 
-data class Type @JvmOverloads @JsonCreator constructor(
+data class Type @JsonCreator @JvmOverloads constructor(
     /**
      * the mapping from source to target, ie a mapping string like:
      *
      * array => java.util.Collection
+     * array @ java.util.Collection
      */
     val type: String,
 
