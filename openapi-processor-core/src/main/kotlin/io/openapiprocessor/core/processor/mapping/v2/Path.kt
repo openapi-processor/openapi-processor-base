@@ -75,5 +75,4 @@ data class Path(
     val options: PathMethod? = null,
     val trace: PathMethod? = null,
     val patch: PathMethod? = null
-
 )
