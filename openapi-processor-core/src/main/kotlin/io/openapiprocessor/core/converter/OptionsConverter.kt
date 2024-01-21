@@ -68,6 +68,7 @@ class OptionsConverter(private val checkObsoleteProcessorOptions: Boolean = fals
                     options.oneOfInterface = mapping.options.oneOfInterface
                     options.formatCode = mapping.options.formatCode
                     options.generatedDate = mapping.options.generatedDate
+                    options.beanValidationValidOnReactive = mapping.options.beanValidationValidOnReactive
                 }
             }
 

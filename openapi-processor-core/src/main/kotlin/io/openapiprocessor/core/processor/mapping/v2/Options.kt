@@ -60,5 +60,12 @@ data class Options(
     /**
      * enable/disable the @Generated date (optional)
      */
-    val generatedDate: Boolean = true
+    val generatedDate: Boolean = true,
+
+    /**
+     * bean validation (compatibility)
+     *
+     * add @Valid on reactive type and not on the wrapped type
+     */
+    val beanValidationValidOnReactive: Boolean = true
 )

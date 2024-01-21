@@ -35,6 +35,10 @@
           "default": false,
           "enum": [false, true, "javax", "jakarta"]
         },
+        "bean-validation-valid-on-reactive": {
+          "description": "(compatibility) add bean validation @Valid annotation to reactive types.",
+          "default": true
+        },
         "javadoc": {
           "description": "generate javadoc from OpenAPI 'description' properties.",
           "type": "boolean",
