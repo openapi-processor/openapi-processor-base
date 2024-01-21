@@ -34,7 +34,7 @@ class BeanValidationFactorySpec extends Specification {
             'Foo', '', [:], null, false, null)
 
         when:
-        def info = validation.validate (dataType, false)
+        def info = validation.validate (dataType, false, false)
 
         then:
         def prop = info.prop
@@ -53,7 +53,7 @@ class BeanValidationFactorySpec extends Specification {
         def dataType = new OtherDataType()
 
         when:
-        def info = validation.validate (dataType, false)
+        def info = validation.validate (dataType, false, false)
 
         then:
         info.annotations == []
@@ -69,7 +69,7 @@ class BeanValidationFactorySpec extends Specification {
         def dataType = new StringDataType("string", constraints, false, null)
 
         when:
-        def info = validation.validate (dataType, false)
+        def info = validation.validate (dataType, false, false)
 
         then:
         info.annotations.collect {it.imports }.flatten().containsAll (resultImports)
@@ -96,7 +96,7 @@ class BeanValidationFactorySpec extends Specification {
         DataType dataType = new ArrayDataType(new NoneDataType(), constraints, false)
 
         when:
-        def info = validation.validate (dataType, false)
+        def info = validation.validate (dataType, false, false)
 
         then:
         info.annotations.collect {it.imports }.flatten().containsAll (resultImports)
@@ -126,11 +126,12 @@ class BeanValidationFactorySpec extends Specification {
             new StringDataType (),
             constraints,
             false,
-            null
+            null,
+            false
         )
 
         when:
-        def info = validation.validate (dataType, false)
+        def info = validation.validate (dataType, false, false)
 
         then:
         info.annotations.collect {it.imports }.flatten().containsAll (resultImports)
@@ -152,7 +153,7 @@ class BeanValidationFactorySpec extends Specification {
         DataType dataType = createDataType (type, new DataTypeConstraints ())
 
         when:
-        def info = validation.validate (dataType, required)
+        def info = validation.validate (dataType, required, false)
 
         then:
         info.annotations.collect {it.imports }.flatten().containsAll (resultImports)
@@ -178,7 +179,7 @@ class BeanValidationFactorySpec extends Specification {
         DataType dataType = createDataType (type, constraints)
 
         when:
-        def info = validation.validate (dataType, false)
+        def info = validation.validate (dataType, false, false)
 
         then:
         info.annotations.collect {it.imports }.flatten().containsAll (resultImports)
@@ -216,7 +217,7 @@ class BeanValidationFactorySpec extends Specification {
         DataType dataType = createDataType (type, constraints)
 
         when:
-        def info = validation.validate (dataType, false)
+        def info = validation.validate (dataType, false, false)
 
         then:
         info.annotations.collect {it.imports }.flatten().containsAll (resultImports)
@@ -255,7 +256,7 @@ class BeanValidationFactorySpec extends Specification {
         DataType dataType = new DoubleDataType ("number:double", constraints, false, null)
 
         when:
-        def info = validation.validate (dataType, false)
+        def info = validation.validate (dataType, false, false)
 
         then:
         info.annotations.collect {it.imports }.flatten().containsAll (resultImports)
@@ -295,7 +296,8 @@ class BeanValidationFactorySpec extends Specification {
                     new StringDataType (),
                     constraints,
                     false,
-                    null
+                    null,
+                    false
                 )
         }
         null

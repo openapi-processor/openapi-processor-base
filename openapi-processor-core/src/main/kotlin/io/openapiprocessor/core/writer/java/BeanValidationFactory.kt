@@ -27,26 +27,34 @@ open class BeanValidationFactory(
         return BeanValidationInfoSimple(dataType, emptyList())
     }
 
-    fun validate(dataType: DataType, required: Boolean = false): BeanValidationInfo {
+    fun validate(dataType: DataType, required: Boolean = false, parentHasValid: Boolean = false): BeanValidationInfo {
         return if (dataType is CollectionDataType) {
+            val (annotations, valid) = collectAnnotationsWithValid(dataType, required, parentHasValid)
+
             BeanValidationInfoCollection(
                 dataType,
-                collectAnnotations(dataType, required),
-                validate(dataType.item, false)
+                annotations,
+                validate(dataType.item, parentHasValid = valid)
             )
         } else {
             BeanValidationInfoSimple(
                 dataType,
-                collectAnnotations(dataType, required)
+                collectAnnotations(dataType, required, parentHasValid)
             )
         }
     }
 
-    private fun collectAnnotations(dataType: DataType, required: Boolean = false): List<Annotation>  {
-        val annotations = mutableListOf<Annotation>()
+    private fun collectAnnotations(dataType: DataType, required: Boolean = false, parentHasValid: Boolean): List<Annotation> {
+        return collectAnnotationsWithValid(dataType, required, parentHasValid).first
+    }
 
-        if (dataType.shouldHaveValid()) {
+    private fun collectAnnotationsWithValid(dataType: DataType, required: Boolean = false, parentHasValid: Boolean): Pair<List<Annotation>, Boolean>  {
+        val annotations = mutableListOf<Annotation>()
+        var valid = false
+
+        if (!parentHasValid && dataType.shouldHaveValid(options)) {
             annotations.add(Annotation(validations.VALID))
+            valid = true
         }
 
         val sourceDataType = getSourceDataType(dataType)
@@ -78,7 +86,7 @@ open class BeanValidationFactory(
             annotations.add(createValuesAnnotation(dataType))
         }
 
-        return annotations
+        return Pair(annotations, valid)
     }
 
     private fun getSourceDataType(dataType: DataType): DataType {
@@ -168,24 +176,48 @@ open class BeanValidationFactory(
     }
 }
 
-private fun DataType.shouldHaveValid(): Boolean {
-    if (this is ModelDataType)
-        return true
+private fun DataType.shouldHaveValid(options: ApiOptions): Boolean {
+    if (options.beanValidationValidOnReactive) {
+        if (this is SingleDataType)
+            return true
 
-    if (this is ArrayDataType)
-        return item is ModelDataType
+        if (this is ModelDataType)
+            return true
 
-    if (this is InterfaceDataType)
-        return true
+        if (this is ArrayDataType)
+            return item is ModelDataType
 
-    if (this is MappedCollectionDataType)
+        if (this is InterfaceDataType)
+            return true
+
+        if (this is MappedCollectionDataType)
+            return multi
+
+        if (this is MappedSourceDataType) {
+            return sourceDataType?.shouldHaveValid(options) ?: false
+        }
+
         return false
 
-    if (this is MappedSourceDataType) {
-        return sourceDataType?.shouldHaveValid() ?: false
-    }
+    } else {
+        if (this is ModelDataType)
+            return true
 
-    return false
+        if (this is ArrayDataType)
+            return item is ModelDataType
+
+        if (this is InterfaceDataType)
+            return true
+
+        if (this is MappedCollectionDataType)
+            return false
+
+        if (this is MappedSourceDataType) {
+            return sourceDataType?.shouldHaveValid(options) ?: false
+        }
+
+        return false
+    }
 }
 
 private fun DataType.isString(): Boolean = this is StringDataType

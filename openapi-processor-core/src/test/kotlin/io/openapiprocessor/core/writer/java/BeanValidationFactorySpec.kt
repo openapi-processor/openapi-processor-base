@@ -194,4 +194,46 @@ class BeanValidationFactorySpec : StringSpec({
         io.imports shouldBe setOf("${apiOptions.packageName}.validation.Values")
         io.annotations.shouldBeEmpty()
     }
+
+    "does apply @Valid annotations to single wrapper, not to the wrapped type" {
+        val dataType = SingleDataType (
+            "Single",
+            "wrapper",
+            ObjectDataType("Foo", "pkg", linkedMapOf("foo" to propertyDataType(StringDataType())))
+        )
+        val info = validation.validate(dataType, true)
+
+        val prop = info.prop
+        prop.dataTypeValue shouldBe "Single<Foo>"
+        prop.imports shouldBe setOf(validations.NOT_NULL, validations.VALID)
+        prop.annotations shouldBe setOf("@Valid", "@NotNull")
+
+        val io = info.inout
+        io.dataTypeValue shouldBe "@Valid @NotNull Single<Foo>"
+        io.imports shouldBe setOf(validations.NOT_NULL, validations.VALID)
+        io.annotations.shouldBeEmpty()
+    }
+
+    "does apply @Valid annotations to multi wrapper, not to the wrapped type" {
+        val dataType = MappedCollectionDataType(
+            "Multi",
+            "wrapper",
+            ObjectDataType("Foo", "pkg", linkedMapOf("foo" to propertyDataType(StringDataType()))),
+            null,
+            false,
+            multi = true
+        )
+
+        val info = validation.validate(dataType, true)
+
+        val prop = info.prop
+        prop.dataTypeValue shouldBe "Multi<Foo>"
+        prop.imports shouldBe setOf(validations.NOT_NULL, validations.VALID)
+        prop.annotations shouldBe setOf("@Valid", "@NotNull")
+
+        val io = info.inout
+        io.dataTypeValue shouldBe "@Valid @NotNull Multi<Foo>"
+        io.imports shouldBe setOf(validations.NOT_NULL, validations.VALID)
+        io.annotations.shouldBeEmpty()
+    }
 })

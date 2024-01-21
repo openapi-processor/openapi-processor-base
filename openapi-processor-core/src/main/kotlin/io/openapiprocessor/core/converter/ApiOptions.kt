@@ -99,6 +99,10 @@ class ApiOptions {
         }
     }
 
+    /**
+     * (compatibility) add @Valid on reactive type and not on the wrapped type
+     */
+    var beanValidationValidOnReactive = true
 }
 
 /**

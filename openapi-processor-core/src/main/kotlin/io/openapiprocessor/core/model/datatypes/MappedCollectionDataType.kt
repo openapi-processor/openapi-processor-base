@@ -17,7 +17,8 @@ open class MappedCollectionDataType(
     override val item: DataType,
     override val constraints: DataTypeConstraints? = null,
     override val deprecated: Boolean = false,
-    override val sourceDataType: DataType? = null
+    override val sourceDataType: DataType? = null,
+    val multi: Boolean = false
 ): DataType, CollectionDataType, MappedSourceDataType {
 
     override fun getName(): String {

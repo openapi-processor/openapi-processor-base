@@ -53,7 +53,8 @@ class MultiDataTypeWrapper(
             targetType.getPkg(),
             (dataType as CollectionDataType).item,
             null,
-            false
+            false,
+            multi = true
         )
     }
 

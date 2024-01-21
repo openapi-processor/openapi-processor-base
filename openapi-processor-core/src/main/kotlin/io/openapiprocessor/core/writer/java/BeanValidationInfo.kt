@@ -11,7 +11,7 @@ import io.openapiprocessor.core.model.datatypes.*
 data class BeanValidationValue(
     val dataTypeValue: String,
     val imports: Set<String>,
-    val annotations: List<String>)
+    val annotations: List<String>) // could be set?
 
 interface BeanValidationInfo {
     val dataType: DataType
