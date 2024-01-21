@@ -53,7 +53,11 @@ class ProcessorPendingSpec: StringSpec({
 
 private fun sources(): Collection<TestSet> {
     return listOf(
-        testSet("map-to-primitive-data-types", INTERNAL, API_30, model = "record", outputs = "outputs.yaml", expected = "outputs"),
+        testSet("bean-validation-requestbody-mapping", INTERNAL, API_31, model = "default", outputs = "outputs.yaml", expected = "outputs"),
+//        testSet("extension-mapping", INTERNAL, API_30, model = "default", outputs = "outputs.yaml", expected = "outputs"),
+//        testSet("extension-mapping", INTERNAL, API_30, model = "record", outputs = "outputs.yaml", expected = "outputs"),
+//        testSet("extension-mapping", INTERNAL, API_31, model = "default", outputs = "outputs.yaml", expected = "outputs"),
+//        testSet("extension-mapping", INTERNAL, API_31, model = "record", outputs = "outputs.yaml", expected = "outputs"),
         //testSet("endpoint-http-mapping", INTERNAL, API_30, model = "record", outputs = "outputs.yaml", expected = "outputs"),
         //testSet("endpoint-http-mapping", OPENAPI4J, API_30, model = "record", outputs = "outputs.yaml", expected = "outputs"),
 //        testSet("endpoint-http-mapping", SWAGGER, API_30, model = "record", outputs = "outputs.yaml", expected = "outputs"),

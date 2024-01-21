@@ -14,6 +14,6 @@ public interface Api {
     void postFoo(@Parameter @Valid Bar body);
 
     @Mapping("/foo-flux")
-    void postFooFlux(@Parameter Flux<@Valid Bar> body);
+    void postFooFlux(@Parameter @Valid Flux<Bar> body);
 
 }
