@@ -110,7 +110,7 @@ class ApiOptions {
 val ApiOptions.resultStyle: ResultStyle
     get() {
         val matches = typeMappings
-            .filterIsInstance(ResultStyleOptionMapping::class.java)
+            .filterIsInstance<ResultStyleOptionMapping>()
 
         if (matches.isEmpty())
             return ResultStyle.SUCCESS
