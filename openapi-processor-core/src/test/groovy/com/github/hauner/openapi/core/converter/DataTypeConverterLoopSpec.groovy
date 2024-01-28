@@ -24,6 +24,7 @@ import io.openapiprocessor.core.model.datatypes.ObjectDataType
 import io.openapiprocessor.core.model.datatypes.PropertyDataType
 import spock.lang.Specification
 
+import static com.github.hauner.openapi.core.test.FactoryHelper.apiConverter
 import static com.github.hauner.openapi.core.test.OpenApiParser.parse
 
 
@@ -60,7 +61,7 @@ components:
 """)
 
         when:
-        def api = new ApiConverter (new ApiOptions(), Stub (Framework))
+        def api = apiConverter (Stub (Framework))
             .convert (openApi)
 
         then:

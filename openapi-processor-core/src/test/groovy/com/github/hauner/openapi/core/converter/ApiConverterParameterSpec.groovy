@@ -16,18 +16,13 @@
 
 package com.github.hauner.openapi.core.converter
 
-import io.openapiprocessor.core.converter.ApiConverter
 import io.openapiprocessor.core.converter.ApiOptions
-import io.openapiprocessor.core.converter.mapping.AddParameterTypeMapping
-import io.openapiprocessor.core.converter.mapping.Annotation
-import io.openapiprocessor.core.converter.mapping.EndpointTypeMapping
-import io.openapiprocessor.core.converter.mapping.TypeMapping
-import io.openapiprocessor.core.framework.FrameworkBase
-import io.openapiprocessor.core.converter.mapping.UnknownParameterTypeException
+import io.openapiprocessor.core.converter.mapping.*
 import io.openapiprocessor.core.model.parameters.AdditionalParameter
 import spock.lang.Ignore
 import spock.lang.Specification
 
+import static com.github.hauner.openapi.core.test.FactoryHelper.apiConverter
 import static com.github.hauner.openapi.core.test.OpenApiParser.parse
 
 class ApiConverterParameterSpec extends Specification {
@@ -59,7 +54,7 @@ paths:
 """)
 
         when:
-        def api = new ApiConverter (new ApiOptions(), new FrameworkBase ())
+        def api = apiConverter ()
             .convert (openApi)
 
         then:
@@ -98,7 +93,7 @@ paths:
 """)
 
         when:
-        def api = new ApiConverter (new ApiOptions(), new FrameworkBase ())
+        def api = apiConverter ()
             .convert (openApi)
 
         then:
@@ -137,7 +132,7 @@ paths:
 """)
 
         when:
-        def api = new ApiConverter (new ApiOptions(), new FrameworkBase ())
+        def api = apiConverter ()
             .convert (openApi)
 
         then:
@@ -176,7 +171,7 @@ paths:
 """)
 
         when:
-        def api = new ApiConverter (new ApiOptions(), new FrameworkBase ())
+        def api = apiConverter ()
             .convert (openApi)
 
         then:
@@ -223,7 +218,7 @@ paths:
         ])
 
         when:
-        def api = new ApiConverter (options, new FrameworkBase ())
+        def api = apiConverter (options)
             .convert (openApi)
 
         then:
@@ -272,7 +267,7 @@ paths:
         ])
 
         when:
-        def api = new ApiConverter (options, new FrameworkBase ())
+        def api = apiConverter (options)
             .convert (openApi)
 
         then:
@@ -316,7 +311,8 @@ paths:
 """)
 
         when:
-        new ApiConverter (null, null).convert (openApi)
+        apiConverter ()
+            .convert (openApi)
 
         then:
         def e = thrown (UnknownParameterTypeException)
@@ -349,7 +345,7 @@ paths:
 """)
 
         when:
-        def api = new ApiConverter (new ApiOptions(), new FrameworkBase ())
+        def api = apiConverter ()
             .convert (openApi)
 
         then:
@@ -358,5 +354,4 @@ paths:
         def param = ep.parameters.first ()
         param.deprecated
     }
-
 }

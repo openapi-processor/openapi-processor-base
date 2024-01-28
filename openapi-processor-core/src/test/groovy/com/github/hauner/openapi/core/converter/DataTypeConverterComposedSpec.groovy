@@ -22,6 +22,7 @@ import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.model.datatypes.ObjectDataType
 import spock.lang.Specification
 
+import static com.github.hauner.openapi.core.test.FactoryHelper.apiConverter
 import static com.github.hauner.openapi.core.test.OpenApiParser.parse
 
 class DataTypeConverterComposedSpec extends Specification {
@@ -62,7 +63,7 @@ components:
 """)
 
         when:
-        def api = new ApiConverter (new ApiOptions(), Stub (Framework))
+        def api = apiConverter (Stub (Framework))
             .convert (openApi)
 
         then:

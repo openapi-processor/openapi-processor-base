@@ -16,15 +16,13 @@
 
 package com.github.hauner.openapi.core.converter
 
-import io.openapiprocessor.core.converter.ApiConverter
+import com.github.hauner.openapi.core.test.ModelAsserts
 import io.openapiprocessor.core.converter.ApiConverterKt
 import io.openapiprocessor.core.framework.Framework
-import io.openapiprocessor.core.model.Api
-import com.github.hauner.openapi.core.test.ModelAsserts
-import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.parser.HttpMethod
 import spock.lang.Specification
 
+import static com.github.hauner.openapi.core.test.FactoryHelper.apiConverter
 import static com.github.hauner.openapi.core.test.OpenApiParser.parse
 
 class ApiConverterEndpointSpec extends Specification implements ModelAsserts {
@@ -58,7 +56,7 @@ components:
           type: string
 """)
         when:
-        Api api = new ApiConverter (new ApiOptions(), Stub (Framework))
+        api = apiConverter (Stub (Framework))
             .convert (openApi)
 
         then:
@@ -95,7 +93,7 @@ paths:
 """)
 
         when:
-        Api api = new ApiConverter (new ApiOptions(), Stub (Framework))
+        api = apiConverter (Stub (Framework))
             .convert (openApi)
 
         then:
@@ -130,7 +128,7 @@ paths:
 """)
 
         when:
-        Api api = new ApiConverter (new ApiOptions(), Stub(Framework))
+        api = apiConverter (Stub (Framework))
             .convert (openApi)
 
         then:
@@ -163,7 +161,7 @@ paths:
 """)
 
         when:
-        api = new ApiConverter (new ApiOptions(), Stub(Framework))
+        api = apiConverter (Stub (Framework))
             .convert (openApi)
 
         then:
@@ -192,7 +190,7 @@ paths:
 """)
 
         when:
-        api = new ApiConverter (new ApiOptions(), Stub (Framework))
+        api = apiConverter (Stub (Framework))
             .convert (openApi)
 
         then:

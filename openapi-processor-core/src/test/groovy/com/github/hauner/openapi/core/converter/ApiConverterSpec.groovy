@@ -6,7 +6,6 @@
 package com.github.hauner.openapi.core.converter
 
 import com.github.hauner.openapi.core.test.ModelAsserts
-import io.openapiprocessor.core.converter.ApiConverter
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.mapping.EndpointTypeMapping
 import io.openapiprocessor.core.framework.Framework
@@ -15,6 +14,7 @@ import io.openapiprocessor.core.writer.java.*
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import static com.github.hauner.openapi.core.test.FactoryHelper.apiConverter
 import static com.github.hauner.openapi.core.test.OpenApiParser.parse
 
 class ApiConverterSpec extends Specification implements ModelAsserts {
@@ -53,7 +53,7 @@ paths:
 """)
 
         when:
-        api = new ApiConverter (new ApiOptions(), Stub (Framework))
+        api = apiConverter (Stub (Framework))
             .convert (openApi)
 
         then:
@@ -89,7 +89,7 @@ paths:
 """)
 
         when:
-        api = new ApiConverter (new ApiOptions(), Stub (Framework))
+        api = apiConverter (Stub (Framework))
             .convert (openApi)
 
         then:
@@ -118,21 +118,21 @@ paths:
 """)
 
         when:
-        def opts = new ApiOptions()
-        api = new ApiConverter (opts, Stub (Framework))
+        def options = new ApiOptions()
+        api = apiConverter (options, Stub (Framework))
             .convert (openApi)
 
         def w = new InterfaceWriter (
-            opts,
+            options,
             Stub (GeneratedWriter),
             new MethodWriter(
-                opts,
+                options,
                 Stub (MappingAnnotationWriter),
                 Stub (ParameterAnnotationWriter),
                 Stub (BeanValidationFactory),
                 Stub (JavaDocWriter)),
             new TestFrameworkAnnotations(),
-            new BeanValidationFactory(opts),
+            new BeanValidationFactory(options),
             new DefaultImportFilter())
         def writer = new StringWriter()
         w.write (writer, api.interfaces.get (0))
@@ -166,7 +166,7 @@ paths:
         )
 
         when:
-        def api = new ApiConverter (options, Stub (Framework))
+        api = apiConverter (options, Stub(Framework))
             .convert (openApi)
 
         then:
@@ -190,7 +190,7 @@ paths:
 """)
 
         when:
-        def api = new ApiConverter (new ApiOptions(), Stub (Framework))
+        api = apiConverter (Stub (Framework))
             .convert (openApi)
 
         then:
@@ -224,7 +224,7 @@ paths:
         ])
 
         when:
-        def api = new ApiConverter (options, Stub (Framework))
+        def api = apiConverter (options, Stub (Framework))
             .convert (openApi)
 
         then:
@@ -233,5 +233,4 @@ paths:
         result[0].interfaceName == 'Api'
         result[1].interfaceName == 'ExcludedApi'
     }
-
 }

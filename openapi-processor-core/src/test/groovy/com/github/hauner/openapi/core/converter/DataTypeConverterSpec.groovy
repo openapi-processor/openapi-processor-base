@@ -36,6 +36,7 @@ import org.jetbrains.annotations.NotNull
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import static com.github.hauner.openapi.core.test.FactoryHelper.apiConverter
 import static com.github.hauner.openapi.core.test.OpenApiParser.parse
 
 class DataTypeConverterSpec extends Specification {
@@ -176,7 +177,7 @@ paths:
         when:
         def options = new ApiOptions(packageName: 'pkg')
 
-        Api api = new ApiConverter (options, Stub (Framework))
+        Api api = apiConverter (options, Stub (Framework))
             .convert (openApi)
 
         then:
@@ -212,7 +213,7 @@ paths:
         when:
         def options = new ApiOptions(packageName: 'pkg')
 
-        Api api = new ApiConverter (options, Stub (Framework))
+        Api api = apiConverter (options, Stub (Framework))
             .convert (openApi)
 
         then:
@@ -262,7 +263,7 @@ components:
         when:
         def options = new ApiOptions(packageName: 'pkg')
 
-        Api api = new ApiConverter (options, Stub (Framework))
+        Api api = apiConverter (options, Stub (Framework))
             .convert (openApi)
 
         then:
@@ -318,7 +319,7 @@ components:
         when:
         def options = new ApiOptions(packageName: 'pkg')
 
-        Api api = new ApiConverter (options, Stub (Framework))
+        Api api = apiConverter (options, Stub (Framework))
             .convert (openApi)
 
         then:
@@ -371,7 +372,7 @@ components:
         when:
         def options = new ApiOptions(packageName: 'pkg')
 
-        Api api = new ApiConverter (options, Stub (Framework))
+        Api api = apiConverter (options, Stub (Framework))
             .convert (openApi)
 
         then:
@@ -415,7 +416,7 @@ paths:
         when:
         def options = new ApiOptions(packageName: 'pkg')
 
-        Api api = new ApiConverter (options, Stub (Framework))
+        Api api = apiConverter (options, Stub (Framework))
             .convert (openApi)
 
         then:

@@ -29,6 +29,7 @@ import io.openapiprocessor.core.parser.ParserType
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import static com.github.hauner.openapi.core.test.FactoryHelper.apiConverter
 import static com.github.hauner.openapi.core.test.OpenApiParser.parse
 
 class DataTypeConverterPrimitiveTypeMappingSpec extends Specification {
@@ -65,7 +66,7 @@ paths:
                     'java.time.ZonedDateTime')
             ])
 
-        Api api = new ApiConverter (options, new FrameworkBase ())
+        Api api = apiConverter (options)
             .convert (openApi)
 
         then:
@@ -115,7 +116,7 @@ paths:
                     'io.openapiprocessor.Bar')
             ])
 
-        Api api = new ApiConverter (options, new FrameworkBase ())
+        Api api = apiConverter (options)
             .convert (openApi)
 
         then:
@@ -160,7 +161,7 @@ components:
                     'java.util.UUID')
             ])
 
-        Api api = new ApiConverter (options, new FrameworkBase ())
+        Api api = apiConverter (options)
             .convert (openApi)
 
         then:
@@ -210,7 +211,7 @@ paths:
                     'java.time.ZonedDateTime')
             ])
 
-        new ApiConverter (options, Stub (Framework))
+        apiConverter (options, Stub (Framework))
             .convert (openApi)
 
         then:
@@ -244,7 +245,7 @@ paths:
         when:
         def options = new ApiOptions(packageName: 'pkg', typeMappings: mappings)
 
-        Api api = new ApiConverter (options, new FrameworkBase ())
+        Api api = apiConverter (options)
             .convert (openApi)
 
         then:

@@ -30,6 +30,7 @@ import io.openapiprocessor.core.model.Api
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import static com.github.hauner.openapi.core.test.FactoryHelper.apiConverter
 import static com.github.hauner.openapi.core.test.OpenApiParser.parse
 
 class DataTypeConverterObjectTypeMappingSpec extends Specification {
@@ -111,7 +112,7 @@ components:
                     false, false)
             ])
 
-        Api api = new ApiConverter (options, new FrameworkBase ())
+        Api api = apiConverter (options)
             .convert (openApi)
 
         then:
@@ -169,7 +170,7 @@ components:
                     'Pageable',
                     'org.springframework.data.domain.Pageable')
             ])
-        new ApiConverter (options, Stub (Framework))
+        apiConverter (options, Stub (Framework))
             .convert (openApi)
 
         then:
@@ -233,7 +234,7 @@ components:
                             'someB.ObjectB')])
             ])
 
-        Api api = new ApiConverter (options, new FrameworkBase ())
+        Api api = apiConverter (options)
             .convert (openApi)
 
         then:
@@ -277,7 +278,7 @@ paths:
         when:
         def options = new ApiOptions(packageName: 'pkg', typeMappings: mappings)
 
-        Api api = new ApiConverter (options, new FrameworkBase ())
+        Api api = apiConverter (options)
             .convert (openApi)
 
         then:
@@ -338,7 +339,7 @@ paths:
             packageName: 'pkg',
             typeMappings: mappings)
 
-        Api api = new ApiConverter (options, Stub (Framework))
+        Api api = apiConverter (options, Stub (Framework))
             .convert (openApi)
 
         then:
@@ -459,7 +460,7 @@ components:
                 ])
             ])
 
-        Api api = new ApiConverter (options, new FrameworkBase ())
+        Api api = apiConverter (options)
             .convert (openApi)
 
         then:
@@ -521,7 +522,7 @@ components:
                 ])
             ])
 
-        Api api = new ApiConverter (options, new FrameworkBase ())
+        Api api = apiConverter (options)
             .convert (openApi)
 
         then:
