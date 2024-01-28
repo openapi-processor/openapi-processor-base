@@ -10,13 +10,43 @@ import spock.lang.Unroll
 
 class IdentifierSpec extends Specification {
 
+    void "recognize word break if a digit is followed by a letter" () {
+        def convert = new JavaIdentifier(new IdentifierOptions(true))
+
+        expect:
+        convert.toCamelCase(src) == camelCase
+        convert.toIdentifier(src) == identifier
+        convert.toClass(src) == clazz
+        convert.toEnum(src) == enumn
+
+        where:
+        src       | camelCase | identifier | clazz     | enumn
+        "foo2Bar" | "foo2Bar" | "foo2Bar"  | "Foo2Bar" | "FOO2_BAR"
+    }
+
+    void "recognize word break if a digit is followed by a letter" () {
+        def convert = new JavaIdentifier(new IdentifierOptions(false))
+
+        expect:
+        convert.toCamelCase(src) == camelCase
+        convert.toIdentifier(src) == identifier
+        convert.toClass(src) == clazz
+        convert.toEnum(src) == enumn
+
+        where:
+        src       | camelCase | identifier | clazz     | enumn
+        "foo2Bar" | "foo2bar" | "foo2bar"  | "Foo2bar" | "FOO2BAR"
+    }
+
     @Unroll
     void "convert source string '#src' to valid identifiers: #identifier/#clazz/#enumn" () {
+        def convert = new JavaIdentifier(new IdentifierOptions(true))
+
         expect:
-        Identifier.toCamelCase (src) == camelCase
-        Identifier.toIdentifier (src) == identifier
-        Identifier.toClass (src) == clazz
-        Identifier.toEnum (src) == enumn
+        convert.toCamelCase (src) == camelCase
+        convert.toIdentifier (src) == identifier
+        convert.toClass (src) == clazz
+        convert.toEnum (src) == enumn
 
         where:
         src              | camelCase      | identifier     | clazz          | enumn
@@ -40,14 +70,14 @@ class IdentifierSpec extends Specification {
         'api/some/thing' | 'apiSomeThing' | 'apiSomeThing' | "ApiSomeThing" | "API_SOME_THING"
         "_fo-o"          | 'foO'          | 'foO'          | 'FoO'          | "FO_O"
 
-        // word break at underscore, it is||valid but unwanted except for enums
+        // word break at underscore, it is valid but unwanted except for enums
         "_ab"            | "ab"           | "ab"           | "Ab"           | "AB"
         "a_b"            | "aB"           | "aB"           | "AB"           | "A_B"
         "a_foo"          | "aFoo"         | "aFoo"         | "AFoo"         | "A_FOO"
         "A_A"            | "aA"           | "aA"           | "AA"           | "A_A"
         "FOO_FOO"        | "fooFoo"       | "fooFoo"       | "FooFoo"       | "FOO_FOO"
 
-        // word break at case change: lowe|| to upper, preserve camel case
+        // word break at case change: lower to upper, preserve camel case
         "fooBar"         | "fooBar"       | "fooBar"       | "FooBar"       | "FOO_BAR"
         "fooBAr"         | "fooBar"       | "fooBar"       | "FooBar"       | "FOO_BAR"
         "fooBAR"         | "fooBar"       | "fooBar"       | "FooBar"       | "FOO_BAR"
@@ -61,5 +91,10 @@ class IdentifierSpec extends Specification {
         "class"          | "class"        | "aClass"       | "Class"        | "CLASS"
         "public"         | "public"       | "aPublic"      | "Public"       | "PUBLIC"
         "final"          | "final"        | "aFinal"       | "Final"        | "FINAL"
+
+        // word break on last digit when the next character is a letter
+        "foo2bar"        | "foo2Bar"         | "foo2Bar"   | "Foo2Bar"      | "FOO2_BAR"
+        "foo2Bar"        | "foo2Bar"         | "foo2Bar"   | "Foo2Bar"      | "FOO2_BAR"
+        "foo22Bar"       | "foo22Bar"        | "foo22Bar"  | "Foo22Bar"     | "FOO22_BAR"
     }
 }
