@@ -36,7 +36,8 @@ class TestProcessor:
             }
 
             val options = convertOptions(processorOptions)
-            val cv = ApiConverter(options, FrameworkBase())
+            val identifier = JavaIdentifier(IdentifierOptions(options.identifierWordBreakFromDigitToLetter))
+            val cv = ApiConverter(options, identifier, FrameworkBase())
             val api = cv.convert(openapi)
 
             val generatedInfo = GeneratedInfo(

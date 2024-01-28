@@ -12,17 +12,17 @@ import io.openapiprocessor.core.converter.wrapper.ResultDataTypeWrapper
 import io.openapiprocessor.core.converter.wrapper.SingleDataTypeWrapper
 import io.openapiprocessor.core.framework.Framework
 import io.openapiprocessor.core.model.*
-import io.openapiprocessor.core.model.RequestBody as ModelRequestBody
-import io.openapiprocessor.core.model.Response as ModelResponse
-import io.openapiprocessor.core.model.parameters.Parameter as ModelParameter
 import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.parser.*
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.parser.RequestBody
 import io.openapiprocessor.core.parser.Response
-import io.openapiprocessor.core.writer.java.toClass
+import io.openapiprocessor.core.writer.Identifier
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import io.openapiprocessor.core.model.RequestBody as ModelRequestBody
+import io.openapiprocessor.core.model.Response as ModelResponse
+import io.openapiprocessor.core.model.parameters.Parameter as ModelParameter
 
 const val MULTIPART = "multipart/"
 const val INTERFACE_DEFAULT_NAME = ""
@@ -33,6 +33,7 @@ const val INTERFACE_DEFAULT_NAME = ""
  */
 class  ApiConverter(
     private val options: ApiOptions,
+    private val identifier: Identifier,
     private val framework: Framework
 ) {
     val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
@@ -313,11 +314,11 @@ class  ApiConverter(
     }
 
     private fun getInlineRequestBodyName(path: String, method: HttpMethod): String {
-        return toClass(path) + method.method.replaceFirstChar { it.uppercase() } + "RequestBody"
+        return identifier.toClass(path) + method.method.replaceFirstChar { it.uppercase() } + "RequestBody"
     }
 
     private fun getInlineResponseName(path: String, method: HttpMethod, httpStatus: String): String {
-        return toClass(path) + method.method.replaceFirstChar { it.uppercase() } + "Response" + httpStatus
+        return identifier.toClass(path) + method.method.replaceFirstChar { it.uppercase() } + "Response" + httpStatus
     }
 
     private fun isExcluded(path: String, method: HttpMethod): Boolean {
@@ -328,7 +329,7 @@ class  ApiConverter(
         var targetInterfaceName = INTERFACE_DEFAULT_NAME
 
         if((op.hasTags())) {
-            targetInterfaceName = toClass(op.getFirstTag()!!)
+            targetInterfaceName = identifier.toClass(op.getFirstTag()!!)
         }
 
         if (excluded) {
