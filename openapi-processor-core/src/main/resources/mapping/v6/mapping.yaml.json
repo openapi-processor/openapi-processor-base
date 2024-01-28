@@ -12,6 +12,9 @@
     "options": {
       "$ref": "#/definitions/Options"
     },
+    "compatibility": {
+      "$ref": "#/definitions/Compatibility"
+    },
     "map": {
       "$ref": "#/definitions/Map"
     }
@@ -34,10 +37,6 @@
           "description": "enable bean validation annotations for OpenAPI constraints.",
           "default": false,
           "enum": [false, true, "javax", "jakarta"]
-        },
-        "bean-validation-valid-on-reactive": {
-          "description": "(compatibility) add bean validation @Valid annotation to reactive types.",
-          "default": true
         },
         "javadoc": {
           "description": "generate javadoc from OpenAPI 'description' properties.",
@@ -82,6 +81,22 @@
       "required": [
         "package-name"
       ]
+    },
+    "Compatibility": {
+      "description": "backward compatibility options.",
+      "type": "object",
+      "properties": {
+        "bean-validation-valid-on-reactive": {
+          "description": "add bean validation @Valid annotation to reactive types.",
+          "type": "boolean",
+          "default": true
+        },
+        "identifier-word-break-from-digit-to-letter": {
+          "description": "identifier word break when switching from digits to letters.",
+          "type": "boolean",
+          "default": true
+        }
+      }
     },
     "Map": {
       "description": "global & path specific mapping rules.",

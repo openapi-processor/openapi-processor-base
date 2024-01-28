@@ -99,10 +99,17 @@ class ApiOptions {
         }
     }
 
+    // compatibility options
+
     /**
-     * (compatibility) add @Valid on reactive type and not on the wrapped type
+     * add @Valid on reactive type and not on the wrapped type
      */
     var beanValidationValidOnReactive = true
+
+    /**
+     * break identifier names from digits to letters.
+     */
+    var identifierWordBreakFromDigitToLetter = true
 }
 
 /**
