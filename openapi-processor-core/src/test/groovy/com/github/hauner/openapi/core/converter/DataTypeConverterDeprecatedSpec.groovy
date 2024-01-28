@@ -32,14 +32,14 @@ import io.openapiprocessor.core.parser.RefResolver
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import static com.github.hauner.openapi.core.test.FactoryHelper.apiConverter
 import static com.github.hauner.openapi.core.test.OpenApiParser.parse
 
 class DataTypeConverterDeprecatedSpec extends Specification {
 
     @Unroll
     void "converts primitive deprecated schema(#type, #format) to datatype" () {
-        def converter = new DataTypeConverter(
-            new ApiOptions(), new MappingFinder(), Stub(NullDataTypeWrapper))
+        def converter = new DataTypeConverter(new ApiOptions(), new MappingFinder(), Stub(NullDataTypeWrapper))
         def schema = new TestSchema (type: type, format: format, deprecated: deprecated)
 
         when:
@@ -119,7 +119,7 @@ components:
 """)
 
         when:
-        def api = new ApiConverter (new ApiOptions(), Stub (Framework))
+        def api = apiConverter (Stub (Framework))
             .convert (openApi)
 
         then:
@@ -163,7 +163,7 @@ components:
 """)
 
         when:
-        def api = new ApiConverter (new ApiOptions(), Stub (Framework))
+        def api = apiConverter (Stub (Framework))
             .convert (openApi)
 
         then:
@@ -203,8 +203,7 @@ paths:
 """)
 
         when:
-        def api = new ApiConverter (new ApiOptions(), new FrameworkBase ())
-            .convert (openApi)
+        def api = apiConverter().convert (openApi)
 
         then:
         def itf = api.interfaces.first ()
@@ -241,7 +240,7 @@ paths:
             packageName: 'pkg',
             typeMappings: [])
 
-        def api = new ApiConverter (options, new FrameworkBase())
+        def api = apiConverter (options)
             .convert (openApi)
 
         then:
@@ -281,8 +280,8 @@ paths:
                 new TypeMapping ('array', 'java.util.Collection')
             ])
 
-        def api = new ApiConverter (options, new FrameworkBase())
-            .convert (openApi)
+        def api = apiConverter (options)
+                .convert (openApi)
 
         then:
         def itf = api.interfaces.first ()

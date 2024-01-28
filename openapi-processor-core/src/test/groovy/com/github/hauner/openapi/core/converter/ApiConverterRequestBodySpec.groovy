@@ -16,16 +16,16 @@
 
 package com.github.hauner.openapi.core.converter
 
-import io.openapiprocessor.core.converter.ApiConverter
+
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.MultipartResponseBodyException
 import io.openapiprocessor.core.converter.mapping.EndpointTypeMapping
 import io.openapiprocessor.core.converter.mapping.TypeMapping
 import io.openapiprocessor.core.framework.Framework
-import io.openapiprocessor.core.framework.FrameworkBase
 import io.openapiprocessor.core.parser.ParserType
 import spock.lang.Specification
 
+import static com.github.hauner.openapi.core.test.FactoryHelper.apiConverter
 import static com.github.hauner.openapi.core.test.OpenApiParser.parse
 
 class ApiConverterRequestBodySpec extends Specification {
@@ -58,7 +58,7 @@ paths:
 """)
 
         when:
-        def api = new ApiConverter (new ApiOptions(), new FrameworkBase ())
+        def api = apiConverter ()
             .convert (openApi)
 
         then:
@@ -109,7 +109,7 @@ paths:
         ])
 
         when:
-        def api = new ApiConverter (options, new FrameworkBase())
+        def api = apiConverter (options)
             .convert (openApi)
 
         then:
@@ -152,7 +152,7 @@ paths:
         )
 
         when:
-        new ApiConverter (new ApiOptions(), Stub (Framework))
+        apiConverter (Stub (Framework))
             .convert (openApi)
 
         then:
@@ -190,11 +190,11 @@ paths:
         )
 
         when:
-        def cv = new ApiConverter (new ApiOptions(), Stub (Framework))
+        def api = apiConverter (Stub (Framework))
             .convert (openApi)
 
         then:
-        cv.dataTypes.modelDataTypes.empty
+        api.dataTypes.modelDataTypes.empty
     }
 
     void "converts request body multipart/* object" () {
@@ -246,7 +246,7 @@ paths:
         ])
 
         when:
-        def api = new ApiConverter (options, new FrameworkBase())
+        def api = apiConverter (options)
             .convert (openApi)
 
         then:
@@ -323,7 +323,7 @@ components:
         ])
 
         when:
-        def api = new ApiConverter (options, new FrameworkBase())
+        def api = apiConverter (options)
             .convert (openApi)
 
         then:

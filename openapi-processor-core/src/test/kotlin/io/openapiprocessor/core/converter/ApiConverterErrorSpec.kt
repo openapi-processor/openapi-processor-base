@@ -17,6 +17,7 @@ import io.mockk.mockk
 import io.openapiprocessor.core.converter.mapping.UnknownDataTypeException
 import io.openapiprocessor.core.framework.Framework
 import io.openapiprocessor.core.support.parse
+import io.openapiprocessor.core.writer.java.JavaIdentifier
 
 class ApiConverterErrorSpec: StringSpec({
     isolationMode = IsolationMode.InstancePerTest
@@ -29,7 +30,7 @@ class ApiConverterErrorSpec: StringSpec({
     }
 
     "logs error when datatype conversion fails" {
-        val converter = ApiConverter(ApiOptions(), mockk<Framework>())
+        val converter = ApiConverter(ApiOptions(), JavaIdentifier(), mockk<Framework>())
         val appender = addAppender(converter)
 
         val openApi = parse ("""

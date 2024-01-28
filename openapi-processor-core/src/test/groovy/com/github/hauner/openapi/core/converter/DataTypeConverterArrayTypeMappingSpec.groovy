@@ -16,19 +16,15 @@
 
 package com.github.hauner.openapi.core.converter
 
-import io.openapiprocessor.core.converter.ApiConverter
+
 import io.openapiprocessor.core.converter.ApiOptions
-import io.openapiprocessor.core.converter.mapping.AmbiguousTypeMappingException
-import io.openapiprocessor.core.converter.mapping.EndpointTypeMapping
-import io.openapiprocessor.core.converter.mapping.NameTypeMapping
-import io.openapiprocessor.core.converter.mapping.ContentTypeMapping
-import io.openapiprocessor.core.converter.mapping.TypeMapping
+import io.openapiprocessor.core.converter.mapping.*
 import io.openapiprocessor.core.framework.Framework
-import io.openapiprocessor.core.framework.FrameworkBase
 import io.openapiprocessor.core.model.Api
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import static com.github.hauner.openapi.core.test.FactoryHelper.apiConverter
 import static com.github.hauner.openapi.core.test.OpenApiParser.parse
 
 class DataTypeConverterArrayTypeMappingSpec extends Specification {
@@ -58,7 +54,7 @@ paths:
         def options = new ApiOptions(packageName: 'pkg', typeMappings: [
             new TypeMapping ('array', targetTypeName)
         ])
-        Api api = new ApiConverter (options, Stub (Framework))
+        Api api = apiConverter (options, Stub (Framework))
             .convert (openApi)
 
         then:
@@ -109,7 +105,7 @@ paths:
                     'java.util.Collection')
             ])
 
-        new ApiConverter (options, Stub (Framework))
+        apiConverter (options, Stub (Framework))
             .convert (openApi)
 
         then:
@@ -147,7 +143,7 @@ paths:
             packageName: 'pkg',
             typeMappings: mappings)
 
-        new ApiConverter (options, Stub (Framework))
+        apiConverter (options, Stub (Framework))
             .convert (openApi)
 
         then:
@@ -228,7 +224,7 @@ paths:
             ])
         ])
 
-        Api api = new ApiConverter (options, Stub (Framework))
+        Api api = apiConverter(options, Stub (Framework))
             .convert (openApi)
 
         then:
@@ -272,7 +268,7 @@ paths:
         when:
         def options = new ApiOptions(packageName: 'pkg', typeMappings: mappings)
 
-        Api api = new ApiConverter (options, new FrameworkBase ())
+        Api api = apiConverter (options)
             .convert (openApi)
 
         then:
@@ -332,7 +328,7 @@ paths:
         when:
         def options = new ApiOptions(packageName: 'pkg', typeMappings: mappings)
 
-        Api api = new ApiConverter (options, Stub (Framework))
+        Api api = apiConverter (options, Stub (Framework))
             .convert (openApi)
 
         then:

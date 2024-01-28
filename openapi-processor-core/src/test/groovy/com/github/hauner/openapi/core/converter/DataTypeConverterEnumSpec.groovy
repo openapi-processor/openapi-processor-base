@@ -23,6 +23,7 @@ import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.model.datatypes.StringDataType
 import spock.lang.Specification
 
+import static com.github.hauner.openapi.core.test.FactoryHelper.apiConverter
 import static com.github.hauner.openapi.core.test.OpenApiParser.parse
 
 
@@ -58,7 +59,7 @@ paths:
 """)
 
         when:
-        def api = new ApiConverter (new ApiOptions(), new FrameworkBase ())
+        def api = apiConverter ()
             .convert (openApi)
 
         then:
@@ -115,7 +116,7 @@ components:
 """)
 
         when:
-        def api = new ApiConverter (new ApiOptions(), Stub (Framework))
+        def api = apiConverter (Stub (Framework))
             .convert (openApi)
 
         then:
@@ -154,7 +155,7 @@ paths:
 """)
 
         when:
-        def api = new ApiConverter (new ApiOptions(enumType: "string"), new FrameworkBase ())
+        def api = apiConverter (new ApiOptions (enumType: "string"))
             .convert (openApi)
 
         then:

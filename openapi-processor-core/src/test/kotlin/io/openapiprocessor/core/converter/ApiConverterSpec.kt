@@ -13,6 +13,7 @@ import io.openapiprocessor.core.converter.mapping.TypeMapping
 import io.openapiprocessor.core.framework.FrameworkBase
 import io.openapiprocessor.core.model.Api
 import io.openapiprocessor.core.support.parse
+import io.openapiprocessor.core.writer.java.JavaIdentifier
 
 class ApiConverterSpec: StringSpec({
     isolationMode = IsolationMode.InstancePerTest
@@ -63,7 +64,7 @@ class ApiConverterSpec: StringSpec({
             )
         )
 
-        val api: Api = ApiConverter (options, FrameworkBase())
+        val api: Api = ApiConverter (options, JavaIdentifier(), FrameworkBase())
             .convert(openApi)
 
         api.getDataTypes().getModelDataTypes().size shouldBe 1
@@ -114,7 +115,7 @@ class ApiConverterSpec: StringSpec({
             )
         )
 
-        val api: Api = ApiConverter (options, FrameworkBase())
+        val api: Api = ApiConverter (options, JavaIdentifier(), FrameworkBase())
             .convert(openApi)
 
         api.getDataTypes().getModelDataTypes().size shouldBe 1
