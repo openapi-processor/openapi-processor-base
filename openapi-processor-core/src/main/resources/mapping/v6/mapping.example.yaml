@@ -13,9 +13,6 @@ options: # general processor options [required]
   # validation annotation (optional): true or false (default), javax, jakarta.
   bean-validation: jakarta
 
-  # compatibility
-  bean-validation-valid-on-reactive: true
-
   # generate javadoc from OpenAPI 'description' properties.
   javadoc: true
 
@@ -34,9 +31,9 @@ options: # general processor options [required]
   # generate common interface for an `oneOf` object list (optional): true or false (default)
   one-of-interface: true
 
-spring:
-  options:
-    enum: with-converter
+compatibility:
+  bean-validation-valid-on-reactive: false
+  identifier-word-break-from-digit-to-letter: false
 
 map: # the type mappings
 

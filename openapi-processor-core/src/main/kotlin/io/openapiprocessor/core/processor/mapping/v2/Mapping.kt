@@ -29,7 +29,12 @@ data class Mapping(
     /**
      * the type mappings
      */
-    val map: Map = Map()
+    val map: Map = Map(),
+
+    /**
+     * compatibility options
+     */
+    val compatibility: Compatibility = Compatibility()
 
 ): MappingVersion {
     override val v2: Boolean = true
