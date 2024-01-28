@@ -8,13 +8,14 @@
 package io.openapiprocessor.core.writer.java
 
 import io.openapiprocessor.core.support.capitalizeFirstChar
+import io.openapiprocessor.core.writer.Identifier
 import java.lang.Character.isJavaIdentifierPart
 import java.lang.Character.isJavaIdentifierStart
 import java.util.*
 import javax.lang.model.SourceVersion
 import kotlin.collections.ArrayList
 
-class JavaIdentifier(val options: IdentifierOptions = IdentifierOptions()) {
+class JavaIdentifier(val options: IdentifierOptions = IdentifierOptions()): Identifier {
     /**
      * converts a source string to a syntactically valid (camel case) java identifier. One way,
      * i.e. it is not reversible. It does not check if the identifier is a java keyword.
@@ -30,7 +31,7 @@ class JavaIdentifier(val options: IdentifierOptions = IdentifierOptions()) {
      * @param src the source "string"
      * @return a valid camel case java identifier
      */
-    fun toCamelCase(src: String): String {
+    override fun toCamelCase(src: String): String {
         return joinCamelCase(splitAtWordBreaks(src))
     }
 
@@ -42,7 +43,7 @@ class JavaIdentifier(val options: IdentifierOptions = IdentifierOptions()) {
      * @param src the source "string"
      * @return a valid camel case java identifier
      */
-    fun toIdentifier(src: String): String {
+    override fun toIdentifier(src: String): String {
         val identifier = joinCamelCase(splitAtWordBreaks(src))
 
         if (SourceVersion.isKeyword(identifier)) {
@@ -67,7 +68,7 @@ class JavaIdentifier(val options: IdentifierOptions = IdentifierOptions()) {
      *
      * @return a valid camel case java class identifier
      */
-    fun toClass(src: String): String {
+    override fun toClass(src: String): String {
         return toCamelCase(src).capitalizeFirstChar()
     }
 
@@ -85,7 +86,7 @@ class JavaIdentifier(val options: IdentifierOptions = IdentifierOptions()) {
      * @param src the source "string"
      * @return a valid upper case enum java identifier
      */
-    fun toEnum(src: String): String {
+    override fun toEnum(src: String): String {
         return joinEnum(splitAtWordBreaks(src))
     }
 
@@ -96,7 +97,7 @@ class JavaIdentifier(val options: IdentifierOptions = IdentifierOptions()) {
      * @param src the source property name without get/set prefix
      * @return a valid accessor name  without get/set prefix
      */
-    fun toMethodTail(src: String): String {
+    override fun toMethodTail(src: String): String {
         return when (src) {
             "Class" -> "AClass"
             else -> src
