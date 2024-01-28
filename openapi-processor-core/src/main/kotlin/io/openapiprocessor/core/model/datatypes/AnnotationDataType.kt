@@ -29,6 +29,6 @@ class AnnotationDataType(
     }
 
     fun getParameters(): LinkedHashMap<String, ParameterValue>? {
-        return parameters;
+        return parameters
     }
 }
