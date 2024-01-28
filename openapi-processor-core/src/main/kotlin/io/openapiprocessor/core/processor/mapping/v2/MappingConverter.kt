@@ -364,7 +364,7 @@ class MappingConverter(val mapping: MappingV2) {
     }
 
     private fun createExtensionMapping(source: Type): Mapping {
-        val (mapping, genericTypes) = parseMapping(source.type, source.generics)
+        val (mapping, _) = parseMapping(source.type, source.generics)
         if (mapping.kind != ANNOTATE) {
             throw BadMappingException(source.type)
         }
