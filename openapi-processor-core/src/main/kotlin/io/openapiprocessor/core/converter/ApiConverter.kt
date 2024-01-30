@@ -67,7 +67,7 @@ class  ApiConverter(
 
                 val ep = createEndpoint(path, op, target.getDataTypes(), api.getRefResolver())
                 if (ep != null) {
-                    itf.endpoints.add(ep)
+                    itf.add(ep)
                 }
             }
         }
@@ -83,7 +83,7 @@ class  ApiConverter(
             return itf
         }
 
-        itf = Interface(targetInterfaceName, listOf(options.packageName, "api").joinToString("."))
+        itf = Interface(targetInterfaceName, listOf(options.packageName, "api").joinToString("."), identifier)
 
         interfaces[targetInterfaceName] = itf
         return itf
