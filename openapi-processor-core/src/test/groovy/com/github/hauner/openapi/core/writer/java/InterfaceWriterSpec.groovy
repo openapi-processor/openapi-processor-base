@@ -11,12 +11,14 @@ import io.openapiprocessor.core.model.Interface
 import io.openapiprocessor.core.writer.java.BeanValidationFactory
 import io.openapiprocessor.core.writer.java.DefaultImportFilter
 import io.openapiprocessor.core.writer.java.InterfaceWriter
+import io.openapiprocessor.core.writer.java.JavaIdentifier
 import io.openapiprocessor.core.writer.java.MethodWriter
 import io.openapiprocessor.core.writer.java.SimpleGeneratedWriter
 import spock.lang.Specification
 
 class InterfaceWriterSpec extends Specification {
     def apiOptions = new ApiOptions()
+    def identifier = new JavaIdentifier()
     def generatedWriter = new SimpleGeneratedWriter (apiOptions)
     def methodWriter = Stub MethodWriter
     def annotations = Stub (FrameworkAnnotations)
@@ -32,7 +34,7 @@ class InterfaceWriterSpec extends Specification {
 
     void "writes 'package'" () {
         def pkg = 'com.github.hauner.openapi'
-        def apiItf = new Interface ("", pkg, [])
+        def apiItf = new Interface ("", pkg, identifier)
 
         when:
         writer.write (target, apiItf)
@@ -46,7 +48,7 @@ package $pkg;
     }
 
     void "writes @Generated import" () {
-        def apiItf = new Interface ("", "", [])
+        def apiItf = new Interface ("", "", identifier)
 
         when:
         writer.write (target, apiItf)
@@ -58,7 +60,7 @@ import io.openapiprocessor.generated.support.Generated;
     }
 
     void "writes 'interface' block" () {
-        def apiItf = new Interface ('name', 'pkg', [])
+        def apiItf = new Interface ('name', 'pkg', identifier)
 
         when:
         writer.write (target, apiItf)
