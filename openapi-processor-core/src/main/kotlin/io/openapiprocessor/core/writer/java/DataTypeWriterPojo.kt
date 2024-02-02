@@ -11,6 +11,7 @@ import io.openapiprocessor.core.model.datatypes.ModelDataType
 import io.openapiprocessor.core.model.datatypes.NullDataType
 import io.openapiprocessor.core.model.datatypes.PropertyDataType
 import io.openapiprocessor.core.support.capitalizeFirstChar
+import io.openapiprocessor.core.writer.Identifier
 import java.io.Writer
 
 /**
@@ -18,10 +19,11 @@ import java.io.Writer
  */
 class DataTypeWriterPojo(
     apiOptions: ApiOptions,
+    identifier: Identifier,
     generatedWriter: GeneratedWriter,
     validationAnnotations: BeanValidationFactory = BeanValidationFactory(apiOptions),
-    javadocWriter: JavaDocWriter = JavaDocWriter()
-) : DataTypeWriterBase(apiOptions, generatedWriter, validationAnnotations, javadocWriter) {
+    javadocWriter: JavaDocWriter = JavaDocWriter(identifier)
+) : DataTypeWriterBase(apiOptions, identifier, generatedWriter, validationAnnotations, javadocWriter) {
 
     override fun write(target: Writer, dataType: ModelDataType) {
         writeFileHeader(target, dataType)
@@ -48,7 +50,7 @@ class DataTypeWriterPojo(
     private fun writeClassProperties(target: Writer, dataType: ModelDataType) {
         val props = mutableListOf<String>()
         dataType.forEach { propName, propDataType ->
-            val javaPropertyName = toIdentifier(propName)
+            val javaPropertyName = identifier.toIdentifier(propName)
             var propSource = getProp(
                 propName,
                 javaPropertyName,
@@ -73,7 +75,7 @@ class DataTypeWriterPojo(
 
     private fun writeClassMethods(dataType: ModelDataType, target: Writer) {
         dataType.forEach { propName, propDataType ->
-            val javaPropertyName = toCamelCase(propName)
+            val javaPropertyName = identifier.toCamelCase(propName)
             target.write(getGetter(javaPropertyName, propDataType))
             target.write(getSetter(javaPropertyName, propDataType))
         }
@@ -102,9 +104,11 @@ class DataTypeWriterPojo(
         var result = ""
         result += ifDeprecated(propDataType)
 
+        val methodName = "get${identifier.toMethodTail(propertyName.capitalizeFirstChar())}"
+
         result += """
-            |    public ${propDataType.getTypeName()} get${toMethodTail(propertyName.capitalizeFirstChar())}() {
-            |        return ${toIdentifier(propertyName)};
+            |    public ${propDataType.getTypeName()} $methodName() {
+            |        return ${identifier.toIdentifier(propertyName)};
             |    }
             |
             |
@@ -117,10 +121,11 @@ class DataTypeWriterPojo(
         var result = ""
         result += ifDeprecated(propDataType)
 
-        val property = toIdentifier(propertyName)
+        val property = identifier.toIdentifier(propertyName)
+        val methodName = "set${identifier.toMethodTail(propertyName.capitalizeFirstChar())}"
 
         result += """
-            |    public void set${toMethodTail(propertyName.capitalizeFirstChar())}(${propDataType.getTypeName()} ${property}) {
+            |    public void ${methodName}(${propDataType.getTypeName()} ${property}) {
             |        this.${property} = ${property};
             |    }
             |

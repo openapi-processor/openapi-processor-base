@@ -21,9 +21,11 @@ class MethodWriterSpec: StringSpec({
     isolationMode = IsolationMode.InstancePerTest
 
     val apiOptions = ApiOptions()
+    val identifier = JavaIdentifier()
 
     val writer = MethodWriter (
         apiOptions,
+        identifier,
         TestMappingAnnotationWriter(),
         TestParameterAnnotationWriter(),
         BeanValidationFactory(apiOptions))

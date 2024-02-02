@@ -28,9 +28,13 @@ class DataTypeWriterPojoSpec: StringSpec({
     this.isolationMode = IsolationMode.InstancePerTest
 
     val options = ApiOptions()
+    val identifier = JavaIdentifier()
     val generatedWriter = SimpleGeneratedWriter(options)
-    var writer = DataTypeWriterPojo(options, generatedWriter, BeanValidationFactory(options))
     val target = StringWriter()
+
+    fun createWriter(validations: BeanValidationFactory = BeanValidationFactory(options)): DataTypeWriterPojo {
+        return DataTypeWriterPojo(options, identifier, generatedWriter, validations)
+    }
 
     "writes @Generated annotation import" {
         val dataType = ObjectDataType("Foo", "pkg", linkedMapOf(
@@ -38,7 +42,7 @@ class DataTypeWriterPojoSpec: StringSpec({
         ))
 
         // when:
-        writer.write(target, dataType)
+        createWriter().write(target, dataType)
 
         // then:
         val imports = extractImports(target)
@@ -51,7 +55,7 @@ class DataTypeWriterPojoSpec: StringSpec({
         ))
 
         // when:
-        writer.write(target, dataType)
+        createWriter().write(target, dataType)
 
         // then:
         target.toString() shouldContain
@@ -70,7 +74,7 @@ class DataTypeWriterPojoSpec: StringSpec({
         ), DataTypeConstraints(required = listOf("foo")), false)
 
         // when:
-        writer.write(target, dataType)
+        createWriter().write(target, dataType)
 
         // then:
         val imports = extractImports(target)
@@ -85,7 +89,7 @@ class DataTypeWriterPojoSpec: StringSpec({
         ), DataTypeConstraints(required = listOf("foo")), false)
 
         // when:
-        writer.write(target, dataType)
+        createWriter().write(target, dataType)
 
         // then:
         target.toString() shouldContain
@@ -103,7 +107,7 @@ class DataTypeWriterPojoSpec: StringSpec({
         ))
 
         // when:
-        writer.write(target, dataType)
+        createWriter().write(target, dataType)
 
         // then:
         val imports = extractImports(target)
@@ -112,19 +116,17 @@ class DataTypeWriterPojoSpec: StringSpec({
 
     "writes additional bean validation object annotation import" {
         options.beanValidation = true
-        val validation = object : BeanValidationFactory(options) {
+        val validations = object : BeanValidationFactory(options) {
             override fun validate(dataType: ModelDataType): BeanValidationInfo {
                 return BeanValidationInfoSimple(dataType, listOf(Annotation("foo.Foo")))
             }
         }
 
-        writer = DataTypeWriterPojo(options, generatedWriter, validation)
-
         val dataType = ObjectDataType("Foo",
             "pkg", linkedMapOf("foo" to propertyDataTypeString()))
 
         // when:
-        writer.write(target, dataType)
+        createWriter(validations).write(target, dataType)
 
         // then:
         val imports = extractImports(target)
@@ -133,18 +135,17 @@ class DataTypeWriterPojoSpec: StringSpec({
 
     "writes additional bean validation object annotation" {
         options.beanValidation = true
-        val validation = object : BeanValidationFactory(options) {
+        val validations = object : BeanValidationFactory(options) {
             override fun validate(dataType: ModelDataType): BeanValidationInfo {
                 return BeanValidationInfoSimple(dataType, listOf(Annotation("foo.Foo")))
             }
         }
-        writer = DataTypeWriterPojo(options, generatedWriter, validation)
 
         val dataType = ObjectDataType("Foo",
             "pkg", linkedMapOf("foo" to propertyDataTypeString()))
 
         // when:
-        writer.write(target, dataType)
+        createWriter(validations).write(target, dataType)
 
         // then:
         target.toString() shouldContain
@@ -171,7 +172,7 @@ class DataTypeWriterPojoSpec: StringSpec({
         ))
 
         // when:
-        writer.write (target, dataType)
+        createWriter().write (target, dataType)
 
         // then:
         target.toString () shouldContain
@@ -201,7 +202,7 @@ class DataTypeWriterPojoSpec: StringSpec({
         dataType.implementsDataType = ifDataType
 
         // when:
-        writer.write (target, dataType)
+        createWriter().write (target, dataType)
 
         target.toString() shouldContain ("public class Foo implements MarkerInterface {")
     }
@@ -211,13 +212,12 @@ class DataTypeWriterPojoSpec: StringSpec({
             AnnotationTypeMappingDefault(
                 "Foo", annotation = MappingAnnotation("foo.Bar")
             ))
-        writer = DataTypeWriterPojo(options, generatedWriter, BeanValidationFactory(options))
 
         val dataType = ObjectDataType("Foo",
             "pkg", linkedMapOf("foo" to propertyDataTypeString()))
 
         // when:
-        writer.write(target, dataType)
+        createWriter().write(target, dataType)
 
         // then:
         val imports = extractImports(target)
@@ -231,13 +231,12 @@ class DataTypeWriterPojoSpec: StringSpec({
                     "foo.Bar", linkedMapOf("bar" to SimpleParameterValue(""""rab""""))
                 )
             ))
-        writer = DataTypeWriterPojo(options, generatedWriter, BeanValidationFactory(options))
 
         val dataType = ObjectDataType("Foo",
             "pkg", linkedMapOf("foo" to propertyDataTypeString()))
 
         // when:
-        writer.write(target, dataType)
+        createWriter().write(target, dataType)
 
         // then:
         target.toString() shouldContain
@@ -254,7 +253,6 @@ class DataTypeWriterPojoSpec: StringSpec({
             AnnotationTypeMappingDefault(
                 "Foo", annotation = MappingAnnotation("foo.Bar")
             ))
-        writer = DataTypeWriterPojo(options, generatedWriter, BeanValidationFactory(options))
 
         val dataType = ObjectDataType("Object",
             "pkg", linkedMapOf(
@@ -263,7 +261,7 @@ class DataTypeWriterPojoSpec: StringSpec({
             ))
 
         // when:
-        writer.write(target, dataType)
+        createWriter().write(target, dataType)
 
         // then:
         val imports = extractImports(target)
@@ -277,7 +275,6 @@ class DataTypeWriterPojoSpec: StringSpec({
                     "foo.Bar", linkedMapOf("bar" to SimpleParameterValue(""""rab""""))
                 )
             ))
-        writer = DataTypeWriterPojo(options, generatedWriter, BeanValidationFactory(options))
 
         val dataType = ObjectDataType("Object",
             "pkg", linkedMapOf(
@@ -286,7 +283,7 @@ class DataTypeWriterPojoSpec: StringSpec({
             ))
 
         // when:
-        writer.write(target, dataType)
+        createWriter().write(target, dataType)
 
         // then:
         target.toString() shouldContain
@@ -317,7 +314,6 @@ class DataTypeWriterPojoSpec: StringSpec({
                     "foo.Bar", linkedMapOf("bar" to SimpleParameterValue(""""rab""""))
                 )
             ))
-        writer = DataTypeWriterPojo(options, generatedWriter, BeanValidationFactory(options))
 
         val dataType = ObjectDataType("Object",
             "pkg", linkedMapOf(
@@ -327,7 +323,7 @@ class DataTypeWriterPojoSpec: StringSpec({
             ))
 
         // when:
-        writer.write(target, dataType)
+        createWriter().write(target, dataType)
 
         // then:
         target.toString() shouldContain
@@ -358,15 +354,13 @@ class DataTypeWriterPojoSpec: StringSpec({
             )
         )
 
-        writer = DataTypeWriterPojo(options, generatedWriter, BeanValidationFactory(options))
-
         val dataType = ObjectDataType("Object",
             "pkg", linkedMapOf(
                 "foo" to propertyDataType(ObjectDataType("Foo", "model")))
             )
 
         // when:
-        writer.write(target, dataType)
+        createWriter().write(target, dataType)
 
         // then:
         target.toString() shouldContain
@@ -397,15 +391,13 @@ class DataTypeWriterPojoSpec: StringSpec({
             )
         )
 
-        writer = DataTypeWriterPojo(options, generatedWriter, BeanValidationFactory(options))
-
         val dataType = ObjectDataType("Object",
             "pkg", linkedMapOf(
                 "foo" to propertyDataType(ObjectDataType("Foo", "model")))
             )
 
         // when:
-        writer.write(target, dataType)
+        createWriter().write(target, dataType)
 
         // then:
         val t1 = target.toString()
@@ -454,8 +446,6 @@ class DataTypeWriterPojoSpec: StringSpec({
             ))
         )
 
-        writer = DataTypeWriterPojo(options, generatedWriter, BeanValidationFactory(options))
-
         val dataType = ObjectDataType("Foo", "pkg", linkedMapOf(
                 "foo" to propertyDataType(StringDataType(), mapOf(
                     "x-foo" to "ext",
@@ -463,7 +453,7 @@ class DataTypeWriterPojoSpec: StringSpec({
                 ))))
 
         // when:
-        writer.write(target, dataType)
+        createWriter().write(target, dataType)
 
         // then:
         val t1 = target.toString()

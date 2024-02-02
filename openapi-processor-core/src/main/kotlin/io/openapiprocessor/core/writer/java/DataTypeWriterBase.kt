@@ -12,6 +12,7 @@ import io.openapiprocessor.core.model.datatypes.DataType
 import io.openapiprocessor.core.model.datatypes.ModelDataType
 import io.openapiprocessor.core.model.datatypes.ObjectDataType
 import io.openapiprocessor.core.model.datatypes.PropertyDataType
+import io.openapiprocessor.core.writer.Identifier
 import java.io.StringWriter
 import java.io.Writer
 
@@ -23,9 +24,10 @@ enum class Access {
 
 abstract class DataTypeWriterBase(
     protected val apiOptions: ApiOptions,
+    protected val identifier: Identifier,
     protected val generatedWriter: GeneratedWriter,
     protected val validationAnnotations: BeanValidationFactory = BeanValidationFactory(apiOptions),
-    protected val javadocWriter: JavaDocWriter = JavaDocWriter()
+    protected val javadocWriter: JavaDocWriter
 ): DataTypeWriter {
     protected val annotationWriter = AnnotationWriter()
 

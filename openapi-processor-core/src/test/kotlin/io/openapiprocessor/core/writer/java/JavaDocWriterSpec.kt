@@ -23,7 +23,7 @@ class JavaDocWriterSpec: StringSpec({
     lateinit var writer: JavaDocWriter
 
     beforeTest {
-        writer = JavaDocWriter()
+        writer = JavaDocWriter(JavaIdentifier())
     }
 
     "converts endpoint without documentation to empty string" {

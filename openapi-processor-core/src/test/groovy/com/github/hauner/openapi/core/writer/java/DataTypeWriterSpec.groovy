@@ -11,7 +11,9 @@ import io.openapiprocessor.core.model.datatypes.StringDataType
 import io.openapiprocessor.core.support.datatypes.ObjectDataType
 import io.openapiprocessor.core.writer.java.BeanValidationFactory
 import io.openapiprocessor.core.writer.java.DataTypeWriterPojo
+import io.openapiprocessor.core.writer.java.Identifier
 import io.openapiprocessor.core.writer.java.JavaDocWriter
+import io.openapiprocessor.core.writer.java.JavaIdentifier
 import io.openapiprocessor.core.writer.java.SimpleGeneratedWriter
 import spock.lang.Specification
 
@@ -23,13 +25,15 @@ import static io.openapiprocessor.core.support.datatypes.Builder.propertyDataTyp
 
 class DataTypeWriterSpec extends Specification {
     def options = new ApiOptions()
+    def identifier = new JavaIdentifier()
     def generatedWriter = new SimpleGeneratedWriter (options)
 
     def writer = new DataTypeWriterPojo(
         options,
+        identifier,
         generatedWriter,
         new BeanValidationFactory(options),
-        new JavaDocWriter())
+        new JavaDocWriter(identifier))
     def target = new StringWriter ()
 
     void "writes 'package'" () {

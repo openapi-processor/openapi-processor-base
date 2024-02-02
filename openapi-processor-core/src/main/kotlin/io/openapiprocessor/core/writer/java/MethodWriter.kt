@@ -14,6 +14,7 @@ import io.openapiprocessor.core.model.EndpointResponse
 import io.openapiprocessor.core.model.parameters.AdditionalParameter
 import io.openapiprocessor.core.model.parameters.Parameter
 import io.openapiprocessor.core.support.capitalizeFirstChar
+import io.openapiprocessor.core.writer.Identifier
 import io.openapiprocessor.core.writer.java.MappingAnnotationWriter as CoreMappingAnnotationWriter
 import io.openapiprocessor.core.writer.java.ParameterAnnotationWriter as CoreParameterAnnotationWriter
 import java.io.StringWriter
@@ -24,10 +25,11 @@ import java.io.Writer
  */
 open class MethodWriter(
     private val apiOptions: ApiOptions,
+    private val identifier: Identifier,
     private val mappingAnnotationWriter: CoreMappingAnnotationWriter,
     private var parameterAnnotationWriter: CoreParameterAnnotationWriter,
     private val beanValidationFactory: BeanValidationFactory,
-    private val javadocWriter: JavaDocWriter = JavaDocWriter()
+    private val javadocWriter: JavaDocWriter = JavaDocWriter(identifier)
 ) {
     private val annotationWriter = AnnotationWriter()
 
@@ -81,13 +83,13 @@ open class MethodWriter(
             tokens += endpointResponse.contentType.split('/')
         }
 
-        val camel = tokens.map { toCamelCase(it) }
+        val camel = tokens.map { identifier.toCamelCase(it) }
         val head = camel.first()
         val tail = camel.subList(1, camel.count())
             .joinToString("") { it.capitalizeFirstChar() }
 
         if(endpoint.parameters.isEmpty() || endpoint.requestBodies.isNotEmpty()) {
-            return head + toMethodTail(tail)
+            return head + identifier.toMethodTail(tail)
         }
 
         return head + tail
@@ -103,7 +105,7 @@ open class MethodWriter(
                 it.dataType.getTypeName()
             }
 
-             "${createParameterAnnotation(endpoint, it)} $dataTypeValue ${toIdentifier (it.name)}"
+             "${createParameterAnnotation(endpoint, it)} $dataTypeValue ${identifier.toIdentifier (it.name)}"
                  .trim()
         }.toMutableList()
 
@@ -117,7 +119,7 @@ open class MethodWriter(
                 body.dataType.getTypeName()
             }
 
-            val param = "${createParameterAnnotation(endpoint, body)} $dataTypeValue ${toIdentifier(body.name)}"
+            val param = "${createParameterAnnotation(endpoint, body)} $dataTypeValue ${identifier.toIdentifier(body.name)}"
             ps.add (param.trim())
         }
 
