@@ -9,6 +9,7 @@ import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.model.datatypes.DataType
 import io.openapiprocessor.core.model.datatypes.ModelDataType
 import io.openapiprocessor.core.model.datatypes.PropertyDataType
+import io.openapiprocessor.core.writer.Identifier
 import java.io.Writer
 
 /**
@@ -16,10 +17,11 @@ import java.io.Writer
  */
 class DataTypeWriterRecord(
     apiOptions: ApiOptions,
+    identifier: Identifier,
     generatedWriter: GeneratedWriter,
     validationAnnotations: BeanValidationFactory = BeanValidationFactory(apiOptions),
-    javadocWriter: JavaDocWriter = JavaDocWriter()
-) : DataTypeWriterBase(apiOptions, generatedWriter, validationAnnotations, javadocWriter) {
+    javadocWriter: JavaDocWriter = JavaDocWriter(identifier)
+) : DataTypeWriterBase(apiOptions, identifier, generatedWriter, validationAnnotations, javadocWriter) {
 
     override fun write(target: Writer, dataType: ModelDataType) {
         writeFileHeader(target, dataType)
@@ -41,7 +43,7 @@ class DataTypeWriterRecord(
     private fun writeRecordParameter(target: Writer, dataType: ModelDataType) {
         val props = mutableListOf<String>()
         dataType.forEach { propName, propDataType ->
-            val javaPropertyName = toIdentifier(propName)
+            val javaPropertyName = identifier.toIdentifier(propName)
             val propSource = getProp(
                 propName,
                 javaPropertyName,

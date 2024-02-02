@@ -40,16 +40,11 @@ class TestProcessor:
             val cv = ApiConverter(options, identifier, FrameworkBase())
             val api = cv.convert(openapi)
 
-            val generatedInfo = GeneratedInfo(
-                "openapi-processor-core",
-                "test"
-                //if (options.generatedDate) OffsetDateTime.now().toString() else null
-            )
-
+            val generatedInfo = GeneratedInfo("openapi-processor-core", "test")
             val generatedWriter = GeneratedWriterImpl(generatedInfo, options)
             val validationWriter = ValidationWriter(options)
             val beanValidation = BeanValidationFactory(options)
-            val javaDocWriter = JavaDocWriter()
+            val javaDocWriter = JavaDocWriter(identifier)
             val formatter = GoogleFormatter()
 
             val writer = ApiWriter(
@@ -61,10 +56,11 @@ class TestProcessor:
                     generatedWriter,
                     MethodWriter(
                         options,
+                        identifier,
                         TestProcessorMappingAnnotationWriter(),
                         TestProcessorParameterAnnotationWriter(),
                         beanValidation,
-                        JavaDocWriter()
+                        javaDocWriter
                     ),
                     TestFrameworkAnnotations(),
                     beanValidation,
@@ -73,12 +69,14 @@ class TestProcessor:
                 when (options.modelType) {
                     "record" -> DataTypeWriterRecord(
                         options,
+                        identifier,
                         generatedWriter,
                         beanValidation,
                         javaDocWriter
                     )
                     else -> DataTypeWriterPojo(
                         options,
+                        identifier,
                         generatedWriter,
                         beanValidation,
                         javaDocWriter

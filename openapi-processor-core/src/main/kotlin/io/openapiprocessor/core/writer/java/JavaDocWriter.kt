@@ -9,6 +9,7 @@ import io.openapiprocessor.core.model.Endpoint
 import io.openapiprocessor.core.model.EndpointResponse
 import io.openapiprocessor.core.model.datatypes.DataType
 import io.openapiprocessor.core.model.datatypes.ModelDataType
+import io.openapiprocessor.core.writer.Identifier
 import org.commonmark.node.Document
 import org.commonmark.node.Node
 import org.commonmark.node.Paragraph
@@ -40,7 +41,7 @@ class SkipParentWrapperParagraphsRenderer(val context: HtmlNodeRendererContext)
 /**
  * create javadoc from OpenAPI descriptions.
  */
-open class JavaDocWriter {
+open class JavaDocWriter(val identifier: Identifier) {
 
     val parser: Parser = Parser
         .builder()
@@ -66,7 +67,7 @@ open class JavaDocWriter {
             comment += "\n"
 
         endpoint.parameters.forEach {
-            comment += convert(it.description, "@param ${toCamelCase (it.name)}")
+            comment += convert(it.description, "@param ${identifier.toCamelCase (it.name)}")
         }
 
         val response = convert(endpointResponse.description, "@return")

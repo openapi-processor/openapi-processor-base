@@ -12,7 +12,7 @@ import java.io.Writer
 class InterfaceDataTypeWriter(
     private val apiOptions: ApiOptions,
     private val generatedWriter: GeneratedWriter,
-    private val javadocWriter: JavaDocWriter = JavaDocWriter()
+    private val javadocWriter: JavaDocWriter
 ) {
 
     fun write(target: Writer, dataType: InterfaceDataType) {

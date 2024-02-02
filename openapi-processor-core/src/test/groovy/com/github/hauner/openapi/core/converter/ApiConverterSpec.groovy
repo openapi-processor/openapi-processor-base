@@ -6,6 +6,7 @@
 package com.github.hauner.openapi.core.converter
 
 import com.github.hauner.openapi.core.test.ModelAsserts
+import io.openapiprocessor.core.converter.ApiConverter
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.mapping.EndpointTypeMapping
 import io.openapiprocessor.core.framework.Framework
@@ -119,6 +120,7 @@ paths:
 
         when:
         def options = new ApiOptions()
+        def identifier = new JavaIdentifier()
         api = apiConverter (options, Stub (Framework))
             .convert (openApi)
 
@@ -127,6 +129,7 @@ paths:
             Stub (GeneratedWriter),
             new MethodWriter(
                 options,
+                identifier,
                 Stub (MappingAnnotationWriter),
                 Stub (ParameterAnnotationWriter),
                 Stub (BeanValidationFactory),

@@ -26,12 +26,13 @@ class MethodWriterAnnotationSpec: StringSpec ({
     isolationMode = IsolationMode.InstancePerTest
 
     val apiOptions = ApiOptions()
+    val identifier = JavaIdentifier()
     val reader = MappingReader()
     val converter = MappingConverter()
 
     val writer = MethodWriter (
         apiOptions,
-        //AnnotationWriter()
+        identifier,
         TestMappingAnnotationWriter(),
         TestParameterAnnotationWriter(),
         BeanValidationFactory(apiOptions))

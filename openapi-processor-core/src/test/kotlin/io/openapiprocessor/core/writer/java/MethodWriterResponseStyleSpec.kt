@@ -22,11 +22,13 @@ import java.io.StringWriter
 
 class MethodWriterResponseStyleSpec: FreeSpec() {
     val apiOptions = ApiOptions()
+    val identifier = JavaIdentifier()
 
     val writer: MethodWriter
         get() {
             return MethodWriter(
                 apiOptions,
+                identifier,
                 TestMappingAnnotationWriter(),
                 TestParameterAnnotationWriter(),
                 mockk<BeanValidationFactory>(),
