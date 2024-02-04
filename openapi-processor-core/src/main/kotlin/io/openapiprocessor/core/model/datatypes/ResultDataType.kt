@@ -18,7 +18,7 @@ class ResultDataType(
 
     override fun getName(): String {
         if (genericType?.isNotEmpty() == true) {
-            return "$name<${genericType}<${dataType.getName()}>"
+            return "$name<${genericType}<${dataType.getName()}>>"
         } else {
             return "$name<${dataType.getName()}>"
 
@@ -27,7 +27,7 @@ class ResultDataType(
 
     override fun getTypeName(): String {
         if (genericType?.isNotEmpty() == true) {
-            return "$name<${genericType}<${dataType.getTypeName()}>"
+            return "$name<${genericType}<${dataType.getTypeName()}>>"
         } else {
             return "$name<${dataType.getTypeName()}>"
         }
