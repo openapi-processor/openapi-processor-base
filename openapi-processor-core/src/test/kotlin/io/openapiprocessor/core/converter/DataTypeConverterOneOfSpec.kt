@@ -12,8 +12,10 @@ import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.model.datatypes.ModelDataType
 import io.openapiprocessor.core.support.getBodySchemaInfo
 import io.openapiprocessor.core.support.parse
+import io.openapiprocessor.core.writer.java.JavaIdentifier
 
 class DataTypeConverterOneOfSpec: StringSpec({
+    val identifier = JavaIdentifier()
 
     "creates interface and implementing model classes for oneOf with objects" {
         val dataTypes = DataTypes()
@@ -72,7 +74,7 @@ class DataTypeConverterOneOfSpec: StringSpec({
             "/foo", HttpMethod.POST, "application/json")
 
         // when:
-        val converter = DataTypeConverter(options)
+        val converter = DataTypeConverter(options, identifier)
         converter.convert(schemaInfo, dataTypes)
 
         // then:

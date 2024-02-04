@@ -255,40 +255,6 @@ fun toCamelCase(src: String): String {
 }
 
 /**
- * converts a source string to a valid (camel case) java identifier. One way, i.e. it is not
- * reversible. It adds an "a" prefix if the identifier is a java keyword (e.g. aClass instead
- * of class).
- *
- * @param src the source "string"
- * @return a valid camel case java identifier
- */
-@Deprecated(message = "obsolete", replaceWith = ReplaceWith("Identifier()"))
-fun toIdentifier(src: String): String {
-    val identifier = joinCamelCase(splitAtWordBreaks(src))
-
-    if (SourceVersion.isKeyword(identifier)) {
-        return joinCamelCase(splitAtWordBreaks("a_$identifier"))
-    }
-
-    return identifier
-}
-
-/**
- * convert an invalid property accessor to a valid property accessor by adding an "A" prefix.
- * This is used to avoid generating a getClass() method that conflicts with Object::getClass().
- *
- * @param src the source property name without get/set prefix
- * @return a valid accessor name  without get/set prefix
- */
-@Deprecated(message = "obsolete", replaceWith = ReplaceWith("Identifier()"))
-fun toMethodTail(src: String): String {
-    return when (src) {
-        "Class" -> "AClass"
-        else -> src
-    }
-}
-
-/**
  * converts a source string to a valid (camel case) java *class* identifier. One way, ie it is
  * not reversible.
  *
@@ -438,10 +404,6 @@ private fun String.isCaseBreak(idx: Int): Boolean {
 
     return prev.isLowerCase()
         && curr.isUpperCase()
-}
-
-private fun Char.isNoWordBreak(): Boolean {
-    return !isWordBreak()
 }
 
 private fun Char.isWordBreak(): Boolean {

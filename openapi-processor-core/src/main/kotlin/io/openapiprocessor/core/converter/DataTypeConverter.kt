@@ -13,6 +13,7 @@ import io.openapiprocessor.core.model.DataTypes
 import io.openapiprocessor.core.model.Documentation
 import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.support.capitalizeFirstChar
+import io.openapiprocessor.core.writer.Identifier
 import io.openapiprocessor.core.writer.java.ModelClassNameCreator
 import java.util.*
 import kotlin.collections.LinkedHashMap
@@ -22,6 +23,7 @@ import kotlin.collections.LinkedHashMap
  */
 class DataTypeConverter(
     private val options: ApiOptions,
+    private val identifier: Identifier,
     private val finder: MappingFinder = MappingFinder(options.typeMappings),
     private val nullWrapper: NullDataTypeWrapper = NullDataTypeWrapper(options, finder)
 ) {
@@ -562,7 +564,6 @@ class DataTypeConverter(
     }
 
     private fun getTypeNameWithSuffix(name: String): String {
-        return ModelClassNameCreator(options.modelNameSuffix).createName(name)
+        return ModelClassNameCreator(options.modelNameSuffix, identifier).createName(name)
     }
-
 }

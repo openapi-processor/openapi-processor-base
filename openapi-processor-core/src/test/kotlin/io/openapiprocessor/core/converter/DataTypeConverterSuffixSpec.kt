@@ -17,8 +17,10 @@ import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.support.getBodySchemaInfo
 import io.openapiprocessor.core.support.getSchemaInfo
 import io.openapiprocessor.core.support.parse
+import io.openapiprocessor.core.writer.java.JavaIdentifier
 
 class DataTypeConverterSuffixSpec: StringSpec({
+    val identifier = JavaIdentifier()
 
     "adds suffix to model data type name" {
         val dataTypes = DataTypes()
@@ -59,7 +61,7 @@ class DataTypeConverterSuffixSpec: StringSpec({
             "/foo", HttpMethod.POST, "application/json")
 
         // when:
-        val converter = DataTypeConverter(options)
+        val converter = DataTypeConverter(options, identifier)
         val datatype = converter.convert(schemaInfo, dataTypes)
 
         // then:
@@ -108,7 +110,7 @@ class DataTypeConverterSuffixSpec: StringSpec({
             "/foo", HttpMethod.POST, "application/json")
 
         // when:
-        val converter = DataTypeConverter(options)
+        val converter = DataTypeConverter(options, identifier)
         val datatype = converter.convert(schemaInfo, dataTypes)
 
         // then:
@@ -155,7 +157,7 @@ paths:
             "/foo", HttpMethod.GET, "200", "application/json")
 
         // when:
-        val converter = DataTypeConverter(options)
+        val converter = DataTypeConverter(options, identifier)
         val datatype = converter.convert(schemaInfo, dataTypes)
 
         // then:
@@ -205,7 +207,7 @@ components:
             "/foo", HttpMethod.GET, "200", "application/json")
 
         // when:
-        val converter = DataTypeConverter(options)
+        val converter = DataTypeConverter(options, identifier)
         val datatype = converter.convert(schemaInfo, dataTypes)
 
         // then:
@@ -220,7 +222,7 @@ components:
         options.modelNameSuffix = "Suffix"
 
         // when:
-        val converter = DataTypeConverter(options)
+        val converter = DataTypeConverter(options, identifier)
         val datatype = converter.createAdditionalParameterDataType(
             TypeMapping(
                 null,

@@ -29,6 +29,7 @@ import io.openapiprocessor.core.model.DataTypes
 import com.github.hauner.openapi.core.test.TestSchema
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.parser.RefResolver
+import io.openapiprocessor.core.writer.java.JavaIdentifier
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -39,7 +40,12 @@ class DataTypeConverterDeprecatedSpec extends Specification {
 
     @Unroll
     void "converts primitive deprecated schema(#type, #format) to datatype" () {
-        def converter = new DataTypeConverter(new ApiOptions(), new MappingFinder(), Stub(NullDataTypeWrapper))
+        def converter = new DataTypeConverter(
+                new ApiOptions(),
+                new JavaIdentifier(),
+                new MappingFinder(),
+                Stub(NullDataTypeWrapper))
+
         def schema = new TestSchema (type: type, format: format, deprecated: deprecated)
 
         when:

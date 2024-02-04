@@ -23,11 +23,13 @@ import io.openapiprocessor.core.parser.ParserType
 import io.openapiprocessor.core.support.getParameterSchemaInfo
 import io.openapiprocessor.core.support.getSchemaInfo
 import io.openapiprocessor.core.support.parse
+import io.openapiprocessor.core.writer.java.JavaIdentifier
 
 class DataTypeConverterMappingSpec: StringSpec({
     isolationMode = IsolationMode.InstancePerTest
 
     val dataTypes = DataTypes()
+    val identifier = JavaIdentifier()
 
     "mapped object data type has source data type" {
         val openApi = parse("""
@@ -62,7 +64,7 @@ class DataTypeConverterMappingSpec: StringSpec({
             "/foo", HttpMethod.GET, "200", "application/json")
 
         // when:
-        val converter = DataTypeConverter(options)
+        val converter = DataTypeConverter(options, identifier)
         val datatype = converter.convert(schemaInfo, dataTypes)
 
         // then:
@@ -110,7 +112,7 @@ class DataTypeConverterMappingSpec: StringSpec({
             "/composed", HttpMethod.GET, "200", "application/json")
 
         // when:
-        val converter = DataTypeConverter(options)
+        val converter = DataTypeConverter(options, identifier)
         val datatype = converter.convert(schemaInfo, dataTypes)
 
         // then:
@@ -153,7 +155,7 @@ class DataTypeConverterMappingSpec: StringSpec({
             "/array", HttpMethod.GET, "200", "application/json")
 
         // when:
-        val converter = DataTypeConverter(options)
+        val converter = DataTypeConverter(options, identifier)
         val datatype = converter.convert(schemaInfo, dataTypes)
 
         // then:
@@ -203,7 +205,7 @@ class DataTypeConverterMappingSpec: StringSpec({
             "/foo", HttpMethod.GET, "200", "*/*")
 
         // when:
-        val converter = DataTypeConverter(options)
+        val converter = DataTypeConverter(options, identifier)
         val datatype = converter.convert(schemaInfo, dataTypes)
 
         // then:
@@ -222,7 +224,7 @@ class DataTypeConverterMappingSpec: StringSpec({
         val tm = options.typeMappings.first().getChildMappings().first() as TypeMapping
 
         // when:
-        val converter = DataTypeConverter(options)
+        val converter = DataTypeConverter(options, identifier)
         val datatype = converter.createAdditionalParameterDataType(tm)
 
         // then:
@@ -262,7 +264,7 @@ class DataTypeConverterMappingSpec: StringSpec({
         val schemaInfo = openApi.getParameterSchemaInfo("/foo", HttpMethod.GET, "foo")
 
         // when:
-        val converter = DataTypeConverter(options)
+        val converter = DataTypeConverter(options, identifier)
         val datatype = converter.convert(schemaInfo, dataTypes)
 
         // then:

@@ -15,10 +15,12 @@ import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.model.datatypes.ObjectDataType
 import io.openapiprocessor.core.support.getBodySchemaInfo
 import io.openapiprocessor.core.support.parse
+import io.openapiprocessor.core.writer.java.JavaIdentifier
 
 class DataTypeConverterNullSpec: StringSpec({
 
     val dataTypes = DataTypes()
+    val identifier = JavaIdentifier()
 
     "wraps object property in a null wrapper if a null mappings exists" {
         val openApi = parse("""
@@ -67,7 +69,7 @@ class DataTypeConverterNullSpec: StringSpec({
             "/foo", HttpMethod.PATCH, "application/json")
 
         // when:
-        val converter = DataTypeConverter(options)
+        val converter = DataTypeConverter(options, identifier)
         val datatype = converter.convert(schemaInfo, dataTypes)
 
         // then:

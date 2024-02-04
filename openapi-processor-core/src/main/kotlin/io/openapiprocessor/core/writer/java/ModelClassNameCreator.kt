@@ -6,14 +6,15 @@
 package io.openapiprocessor.core.writer.java
 
 import io.openapiprocessor.core.support.capitalizeFirstChar
+import io.openapiprocessor.core.writer.Identifier
 
 /**
  * create a class name, possibly adding a suffix if any is configured.
  */
-class ModelClassNameCreator(private val suffix: String) {
+class ModelClassNameCreator(private val suffix: String, val identifier: Identifier) {
 
     fun createName(dataTypeName: String): String {
-        val classTypeName = toClass(dataTypeName)
+        val classTypeName = identifier.toClass(dataTypeName)
 
         if (dataTypeName.isEmpty())
             return classTypeName
@@ -23,5 +24,4 @@ class ModelClassNameCreator(private val suffix: String) {
 
         return "$classTypeName${suffix.capitalizeFirstChar()}"
     }
-
 }

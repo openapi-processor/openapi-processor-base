@@ -25,15 +25,17 @@ import io.openapiprocessor.core.parser.RefResolver
 import io.openapiprocessor.core.parser.Schema
 import io.openapiprocessor.core.support.getParameterSchemaInfo
 import io.openapiprocessor.core.support.parse
+import io.openapiprocessor.core.writer.java.JavaIdentifier
 
 class DataTypeConverterPrimitiveSpec: StringSpec({
     isolationMode = IsolationMode.InstancePerTest
 
     val dataTypes = DataTypes()
+    val identifier = JavaIdentifier()
 
     "ignores unknown primitive data type format" {
         val any = SchemaInfo.Endpoint("/any", HttpMethod.GET)
-        val converter = DataTypeConverter(ApiOptions(), MappingFinder())
+        val converter = DataTypeConverter(ApiOptions(), identifier, MappingFinder())
         val resolver = mockk<RefResolver>()
 
         forAll(
@@ -85,7 +87,7 @@ class DataTypeConverterPrimitiveSpec: StringSpec({
         val schemaInfo = openApi.getParameterSchemaInfo("/foo", HttpMethod.GET, "foo")
 
         // when:
-        val converter = DataTypeConverter(options)
+        val converter = DataTypeConverter(options, identifier)
         val datatype = converter.convert(schemaInfo, dataTypes)
 
         // then:
@@ -129,7 +131,7 @@ class DataTypeConverterPrimitiveSpec: StringSpec({
         val schemaInfo = openApi.getParameterSchemaInfo("/foo", HttpMethod.GET, "foo")
 
         // when:
-        val converter = DataTypeConverter(options)
+        val converter = DataTypeConverter(options, identifier)
         val datatype = converter.convert(schemaInfo, dataTypes)
 
         // then:
