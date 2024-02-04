@@ -63,9 +63,12 @@ publishing {
 //    onlyIf { isReleaseVersion() }
 //}
 
-signing {
-    useInMemoryPgpKeys(buildSignKey("SIGN_KEY"), buildProperty("SIGN_PWD"))
-    sign(publishing.publications["openapiprocessor"])
+if (!buildProperty("SKIP_SIGNING").toBoolean()) {
+
+    signing {
+        useInMemoryPgpKeys(buildSignKey("SIGN_KEY"), buildProperty("SIGN_PWD"))
+        sign(publishing.publications["openapiprocessor"])
+    }
 }
 
 //nexusStaging {
