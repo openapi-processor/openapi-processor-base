@@ -82,7 +82,7 @@ class TestProcessor:
                         javaDocWriter
                     )
                 },
-                StringEnumWriter(options, generatedWriter),
+                StringEnumWriter(options, identifier, generatedWriter),
                 InterfaceDataTypeWriter(
                     options,
                     generatedWriter,
