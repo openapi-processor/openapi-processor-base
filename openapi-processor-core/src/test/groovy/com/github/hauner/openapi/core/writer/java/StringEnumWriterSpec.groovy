@@ -8,7 +8,6 @@ package com.github.hauner.openapi.core.writer.java
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.model.datatypes.StringEnumDataType
 import io.openapiprocessor.core.support.datatypes.DataTypeName
-import io.openapiprocessor.core.writer.java.Identifier
 import io.openapiprocessor.core.writer.java.JavaIdentifier
 import io.openapiprocessor.core.writer.java.SimpleGeneratedWriter
 import io.openapiprocessor.core.writer.java.StringEnumWriter

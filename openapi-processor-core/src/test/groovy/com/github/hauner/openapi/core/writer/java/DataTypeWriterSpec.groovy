@@ -11,7 +11,6 @@ import io.openapiprocessor.core.model.datatypes.StringDataType
 import io.openapiprocessor.core.support.datatypes.ObjectDataType
 import io.openapiprocessor.core.writer.java.BeanValidationFactory
 import io.openapiprocessor.core.writer.java.DataTypeWriterPojo
-import io.openapiprocessor.core.writer.java.Identifier
 import io.openapiprocessor.core.writer.java.JavaDocWriter
 import io.openapiprocessor.core.writer.java.JavaIdentifier
 import io.openapiprocessor.core.writer.java.SimpleGeneratedWriter

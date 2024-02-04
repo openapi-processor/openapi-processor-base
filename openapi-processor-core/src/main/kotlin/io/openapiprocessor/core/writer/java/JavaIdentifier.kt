@@ -3,8 +3,6 @@
  * PDX-License-Identifier: Apache-2.0
  */
 
-@file:JvmName("Identifier")
-
 package io.openapiprocessor.core.writer.java
 
 import io.openapiprocessor.core.support.capitalizeFirstChar
@@ -14,6 +12,10 @@ import java.lang.Character.isJavaIdentifierStart
 import java.util.*
 import javax.lang.model.SourceVersion
 import kotlin.collections.ArrayList
+
+
+private val INVALID_WORD_BREAKS = listOf(' ', '-')
+private val VALID_WORD_BREAKS = listOf('_')
 
 class JavaIdentifier(val options: IdentifierOptions = IdentifierOptions()): Identifier {
     /**
@@ -178,9 +180,33 @@ class JavaIdentifier(val options: IdentifierOptions = IdentifierOptions()): Iden
         return words
     }
 
+    private fun isValid(c: Char): Boolean {
+        return isJavaIdentifierPart(c) && !isValidWordBreak(c)
+    }
+
+    private fun isValidStart(c: Char): Boolean {
+        return isJavaIdentifierStart(c) && !isValidWordBreak(c)
+    }
+
+    private fun isWordBreakChar(c: Char): Boolean {
+        return isInvalidWordBreak(c) || isValidWordBreak(c)
+    }
+
+    private fun isValidWordBreak(c: Char): Boolean {
+        return VALID_WORD_BREAKS.contains(c)
+    }
+
+    private fun isInvalidWordBreak(c: Char): Boolean {
+        return INVALID_WORD_BREAKS.contains(c)
+    }
+
+    private fun ArrayList<String>.add(builder: StringBuilder) {
+        add(builder.toString())
+    }
+
     private fun String.isWordBreak(idx: Int): Boolean {
-        return this.isForcedBreak(idx)
-            || this.isCaseBreak(idx)
+        return isForcedBreak(idx)
+            || isCaseBreak(idx)
     }
 
     private fun String.isForcedBreak(idx: Int): Boolean {
@@ -206,65 +232,21 @@ class JavaIdentifier(val options: IdentifierOptions = IdentifierOptions()): Iden
         return false
     }
 
+    private fun String.trimInvalidStart(): String {
+        return trimStart {
+            !isValidStart(it)
+        }
+    }
+
+    private fun StringBuilder.appendValid(c: Char): StringBuilder {
+        if (isValid(c)) {
+            append(c)
+        }
+        return this
+    }
+
     private fun Char.isWordBreak(): Boolean {
         return isWordBreakChar(this)
             || !isJavaIdentifierPart(this)
     }
-
-    private fun isValid(c: Char): Boolean {
-        return isJavaIdentifierPart(c) && !isValidWordBreak(c)
-    }
-
-    private fun isValidStart(c: Char): Boolean {
-        return isJavaIdentifierStart(c) && !isValidWordBreak(c)
-    }
-
-    private fun isWordBreakChar(c: Char): Boolean {
-        return isInvalidWordBreak(c) || isValidWordBreak(c)
-    }
-
-    private fun isValidWordBreak(c: Char): Boolean {
-        return VALID_WORD_BREAKS.contains(c)
-    }
-
-    private fun isInvalidWordBreak(c: Char): Boolean {
-        return INVALID_WORD_BREAKS.contains(c)
-    }
-}
-
-
-
-
-
-private fun ArrayList<String>.add(builder: StringBuilder) {
-    add(builder.toString())
-}
-
-private fun String.trimInvalidStart(): String {
-    return this.trimStart {
-        !isValidStart(it)
-    }
-}
-
-private fun StringBuilder.appendValid(c: Char): StringBuilder {
-    if (isValid(c)) {
-        append(c)
-    }
-    return this
-}
-
-private val INVALID_WORD_BREAKS = listOf(' ', '-')
-private val VALID_WORD_BREAKS = listOf('_')
-
-
-private fun isValid(c: Char): Boolean {
-    return isJavaIdentifierPart(c) && !isValidWordBreak(c)
-}
-
-private fun isValidStart(c: Char): Boolean {
-    return isJavaIdentifierStart(c) && !isValidWordBreak(c)
-}
-
-private fun isValidWordBreak(c: Char): Boolean {
-    return VALID_WORD_BREAKS.contains(c)
 }
