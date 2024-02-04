@@ -14,11 +14,13 @@ import io.openapiprocessor.core.model.DataTypes
 import io.openapiprocessor.core.parser.HttpMethod.GET
 import io.openapiprocessor.core.support.getSchemaInfo
 import io.openapiprocessor.core.support.parse
+import io.openapiprocessor.core.writer.java.JavaIdentifier
 
 class DataTypeUsageSpec: StringSpec({
     isolationMode = IsolationMode.InstancePerTest
 
     val dataTypes = DataTypes()
+    val identifier = JavaIdentifier()
 
     "collect usage of normal array item schema" {
         val openApi = parse("""
@@ -60,7 +62,7 @@ class DataTypeUsageSpec: StringSpec({
             "/foo", GET, "200", "application/json")
 
         // when:
-        val converter = DataTypeConverter(ApiOptions())
+        val converter = DataTypeConverter(ApiOptions(), identifier)
         converter.convert(schemaInfo, dataTypes)
 
         // then:
@@ -118,7 +120,7 @@ class DataTypeUsageSpec: StringSpec({
             "/foo", GET, "200", "application/json")
 
         // when:
-        val converter = DataTypeConverter(options)
+        val converter = DataTypeConverter(options, identifier)
         converter.convert(schemaInfo, dataTypes)
 
         // then:
@@ -169,7 +171,7 @@ class DataTypeUsageSpec: StringSpec({
             "/foo", GET, "200", "application/json")
 
         // when:
-        val converter = DataTypeConverter(ApiOptions())
+        val converter = DataTypeConverter(ApiOptions(), identifier)
         converter.convert(schemaInfo, dataTypes)
 
         // then:
@@ -229,7 +231,7 @@ class DataTypeUsageSpec: StringSpec({
             "/foo", GET, "200", "application/json")
 
         // when:
-        val converter = DataTypeConverter(options)
+        val converter = DataTypeConverter(options, identifier)
         converter.convert(schemaInfo, dataTypes)
 
         // then:
@@ -291,7 +293,7 @@ class DataTypeUsageSpec: StringSpec({
             "/foo", GET, "200", "application/json")
 
         // when:
-        val converter = DataTypeConverter(options)
+        val converter = DataTypeConverter(options, identifier)
         converter.convert(schemaInfo, dataTypes)
 
         // then:

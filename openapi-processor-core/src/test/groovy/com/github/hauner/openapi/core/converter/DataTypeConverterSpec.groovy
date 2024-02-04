@@ -16,22 +16,22 @@
 
 package com.github.hauner.openapi.core.converter
 
-import io.openapiprocessor.core.converter.ApiConverter
+import com.github.hauner.openapi.core.test.TestSchema
+import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.DataTypeConverter
 import io.openapiprocessor.core.converter.SchemaInfo
 import io.openapiprocessor.core.converter.mapping.MappingFinder
+import io.openapiprocessor.core.converter.mapping.UnknownDataTypeException
 import io.openapiprocessor.core.converter.wrapper.NullDataTypeWrapper
 import io.openapiprocessor.core.framework.Framework
 import io.openapiprocessor.core.model.Api
 import io.openapiprocessor.core.model.DataTypes
-import io.openapiprocessor.core.converter.ApiOptions
-import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.model.datatypes.ObjectDataType
-import com.github.hauner.openapi.core.test.TestSchema
-import io.openapiprocessor.core.converter.mapping.UnknownDataTypeException
+import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.parser.NamedSchema
 import io.openapiprocessor.core.parser.RefResolver
 import io.openapiprocessor.core.parser.Schema
+import io.openapiprocessor.core.writer.java.JavaIdentifier
 import org.jetbrains.annotations.NotNull
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -41,7 +41,7 @@ import static com.github.hauner.openapi.core.test.OpenApiParser.parse
 
 class DataTypeConverterSpec extends Specification {
     def converter = new DataTypeConverter(
-        new ApiOptions(), new MappingFinder(), Stub(NullDataTypeWrapper))
+        new ApiOptions(), new JavaIdentifier(), new MappingFinder(), Stub(NullDataTypeWrapper))
 
     @Unroll
     void "converts schema(#type, #format) to #javaType" () {
