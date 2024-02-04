@@ -8,14 +8,17 @@ package com.github.hauner.openapi.core.writer.java
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.model.datatypes.StringEnumDataType
 import io.openapiprocessor.core.support.datatypes.DataTypeName
+import io.openapiprocessor.core.writer.java.Identifier
+import io.openapiprocessor.core.writer.java.JavaIdentifier
 import io.openapiprocessor.core.writer.java.SimpleGeneratedWriter
 import io.openapiprocessor.core.writer.java.StringEnumWriter
 import spock.lang.Specification
 
 class StringEnumWriterSpec extends Specification {
     def options = new ApiOptions()
+    def identifier = new JavaIdentifier()
     def generatedWriter = new SimpleGeneratedWriter(options)
-    def writer = new StringEnumWriter(options, generatedWriter)
+    def writer = new StringEnumWriter(options, identifier, generatedWriter)
     def target = new StringWriter ()
 
     void "writes 'package'" () {

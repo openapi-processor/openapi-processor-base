@@ -8,12 +8,17 @@ package io.openapiprocessor.core.writer.java
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.model.datatypes.DataType
 import io.openapiprocessor.core.model.datatypes.StringEnumDataType
+import io.openapiprocessor.core.writer.Identifier
 import java.io.Writer
 
 /**
  * Writer for String enum.
  */
-open class StringEnumWriter(private val apiOptions: ApiOptions, private val generatedWriter: GeneratedWriter) {
+open class StringEnumWriter(
+    private val apiOptions: ApiOptions,
+    private val identifier: Identifier,
+    private val generatedWriter: GeneratedWriter
+) {
 
     fun write(target: Writer, dataType: StringEnumDataType) {
         target.write("package ${dataType.getPackageName()};\n\n")
@@ -36,7 +41,7 @@ open class StringEnumWriter(private val apiOptions: ApiOptions, private val gene
 
         val values = mutableListOf<String>()
         dataType.values.forEach {
-            values.add ("    ${toEnum (it)}(\"${it}\")")
+            values.add ("    ${identifier.toEnum (it)}(\"${it}\")")
         }
         target.write (values.joinToString (",\n") + ";\n\n")
         target.write("    private final String value;\n\n")
