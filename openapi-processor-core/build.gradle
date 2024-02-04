@@ -125,6 +125,7 @@ tasks.named("dependencyUpdates").configure {
 }
 
 jacocoTestReport {
+    dependsOn(testInt)
     getExecutionData().setFrom(fileTree(buildDir).include("/jacoco/*.exec"))
 }
 

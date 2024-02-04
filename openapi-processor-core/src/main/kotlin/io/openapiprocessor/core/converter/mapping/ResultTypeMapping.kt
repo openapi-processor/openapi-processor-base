@@ -11,10 +11,11 @@ package io.openapiprocessor.core.converter.mapping
  */
 class ResultTypeMapping(
 
-    /**
-     * The fully qualified java type name that will be used as the result type.
-     */
-    val targetTypeName: String
+        /**
+         * The fully qualified java type name that will be used as the result type.
+         */
+        val targetTypeName: String,
+        val genericTypes: List<String> = emptyList()
 
 ): Mapping, TargetTypeMapping {
 
@@ -28,7 +29,8 @@ class ResultTypeMapping(
      * @return the target type
      */
     override fun getTargetType(): TargetType {
-        return TargetType(targetTypeName, emptyList())
+        val genericTargetTypes = genericTypes.map { TargetType(it) }
+        return TargetType(targetTypeName, genericTargetTypes)
     }
 
 }

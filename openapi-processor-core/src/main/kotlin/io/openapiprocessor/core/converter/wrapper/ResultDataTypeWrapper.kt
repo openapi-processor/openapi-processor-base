@@ -45,7 +45,9 @@ class ResultDataTypeWrapper(
                 ResultDataType (
                     targetType.getName(),
                     targetType.getPkg(),
-                    checkNone (dataType)
+                    checkNone (dataType),
+                    targetType.genericTypes.map { it.getName() }.firstOrNull(),
+                    targetType.genericTypes.map { it.getPkg() }.firstOrNull()
                 )
             }
         }

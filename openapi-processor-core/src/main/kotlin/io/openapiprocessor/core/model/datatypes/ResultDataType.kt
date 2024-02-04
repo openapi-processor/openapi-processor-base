@@ -11,15 +11,26 @@ package io.openapiprocessor.core.model.datatypes
 class ResultDataType(
     private val name: String,
     private val pkg: String,
-    private val dataType: DataType
+    private val dataType: DataType,
+    private val genericType: String?,
+    private val genericPkg: String?
 ): DataType {
 
     override fun getName(): String {
-        return "$name<${dataType.getName()}>"
+        if (genericType?.isNotEmpty() == true) {
+            return "$name<${genericType}<${dataType.getName()}>"
+        } else {
+            return "$name<${dataType.getName()}>"
+
+        }
     }
 
     override fun getTypeName(): String {
-        return "$name<${dataType.getTypeName()}>"
+        if (genericType?.isNotEmpty() == true) {
+            return "$name<${genericType}<${dataType.getTypeName()}>"
+        } else {
+            return "$name<${dataType.getTypeName()}>"
+        }
     }
 
     override fun getPackageName(): String {
@@ -27,7 +38,7 @@ class ResultDataType(
     }
 
     override fun getImports(): Set<String> {
-        return setOf("${getPackageName()}.$name") + dataType.getImports()
+        return setOf("${getPackageName()}.$name") + dataType.getImports() + if (genericType?.isNotBlank() == true) { setOf("${genericPkg}.$genericType")} else { emptySet() }
     }
 
     /**
