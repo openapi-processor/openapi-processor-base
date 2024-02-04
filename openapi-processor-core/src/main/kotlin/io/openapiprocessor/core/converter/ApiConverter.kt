@@ -224,7 +224,7 @@ class  ApiConverter(
             }
 
             override fun getSchema(): Schema {
-                null!!
+                throw NotImplementedError("unexpected method call.")
             }
 
             override fun isRequired(): Boolean {
