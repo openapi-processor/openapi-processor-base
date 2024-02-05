@@ -1,10 +1,9 @@
 :openapi: https://www.openapis.org/
-:annotations: https://github.com/openapi-processor/openapi-processor-base/tree/master/openapi-processor-annotations
 :core: https://github.com/openapi-processor/openapi-processor-base/tree/master/openapi-processor-core
 :test: https://github.com/openapi-processor/openapi-processor-base/tree/master/openapi-processor-test
 
-:core-ci: https://github.com/openapi-processor/openapi-processor-base/actions?query=workflow%3Abuild
-:core-ci-badge: https://github.com/openapi-processor/openapi-processor-base/workflows/build/badge.svg
+:base-ci: https://github.com/openapi-processor/openapi-processor-base/actions?query=workflow%3Abuild
+:base-ci-badge: https://github.com/openapi-processor/openapi-processor-base/workflows/build/badge.svg
 
 :core-sonar: https://sonarcloud.io/dashboard?id=openapi-processor_openapi-processor-base-core
 :core-sonar-coverage: https://sonarcloud.io/api/project_badges/measure?project=openapi-processor_openapi-processor-base-core&metric=coverage
@@ -14,7 +13,7 @@
 :core-central-badge: https://img.shields.io/maven-central/v/io.openapiprocessor/openapi-processor-core?label=Maven%20Central
 
 // badges
-link:{core-ci}[image:{core-ci-badge}[]]
+link:{base-ci}[image:{base-ci-badge}[]]
 
 == openapi-processor-base
 
