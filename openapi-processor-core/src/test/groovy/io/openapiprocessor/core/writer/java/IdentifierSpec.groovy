@@ -24,7 +24,7 @@ class IdentifierSpec extends Specification {
         "foo2Bar" | "foo2Bar" | "foo2Bar"  | "Foo2Bar" | "FOO2_BAR"
     }
 
-    void "recognize word break if a digit is followed by a letter" () {
+    void "ignore word break if a digit is followed by a letter" () {
         def convert = new JavaIdentifier(new IdentifierOptions(false))
 
         expect:
