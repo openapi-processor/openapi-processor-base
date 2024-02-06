@@ -12,24 +12,24 @@ class ResultDataType(
     private val name: String,
     private val pkg: String,
     private val dataType: DataType,
-    private val genericType: String?,
-    private val genericPkg: String?
+    private val genericType: String? = null,
+    private val genericPkg: String? = null
 ): DataType {
 
     override fun getName(): String {
-        if (genericType?.isNotEmpty() == true) {
-            return "$name<${genericType}<${dataType.getName()}>>"
+        return if (genericType?.isNotEmpty() == true) {
+            "$name<${genericType}<${dataType.getName()}>>"
         } else {
-            return "$name<${dataType.getName()}>"
+            "$name<${dataType.getName()}>"
 
         }
     }
 
     override fun getTypeName(): String {
-        if (genericType?.isNotEmpty() == true) {
-            return "$name<${genericType}<${dataType.getTypeName()}>>"
+        return if (genericType?.isNotEmpty() == true) {
+            "$name<${genericType}<${dataType.getTypeName()}>>"
         } else {
-            return "$name<${dataType.getTypeName()}>"
+            "$name<${dataType.getTypeName()}>"
         }
     }
 
