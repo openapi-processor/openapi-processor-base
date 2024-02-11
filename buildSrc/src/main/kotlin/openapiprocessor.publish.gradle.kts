@@ -70,8 +70,6 @@ signing {
 
     val signKey: String? by project
     val signPwd: String? by project
-    println("## (${signKey?.substring(0, 200)})")
-
     useInMemoryPgpKeys(signKey, signPwd)
 
     sign(publishing.publications["openapiprocessor"])
