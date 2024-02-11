@@ -74,6 +74,7 @@ jobs:
       env:
         MULTILINE: ${{ needs.version.outputs.MULTILINE }}
       run: |
+        echo multiline: #$MULTILINE#
         ./gradlew javaToolchains check --warning-mode all 
 
     - name: archive test results
@@ -115,7 +116,6 @@ jobs:
         PUBLISH_USER: ${{ secrets.PUBLISH_USER }}
         PUBLISH_KEY: ${{ secrets.PUBLISH_KEY }}
       run: |
-        echo multiline: #$MULTILINE#
         ./gradlew publishToSonatype --stacktrace
 
   sonar:
