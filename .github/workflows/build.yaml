@@ -20,6 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       BUILD_VERSION: ${{ env.BUILD_VERSION }}
+      MULTILINE: ${{ env.MULTILINE }}
 
     steps:
       - name: Set up Homebrew
@@ -72,11 +73,15 @@ jobs:
 
     - name: run tests
       env:
+        MULTILINE_SECRET: ${{ secrets.MULTILINE_SECRET }}
+        MULTILINE_SECRET2: "${{ secrets.MULTILINE_SECRET }}"
         VERSION: ${{ needs.version.outputs.BUILD_VERSION }}
         MULTILINE: ${{ needs.version.outputs.MULTILINE }}
         MULTILINE2: "${{ needs.version.outputs.MULTILINE }}"
       run: |
         echo "version: $VERSION"
+        echo "multiline secret: $MULTILINE_SECRET"
+        echo "multiline secret: $MULTILINE_SECRET2"
         echo "multiline: $MULTILINE"
         echo "multiline2: $MULTILINE2"
         ./gradlew javaToolchains check --warning-mode all 
