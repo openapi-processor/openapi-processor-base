@@ -60,6 +60,8 @@ publishing {
     }
 }
 
+fun environment(key: String): Provider<String> = providers.environmentVariable(key)
+
 // signing requires the sign key and pwd as environment variables:
 //
 // ORG_GRADLE_PROJECT_signKey=...
@@ -68,13 +70,12 @@ publishing {
 signing {
     setRequired({ gradle.taskGraph.hasTask("${project.path}:publishToSonatype") })
 
-    val multiline: String? by project
-    println("sign multiline: ($multiline)")
+    val key = environment("SIGN_KEY")
+    println("## (${key.get().substring(0, 200)})")
+
     val signKey: String? by project
     val signPwd: String? by project
-
     println("## (${signKey?.substring(0, 200)})")
-    println("sign multiline: ($multiline)")
 
     useInMemoryPgpKeys(signKey, signPwd)
 
