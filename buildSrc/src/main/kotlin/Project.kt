@@ -14,10 +14,6 @@ fun Project.buildProperty(property: String): String {
     return "n/a"
 }
 
-fun Project.buildSignKey(property: String): String {
-    return buildProperty(property).replace("\\n", "\n")
-}
-
 fun Project.isReleaseVersion(): Boolean {
     return !(version.toString().endsWith("SNAPSHOT"))
 }
