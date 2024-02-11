@@ -74,7 +74,7 @@ jobs:
       env:
         MULTILINE: ${{ needs.version.outputs.MULTILINE }}
       run: |
-        ./gradlew javaToolchains check --warning-mode all --stacktrace
+        ./gradlew javaToolchains check --warning-mode all 
 
     - name: archive test results
       uses: actions/upload-artifact@v4
