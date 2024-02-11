@@ -72,11 +72,13 @@ jobs:
 
     - name: run tests
       env:
+        VERSION: ${{ needs.version.outputs.BUILD_VERSION }}
         MULTILINE: ${{ needs.version.outputs.MULTILINE }}
         MULTILINE2: "${{ needs.version.outputs.MULTILINE }}"
       run: |
-        echo "multiline: *$MULTILINE*"
-        echo "multiline2: *$MULTILINE2*"
+        echo "version: $VERSION"
+        echo "multiline: $MULTILINE"
+        echo "multiline2: $MULTILINE2"
         ./gradlew javaToolchains check --warning-mode all 
 
     - name: archive test results
