@@ -119,7 +119,7 @@ jobs:
     - name: publish snapshot
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SIGN_KEY: ${{ secrets.SIGN_KEY }}
+        SIGN_KEY: ${{ secrets.SIGN_KEY_ORG }}
         SIGN_PWD: ${{ secrets.SIGN_PWD }}
         ORG_GRADLE_PROJECT_signKey: ${{ secrets.SIGN_KEY }}
         ORG_GRADLE_PROJECT_signPwd: ${{ secrets.SIGN_PWD }}
