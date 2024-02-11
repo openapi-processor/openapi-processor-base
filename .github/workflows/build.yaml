@@ -38,7 +38,7 @@ jobs:
         run: |
           version=`dasel -r toml -f gradle/libs.versions.toml versions.processor`
           echo "BUILD_VERSION=${version#projectVersion=}" >> $GITHUB_ENV
-          echo "MULTILINE=line 1\nline 2\nline 3\n" >> $GITHUB_ENV
+          echo "MULTILINE='line 1\nline 2\nline 3\n'" >> $GITHUB_ENV
           cat $GITHUB_ENV
 
       - name: actor
