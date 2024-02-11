@@ -24,17 +24,6 @@ tasks.named("build") {
     dependsOn ("jacocoLogAggregatedCoverage")
 }
 
-fun properties(key: String): Provider<String> = providers.gradleProperty(key)
-fun environment(key: String): Provider<String> = providers.environmentVariable(key)
-
-val secret = environment("MULTILINE_SECRET")
-println("secret (${secret.get()})")
-
-val multiline = environment("MULTILINE")
-println("multiline (${multiline.get()})")
-val multiline2 = environment("MULTILINE2")
-println("multiline2 (${multiline2.get()})")
-
 extra["publishUser"] = buildProperty("PUBLISH_USER")
 extra["publishKey"] = buildProperty("PUBLISH_KEY")
 val publishUser: String by extra
