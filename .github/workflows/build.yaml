@@ -72,7 +72,7 @@ jobs:
 
     - name: run tests
       env:
-        MULTILINE: ${{ version.outputs.MULTILINE }}
+        MULTILINE: ${{ needs.version.outputs.MULTILINE }}
       run: |
         ./gradlew javaToolchains check --warning-mode all --stacktrace
 
