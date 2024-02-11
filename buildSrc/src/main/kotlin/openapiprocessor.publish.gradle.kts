@@ -60,8 +60,6 @@ publishing {
     }
 }
 
-fun environment(key: String): Provider<String> = providers.environmentVariable(key)
-
 // signing requires the sign key and pwd as environment variables:
 //
 // ORG_GRADLE_PROJECT_signKey=...
@@ -69,9 +67,6 @@ fun environment(key: String): Provider<String> = providers.environmentVariable(k
 
 signing {
     setRequired({ gradle.taskGraph.hasTask("${project.path}:publishToSonatype") })
-
-    val key = environment("SIGN_KEY")
-    println("## (${key.get().substring(0, 200)})")
 
     val signKey: String? by project
     val signPwd: String? by project

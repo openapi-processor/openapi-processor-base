@@ -37,3 +37,8 @@ nexusPublishing {
         }
     }
 }
+
+fun environment(key: String): Provider<String> = providers.environmentVariable(key)
+
+val key = environment("SIGN_KEY")
+println("## (${key.get().substring(0, 200)})")
