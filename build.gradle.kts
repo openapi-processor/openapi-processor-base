@@ -40,8 +40,18 @@ nexusPublishing {
 
 //fun environment(key: String): Provider<String> = providers.environmentVariable(key)
 
-val key: String? = System.getenv("SIGN_KEY")
-println("#1# (${key?.substring(0, 200)})")
+//val key: String? = System.getenv("SIGN_KEY")
+//println("#1# (${key?.substring(0, 200)})")
+
+
+
+extra["k1"] = System.getenv("SIGN_KEY")
+val k1: String by extra
+println("k1 (${k1.substring(0, 200)})")
+
+extra["k2"] = buildProperty("SIGN_KEY")
+val k2: String by extra
+println("k2 (${k2.substring(0, 200)})")
 
 val keyx: String = buildProperty("SIGN_KEY")
 println("#2# (${keyx.substring(0, 200)})")
