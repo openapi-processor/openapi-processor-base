@@ -53,8 +53,8 @@ println("#2# (${key2.substring(0, 200)})")
 //val key2 = environment("SIGN_KEY").get()
 //println("### (${key2.substring(0, 200)})")
 
-var SIGN_KEY_ORG: String? by project
-if (SIGN_KEY_ORG == null)
-    SIGN_KEY_ORG = "no value"
-println("#3# (${SIGN_KEY_ORG?.substring(0, 200)})")
+//var SIGN_KEY_ORG: String? by project
+//if (SIGN_KEY_ORG == null)
+//    SIGN_KEY_ORG = "no value"
+//println("#3# (${SIGN_KEY_ORG?.substring(0, 200)})")
 
