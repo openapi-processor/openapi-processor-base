@@ -72,6 +72,10 @@ signing {
     println("sign multiline: ($multiline)")
     val signKey: String? by project
     val signPwd: String? by project
+
+    println("## (${signKey?.substring(0, 200)})")
+    println("sign multiline: ($multiline)")
+
     useInMemoryPgpKeys(signKey, signPwd)
 
     sign(publishing.publications["openapiprocessor"])
