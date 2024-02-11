@@ -78,6 +78,7 @@ jobs:
         VERSION: ${{ needs.version.outputs.BUILD_VERSION }}
         MULTILINE: ${{ needs.version.outputs.MULTILINE }}
         MULTILINE2: "${{ needs.version.outputs.MULTILINE }}"
+        ORG_GRADLE_PROJECT_multiline: ${{ secrets.MULTILINE_SECRET }}
       run: |
         echo "version: $VERSION"
         echo "multiline secret: $MULTILINE_SECRET"

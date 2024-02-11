@@ -68,6 +68,8 @@ publishing {
 signing {
     setRequired({ gradle.taskGraph.hasTask("${project.path}:publishToSonatype") })
 
+    val multiline: String? by project
+    println("sign multiline: ($multiline)")
     val signKey: String? by project
     val signPwd: String? by project
     useInMemoryPgpKeys(signKey, signPwd)
