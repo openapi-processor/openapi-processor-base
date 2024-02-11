@@ -46,6 +46,7 @@ jobs:
 
   test:
     name: test
+    needs: [version]
 
     runs-on: ${{ matrix.os }}
     strategy:
@@ -70,6 +71,8 @@ jobs:
       uses: gradle/actions/setup-gradle@v3
 
     - name: run tests
+      env:
+        MULTILINE: ${{ version.outputs.MULTILINE }}
       run: |
         ./gradlew javaToolchains check --warning-mode all --stacktrace
 
