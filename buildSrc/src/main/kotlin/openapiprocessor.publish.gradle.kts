@@ -8,6 +8,7 @@ plugins {
 // see buildSrc/build.gradle catalog hack
 val libs = the<LibrariesForLibs>()
 
+fun properties(key: String): Provider<String> = providers.gradleProperty(key)
 val componentName = if (isPlatform()) { "javaPlatform" } else { "java" }
 
 publishing {
@@ -59,19 +60,17 @@ publishing {
     }
 }
 
-//tasks.withType<Sign>().configureEach {
-//    onlyIf { isReleaseVersion() }
-//}
+// signing requires the sign key and pwd as environment variables:
+//
+// ORG_GRADLE_PROJECT_signKey=...
+// ORG_GRADLE_PROJECT_signPwd=...
 
-if (!buildProperty("SKIP_SIGNING").toBoolean()) {
+signing {
+    setRequired({ gradle.taskGraph.hasTask("${project.path}:publishToSonatype") })
 
-    signing {
-        useInMemoryPgpKeys(buildSignKey("SIGN_KEY"), buildProperty("SIGN_PWD"))
-        sign(publishing.publications["openapiprocessor"])
-    }
+    val signKey: String? by project
+    val signPwd: String? by project
+    useInMemoryPgpKeys(signKey, signPwd)
+
+    sign(publishing.publications["openapiprocessor"])
 }
-
-//nexusStaging {
-//    username = publishUser
-//    password = publishKey
-//}
