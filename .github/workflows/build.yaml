@@ -20,7 +20,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       BUILD_VERSION: ${{ env.BUILD_VERSION }}
-      MULTILINE: ${{ env.MULTILINE }}
 
     steps:
       - name: Set up Homebrew
@@ -39,7 +38,6 @@ jobs:
         run: |
           version=`dasel -r toml -f gradle/libs.versions.toml versions.processor`
           echo BUILD_VERSION="${version#projectVersion=}" >> $GITHUB_ENV
-          echo MULTILINE="line 1\nline 2\nline 3\n" >> $GITHUB_ENV
           cat $GITHUB_ENV
 
       - name: actor
@@ -73,18 +71,14 @@ jobs:
 
     - name: run tests
       env:
-        MULTILINE_SECRET: ${{ secrets.MULTILINE_SECRET }}
-        MULTILINE_SECRET2: "${{ secrets.MULTILINE_SECRET }}"
-        VERSION: ${{ needs.version.outputs.BUILD_VERSION }}
-        MULTILINE: ${{ needs.version.outputs.MULTILINE }}
-        MULTILINE2: "${{ needs.version.outputs.MULTILINE }}"
-        ORG_GRADLE_PROJECT_multiline: ${{ secrets.MULTILINE_SECRET }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SIGN_KEY: ${{ secrets.SIGN_KEY_ORG }}
+        SIGN_PWD: ${{ secrets.SIGN_PWD }}
+        ORG_GRADLE_PROJECT_signKey: ${{ secrets.SIGN_KEY }}
+        ORG_GRADLE_PROJECT_signPwd: ${{ secrets.SIGN_PWD }}
+        PUBLISH_USER: ${{ secrets.PUBLISH_USER }}
+        PUBLISH_KEY: ${{ secrets.PUBLISH_KEY }}
       run: |
-        echo "version: $VERSION"
-        echo "multiline secret: $MULTILINE_SECRET"
-        echo "multiline secret: $MULTILINE_SECRET2"
-        echo "multiline: $MULTILINE"
-        echo "multiline2: $MULTILINE2"
         ./gradlew javaToolchains check --warning-mode all 
 
     - name: archive test results
