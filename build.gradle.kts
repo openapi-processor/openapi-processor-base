@@ -27,8 +27,10 @@ tasks.named("build") {
 fun properties(key: String): Provider<String> = providers.gradleProperty(key)
 fun environment(key: String): Provider<String> = providers.environmentVariable(key)
 
-val multiline = environment("MULTiLINE")
+val multiline = environment("MULTILINE")
 print("multiline ($multiline)")
+val multiline2 = environment("MULTILINE2")
+print("multiline2 ($multiline2)")
 
 extra["publishUser"] = buildProperty("PUBLISH_USER")
 extra["publishKey"] = buildProperty("PUBLISH_KEY")
