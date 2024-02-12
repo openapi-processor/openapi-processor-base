@@ -37,3 +37,4 @@ nexusPublishing {
         }
     }
 }
+
