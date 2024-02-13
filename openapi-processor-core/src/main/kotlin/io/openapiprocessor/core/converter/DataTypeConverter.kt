@@ -5,8 +5,10 @@
 
 package io.openapiprocessor.core.converter
 
-import io.openapiprocessor.core.converter.mapping.*
 import io.openapiprocessor.core.converter.mapping.MappingFinder
+import io.openapiprocessor.core.converter.mapping.TargetType
+import io.openapiprocessor.core.converter.mapping.TypeMapping
+import io.openapiprocessor.core.converter.mapping.UnknownDataTypeException
 import io.openapiprocessor.core.converter.wrapper.NullDataTypeWrapper
 import io.openapiprocessor.core.model.DataTypeCollector
 import io.openapiprocessor.core.model.DataTypes
@@ -14,9 +16,7 @@ import io.openapiprocessor.core.model.Documentation
 import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.support.capitalizeFirstChar
 import io.openapiprocessor.core.writer.Identifier
-import io.openapiprocessor.core.writer.java.ModelClassNameCreator
 import java.util.*
-import kotlin.collections.LinkedHashMap
 
 /**
  * Converter to map OpenAPI schemas to Java data types.
@@ -81,23 +81,7 @@ class DataTypeConverter(
     }
 
     private fun convertGenerics(targetType: TargetType): List<GenericDataType> {
-        val genericDataTypes = mutableListOf<GenericDataType>()
-
-        targetType.genericTypes.forEach {
-            val typeName = it.getName()
-            val dataTypeName = when {
-                it.typeName.startsWith(options.packageName) -> {
-                    DataTypeName(typeName, getTypeNameWithSuffix(typeName))
-                }
-                else -> {
-                    DataTypeName(typeName)
-                }
-            }
-
-            genericDataTypes.add(GenericDataType(dataTypeName, it.getPkg(), convertGenerics(it)))
-        }
-
-        return genericDataTypes
+        return GenericDataTypeConverter(options, identifier).convertGenerics(targetType)
     }
 
     private fun createComposedDataType(schemaInfo: SchemaInfo, dataTypes: DataTypes): DataType {
@@ -564,6 +548,6 @@ class DataTypeConverter(
     }
 
     private fun getTypeNameWithSuffix(name: String): String {
-        return ModelClassNameCreator(options.modelNameSuffix, identifier).createName(name)
+        return identifier.toClass(name, options.modelNameSuffix)
     }
 }
