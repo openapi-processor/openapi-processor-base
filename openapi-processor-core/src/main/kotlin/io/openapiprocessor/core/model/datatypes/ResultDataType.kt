@@ -5,6 +5,7 @@
 
 package io.openapiprocessor.core.model.datatypes
 
+
 /**
  * Result data type wrapper. Assumes a single generic parameter.
  */
@@ -12,24 +13,22 @@ class ResultDataType(
     private val name: String,
     private val pkg: String,
     private val dataType: DataType,
-    private val genericType: String? = null,
-    private val genericPkg: String? = null
+    private val genericTypes: List<GenericDataType> = emptyList()
 ): DataType {
 
     override fun getName(): String {
-        return if (genericType?.isNotEmpty() == true) {
-            "$name<${genericType}<${dataType.getName()}>>"
-        } else {
+        return if (genericTypes.isEmpty()) {
             "$name<${dataType.getName()}>"
-
+        } else {
+            "$name<${genericTypes.first().getName()}<${dataType.getName()}>>"
         }
     }
 
     override fun getTypeName(): String {
-        return if (genericType?.isNotEmpty() == true) {
-            "$name<${genericType}<${dataType.getTypeName()}>>"
-        } else {
+        return if (genericTypes.isEmpty()) {
             "$name<${dataType.getTypeName()}>"
+        } else {
+            "$name<${genericTypes.first().getTypeName()}<${dataType.getTypeName()}>>"
         }
     }
 
@@ -38,8 +37,16 @@ class ResultDataType(
     }
 
     override fun getImports(): Set<String> {
-        return setOf("${getPackageName()}.$name") + dataType.getImports() + if (genericType?.isNotBlank() == true) { setOf("${genericPkg}.$genericType")} else { emptySet() }
+        return setOf("${getPackageName()}.$name") + genericImports + dataType.getImports()
     }
+
+    private val genericImports: Set<String>
+        get() {
+            return genericTypes
+                .map { it.getImports() }
+                .flatten()
+                .toSet()
+        }
 
     /**
      * type if the result data type can have multiple values.

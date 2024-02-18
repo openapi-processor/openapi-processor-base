@@ -338,8 +338,8 @@ class MethodWriterSpec extends Specification {
                     r.response ('', new ResultDataType (
                         'ResultWrapper',
                         'http',
-                        new NoneDataType ()
-                            .wrappedInResult (), null, null
+                        new NoneDataType ().wrappedInResult (),
+                        []
                     ))
                 }
             }
