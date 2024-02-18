@@ -1,5 +1,5 @@
 [versions]
-processor = "2024.2-SNAPSHOT"
+processor = "2024.2"
 parser = "2024.1"
 
 kotlin = "1.9.22"
