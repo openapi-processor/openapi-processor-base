@@ -37,7 +37,7 @@ class ResultDataType(
     }
 
     override fun getImports(): Set<String> {
-        return setOf("${getPackageName()}.$name") + genericImports + dataType.getImports()
+        return setOf("${getPackageName()}.$name") + dataType.getImports() + genericImports
     }
 
     private val genericImports: Set<String>
