@@ -18,33 +18,11 @@ private val INVALID_WORD_BREAKS = listOf(' ', '-')
 private val VALID_WORD_BREAKS = listOf('_')
 
 class JavaIdentifier(val options: IdentifierOptions = IdentifierOptions()): Identifier {
-    /**
-     * converts a source string to a syntactically valid (camel case) java identifier. One way,
-     * i.e. it is not reversible. It does not check if the identifier is a java keyword.
-     *
-     * conversion rules:
-     * create camel case from word breaks. A word break is any invalid character (i.e. it is not
-     * allowed in a java identifier), an underscore or an upper case letter. Invalid characters
-     * are dropped.
-     *
-     * All words are converted to lowercase and are capitalized and joined except the first word
-     * that is no capitalized. It does not handle java keywords.
-     *
-     * @param src the source "string"
-     * @return a valid camel case java identifier
-     */
+
     override fun toCamelCase(src: String): String {
         return joinCamelCase(splitAtWordBreaks(src))
     }
 
-    /**
-     * converts a source string to a valid (camel case) java identifier. One way, i.e. it is not
-     * reversible. It adds an "a" prefix if the identifier is a java keyword (e.g. aClass instead
-     * of class).
-     *
-     * @param src the source "string"
-     * @return a valid camel case java identifier
-     */
     override fun toIdentifier(src: String): String {
         val identifier = joinCamelCase(splitAtWordBreaks(src))
 
@@ -55,50 +33,26 @@ class JavaIdentifier(val options: IdentifierOptions = IdentifierOptions()): Iden
         return identifier
     }
 
-    /**
-     * converts a source string to a valid (camel case) java *class* identifier. One way, ie it is
-     * not reversible.
-     *
-     * conversion rules:
-     * create camel case from word breaks. A word break is any invalid character (i.e. it is not
-     * allowed in a java identifier), an underscore or an upper case letter. Invalid characters
-     * are dropped.
-     *
-     * All words are converted to lowercase and are capitalized and joined.
-     *
-     * @param src the source string
-     *
-     * @return a valid camel case java class identifier
-     */
     override fun toClass(src: String): String {
         return toCamelCase(src).capitalizeFirstChar()
     }
 
-    /**
-     * converts a source string to a valid (all upper case) java enum identifier. One way, ie it is
-     * not reversible.
-     *
-     * conversion rules:
-     * create camel case from word breaks. A word break is any invalid character (i.e. it is not
-     * allowed in a java identifier), an underscore or an upper case letter. Invalid characters
-     * are dropped.
-     *
-     * All words are converted to uppercase and joined by an underscore.
-     *
-     * @param src the source "string"
-     * @return a valid upper case enum java identifier
-     */
+    override fun toClass(src: String, suffix: String): String {
+        val classTypeName = toClass(src)
+
+        if (src.isEmpty())
+            return classTypeName
+
+        if (src.endsWith(suffix.capitalizeFirstChar()))
+            return classTypeName
+
+        return "$classTypeName${suffix.capitalizeFirstChar()}"
+    }
+
     override fun toEnum(src: String): String {
         return joinEnum(splitAtWordBreaks(src))
     }
 
-    /**
-     * convert an invalid property accessor to a valid property accessor by adding an "A" prefix.
-     * This is used to avoid generating a getClass() method that conflicts with Object::getClass().
-     *
-     * @param src the source property name without get/set prefix
-     * @return a valid accessor name  without get/set prefix
-     */
     override fun toMethodTail(src: String): String {
         return when (src) {
             "Class" -> "AClass"

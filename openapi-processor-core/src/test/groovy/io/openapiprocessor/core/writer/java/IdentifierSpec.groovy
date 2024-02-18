@@ -97,4 +97,18 @@ class IdentifierSpec extends Specification {
         "foo2Bar"        | "foo2Bar"         | "foo2Bar"   | "Foo2Bar"      | "FOO2_BAR"
         "foo22Bar"       | "foo22Bar"        | "foo22Bar"  | "Foo22Bar"     | "FOO22_BAR"
     }
+
+    void "adds suffix to class name" () {
+        def convert = new JavaIdentifier(new IdentifierOptions(true))
+
+        expect:
+        convert.toClass("foo", "X") == "FooX"
+    }
+
+    void "ignores suffix if class name already ends with the suffix"() {
+        def convert = new JavaIdentifier(new IdentifierOptions(true))
+
+        expect:
+        convert.toClass("FooX", "X") == "FooX"
+    }
 }

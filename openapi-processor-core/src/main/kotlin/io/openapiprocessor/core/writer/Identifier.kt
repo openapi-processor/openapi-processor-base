@@ -51,6 +51,14 @@ interface Identifier {
     fun toClass(src: String): String
 
     /**
+     * converts a source string to a valid (camel case) *class* identifier with additional suffix.
+     * One way, i.e. it is not reversible.
+     *
+     * it delegates to [toClass] without suffix.
+     */
+    fun toClass(src: String, suffix: String): String
+
+    /**
      * converts a source string to a valid (all upper case) java enum identifier. One way, ie it is
      * not reversible.
      *
