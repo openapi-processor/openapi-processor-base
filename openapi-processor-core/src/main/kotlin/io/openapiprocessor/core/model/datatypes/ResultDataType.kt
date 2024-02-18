@@ -5,21 +5,31 @@
 
 package io.openapiprocessor.core.model.datatypes
 
+
 /**
  * Result data type wrapper. Assumes a single generic parameter.
  */
 class ResultDataType(
     private val name: String,
     private val pkg: String,
-    private val dataType: DataType
+    private val dataType: DataType,
+    private val genericTypes: List<GenericDataType> = emptyList()
 ): DataType {
 
     override fun getName(): String {
-        return "$name<${dataType.getName()}>"
+        return if (genericTypes.isEmpty()) {
+            "$name<${dataType.getName()}>"
+        } else {
+            "$name<${genericTypes.first().getName()}<${dataType.getName()}>>"
+        }
     }
 
     override fun getTypeName(): String {
-        return "$name<${dataType.getTypeName()}>"
+        return if (genericTypes.isEmpty()) {
+            "$name<${dataType.getTypeName()}>"
+        } else {
+            "$name<${genericTypes.first().getTypeName()}<${dataType.getTypeName()}>>"
+        }
     }
 
     override fun getPackageName(): String {
@@ -27,8 +37,16 @@ class ResultDataType(
     }
 
     override fun getImports(): Set<String> {
-        return setOf("${getPackageName()}.$name") + dataType.getImports()
+        return setOf("${getPackageName()}.$name") + dataType.getImports() + genericImports
     }
+
+    private val genericImports: Set<String>
+        get() {
+            return genericTypes
+                .map { it.getImports() }
+                .flatten()
+                .toSet()
+        }
 
     /**
      * type if the result data type can have multiple values.

@@ -14,7 +14,12 @@ class ResultTypeMapping(
     /**
      * The fully qualified java type name that will be used as the result type.
      */
-    val targetTypeName: String
+    val targetTypeName: String,
+
+    /**
+     * The fully qualified java type names of all generic parameters of {@link #targetTypeName}.
+     */
+    val genericTypes: List<TargetType> = emptyList()
 
 ): Mapping, TargetTypeMapping {
 
@@ -28,7 +33,7 @@ class ResultTypeMapping(
      * @return the target type
      */
     override fun getTargetType(): TargetType {
-        return TargetType(targetTypeName, emptyList())
+        return TargetType(targetTypeName, genericTypes)
     }
 
 }

@@ -93,7 +93,7 @@ class MappingConverter {
     }
 
     private fun convertResult(result: Result): Mapping {
-        return ResultTypeMapping (result.to)
+        return ResultTypeMapping (result.to, emptyList())
     }
 
     private fun convertParameter(source: Parameter): Mapping {

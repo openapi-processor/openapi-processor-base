@@ -74,7 +74,9 @@ class MappingConverter(val mapping: MappingV2) {
 
     private fun convertResult (result: String): Mapping {
         val mapping = parseMapping(result)
-        return ResultTypeMapping(resolvePackageVariable(mapping.targetType!!))
+        return ResultTypeMapping(
+            resolvePackageVariable(mapping.targetType!!),
+            convertInlineGenerics(mapping.targetGenericTypes2))
     }
 
     private fun convertNull(value: String): Mapping {

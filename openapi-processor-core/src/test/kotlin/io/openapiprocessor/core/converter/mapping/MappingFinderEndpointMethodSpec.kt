@@ -128,7 +128,7 @@ class MappingFinderEndpointMethodSpec: StringSpec({
             listOf(
                 EndpointTypeMapping("/foo", null, emptyList()),
                 EndpointTypeMapping("/foo", HttpMethod.GET, listOf(
-                    ResultTypeMapping("io.openapiprocessor.ResultWrapper")
+                    ResultTypeMapping("io.openapiprocessor.ResultWrapper", emptyList())
             )))
         )
 

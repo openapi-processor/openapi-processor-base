@@ -2,7 +2,7 @@ package generated.api;
 
 import annotation.Mapping;
 import generated.support.Generated;
-import io.oap.Wrap;
+import org.springframework.http.ResponseEntity;
 
 @Generated(value = "openapi-processor-core", version = "test")
 public interface Api {
@@ -11,6 +11,6 @@ public interface Api {
     String getFoo();
 
     @Mapping("/bar")
-    Wrap<String> getBar();
+    ResponseEntity<String> getBar();
 
 }

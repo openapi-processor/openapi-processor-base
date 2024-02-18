@@ -6,20 +6,23 @@
 package io.openapiprocessor.core.converter.wrapper
 
 import io.openapiprocessor.core.converter.ApiOptions
+import io.openapiprocessor.core.converter.GenericDataTypeConverter
 import io.openapiprocessor.core.converter.SchemaInfo
 import io.openapiprocessor.core.converter.mapping.*
 import io.openapiprocessor.core.model.datatypes.DataType
+import io.openapiprocessor.core.model.datatypes.GenericDataType
 import io.openapiprocessor.core.model.datatypes.NoneDataType
 import io.openapiprocessor.core.model.datatypes.ResultDataType
+import io.openapiprocessor.core.writer.Identifier
 
 /**
  * wraps the result data type with the mapped result type.
  */
 class ResultDataTypeWrapper(
     private val options: ApiOptions,
+    private val identifier: Identifier,
     private val finder: MappingFinder = MappingFinder(options.typeMappings)
 ) {
-
     /**
      * wraps a (converted) result data type with the configured result java data type like
      * {@code ResponseEntity}.
@@ -39,13 +42,13 @@ class ResultDataTypeWrapper(
         return when (targetType.typeName) {
             "plain" -> {
                 dataType
-
             }
             else -> {
                 ResultDataType (
                     targetType.getName(),
                     targetType.getPkg(),
-                    checkNone (dataType)
+                    checkNone (dataType),
+                    convertGenerics(targetType)
                 )
             }
         }
@@ -70,4 +73,7 @@ class ResultDataTypeWrapper(
         return finder.findResultTypeMapping()?.getTargetType()
     }
 
+    private fun convertGenerics(targetType: TargetType): List<GenericDataType> {
+        return GenericDataTypeConverter(options, identifier).convertGenerics(targetType)
+    }
 }
