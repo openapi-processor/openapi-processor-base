@@ -53,16 +53,9 @@ class ProcessorPendingSpec: StringSpec({
 
 private fun sources(): Collection<TestSet> {
     return listOf(
-        testSet("bean-validation-requestbody-mapping", INTERNAL, API_31, model = "default", outputs = "outputs.yaml", expected = "outputs"),
-//        testSet("extension-mapping", INTERNAL, API_30, model = "default", outputs = "outputs.yaml", expected = "outputs"),
-//        testSet("extension-mapping", INTERNAL, API_30, model = "record", outputs = "outputs.yaml", expected = "outputs"),
-//        testSet("extension-mapping", INTERNAL, API_31, model = "default", outputs = "outputs.yaml", expected = "outputs"),
-//        testSet("extension-mapping", INTERNAL, API_31, model = "record", outputs = "outputs.yaml", expected = "outputs"),
-        //testSet("endpoint-http-mapping", INTERNAL, API_30, model = "record", outputs = "outputs.yaml", expected = "outputs"),
-        //testSet("endpoint-http-mapping", OPENAPI4J, API_30, model = "record", outputs = "outputs.yaml", expected = "outputs"),
-//        testSet("endpoint-http-mapping", SWAGGER, API_30, model = "record", outputs = "outputs.yaml", expected = "outputs"),
-//        testSet("keyword-identifier", INTERNAL, API_30, model = "default", outputs = "outputs.yaml", expected = "outputs"),
-//        testSet("bean-validation", INTERNAL, API_31, model = "record", outputs = "outputs.yaml", expected = "outputs"),
-//        testSet("bean-validation", INTERNAL, API_31, model = "default", outputs = "outputs.yaml", expected = "outputs"),
+//        testSet("response-reactive-mapping", INTERNAL, API_31, model = "default", outputs = "outputs.yaml", expected = "outputs"),
+//        testSet("response-reactive-result-mapping", INTERNAL, API_31, model = "default", outputs = "outputs.yaml", expected = "outputs"),
+//        testSet("response-result-mapping", INTERNAL, API_31, model = "default", outputs = "outputs.yaml", expected = "outputs"),
+//        testSet("response-result-reactive-mapping", INTERNAL, API_31, model = "default", outputs = "outputs.yaml", expected = "outputs"),
     )
 }

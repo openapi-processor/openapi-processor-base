@@ -9,4 +9,4 @@ map:
 
   paths:
     /bar:
-      result: io.oap.Wrap
+      result: org.springframework.http.ResponseEntity
