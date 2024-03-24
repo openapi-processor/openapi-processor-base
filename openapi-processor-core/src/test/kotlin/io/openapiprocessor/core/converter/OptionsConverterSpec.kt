@@ -7,6 +7,7 @@ package io.openapiprocessor.core.converter
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.booleans.shouldBeFalse
+import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.support.Empty
@@ -19,12 +20,16 @@ class OptionsConverterSpec: StringSpec({
         val options = converter.convertOptions(emptyMap())
 
         options.targetDir shouldBe null
+        options.clearTargetDir.shouldBeTrue()
+
         options.packageName shouldBe "io.openapiprocessor.generated"
         options.beanValidation shouldBe false
         options.javadoc shouldBe false
         options.modelType shouldBe "default"
         options.enumType shouldBe "default"
         options.modelNameSuffix shouldBe String.Empty
+        options.formatCode.shouldBeFalse()
+
         options.typeMappings shouldHaveSize 0
         options.formatCode.shouldBeFalse()
     }
@@ -73,7 +78,7 @@ class OptionsConverterSpec: StringSpec({
         options.packageName shouldBe "generated"
     }
 
-    "should read Mapping options V1" {
+    "should read Mapping options (old, v1)" {
         val converter = OptionsConverter()
         val options = converter.convertOptions(mapOf(
             "mapping" to """
@@ -87,12 +92,13 @@ class OptionsConverterSpec: StringSpec({
         options.beanValidation shouldBe true
     }
 
-    "should read Mapping options V2" {
+    "should read Mapping options (new, v2)" {
         val converter = OptionsConverter()
         val options = converter.convertOptions(mapOf(
             "mapping" to """
-                openapi-processor-mapping: v2
+                openapi-processor-mapping: v7
                 options:
+                  clear-target-dir: false
                   package-name: generated
                   model-name-suffix: Suffix
                   model-type: record
@@ -103,6 +109,7 @@ class OptionsConverterSpec: StringSpec({
             """.trimIndent()
         ))
 
+        options.clearTargetDir.shouldBeFalse()
         options.packageName shouldBe "generated"
         options.modelNameSuffix shouldBe "Suffix"
         options.modelType shouldBe "record"

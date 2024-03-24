@@ -23,6 +23,11 @@ data class Options(
     val packageName: String = "io.openapiprocessor.generated",
 
     /**
+     * enable/disable clearing of targetDir (optional).
+     */
+    val clearTargetDir: Boolean = true,
+
+    /**
      * bean validation (optional)
      */
     val beanValidation: String = "false",

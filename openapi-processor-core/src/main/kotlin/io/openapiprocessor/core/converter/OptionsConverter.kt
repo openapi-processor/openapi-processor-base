@@ -55,6 +55,10 @@ class OptionsConverter(private val checkObsoleteProcessorOptions: Boolean = fals
                 }
 
                 is MappingV2 -> {
+                    with(mapping.options) {
+                        options.clearTargetDir = clearTargetDir
+                    }
+
                     options.packageName = mapping.options.packageName
                     options.modelType = mapping.options.modelType
                     options.enumType = mapping.options.enumType
