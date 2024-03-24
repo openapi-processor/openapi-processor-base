@@ -155,6 +155,33 @@ class DefaultWriterFactorySpec : StringSpec({
         Files.exists(validation.resolve("Old.java")) shouldBe false
     }
 
+    "skips deleting of target directory if clearTargetDir option is false" {
+        options.clearTargetDir = false
+
+        val api = options.getSourceDir("api")
+        val model = options.getSourceDir("model")
+        val support = options.getSourceDir("support")
+        val validation = options.getSourceDir("validation")
+
+        Files.createDirectories(api)
+        Files.createDirectories(model)
+        Files.createDirectories(support)
+        Files.createDirectories(validation)
+
+        api.resolve("Old.java").createFile()
+        model.resolve("Old.java").createFile()
+        support.resolve("Old.java").createFile()
+        validation.resolve("Old.java").createFile()
+
+        val factory = DefaultWriterFactory(options)
+        factory.init()
+
+        Files.exists(api.resolve("Old.java")) shouldBe true
+        Files.exists(model.resolve("Old.java")) shouldBe true
+        Files.exists(support.resolve("Old.java")) shouldBe true
+        Files.exists(validation.resolve("Old.java")) shouldBe true
+    }
+
     "initializes additional package folders" {
         val writerFactory = object : DefaultWriterFactory(options) {
             override fun initAdditionalPackages(options: ApiOptions): Map<String, Path> {

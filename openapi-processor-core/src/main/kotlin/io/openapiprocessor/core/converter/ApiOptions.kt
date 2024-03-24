@@ -21,6 +21,11 @@ class ApiOptions {
     var targetDir: String? = null
 
     /**
+     * enable/disable clearing of [targetDir] (optional).
+     */
+    var clearTargetDir = true
+
+    /**
      * the root package of the generated interfaces/model. The package folder tree will be created
      * inside {@link #targetDir}. Interfaces and models will be placed into the "api" and "model"
      * subpackages of packageName:

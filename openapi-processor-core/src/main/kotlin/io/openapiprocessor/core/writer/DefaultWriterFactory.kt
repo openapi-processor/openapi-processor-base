@@ -40,7 +40,9 @@ open class DefaultWriterFactory(val options: ApiOptions): WriterFactory, InitWri
         val pkgPaths = HashMap<String, Path>()
 
         log.debug ("initializing target folders")
-        clearTargetDir()
+        if (options.clearTargetDir) {
+            clearTargetDir()
+        }
 
         val (apiName, apiPath) = initTargetPackage("api")
         pkgPaths[apiName] = apiPath
