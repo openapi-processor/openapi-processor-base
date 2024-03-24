@@ -56,7 +56,7 @@ open class JavaDocWriter(val identifier: Identifier) {
         var comment = ""
 
         if (endpoint.summary != null) {
-            comment += endpoint.summary + "\n\n"
+            comment += endpoint.summary + "\n"
         }
 
         if (endpoint.description != null) {

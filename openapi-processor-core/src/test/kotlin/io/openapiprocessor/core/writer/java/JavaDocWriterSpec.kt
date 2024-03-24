@@ -103,7 +103,6 @@ class JavaDocWriterSpec: StringSpec({
         html shouldBe """
             |    /**
             |     * plain text summary
-            |     *
             |     * <em>markdown</em> description with <strong>text</strong>
             |     */
             |
