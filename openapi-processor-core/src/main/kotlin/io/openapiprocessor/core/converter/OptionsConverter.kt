@@ -72,7 +72,11 @@ class OptionsConverter(private val checkObsoleteProcessorOptions: Boolean = fals
                     options.oneOfInterface = mapping.options.oneOfInterface
                     options.formatCode = mapping.options.formatCode
                     options.generatedDate = mapping.options.generatedDate
-                    options.beanValidationValidOnReactive = mapping.options.beanValidationValidOnReactive
+
+                    with(mapping.compatibility) {
+                        options.beanValidationValidOnReactive = beanValidationValidOnReactive
+                        options.identifierWordBreakFromDigitToLetter = identifierWordBreakFromDigitToLetter
+                    }
                 }
             }
 

@@ -31,7 +31,9 @@ class OptionsConverterSpec: StringSpec({
         options.formatCode.shouldBeFalse()
 
         options.typeMappings shouldHaveSize 0
-        options.formatCode.shouldBeFalse()
+
+        options.beanValidationValidOnReactive.shouldBeTrue()
+        options.identifierWordBreakFromDigitToLetter.shouldBeTrue()
     }
 
     "should set target dir" {
@@ -106,6 +108,9 @@ class OptionsConverterSpec: StringSpec({
                   bean-validation: true
                   javadoc: true
                   format-code: false
+                compatibility:
+                  bean-validation-valid-on-reactive: false
+                  identifier-word-break-from-digit-to-letter: false
             """.trimIndent()
         ))
 
@@ -117,6 +122,9 @@ class OptionsConverterSpec: StringSpec({
         options.beanValidation shouldBe true
         options.javadoc shouldBe true
         options.formatCode.shouldBeFalse()
+
+        options.beanValidationValidOnReactive.shouldBeFalse()
+        options.identifierWordBreakFromDigitToLetter.shouldBeFalse()
     }
 
     data class BeanData(val source: String, val enabled: Boolean, val format: String?)
