@@ -23,7 +23,7 @@ class Response(private val response: Response31): ParserResponse {
         return content
     }
 
-    override val description: String?
+    override val description: String
         get() = response.description
 
 }
