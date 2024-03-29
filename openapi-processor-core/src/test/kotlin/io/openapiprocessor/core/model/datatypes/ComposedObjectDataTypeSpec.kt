@@ -6,6 +6,7 @@
 package io.openapiprocessor.core.model.datatypes
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.support.datatypes.ObjectDataType
@@ -85,6 +86,22 @@ class ComposedObjectDataTypeSpec : StringSpec({
         ))
 
         composed.constraints!!.required shouldContainAll listOf("foo", "fux", "bar", "bux")
+    }
+
+    "allOf merges 'required' constraint of all items" {
+        val composed = AllOfObjectDataType(DataTypeName("AllOf"), "pkg", listOf(
+            ObjectDataType("FooConstraints", "pkg", linkedMapOf(),
+                constraints = DataTypeConstraints(required = listOf("foo", "fux"))),
+            ObjectDataType(
+                "Foo", "pkg", linkedMapOf(
+                    "foo" to propertyDataTypeString(),
+                    "fux" to propertyDataTypeString()
+            ), constraints = DataTypeConstraints(required = listOf()))
+        ))
+
+        composed.constraints!!.required shouldContainAll listOf("foo", "fux")
+        composed.isRequired("foo").shouldBeTrue()
+        composed.isRequired("fux").shouldBeTrue()
     }
 
     "allOf without 'required' has null constraints" {

@@ -2,4 +2,5 @@ items:
   - inputs/openapi30.yaml
   - inputs/openapi31.yaml
   - inputs/query.yaml
+  - inputs/query-2.yaml
   - inputs/mapping.yaml

@@ -6,3 +6,6 @@ info:
 paths:
   /query:
     $ref: 'query.yaml'
+
+  /query-2:
+    $ref: 'query-2.yaml'
