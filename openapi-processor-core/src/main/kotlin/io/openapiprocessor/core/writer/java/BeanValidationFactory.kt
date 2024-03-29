@@ -177,28 +177,29 @@ open class BeanValidationFactory(
 }
 
 private fun DataType.shouldHaveValid(options: ApiOptions): Boolean {
-    if (this is SingleDataType && options.beanValidationValidOnReactive)
-        return true
+    return if (this is SingleDataType && options.beanValidationValidOnReactive)
+        true
 
-    if (this is ModelDataType)
-        return true
+    else if (this is ModelDataType)
+        true
 
-    if (this is ArrayDataType)
-        return item is ModelDataType
+    else if (this is ArrayDataType)
+        item is ModelDataType
 
-    if (this is InterfaceDataType)
-        return true
+    else if (this is InterfaceDataType)
+        true
 
-    if (this is MappedCollectionDataType && options.beanValidationValidOnReactive)
-        return multi
+    else if (this is MappedCollectionDataType && options.beanValidationValidOnReactive)
+        multi
 
-    if (this is MappedCollectionDataType)
-        return false
+    else if (this is MappedCollectionDataType)
+        false
 
-    if (this is MappedSourceDataType)
-        return sourceDataType?.shouldHaveValid(options) ?: false
+    else if (this is MappedSourceDataType)
+        sourceDataType?.shouldHaveValid(options) ?: false
 
-    return false
+    else
+        false
 }
 
 private fun DataType.isString(): Boolean = this is StringDataType
