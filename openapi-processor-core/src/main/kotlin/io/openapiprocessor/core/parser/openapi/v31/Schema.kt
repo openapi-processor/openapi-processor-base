@@ -60,7 +60,7 @@ class Schema(val schema: Schema31) : ParserSchema {
         return values!!.toList()
     }
 
-    override fun getItem(): ParserSchema = Schema(schema.items!!) // todo check !!
+    override fun getItem(): ParserSchema = Schema(schema.items!!)
 
     override fun getProperties(): Map<String, ParserSchema> {
         val props = LinkedHashMap<String, ParserSchema> ()

@@ -18,7 +18,7 @@ class Parameter(private val parameter: Parameter31): ParserParameter {
 
     override fun getName(): String = parameter.name
 
-    override fun getSchema(): ParserSchema = Schema (parameter.schema!!) // todo !!
+    override fun getSchema(): ParserSchema = Schema (parameter.schema!!)
 
     override fun isRequired(): Boolean = parameter.required
 
