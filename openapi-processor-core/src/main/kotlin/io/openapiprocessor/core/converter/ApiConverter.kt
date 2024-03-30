@@ -15,6 +15,7 @@ import io.openapiprocessor.core.model.*
 import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.parser.*
 import io.openapiprocessor.core.parser.HttpMethod
+import io.openapiprocessor.core.parser.NullSchema.Companion.nullSchema
 import io.openapiprocessor.core.parser.RequestBody
 import io.openapiprocessor.core.parser.Response
 import io.openapiprocessor.core.writer.Identifier
@@ -275,7 +276,7 @@ class  ApiConverter(
         if (response.getContent().isEmpty()) {
             val info = SchemaInfo (
                 SchemaInfo.Endpoint(ep.path, ep.method),
-                "", "", null, resolver)
+                "", "", nullSchema, resolver)
 
             val dataType = NoneDataType()
             val singleDataType = singleDataTypeWrapper.wrap (dataType, info)

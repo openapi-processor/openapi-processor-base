@@ -14,6 +14,7 @@ import io.kotest.matchers.shouldBe
 import io.mockk.mockk
 import io.openapiprocessor.core.converter.SchemaInfo
 import io.openapiprocessor.core.parser.HttpMethod
+import io.openapiprocessor.core.parser.NullSchema.Companion.nullSchema
 import io.openapiprocessor.core.parser.RefResolver
 import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
 
@@ -25,7 +26,7 @@ class MappingFinderSpec: StringSpec({
     "no type mapping in empty mappings" {
         val finder = MappingFinder(emptyList())
 
-        val info = SchemaInfo(any, "Any", "", null, resolver)
+        val info = SchemaInfo(any, "Any", "", nullSchema, resolver)
         val result = finder.findTypeMapping(info)
 
         result.shouldBeNull()
@@ -40,7 +41,7 @@ class MappingFinderSpec: StringSpec({
             )
         )
 
-        val info = SchemaInfo(any, "Foo", "", null, resolver)
+        val info = SchemaInfo(any, "Foo", "", nullSchema, resolver)
         val result = finder.findTypeMapping(info)
 
         result.shouldNotBeNull()
@@ -56,7 +57,7 @@ class MappingFinderSpec: StringSpec({
             )
         )
 
-        val info = SchemaInfo(any, "Foo", "", null, resolver)
+        val info = SchemaInfo(any, "Foo", "", nullSchema, resolver)
 
         shouldThrow<AmbiguousTypeMappingException> {
             finder.findTypeMapping(info)
@@ -66,11 +67,11 @@ class MappingFinderSpec: StringSpec({
     "no io mapping in empty mappings" {
         val finder = MappingFinder(emptyList())
 
-        val param = SchemaInfo(any, "parameter", "", null, resolver)
+        val param = SchemaInfo(any, "parameter", "", nullSchema, resolver)
         val paramResult = finder.findIoTypeMapping(param)
         paramResult.shouldBeNull()
 
-        val response = SchemaInfo(any, "", "application/json", null, resolver)
+        val response = SchemaInfo(any, "", "application/json", nullSchema, resolver)
         val responseResult = finder.findIoTypeMapping(response)
         responseResult.shouldBeNull()
     }
@@ -87,7 +88,7 @@ class MappingFinderSpec: StringSpec({
             )
         )
 
-        val info = SchemaInfo(any, "far param", "", null, resolver)
+        val info = SchemaInfo(any, "far param", "", nullSchema, resolver)
         val result = finder.findIoTypeMapping(info)
 
         result.shouldNotBeNull()
@@ -107,7 +108,7 @@ class MappingFinderSpec: StringSpec({
             )
         )
 
-        val info = SchemaInfo(any, "", "application/json",null, resolver)
+        val info = SchemaInfo(any, "", "application/json", nullSchema, resolver)
         val result = finder.findIoTypeMapping(info)
 
         result.shouldNotBeNull()
@@ -125,7 +126,7 @@ class MappingFinderSpec: StringSpec({
             )
         )
 
-        val info = SchemaInfo(any, "foo param", "", null, resolver)
+        val info = SchemaInfo(any, "foo param", "", nullSchema, resolver)
 
         shouldThrow<AmbiguousTypeMappingException> {
             finder.findIoTypeMapping(info)
@@ -142,7 +143,7 @@ class MappingFinderSpec: StringSpec({
             )
         )
 
-        val info = SchemaInfo(any, "", "application/json", null, resolver)
+        val info = SchemaInfo(any, "", "application/json", nullSchema, resolver)
 
         shouldThrow<AmbiguousTypeMappingException> {
             finder.findIoTypeMapping(info)
@@ -152,7 +153,7 @@ class MappingFinderSpec: StringSpec({
     "no endpoint type mapping in empty mappings" {
         val finder = MappingFinder(emptyList())
 
-        val info = SchemaInfo(foo, "Foo", "", null, resolver)
+        val info = SchemaInfo(foo, "Foo", "", nullSchema, resolver)
         val result = finder.findEndpointTypeMapping(info)
 
         result.shouldBeNull()
@@ -171,7 +172,7 @@ class MappingFinderSpec: StringSpec({
             )))
         )
 
-        val info = SchemaInfo(foo, "far param", "", null, resolver)
+        val info = SchemaInfo(foo, "far param", "", nullSchema, resolver)
         val result = finder.findEndpointTypeMapping(info)
 
         result.shouldNotBeNull()
@@ -192,7 +193,7 @@ class MappingFinderSpec: StringSpec({
             )))
         )
 
-        val info = SchemaInfo(foo, "", "application/json",null, resolver)
+        val info = SchemaInfo(foo, "", "application/json", nullSchema, resolver)
         val result = finder.findEndpointTypeMapping(info)
 
         result.shouldNotBeNull()
@@ -210,7 +211,7 @@ class MappingFinderSpec: StringSpec({
                 )))
         )
 
-        val info = SchemaInfo(foo, "foo param", "", null, resolver)
+        val info = SchemaInfo(foo, "foo param", "", nullSchema, resolver)
 
         shouldThrow<AmbiguousTypeMappingException> {
             finder.findEndpointTypeMapping(info)
@@ -228,7 +229,7 @@ class MappingFinderSpec: StringSpec({
             )))
         )
 
-        val info = SchemaInfo(foo, "", "application/json", null, resolver)
+        val info = SchemaInfo(foo, "", "application/json", nullSchema, resolver)
 
         shouldThrow<AmbiguousTypeMappingException> {
             finder.findEndpointTypeMapping(info)
@@ -245,7 +246,7 @@ class MappingFinderSpec: StringSpec({
             )))
         )
 
-        val info = SchemaInfo(foo, "Foo", "", null, resolver)
+        val info = SchemaInfo(foo, "Foo", "", nullSchema, resolver)
         val result = finder.findEndpointTypeMapping(info)
 
         result.shouldNotBeNull()
@@ -256,7 +257,7 @@ class MappingFinderSpec: StringSpec({
     "no endpoint null mapping in empty mappings" {
         val finder = MappingFinder(emptyList())
 
-        val info = SchemaInfo(foo, "", "", null, resolver)
+        val info = SchemaInfo(foo, "", "", nullSchema, resolver)
         val result = finder.findEndpointNullTypeMapping(info)
 
         result.shouldBeNull()
@@ -272,7 +273,7 @@ class MappingFinderSpec: StringSpec({
             )))
         )
 
-        val info = SchemaInfo(foo, "Foo", "", null, resolver)
+        val info = SchemaInfo(foo, "Foo", "", nullSchema, resolver)
         val result = finder.findEndpointNullTypeMapping(info)
 
         result.shouldNotBeNull()
@@ -289,7 +290,7 @@ class MappingFinderSpec: StringSpec({
     }
 
     "find result style option mapping" {
-        ResultStyle.values().forAll { style ->
+        ResultStyle.entries.toTypedArray().forAll { style ->
             val finder = MappingFinder(listOf(ResultStyleOptionMapping(style)))
 
             val result = finder.findResultStyleMapping()

@@ -16,6 +16,7 @@ import io.openapiprocessor.core.converter.mapping.MappingFinder
 import io.openapiprocessor.core.converter.mapping.NullTypeMapping
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.model.datatypes.StringDataType
+import io.openapiprocessor.core.parser.NullSchema.Companion.nullSchema
 import io.openapiprocessor.core.parser.RefResolver
 
 class NullDataTypeWrapperSpec : StringSpec({
@@ -28,7 +29,7 @@ class NullDataTypeWrapperSpec : StringSpec({
 
         val wrapper = NullDataTypeWrapper(ApiOptions(), finder)
 
-        val info = SchemaInfo(any, "", "", null, resolver)
+        val info = SchemaInfo(any, "", "", nullSchema, resolver)
         val dataType = StringDataType()
 
         wrapper.wrap(dataType, info).shouldBeSameInstanceAs(dataType)
@@ -41,7 +42,7 @@ class NullDataTypeWrapperSpec : StringSpec({
 
         val wrapper = NullDataTypeWrapper(ApiOptions(), finder)
 
-        val info = SchemaInfo(any, "", "", null, resolver)
+        val info = SchemaInfo(any, "", "", nullSchema, resolver)
         val dataType = StringDataType()
 
         val result = wrapper.wrap(dataType, info)

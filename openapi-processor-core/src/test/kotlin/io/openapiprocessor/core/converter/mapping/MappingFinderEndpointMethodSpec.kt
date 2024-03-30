@@ -13,6 +13,7 @@ import io.kotest.matchers.shouldBe
 import io.mockk.mockk
 import io.openapiprocessor.core.converter.SchemaInfo
 import io.openapiprocessor.core.parser.HttpMethod
+import io.openapiprocessor.core.parser.NullSchema.Companion.nullSchema
 import io.openapiprocessor.core.parser.RefResolver
 
 class MappingFinderEndpointMethodSpec: StringSpec({
@@ -30,7 +31,7 @@ class MappingFinderEndpointMethodSpec: StringSpec({
             )))
         )
 
-        val info = SchemaInfo(foo, "Foo", "", null, resolver)
+        val info = SchemaInfo(foo, "Foo", "", nullSchema, resolver)
         val result = finder.findEndpointTypeMapping(info)
 
         result.shouldNotBeNull()
@@ -52,7 +53,7 @@ class MappingFinderEndpointMethodSpec: StringSpec({
             )))
         )
 
-        val info = SchemaInfo(foo, "far param", "", null, resolver)
+        val info = SchemaInfo(foo, "far param", "", nullSchema, resolver)
         val result = finder.findEndpointTypeMapping(info)
 
         result.shouldNotBeNull()
@@ -74,7 +75,7 @@ class MappingFinderEndpointMethodSpec: StringSpec({
             )))
         )
 
-        val info = SchemaInfo(foo, "", "application/json",null, resolver)
+        val info = SchemaInfo(foo, "", "application/json", nullSchema, resolver)
         val result = finder.findEndpointTypeMapping(info)
 
         result.shouldNotBeNull()
@@ -95,7 +96,7 @@ class MappingFinderEndpointMethodSpec: StringSpec({
 
         val info = SchemaInfo(
             SchemaInfo.Endpoint("/foo", HttpMethod.PATCH),
-            "Foo", "", null, resolver)
+            "Foo", "", nullSchema, resolver)
         val result = finder.findEndpointNullTypeMapping(info)
 
         result.shouldNotBeNull()
@@ -115,7 +116,7 @@ class MappingFinderEndpointMethodSpec: StringSpec({
             )))
         )
 
-        val info = SchemaInfo(foo, "", "", null, resolver)
+        val info = SchemaInfo(foo, "", "", nullSchema, resolver)
         val result = finder.findEndpointAddParameterTypeMappings(info.getPath(), info.getMethod())
 
         result.shouldNotBeEmpty()
@@ -132,7 +133,7 @@ class MappingFinderEndpointMethodSpec: StringSpec({
             )))
         )
 
-        val info = SchemaInfo(foo, "", "", null, resolver)
+        val info = SchemaInfo(foo, "", "", nullSchema, resolver)
         val result = finder.findEndpointResultTypeMapping(info)
 
         result.shouldNotBeNull()
@@ -151,7 +152,7 @@ class MappingFinderEndpointMethodSpec: StringSpec({
             )))
         )
 
-        val info = SchemaInfo(foo, "", "", null, resolver)
+        val info = SchemaInfo(foo, "", "", nullSchema, resolver)
         val result = finder.findEndpointSingleTypeMapping(info)
 
         result.shouldNotBeNull()
@@ -169,7 +170,7 @@ class MappingFinderEndpointMethodSpec: StringSpec({
             )))
         )
 
-        val info = SchemaInfo(foo, "", "", null, resolver)
+        val info = SchemaInfo(foo, "", "", nullSchema, resolver)
         val result = finder.findEndpointSingleTypeMapping(info)
 
         result.shouldNotBeNull()
@@ -188,7 +189,7 @@ class MappingFinderEndpointMethodSpec: StringSpec({
             )))
         )
 
-        val info = SchemaInfo(foo, "", "", null, resolver)
+        val info = SchemaInfo(foo, "", "", nullSchema, resolver)
         val result = finder.findEndpointMultiTypeMapping(info)
 
         result.shouldNotBeNull()
@@ -206,7 +207,7 @@ class MappingFinderEndpointMethodSpec: StringSpec({
             )))
         )
 
-        val info = SchemaInfo(foo, "", "", null, resolver)
+        val info = SchemaInfo(foo, "", "", nullSchema, resolver)
         val result = finder.findEndpointMultiTypeMapping(info)
 
         result.shouldNotBeNull()
@@ -221,7 +222,7 @@ class MappingFinderEndpointMethodSpec: StringSpec({
             )
         )
 
-        val info = SchemaInfo(foo, "", "", null, resolver)
+        val info = SchemaInfo(foo, "", "", nullSchema, resolver)
         val result = finder.isExcludedEndpoint(info.getPath(), info.getMethod())
 
         result.shouldBeTrue()
@@ -234,7 +235,7 @@ class MappingFinderEndpointMethodSpec: StringSpec({
             )
         )
 
-        val info = SchemaInfo(foo, "", "", null, resolver)
+        val info = SchemaInfo(foo, "", "", nullSchema, resolver)
         val result = finder.isExcludedEndpoint(info.getPath(), info.getMethod())
 
         result.shouldBeTrue()
@@ -248,7 +249,7 @@ class MappingFinderEndpointMethodSpec: StringSpec({
             )
         )
 
-        val info = SchemaInfo(foo, "", "", null, resolver)
+        val info = SchemaInfo(foo, "", "", nullSchema, resolver)
         val result = finder.isExcludedEndpoint(info.getPath(), info.getMethod())
 
         result.shouldBeTrue()

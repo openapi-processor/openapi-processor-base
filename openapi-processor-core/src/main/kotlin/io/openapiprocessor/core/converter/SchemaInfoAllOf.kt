@@ -12,7 +12,7 @@ class SchemaInfoAllOf(
     endpoint: Endpoint,
     name: String,
     contentType: String = "",
-    schema: Schema?,
+    schema: Schema,
     resolver: RefResolver
 ) : SchemaInfo(endpoint, name, contentType, schema, resolver) {
 

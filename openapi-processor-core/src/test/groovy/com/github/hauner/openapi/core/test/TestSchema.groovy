@@ -56,7 +56,7 @@ class TestSchema implements Schema {
     String pattern
 
     Schema item
-    Map<String, Schema> properties
+    Map<String, Schema> properties = [:]
     List<?> enumValues = []
 
     String description

@@ -35,7 +35,7 @@ open class SchemaInfo(
     /**
      * the OpenAPI schema
      */
-    private val schema: Schema?, // todo not null
+    private val schema: Schema,
 
     /**
      * resolver of $ref'erences
@@ -81,7 +81,7 @@ open class SchemaInfo(
      * @return schema type
      */
     override fun getType(): String? {
-       return schema?.getType()
+       return schema.getType()
     }
 
     /**
@@ -90,7 +90,7 @@ open class SchemaInfo(
      * @return schema type format
      */
     override fun getFormat(): String? {
-        return schema?.getFormat()
+        return schema.getFormat()
     }
 
     fun getTypeFormat(): String {
@@ -107,7 +107,7 @@ open class SchemaInfo(
      * @return schema $ref
      */
     fun getRef(): String? {
-        return schema?.getRef()
+        return schema.getRef()
     }
 
     /**
@@ -116,7 +116,7 @@ open class SchemaInfo(
      * @return default value or null
      */
     fun getDefaultValue(): Any? {
-        return schema?.getDefault()
+        return schema.getDefault()
     }
 
     /**
@@ -124,7 +124,7 @@ open class SchemaInfo(
      *
      * @return description or null
      */
-    val description: String? = schema?.description
+    val description: String? = schema.description
 
     /**
      * get deprecated value
@@ -132,7 +132,7 @@ open class SchemaInfo(
      * @return true or false
      */
     fun getDeprecated(): Boolean {
-        return schema?.isDeprecated()!!
+        return schema.isDeprecated()
     }
 
     /**
@@ -141,7 +141,7 @@ open class SchemaInfo(
      * @return true or false
      */
     fun getRequired(): List<String> {
-        return schema?.getRequired()!!
+        return schema.getRequired()
     }
 
     /**
@@ -150,7 +150,7 @@ open class SchemaInfo(
      * @return nullable, true or false
      */
     fun getNullable(): Boolean {
-        return schema?.getNullable()!!
+        return schema.getNullable()
     }
 
     /**
@@ -159,7 +159,7 @@ open class SchemaInfo(
      * @return minLength value >= 0
      */
     fun getMinLength(): Int {
-        return schema?.getMinLength() ?: 0
+        return schema.getMinLength() ?: 0
     }
 
     /**
@@ -168,7 +168,7 @@ open class SchemaInfo(
      * @return maxLength value or null
      */
     fun getMaxLength(): Int? {
-        return schema?.getMaxLength()
+        return schema.getMaxLength()
     }
 
     /**
@@ -177,7 +177,7 @@ open class SchemaInfo(
      * @return minItems value or null
      */
     fun getMinItems(): Int? {
-        return schema?.getMinItems()
+        return schema.getMinItems()
     }
 
     /**
@@ -186,7 +186,7 @@ open class SchemaInfo(
      * @return maxItems value or null
      */
     fun getMaxItems(): Int? {
-        return schema?.getMaxItems()
+        return schema.getMaxItems()
     }
 
     /**
@@ -195,7 +195,7 @@ open class SchemaInfo(
      * @return maximum value or null
      */
     fun getMaximum(): Number? {
-        return schema?.getMaximum()
+        return schema.getMaximum()
     }
 
     /**
@@ -204,7 +204,7 @@ open class SchemaInfo(
      * @return true or false
      */
     fun getExclusiveMaximum(): Boolean {
-        return schema?.isExclusiveMaximum()!!
+        return schema.isExclusiveMaximum()
     }
 
     /**
@@ -213,7 +213,7 @@ open class SchemaInfo(
      * @return minimum value or null
      */
     fun getMinimum(): Number? {
-        return schema?.getMinimum()
+        return schema.getMinimum()
     }
 
     /**
@@ -222,23 +222,23 @@ open class SchemaInfo(
      * @return exclusiveMinimum value or null
      */
     fun getExclusiveMinimum(): Boolean {
-        return schema?.isExclusiveMinimum()!!
+        return schema.isExclusiveMinimum()
     }
 
     val pattern: String?
-        get() = schema?.pattern
+        get() = schema.pattern
 
     val readOnly: Boolean
-        get() = schema?.readOnly ?: false
+        get() = schema.readOnly
 
     val writeOnly: Boolean
-        get() = schema?.writeOnly ?: false
+        get() = schema.writeOnly
 
     /**
      * iterate over properties
      */
     fun eachProperty(action: (name: String, info: SchemaInfo) -> Unit) {
-        schema?.getProperties()?.forEach { (name, schema) ->
+        schema.getProperties().forEach { (name, schema) ->
             action(name, buildForNestedType(name, schema))
         }
     }
@@ -247,7 +247,7 @@ open class SchemaInfo(
      * iterate over composed items
      */
     fun eachItemOf(action: (info: SchemaInfo) -> Unit) {
-        if (schema?.getProperties()?.isNotEmpty() == true) {
+        if (schema.getProperties().isNotEmpty()) {
             action(SchemaInfoAllOf(
                 endpoint = endpoint,
                 name = "${name}_${itemOf()!!.capitalizeFirstChar()}",
@@ -256,7 +256,7 @@ open class SchemaInfo(
             ))
         }
 
-        schema?.getItems()?.forEachIndexed { index, schema ->
+        schema.getItems().forEachIndexed { index, schema ->
             action(SchemaInfo(
                 endpoint = endpoint,
                 name = "${name}_${itemOf()!!.capitalizeFirstChar()}_${index}",
@@ -270,13 +270,10 @@ open class SchemaInfo(
      * allOf, oneOf, anyOf.
      */
     fun itemOf(): String? {
-        return schema?.itemsOf()
+        return schema.itemsOf()
     }
 
     fun getExtensions(): Map<String, *> {
-        if (schema == null)
-            return emptyMap<String, Any>()
-
         return schema.extensions
     }
 
@@ -286,7 +283,7 @@ open class SchemaInfo(
      * @return a new {@link SchemaInfo}
      */
     fun buildForRef(): SchemaInfo {
-        val resolved = resolver.resolve(schema!!)
+        val resolved = resolver.resolve(schema)
         val resolvedName = if (refName || resolved.hasNoName) {
             name // propagate "parent" name
         } else {
@@ -326,7 +323,7 @@ open class SchemaInfo(
      * @return a new {@link SchemaInfo}
      */
     fun buildForItem(): SchemaInfo {
-        val item = schema!!.getItem()
+        val item = schema.getItem()
 
         return SchemaInfo(
             endpoint = endpoint,
@@ -342,7 +339,7 @@ open class SchemaInfo(
      * @return a new {@link SchemaInfo}
      */
     fun buildForAdditionalProperties(): SchemaInfo? {
-        val additionalProperties = schema?.getAdditionalProperties() ?: return null
+        val additionalProperties = schema.getAdditionalProperties() ?: return null
 
         return SchemaInfo(
             endpoint = endpoint,
@@ -371,7 +368,7 @@ open class SchemaInfo(
         )
 
     override fun isPrimitive(): Boolean {
-        return listOf("boolean", "integer", "number", "string").contains(schema?.getType())
+        return listOf("boolean", "integer", "number", "string").contains(schema.getType())
     }
 
     override fun isArray(): Boolean {
@@ -382,11 +379,8 @@ open class SchemaInfo(
         if (getType().equals("object"))
             return true
 
-        val properties = schema?.getProperties()
-        if (!properties.isNullOrEmpty())
-            return true
-
-        return false
+        val properties = schema.getProperties()
+        return properties.isNotEmpty()
     }
 
     fun isComposedObject(): Boolean {
@@ -402,23 +396,19 @@ open class SchemaInfo(
     }
 
     fun isTypeLess(): Boolean {
-        return schema?.getType() == null
+        return schema.getType() == null
     }
 
     fun isRefObject(): Boolean {
-        return schema?.getRef() != null
-    }
-
-    fun isEmpty(): Boolean {
-        return schema == null
+        return schema.getRef() != null
     }
 
     fun isEnum(): Boolean {
-        return schema!!.getEnum().isNotEmpty()
+        return schema.getEnum().isNotEmpty()
     }
 
     fun getEnumValues(): List<*> {
-        return schema!!.getEnum()
+        return schema.getEnum()
     }
 
     private fun getArrayItemName(): String {
@@ -428,5 +418,4 @@ open class SchemaInfo(
     private fun getNestedTypeName(nestedName: String): String {
         return name + nestedName.capitalizeFirstChar()
     }
-
 }

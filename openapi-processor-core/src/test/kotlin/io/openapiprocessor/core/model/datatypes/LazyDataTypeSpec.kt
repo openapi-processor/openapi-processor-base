@@ -13,6 +13,7 @@ import io.mockk.mockk
 import io.openapiprocessor.core.converter.SchemaInfo
 import io.openapiprocessor.core.model.DataTypes
 import io.openapiprocessor.core.parser.HttpMethod
+import io.openapiprocessor.core.parser.NullSchema.Companion.nullSchema
 import io.openapiprocessor.core.parser.RefResolver
 
 class LazyDataTypeSpec : StringSpec({
@@ -25,7 +26,7 @@ class LazyDataTypeSpec : StringSpec({
             ObjectDataType(DataTypeName("Foo", "FooX"), "pkg", linkedMapOf())
         )
 
-        val info = SchemaInfo(any, "Foo", "", null, resolver)
+        val info = SchemaInfo(any, "Foo", "", nullSchema, resolver)
         val dt = dataTypes.lazy(info.getName())
 
         dt.getName() shouldBe "Foo"
@@ -40,7 +41,7 @@ class LazyDataTypeSpec : StringSpec({
                 ObjectDataType(DataTypeName(id, type), "pkg", linkedMapOf())
             )
 
-            val info = SchemaInfo(any, id, "", null, resolver)
+            val info = SchemaInfo(any, id, "", nullSchema, resolver)
             val dt = dataTypes.lazy(info.getName())
 
             dt.getImports() shouldBe setOf(
