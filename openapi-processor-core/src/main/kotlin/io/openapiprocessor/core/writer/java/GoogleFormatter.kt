@@ -9,8 +9,10 @@ import com.google.googlejavaformat.java.Formatter
 import com.google.googlejavaformat.java.JavaFormatterOptions
 import io.openapiprocessor.core.writer.SourceFormatter
 
-class GoogleFormatter: SourceFormatter {
-    private lateinit var formatter: Formatter
+private const val addExportsLink: String = "https://openapiprocessor.io/oap/home/jdk.html"
+
+open class GoogleFormatter: SourceFormatter {
+    protected lateinit var formatter: Formatter
 
     init {
         initFormatter()
@@ -19,8 +21,13 @@ class GoogleFormatter: SourceFormatter {
     override fun format(raw: String): String {
         try {
             return correctLineFeed(formatter.formatSource(raw))
+
+        } catch (e: IllegalAccessError) {
+            // since java 16 the jdk.compiler module does not export com.sun.tools.javac.parser
+            throw FormattingException("looks like you may need $addExportsLink to make formatting work.", e)
+
         } catch (e: Exception) {
-            throw FormattingException(raw, e)
+            throw FormattingException("failed to format the generated source: \n>>\n$raw\n<<", e)
         }
     }
 

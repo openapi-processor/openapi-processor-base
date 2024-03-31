@@ -5,8 +5,12 @@
 
 package io.openapiprocessor.core.writer.java
 
+import com.google.googlejavaformat.java.Formatter
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
+import io.mockk.every
+import io.mockk.mockk
 
 class GoogleFormatterSpec : StringSpec({
 
@@ -18,5 +22,20 @@ class GoogleFormatterSpec : StringSpec({
             |}
             |
         """.trimMargin()
+    }
+
+    "formatter catches IllegalAccessError and re-throws with link to add-export note" {
+        val f: Formatter = mockk<Formatter>()
+        every { f.formatSource(any()) } throws IllegalAccessError("fake illegal access error")
+
+        val formatter = object: GoogleFormatter() {
+            init {
+                formatter = f
+            }
+        }
+
+        shouldThrow<FormattingException> {
+            formatter.format("....")
+        }
     }
 })
