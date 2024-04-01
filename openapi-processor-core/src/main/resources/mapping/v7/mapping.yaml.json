@@ -1,13 +1,13 @@
 {
-  "$id": "https://openapiprocessor.io/schemas/mapping/mapping-v6.json",
+  "$id": "https://openapiprocessor.io/schemas/mapping/mapping-v7.json",
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "JSON Schema for openapi-processor mapping.yaml v6",
+  "title": "JSON Schema for openapi-processor mapping.yaml v7",
   "description": "openapi-processor configuration and type mappings",
   "type": "object",
   "properties": {
     "openapi-processor-mapping": {
       "description": "version of the mapping format.",
-      "enum": ["v6"]
+      "enum": ["v7"]
     },
     "options": {
       "$ref": "#/definitions/Options"
