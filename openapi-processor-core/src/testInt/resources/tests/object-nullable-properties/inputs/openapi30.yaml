@@ -36,6 +36,7 @@ components:
         bar:
           nullable: true
           type: string
+          maxLength: 4
 
     Foo2:
       description: a Foo 2
@@ -44,3 +45,4 @@ components:
         bar:
           nullable: true
           type: string
+          maxLength: 4

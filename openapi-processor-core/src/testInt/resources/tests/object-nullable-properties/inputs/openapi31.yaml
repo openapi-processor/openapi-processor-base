@@ -37,6 +37,7 @@ components:
           type:
             - string
             - null
+          maxLength: 4
 
     Foo2:
       description: a Foo 2
@@ -46,3 +47,4 @@ components:
           type:
             - string
             - null
+          maxLength: 4

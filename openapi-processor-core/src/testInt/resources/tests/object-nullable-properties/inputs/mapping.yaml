@@ -1,7 +1,8 @@
-openapi-processor-mapping: v4
+openapi-processor-mapping: v7
 
 options:
   package-name: generated
+  bean-validation: true
   format-code: false
 
 map:
