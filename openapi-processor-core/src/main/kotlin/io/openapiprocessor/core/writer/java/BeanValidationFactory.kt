@@ -90,7 +90,7 @@ open class BeanValidationFactory(
     }
 
     private fun getSourceDataType(dataType: DataType): DataType {
-        if (dataType is MappedSourceDataType && dataType.sourceDataType != null) {
+        if (dataType is SourceDataType && dataType.sourceDataType != null) {
             return dataType.sourceDataType!!
         }
 
@@ -195,7 +195,7 @@ private fun DataType.shouldHaveValid(options: ApiOptions): Boolean {
     else if (this is MappedCollectionDataType)
         false
 
-    else if (this is MappedSourceDataType)
+    else if (this is SourceDataType)
         sourceDataType?.shouldHaveValid(options) ?: false
 
     else

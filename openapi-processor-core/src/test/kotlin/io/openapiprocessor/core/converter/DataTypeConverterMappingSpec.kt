@@ -68,7 +68,7 @@ class DataTypeConverterMappingSpec: StringSpec({
         val datatype = converter.convert(schemaInfo, dataTypes)
 
         // then:
-        datatype.shouldBeInstanceOf<MappedSourceDataType>()
+        datatype.shouldBeInstanceOf<SourceDataType>()
         datatype.sourceDataType.shouldBeInstanceOf<ObjectDataType>()
     }
 
@@ -116,7 +116,7 @@ class DataTypeConverterMappingSpec: StringSpec({
         val datatype = converter.convert(schemaInfo, dataTypes)
 
         // then:
-        datatype.shouldBeInstanceOf<MappedSourceDataType>()
+        datatype.shouldBeInstanceOf<SourceDataType>()
         datatype.sourceDataType.shouldBeInstanceOf<AllOfObjectDataType>()
     }
 

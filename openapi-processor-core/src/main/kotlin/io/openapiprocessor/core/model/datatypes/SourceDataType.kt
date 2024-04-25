@@ -5,6 +5,6 @@
 
 package io.openapiprocessor.core.model.datatypes
 
-interface MappedSourceDataType {
+interface SourceDataType {
     val sourceDataType: DataType?
 }

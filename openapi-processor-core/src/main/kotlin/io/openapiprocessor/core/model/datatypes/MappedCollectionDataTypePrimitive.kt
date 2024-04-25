@@ -15,7 +15,7 @@ open class MappedCollectionDataTypePrimitive(
     override val constraints: DataTypeConstraints? = null,
     override val deprecated: Boolean = false,
     override val sourceDataType: DataType? = null
-): DataType, CollectionDataType, MappedSourceDataType {
+): DataType, CollectionDataType, SourceDataType {
 
     override fun getName(): String {
         return "${name}[]"

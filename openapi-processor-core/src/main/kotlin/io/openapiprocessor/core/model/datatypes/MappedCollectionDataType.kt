@@ -19,7 +19,7 @@ open class MappedCollectionDataType(
     override val deprecated: Boolean = false,
     override val sourceDataType: DataType? = null,
     val multi: Boolean = false
-): DataType, CollectionDataType, MappedSourceDataType {
+): DataType, CollectionDataType, SourceDataType {
 
     override fun getName(): String {
         return "${name}<${item.getName()}>"

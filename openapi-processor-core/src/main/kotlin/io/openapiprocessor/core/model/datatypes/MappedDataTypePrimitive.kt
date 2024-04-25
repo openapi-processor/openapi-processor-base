@@ -15,7 +15,7 @@ open class MappedDataTypePrimitive(
     override val constraints: DataTypeConstraints? = null,
     override val deprecated: Boolean = false,
     override val sourceDataType: DataType? = null
-): DataType, MappedSourceDataType {
+): DataType, SourceDataType {
 
     override fun getName(): String {
         return type

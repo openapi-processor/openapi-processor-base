@@ -14,7 +14,7 @@ class NullDataType(
     private val pkg: String,
     private val dataType: DataType,
     val init: String? = null
-): DataType, MappedSourceDataType {
+): DataType, SourceDataType {
 
     override fun getName(): String {
         return "$name<${dataType.getName()}>"
