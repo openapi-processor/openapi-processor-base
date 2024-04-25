@@ -14,7 +14,7 @@ class NullDataType(
     private val pkg: String,
     private val dataType: DataType,
     val init: String? = null
-): DataType {
+): DataType, MappedSourceDataType {
 
     override fun getName(): String {
         return "$name<${dataType.getName()}>"
@@ -32,4 +32,6 @@ class NullDataType(
         return setOf("${getPackageName()}.$name") + dataType.getImports()
     }
 
+    override val sourceDataType: DataType
+        get() = dataType
 }
