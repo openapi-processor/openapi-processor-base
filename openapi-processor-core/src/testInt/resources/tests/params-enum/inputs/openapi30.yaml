@@ -49,6 +49,21 @@ paths:
         '204':
           description: empty
 
+  /enum-names:
+    get:
+      tags:
+        - enum
+      parameters:
+        - name: named
+          description: enum parameter
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/NamedEnum'
+      responses:
+        '204':
+          description: empty
+
 components:
   schemas:
 
@@ -58,3 +73,14 @@ components:
         - bar
         - bar-2
         - bar-bar
+
+    NamedEnum:
+      type: string
+      enum:
+        - "1"
+        - "2"
+        - "3"
+      x-enumNames:
+        - "ONE"
+        - "TWO"
+        - "THREE"

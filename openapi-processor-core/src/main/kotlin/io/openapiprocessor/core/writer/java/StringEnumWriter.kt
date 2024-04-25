@@ -40,8 +40,20 @@ open class StringEnumWriter(
         target.write(" {\n")
 
         val values = mutableListOf<String>()
-        dataType.values.forEach {
-            values.add ("    ${identifier.toEnum (it)}(\"${it}\")")
+        // Review: probably not the best place for validation
+        if (dataType.xEnumNames.size > 0 && dataType.values.size != dataType.xEnumNames.size) {
+            throw IllegalStateException("Enum names size mismatch")
+        }
+        val enumNames = if (dataType.xEnumNames.size > 0) dataType.xEnumNames
+            else MutableList(dataType.values.size) { "" }
+        dataType.values.zip(enumNames).forEach { pair ->
+            val enumValue = pair.component1()
+            val enumName = pair.component2()
+            if (enumName == "") {
+                values.add("    ${identifier.toEnum(enumValue)}(\"${enumValue}\")")
+            } else {
+                values.add("    ${identifier.toEnum(enumName)}(\"${enumValue}\")")
+            }
         }
         target.write (values.joinToString (",\n") + ";\n\n")
         target.write("    private final String value;\n\n")

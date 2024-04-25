@@ -17,6 +17,7 @@ import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.support.capitalizeFirstChar
 import io.openapiprocessor.core.writer.Identifier
 import java.util.*
+import java.util.Collections.emptyList
 
 /**
  * Converter to map OpenAPI schemas to Java data types.
@@ -404,6 +405,7 @@ class DataTypeConverter(
             DataTypeName(enumName, getTypeNameWithSuffix(enumName)),
             listOf(options.packageName, "model").joinToString("."),
             schemaInfo.getEnumValues() as List<String>,
+            schemaInfo.getExtensions().getOrDefault("x-enumNames", emptyList<String>()) as List<String>,
             constraints,
             schemaInfo.getDeprecated())
 

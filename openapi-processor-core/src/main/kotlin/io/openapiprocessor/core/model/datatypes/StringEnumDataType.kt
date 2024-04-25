@@ -12,6 +12,7 @@ class StringEnumDataType(
     private val name: DataTypeName,
     private val pkg: String,
     val values: List<String> = emptyList(),
+    val xEnumNames: List<String> = emptyList(),
     override val constraints: DataTypeConstraints? = null,
     override val deprecated: Boolean = false
 ): DataType {

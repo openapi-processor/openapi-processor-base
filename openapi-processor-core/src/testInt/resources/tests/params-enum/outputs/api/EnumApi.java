@@ -5,6 +5,7 @@ import annotation.Parameter;
 import generated.model.Bar;
 import generated.model.Foo;
 import generated.model.FooFoo;
+import generated.model.NamedEnum;
 import generated.support.Generated;
 
 @Generated(value = "openapi-processor-core", version = "test")
@@ -17,5 +18,8 @@ public interface EnumApi {
 
     @Mapping("/endpoint-dashed")
     void getEndpointDashed(@Parameter FooFoo fooFoo);
+
+    @Mapping("/enum-names")
+    void getEnumNames(@Parameter NamedEnum named);
 
 }
