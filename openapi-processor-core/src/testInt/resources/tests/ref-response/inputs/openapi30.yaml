@@ -1,0 +1,38 @@
+openapi: 3.0.3
+info:
+  title: ref to response
+  version: 1.0.0
+
+paths:
+  /response-inline-ref:
+    get:
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Foo'
+
+  /response-ref-ref:
+    get:
+      responses:
+        '200':
+          $ref: '#/components/responses/FooResponse'
+
+components:
+
+  schemas:
+    Foo:
+      type: object
+      properties:
+        bar:
+          type: string
+
+  responses:
+    FooResponse:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Foo'
