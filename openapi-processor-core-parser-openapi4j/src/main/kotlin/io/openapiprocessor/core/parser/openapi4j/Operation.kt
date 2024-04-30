@@ -71,7 +71,7 @@ class Operation(
         val content = linkedMapOf<String, ParserResponse>()
 
         operation.responses.forEach { (key: String, value: O4jResponse) ->
-            content.put (key, Response(value))
+            content[key] = Response(value, refResolver)
         }
 
         return content
