@@ -13,17 +13,28 @@ import org.openapi4j.parser.model.v3.Response as O4jResponse
 /**
  * openapi4j Response abstraction.
  */
-class Response(private val response: O4jResponse): ParserResponse {
+class Response(private val response: O4jResponse, private val refResolver: RefResolverNative): ParserResponse {
 
     override fun getContent(): Map<String, ParserMediaType> {
+        var resp = response
+        if(resp.isRef) {
+            resp = refResolver.resolve(resp)
+        }
+
         val content = linkedMapOf<String, ParserMediaType>()
-        response.contentMediaTypes?.forEach { (key: String, entry: O4jMediaType) ->
+        resp.contentMediaTypes?.forEach { (key: String, entry: O4jMediaType) ->
             content[key] = MediaType(entry)
         }
         return content
     }
 
     override val description: String?
-        get() = response.description
+        get() {
+            var resp = response
+            if(resp.isRef) {
+                resp = refResolver.resolve(resp)
+            }
 
+            return resp.description
+        }
 }
