@@ -7,10 +7,10 @@ import generated.support.Generated;
 @Generated(value = "openapi-processor-core", version = "test")
 public interface Api {
 
-    @GetMapping(path = "/response-inline-ref", produces = {"application/json"})
+    @Mapping("/response-inline-ref")
     Foo getResponseInlineRef();
 
-    @GetMapping(path = "/response-ref-ref")
-    void getResponseRefRef();
+    @Mapping("/response-ref-ref")
+    Foo getResponseRefRef();
 
 }

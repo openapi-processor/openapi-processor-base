@@ -21,11 +21,12 @@ paths:
           $ref: '#/components/responses/FooResponse'
 
 components:
+
   schemas:
     Foo:
       type: object
       properties:
-        name:
+        bar:
           type: string
 
   responses:
