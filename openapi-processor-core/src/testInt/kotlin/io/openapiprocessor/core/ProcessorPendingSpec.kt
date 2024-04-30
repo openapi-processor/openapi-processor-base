@@ -53,6 +53,17 @@ class ProcessorPendingSpec: StringSpec({
 
 private fun sources(): Collection<TestSet> {
     return listOf(
+        testSet("ref-response", SWAGGER, API_30, model = "default", outputs = "outputs.yaml", expected = "outputs"),
+        testSet("ref-response", INTERNAL, API_30, model = "default", outputs = "outputs.yaml", expected = "outputs"),
+        testSet("ref-response", INTERNAL, API_30, model = "record", outputs = "outputs.yaml", expected = "outputs"),
+        testSet("ref-response", INTERNAL, API_31, model = "default", outputs = "outputs.yaml", expected = "outputs"),
+        testSet("ref-response", INTERNAL, API_31, model = "record", outputs = "outputs.yaml", expected = "outputs"),
+        testSet("ref-response", OPENAPI4J, API_30, model = "default", outputs = "outputs.yaml", expected = "outputs"),
+//        testSet("ref-response", INTERNAL, API_30, model = "record", outputs = "outputs.yaml", expected = "outputs"),
+//        testSet("object-nullable-properties", INTERNAL, API_31, model = "default", outputs = "outputs.yaml", expected = "outputs"),
+//        testSet("object-nullable-properties", INTERNAL, API_31, model = "record", outputs = "outputs.yaml", expected = "outputs"),
+//        testSet("object-nullable-properties", INTERNAL, API_30, model = "default", outputs = "outputs.yaml", expected = "outputs"),
+//        testSet("object-nullable-properties", INTERNAL, API_30, model = "record", outputs = "outputs.yaml", expected = "outputs"),
 //        testSet("response-reactive-mapping", INTERNAL, API_31, model = "default", outputs = "outputs.yaml", expected = "outputs"),
 //        testSet("response-reactive-result-mapping", INTERNAL, API_31, model = "default", outputs = "outputs.yaml", expected = "outputs"),
 //        testSet("response-result-mapping", INTERNAL, API_31, model = "default", outputs = "outputs.yaml", expected = "outputs"),
