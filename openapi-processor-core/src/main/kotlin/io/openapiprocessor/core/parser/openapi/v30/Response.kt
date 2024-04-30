@@ -16,14 +16,25 @@ import io.openapiprocessor.core.parser.Response as ParserResponse
 class Response(private val response: Response30): ParserResponse {
 
     override fun getContent(): Map<String, ParserMediaType> {
+        val responseContent = if(response.isRef) {
+            response.refObject.content
+        } else {
+            response.content
+        }
+
         val content = linkedMapOf<String, ParserMediaType>()
-        response.content.forEach { (key: String, entry: MediaType30) ->
+        responseContent.forEach { (key: String, entry: MediaType30) ->
             content[key] = MediaType(entry)
         }
         return content
     }
 
     override val description: String
-        get() = response.description
-
+        get() {
+            return if (response.isRef) {
+                response.refObject.description
+            } else {
+                response.description
+            }
+        }
 }
