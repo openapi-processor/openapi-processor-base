@@ -10,6 +10,23 @@ import spock.lang.Unroll
 
 class IdentifierSpec extends Specification {
 
+    void "add prefix to single invalid identifier"() {
+        def convert = new JavaIdentifier(new IdentifierOptions(wbfdtl))
+
+        expect:
+        convert.toCamelCase(src) == camelCase
+        convert.toIdentifier(src) == identifier
+        convert.toClass(src) == clazz
+        convert.toEnum(src) == enumn
+
+        where:
+        src  | camelCase | identifier | clazz | enumn | wbfdtl
+        "1"  | "v1"      | "v1"       | "V1"  | "V1"  | true
+        "11" | "v11"     | "v11"      | "V11" | "V11" | true
+        "1"  | "v1"      | "v1"       | "V1"  | "V1"  | false
+        "11" | "v11"     | "v11"      | "V11" | "V11" | false
+    }
+
     void "recognize word break if a digit is followed by a letter" () {
         def convert = new JavaIdentifier(new IdentifierOptions(true))
 

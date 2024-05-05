@@ -14,6 +14,7 @@ import javax.lang.model.SourceVersion
 import kotlin.collections.ArrayList
 
 
+private val INVALID_WORD_PREFIX = "v"
 private val INVALID_WORD_BREAKS = listOf(' ', '-')
 private val VALID_WORD_BREAKS = listOf('_')
 
@@ -112,7 +113,11 @@ class JavaIdentifier(val options: IdentifierOptions = IdentifierOptions()): Iden
         val words = ArrayList<String>()
         val current = StringBuilder()
 
-        val trimmed = src.trimInvalidStart()
+        var trimmed = src.trimInvalidStart()
+        if (trimmed.isEmpty()) {
+            trimmed = "$INVALID_WORD_PREFIX$src"
+        }
+
         trimmed.forEachIndexed { idx, c ->
             if (idx == 0 || !trimmed.isWordBreak(idx)) {
                 current.append(c)
@@ -130,6 +135,11 @@ class JavaIdentifier(val options: IdentifierOptions = IdentifierOptions()): Iden
         if(current.isNotEmpty()) {
             words.add(current)
         }
+
+//        if(words.isEmpty()) {
+//            words.add(INVALID_WORD_PREFIX)
+//            words.add(src)
+//        }
 
         return words
     }
