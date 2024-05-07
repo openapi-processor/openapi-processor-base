@@ -99,10 +99,10 @@ class IdentifierSpec extends Specification {
         "fooBAr"         | "fooBar"       | "fooBar"       | "FooBar"       | "FOO_BAR"
         "fooBAR"         | "fooBar"       | "fooBar"       | "FooBar"       | "FOO_BAR"
 
-        // final result is empty
-        " "              | "invalid"      | "invalid"      | "Invalid"      | "INVALID"
-        "_"              | "invalid"      | "invalid"      | "Invalid"      | "INVALID"
-        "-"              | "invalid"      | "invalid"      | "Invalid"      | "INVALID"
+        // final result is empty, i.e. it gets replaced by the "invalid" prefix
+        " "              | "v"            | "v"            | "V"            | "V"
+        "_"              | "v"            | "v"            | "V"            | "V"
+        "-"              | "v"            | "v"            | "V"            | "V"
 
         // identifier handles keywords
         "class"          | "class"        | "aClass"       | "Class"        | "CLASS"
