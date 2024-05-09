@@ -36,6 +36,14 @@ It reads the link:{openapi}[OpenAPI] yaml, converts it to an internal model and 
 
 openapi parser abstraction used by openapi-processor-core
 
+=== openapi-processor-core-parser-swagger
+
+swagger parser implementation of parser api
+
+=== openapi-processor-core-parser-openapi4j (deprecated)
+
+openapi4j parser implementation of parser api
+
 === link:{test}[openapi-processor-test]
 
 re-usable code for running integration tests of an openapi-processor-x.
