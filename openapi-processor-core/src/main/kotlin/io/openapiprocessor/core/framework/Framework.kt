@@ -10,6 +10,7 @@ import io.openapiprocessor.core.model.datatypes.AnnotationDataType
 import io.openapiprocessor.core.model.parameters.Parameter
 import io.openapiprocessor.core.model.datatypes.DataType
 import io.openapiprocessor.core.parser.Parameter as ParserParameter
+import io.openapiprocessor.core.parser.RequestBody as ParserRequestBody
 
 /**
  * factory for framework model objects.
@@ -76,10 +77,9 @@ interface Framework {
      * create a model request body.
      *
      * @param contentType an OpenAPI request body content type
-     * @param required the request body is required
+     * @param requestBody an OpenAPI request body
      * @param dataType data type of the request body
      * @return an additional {@link RequestBody}
      */
-    fun createRequestBody(contentType: String, required: Boolean, dataType: DataType): RequestBody
-
+    fun createRequestBody(contentType: String, requestBody: ParserRequestBody, dataType: DataType): RequestBody
 }

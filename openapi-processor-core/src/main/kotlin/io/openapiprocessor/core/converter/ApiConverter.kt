@@ -154,7 +154,7 @@ class  ApiConverter(
             if (contentType.startsWith(MULTIPART)) {
                 ep.parameters.addAll (createMultipartParameter(info, mediaType.encodings, dataTypes))
             } else {
-                ep.requestBodies.add (createRequestBody (contentType, info, requestBody.getRequired(), dataTypes))
+                ep.requestBodies.add (createRequestBody (contentType, info, requestBody, dataTypes))
             }
         }
     }
@@ -243,7 +243,7 @@ class  ApiConverter(
         return framework.createAdditionalParameter (parameter, addType, annotationType)
     }
 
-    private fun createRequestBody(contentType: String, info: SchemaInfo, required: Boolean, dataTypes: DataTypes): ModelRequestBody {
+    private fun createRequestBody(contentType: String, info: SchemaInfo, requestBody: RequestBody, dataTypes: DataTypes): ModelRequestBody {
         val dataType = convertDataType(info, dataTypes)
 
         val changedType = if (dataType.isCollection()) {
@@ -252,7 +252,7 @@ class  ApiConverter(
             singleDataTypeWrapper.wrap(dataType, info)
         }
 
-        return framework.createRequestBody(contentType, required, changedType)
+        return framework.createRequestBody(contentType, requestBody, changedType)
     }
 
     private fun createMultipartParameter(info: SchemaInfo, encodings: Map<String, Encoding>,

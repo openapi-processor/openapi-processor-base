@@ -16,6 +16,7 @@ import io.openapiprocessor.core.model.parameters.PathParameter
 import io.openapiprocessor.core.model.parameters.QueryParameter
 import io.openapiprocessor.core.model.datatypes.DataType
 import io.openapiprocessor.core.parser.Parameter as ParserParameter
+import io.openapiprocessor.core.parser.RequestBody as ParserRequestBody
 
 /**
  * default implementation of [io.openapiprocessor.core.framework.Framework].
@@ -82,8 +83,13 @@ open class FrameworkBase: Framework {
             parameter.description)
     }
 
-    override fun createRequestBody(contentType: String, required: Boolean, dataType: DataType): RequestBody {
-        return RequestBody("body", contentType, dataType, required, false)
+    override fun createRequestBody(contentType: String, requestBody: ParserRequestBody, dataType: DataType): RequestBody {
+        return RequestBody(
+            "body",
+            contentType,
+            dataType,
+            requestBody.getRequired(),
+            false,
+            requestBody.description)
     }
-
 }
