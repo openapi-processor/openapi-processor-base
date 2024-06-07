@@ -7,4 +7,4 @@ options:
 map:
   types:
     - type: string:foo @ io.oap.Annotation (value = io.oap.Bar.class)
-    - type: Foo @ io.oap.AnnotationAtClass(value = io.oap.AnnotationAtClassParameter.class, simple = 2)
+    - type: Foo @ io.oap.ClassAnnotation(value = io.oap.Param.class, simple = 2)
