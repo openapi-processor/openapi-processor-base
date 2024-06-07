@@ -234,6 +234,12 @@ abstract class DataTypeWriterBase(
 
         annotationTypeMappings.forEach {
             imports.add(it.annotation.type)
+
+            val parameterImports = it.annotation.parameters.values
+                .filter { v -> v.import != null }
+                .map { v -> v.import!! }
+
+            imports.addAll(parameterImports)
         }
 
         return imports
