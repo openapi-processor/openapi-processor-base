@@ -1,4 +1,4 @@
-openapi-processor-mapping: v4
+openapi-processor-mapping: v7
 
 options:
   package-name: generated
@@ -7,3 +7,4 @@ options:
 map:
   types:
     - type: string:foo @ io.oap.Annotation (value = io.oap.Bar.class)
+    - type: Foo @ io.oap.AnnotationAtClass(value = io.oap.AnnotationAtClassParameter.class, simple = 2)
