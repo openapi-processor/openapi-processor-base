@@ -70,6 +70,10 @@ open class JavaDocWriter(val identifier: Identifier) {
             comment += convert(it.description, "@param ${identifier.toCamelCase (it.name)}")
         }
 
+        endpoint.requestBodies.forEach {
+            comment += convert(it.description, "@param ${identifier.toCamelCase (it.name)}")
+        }
+
         val response = convert(endpointResponse.description, "@return")
         if (response.isNotEmpty()) {
             comment += response

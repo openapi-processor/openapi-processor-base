@@ -18,7 +18,7 @@ list of OpenAPI *documentation* properties. Checked items are supported/used to 
 ** [ ] `examples: [string -> Example]`
 
 * `Request Body`:
-** [ ] `description: string` (common mark)
+** [x] `description: string` (common mark)
 ** [ ] `content: [string -> MediaType]`
 
 * `Responses`:
