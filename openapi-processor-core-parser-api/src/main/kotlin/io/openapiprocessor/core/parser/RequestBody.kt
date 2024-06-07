@@ -13,5 +13,6 @@ interface RequestBody {
     // default: false
     fun getRequired(): Boolean
     fun getContent(): Map<String, MediaType>
+    val description: String?
 
 }

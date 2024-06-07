@@ -27,4 +27,6 @@ class RequestBody(private val requestBody: RequestBody31): ParserRequestBody {
         return content
     }
 
+    override val description: String?
+        get() = requestBody.description
 }

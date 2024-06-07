@@ -40,4 +40,6 @@ class RequestBody(private val requestBody: O4jRequestBody): ParserRequestBody {
         return content
     }
 
+    override val description: String?
+        get() = requestBody.description
 }

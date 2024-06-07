@@ -41,4 +41,6 @@ class RequestBody(private val requestBody: SwaggerRequestBody): ParserRequestBod
         return content
     }
 
+    override val description: String?
+        get() = requestBody.description
 }
