@@ -19,9 +19,14 @@ public interface Api {
      * more
      *
      * @param fOO this is a <em>parameter</em> description
+     * @param bar this is another <em>parameter</em> description
+     * @param body this is the request body
      * @return this is a <em>response</em> description
      */
     @Mapping("/foo")
-    Foo getFoo(@Parameter Foo fOO);
+    Foo getFoo(
+            @Parameter Foo fOO,
+            @Parameter String bar,
+            @Parameter Foo[] body);
 
 }

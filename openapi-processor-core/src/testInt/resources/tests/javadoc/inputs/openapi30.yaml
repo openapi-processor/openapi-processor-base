@@ -25,6 +25,21 @@ paths:
           in: query
           schema:
             $ref: '#/components/schemas/Foo'
+        - name: bar
+          description: this is another *parameter* description
+          example: this is another example
+          in: query
+          schema:
+            type: string
+      requestBody:
+        description: this is the request body
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Foo'
+        required: true
       responses:
         '200':
           description: this is a *response* description
