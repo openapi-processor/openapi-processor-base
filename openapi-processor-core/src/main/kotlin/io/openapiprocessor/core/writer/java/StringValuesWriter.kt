@@ -8,20 +8,42 @@ package io.openapiprocessor.core.writer.java
 import io.openapiprocessor.core.converter.ApiOptions
 import java.io.Writer
 
-class StringValuesWriter(val options: ApiOptions) {
+class StringValuesWriter(
+    val options: ApiOptions,
+    private val generatedWriter: GeneratedWriter
+) {
 
     fun writeValues(target: Writer) {
+        val imports = listOf(
+            generatedWriter.getImport(),
+            "${options.beanValidationFormat}.validation.Constraint",
+            "${options.beanValidationFormat}.validation.Payload",
+            "java.lang.annotation.*"
+        ).sorted()
+
         target.write("""
             package ${options.packageName}.validation;
+            
+        """.trimIndent())
 
-            import ${options.beanValidationFormat}.validation.Constraint;
-            import ${options.beanValidationFormat}.validation.Payload;
-            import java.lang.annotation.*;
-    
+        target.write("\n")
+        imports.forEach {
+            target.write("import ${it};\n")
+        }
+        target.write("\n")
+
+        target.write("""
             @Target({ElementType.FIELD, ElementType.PARAMETER})
             @Retention(RetentionPolicy.RUNTIME)
             @Constraint(validatedBy = ValueValidator.class)
             @Documented
+            
+        """.trimIndent())
+
+        generatedWriter.writeUse(target)
+        target.write("\n")
+
+        target.write("""
             public @interface Values {
                 String message() default "Invalid value. Should be one of values.";
                 Class<?>[] groups() default {};
@@ -33,14 +55,28 @@ class StringValuesWriter(val options: ApiOptions) {
     }
 
     fun writeValueValidator(target: Writer) {
+        val imports = listOf(
+            generatedWriter.getImport(),
+            "${options.beanValidationFormat}.validation.ConstraintValidator",
+            "${options.beanValidationFormat}.validation.ConstraintValidatorContext",
+            "java.util.Arrays"
+        ).sorted()
+
         target.write("""
             package ${options.packageName}.validation;
-
-            import ${options.beanValidationFormat}.validation.ConstraintValidator;
-            import ${options.beanValidationFormat}.validation.ConstraintValidatorContext;
             
-            import java.util.Arrays;
+        """.trimIndent())
 
+        target.write("\n")
+        imports.forEach {
+            target.write("import ${it};\n")
+        }
+        target.write("\n")
+
+        generatedWriter.writeUse(target)
+        target.write("\n")
+
+        target.write("""
             public class ValueValidator implements ConstraintValidator<Values, String> {
                 private String[] values;
 

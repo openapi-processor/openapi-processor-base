@@ -1,10 +1,11 @@
 package generated.validation;
 
+import generated.support.Generated;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-
 import java.util.Arrays;
 
+@Generated(value = "openapi-processor-core", version = "test")
 public class ValueValidator implements ConstraintValidator<Values, String> {
     private String[] values;
 

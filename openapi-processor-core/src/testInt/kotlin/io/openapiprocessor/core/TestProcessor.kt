@@ -42,7 +42,7 @@ class TestProcessor:
 
             val generatedInfo = GeneratedInfo("openapi-processor-core", "test")
             val generatedWriter = GeneratedWriterImpl(generatedInfo, options)
-            val validationWriter = ValidationWriter(options)
+            val validationWriter = ValidationWriter(options, generatedWriter)
             val beanValidation = BeanValidationFactory(options)
             val javaDocWriter = JavaDocWriter(identifier)
             val formatter = GoogleFormatter()

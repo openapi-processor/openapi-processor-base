@@ -13,7 +13,8 @@ import java.io.Writer
 
 class ValidationWriter(
     private val options: ApiOptions,
-    private val writer: StringValuesWriter = StringValuesWriter(options)
+    private val generatedWriter: GeneratedWriter,
+    private val writer: StringValuesWriter = StringValuesWriter(options, generatedWriter)
 ) {
     fun write(formatter: SourceFormatter, writerFactory: WriterFactory) {
         if (!options.beanValidation)
