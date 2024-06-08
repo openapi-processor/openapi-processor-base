@@ -214,7 +214,7 @@ abstract class DataTypeWriterBase(
     private fun collectImports(packageName: String, dataType: ModelDataType): List<String> {
         val imports = mutableSetOf<String>()
 
-        imports.add(generatedWriter.getImport())
+        imports.addAll(generatedWriter.getImports())
         imports.addAll(collectDataTypeImports(dataType))
         imports.addAll(collectBeanValidationImports(dataType))
         imports.addAll(collectDataTypePropertiesImports(dataType))

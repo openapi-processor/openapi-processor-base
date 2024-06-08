@@ -53,7 +53,7 @@ class InterfaceWriter(
     private fun collectImports(packageName: String, endpoints: List<Endpoint>): List<String> {
         val imports: MutableSet<String> = mutableSetOf()
 
-        imports.add(generatedWriter.getImport())
+        imports.addAll(generatedWriter.getImports())
 
         endpoints.forEach { ep ->
             val annotation = annotations.getAnnotation (ep.method)

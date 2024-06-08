@@ -36,7 +36,7 @@ class InterfaceDataTypeWriter(
 
     private fun collectImports(): Set<String> {
         val imports = mutableSetOf<String>()
-        imports.add(generatedWriter.getImport())
+        imports.addAll(generatedWriter.getImports())
         return imports
     }
 }

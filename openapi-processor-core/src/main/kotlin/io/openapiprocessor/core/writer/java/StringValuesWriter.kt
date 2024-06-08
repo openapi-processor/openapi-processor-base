@@ -14,12 +14,12 @@ class StringValuesWriter(
 ) {
 
     fun writeValues(target: Writer) {
-        val imports = listOf(
-            generatedWriter.getImport(),
+        val imports = mutableListOf(
             "${options.beanValidationFormat}.validation.Constraint",
             "${options.beanValidationFormat}.validation.Payload",
             "java.lang.annotation.*"
-        ).sorted()
+        )
+        imports.addAll(generatedWriter.getImports())
 
         target.write("""
             package ${options.packageName}.validation;
@@ -27,7 +27,7 @@ class StringValuesWriter(
         """.trimIndent())
 
         target.write("\n")
-        imports.forEach {
+        imports.sorted().forEach {
             target.write("import ${it};\n")
         }
         target.write("\n")
@@ -55,12 +55,12 @@ class StringValuesWriter(
     }
 
     fun writeValueValidator(target: Writer) {
-        val imports = listOf(
-            generatedWriter.getImport(),
+        val imports = mutableListOf(
             "${options.beanValidationFormat}.validation.ConstraintValidator",
             "${options.beanValidationFormat}.validation.ConstraintValidatorContext",
             "java.util.Arrays"
-        ).sorted()
+        )
+        imports.addAll(generatedWriter.getImports())
 
         target.write("""
             package ${options.packageName}.validation;
@@ -68,7 +68,7 @@ class StringValuesWriter(
         """.trimIndent())
 
         target.write("\n")
-        imports.forEach {
+        imports.sorted().forEach {
             target.write("import ${it};\n")
         }
         target.write("\n")

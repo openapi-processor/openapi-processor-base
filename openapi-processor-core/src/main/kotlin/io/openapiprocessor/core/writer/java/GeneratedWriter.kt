@@ -8,7 +8,7 @@ package io.openapiprocessor.core.writer.java
 import java.io.Writer
 
 interface GeneratedWriter {
-    fun getImport():String
+    fun getImports(): Set<String>
     fun writeUse(target: Writer)
     fun writeSource(target: Writer)
 }

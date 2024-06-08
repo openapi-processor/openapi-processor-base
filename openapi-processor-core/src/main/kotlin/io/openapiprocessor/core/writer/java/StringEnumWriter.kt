@@ -98,10 +98,10 @@ open class StringEnumWriter(
 
     private fun collectImports(packageName: String, dataType: DataType): List<String> {
         val imports = mutableSetOf<String>()
-        imports.add ("com.fasterxml.jackson.annotation.JsonCreator")
-        imports.add ("com.fasterxml.jackson.annotation.JsonValue")
-        imports.add(generatedWriter.getImport())
-        imports.addAll (dataType.referencedImports)
+        imports.add("com.fasterxml.jackson.annotation.JsonCreator")
+        imports.add("com.fasterxml.jackson.annotation.JsonValue")
+        imports.addAll(generatedWriter.getImports())
+        imports.addAll(dataType.referencedImports)
         if (isSupplier()) {
             imports.add ("java.util.function.Supplier")
         }

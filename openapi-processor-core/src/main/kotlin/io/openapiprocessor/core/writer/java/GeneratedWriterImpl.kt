@@ -12,8 +12,8 @@ import java.io.Writer
 class GeneratedWriterImpl(private val info: GeneratedInfo, private val options: ApiOptions)
     : GeneratedWriter {
 
-    override fun getImport():String {
-        return "${options.packageName}.support.Generated"
+    override fun getImports(): Set<String> {
+        return setOf("${options.packageName}.support.Generated")
     }
 
     override fun writeUse(target: Writer) {

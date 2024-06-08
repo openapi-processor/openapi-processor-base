@@ -10,8 +10,8 @@ import java.io.Writer
 
 class SimpleGeneratedWriter(private val options: ApiOptions) : GeneratedWriter {
 
-    override fun getImport(): String {
-        return "${options.packageName}.support.Generated"
+    override fun getImports(): Set<String> {
+        return setOf("${options.packageName}.support.Generated")
     }
 
     override fun writeUse(target: Writer) {
