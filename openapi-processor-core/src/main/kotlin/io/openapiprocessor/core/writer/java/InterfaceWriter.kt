@@ -37,7 +37,6 @@ class InterfaceWriter(
         target.write("\n")
 
         generatedWriter.writeUse(target)
-        target.write("\n")
         target.write("public interface ${itf.getInterfaceName()} {\n\n")
 
         itf.endpoints.forEach { ep ->

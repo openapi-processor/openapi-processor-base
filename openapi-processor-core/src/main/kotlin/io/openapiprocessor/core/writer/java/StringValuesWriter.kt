@@ -14,7 +14,7 @@ class StringValuesWriter(
 ) {
 
     fun writeValues(target: Writer) {
-        val imports = mutableListOf(
+        val imports = mutableSetOf(
             "${options.beanValidationFormat}.validation.Constraint",
             "${options.beanValidationFormat}.validation.Payload",
             "java.lang.annotation.*"
@@ -41,7 +41,6 @@ class StringValuesWriter(
         """.trimIndent())
 
         generatedWriter.writeUse(target)
-        target.write("\n")
 
         target.write("""
             public @interface Values {
@@ -55,7 +54,7 @@ class StringValuesWriter(
     }
 
     fun writeValueValidator(target: Writer) {
-        val imports = mutableListOf(
+        val imports = mutableSetOf(
             "${options.beanValidationFormat}.validation.ConstraintValidator",
             "${options.beanValidationFormat}.validation.ConstraintValidatorContext",
             "java.util.Arrays"
@@ -74,7 +73,6 @@ class StringValuesWriter(
         target.write("\n")
 
         generatedWriter.writeUse(target)
-        target.write("\n")
 
         target.write("""
             public class ValueValidator implements ConstraintValidator<Values, String> {

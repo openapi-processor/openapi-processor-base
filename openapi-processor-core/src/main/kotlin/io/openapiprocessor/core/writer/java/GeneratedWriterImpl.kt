@@ -18,6 +18,7 @@ class GeneratedWriterImpl(private val info: GeneratedInfo, private val options: 
 
     override fun writeUse(target: Writer) {
         target.write(create())
+        target.write("\n")
     }
 
     override fun writeSource(target: Writer) {

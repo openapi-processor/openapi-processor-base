@@ -32,7 +32,6 @@ open class StringEnumWriter(
         }
 
         generatedWriter.writeUse(target)
-        target.write("\n")
         target.write("public enum ${dataType.getTypeName()}")
         if (isSupplier()) {
             target.write(" implements Supplier<String>")

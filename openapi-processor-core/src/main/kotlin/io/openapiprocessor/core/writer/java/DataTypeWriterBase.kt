@@ -208,7 +208,6 @@ abstract class DataTypeWriterBase(
 
     private fun writeAnnotationsGenerated(target: Writer) {
         generatedWriter.writeUse(target)
-        target.write("\n")
     }
 
     private fun collectImports(packageName: String, dataType: ModelDataType): List<String> {

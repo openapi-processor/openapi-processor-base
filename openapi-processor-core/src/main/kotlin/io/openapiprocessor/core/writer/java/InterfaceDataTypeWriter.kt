@@ -29,7 +29,6 @@ class InterfaceDataTypeWriter(
         }
 
         generatedWriter.writeUse(target)
-        target.write("\n")
         target.write("public interface ${dataType.getTypeName()} {\n")
         target.write ("}\n")
     }

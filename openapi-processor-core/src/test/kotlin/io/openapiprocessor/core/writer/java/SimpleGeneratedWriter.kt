@@ -15,7 +15,7 @@ class SimpleGeneratedWriter(private val options: ApiOptions) : GeneratedWriter {
     }
 
     override fun writeUse(target: Writer) {
-        target.write("@Generated")
+        target.write("@Generated\n")
     }
 
     override fun writeSource(target: Writer) {
