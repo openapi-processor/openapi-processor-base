@@ -13,15 +13,27 @@ class GeneratedWriterImpl(private val info: GeneratedInfo, private val options: 
     : GeneratedWriter {
 
     override fun getImports(): Set<String> {
+        if (!options.generatedAnnotation) {
+            return emptySet()
+        }
+
         return setOf("${options.packageName}.support.Generated")
     }
 
     override fun writeUse(target: Writer) {
+        if (!options.generatedAnnotation) {
+            return
+        }
+
         target.write(create())
         target.write("\n")
     }
 
     override fun writeSource(target: Writer) {
+        if (!options.generatedAnnotation) {
+            return
+        }
+
         target.write("""
             package ${options.packageName}.support;
 

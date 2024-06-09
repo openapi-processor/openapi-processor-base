@@ -78,6 +78,11 @@ class ApiOptions {
     var formatCode = false
 
     /**
+     *  enable/disable the @Generated annotation (optional).
+     */
+    var generatedAnnotation = true
+
+    /**
      *  enable/disable the @Generated date (optional).
      */
     var generatedDate = true
