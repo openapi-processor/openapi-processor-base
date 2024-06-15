@@ -41,7 +41,7 @@ class ParameterDeserializer : StdDeserializer<Parameter>(Parameter::class.java) 
             return Type(type, generics)
         }
 
-        throw IOException("unknown parameter type at: " + p?.tokenLocation.toString ())
+        throw IOException("unknown parameter type at: " + p?.currentLocation().toString ())
     }
 
     private fun isRequestParameter(source: Map<*, *>): Boolean {
