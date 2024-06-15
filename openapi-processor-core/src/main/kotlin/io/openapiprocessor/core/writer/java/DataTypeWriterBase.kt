@@ -29,7 +29,11 @@ data class PropertyData(
     val baseName: String,
     val imports: Set<String>,
     val propDataType: PropertyDataType
-)
+) {
+    fun isRequired(dataType: ModelDataType): Boolean {
+        return dataType.isRequired(srcPropName)
+    }
+}
 
 
 abstract class DataTypeWriterBase(

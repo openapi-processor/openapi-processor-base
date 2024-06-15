@@ -44,11 +44,11 @@ class DataTypeWriterRecord(
         val props = mutableListOf<String>()
 
         propsData.forEach { propData ->
-            var prop = getProp(
+            val prop = getProp(
                 propData.srcPropName,
                 propData.propName,
                 propData.propDataType,
-                dataType.isRequired(propData.srcPropName),
+                propData.isRequired(dataType),
                 Access.NONE)
 
             // todo can't init record parameter here
