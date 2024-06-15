@@ -9,7 +9,6 @@ import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.model.datatypes.DataType
 import io.openapiprocessor.core.model.datatypes.ModelDataType
 import io.openapiprocessor.core.model.datatypes.NullDataType
-import io.openapiprocessor.core.model.datatypes.PropertyDataType
 import io.openapiprocessor.core.support.capitalizeFirstChar
 import io.openapiprocessor.core.writer.Identifier
 import java.io.Writer
@@ -26,15 +25,16 @@ class DataTypeWriterPojo(
 ) : DataTypeWriterBase(apiOptions, identifier, generatedWriter, validationAnnotations, javadocWriter) {
 
     override fun write(target: Writer, dataType: ModelDataType) {
-        writeFileHeader(target, dataType)
-        writePreClass(target, dataType)
-        writeClass(target, dataType)
+        val propsData = collectPropertiesData(dataType)
+        writeFileHeader(target, dataType, propsData)
+        writePreClass(target, dataType, propsData)
+        writeClass(target, dataType, propsData)
     }
 
-    private fun writeClass(target: Writer, dataType: ModelDataType) {
+    private fun writeClass(target: Writer, dataType: ModelDataType, propsData: List<PropertyData>) {
         writeClassOpen(target, dataType)
-        writeClassProperties(target, dataType)
-        writeClassMethods(dataType, target)
+        writeClassProperties(target, dataType, propsData)
+        writeClassMethods(target, dataType, propsData)
         writeClassClose(target)
     }
 
@@ -47,24 +47,24 @@ class DataTypeWriterPojo(
         }
     }
 
-    private fun writeClassProperties(target: Writer, dataType: ModelDataType) {
+    private fun writeClassProperties(target: Writer, dataType: ModelDataType, propsData: List<PropertyData>) {
         val props = mutableListOf<String>()
-        dataType.forEach { propName, propDataType ->
-            val javaPropertyName = identifier.toIdentifier(propName)
-            var propSource = getProp(
-                propName,
-                javaPropertyName,
-                propDataType as PropertyDataType,
-                dataType.isRequired(propName),
+
+        propsData.forEach { propData ->
+            var prop = getProp(
+                propData.srcPropName,
+                propData.propName,
+                propData.propDataType,
+                dataType.isRequired(propData.srcPropName),
                 Access.PRIVATE)
 
             // null (JsonNullable) may have an init value
-            val pDataType = propDataType.dataType
+            val pDataType = propData.propDataType.dataType
             if (pDataType is NullDataType && pDataType.init != null) {
-                propSource += " = ${pDataType.init}"
+                prop += " = ${pDataType.init}"
             }
 
-            props.add(propSource)
+            props.add(prop)
         }
 
         target.write(props.joinToString(";\n\n"))
@@ -73,11 +73,10 @@ class DataTypeWriterPojo(
         }
     }
 
-    private fun writeClassMethods(dataType: ModelDataType, target: Writer) {
-        dataType.forEach { propName, propDataType ->
-            val javaPropertyName = identifier.toCamelCase(propName)
-            target.write(getGetter(javaPropertyName, propDataType))
-            target.write(getSetter(javaPropertyName, propDataType))
+    private fun writeClassMethods(target: Writer, dataType: ModelDataType, propsData: List<PropertyData>) {
+        propsData.forEach {
+            target.write(getGetter(it.baseName, it.propDataType))
+            target.write(getSetter(it.baseName, it.propDataType))
         }
     }
 

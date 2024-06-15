@@ -22,6 +22,16 @@ enum class Access {
     NONE, PRIVATE
 }
 
+
+data class PropertyData(
+    val srcPropName: String,
+    val propName: String,
+    val baseName: String,
+    val imports: Set<String>,
+    val propDataType: PropertyDataType
+)
+
+
 abstract class DataTypeWriterBase(
     protected val apiOptions: ApiOptions,
     protected val identifier: Identifier,
@@ -31,12 +41,33 @@ abstract class DataTypeWriterBase(
 ): DataTypeWriter {
     protected val annotationWriter = AnnotationWriter()
 
-    protected fun writeFileHeader(target: Writer, dataType: ModelDataType) {
-        writePackage(target, dataType)
-        writeImports(target, dataType)
+    protected fun collectPropertiesData(modelDataType: ModelDataType): List<PropertyData> {
+        val propData = mutableListOf<PropertyData>()
+
+        modelDataType.forEach { srcPropName, dataType ->
+            val propDataType = dataType as PropertyDataType
+
+            val propName = identifier.toIdentifier(srcPropName)
+            val baseName = identifier.toCamelCase(srcPropName)
+            val propImports = collectDataTypePropertyImports(modelDataType, srcPropName, propDataType)
+
+            propData.add(PropertyData(
+                srcPropName,
+                propName,
+                baseName,
+                propImports,
+                propDataType))
+        }
+
+        return propData
     }
 
-    protected fun writePreClass(target: Writer, dataType: ModelDataType) {
+    protected fun writeFileHeader(target: Writer, dataType: ModelDataType, propsData: List<PropertyData>) {
+        writePackage(target, dataType)
+        writeImports(target, dataType, propsData)
+    }
+
+    protected fun writePreClass(target: Writer, dataType: ModelDataType, propsData: List<PropertyData>) {
         writeJavaDoc(target, dataType)
         writeDeprecated(target, dataType)
         writeAnnotationsBeanValidation(target, dataType)
@@ -79,7 +110,7 @@ abstract class DataTypeWriterBase(
         writeAnnotations(extBuilder, collectExtensionAnnotations(propDataType.extensions))
         result += extBuilder.toString()
 
-        result += "    ${getPropertyAnnotation(propertyName, propDataType)}\n"
+        result += "    ${getPropertyAnnotation(propertyName, propDataType)}"
 
         result += if (access == Access.PRIVATE) {
             "    private $propTypeName $javaPropertyName"
@@ -140,7 +171,7 @@ abstract class DataTypeWriterBase(
             "\"$propertyName\""
         }
 
-        result += ")"
+        result += ")\n"
         return result
     }
 
@@ -164,8 +195,9 @@ abstract class DataTypeWriterBase(
         target.write("package ${dataType.getPackageName()};\n\n")
     }
 
-    private fun writeImports(target: Writer, dataType: ModelDataType) {
-        val imports: List<String> = collectImports(dataType.getPackageName(), dataType)
+    private fun writeImports(target: Writer, dataType: ModelDataType, propsData: List<PropertyData>) {
+        val imports: List<String> = collectImports(dataType.getPackageName(), dataType, propsData)
+
         imports.forEach {
             target.write("import ${it};\n")
         }
@@ -210,17 +242,22 @@ abstract class DataTypeWriterBase(
         generatedWriter.writeUse(target)
     }
 
-    private fun collectImports(packageName: String, dataType: ModelDataType): List<String> {
+    private fun collectImports(packageName: String, dataType: ModelDataType, propsData: List<PropertyData>): List<String> {
         val imports = mutableSetOf<String>()
 
         imports.addAll(generatedWriter.getImports())
         imports.addAll(collectDataTypeImports(dataType))
-        imports.addAll(collectBeanValidationImports(dataType))
-        imports.addAll(collectDataTypePropertiesImports(dataType))
+        imports.addAll(collectPropertyImports(propsData))
 
         return DefaultImportFilter()
             .filter(packageName, imports)
             .sorted()
+    }
+
+    private fun collectPropertyImports(propsData: List<PropertyData>): List<String> {
+        return propsData
+            .map { it.imports }
+            .flatten()
     }
 
     private fun collectDataTypeImports(dataType: ModelDataType): Set<String> {
@@ -241,64 +278,57 @@ abstract class DataTypeWriterBase(
             imports.addAll(parameterImports)
         }
 
-        return imports
-    }
-
-    private fun collectBeanValidationImports(dataType: ModelDataType): Set<String> {
-        if (!apiOptions.beanValidation)
-            return emptySet()
-
-        val imports = mutableSetOf<String>()
-
-        val info = validationAnnotations.validate(dataType)
-        val prop = info.prop
-        imports.addAll(prop.imports)
-
-        dataType.forEach { propName, propDataType ->
-            val target = getTarget(propDataType)
-            val propInfo = validationAnnotations.validate(target, dataType.isRequired(propName))
-            val propProp = propInfo.prop
-            imports.addAll(propProp.imports)
+        if (apiOptions.beanValidation) {
+            val info = validationAnnotations.validate(dataType)
+            val prop = info.prop
+            imports.addAll(prop.imports)
         }
 
         return imports
     }
 
-    private fun collectDataTypePropertiesImports(dataType: ModelDataType): Set<String> {
+    private fun collectDataTypePropertyImports(
+        modelDataType: ModelDataType,
+        srcPropName: String,
+        propDataType: PropertyDataType
+    ): Set<String> {
         val imports = mutableSetOf<String>()
 
-        dataType.forEach { _, propDataType ->
-            imports.add("com.fasterxml.jackson.annotation.JsonProperty")
+        val target = getTarget(propDataType)
 
-            // do not annotate unmapped, i.e. generated pojo property
-            if ((propDataType is PropertyDataType) && (propDataType.dataType is ObjectDataType)) {
-                return@forEach
+        imports.add("com.fasterxml.jackson.annotation.JsonProperty")
+
+        if (apiOptions.beanValidation) {
+            val required = modelDataType.isRequired(srcPropName)
+            val propInfo = validationAnnotations.validate(target, required)
+            val propProp = propInfo.prop
+            imports.addAll(propProp.imports)
+        }
+
+        // do not annotate unmapped, i.e. generated pojo property
+        if (propDataType.dataType is ObjectDataType) {
+            return imports
+        }
+
+        val typeAnnotations = collectTypeAnnotations(target.getSourceName())
+        typeAnnotations.forEach { annotation ->
+            imports.addAll(annotation.imports)
+
+            annotation.parameters.forEach {
+                val import = it.value.import
+                if (import != null)
+                    imports.add(import)
             }
+        }
 
-            val target = getTarget(propDataType)
+        val extAnnotations = collectExtensionAnnotations(propDataType.extensions)
+        extAnnotations.forEach { annotation ->
+            imports.addAll(annotation.imports)
 
-            val typeAnnotations = collectTypeAnnotations(target.getSourceName())
-            typeAnnotations.forEach { annotation ->
-                imports.addAll(annotation.imports)
-
-                annotation.parameters.forEach {
-                    val import = it.value.import
-                    if (import != null)
-                        imports.add(import)
-                }
-            }
-
-            if (propDataType is PropertyDataType) {
-                val extAnnotations = collectExtensionAnnotations(propDataType.extensions)
-                extAnnotations.forEach { annotation ->
-                    imports.addAll(annotation.imports)
-
-                    annotation.parameters.forEach {
-                        val import = it.value.import
-                        if (import != null)
-                            imports.add(import)
-                    }
-                }
+            annotation.parameters.forEach {
+                val import = it.value.import
+                if (import != null)
+                    imports.add(import)
             }
         }
 

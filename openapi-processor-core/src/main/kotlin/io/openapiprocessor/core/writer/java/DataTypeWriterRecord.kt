@@ -8,7 +8,6 @@ package io.openapiprocessor.core.writer.java
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.model.datatypes.DataType
 import io.openapiprocessor.core.model.datatypes.ModelDataType
-import io.openapiprocessor.core.model.datatypes.PropertyDataType
 import io.openapiprocessor.core.writer.Identifier
 import java.io.Writer
 
@@ -24,14 +23,15 @@ class DataTypeWriterRecord(
 ) : DataTypeWriterBase(apiOptions, identifier, generatedWriter, validationAnnotations, javadocWriter) {
 
     override fun write(target: Writer, dataType: ModelDataType) {
-        writeFileHeader(target, dataType)
-        writePreClass(target, dataType)
-        writeRecord(target, dataType)
+        val propsData = collectPropertiesData(dataType)
+        writeFileHeader(target, dataType, propsData)
+        writePreClass(target, dataType, propsData)
+        writeRecord(target, dataType, propsData)
     }
 
-    private fun writeRecord(target: Writer, dataType: ModelDataType) {
+    private fun writeRecord(target: Writer, dataType: ModelDataType, propsData: List<PropertyData>) {
         writeRecordOpen(target, dataType)
-        writeRecordParameter(target, dataType)
+        writeRecordParameter(target, dataType, propsData)
         writeRecordImplements(target, dataType)
         writeRecordClose(target)
     }
@@ -40,15 +40,15 @@ class DataTypeWriterRecord(
         writeRecordHeader(target, dataType)
     }
 
-    private fun writeRecordParameter(target: Writer, dataType: ModelDataType) {
+    private fun writeRecordParameter(target: Writer, dataType: ModelDataType, propsData: List<PropertyData>) {
         val props = mutableListOf<String>()
-        dataType.forEach { propName, propDataType ->
-            val javaPropertyName = identifier.toIdentifier(propName)
-            val propSource = getProp(
-                propName,
-                javaPropertyName,
-                propDataType as PropertyDataType,
-                dataType.isRequired(propName),
+
+        propsData.forEach { propData ->
+            var prop = getProp(
+                propData.srcPropName,
+                propData.propName,
+                propData.propDataType,
+                dataType.isRequired(propData.srcPropName),
                 Access.NONE)
 
             // todo can't init record parameter here
@@ -58,7 +58,7 @@ class DataTypeWriterRecord(
             //     result += " = ${dataType.init}"
             // }
 
-            props.add(propSource)
+            props.add(prop)
         }
 
         target.write("(\n")
