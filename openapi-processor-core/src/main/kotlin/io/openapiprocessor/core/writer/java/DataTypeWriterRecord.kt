@@ -48,7 +48,7 @@ class DataTypeWriterRecord(
                 propData.srcPropName,
                 propData.propName,
                 propData.propDataType,
-                propData.isRequired(dataType),
+                propData.required,
                 Access.NONE)
 
             // todo can't init record parameter here

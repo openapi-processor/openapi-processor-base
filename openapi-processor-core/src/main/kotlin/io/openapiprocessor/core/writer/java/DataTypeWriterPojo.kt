@@ -55,7 +55,7 @@ class DataTypeWriterPojo(
                 propData.srcPropName,
                 propData.propName,
                 propData.propDataType,
-                propData.isRequired(dataType),
+                propData.required,
                 Access.PRIVATE)
 
             // null (JsonNullable) may have an init value
