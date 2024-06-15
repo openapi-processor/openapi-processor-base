@@ -44,12 +44,7 @@ class DataTypeWriterRecord(
         val props = mutableListOf<String>()
 
         propsData.forEach { propData ->
-            val prop = getProp(
-                propData.srcPropName,
-                propData.propName,
-                propData.propDataType,
-                propData.required,
-                Access.NONE)
+            val prop = getProp(propData, Access.NONE)
 
             // todo can't init record parameter here
             // null (JsonNullable) may have an init value

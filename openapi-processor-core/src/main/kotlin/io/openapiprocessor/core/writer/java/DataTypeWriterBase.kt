@@ -79,13 +79,8 @@ abstract class DataTypeWriterBase(
         writeAnnotationsGenerated(target)
     }
 
-    protected fun getProp(
-        propertyName: String,
-        javaPropertyName: String,
-        propDataType: PropertyDataType,
-        required: Boolean,
-        access: Access): String {
-
+    protected fun getProp(propData: PropertyData, access: Access): String {
+        val propDataType = propData.propDataType
         var result = ""
 
         if (apiOptions.javadoc) {
@@ -96,7 +91,7 @@ abstract class DataTypeWriterBase(
 
         var propTypeName = propDataType.getTypeName()
         if(apiOptions.beanValidation) {
-            val info = validationAnnotations.validate(propDataType.dataType, required)
+            val info = validationAnnotations.validate(propDataType.dataType, propData.required)
             val prop = info.prop
             prop.annotations.forEach {
                 result += "    ${it}\n"
@@ -114,12 +109,12 @@ abstract class DataTypeWriterBase(
         writeAnnotations(extBuilder, collectExtensionAnnotations(propDataType.extensions))
         result += extBuilder.toString()
 
-        result += "    ${getPropertyAnnotation(propertyName, propDataType)}"
+        result += "    ${getPropertyAnnotation(propData.srcPropName, propDataType)}"
 
         result += if (access == Access.PRIVATE) {
-            "    private $propTypeName $javaPropertyName"
+            "    private $propTypeName ${propData.propName}"
         } else {
-            "    $propTypeName $javaPropertyName"
+            "    $propTypeName ${propData.propName}"
         }
 
         return result

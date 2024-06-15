@@ -51,12 +51,7 @@ class DataTypeWriterPojo(
         val props = mutableListOf<String>()
 
         propsData.forEach { propData ->
-            var prop = getProp(
-                propData.srcPropName,
-                propData.propName,
-                propData.propDataType,
-                propData.required,
-                Access.PRIVATE)
+            var prop = getProp(propData, Access.PRIVATE)
 
             // null (JsonNullable) may have an init value
             val pDataType = propData.propDataType.dataType
