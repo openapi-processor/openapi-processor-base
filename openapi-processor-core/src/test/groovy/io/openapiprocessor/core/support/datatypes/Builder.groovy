@@ -25,7 +25,7 @@ class Builder {
     static ObjectDataType objectDataType (
         String nameId,
         String pkg,
-        LinkedHashMap<String, DataType> properties = [:],
+        LinkedHashMap<String, PropertyDataType> properties = [:],
         DataTypeConstraints constraints = null,
         Boolean deprecated = false,
         Documentation documentation = null
@@ -43,7 +43,7 @@ class Builder {
     static ObjectDataType objectDataType (
         DataTypeName dataTypeName,
         String pkg,
-        LinkedHashMap<String, DataType> properties = [:],
+        LinkedHashMap<String, PropertyDataType> properties = [:],
         DataTypeConstraints constraints = null,
         Boolean deprecated = false,
         Documentation documentation = null
