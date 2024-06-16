@@ -16,5 +16,9 @@ enum class JsonPropertyAnnotationMode(private val mode: String) {
      * add @JsonProperty, if the java property name is NOT identical to the OpenAPI property name
      * or set to read/write only.
      */
-    Auto("auto")
+    Auto("auto");
+
+    companion object {
+        fun findBy(mode: String): JsonPropertyAnnotationMode = entries.first { it.mode == mode }
+    }
 }

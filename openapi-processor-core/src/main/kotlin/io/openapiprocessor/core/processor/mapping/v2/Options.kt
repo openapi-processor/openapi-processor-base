@@ -70,5 +70,10 @@ data class Options(
     /**
      * enable/disable the @Generated date (optional)
      */
-    val generatedDate: Boolean = true
+    val generatedDate: Boolean = true,
+
+    /**
+     * generate @JsonProperty annotation always|auto (optional)
+     */
+    val jsonPropertyAnnotation: String = "always"
 )

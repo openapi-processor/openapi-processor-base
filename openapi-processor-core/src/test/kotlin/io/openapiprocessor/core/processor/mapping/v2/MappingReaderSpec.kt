@@ -201,4 +201,21 @@ class MappingReaderSpec: StringSpec ({
         extList[0].type shouldBe "fooA @ custom.Annotation"
         extList[1].type shouldBe "fooB @ custom.Annotation"
     }
+
+    "reads json property annotation" {
+        val yaml = """
+            |openapi-processor-mapping: v8
+            |options:
+            |  package-name: no.warning
+            |  json-property-annotation: auto
+        """.trimMargin()
+
+        val reader = MappingReader()
+
+        // when:
+        val mapping = reader.read (yaml) as Mapping
+
+        // then:
+        mapping.options.jsonPropertyAnnotation shouldBe "auto"
+    }
 })

@@ -73,6 +73,8 @@ class OptionsConverter(private val checkObsoleteProcessorOptions: Boolean = fals
                     options.formatCode = mapping.options.formatCode
                     options.generatedAnnotation = mapping.options.generatedAnnotation
                     options.generatedDate = mapping.options.generatedDate
+                    options.jsonPropertyAnnotation = JsonPropertyAnnotationMode.findBy(
+                        mapping.options.jsonPropertyAnnotation)
 
                     with(mapping.compatibility) {
                         options.beanValidationValidOnReactive = beanValidationValidOnReactive
