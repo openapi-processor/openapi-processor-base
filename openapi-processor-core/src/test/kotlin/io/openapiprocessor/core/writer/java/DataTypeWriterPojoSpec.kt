@@ -560,6 +560,39 @@ class DataTypeWriterPojoSpec: StringSpec({
             """.trimMargin()
     }
 
+    "does not add @JsonProperty annotation if OpenAPI property name != java property name" {
+        options.jsonPropertyAnnotation = JsonPropertyAnnotationMode.Never
+
+        val dataType = ObjectDataType("Foo", "pkg", linkedMapOf(
+            Pair("1foo", propertyDataTypeString())
+        ))
+
+        // when:
+        createWriter().write(target, dataType)
+
+        target.toString() shouldContain
+            """package pkg;
+            |
+            |import io.openapiprocessor.generated.support.Generated;
+            |
+            |@Generated
+            |public class Foo {
+            |
+            |    private String foo;
+            |
+            |    public String getFoo() {
+            |        return foo;
+            |    }
+            |
+            |    public void setFoo(String foo) {
+            |        this.foo = foo;
+            |    }
+            |
+            |}
+            |
+            """.trimMargin()
+    }
+
     "does add @JsonProperty annotation if OpenAPI property is read only" {
         options.jsonPropertyAnnotation = JsonPropertyAnnotationMode.Auto
 

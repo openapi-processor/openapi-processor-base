@@ -346,6 +346,7 @@ abstract class DataTypeWriterBase(
         return when(apiOptions.jsonPropertyAnnotation) {
             JsonPropertyAnnotationMode.Always -> true
             JsonPropertyAnnotationMode.Auto -> propData.requiresJsonAnnotation
+            JsonPropertyAnnotationMode.Never -> false
         }
     }
 
