@@ -63,6 +63,11 @@ data class Options(
     val formatCode: Boolean = false,
 
     /**
+     * enable/disable the @Generated annotation (optional)
+     */
+    val generatedAnnotation: Boolean = true,
+
+    /**
      * enable/disable the @Generated date (optional)
      */
     val generatedDate: Boolean = true

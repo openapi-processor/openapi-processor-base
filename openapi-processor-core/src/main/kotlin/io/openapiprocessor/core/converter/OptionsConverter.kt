@@ -71,6 +71,7 @@ class OptionsConverter(private val checkObsoleteProcessorOptions: Boolean = fals
                     options.javadoc = mapping.options.javadoc
                     options.oneOfInterface = mapping.options.oneOfInterface
                     options.formatCode = mapping.options.formatCode
+                    options.generatedAnnotation = mapping.options.generatedAnnotation
                     options.generatedDate = mapping.options.generatedDate
 
                     with(mapping.compatibility) {

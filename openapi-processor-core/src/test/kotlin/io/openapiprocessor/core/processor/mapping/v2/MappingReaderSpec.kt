@@ -125,9 +125,25 @@ class MappingReaderSpec: StringSpec ({
         mapping.options.formatCode shouldBe false
     }
 
+    "reads generated-annotation" {
+        val yaml = """
+            |openapi-processor-mapping: v8
+            |options:
+            |  generated-annotation: false
+        """.trimMargin()
+
+        val reader = MappingReader()
+
+        // when:
+        val mapping = reader.read (yaml) as Mapping
+
+        // then:
+        mapping.options.generatedAnnotation shouldBe false
+    }
+
     "reads generated-date" {
         val yaml = """
-            |openapi-processor-mapping: v2.1
+            |openapi-processor-mapping: v8
             |options:
             |  generated-date: false
         """.trimMargin()
