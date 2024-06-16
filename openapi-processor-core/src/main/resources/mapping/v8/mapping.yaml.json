@@ -89,7 +89,7 @@
         "json-property-annotation": {
           "description": "generate @JsonProperty annotation.",
           "default": "always",
-          "enum": ["always", "auto"]
+          "enum": ["always", "auto", "never"]
         }
       },
       "additionalProperties": false,

@@ -40,6 +40,8 @@ options: # general processor options [required]
   # enable/disable date on @Generated annotation
   generated-date: true
 
+  # control @JsonProperty annotation (always|auto|never)
+  json-property-annotation: always
 
 
 compatibility:
