@@ -6,6 +6,7 @@
 package io.openapiprocessor.core.writer.java
 
 import io.openapiprocessor.core.converter.ApiOptions
+import io.openapiprocessor.core.converter.JsonPropertyAnnotationMode
 import io.openapiprocessor.core.converter.MappingFinder
 import io.openapiprocessor.core.model.Annotation
 import io.openapiprocessor.core.model.datatypes.DataType
@@ -32,6 +33,7 @@ data class PropertyData(
     val propDataType: PropertyDataType
 ) {
     val required = modelDataType.isRequired(srcPropName)
+    val requiresJsonAnnotation: Boolean = srcPropName != propName || propDataType.readOnly || propDataType.writeOnly
 }
 
 
@@ -45,25 +47,31 @@ abstract class DataTypeWriterBase(
     protected val annotationWriter = AnnotationWriter()
 
     protected fun collectPropertiesData(modelDataType: ModelDataType): List<PropertyData> {
-        val propData = mutableListOf<PropertyData>()
+        val propDatas = mutableListOf<PropertyData>()
 
         modelDataType.forEach { srcPropName, dataType ->
             val propDataType = dataType as PropertyDataType
 
             val propName = identifier.toIdentifier(srcPropName)
             val baseName = identifier.toCamelCase(srcPropName)
-            val propImports = collectDataTypePropertyImports(modelDataType, srcPropName, propDataType)
 
-            propData.add(PropertyData(
+            val propImports = mutableSetOf<String>()
+
+            val propData = PropertyData(
                 srcPropName,
                 propName,
                 baseName,
                 propImports,
                 modelDataType,
-                propDataType))
+                propDataType
+            )
+
+            propImports.addAll(collectDataTypePropertyImports(propData))
+
+            propDatas.add(propData)
         }
 
-        return propData
+        return propDatas
     }
 
     protected fun writeFileHeader(target: Writer, dataType: ModelDataType, propsData: List<PropertyData>) {
@@ -109,7 +117,9 @@ abstract class DataTypeWriterBase(
         writeAnnotations(extBuilder, collectExtensionAnnotations(propDataType.extensions))
         result += extBuilder.toString()
 
-        result += "    ${getPropertyAnnotation(propData.srcPropName, propDataType)}"
+        if (requiresJsonPropertyAnnotation(propData)) {
+            result += "    ${getPropertyAnnotation(propData.srcPropName, propDataType)}"
+        }
 
         result += if (access == Access.PRIVATE) {
             "    private $propTypeName ${propData.propName}"
@@ -286,26 +296,24 @@ abstract class DataTypeWriterBase(
         return imports
     }
 
-    private fun collectDataTypePropertyImports(
-        modelDataType: ModelDataType,
-        srcPropName: String,
-        propDataType: PropertyDataType
-    ): Set<String> {
+    private fun collectDataTypePropertyImports(propData: PropertyData): Set<String> {
         val imports = mutableSetOf<String>()
 
-        val target = getTarget(propDataType)
+        val target = getTarget(propData.propDataType)
 
-        imports.add("com.fasterxml.jackson.annotation.JsonProperty")
+        if (requiresJsonPropertyAnnotation(propData)) {
+            imports.add("com.fasterxml.jackson.annotation.JsonProperty")
+        }
 
         if (apiOptions.beanValidation) {
-            val required = modelDataType.isRequired(srcPropName)
+            val required = propData.required
             val propInfo = validationAnnotations.validate(target, required)
             val propProp = propInfo.prop
             imports.addAll(propProp.imports)
         }
 
         // do not annotate unmapped, i.e. generated pojo property
-        if (propDataType.dataType is ObjectDataType) {
+        if (propData.propDataType.dataType is ObjectDataType) {
             return imports
         }
 
@@ -320,7 +328,7 @@ abstract class DataTypeWriterBase(
             }
         }
 
-        val extAnnotations = collectExtensionAnnotations(propDataType.extensions)
+        val extAnnotations = collectExtensionAnnotations(propData.propDataType.extensions)
         extAnnotations.forEach { annotation ->
             imports.addAll(annotation.imports)
 
@@ -332,6 +340,13 @@ abstract class DataTypeWriterBase(
         }
 
         return imports
+    }
+
+    private fun requiresJsonPropertyAnnotation(propData: PropertyData): Boolean {
+        return when(apiOptions.jsonPropertyAnnotation) {
+            JsonPropertyAnnotationMode.Always -> true
+            JsonPropertyAnnotationMode.Auto -> propData.requiresJsonAnnotation
+        }
     }
 
     private fun getTarget(dataType: DataType): DataType {

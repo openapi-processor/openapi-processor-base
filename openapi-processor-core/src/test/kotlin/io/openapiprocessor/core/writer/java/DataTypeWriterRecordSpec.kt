@@ -13,6 +13,7 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldStartWith
 import io.openapiprocessor.core.converter.ApiOptions
+import io.openapiprocessor.core.converter.JsonPropertyAnnotationMode
 import io.openapiprocessor.core.converter.mapping.Annotation
 import io.openapiprocessor.core.converter.mapping.AnnotationNameMappingDefault
 import io.openapiprocessor.core.converter.mapping.ExtensionMapping
@@ -363,6 +364,85 @@ class DataTypeWriterRecordSpec: StringSpec({
 
         t1 shouldBeEqual t2
         Arrays.mismatch(t1.toByteArray(), t2.toByteArray()).shouldBe(-1)
+    }
+
+    "does not add @JsonProperty annotation if OpenAPI property name = java property name" {
+        options.jsonPropertyAnnotation = JsonPropertyAnnotationMode.Auto
+
+        val dataType = io.openapiprocessor.core.support.datatypes.ObjectDataType(
+            "Foo", "pkg", linkedMapOf(
+                Pair("foo", propertyDataTypeString())
+            )
+        )
+
+        // when:
+        writer.write(target, dataType)
+
+        target.toString() shouldContain
+            """package pkg;
+            |
+            |import io.openapiprocessor.generated.support.Generated;
+            |
+            |@Generated
+            |public record Foo(
+            |    String foo
+            |) {}
+            |
+            """.trimMargin()
+    }
+
+    "does add @JsonProperty annotation if OpenAPI property name != java property name" {
+        options.jsonPropertyAnnotation = JsonPropertyAnnotationMode.Auto
+
+        val dataType = io.openapiprocessor.core.support.datatypes.ObjectDataType(
+            "Foo", "pkg", linkedMapOf(
+                Pair("1foo", propertyDataTypeString())
+            )
+        )
+
+        // when:
+        writer.write(target, dataType)
+
+        target.toString() shouldContain
+            """package pkg;
+            |
+            |import com.fasterxml.jackson.annotation.JsonProperty;
+            |import io.openapiprocessor.generated.support.Generated;
+            |
+            |@Generated
+            |public record Foo(
+            |    @JsonProperty("1foo")
+            |    String foo
+            |) {}
+            |
+            """.trimMargin()
+    }
+
+    "does add @JsonProperty annotation if OpenAPI property is read only" {
+        options.jsonPropertyAnnotation = JsonPropertyAnnotationMode.Auto
+
+        val dataType = io.openapiprocessor.core.support.datatypes.ObjectDataType(
+            "Foo", "pkg", linkedMapOf(
+                Pair("foo", propertyDataTypeString(readOnly = true))
+            )
+        )
+
+        // when:
+        writer.write(target, dataType)
+
+        target.toString() shouldContain
+            """package pkg;
+            |
+            |import com.fasterxml.jackson.annotation.JsonProperty;
+            |import io.openapiprocessor.generated.support.Generated;
+            |
+            |@Generated
+            |public record Foo(
+            |    @JsonProperty(value = "foo", access = JsonProperty.Access.READ_ONLY)
+            |    String foo
+            |) {}
+            |
+            """.trimMargin()
     }
 })
 

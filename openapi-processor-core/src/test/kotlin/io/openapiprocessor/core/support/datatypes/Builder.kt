@@ -15,6 +15,6 @@ fun propertyDataType(dataType: DataType, extensions: Map<String, *>): PropertyDa
     return PropertyDataType(readOnly = false, writeOnly = false, dataType = dataType, extensions)
 }
 
-fun propertyDataTypeString(): PropertyDataType {
-    return PropertyDataType(readOnly = false, writeOnly = false, dataType = StringDataType())
+fun propertyDataTypeString(readOnly: Boolean = false, writeOnly: Boolean = false): PropertyDataType {
+    return PropertyDataType(readOnly = readOnly, writeOnly = writeOnly, dataType = StringDataType())
 }

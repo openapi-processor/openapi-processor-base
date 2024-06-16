@@ -88,6 +88,11 @@ class ApiOptions {
     var generatedDate = true
 
     /**
+     * add json property annotation: always/auto (optional).
+     */
+    var jsonPropertyAnnotation = JsonPropertyAnnotationMode.Always
+
+    /**
      * provide additional type mapping information to map OpenAPI types to java types. The list can
      * contain the following mappings:
      *
