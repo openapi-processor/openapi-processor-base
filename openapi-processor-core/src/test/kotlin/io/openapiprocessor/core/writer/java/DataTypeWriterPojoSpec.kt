@@ -249,6 +249,29 @@ class DataTypeWriterPojoSpec: StringSpec({
             """.trimMargin()
     }
 
+    "writes additional object annotation from annotation mapping with model name suffix" {
+        options.modelNameSuffix = "X"
+        options.typeMappings = listOf(
+            AnnotationTypeMappingDefault(
+                "Foo", annotation = MappingAnnotation("foo.Bar", linkedMapOf())
+            ))
+
+        val dataType = ObjectDataType(DataTypeName("Foo", "FooX"),
+            "pkg", linkedMapOf("foo" to propertyDataTypeString()))
+
+        // when:
+        createWriter().write(target, dataType)
+
+        // then:
+        target.toString() shouldContain
+            """    
+            |@Bar
+            |@Generated
+            |public class FooX {
+            |
+            """.trimMargin()
+    }
+
     "writes additional annotation import from annotation mapping for a mapped property data type" {
         options.typeMappings = listOf(
             AnnotationTypeMappingDefault(

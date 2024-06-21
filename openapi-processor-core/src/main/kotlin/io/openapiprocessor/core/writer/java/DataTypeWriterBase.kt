@@ -239,7 +239,7 @@ abstract class DataTypeWriterBase(
 
     private fun writeAnnotationsMappings(target: Writer, dataType: ModelDataType) {
         val annotationTypeMappings = MappingFinder(apiOptions.typeMappings)
-            .findTypeAnnotations(dataType.getTypeName(), true)
+            .findTypeAnnotations(dataType.getName(), true)
 
         annotationTypeMappings.forEach {
             annotationWriter.write(target, Annotation(it.annotation.type, it.annotation.parameters))
