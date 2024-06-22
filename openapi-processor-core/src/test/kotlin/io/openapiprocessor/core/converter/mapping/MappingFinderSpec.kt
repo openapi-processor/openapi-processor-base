@@ -102,7 +102,7 @@ class MappingFinderSpec: StringSpec({
                 ContentTypeMapping("application/json",
                     TypeMapping("Foo", null, "io.openapiprocessor.Foo")),
                 ContentTypeMapping("application/json-2",
-                    TypeMapping("far", null, "io.openapiprocessor.Far")),
+                    TypeMapping("Far", null, "io.openapiprocessor.Far")),
                 ContentTypeMapping("application/json-3",
                     TypeMapping("Bar", null, "io.openapiprocessor.Bar"))
             )
