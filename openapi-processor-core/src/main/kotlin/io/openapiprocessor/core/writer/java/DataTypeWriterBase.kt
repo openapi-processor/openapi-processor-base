@@ -275,7 +275,7 @@ abstract class DataTypeWriterBase(
         imports.addAll(dataType.referencedImports)
 
         val annotationTypeMappings = MappingFinder(apiOptions.typeMappings)
-            .findTypeAnnotations(dataType.getTypeName(), true)
+            .findTypeAnnotations(dataType.getName(), true)
 
         annotationTypeMappings.forEach {
             imports.add(it.annotation.type)

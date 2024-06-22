@@ -263,8 +263,11 @@ class DataTypeWriterPojoSpec: StringSpec({
         createWriter().write(target, dataType)
 
         // then:
+        val imports = extractImports(target)
+        imports shouldContain "import foo.Bar;"
+
         target.toString() shouldContain
-            """    
+            """
             |@Bar
             |@Generated
             |public class FooX {
