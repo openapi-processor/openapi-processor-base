@@ -28,7 +28,7 @@ class MappingConverter(val mapping: MappingV2) {
             result.add(convertResult(mapping.map.result))
         }
 
-        if(mapping.map.resultStyle != null) {
+        if (mapping.map.resultStyle != null) {
             result.add(convertResultStyleOption(mapping.map.resultStyle))
         }
 
@@ -70,10 +70,15 @@ class MappingConverter(val mapping: MappingV2) {
 
     fun convertX(): Mappings {
         var resultTypeMapping: ResultTypeMapping? = null
+        var resultStyle: ResultStyle? = null
         val globalTypeMappings = mutableListOf<Mapping>()
 
         if (mapping.map.result != null) {
             resultTypeMapping = convertResult(mapping.map.result)
+        }
+
+        if (mapping.map.resultStyle != null) {
+            resultStyle = mapping.map.resultStyle
         }
 
         mapping.map.types.forEach {
@@ -82,11 +87,12 @@ class MappingConverter(val mapping: MappingV2) {
 
         return Mappings(
             resultTypeMapping,
+            resultStyle,
             TypeMappings(globalTypeMappings)
         )
     }
 
-    private fun convertResultStyleOption(value: ResultStyle): Mapping {
+    private fun convertResultStyleOption(value: ResultStyle): ResultStyleOptionMapping {
         return ResultStyleOptionMapping(value)
     }
 

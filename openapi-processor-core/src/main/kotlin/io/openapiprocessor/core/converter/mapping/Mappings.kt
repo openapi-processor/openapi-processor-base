@@ -5,17 +5,23 @@
 
 package io.openapiprocessor.core.converter.mapping
 
+import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 class Mappings(
     private val resultTypeMapping: ResultTypeMapping?,
+    private val resultStyle: ResultStyle?,
     private val typeMappings: TypeMappings
 ) {
     val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     fun getGlobalResultTypeMapping(): ResultTypeMapping? {
         return resultTypeMapping
+    }
+
+    fun getGlobalResultStyle(): ResultStyle? {
+        return resultStyle
     }
 
     fun findGlobalTypeMapping(filter: MappingMatcher): TypeMapping? {
