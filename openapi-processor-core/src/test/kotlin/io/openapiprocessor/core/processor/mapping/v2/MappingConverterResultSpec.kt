@@ -13,8 +13,6 @@ import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.processor.MappingReader
 
 class MappingConverterResultSpec: StringSpec({
-    isolationMode = IsolationMode.InstancePerTest
-
     val reader = MappingReader()
 
     "read global result type mapping, plain" {

@@ -71,6 +71,8 @@ class MappingConverter(val mapping: MappingV2) {
     fun convertX(): Mappings {
         var resultTypeMapping: ResultTypeMapping? = null
         var resultStyle: ResultStyle? = null
+        var singleTypeMapping: TypeMapping? = null
+        var multiTypeMapping: TypeMapping? = null
         val globalTypeMappings = mutableListOf<Mapping>()
 
         if (mapping.map.result != null) {
@@ -81,6 +83,14 @@ class MappingConverter(val mapping: MappingV2) {
             resultStyle = mapping.map.resultStyle
         }
 
+        if(mapping.map.single != null) {
+            singleTypeMapping = convertType("single" , mapping.map.single)
+        }
+
+        if(mapping.map.multi != null) {
+            multiTypeMapping = convertType("multi", mapping.map.multi)
+        }
+
         mapping.map.types.forEach {
             globalTypeMappings.add(convertType(it))
         }
@@ -88,6 +98,8 @@ class MappingConverter(val mapping: MappingV2) {
         return Mappings(
             resultTypeMapping,
             resultStyle,
+            singleTypeMapping,
+            multiTypeMapping,
             TypeMappings(globalTypeMappings)
         )
     }
@@ -116,7 +128,7 @@ class MappingConverter(val mapping: MappingV2) {
         return NullTypeMapping("null", type, init)
     }
 
-    private fun convertType (from: String, to: String): Mapping {
+    private fun convertType (from: String, to: String): TypeMapping {
         val mapping = parseMapping(to)
         return TypeMapping(
             from,

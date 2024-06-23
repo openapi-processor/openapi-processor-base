@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory
 class Mappings(
     private val resultTypeMapping: ResultTypeMapping?,
     private val resultStyle: ResultStyle?,
+    private val singleTypeMapping: TypeMapping?,
+    private val multiTypeMapping: TypeMapping?,
     private val typeMappings: TypeMappings
 ) {
     val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
@@ -22,6 +24,14 @@ class Mappings(
 
     fun getGlobalResultStyle(): ResultStyle? {
         return resultStyle
+    }
+
+    fun getGlobalSingleTypeMapping(): TypeMapping? {
+        return singleTypeMapping
+    }
+
+    fun getGlobalMultiTypeMapping(): TypeMapping? {
+        return multiTypeMapping
     }
 
     fun findGlobalTypeMapping(filter: MappingMatcher): TypeMapping? {
