@@ -68,11 +68,29 @@ class MappingConverter(val mapping: MappingV2) {
         return result
     }
 
+    fun convertX(): Mappings {
+        var resultTypeMapping: ResultTypeMapping? = null
+        val globalTypeMappings = mutableListOf<Mapping>()
+
+        if (mapping.map.result != null) {
+            resultTypeMapping = convertResult(mapping.map.result)
+        }
+
+        mapping.map.types.forEach {
+            globalTypeMappings.add(convertType(it))
+        }
+
+        return Mappings(
+            resultTypeMapping,
+            TypeMappings(globalTypeMappings)
+        )
+    }
+
     private fun convertResultStyleOption(value: ResultStyle): Mapping {
         return ResultStyleOptionMapping(value)
     }
 
-    private fun convertResult (result: String): Mapping {
+    private fun convertResult (result: String): ResultTypeMapping {
         val mapping = parseMapping(result)
         return ResultTypeMapping(
             resolvePackageVariable(mapping.targetType!!),

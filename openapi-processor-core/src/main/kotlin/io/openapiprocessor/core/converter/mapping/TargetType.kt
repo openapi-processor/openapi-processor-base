@@ -42,4 +42,20 @@ class TargetType(
 
         return typeName.substring(0, dot)
     }
+
+    override fun toString(): String {
+        return targetType()
+    }
+
+    private fun targetType(): String {
+        return "${typeName}${targetTypeGenerics()}"
+    }
+
+    private fun targetTypeGenerics(): String {
+        return if (genericTypes.isEmpty()) {
+            ""
+        } else {
+            genericTypes.joinToString(",", "<", ">") { it.toString() }
+        }
+    }
 }

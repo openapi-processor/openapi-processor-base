@@ -5,13 +5,30 @@
 
 package io.openapiprocessor.core.converter.mapping.matcher
 
-import io.openapiprocessor.core.converter.mapping.MappingSchema
-import io.openapiprocessor.core.converter.mapping.TypeMapping
+import io.openapiprocessor.core.converter.mapping.*
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * [io.openapiprocessor.core.converter.mapping.MappingFinder] matcher for type mappings.
  */
-class TypeMatcher(private val schema: MappingSchema): (TypeMapping) -> Boolean {
+class TypeMatcher(private val schema: MappingSchema): MappingMatcher, (TypeMapping) -> Boolean {
+    val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
+
+    override fun match(mapping: Mapping): Boolean {
+        if (mapping !is TypeMapping) {
+            log.trace("not matched: {}", mapping)
+            return false
+        }
+
+        val match = this.invoke(mapping)
+        log.trace("${if (match) "" else "not "}matched: {}", mapping)
+        return match
+    }
+
+    override fun toString(): String {
+        return schema.toStringSchema()
+    }
 
     override fun invoke(mapping: TypeMapping): Boolean {
         // try to match by name first

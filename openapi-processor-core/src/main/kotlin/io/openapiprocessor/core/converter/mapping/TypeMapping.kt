@@ -17,7 +17,7 @@ class  TypeMapping @JvmOverloads constructor(
     /**
      * The OpenAPI schema type that should be mapped to the {@link #targetTypeName} java type.
      */
-    val sourceTypeName: String?,
+    val sourceTypeName: String?,  // todo optional ??
 
     /**
      * The OpenAPI format of {@link #sourceTypeName} that should be mapped to the
@@ -58,8 +58,34 @@ class  TypeMapping @JvmOverloads constructor(
     override fun getChildMappings(): List<Mapping> {
         return listOf(this)
     }
+
+    override fun toString(): String {
+        return "${sourceType()} => ${targetType()}"
+    }
+
+    private fun sourceType(): String {
+        return if (sourceTypeFormat == null) {
+            sourceTypeName!!
+        } else {
+            "${sourceTypeName}:${sourceTypeFormat}"
+        }
+    }
+
+    private fun targetType(): String {
+        return "${targetTypeName}${targetTypeGenerics()}"
+    }
+
+    private fun targetTypeGenerics(): String {
+        return if (genericTypes.isEmpty()) {
+            ""
+        } else {
+            genericTypes.joinToString(",", "<", ">") { it.toString() }
+        }
+    }
 }
 
 fun List<Mapping>.toTypeMapping(): List<TypeMapping> {
     return map { it as TypeMapping }
 }
+
+

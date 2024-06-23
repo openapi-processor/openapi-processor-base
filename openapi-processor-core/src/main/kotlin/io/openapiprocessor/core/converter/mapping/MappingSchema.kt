@@ -24,4 +24,29 @@ interface MappingSchema {
     fun isPrimitive(): Boolean
     fun isArray(): Boolean
 
+    fun toStringSchema(): String {
+        val parts = mutableListOf<String>()
+        parts.add("path: ${getPath()}")
+        parts.add("method: ${getMethod()}")
+        parts.add("name: ${getName()}")
+        parts.add("contentType: ${getContentType()}")
+
+        if (getType() != null) {
+            parts.add("type: ${getType()}")
+        }
+
+        if (getFormat() != null) {
+            parts.add("format: ${getFormat()}")
+        }
+
+        if (isPrimitive()) {
+            parts.add("primitive")
+        }
+
+        if (isArray()) {
+            parts.add("array")
+        }
+
+        return parts.joinToString(", ")
+    }
 }
