@@ -10,8 +10,10 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.converter.mapping.*
+import io.openapiprocessor.core.converter.mapping.matcher.TypeMatcher
 import io.openapiprocessor.core.processor.MappingConverter
 import io.openapiprocessor.core.processor.MappingReader
+import io.openapiprocessor.core.support.MappingSchema
 
 class MappingConverterSpec: StringSpec({
     isolationMode = IsolationMode.InstancePerTest
@@ -19,6 +21,37 @@ class MappingConverterSpec: StringSpec({
     val reader = MappingReader()
     val converter = MappingConverter()
 
+    "read global type mapping with generic parameter using the generated package ref" {
+        val yaml = """
+           |openapi-processor-mapping: v2
+           |
+           |options:
+           |  package-name: io.openapiprocessor.somewhere
+           | 
+           |map:
+           |  types:
+           |    - type: Foo => io.openapiprocessor.Foo<{package-name}.Bar>
+           """.trimMargin()
+
+        // when:
+        val mapping = reader.read (yaml) as Mapping
+        val mappings = MappingConverter(mapping).convertX()
+
+        // then:
+        val typeMapping = mappings.findGlobalTypeMapping(
+            TypeMatcher(
+                MappingSchema(
+                    name = "Foo"
+                )
+            )
+        )!!
+
+        typeMapping.targetTypeName shouldBe "io.openapiprocessor.Foo"
+        typeMapping.genericTypes.size shouldBe 1
+        typeMapping.genericTypes[0].typeName shouldBe "io.openapiprocessor.somewhere.Bar"
+    }
+
+    // obsolete
     "read generic parameter with generated package ref" {
         val yaml = """
                    |openapi-processor-mapping: v2
