@@ -33,13 +33,12 @@ object SystemTagExtension: TagExtension {
             .lowercase()
             .contains("windows")
     }
-
 }
 
 /**
  * kotest config
  */
-object ProjectConfig: AbstractProjectConfig() {
+object KotestConfig: AbstractProjectConfig() {
     override fun extensions() = listOf(SystemTagExtension)
 }
 
