@@ -198,4 +198,7 @@ class MappingConverterTypeSpec: FreeSpec({
             typeMapping.primitiveArray shouldBe expected.primitiveArray
         }
     }
+
+    // todo null
+    // todo ambiguous
 })

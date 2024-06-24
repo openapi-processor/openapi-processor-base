@@ -5,11 +5,16 @@
 
 package io.openapiprocessor.core.processor.mapping.v2
 
+import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
-import io.openapiprocessor.core.converter.mapping.*
+import io.openapiprocessor.core.converter.mapping.AnnotationTypeMapping
+import io.openapiprocessor.core.converter.mapping.EndpointTypeMapping
+import io.openapiprocessor.core.converter.mapping.NullTypeMapping
+import io.openapiprocessor.core.converter.mapping.TypeMapping
 import io.openapiprocessor.core.converter.mapping.matcher.TypeMatcher
 import io.openapiprocessor.core.processor.MappingConverter
 import io.openapiprocessor.core.processor.MappingReader
@@ -21,9 +26,10 @@ class MappingConverterSpec: StringSpec({
     val reader = MappingReader()
     val converter = MappingConverter()
 
+
     "read global type mapping with generic parameter using the generated package ref" {
         val yaml = """
-           |openapi-processor-mapping: v2
+           |openapi-processor-mapping: v8
            |
            |options:
            |  package-name: io.openapiprocessor.somewhere
@@ -39,12 +45,7 @@ class MappingConverterSpec: StringSpec({
 
         // then:
         val typeMapping = mappings.findGlobalTypeMapping(
-            TypeMatcher(
-                MappingSchema(
-                    name = "Foo"
-                )
-            )
-        )!!
+            TypeMatcher(MappingSchema(name = "Foo")))!!
 
         typeMapping.targetTypeName shouldBe "io.openapiprocessor.Foo"
         typeMapping.genericTypes.size shouldBe 1
@@ -218,5 +219,36 @@ class MappingConverterSpec: StringSpec({
         annotation.sourceTypeName shouldBe "Foo"
         annotation.sourceTypeFormat.shouldBeNull()
         annotation.annotation.type shouldBe "io.openapiprocessor.Annotation"
+    }
+
+    "does not fail on 'empty' options: key" {
+        val yaml = """
+           |openapi-processor-mapping: v8
+           |options:
+           |
+           """.trimMargin()
+
+        val mapping = reader.read (yaml) as Mapping
+
+        val mappings = shouldNotThrow<Exception> {
+            MappingConverter(mapping).convertX()
+        }
+
+        mappings.shouldNotBeNull()
+    }
+
+    "does not fail on 'empty' mapping.yaml" {
+        val yaml = """
+           |openapi-processor-mapping: v8
+           |
+           """.trimMargin()
+
+        val mapping = reader.read (yaml) as Mapping
+
+        val mappings = shouldNotThrow<Exception> {
+            MappingConverter(mapping).convertX()
+        }
+
+        mappings.shouldNotBeNull()
     }
 })
