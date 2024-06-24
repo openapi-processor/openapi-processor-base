@@ -16,8 +16,6 @@ import io.openapiprocessor.core.support.MappingSchema
 class MappingConverterTypeSpec: FreeSpec({
     val reader = MappingReader()
 
-//    enableTraceMapping()
-
     fun buildMapping(source: String, generics: List<String>?): String {
         var yaml = """
            |openapi-processor-mapping: v8

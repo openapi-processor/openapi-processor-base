@@ -14,6 +14,7 @@ import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.converter.mapping.AmbiguousTypeMappingException
 import io.openapiprocessor.core.converter.mapping.AnnotationNameMapping
 import io.openapiprocessor.core.converter.mapping.NameTypeMapping
+import io.openapiprocessor.core.converter.mapping.matcher.ParameterTypeMatcher
 import io.openapiprocessor.core.converter.mapping.matcher.TypeMatcher
 import io.openapiprocessor.core.processor.MappingConverter
 import io.openapiprocessor.core.processor.MappingReader
@@ -26,7 +27,7 @@ class MappingConverterParameterSpec: StringSpec({
     val converter = MappingConverter()
 
     // obsolete
-    "read global parameter name type mapping" {
+    "read global parameter name type mapping, old" {
         val yaml = """
            |openapi-processor-mapping: v5
            |map:
@@ -123,6 +124,71 @@ class MappingConverterParameterSpec: StringSpec({
         shouldThrow<AmbiguousTypeMappingException> {
             mappings.findGlobalParameterTypeMapping(
                 TypeMatcher(MappingSchema(name = "Foo")))
+        }
+    }
+
+    "read global parameter name type mapping" {
+        val yaml = """
+           |openapi-processor-mapping: v8
+           |map:
+           |  parameters:
+           |    - name: foo => mapping.Foo
+           """.trimMargin()
+
+        // when:
+        val mapping = reader.read (yaml) as Mapping
+        val mappings = MappingConverter(mapping).convertX()
+
+        // then:
+        val nameTypeMapping = mappings.findGlobalParameterNameTypeMapping(
+            ParameterTypeMatcher(MappingSchema(name = "foo")))!!
+
+        nameTypeMapping.parameterName shouldBe "foo"
+        nameTypeMapping.mapping.sourceTypeName.shouldBeNull()
+        nameTypeMapping.mapping.targetTypeName shouldBe "mapping.Foo"
+        nameTypeMapping.mapping.sourceTypeFormat.shouldBeNull()
+        nameTypeMapping.mapping.genericTypes.shouldBeEmpty()
+    }
+
+    "missing global parameter name type mapping returns null" {
+        val yaml = """
+           |openapi-processor-mapping: v8
+           |
+           |options:
+           |  package-name: io.openapiprocessor.somewhere
+           |  
+           """.trimMargin()
+
+        // when:
+        val mapping = reader.read (yaml) as Mapping
+        val mappings = MappingConverter(mapping).convertX()
+
+        // then:
+        val nameTypeMapping = mappings.findGlobalParameterNameTypeMapping(
+            ParameterTypeMatcher(MappingSchema(name = "foo")))
+
+        nameTypeMapping.shouldBeNull()
+    }
+
+    "duplicate global parameter name type mapping throws" {
+        val yaml = """
+           |openapi-processor-mapping: v8
+           |
+           |options:
+           |  package-name: io.openapiprocessor.somewhere
+           |  
+           |map:
+           |  parameters:
+           |    - name: foo => io.openapiprocessor.Foo
+           |    - name: foo => io.openapiprocessor.Foo
+           """.trimMargin()
+
+        val mapping = reader.read (yaml) as Mapping
+        val mappings = MappingConverter(mapping).convertX()
+
+        shouldThrow<AmbiguousTypeMappingException> {
+            mappings.findGlobalParameterNameTypeMapping(
+                ParameterTypeMatcher(MappingSchema(name = "foo")))
         }
     }
 })

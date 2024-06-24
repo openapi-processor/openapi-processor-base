@@ -44,7 +44,7 @@ class Mappings(
         }
 
         if (mappings.size > 1) {
-            throw AmbiguousTypeMappingException(mappings.toTypeMapping())
+            throw AmbiguousTypeMappingException(mappings)
         }
 
         return mappings.first() as TypeMapping
@@ -59,9 +59,24 @@ class Mappings(
         }
 
         if (mappings.size > 1) {
-            throw AmbiguousTypeMappingException(mappings.toTypeMapping())
+            throw AmbiguousTypeMappingException(mappings)
         }
 
         return mappings.first() as TypeMapping
+    }
+
+    fun findGlobalParameterNameTypeMapping(filter: MappingMatcher): NameTypeMapping? {
+        log.trace("looking for global parameter mapping of {}", filter)
+
+        val mappings = parameterTypeMappings.filter(filter)
+        if (mappings.isEmpty()) {
+            return null
+        }
+
+        if (mappings.size > 1) {
+            throw AmbiguousTypeMappingException(mappings)
+        }
+
+        return mappings.first() as NameTypeMapping
     }
 }
