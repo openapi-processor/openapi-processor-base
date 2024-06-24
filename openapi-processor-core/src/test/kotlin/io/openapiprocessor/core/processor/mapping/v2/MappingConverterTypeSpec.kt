@@ -1,9 +1,12 @@
 package io.openapiprocessor.core.processor.mapping.v2
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.datatest.WithDataTestName
 import io.kotest.datatest.withData
+import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
+import io.openapiprocessor.core.converter.mapping.AmbiguousTypeMappingException
 import io.openapiprocessor.core.converter.mapping.TargetType
 import io.openapiprocessor.core.converter.mapping.TypeMapping
 import io.openapiprocessor.core.converter.mapping.matcher.TypeMatcher
@@ -199,6 +202,44 @@ class MappingConverterTypeSpec: FreeSpec({
         }
     }
 
-    // todo null
-    // todo ambiguous
+    "missing global type mapping returns null" - {
+        val yaml = """
+           |openapi-processor-mapping: v8
+           |
+           |options:
+           |  package-name: io.openapiprocessor.somewhere
+           |  
+           """.trimMargin()
+
+        // when:
+        val mapping = reader.read (yaml) as Mapping
+        val mappings = MappingConverter(mapping).convertX()
+
+        // then:
+        val typeMapping = mappings.findGlobalTypeMapping(
+            TypeMatcher(MappingSchema(name = "Foo")))
+
+        typeMapping.shouldBeNull()
+    }
+
+    "duplicate global type mapping throws" - {
+        val yaml = """
+           |openapi-processor-mapping: v8
+           |
+           |options:
+           |  package-name: io.openapiprocessor.somewhere
+           |  
+           |map:
+           |  types:
+           |    - type: Foo => io.openapiprocessor.Foo
+           |    - type: Foo => io.openapiprocessor.Foo
+           """.trimMargin()
+
+        val mapping = reader.read (yaml) as Mapping
+        val mappings = MappingConverter(mapping).convertX()
+
+        shouldThrow<AmbiguousTypeMappingException> {
+            mappings.findGlobalTypeMapping(TypeMatcher(MappingSchema(name = "Foo")))
+        }
+    }
 })
