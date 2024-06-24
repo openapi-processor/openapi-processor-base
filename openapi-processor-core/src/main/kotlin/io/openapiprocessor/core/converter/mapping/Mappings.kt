@@ -14,7 +14,8 @@ class Mappings(
     private val resultStyle: ResultStyle?,
     private val singleTypeMapping: TypeMapping?,
     private val multiTypeMapping: TypeMapping?,
-    private val typeMappings: TypeMappings
+    private val typeMappings: TypeMappings,
+    private val parameterTypeMappings: TypeMappings
 ) {
     val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
@@ -38,6 +39,21 @@ class Mappings(
         log.trace("looking for global type mapping of {}", filter)
 
         val mappings = typeMappings.filter(filter)
+        if (mappings.isEmpty()) {
+            return null
+        }
+
+        if (mappings.size > 1) {
+            throw AmbiguousTypeMappingException(mappings.toTypeMapping())
+        }
+
+        return mappings.first() as TypeMapping
+    }
+
+    fun findGlobalParameterTypeMapping(filter: MappingMatcher): TypeMapping? {
+        log.trace("looking for global parameter type mapping of {}", filter)
+
+        val mappings = parameterTypeMappings.filter(filter)
         if (mappings.isEmpty()) {
             return null
         }
