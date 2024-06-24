@@ -15,9 +15,20 @@ interface MappingSchema {
 
     fun getPath(): String
     fun getMethod(): HttpMethod
+
+    /**
+     *  name, depends on context.
+     *
+     *  - parameter: name
+     *  - request body: inline name
+     *  - response: inline name
+     *  - schema: name
+     *  - property: name
+     */
     fun getName(): String
     fun getContentType(): String
 
+    /** schema type */
     fun getType(): String?
     fun getFormat(): String?
 
