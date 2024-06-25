@@ -9,11 +9,13 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.maps.shouldBeEmpty
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.converter.mapping.AmbiguousTypeMappingException
 import io.openapiprocessor.core.converter.mapping.AnnotationNameMapping
 import io.openapiprocessor.core.converter.mapping.NameTypeMapping
+import io.openapiprocessor.core.converter.mapping.matcher.AddParameterTypeMatcher
 import io.openapiprocessor.core.converter.mapping.matcher.ParameterTypeMatcher
 import io.openapiprocessor.core.converter.mapping.matcher.TypeMatcher
 import io.openapiprocessor.core.processor.MappingConverter
@@ -191,6 +193,75 @@ class MappingConverterParameterSpec: StringSpec({
                 ParameterTypeMatcher(MappingSchema(name = "foo")))
         }
     }
+
+    "missing global additional parameter name type mapping returns empty list" {
+        val yaml = """
+           |openapi-processor-mapping: v8
+           |
+           |options:
+           |  package-name: io.openapiprocessor.somewhere
+           |  
+           """.trimMargin()
+
+        // when:
+        val mapping = reader.read (yaml) as Mapping
+        val mappings = MappingConverter(mapping).convertX()
+
+        // then:
+        val addMappings = mappings.findGlobalAddParameterTypeMappings(
+            AddParameterTypeMatcher())
+
+        addMappings.shouldBeEmpty()
+    }
+
+    "read global additional parameter type mapping" {
+        val yaml = """
+           |openapi-processor-mapping: v8
+           |map:
+           |  parameters:
+           |    - add: foo => annotation.Bar mapping.Foo
+           """.trimMargin()
+
+        // when:
+        val mapping = reader.read (yaml) as Mapping
+        val mappings = MappingConverter(mapping).convertX()
+
+        // then:
+        val addMappings = mappings.findGlobalAddParameterTypeMappings(
+            AddParameterTypeMatcher())
+
+        addMappings.size.shouldBe(1)
+        val add = addMappings.first()
+        add.parameterName shouldBe "foo"
+        add.mapping.sourceTypeName.shouldBeNull()
+        add.mapping.sourceTypeFormat.shouldBeNull()
+        add.mapping.targetTypeName shouldBe "mapping.Foo"
+        add.annotation!!.type shouldBe "annotation.Bar"
+        add.annotation!!.parameters.shouldBeEmpty()
+    }
+
+    "read multiple global additional parameter type mappings" {
+        val yaml = """
+           |openapi-processor-mapping: v8
+           |map:
+           |  parameters:
+           |    - add: foo => mapping.Foo
+           |    - add: bar => mapping.Bar
+           """.trimMargin()
+
+        // when:
+        val mapping = reader.read(yaml) as Mapping
+        val mappings = MappingConverter(mapping).convertX()
+
+        // then:
+        val addMappings = mappings.findGlobalAddParameterTypeMappings(
+            AddParameterTypeMatcher()
+        )
+
+        addMappings.size.shouldBe(2)
+        addMappings[0].parameterName shouldBe "foo"
+        addMappings[1].parameterName shouldBe "bar"
+    }
 })
 
 
@@ -220,11 +291,11 @@ class MappingConverterParameterSpec: StringSpec({
         val typeMapping = mappings.findGlobalTypeMapping(
             TypeMatcher(MappingSchema(name = "Foo")))!!
 
-    // type & name => invalid
+    // todo type & name => invalid
     // type => 1
     // name => 1
-    // add => many
-    // type and name => @ many
+    // todo add => many
+    // todo type and name => @ many
     //
 
  */

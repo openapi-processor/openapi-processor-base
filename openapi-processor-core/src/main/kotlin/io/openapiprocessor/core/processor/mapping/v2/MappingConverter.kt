@@ -75,6 +75,7 @@ class MappingConverter(val mapping: MappingV2) {
         var multiTypeMapping: TypeMapping? = null
         val globalTypeMappings = mutableListOf<Mapping>()
         val globalParameterTypeMappings = mutableListOf<Mapping>()
+        val globalResponseTypeMappings = mutableListOf<Mapping>()
 
         if (mapping.map.result != null) {
             resultTypeMapping = convertResult(mapping.map.result)
@@ -100,13 +101,18 @@ class MappingConverter(val mapping: MappingV2) {
             globalParameterTypeMappings.add (convertParameter (it))
         }
 
+        mapping.map.responses.forEach {
+            globalResponseTypeMappings.add (convertResponse (it))
+        }
+
         return Mappings(
             resultTypeMapping,
             resultStyle,
             singleTypeMapping,
             multiTypeMapping,
             TypeMappings(globalTypeMappings),
-            TypeMappings(globalParameterTypeMappings)
+            TypeMappings(globalParameterTypeMappings),
+            TypeMappings(globalResponseTypeMappings)
         )
     }
 
