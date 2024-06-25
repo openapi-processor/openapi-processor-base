@@ -6,8 +6,7 @@
 package io.openapiprocessor.core.converter.mapping
 
 /**
- * Used with [EndpointTypeMapping] to configure the java type that should represent the schema
- * of the given endpoint parameter.
+ * parameter name type mapping
  */
 class NameTypeMapping(
 
@@ -28,4 +27,19 @@ class NameTypeMapping(
         return listOf(mapping)
     }
 
+    override fun toString(): String {
+        return "$parameterName => ${targetType()}"
+    }
+
+    private fun targetType(): String {
+        return "${mapping.targetTypeName}${targetTypeGenerics()}"
+    }
+
+    private fun targetTypeGenerics(): String {
+        return if (mapping.genericTypes.isEmpty()) {
+            ""
+        } else {
+            mapping.genericTypes.joinToString(",", "<", ">") { it.toString() }
+        }
+    }
 }
