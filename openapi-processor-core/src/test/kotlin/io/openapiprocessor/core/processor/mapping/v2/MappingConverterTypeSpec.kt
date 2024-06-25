@@ -4,11 +4,15 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.datatest.WithDataTestName
 import io.kotest.datatest.withData
+import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.maps.shouldBeEmpty
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.converter.mapping.AmbiguousTypeMappingException
 import io.openapiprocessor.core.converter.mapping.TargetType
 import io.openapiprocessor.core.converter.mapping.TypeMapping
+import io.openapiprocessor.core.converter.mapping.matcher.AnnotationTypeMatcher
 import io.openapiprocessor.core.converter.mapping.matcher.TypeMatcher
 import io.openapiprocessor.core.processor.MappingReader
 import io.openapiprocessor.core.support.MappingSchema
@@ -239,5 +243,74 @@ class MappingConverterTypeSpec: FreeSpec({
         shouldThrow<AmbiguousTypeMappingException> {
             mappings.findGlobalTypeMapping(TypeMatcher(MappingSchema(name = "Foo")))
         }
+    }
+
+    "read global annotation type mapping" {
+        val yaml = """
+           |openapi-processor-mapping: v8
+           |
+           |options:
+           |  package-name: io.openapiprocessor.somewhere
+           | 
+           |map:
+           |  types:
+           |    - type: Foo @ io.openapiprocessor.Foo
+           """.trimMargin()
+
+        val mapping = reader.read (yaml) as Mapping
+        val mappings = MappingConverter(mapping).convertX()
+
+        val annotationMappings = mappings.findGlobalAnnotationTypeMapping(
+            AnnotationTypeMatcher(MappingSchema(name = "Foo")))
+
+        annotationMappings shouldHaveSize 1
+        val annotationMapping = annotationMappings.first()
+        annotationMapping.sourceTypeName shouldBe  "Foo"
+        annotationMapping.sourceTypeFormat.shouldBeNull()
+        annotationMapping.annotation.type shouldBe "io.openapiprocessor.Foo"
+        annotationMapping.annotation.parameters.shouldBeEmpty()
+    }
+
+    "multiple global annotation type mappings returns all" - {
+        val yaml = """
+           |openapi-processor-mapping: v8
+           |
+           |options:
+           |  package-name: io.openapiprocessor.somewhere
+           |  
+           |map:
+           |  types:
+           |    - type: Foo @ io.openapiprocessor.Foo
+           |    - type: Foo @ io.openapiprocessor.Bar
+           |    - type: object @ io.openapiprocessor.Object
+           """.trimMargin()
+
+        val mapping = reader.read (yaml) as Mapping
+        val mappings = MappingConverter(mapping).convertX()
+
+        val annotationMappings = mappings.findGlobalAnnotationTypeMapping(
+            AnnotationTypeMatcher(MappingSchema(name = "Foo"), true))
+
+        annotationMappings shouldHaveSize 3
+    }
+
+    "missing annotation type mapping returns empty list" - {
+        val yaml = """
+           |openapi-processor-mapping: v8
+           |
+           |options:
+           |  package-name: io.openapiprocessor.somewhere
+           |  
+           """.trimMargin()
+
+        // when:
+        val mapping = reader.read (yaml) as Mapping
+        val mappings = MappingConverter(mapping).convertX()
+
+        // then:
+        val annotationMappings = mappings.findGlobalAnnotationTypeMapping(
+            AnnotationTypeMatcher(MappingSchema(name = "Foo")))
+
+        annotationMappings.shouldBeEmpty()
     }
 })
