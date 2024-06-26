@@ -124,4 +124,19 @@ class Mappings(
 
         return mappings.map { it as AddParameterTypeMapping }
     }
+
+    fun findGlobalResponseTypeMapping(filter: MappingMatcher): ContentTypeMapping? {
+        log.trace("looking for global response type mapping of {}", filter)
+
+        val mappings = responseTypeMappings.filter(filter)
+        if (mappings.isEmpty()) {
+            return null
+        }
+
+        if (mappings.size > 1) {
+            throw AmbiguousTypeMappingException(mappings)
+        }
+
+        return mappings.first() as ContentTypeMapping
+    }
 }
