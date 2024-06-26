@@ -125,7 +125,7 @@ class Mappings(
         return mappings.map { it as AddParameterTypeMapping }
     }
 
-    fun findGlobalResponseTypeMapping(filter: MappingMatcher): ContentTypeMapping? {
+    fun findGlobalContentTypeMapping(filter: MappingMatcher): ContentTypeMapping? {
         log.trace("looking for global response type mapping of {}", filter)
 
         val mappings = responseTypeMappings.filter(filter)
