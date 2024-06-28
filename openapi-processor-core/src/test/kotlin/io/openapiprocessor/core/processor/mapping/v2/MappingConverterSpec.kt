@@ -15,7 +15,6 @@ import io.openapiprocessor.core.converter.mapping.AnnotationTypeMapping
 import io.openapiprocessor.core.converter.mapping.EndpointTypeMapping
 import io.openapiprocessor.core.converter.mapping.NullTypeMapping
 import io.openapiprocessor.core.converter.mapping.TypeMapping
-import io.openapiprocessor.core.converter.mapping.matcher.TypeMatcher
 import io.openapiprocessor.core.processor.MappingConverter
 import io.openapiprocessor.core.processor.MappingReader
 import io.openapiprocessor.core.support.MappingSchema
@@ -44,8 +43,7 @@ class MappingConverterSpec: StringSpec({
         val mappings = MappingConverter(mapping).convertX()
 
         // then:
-        val typeMapping = mappings.findGlobalTypeMapping(
-            TypeMatcher(MappingSchema(name = "Foo")))!!
+        val typeMapping = mappings.findGlobalTypeMapping(MappingSchema(name = "Foo"))!!
 
         typeMapping.targetTypeName shouldBe "io.openapiprocessor.Foo"
         typeMapping.genericTypes.size shouldBe 1

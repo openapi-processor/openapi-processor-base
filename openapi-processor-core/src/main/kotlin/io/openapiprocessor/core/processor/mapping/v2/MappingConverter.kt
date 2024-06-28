@@ -68,41 +68,52 @@ class MappingConverter(val mapping: MappingV2) {
         return result
     }
 
-    fun convertX(): Mappings {
+    fun convertX(): MappingRepository {
+
+//        mapping.map.extensions.forEach {
+//            result.add(convertExtension (it.key, it.value))
+//        }
+
+        return MappingRepository(
+            convertGlobalMappings(mapping.map),
+            convertPathsMappings(mapping.map.paths))
+    }
+
+    private fun convertGlobalMappings(map: Map): Mappings {
         var resultTypeMapping: ResultTypeMapping? = null
         var resultStyle: ResultStyle? = null
         var singleTypeMapping: TypeMapping? = null
         var multiTypeMapping: TypeMapping? = null
-        val globalTypeMappings = mutableListOf<Mapping>()
-        val globalParameterTypeMappings = mutableListOf<Mapping>()
-        val globalResponseTypeMappings = mutableListOf<Mapping>()
+        val typeMappings = mutableListOf<Mapping>()
+        val parameterTypeMappings = mutableListOf<Mapping>()
+        val responseTypeMappings = mutableListOf<Mapping>()
 
-        if (mapping.map.result != null) {
-            resultTypeMapping = convertResult(mapping.map.result)
+        if (map.result != null) {
+            resultTypeMapping = convertResult(map.result)
         }
 
-        if (mapping.map.resultStyle != null) {
-            resultStyle = mapping.map.resultStyle
+        if (map.resultStyle != null) {
+            resultStyle = map.resultStyle
         }
 
-        if(mapping.map.single != null) {
-            singleTypeMapping = convertType("single" , mapping.map.single)
+        if(map.single != null) {
+            singleTypeMapping = convertType("single" , map.single)
         }
 
-        if(mapping.map.multi != null) {
-            multiTypeMapping = convertType("multi", mapping.map.multi)
+        if(map.multi != null) {
+            multiTypeMapping = convertType("multi", map.multi)
         }
 
-        mapping.map.types.forEach {
-            globalTypeMappings.add(convertType(it))
+        map.types.forEach {
+            typeMappings.add(convertType(it))
         }
 
-        mapping.map.parameters.forEach {
-            globalParameterTypeMappings.add (convertParameter (it))
+        map.parameters.forEach {
+            parameterTypeMappings.add (convertParameter (it))
         }
 
-        mapping.map.responses.forEach {
-            globalResponseTypeMappings.add (convertResponse (it))
+        map.responses.forEach {
+            responseTypeMappings.add (convertResponse (it))
         }
 
         return Mappings(
@@ -110,10 +121,56 @@ class MappingConverter(val mapping: MappingV2) {
             resultStyle,
             singleTypeMapping,
             multiTypeMapping,
-            TypeMappings(globalTypeMappings),
-            TypeMappings(globalParameterTypeMappings),
-            TypeMappings(globalResponseTypeMappings)
-        )
+            TypeMappings(typeMappings),
+            TypeMappings(parameterTypeMappings),
+            TypeMappings(responseTypeMappings))
+    }
+
+    private fun convertPathsMappings(paths: HashMap<String, Path>): HashMap<String, EndpointMappings> {
+        val endpointMappings = HashMap<String, EndpointMappings>()
+
+        paths.forEach {
+            val path: Path = it.value
+
+            val pathMappings = convertPath(path)
+            val methodMappings = HashMap<HttpMethod, Mappings>()
+
+            if (path.get != null) {
+                methodMappings[HttpMethod.GET] = convertPathMethod(path.get)
+            }
+
+            if (path.put != null) {
+                methodMappings[HttpMethod.PUT] = convertPathMethod(path.put)
+            }
+
+            if (path.post != null) {
+                methodMappings[HttpMethod.POST] = convertPathMethod(path.post)
+            }
+
+            if (path.delete != null) {
+                methodMappings[HttpMethod.DELETE] = convertPathMethod(path.delete)
+            }
+
+            if (path.options != null) {
+                methodMappings[HttpMethod.OPTIONS] = convertPathMethod(path.options)
+            }
+
+            if (path.head != null) {
+                methodMappings[HttpMethod.HEAD] = convertPathMethod(path.head)
+            }
+
+            if (path.patch != null) {
+                methodMappings[HttpMethod.PATCH] = convertPathMethod(path.patch)
+            }
+
+            if (path.trace != null) {
+                methodMappings[HttpMethod.TRACE] = convertPathMethod(path.trace)
+            }
+
+            endpointMappings[it.key] = EndpointMappings(pathMappings, methodMappings, it.value.exclude)
+        }
+
+        return endpointMappings
     }
 
     private fun convertResultStyleOption(value: ResultStyle): ResultStyleOptionMapping {
@@ -331,6 +388,48 @@ class MappingConverter(val mapping: MappingV2) {
         return EndpointTypeMapping(path, null, result, source.exclude)
     }
 
+    private fun convertPath(source: Path): Mappings {
+        var resultTypeMapping: ResultTypeMapping? = null
+        var singleTypeMapping: TypeMapping? = null
+        var multiTypeMapping: TypeMapping? = null
+        val typeMappings = mutableListOf<Mapping>()
+        val parameterTypeMappings = mutableListOf<Mapping>()
+        val responseTypeMappings = mutableListOf<Mapping>()
+
+        if (source.result != null) {
+            resultTypeMapping = convertResult(source.result)
+        }
+
+        if(source.single != null) {
+            singleTypeMapping = convertType("single" , source.single)
+        }
+
+        if(source.multi != null) {
+            multiTypeMapping = convertType("multi", source.multi)
+        }
+
+        source.types.forEach {
+            typeMappings.add(convertType(it))
+        }
+
+        source.parameters.forEach {
+            parameterTypeMappings.add (convertParameter (it))
+        }
+
+        source.responses.forEach {
+            responseTypeMappings.add (convertResponse (it))
+        }
+
+        return Mappings(
+            resultTypeMapping,
+            null,
+            singleTypeMapping,
+            multiTypeMapping,
+            TypeMappings(typeMappings),
+            TypeMappings(parameterTypeMappings),
+            TypeMappings(responseTypeMappings))
+    }
+
     private fun convertPathMethods(path: String, source: Path): List<Mapping> {
         val result = ArrayList<Mapping>()
 
@@ -401,6 +500,53 @@ class MappingConverter(val mapping: MappingV2) {
         }
 
         return EndpointTypeMapping(path, method, result, source.exclude)
+    }
+
+    private fun convertPathMethod(source: PathMethod): Mappings {
+        var resultTypeMapping: ResultTypeMapping? = null
+        var singleTypeMapping: TypeMapping? = null
+        var multiTypeMapping: TypeMapping? = null
+        val typeMappings = mutableListOf<Mapping>()
+        val parameterTypeMappings = mutableListOf<Mapping>()
+        val responseTypeMappings = mutableListOf<Mapping>()
+
+        if (source.result != null) {
+            resultTypeMapping = convertResult(source.result)
+        }
+
+        // if (source.resultStyle != null) {
+        //    resultStyle = source.resultStyle
+        // }
+
+        if(source.single != null) {
+            singleTypeMapping = convertType("single" , source.single)
+        }
+
+        if(source.multi != null) {
+            multiTypeMapping = convertType("multi", source.multi)
+        }
+
+        source.types.forEach {
+            typeMappings.add(convertType(it))
+        }
+
+        source.parameters.forEach {
+            parameterTypeMappings.add (convertParameter (it))
+        }
+
+        source.responses.forEach {
+            responseTypeMappings.add (convertResponse (it))
+        }
+
+        return Mappings(
+            resultTypeMapping,
+            null,
+            singleTypeMapping,
+            multiTypeMapping,
+            TypeMappings(typeMappings),
+            TypeMappings(parameterTypeMappings),
+            TypeMappings(responseTypeMappings)
+        )
     }
 
     private fun convertExtension(extension: String, values: List<Type>): Mapping {

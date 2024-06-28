@@ -186,9 +186,10 @@ class MappingConverterTypeSpec: FreeSpec({
 
             // then:
             val typeMapping = mappings.findGlobalTypeMapping(
-                TypeMatcher(MappingSchema(
+                MappingSchema(
                     name = expected.sourceTypeName,
-                    format = expected.sourceTypeFormat))
+                    format = expected.sourceTypeFormat
+                )
             )!!
 
             typeMapping.sourceTypeName shouldBe expected.sourceTypeName
@@ -218,8 +219,7 @@ class MappingConverterTypeSpec: FreeSpec({
         val mappings = MappingConverter(mapping).convertX()
 
         // then:
-        val typeMapping = mappings.findGlobalTypeMapping(
-            TypeMatcher(MappingSchema(name = "Foo")))
+        val typeMapping = mappings.findGlobalTypeMapping(MappingSchema(name = "Foo"))
 
         typeMapping.shouldBeNull()
     }
@@ -241,7 +241,7 @@ class MappingConverterTypeSpec: FreeSpec({
         val mappings = MappingConverter(mapping).convertX()
 
         shouldThrow<AmbiguousTypeMappingException> {
-            mappings.findGlobalTypeMapping(TypeMatcher(MappingSchema(name = "Foo")))
+            mappings.findGlobalTypeMapping(MappingSchema(name = "Foo"))
         }
     }
 
@@ -255,13 +255,13 @@ class MappingConverterTypeSpec: FreeSpec({
            |map:
            |  types:
            |    - type: Foo @ io.openapiprocessor.Foo
+           |    - type: object @ io.openapiprocessor.Object
            """.trimMargin()
 
         val mapping = reader.read (yaml) as Mapping
         val mappings = MappingConverter(mapping).convertX()
 
-        val annotationMappings = mappings.findGlobalAnnotationTypeMapping(
-            AnnotationTypeMatcher(MappingSchema(name = "Foo")))
+        val annotationMappings = mappings.findGlobalAnnotationTypeMapping(MappingSchema(name = "Foo"), false)
 
         annotationMappings shouldHaveSize 1
         val annotationMapping = annotationMappings.first()
@@ -288,8 +288,7 @@ class MappingConverterTypeSpec: FreeSpec({
         val mapping = reader.read (yaml) as Mapping
         val mappings = MappingConverter(mapping).convertX()
 
-        val annotationMappings = mappings.findGlobalAnnotationTypeMapping(
-            AnnotationTypeMatcher(MappingSchema(name = "Foo"), true))
+        val annotationMappings = mappings.findGlobalAnnotationTypeMapping(MappingSchema(name = "Foo"), true)
 
         annotationMappings shouldHaveSize 3
     }
@@ -308,8 +307,7 @@ class MappingConverterTypeSpec: FreeSpec({
         val mappings = MappingConverter(mapping).convertX()
 
         // then:
-        val annotationMappings = mappings.findGlobalAnnotationTypeMapping(
-            AnnotationTypeMatcher(MappingSchema(name = "Foo")))
+        val annotationMappings = mappings.findGlobalAnnotationTypeMapping(MappingSchema(name = "Foo"))
 
         annotationMappings.shouldBeEmpty()
     }

@@ -32,8 +32,7 @@ class MappingConverterResponseSpec: StringSpec({
 
         // then:
         val contentMapping = mappings.findGlobalContentTypeMapping(
-            ResponseTypeMatcher(MappingSchema(contentType = "application/vnd.array"))
-        )!!
+            MappingSchema(contentType = "application/vnd.array"))!!
 
         contentMapping.contentType shouldBe "application/vnd.array"
         contentMapping.mapping.sourceTypeName.shouldBeNull()
@@ -57,7 +56,7 @@ class MappingConverterResponseSpec: StringSpec({
 
         // then:
         val contentMapping = mappings.findGlobalContentTypeMapping(
-            ResponseTypeMatcher(MappingSchema(contentType = "application/vnd.array")))
+            MappingSchema(contentType = "application/vnd.array"))
 
         contentMapping.shouldBeNull()
     }
@@ -81,7 +80,7 @@ class MappingConverterResponseSpec: StringSpec({
 
         shouldThrow<AmbiguousTypeMappingException> {
             mappings.findGlobalContentTypeMapping(
-                ResponseTypeMatcher(MappingSchema(contentType = "application/vnd.array"))
+                MappingSchema(contentType = "application/vnd.array")
             )
         }
     }

@@ -16,28 +16,33 @@ class Mappings(
     private val multiTypeMapping: TypeMapping?,
     private val typeMappings: TypeMappings,
     private val parameterTypeMappings: TypeMappings,
-    private val responseTypeMappings: TypeMappings
+    private val responseTypeMappings: TypeMappings,
+    private val exclude: Boolean = false
 ) {
     val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
-    fun getGlobalResultTypeMapping(): ResultTypeMapping? {
+    fun getResultTypeMapping(): ResultTypeMapping? {
+        log.trace("looking for result type mapping")
         return resultTypeMapping
     }
 
-    fun getGlobalResultStyle(): ResultStyle? {
+    fun getResultStyle(): ResultStyle? {
+        log.trace("looking for result style")
         return resultStyle
     }
 
-    fun getGlobalSingleTypeMapping(): TypeMapping? {
+    fun getSingleTypeMapping(): TypeMapping? {
+        log.trace("looking for single mapping")
         return singleTypeMapping
     }
 
-    fun getGlobalMultiTypeMapping(): TypeMapping? {
+    fun getMultiTypeMapping(): TypeMapping? {
+        log.trace("looking for multi mapping")
         return multiTypeMapping
     }
 
-    fun findGlobalTypeMapping(filter: MappingMatcher): TypeMapping? {
-        log.trace("looking for global type mapping of {}", filter)
+    fun findTypeMapping(filter: MappingMatcher): TypeMapping? {
+        log.trace("looking for type mapping of {}", filter)
 
         val mappings = typeMappings.filter(filter)
         if (mappings.isEmpty()) {
@@ -51,8 +56,8 @@ class Mappings(
         return mappings.first() as TypeMapping
     }
 
-    fun findGlobalAnnotationTypeMapping(filter: MappingMatcher): List<AnnotationTypeMapping> {
-        log.trace("looking for global annotation type mapping of {}", filter)
+    fun findAnnotationTypeMapping(filter: MappingMatcher): List<AnnotationTypeMapping> {
+        log.trace("looking for annotation type mapping of {}", filter)
 
         val mappings = typeMappings.filter(filter)
         if (mappings.isEmpty()) {
@@ -62,8 +67,8 @@ class Mappings(
         return mappings.map { it as AnnotationTypeMapping }
     }
 
-    fun findGlobalParameterTypeMapping(filter: MappingMatcher): TypeMapping? {
-        log.trace("looking for global parameter type mapping of {}", filter)
+    fun findParameterTypeMapping(filter: MappingMatcher): TypeMapping? {
+        log.trace("looking for parameter type mapping of {}", filter)
 
         val mappings = parameterTypeMappings.filter(filter)
         if (mappings.isEmpty()) {
@@ -77,8 +82,8 @@ class Mappings(
         return mappings.first() as TypeMapping
     }
 
-    fun findGlobalAnnotationParameterTypeMapping(filter: MappingMatcher): List<AnnotationTypeMapping> {
-        log.trace("looking for global annotation parameter type mapping of {}", filter)
+    fun findAnnotationParameterTypeMapping(filter: MappingMatcher): List<AnnotationTypeMapping> {
+        log.trace("looking for annotation parameter type mapping of {}", filter)
 
         val mappings = parameterTypeMappings.filter(filter)
         if (mappings.isEmpty()) {
@@ -88,8 +93,8 @@ class Mappings(
         return mappings.map { it as AnnotationTypeMapping }
     }
 
-    fun findGlobalParameterNameTypeMapping(filter: MappingMatcher): NameTypeMapping? {
-        log.trace("looking for global parameter mapping of {}", filter)
+    fun findParameterNameTypeMapping(filter: MappingMatcher): NameTypeMapping? {
+        log.trace("looking for parameter mapping of {}", filter)
 
         val mappings = parameterTypeMappings.filter(filter)
         if (mappings.isEmpty()) {
@@ -103,8 +108,8 @@ class Mappings(
         return mappings.first() as NameTypeMapping
     }
 
-    fun findGlobalAnnotationParameterNameTypeMapping(filter: MappingMatcher): List<AnnotationNameMapping> {
-        log.trace("looking for global annotation parameter name mapping of {}", filter)
+    fun findAnnotationParameterNameTypeMapping(filter: MappingMatcher): List<AnnotationNameMapping> {
+        log.trace("looking for annotation parameter name mapping of {}", filter)
 
         val mappings = parameterTypeMappings.filter(filter)
         if (mappings.isEmpty()) {
@@ -114,7 +119,7 @@ class Mappings(
         return mappings.map { it as AnnotationNameMapping }
     }
 
-    fun findGlobalAddParameterTypeMappings(filter: MappingMatcher): List<AddParameterTypeMapping>  {
+    fun findAddParameterTypeMappings(filter: MappingMatcher): List<AddParameterTypeMapping>  {
         log.trace("looking for global additional parameter mapping of {}", filter)
 
         val mappings = parameterTypeMappings.filter(filter)
@@ -125,7 +130,7 @@ class Mappings(
         return mappings.map { it as AddParameterTypeMapping }
     }
 
-    fun findGlobalContentTypeMapping(filter: MappingMatcher): ContentTypeMapping? {
+    fun findContentTypeMapping(filter: MappingMatcher): ContentTypeMapping? {
         log.trace("looking for global response type mapping of {}", filter)
 
         val mappings = responseTypeMappings.filter(filter)
@@ -138,5 +143,9 @@ class Mappings(
         }
 
         return mappings.first() as ContentTypeMapping
+    }
+
+    fun isExcluded(): Boolean {
+        return exclude
     }
 }

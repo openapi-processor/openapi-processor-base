@@ -77,8 +77,7 @@ class MappingConverterParameterSpec: StringSpec({
         val mappings = MappingConverter(mapping).convertX()
 
         // then:
-        val typeMapping = mappings.findGlobalParameterTypeMapping(
-            TypeMatcher(MappingSchema(name = "Foo")))!!
+        val typeMapping = mappings.findGlobalParameterTypeMapping(MappingSchema(name = "Foo"))!!
 
         typeMapping.sourceTypeName shouldBe "Foo"
         typeMapping.targetTypeName shouldBe "mapping.Foo"
@@ -100,8 +99,7 @@ class MappingConverterParameterSpec: StringSpec({
         val mappings = MappingConverter(mapping).convertX()
 
         // then:
-        val typeMapping = mappings.findGlobalParameterTypeMapping(
-            TypeMatcher(MappingSchema(name = "Foo")))
+        val typeMapping = mappings.findGlobalParameterTypeMapping(MappingSchema(name = "Foo"))
 
         typeMapping.shouldBeNull()
     }
@@ -123,8 +121,7 @@ class MappingConverterParameterSpec: StringSpec({
         val mappings = MappingConverter(mapping).convertX()
 
         shouldThrow<AmbiguousTypeMappingException> {
-            mappings.findGlobalParameterTypeMapping(
-                TypeMatcher(MappingSchema(name = "Foo")))
+            mappings.findGlobalParameterTypeMapping(MappingSchema(name = "Foo"))
         }
     }
 
@@ -141,8 +138,7 @@ class MappingConverterParameterSpec: StringSpec({
         val mappings = MappingConverter(mapping).convertX()
 
         // then:
-        val nameTypeMapping = mappings.findGlobalParameterNameTypeMapping(
-            ParameterTypeMatcher(MappingSchema(name = "foo")))!!
+        val nameTypeMapping = mappings.findGlobalParameterNameTypeMapping(MappingSchema(name = "foo"))!!
 
         nameTypeMapping.parameterName shouldBe "foo"
         nameTypeMapping.mapping.sourceTypeName.shouldBeNull()
@@ -165,8 +161,7 @@ class MappingConverterParameterSpec: StringSpec({
         val mappings = MappingConverter(mapping).convertX()
 
         // then:
-        val nameTypeMapping = mappings.findGlobalParameterNameTypeMapping(
-            ParameterTypeMatcher(MappingSchema(name = "foo")))
+        val nameTypeMapping = mappings.findGlobalParameterNameTypeMapping(MappingSchema(name = "foo"))
 
         nameTypeMapping.shouldBeNull()
     }
@@ -188,8 +183,7 @@ class MappingConverterParameterSpec: StringSpec({
         val mappings = MappingConverter(mapping).convertX()
 
         shouldThrow<AmbiguousTypeMappingException> {
-            mappings.findGlobalParameterNameTypeMapping(
-                ParameterTypeMatcher(MappingSchema(name = "foo")))
+            mappings.findGlobalParameterNameTypeMapping(MappingSchema(name = "foo"))
         }
     }
 
@@ -207,8 +201,7 @@ class MappingConverterParameterSpec: StringSpec({
         val mappings = MappingConverter(mapping).convertX()
 
         // then:
-        val addMappings = mappings.findGlobalAddParameterTypeMappings(
-            AddParameterTypeMatcher())
+        val addMappings = mappings.findGlobalAddParameterTypeMappings()
 
         addMappings.shouldBeEmpty()
     }
@@ -226,8 +219,7 @@ class MappingConverterParameterSpec: StringSpec({
         val mappings = MappingConverter(mapping).convertX()
 
         // then:
-        val addMappings = mappings.findGlobalAddParameterTypeMappings(
-            AddParameterTypeMatcher())
+        val addMappings = mappings.findGlobalAddParameterTypeMappings()
 
         addMappings.size.shouldBe(1)
         val add = addMappings.first()
@@ -253,9 +245,7 @@ class MappingConverterParameterSpec: StringSpec({
         val mappings = MappingConverter(mapping).convertX()
 
         // then:
-        val addMappings = mappings.findGlobalAddParameterTypeMappings(
-            AddParameterTypeMatcher()
-        )
+        val addMappings = mappings.findGlobalAddParameterTypeMappings()
 
         addMappings.size.shouldBe(2)
         addMappings[0].parameterName shouldBe "foo"
@@ -277,8 +267,7 @@ class MappingConverterParameterSpec: StringSpec({
          val mapping = reader.read (yaml) as Mapping
          val mappings = MappingConverter(mapping).convertX()
 
-         val annotationMappings = mappings.findGlobalAnnotationParameterTypeMapping(
-             AnnotationTypeMatcher(MappingSchema(name = "Foo")))
+         val annotationMappings = mappings.findGlobalAnnotationParameterTypeMapping(MappingSchema(name = "Foo"))
 
          annotationMappings shouldHaveSize 1
          val annotationMapping = annotationMappings.first()
@@ -304,8 +293,7 @@ class MappingConverterParameterSpec: StringSpec({
          val mapping = reader.read (yaml) as Mapping
          val mappings = MappingConverter(mapping).convertX()
 
-         val annotationMappings = mappings.findGlobalAnnotationParameterTypeMapping(
-             AnnotationTypeMatcher(MappingSchema(name = "Foo")))
+         val annotationMappings = mappings.findGlobalAnnotationParameterTypeMapping(MappingSchema(name = "Foo"))
 
          annotationMappings shouldHaveSize 2
      }
@@ -324,8 +312,7 @@ class MappingConverterParameterSpec: StringSpec({
          val mappings = MappingConverter(mapping).convertX()
 
          // then:
-         val annotationMappings = mappings.findGlobalAnnotationParameterTypeMapping(
-             AnnotationTypeMatcher(MappingSchema(name = "Foo")))
+         val annotationMappings = mappings.findGlobalAnnotationParameterTypeMapping(MappingSchema(name = "Foo"))
 
          annotationMappings.shouldBeEmpty()
      }
@@ -345,9 +332,7 @@ class MappingConverterParameterSpec: StringSpec({
          val mapping = reader.read (yaml) as Mapping
          val mappings = MappingConverter(mapping).convertX()
 
-         val annotationMappings = mappings.findGlobalAnnotationParameterNameTypeMapping(
-             AnnotationParameterNameMatcher(MappingSchema(name = "foo"))
-         )
+         val annotationMappings = mappings.findGlobalAnnotationParameterNameTypeMapping(MappingSchema(name = "foo"))
 
          annotationMappings shouldHaveSize 1
          val annotationMapping = annotationMappings.first()
@@ -372,9 +357,7 @@ class MappingConverterParameterSpec: StringSpec({
         val mapping = reader.read(yaml) as Mapping
         val mappings = MappingConverter(mapping).convertX()
 
-        val annotationMappings = mappings.findGlobalAnnotationParameterNameTypeMapping(
-            AnnotationParameterNameMatcher(MappingSchema(name = "foo"))
-        )
+        val annotationMappings = mappings.findGlobalAnnotationParameterNameTypeMapping(MappingSchema(name = "foo"))
 
         annotationMappings shouldHaveSize 2
     }
@@ -393,9 +376,7 @@ class MappingConverterParameterSpec: StringSpec({
         val mappings = MappingConverter(mapping).convertX()
 
         // then:
-        val annotationMappings = mappings.findGlobalAnnotationParameterNameTypeMapping(
-            AnnotationParameterNameMatcher(MappingSchema(name = "foo"))
-        )
+        val annotationMappings = mappings.findGlobalAnnotationParameterNameTypeMapping(MappingSchema(name = "foo"))
 
         annotationMappings.shouldBeEmpty()
     }
