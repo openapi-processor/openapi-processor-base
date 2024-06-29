@@ -64,18 +64,56 @@ class MappingRepository(
         return globalMappings.findContentTypeMapping(ResponseTypeMatcher(schema))
     }
 
-    fun getEndpointResultMapping(schema: MappingSchema): ResultTypeMapping? {
-        val pathMappings = endpointMappings[schema.getPath()]
-        val pathMapping = pathMappings?.getEndpointResultMapping(schema)
-        if (pathMapping != null) {
-            return pathMapping
-        }
+    fun getEndpointResultTypeMapping(schema: MappingSchema): ResultTypeMapping? {
+        return endpointMappings[schema.getPath()]?.getResultTypeMapping(schema)
+    }
 
-        val mapping = globalMappings.getResultTypeMapping()
-        if(mapping != null) {
-            return mapping
-        }
+    fun getEndpointSingleTypeMapping(schema: MappingSchema): TypeMapping? {
+        return endpointMappings[schema.getPath()]?.getSingleTypeMapping(schema)
+    }
 
-        return null
+    fun getEndpointMultiTypeMapping(schema: MappingSchema): TypeMapping? {
+        return endpointMappings[schema.getPath()]?.getMultiTypeMapping(schema)
+    }
+
+    fun findEndpointTypeMapping(schema: MappingSchema): TypeMapping? {
+        return endpointMappings[schema.getPath()]?.findTypeMapping(schema)
+    }
+
+    fun findEndpointAnnotationTypeMapping(schema: MappingSchema, allowObject: Boolean = false): List<AnnotationTypeMapping> {
+        val mappings = endpointMappings[schema.getPath()] ?: return listOf()
+        return mappings.findAnnotationTypeMapping(schema, allowObject)
+    }
+
+    fun findEndpointParameterTypeMapping(schema: MappingSchema): TypeMapping? {
+        return endpointMappings[schema.getPath()]?.findParameterTypeMapping(schema)
+    }
+
+    fun findEndpointAnnotationParameterTypeMapping(schema: MappingSchema): List<AnnotationTypeMapping> {
+        val mappings = endpointMappings[schema.getPath()] ?: return listOf()
+        return mappings.findAnnotationParameterTypeMapping(schema)
+    }
+
+    fun findEndpointParameterNameTypeMapping(schema: MappingSchema): NameTypeMapping? {
+        return endpointMappings[schema.getPath()]?.findParameterNameTypeMapping(schema)
+    }
+
+    fun findEndpointAnnotationParameterNameTypeMapping(schema: MappingSchema): List<AnnotationNameMapping> {
+        val mappings = endpointMappings[schema.getPath()] ?: return listOf()
+        return mappings.findAnnotationParameterNameTypeMapping(schema)
+    }
+
+    fun findEndpointAddParameterTypeMappings(schema: MappingSchema): List<AddParameterTypeMapping> {
+        val mappings = endpointMappings[schema.getPath()] ?: return listOf()
+        return mappings.findAddParameterTypeMappings(schema)
+    }
+
+    fun findEndpointContentTypeMapping(schema: MappingSchema): ContentTypeMapping? {
+        return endpointMappings[schema.getPath()]?.findContentTypeMapping(schema)
+    }
+
+    fun isEndpointExcluded(schema: MappingSchema): Boolean {
+        val mappings = endpointMappings[schema.getPath()]?: return false
+        return mappings.isExcluded(schema)
     }
 }

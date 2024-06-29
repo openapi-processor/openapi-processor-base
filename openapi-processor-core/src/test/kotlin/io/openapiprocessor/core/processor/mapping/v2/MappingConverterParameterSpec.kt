@@ -16,7 +16,7 @@ import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.converter.mapping.AmbiguousTypeMappingException
 import io.openapiprocessor.core.converter.mapping.AnnotationNameMapping
 import io.openapiprocessor.core.converter.mapping.NameTypeMapping
-import io.openapiprocessor.core.converter.mapping.matcher.*
+import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.processor.MappingConverter
 import io.openapiprocessor.core.processor.MappingReader
 import io.openapiprocessor.core.support.MappingSchema
@@ -379,5 +379,177 @@ class MappingConverterParameterSpec: StringSpec({
         val annotationMappings = mappings.findGlobalAnnotationParameterNameTypeMapping(MappingSchema(name = "foo"))
 
         annotationMappings.shouldBeEmpty()
+    }
+
+    "reads endpoint parameter type mapping" {
+        val yaml = """
+           |openapi-processor-mapping: v8
+           |
+           |options:
+           |  package-name: io.openapiprocessor.somewhere
+           | 
+           |map:
+           |  paths:
+           |    /foo:
+           |      parameters:
+           |        - type: Foo => io.openapiprocessor.Foo
+           |      
+           |      get:
+           |        parameters:
+           |          - type: Foo => io.openapiprocessor.Foo2
+           |
+           """.trimMargin()
+
+        // when:
+        val mapping = reader.read (yaml) as Mapping
+        val mappings = MappingConverter(mapping).convertX()
+
+        // then:
+        val typeMapping = mappings.findEndpointParameterTypeMapping(
+            MappingSchema(path = "/foo", method = HttpMethod.POST, name = "Foo"))!!
+
+        typeMapping.sourceTypeName shouldBe "Foo"
+        typeMapping.sourceTypeFormat.shouldBeNull()
+        typeMapping.targetTypeName shouldBe "io.openapiprocessor.Foo"
+
+        val typeMappingGet = mappings.findEndpointParameterTypeMapping(
+            MappingSchema(path = "/foo", method = HttpMethod.GET, name= "Foo"))!!
+
+        typeMappingGet.sourceTypeName shouldBe "Foo"
+        typeMappingGet.sourceTypeFormat.shouldBeNull()
+        typeMappingGet.targetTypeName shouldBe "io.openapiprocessor.Foo2"
+    }
+
+    "read endpoint annotation type mapping" {
+        val yaml = """
+           |openapi-processor-mapping: v8
+           |
+           |options:
+           |  package-name: io.openapiprocessor.somewhere
+           |
+           |map:
+           |  paths:
+           |    /foo:
+           |      parameters:
+           |        - type: Foo @ io.openapiprocessor.Foo
+           |        - type: Foo @ io.openapiprocessor.Bar
+           |
+           |      get:
+           |        parameters:
+           |          - type: Foo @ io.openapiprocessor.Foo2
+           |          - type: Foo @ io.openapiprocessor.Bar2
+           |
+           """.trimMargin()
+
+        val mapping = reader.read (yaml) as Mapping
+        val mappings = MappingConverter(mapping).convertX()
+
+        val annotationMappings = mappings.findEndpointAnnotationParameterTypeMapping(
+            MappingSchema(path = "/foo", method = HttpMethod.POST, name = "Foo"))
+
+        annotationMappings shouldHaveSize 2
+        annotationMappings[0].sourceTypeName shouldBe  "Foo"
+        annotationMappings[0].sourceTypeFormat.shouldBeNull()
+        annotationMappings[0].annotation.type shouldBe "io.openapiprocessor.Foo"
+        annotationMappings[0].annotation.parameters.shouldBeEmpty()
+        annotationMappings[1].sourceTypeName shouldBe  "Foo"
+        annotationMappings[1].sourceTypeFormat.shouldBeNull()
+        annotationMappings[1].annotation.type shouldBe "io.openapiprocessor.Bar"
+        annotationMappings[1].annotation.parameters.shouldBeEmpty()
+
+        val annotationMappingsGet = mappings.findEndpointAnnotationParameterTypeMapping(
+            MappingSchema(path = "/foo", method = HttpMethod.GET, name = "Foo"))
+
+        annotationMappingsGet shouldHaveSize 2
+        annotationMappingsGet[0].sourceTypeName shouldBe  "Foo"
+        annotationMappingsGet[0].sourceTypeFormat.shouldBeNull()
+        annotationMappingsGet[0].annotation.type shouldBe "io.openapiprocessor.Foo2"
+        annotationMappingsGet[0].annotation.parameters.shouldBeEmpty()
+        annotationMappingsGet[1].sourceTypeName shouldBe  "Foo"
+        annotationMappingsGet[1].sourceTypeFormat.shouldBeNull()
+        annotationMappingsGet[1].annotation.type shouldBe "io.openapiprocessor.Bar2"
+        annotationMappingsGet[1].annotation.parameters.shouldBeEmpty()
+    }
+
+    "reads endpoint parameter name mapping" {
+        val yaml = """
+           |openapi-processor-mapping: v8
+           |
+           |options:
+           |  package-name: io.openapiprocessor.somewhere
+           | 
+           |map:
+           |  paths:
+           |    /foo:
+           |      parameters:
+           |        - name: foo => io.openapiprocessor.Foo
+           |      
+           |      get:
+           |        parameters:
+           |          - name: foo => io.openapiprocessor.Foo2
+           |
+           """.trimMargin()
+
+        // when:
+        val mapping = reader.read (yaml) as Mapping
+        val mappings = MappingConverter(mapping).convertX()
+
+        // then:
+        val typeMapping = mappings.findEndpointParameterNameTypeMapping(
+            MappingSchema(path = "/foo", method = HttpMethod.POST, name = "foo"))!!
+
+        typeMapping.parameterName shouldBe "foo"
+        typeMapping.mapping.sourceTypeName.shouldBeNull()
+        typeMapping.mapping.targetTypeName shouldBe "io.openapiprocessor.Foo"
+
+        val typeMappingGet = mappings.findEndpointParameterNameTypeMapping(
+            MappingSchema(path = "/foo", method = HttpMethod.GET, name= "foo"))!!
+
+        typeMappingGet.parameterName shouldBe "foo"
+        typeMappingGet.mapping.sourceTypeName.shouldBeNull()
+        typeMappingGet.mapping.targetTypeName shouldBe "io.openapiprocessor.Foo2"
+    }
+
+    "read endpoint annotation parameter name type mapping" {
+        val yaml = """
+           |openapi-processor-mapping: v8
+           |
+           |options:
+           |  package-name: io.openapiprocessor.somewhere
+           |
+           |map:
+           |  paths:
+           |    /foo:
+           |      parameters:
+           |        - name: foo @ io.openapiprocessor.Foo
+           |        - name: foo @ io.openapiprocessor.Bar
+           |
+           |      get:
+           |        parameters:
+           |          - name: foo @ io.openapiprocessor.Foo2
+           |          - name: foo @ io.openapiprocessor.Bar2
+           |
+           """.trimMargin()
+
+        val mapping = reader.read (yaml) as Mapping
+        val mappings = MappingConverter(mapping).convertX()
+
+        val annotationMappings = mappings.findEndpointAnnotationParameterNameTypeMapping(
+            MappingSchema(path = "/foo", method = HttpMethod.POST, name = "foo"))
+
+        annotationMappings shouldHaveSize 2
+        annotationMappings[0].name shouldBe  "foo"
+        annotationMappings[0].annotation.type shouldBe "io.openapiprocessor.Foo"
+        annotationMappings[1].name shouldBe  "foo"
+        annotationMappings[1].annotation.type shouldBe "io.openapiprocessor.Bar"
+
+        val annotationMappingsGet = mappings.findEndpointAnnotationParameterNameTypeMapping(
+            MappingSchema(path = "/foo", method = HttpMethod.GET, name = "foo"))
+
+        annotationMappingsGet shouldHaveSize 2
+        annotationMappingsGet[0].name shouldBe  "foo"
+        annotationMappingsGet[0].annotation.type shouldBe "io.openapiprocessor.Foo2"
+        annotationMappingsGet[1].name shouldBe  "foo"
+        annotationMappingsGet[1].annotation.type shouldBe "io.openapiprocessor.Bar2"
     }
 })

@@ -5,12 +5,13 @@
 
 package io.openapiprocessor.core.processor.mapping.v2
 
-import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
+import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.processor.MappingReader
+import io.openapiprocessor.core.support.MappingSchema
 
 class MappingConverterResultSpec: StringSpec({
     val reader = MappingReader()
@@ -119,5 +120,42 @@ class MappingConverterResultSpec: StringSpec({
         val resultStyle = mappings.getGlobalResultStyle()!!
 
         resultStyle.shouldBe(ResultStyle.ALL)
+    }
+
+    "read endpoint result type mapping" {
+        val yaml = """
+           |openapi-processor-mapping: v8
+           |
+           |options:
+           |  package-name: io.openapiprocessor.somewhere
+           | 
+           |map:
+           |  paths:
+           |    /foo:
+           |      result: io.openapiprocessor.WrapAll
+           |      
+           |      get:
+           |        result: io.openapiprocessor.WrapGet
+           |      
+           """.trimMargin()
+
+        // when:
+        val mapping = reader.read (yaml) as Mapping
+        val mappings = MappingConverter(mapping).convertX()
+
+        // then:
+        val resultTypeMapping = mappings.getEndpointResultTypeMapping(
+            MappingSchema(path = "/foo", method = HttpMethod.POST)
+        )!!
+
+        resultTypeMapping.targetTypeName shouldBe "io.openapiprocessor.WrapAll"
+        resultTypeMapping.genericTypes.shouldBeEmpty()
+
+        val resultTypeMappingGet = mappings.getEndpointResultTypeMapping(
+            MappingSchema(path = "/foo", method = HttpMethod.GET)
+        )!!
+
+        resultTypeMappingGet.targetTypeName shouldBe "io.openapiprocessor.WrapGet"
+        resultTypeMappingGet.genericTypes.shouldBeEmpty()
     }
 })
