@@ -5,10 +5,7 @@
 
 package io.openapiprocessor.core.converter.mapping
 
-import io.openapiprocessor.core.converter.mapping.matcher.AnnotationParameterNameMatcher
-import io.openapiprocessor.core.converter.mapping.matcher.AnnotationTypeMatcher
-import io.openapiprocessor.core.converter.mapping.matcher.ParameterTypeMatcher
-import io.openapiprocessor.core.converter.mapping.matcher.TypeMatcher
+import io.openapiprocessor.core.converter.mapping.matcher.*
 import io.openapiprocessor.core.parser.HttpMethod
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -163,7 +160,16 @@ class EndpointMappings(
     }
 
     fun findAddParameterTypeMappings(schema: MappingSchema): List<AddParameterTypeMapping> {
-        return listOf()
+        val httpMethodMappings = methodMappings[schema.getMethod()]
+        val methodMappings = httpMethodMappings?.findAddParameterTypeMappings(AddParameterTypeMatcher())
+        if (!methodMappings.isNullOrEmpty()) {
+            log.trace("found endpoint add parameter type mappings ({} {})", schema.getPath(), schema.getMethod())
+            return methodMappings
+        }
+
+        val mappings = mappings.findAddParameterTypeMappings(AddParameterTypeMatcher())
+        log.trace("found endpoint add parameter type mapping ({})", schema.getPath())
+        return mappings
     }
 
     fun findContentTypeMapping(schema: MappingSchema): ContentTypeMapping? {

@@ -552,4 +552,49 @@ class MappingConverterParameterSpec: StringSpec({
         annotationMappingsGet[1].name shouldBe  "foo"
         annotationMappingsGet[1].annotation.type shouldBe "io.openapiprocessor.Bar2"
     }
+
+    "reads endpoint add parameter type mapping" {
+        val yaml = """
+           |openapi-processor-mapping: v8
+           |
+           |options:
+           |  package-name: io.openapiprocessor.somewhere
+           | 
+           |map:
+           |  paths:
+           |    /foo:
+           |      parameters:
+           |        - add: foo => io.openapiprocessor.Foo
+           |        - add: bar => io.openapiprocessor.Bar
+           |      
+           |      get:
+           |        parameters:
+           |          - add: foo2 => io.openapiprocessor.Foo2
+           |          - add: bar2 => io.openapiprocessor.Bar2
+           |
+           """.trimMargin()
+
+        // when:
+        val mapping = reader.read (yaml) as Mapping
+        val mappings = MappingConverter(mapping).convertX()
+
+        // then:
+        val addMappings = mappings.findEndpointAddParameterTypeMappings(
+            MappingSchema(path = "/foo", method = HttpMethod.POST))
+
+        addMappings shouldHaveSize 2
+        addMappings[0].parameterName shouldBe "foo"
+        addMappings[0].mapping.targetTypeName shouldBe "io.openapiprocessor.Foo"
+        addMappings[1].parameterName shouldBe "bar"
+        addMappings[1].mapping.targetTypeName shouldBe "io.openapiprocessor.Bar"
+
+        val addMappingsGet = mappings.findEndpointAddParameterTypeMappings(
+            MappingSchema(path = "/foo", method = HttpMethod.GET))
+
+        addMappingsGet shouldHaveSize 2
+        addMappingsGet[0].parameterName shouldBe "foo2"
+        addMappingsGet[0].mapping.targetTypeName shouldBe "io.openapiprocessor.Foo2"
+        addMappingsGet[1].parameterName shouldBe "bar2"
+        addMappingsGet[1].mapping.targetTypeName shouldBe "io.openapiprocessor.Bar2"
+    }
 })
