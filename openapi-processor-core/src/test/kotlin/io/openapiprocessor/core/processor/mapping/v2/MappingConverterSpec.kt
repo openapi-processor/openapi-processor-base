@@ -8,6 +8,8 @@ package io.openapiprocessor.core.processor.mapping.v2
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.booleans.shouldBeFalse
+import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
@@ -15,6 +17,7 @@ import io.openapiprocessor.core.converter.mapping.AnnotationTypeMapping
 import io.openapiprocessor.core.converter.mapping.EndpointTypeMapping
 import io.openapiprocessor.core.converter.mapping.NullTypeMapping
 import io.openapiprocessor.core.converter.mapping.TypeMapping
+import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.processor.MappingConverter
 import io.openapiprocessor.core.processor.MappingReader
 import io.openapiprocessor.core.support.MappingSchema
@@ -248,5 +251,31 @@ class MappingConverterSpec: StringSpec({
         }
 
         mappings.shouldNotBeNull()
+    }
+
+    "read endpoint path exclude" {
+        val yaml = """
+                   |openapi-processor-mapping: 8
+                   |
+                   |options:
+                   |  package-name: io.openapiprocessor.somewhere
+                   | 
+                   |map:
+                   |  paths:
+                   |    /foo:
+                   |      get:
+                   |        exclude: true
+                   """.trimMargin()
+
+        // when:
+        val mapping = reader.read (yaml) as Mapping
+        val mappings = MappingConverter(mapping).convertX()
+
+        // then:
+        val excluded = mappings.isEndpointExcluded(MappingSchema(path = "/foo", method = HttpMethod.POST))
+        excluded.shouldBeFalse()
+
+        val excludedGet = mappings.isEndpointExcluded(MappingSchema(path = "/foo", method = HttpMethod.GET))
+        excludedGet.shouldBeTrue()
     }
 })

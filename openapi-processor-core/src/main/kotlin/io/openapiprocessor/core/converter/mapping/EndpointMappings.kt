@@ -173,10 +173,29 @@ class EndpointMappings(
     }
 
     fun findContentTypeMapping(schema: MappingSchema): ContentTypeMapping? {
+        val httpMethodMappings = methodMappings[schema.getMethod()]
+        val methodMapping = httpMethodMappings?.findContentTypeMapping(ResponseTypeMatcher(schema))
+        if (methodMapping != null) {
+            log.trace("found endpoint content type mapping ({} {})", schema.getPath(), schema.getMethod())
+            return methodMapping
+        }
+
+        val mapping = mappings.findContentTypeMapping(ResponseTypeMatcher(schema))
+        if (mapping != null) {
+            log.trace("found endpoint content type mapping ({})", schema.getPath())
+            return mapping
+        }
+
         return null
     }
 
     fun isExcluded(schema: MappingSchema): Boolean {
-        return false
+        val httpMethodMappings = methodMappings[schema.getMethod()]
+        val excluded = httpMethodMappings?.isExcluded()
+        if(excluded != null && excluded == true) {
+            return excluded
+        }
+
+        return mappings.isExcluded()
     }
 }

@@ -427,7 +427,8 @@ class MappingConverter(val mapping: MappingV2) {
             multiTypeMapping,
             TypeMappings(typeMappings),
             TypeMappings(parameterTypeMappings),
-            TypeMappings(responseTypeMappings))
+            TypeMappings(responseTypeMappings),
+            source.exclude)
     }
 
     private fun convertPathMethods(path: String, source: Path): List<Mapping> {
@@ -545,7 +546,8 @@ class MappingConverter(val mapping: MappingV2) {
             multiTypeMapping,
             TypeMappings(typeMappings),
             TypeMappings(parameterTypeMappings),
-            TypeMappings(responseTypeMappings)
+            TypeMappings(responseTypeMappings),
+            source.exclude
         )
     }
 

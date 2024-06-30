@@ -11,6 +11,7 @@ import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.converter.mapping.AmbiguousTypeMappingException
+import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.processor.MappingReader
 import io.openapiprocessor.core.support.MappingSchema
 
@@ -82,5 +83,48 @@ class MappingConverterResponseSpec: StringSpec({
                 MappingSchema(contentType = "application/vnd.array")
             )
         }
+    }
+
+    "reads endpoint parameter type mapping" {
+        val yaml = """
+           |openapi-processor-mapping: v8
+           |
+           |options:
+           |  package-name: io.openapiprocessor.somewhere
+           | 
+           |map:
+           |  paths:
+           |    /foo:
+           |      responses:
+           |        - content: application/vnd.array => java.util.List
+           |      
+           |      get:
+           |        responses:
+           |          - content: application/vnd.array => java.util.List2
+           |
+           """.trimMargin()
+
+        // when:
+        val mapping = reader.read (yaml) as Mapping
+        val mappings = MappingConverter(mapping).convertX()
+
+        // then:
+        val contentMapping = mappings.findEndpointContentTypeMapping(
+            MappingSchema(path = "/foo", method = HttpMethod.POST, contentType = "application/vnd.array"))!!
+
+        contentMapping.contentType shouldBe "application/vnd.array"
+        contentMapping.mapping.sourceTypeName.shouldBeNull()
+        contentMapping.mapping.sourceTypeFormat.shouldBeNull()
+        contentMapping.mapping.targetTypeName shouldBe "java.util.List"
+        contentMapping.mapping.genericTypes.shouldBeEmpty()
+
+        val contentMappingGet = mappings.findEndpointContentTypeMapping(
+            MappingSchema(path = "/foo", method = HttpMethod.GET, contentType = "application/vnd.array"))!!
+
+        contentMappingGet.contentType shouldBe "application/vnd.array"
+        contentMappingGet.mapping.sourceTypeName.shouldBeNull()
+        contentMappingGet.mapping.sourceTypeFormat.shouldBeNull()
+        contentMappingGet.mapping.targetTypeName shouldBe "java.util.List2"
+        contentMappingGet.mapping.genericTypes.shouldBeEmpty()
     }
 })
