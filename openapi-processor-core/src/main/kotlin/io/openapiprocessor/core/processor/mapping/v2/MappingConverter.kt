@@ -14,6 +14,7 @@ import io.openapiprocessor.core.processor.mapping.v2.parser.MappingType
 import io.openapiprocessor.core.processor.mapping.v2.parser.antlr.parseMapping
 import java.util.stream.Collectors
 import io.openapiprocessor.core.processor.mapping.v2.Mapping as MappingV2
+import io.openapiprocessor.core.processor.mapping.v2.Map as MapV2
 
 /**
  *  Converter for the type mapping from the mapping yaml. It converts the type mapping information
@@ -69,17 +70,13 @@ class MappingConverter(val mapping: MappingV2) {
     }
 
     fun convertX(): MappingRepository {
-
-//        mapping.map.extensions.forEach {
-//            result.add(convertExtension (it.key, it.value))
-//        }
-
         return MappingRepository(
             convertGlobalMappings(mapping.map),
-            convertPathsMappings(mapping.map.paths))
+            convertPathsMappings(mapping.map.paths),
+            convertExtensionMappings(mapping.map.extensions))
     }
 
-    private fun convertGlobalMappings(map: Map): Mappings {
+    private fun convertGlobalMappings(map: MapV2): Mappings {
         var resultTypeMapping: ResultTypeMapping? = null
         var resultStyle: ResultStyle? = null
         var singleTypeMapping: TypeMapping? = null
@@ -126,7 +123,7 @@ class MappingConverter(val mapping: MappingV2) {
             TypeMappings(responseTypeMappings))
     }
 
-    private fun convertPathsMappings(paths: HashMap<String, Path>): HashMap<String, EndpointMappings> {
+    private fun convertPathsMappings(paths: Map<String, Path>): Map<String, EndpointMappings> {
         val endpointMappings = HashMap<String, EndpointMappings>()
 
         paths.forEach {
@@ -171,6 +168,21 @@ class MappingConverter(val mapping: MappingV2) {
         }
 
         return endpointMappings
+    }
+
+    private fun convertExtensionMappings(extensions: Map<String, List<Type>>): Map<String, ExtensionMappings> {
+        val extensionMappings = LinkedHashMap<String, ExtensionMappings>()
+
+        extensions.forEach { ext ->
+            val valueMappings = mutableMapOf<String /* extension value */, MutableList<AnnotationNameMapping>>()
+            ext.value.forEach { value ->
+                val xMapping = createExtensionMappingX(value)
+                valueMappings.computeIfAbsent(xMapping.name) { mutableListOf() }.add(xMapping)
+            }
+            extensionMappings[ext.key] = ExtensionMappings(valueMappings)
+        }
+
+        return extensionMappings
     }
 
     private fun convertResultStyleOption(value: ResultStyle): ResultStyleOptionMapping {
@@ -560,6 +572,17 @@ class MappingConverter(val mapping: MappingV2) {
     }
 
     private fun createExtensionMapping(source: Type): Mapping {
+        val (mapping, _) = parseMapping(source.type, source.generics)
+        if (mapping.kind != ANNOTATE) {
+            throw BadMappingException(source.type)
+        }
+
+        return AnnotationNameMappingDefault(mapping.sourceType!!, Annotation(
+                        mapping.annotationType!!,
+                        mapping.annotationParameters))
+    }
+
+    private fun createExtensionMappingX(source: Type): AnnotationNameMapping {
         val (mapping, _) = parseMapping(source.type, source.generics)
         if (mapping.kind != ANNOTATE) {
             throw BadMappingException(source.type)

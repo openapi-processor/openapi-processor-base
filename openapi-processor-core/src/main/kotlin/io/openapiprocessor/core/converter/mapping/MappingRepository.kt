@@ -12,7 +12,8 @@ import org.slf4j.LoggerFactory
 
 class MappingRepository(
     private val globalMappings: Mappings,
-    private val endpointMappings: Map<String, EndpointMappings>
+    private val endpointMappings: Map<String /* path */, EndpointMappings>,
+    private val extensionMappings: Map<String /* x- */, ExtensionMappings>
 ) {
     val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
@@ -81,7 +82,7 @@ class MappingRepository(
     }
 
     fun findEndpointAnnotationTypeMapping(schema: MappingSchema, allowObject: Boolean = false): List<AnnotationTypeMapping> {
-        val mappings = endpointMappings[schema.getPath()] ?: return listOf()
+        val mappings = endpointMappings[schema.getPath()] ?: return emptyList()
         return mappings.findAnnotationTypeMapping(schema, allowObject)
     }
 
@@ -90,7 +91,7 @@ class MappingRepository(
     }
 
     fun findEndpointAnnotationParameterTypeMapping(schema: MappingSchema): List<AnnotationTypeMapping> {
-        val mappings = endpointMappings[schema.getPath()] ?: return listOf()
+        val mappings = endpointMappings[schema.getPath()] ?: return emptyList()
         return mappings.findAnnotationParameterTypeMapping(schema)
     }
 
@@ -99,12 +100,12 @@ class MappingRepository(
     }
 
     fun findEndpointAnnotationParameterNameTypeMapping(schema: MappingSchema): List<AnnotationNameMapping> {
-        val mappings = endpointMappings[schema.getPath()] ?: return listOf()
+        val mappings = endpointMappings[schema.getPath()] ?: return emptyList()
         return mappings.findAnnotationParameterNameTypeMapping(schema)
     }
 
     fun findEndpointAddParameterTypeMappings(schema: MappingSchema): List<AddParameterTypeMapping> {
-        val mappings = endpointMappings[schema.getPath()] ?: return listOf()
+        val mappings = endpointMappings[schema.getPath()] ?: return emptyList()
         return mappings.findAddParameterTypeMappings(schema)
     }
 
@@ -115,5 +116,10 @@ class MappingRepository(
     fun isEndpointExcluded(schema: MappingSchema): Boolean {
         val mappings = endpointMappings[schema.getPath()]?: return false
         return mappings.isExcluded(schema)
+    }
+
+    fun findExtensionAnnotations(extension: String, value: String): List<AnnotationNameMapping> {
+        val extMappings = extensionMappings[extension] ?: return emptyList()
+        return extMappings.get(value)
     }
 }

@@ -66,4 +66,31 @@ class MappingConverterExtensionsSpec: StringSpec({
             converter.convert(reader.read(yaml))
         }
     }
+
+    "read extension annotation mappings" {
+        val yaml = """
+           |openapi-processor-mapping: v8
+           |options:
+           |  package-name: some.package
+           |
+           |map:
+           |  extensions:
+           |    x-foo:
+           |      - foo @ annotation.Foo
+           |      - bar @ annotation.Bar
+           """.trimMargin()
+
+        val mapping = reader.read (yaml) as Mapping
+        val mappings = MappingConverter(mapping).convertX()
+
+        val annotationsFoo = mappings.findExtensionAnnotations("x-foo", "foo")
+        annotationsFoo shouldHaveSize 1
+        annotationsFoo[0].name shouldBe "foo"
+        annotationsFoo[0].annotation.type shouldBe "annotation.Foo"
+
+        val annotationsBar = mappings.findExtensionAnnotations("x-foo", "bar")
+        annotationsBar shouldHaveSize 1
+        annotationsBar[0].name shouldBe "bar"
+        annotationsBar[0].annotation.type shouldBe "annotation.Bar"
+    }
 })
