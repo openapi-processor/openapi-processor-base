@@ -236,6 +236,7 @@ paths:
         !request.withAnnotation
     }
 
+    @Ignore // obsolete
     void "adds additional request parameter with annotation from endpoint mapping" () {
         def openApi = parse (
 """\

@@ -7,7 +7,9 @@ package io.openapiprocessor.core.converter
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.booleans.shouldBeFalse
+import io.kotest.matchers.maps.shouldHaveSize
 import io.kotest.matchers.shouldBe
+import io.openapiprocessor.core.model.parameters.AdditionalParameter
 import io.openapiprocessor.core.support.apiConverter
 import io.openapiprocessor.core.support.getEndpoint
 import io.openapiprocessor.core.support.parseApi
@@ -35,8 +37,7 @@ class ApiConverterParameterSpec: StringSpec({
             |      responses:
             |        '204':
             |          description: empty
-        """.trimMargin()
-        )
+        """.trimMargin())
 
         val options = parseOptions(
             """
@@ -50,8 +51,7 @@ class ApiConverterParameterSpec: StringSpec({
             |    /foo:
             |      parameters:
             |      - add: request => javax.servlet.http.HttpServletRequest
-            """.trimMargin()
-        )
+            """.trimMargin())
 
         // act
         val api = apiConverter(options).convert(openApi)
@@ -65,5 +65,50 @@ class ApiConverterParameterSpec: StringSpec({
         request.dataType.getName() shouldBe "HttpServletRequest"
         request.dataType.getPackageName() shouldBe "javax.servlet.http"
         !request.withAnnotation
+    }
+
+    "adds additional request parameter with annotation from endpoint mapping" {
+        val openApi = parseApi(
+            """
+            |openapi: 3.1.0
+            |info:
+            |  title: test additional parameter annotation
+            |  version: 1.0.0
+            |paths:
+            |  /foo:
+            |    get:
+            |      responses:
+            |        '204':
+            |          description: empty
+        """.trimMargin())
+
+        val options = parseOptions(
+            """
+            |openapi-processor-mapping: v8
+            |
+            |options:
+            |  package-name: pkg
+            | 
+            |map:
+            |  paths:
+            |    /foo:
+            |      parameters:
+            |      - add: foo => bar.Bar(one = "value") java.lang.String
+            """.trimMargin())
+
+        // act
+        val api = apiConverter(options).convert(openApi)
+
+        // assert
+        val ep = api.getEndpoint("/foo")
+
+        val p = ep.parameters[0] as AdditionalParameter
+        p.name shouldBe "foo"
+        p.dataType.getName() shouldBe "String"
+        p.dataType.getPackageName() shouldBe "java.lang"
+        p.annotationDataType!!.getName() shouldBe "Bar"
+        p.annotationDataType!!.getPackageName() shouldBe "bar"
+        p.annotationDataType!!.getParameters()?.shouldHaveSize(1)
+        p.annotationDataType!!.getParameters()?.get("one")?.value shouldBe """"value""""
     }
 })
