@@ -113,13 +113,13 @@ class MappingRepository(
         return endpointMappings[schema.getPath()]?.findContentTypeMapping(schema)
     }
 
-    fun isEndpointExcluded(schema: MappingSchema): Boolean {
-        val mappings = endpointMappings[schema.getPath()]?: return false
-        return mappings.isExcluded(schema)
-    }
-
     fun findExtensionAnnotations(extension: String, value: String): List<AnnotationNameMapping> {
         val extMappings = extensionMappings[extension] ?: return emptyList()
         return extMappings.get(value)
+    }
+
+    fun isEndpointExcluded(schema: MappingSchema): Boolean {
+        val mappings = endpointMappings[schema.getPath()]?: return false
+        return mappings.isExcluded(schema)
     }
 }

@@ -10,13 +10,13 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 class Mappings(
-    private val resultTypeMapping: ResultTypeMapping?,
-    private val resultStyle: ResultStyle?,
-    private val singleTypeMapping: TypeMapping?,
-    private val multiTypeMapping: TypeMapping?,
-    private val typeMappings: TypeMappings,
-    private val parameterTypeMappings: TypeMappings,
-    private val responseTypeMappings: TypeMappings,
+    private val resultTypeMapping: ResultTypeMapping? = null,
+    private val resultStyle: ResultStyle? = null,
+    private val singleTypeMapping: TypeMapping? = null,
+    private val multiTypeMapping: TypeMapping? = null,
+    private val typeMappings: TypeMappings = TypeMappings(emptyList()),
+    private val parameterTypeMappings: TypeMappings = TypeMappings(emptyList()),
+    private val responseTypeMappings: TypeMappings = TypeMappings(emptyList()),
     private val exclude: Boolean = false
 ) {
     val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
