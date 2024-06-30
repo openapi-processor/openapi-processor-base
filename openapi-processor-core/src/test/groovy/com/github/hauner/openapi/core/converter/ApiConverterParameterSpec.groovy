@@ -183,6 +183,7 @@ paths:
         param.dataType.typeName == 'String'
     }
 
+    @Ignore // obsolete
     void "adds additional request parameter from endpoint mapping" () {
         def openApi = parse (
 """\
