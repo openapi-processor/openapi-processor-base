@@ -17,6 +17,10 @@ import io.openapiprocessor.test.stream.Memory
  *
  * extract individual Schemas with the get...Schema() functions on the [ParserOpenApi] result.
  */
+fun parseApi(apiYaml: String, parserType: ParserType = ParserType.INTERNAL): ParserOpenApi {
+    return parse(apiYaml, parserType)
+}
+
 fun parse(apiYaml: String, parserType: ParserType = ParserType.SWAGGER): ParserOpenApi {
     return when (parserType) {
         ParserType.SWAGGER -> parseWithSwagger(apiYaml)
