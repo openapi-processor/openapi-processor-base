@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 https://github.com/openapi-processor/openapi-processor-core
+ * Copyright 2020 https://github.com/openapi-processor/openapi-processor-base
  * PDX-License-Identifier: Apache-2.0
  */
 
@@ -21,10 +21,9 @@ class InterfaceSpec: StringSpec ({
     "adds endpoint to interface" {
         val itf = `interface` {
             endpoint("/foo") {
-
             }
         }
 
-        itf.getEndpoint("/foo").path shouldBe "/foo"
+        itf.getEndpoint("/foo")!!.path shouldBe "/foo"
     }
 })

@@ -18,8 +18,8 @@ class Interface(
 ) {
     val endpoints: List<Endpoint> = mutableListOf()
 
-    fun getEndpoint(path: String): Endpoint {
-        return endpoints.find { it.path == path }!!
+    fun getEndpoint(path: String): Endpoint? {
+        return endpoints.find { it.path == path }
     }
 
     fun getPackageName(): String {
