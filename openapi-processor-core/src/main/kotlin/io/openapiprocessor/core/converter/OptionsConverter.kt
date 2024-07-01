@@ -80,6 +80,8 @@ class OptionsConverter(private val checkObsoleteProcessorOptions: Boolean = fals
                         options.beanValidationValidOnReactive = beanValidationValidOnReactive
                         options.identifierWordBreakFromDigitToLetter = identifierWordBreakFromDigitToLetter
                     }
+
+                    options.mappingRepository = MappingConverter().convertX(mapping)
                 }
             }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 https://github.com/openapi-processor/openapi-processor-core
+ * Copyright 2019 https://github.com/openapi-processor/openapi-processor-base
  * PDX-License-Identifier: Apache-2.0
  */
 
@@ -21,6 +21,9 @@ class Api(
      */
     private val dataTypes: DataTypes = DataTypes()
 ) {
+    fun getInterfaces(): List<Interface> {
+        return interfaces
+    }
 
     fun getInterface(name: String): Interface {
         return interfaces.find { it.name.equals(name, ignoreCase = true) }!!

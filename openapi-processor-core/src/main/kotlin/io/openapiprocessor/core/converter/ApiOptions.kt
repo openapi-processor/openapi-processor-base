@@ -103,7 +103,13 @@ class ApiOptions {
      * override parameter/response type mappings or to add additional parameters on a single
      * endpoint.
      */
+    @Deprecated(message = "use MappingRepository")
     var typeMappings: List<Mapping> = emptyList()
+
+    var mappingRepository: MappingRepository = MappingRepository(
+        Mappings(),
+        emptyMap(),
+        emptyMap())
 
     /**
      * validate that targetDir is set, throws if not.

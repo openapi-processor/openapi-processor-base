@@ -40,6 +40,7 @@ class  ApiConverter(
     val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     private val mappingFinder = MappingFinder(options.typeMappings)
+    private val mappingFinderX = MappingFinderX(options.mappingRepository)
     private val dataTypeWrapper = ResultDataTypeWrapper(options, identifier, mappingFinder)
     private val dataTypeConverter = DataTypeConverter(options, identifier, mappingFinder)
     private val singleDataTypeWrapper = SingleDataTypeWrapper(options, mappingFinder)
@@ -125,17 +126,7 @@ class  ApiConverter(
     }
 
     private fun getAdditionalParameter(ep: Endpoint): List<AddParameterTypeMapping> {
-        // check endpoint parameter mappings
-        val epMatch = mappingFinder.findEndpointAddParameterTypeMappings (ep.path, ep.method)
-        if (epMatch.isNotEmpty())
-            return epMatch
-
-        // check global parameter mappings
-        val paramMatch = mappingFinder.findAddParameterTypeMappings()
-        if (paramMatch.isNotEmpty())
-            return paramMatch
-
-        return emptyList()
+        return mappingFinderX.findAddParameterTypeMappings(MappingSchemaSimple(ep.path, ep.method))
     }
 
     private fun collectRequestBody(requestBody: RequestBody?, ep: Endpoint, dataTypes: DataTypes, resolver: RefResolver) {
@@ -323,7 +314,7 @@ class  ApiConverter(
     }
 
     private fun isExcluded(path: String, method: HttpMethod): Boolean {
-        return mappingFinder.isExcludedEndpoint(path, method)
+        return mappingFinderX.isEndpointExcluded(MappingSchemaSimple(path, method))
     }
 
     private fun getInterfaceName(op: Operation, excluded: Boolean): String {
