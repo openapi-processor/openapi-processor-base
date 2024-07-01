@@ -19,10 +19,8 @@ package com.github.hauner.openapi.core.processor
 import io.openapiprocessor.core.converter.mapping.*
 import io.openapiprocessor.core.processor.MappingConverter
 import io.openapiprocessor.core.processor.MappingReader
-import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
 import spock.lang.Specification
 import spock.lang.Subject
-import spock.lang.Unroll
 
 class MappingConverterV2Spec extends Specification {
 
@@ -30,160 +28,6 @@ class MappingConverterV2Spec extends Specification {
 
     @Subject
     def converter = new MappingConverter()
-
-    @Unroll
-    void "reads global type mapping: (#input.source)" () {
-        String yaml = """\
-openapi-processor-mapping: v2
-options: {}
-map:
-  types:
-    - type: ${input.source}
-"""
-
-        if (input.generics) {
-            yaml += """\
-      generics:
-"""
-        }
-
-        input.generics?.each {
-            yaml += """\
-        - ${it} 
-"""
-        }
-
-        when:
-        def mapping = reader.read (yaml)
-        def mappings = converter.convert (mapping)
-
-        then:
-        mappings.size () == 1
-        def type = mappings.first () as TypeMapping
-        type.sourceTypeName == input.expected.sourceTypeName
-        type.sourceTypeFormat == input.expected.sourceTypeFormat
-        type.targetTypeName == input.expected.targetTypeName
-        assertGenericTypes(type.genericTypes, input.expected.genericTypes)
-
-        where:
-        input << [
-            [
-                // normal
-                source: 'array => java.util.Collection',
-                expected: new TypeMapping (
-                    'array',
-                    null,
-                    'java.util.Collection',
-                    [],
-                    false,
-                    false)
-            ], [
-                // extra whitespaces
-                source: '  array   =>    java.util.Collection   ',
-                expected: new TypeMapping (
-                    'array',
-                    null,
-                    'java.util.Collection',
-                    [],
-                    false,
-                    false)
-            ], [
-                // with format
-                source: 'string:date-time => java.time.ZonedDateTime',
-                expected: new TypeMapping (
-                    'string',
-                    'date-time',
-                    'java.time.ZonedDateTime',
-                    [],
-                    false,
-                    false)
-            ], [
-                // extra whitespaces with format
-                source  : '"  string  :  date-time   =>    java.time.ZonedDateTime   "',
-                expected: new TypeMapping (
-                    'string',
-                    'date-time',
-                    'java.time.ZonedDateTime',
-                    [],
-                    false,
-                    false)
-            ], [
-                // with inline generics
-                source: 'Foo => mapping.Bar<java.lang.String, java.lang.Boolean>',
-                expected: new TypeMapping (
-                    'Foo',
-                    null,
-                    'mapping.Bar',
-                    [
-                        new TargetType("java.lang.String", []),
-                        new TargetType("java.lang.Boolean", [])
-                    ],
-                    false,
-                    false)
-            ], [
-                // with extracted generics
-                source: 'Foo => mapping.Bar',
-                generics: ['java.lang.String', 'java.lang.Boolean'],
-                expected: new TypeMapping (
-                    'Foo',
-                    null,
-                    'mapping.Bar',
-                    [
-                        new TargetType("java.lang.String", []),
-                        new TargetType("java.lang.Boolean", [])
-                    ],
-                    false,
-                    false)
-            ],  [
-                // inline generics with extra whitespaces
-                source: 'Foo => mapping.Bar  <   java.lang.String  ,   java.lang.Boolean   >   ',
-                expected: new TypeMapping (
-                    'Foo',
-                    null,
-                    'mapping.Bar',
-                    [
-                        new TargetType("java.lang.String", []),
-                        new TargetType("java.lang.Boolean", [])
-                    ],
-                    false,
-                    false)
-            ], [
-                // extracted generics with extra whitespaces
-                source: 'Foo => mapping.Bar',
-                generics: ['   java.lang.String   ', '   java.lang.Boolean   '],
-                expected: new TypeMapping (
-                    'Foo',
-                    null,
-                    'mapping.Bar',
-                    [
-                        new TargetType("java.lang.String", []),
-                        new TargetType("java.lang.Boolean", [])
-                    ],
-                    false,
-                    false)
-            ], [
-                // primitive
-                source: 'Foo => byte',
-                expected: new TypeMapping (
-                    'Foo',
-                    null,
-                    'byte',
-                    [],
-                    true,
-                    false)
-            ], [
-                // primitive array
-                source: 'Foo => byte',
-                expected: new TypeMapping (
-                    'Foo',
-                    null,
-                    'byte',
-                    [],
-                    true,
-                    true)
-            ]
-        ]
-    }
 
     void "reads global response type mapping" () {
         String yaml = """\
@@ -207,38 +51,6 @@ map:
         response.mapping.sourceTypeFormat == null
         response.mapping.targetTypeName == 'java.util.List'
         response.mapping.genericTypes == []
-    }
-
-    void "reads global parameter type mapping" () {
-        String yaml = """\
-openapi-processor-mapping: v2
-options: {}
-map:
-  parameters:
-    - name: foo => mapping.Foo
-    - add: bar => mapping.Bar
-"""
-
-        when:
-        def mapping = reader.read (yaml)
-        def mappings = converter.convert (mapping)
-
-        then:
-        mappings.size() == 2
-
-        def parameter = mappings.first () as NameTypeMapping
-        parameter.parameterName == 'foo'
-        parameter.mapping.sourceTypeName == null
-        parameter.mapping.sourceTypeFormat == null
-        parameter.mapping.targetTypeName == 'mapping.Foo'
-        parameter.mapping.genericTypes == []
-
-        def additional = mappings[1] as AddParameterTypeMapping
-        additional.parameterName == 'bar'
-        additional.mapping.sourceTypeName == null
-        additional.mapping.sourceTypeFormat == null
-        additional.mapping.targetTypeName == 'mapping.Bar'
-        additional.mapping.genericTypes == []
     }
 
     void "reads endpoint exclude flag" () {
@@ -389,29 +201,6 @@ map:
         response.mapping.genericTypes == []
     }
 
-    void "reads global result mapping #result" () {
-        String yaml = """\
-openapi-processor-mapping: v2
-options: {}
-map:
-  result: $result
-"""
-
-        when:
-        def mapping = reader.read (yaml)
-        def mappings = converter.convert (mapping)
-
-        then:
-        mappings.size () == 1
-        def type = mappings.first () as ResultTypeMapping
-        type.targetTypeName == expected
-
-        where:
-        result                                    | expected
-        'plain'                                   | 'plain'
-        'org.springframework.http.ResponseEntity' | 'org.springframework.http.ResponseEntity'
-    }
-
     void "reads endpoint result mapping #result" () {
         String yaml = """\
 openapi-processor-mapping: v2
@@ -442,32 +231,6 @@ map:
         'org.springframework.http.ResponseEntity' | 'org.springframework.http.ResponseEntity'
     }
 
-    void "reads global single & multi mapping" () {
-        String yaml = """\
-openapi-processor-mapping: v2
-options: {}
-map:
-  single: $single
-  multi: $multi
-"""
-
-        when:
-        def mapping = reader.read (yaml)
-        def mappings = converter.convert (mapping)
-
-        then:
-        mappings.size () == 2
-        def typeSingle = mappings.first () as TypeMapping
-        typeSingle.sourceTypeName == 'single'
-        typeSingle.targetTypeName == single
-        def typeMulti = mappings[1] as TypeMapping
-        typeMulti.sourceTypeName == 'multi'
-        typeMulti.targetTypeName == multi
-
-        where:
-        single << ['reactor.core.publisher.Mono']
-        multi << ['reactor.core.publisher.Flux']
-    }
 
     void "reads endpoint single & multi mapping" () {
         String yaml = """\
@@ -503,79 +266,4 @@ map:
         multi << ['reactor.core.publisher.Flux']
     }
 
-    void "reads global result style mapping #resultStyle" () {
-        String yaml = """\
-openapi-processor-mapping: v2
-options: {}
-map:
-  result-style: $resultStyle
-"""
-
-        when:
-        def mapping = reader.read (yaml)
-        def mappings = converter.convert (mapping)
-
-        then:
-        mappings.size () == 1
-        def type = mappings.first () as OptionMapping
-        type.name == 'resultStyle'
-        type.value == expected
-
-        where:
-        resultStyle | expected
-        'all'       | ResultStyle.ALL
-        'success'   | ResultStyle.SUCCESS
-    }
-
-    void "does not fail on 'empty' options: key" () {
-        String yaml = """\
-openapi-processor-mapping: v2
-options:
-"""
-
-        when:
-        def mapping = reader.read (yaml)
-        converter.convert (mapping)
-
-        then:
-        notThrown (Exception)
-    }
-
-    void "does not fail on 'empty' map: key" () {
-        String yaml = """\
-openapi-processor-mapping: v2
-options: {}
-map:
-"""
-
-        when:
-        def mapping = reader.read (yaml)
-        converter.convert (mapping)
-
-        then:
-        notThrown (Exception)
-    }
-
-    void "does not fail on 'empty' mapping.yaml" () {
-        String yaml = """\
-openapi-processor-mapping: v2
-"""
-
-        when:
-        def mapping = reader.read (yaml)
-        converter.convert (mapping)
-
-        then:
-        notThrown (Exception)
-    }
-
-    void assertGenericTypes (List<TargetType> actualTargetTypes, List<TargetType> expectedTargetTypes) {
-        assert actualTargetTypes.size () == expectedTargetTypes.size()
-
-        if (!expectedTargetTypes.isEmpty ()) {
-            expectedTargetTypes.eachWithIndex { TargetType expected, int i ->
-                assert actualTargetTypes[i].typeName == expected.typeName
-            }
-        }
-    }
 }
