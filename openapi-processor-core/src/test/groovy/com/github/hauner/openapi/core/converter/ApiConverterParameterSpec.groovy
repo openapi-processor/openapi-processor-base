@@ -16,9 +16,8 @@
 
 package com.github.hauner.openapi.core.converter
 
-import io.openapiprocessor.core.converter.ApiOptions
-import io.openapiprocessor.core.converter.mapping.*
-import io.openapiprocessor.core.model.parameters.AdditionalParameter
+
+import io.openapiprocessor.core.converter.mapping.UnknownParameterTypeException
 import spock.lang.Ignore
 import spock.lang.Specification
 
@@ -181,109 +180,6 @@ paths:
         param.name == 'foo'
         param.required
         param.dataType.typeName == 'String'
-    }
-
-    @Ignore // obsolete
-    void "adds additional request parameter from endpoint mapping" () {
-        def openApi = parse (
-"""\
-openapi: 3.0.2
-info:
-  title: test additional parameters
-  version: 1.0.0
-
-paths:
-  /foo:
-    get:
-      parameters:
-        - name: foo
-          description: query, required
-          in: query
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: empty
-"""
-        )
-
-        def options = new ApiOptions(packageName: 'pkg', typeMappings: [
-            new EndpointTypeMapping('/foo', null, [
-                new AddParameterTypeMapping (
-                    'request', new TypeMapping (
-                        null,
-                        'javax.servlet.http.HttpServletRequest'),
-                    null)
-            ])
-        ])
-
-        when:
-        def api = apiConverter (options)
-            .convert (openApi)
-
-        then:
-        def itf = api.interfaces.first ()
-        def ep = itf.endpoints.first ()
-        def foo = ep.parameters[0]
-        def request = ep.parameters[1]
-
-        foo.name == 'foo'
-        request.name == 'request'
-        !request.required
-        request.dataType.name == 'HttpServletRequest'
-        request.dataType.packageName == 'javax.servlet.http'
-        !request.withAnnotation
-    }
-
-    @Ignore // obsolete
-    void "adds additional request parameter with annotation from endpoint mapping" () {
-        def openApi = parse (
-"""\
-openapi: 3.0.2
-info:
-  title: test additional parameter annotation
-  version: 1.0.0
-
-paths:
-  /foo:
-    get:
-      responses:
-        '204':
-          description: empty
-"""
-        )
-
-
-        def annotationParams = new LinkedHashMap<String, String>()
-        annotationParams.one = "value"
-
-        def options = new ApiOptions(packageName: 'pkg', typeMappings: [
-            new EndpointTypeMapping('/foo', null, [
-                new AddParameterTypeMapping (
-                    'foo', new TypeMapping (
-                        null,
-                        'java.lang.String'),
-                    new Annotation("bar.Bar", annotationParams))
-            ])
-        ])
-
-        when:
-        def api = apiConverter (options)
-            .convert (openApi)
-
-        then:
-        def itf = api.interfaces.first ()
-        def ep = itf.endpoints.first ()
-        def foo = ep.parameters[0] as AdditionalParameter
-
-        foo.name == 'foo'
-        foo.dataType.name == 'String'
-        foo.dataType.packageName == 'java.lang'
-        foo.annotationDataType?.name == 'Bar'
-        foo.annotationDataType?.packageName == 'bar'
-        foo.annotationDataType?.parameters?.size () == 1
-        foo.annotationDataType?.parameters?.one == "value"
     }
 
     @Ignore("the openapi parser ignores parameters with unknown types")
