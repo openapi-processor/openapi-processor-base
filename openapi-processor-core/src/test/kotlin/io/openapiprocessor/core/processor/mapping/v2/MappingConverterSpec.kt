@@ -254,21 +254,23 @@ class MappingConverterSpec: StringSpec({
     }
 
     "read endpoint path exclude" {
-        val yaml = """
-                   |openapi-processor-mapping: 8
-                   |
-                   |options:
-                   |  package-name: io.openapiprocessor.somewhere
-                   | 
-                   |map:
-                   |  paths:
-                   |    /foo:
-                   |      get:
-                   |        exclude: true
-                   """.trimMargin()
+
+        val yaml =
+            """
+            |openapi-processor-mapping: v8
+            |
+            |options:
+            |  package-name: io.openapiprocessor.somewhere
+            | 
+            |map:
+            |  paths:
+            |    /foo:
+            |      get:
+            |        exclude: true
+            """.trimMargin()
 
         // when:
-        val mapping = reader.read (yaml) as Mapping
+        val mapping = reader.read(yaml) as Mapping
         val mappings = MappingConverter(mapping).convertX()
 
         // then:
