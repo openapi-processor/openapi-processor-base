@@ -6,13 +6,10 @@
 package com.github.hauner.openapi.core.converter
 
 import com.github.hauner.openapi.core.test.ModelAsserts
-import io.openapiprocessor.core.converter.ApiConverter
 import io.openapiprocessor.core.converter.ApiOptions
-import io.openapiprocessor.core.converter.mapping.EndpointTypeMapping
 import io.openapiprocessor.core.framework.Framework
 import io.openapiprocessor.core.support.TestFrameworkAnnotations
 import io.openapiprocessor.core.writer.java.*
-import spock.lang.Ignore
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -199,43 +196,5 @@ paths:
 
         then:
         api.interfaces.first ().interfaceName == 'Api'
-    }
-
-    @Ignore // obsolete
-    void "creates 'Excluded' interface when an endpoint should be skipped" () {
-        def openApi = parse (
-"""\
-openapi: 3.0.2
-info:
-  title: API
-  version: 1.0.0
-
-paths:
-  /foo:
-    get:
-      responses:
-        '204':
-          description: no content
-
-  /bar:
-    get:
-      responses:
-        '204':
-          description: no content
-""")
-
-        def options = new ApiOptions(typeMappings: [
-            new EndpointTypeMapping ('/foo', null, [], true)
-        ])
-
-        when:
-        def api = apiConverter (options, Stub (Framework))
-            .convert (openApi)
-
-        then:
-        def result = api.interfaces
-        result.size () == 2
-        result[0].interfaceName == 'Api'
-        result[1].interfaceName == 'ExcludedApi'
     }
 }
