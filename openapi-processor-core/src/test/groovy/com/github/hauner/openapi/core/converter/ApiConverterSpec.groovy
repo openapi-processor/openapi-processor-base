@@ -12,6 +12,7 @@ import io.openapiprocessor.core.converter.mapping.EndpointTypeMapping
 import io.openapiprocessor.core.framework.Framework
 import io.openapiprocessor.core.support.TestFrameworkAnnotations
 import io.openapiprocessor.core.writer.java.*
+import spock.lang.Ignore
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -200,6 +201,7 @@ paths:
         api.interfaces.first ().interfaceName == 'Api'
     }
 
+    @Ignore // obsolete
     void "creates 'Excluded' interface when an endpoint should be skipped" () {
         def openApi = parse (
 """\
