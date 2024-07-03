@@ -48,7 +48,7 @@ class TypeMatcherSpec: StringSpec({
         val info = createSchema("Name", null)
 
         val mapping = TypeMapping("other Name", null,"Target")
-        val matcher = TypeMatcher(info)
+        val matcher = TypeMatcher(MappingQueryInfo(info))
 
         matcher(mapping).shouldBeFalse()
     }
@@ -57,7 +57,7 @@ class TypeMatcherSpec: StringSpec({
         val info = createSchema("Name", "a format")
 
         val mapping = TypeMapping("Name", "other format","Target")
-        val matcher = TypeMatcher(info)
+        val matcher = TypeMatcher(MappingQueryInfo(info))
 
         matcher(mapping).shouldBeFalse()
     }
@@ -66,7 +66,7 @@ class TypeMatcherSpec: StringSpec({
         val info = createSchema("Name", null)
 
         val mapping = TypeMapping("Name", null,"Target")
-        val matcher = TypeMatcher(info)
+        val matcher = TypeMatcher(MappingQueryInfo(info))
 
         matcher(mapping).shouldBeTrue()
     }
@@ -75,7 +75,7 @@ class TypeMatcherSpec: StringSpec({
         val info = createSchema("Name", "format")
 
         val mapping = TypeMapping("Name", "format","Target")
-        val matcher = TypeMatcher(info)
+        val matcher = TypeMatcher(MappingQueryInfo(info))
 
         matcher(mapping).shouldBeTrue()
     }
@@ -84,7 +84,7 @@ class TypeMatcherSpec: StringSpec({
         val info = createPrimitiveSchema("type", null)
 
         val mapping = TypeMapping("other type", null,"Target")
-        val matcher = TypeMatcher(info)
+        val matcher = TypeMatcher(MappingQueryInfo(info))
 
         matcher(mapping).shouldBeFalse()
     }
@@ -93,7 +93,7 @@ class TypeMatcherSpec: StringSpec({
         val info = createPrimitiveSchema("type", "a format")
 
         val mapping = TypeMapping("type", "other format","Target")
-        val matcher = TypeMatcher(info)
+        val matcher = TypeMatcher(MappingQueryInfo(info))
 
         matcher(mapping).shouldBeFalse()
     }
@@ -102,7 +102,7 @@ class TypeMatcherSpec: StringSpec({
         val info = createPrimitiveSchema("type", null)
 
         val mapping = TypeMapping("type", null,"Target")
-        val matcher = TypeMatcher(info)
+        val matcher = TypeMatcher(MappingQueryInfo(info))
 
         matcher(mapping).shouldBeTrue()
     }
@@ -111,7 +111,7 @@ class TypeMatcherSpec: StringSpec({
         val info = createPrimitiveSchema("type", "format")
 
         val mapping = TypeMapping("type", "format","Target")
-        val matcher = TypeMatcher(info)
+        val matcher = TypeMatcher(MappingQueryInfo(info))
 
         matcher(mapping).shouldBeTrue()
     }
@@ -120,7 +120,7 @@ class TypeMatcherSpec: StringSpec({
         val info = createArraySchema()
 
         val mapping = TypeMapping("array", null,"Target")
-        val matcher = TypeMatcher(info)
+        val matcher = TypeMatcher(MappingQueryInfo(info))
 
         matcher(mapping).shouldBeTrue()
     }

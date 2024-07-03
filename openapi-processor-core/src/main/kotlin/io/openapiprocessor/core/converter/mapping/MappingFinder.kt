@@ -41,11 +41,11 @@ class MappingFinder(private val typeMappings: List<Mapping> = emptyList()) {
         if (parameter != null)
             return parameter
 
-        val response = getTypeMapping(filterMappings(ResponseTypeMatcher(info), ep))
+        val response = getTypeMapping(filterMappings(ResponseTypeMatcher(MappingQueryInfo(info)), ep))
         if (response != null)
             return response
 
-        return getTypeMapping(filterMappings(TypeMatcher(info), ep))
+        return getTypeMapping(filterMappings(TypeMatcher(MappingQueryInfo(info)), ep))
     }
 
     /**
@@ -60,7 +60,7 @@ class MappingFinder(private val typeMappings: List<Mapping> = emptyList()) {
         if (parameter != null)
             return parameter
 
-        val response = getTypeMapping(filterMappings(ResponseTypeMatcher(info), typeMappings))
+        val response = getTypeMapping(filterMappings(ResponseTypeMatcher(MappingQueryInfo(info)), typeMappings))
         if (response != null)
             return response
 
@@ -75,23 +75,7 @@ class MappingFinder(private val typeMappings: List<Mapping> = emptyList()) {
      * @throws AmbiguousTypeMappingException if there is more than one match.
      */
     fun findTypeMapping(info: SchemaInfo): TypeMapping? {
-        return getTypeMapping(filterMappings(TypeMatcher(info), typeMappings))
-    }
-
-    /**
-     * find a matching (global) add parameter type mapping.
-     *
-     * @return the matching mappings or an empty list.
-     * @throws AmbiguousTypeMappingException if there is more than one match.
-     */
-    fun findAddParameterTypeMappings(): List<AddParameterTypeMapping>  {
-        val matches = typeMappings
-            .filterIsInstance(AddParameterTypeMapping::class.java)
-
-        if (matches.isNotEmpty())
-            return matches
-
-        return emptyList()
+        return getTypeMapping(filterMappings(TypeMatcher(MappingQueryInfo(info)), typeMappings))
     }
 
     /**

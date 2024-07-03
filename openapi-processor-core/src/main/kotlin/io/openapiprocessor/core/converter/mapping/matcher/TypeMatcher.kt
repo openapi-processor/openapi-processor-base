@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory
 /**
  * [io.openapiprocessor.core.converter.mapping.MappingFinder] matcher for type mappings.
  */
-class TypeMatcher(private val schema: MappingSchema): MappingMatcher, (TypeMapping) -> Boolean {
+class TypeMatcher(private val query: MappingQuery): MappingMatcher, (TypeMapping) -> Boolean {
     val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     override fun match(mapping: Mapping): Boolean {
@@ -26,9 +26,9 @@ class TypeMatcher(private val schema: MappingSchema): MappingMatcher, (TypeMappi
         return match
     }
 
-    override fun toString(): String {
-        return schema.toStringSchema()
-    }
+//    override fun toString(): String {
+//        return query.toStringSchema()
+//    }
 
     override fun invoke(mapping: TypeMapping): Boolean {
         // try to match by name first
@@ -39,10 +39,10 @@ class TypeMatcher(private val schema: MappingSchema): MappingMatcher, (TypeMappi
         }
 
         return when {
-            schema.isPrimitive() -> {
+            query.primitive -> {
                 matchesType(mapping) && matchesFormat(mapping)
             }
-            schema.isArray() -> {
+            query.array -> {
                 matchesArray(mapping)
             }
             else -> {
@@ -51,8 +51,8 @@ class TypeMatcher(private val schema: MappingSchema): MappingMatcher, (TypeMappi
         }
     }
 
-    private fun matchesName(m: TypeMapping): Boolean = m.sourceTypeName == schema.getName()
-    private fun matchesFormat(m: TypeMapping): Boolean = m.sourceTypeFormat == schema.getFormat()
-    private fun matchesType(m: TypeMapping): Boolean = m.sourceTypeName == schema.getType()
+    private fun matchesName(m: TypeMapping): Boolean = m.sourceTypeName == query.name
+    private fun matchesFormat(m: TypeMapping): Boolean = m.sourceTypeFormat == query.format
+    private fun matchesType(m: TypeMapping): Boolean = m.sourceTypeName == query.type
     private fun matchesArray(m: TypeMapping): Boolean = m.sourceTypeName == "array"
 }

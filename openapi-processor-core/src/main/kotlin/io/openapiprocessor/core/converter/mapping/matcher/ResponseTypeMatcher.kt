@@ -9,10 +9,7 @@ import io.openapiprocessor.core.converter.mapping.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-/**
- * [io.openapiprocessor.core.converter.mapping.MappingFinder] matcher for response type mappings.
- */
-class ResponseTypeMatcher(private val schema: MappingSchema): MappingMatcher, (ContentTypeMapping) -> Boolean {
+class ResponseTypeMatcher(private val query: MappingQuery): MappingMatcher, (ContentTypeMapping) -> Boolean {
     val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     override fun match(mapping: Mapping): Boolean {
@@ -27,6 +24,6 @@ class ResponseTypeMatcher(private val schema: MappingSchema): MappingMatcher, (C
     }
 
     override fun invoke(mapping: ContentTypeMapping): Boolean {
-        return mapping.contentType == schema.getContentType()
+        return mapping.contentType == query.contentType
     }
 }

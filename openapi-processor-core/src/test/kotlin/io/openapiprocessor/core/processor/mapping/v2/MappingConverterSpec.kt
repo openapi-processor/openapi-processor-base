@@ -13,14 +13,10 @@ import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
-import io.openapiprocessor.core.converter.mapping.AnnotationTypeMapping
-import io.openapiprocessor.core.converter.mapping.EndpointTypeMapping
-import io.openapiprocessor.core.converter.mapping.NullTypeMapping
-import io.openapiprocessor.core.converter.mapping.TypeMapping
+import io.openapiprocessor.core.converter.mapping.*
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.processor.MappingConverter
 import io.openapiprocessor.core.processor.MappingReader
-import io.openapiprocessor.core.support.MappingSchema
 
 class MappingConverterSpec: StringSpec({
     isolationMode = IsolationMode.InstancePerTest
@@ -46,7 +42,7 @@ class MappingConverterSpec: StringSpec({
         val mappings = MappingConverter(mapping).convertX()
 
         // then:
-        val typeMapping = mappings.findGlobalTypeMapping(MappingSchema(name = "Foo"))!!
+        val typeMapping = mappings.findGlobalTypeMapping(MappingQueryValues(name = "Foo"))!!
 
         typeMapping.targetTypeName shouldBe "io.openapiprocessor.Foo"
         typeMapping.genericTypes.size shouldBe 1
@@ -274,10 +270,10 @@ class MappingConverterSpec: StringSpec({
         val mappings = MappingConverter(mapping).convertX()
 
         // then:
-        val excluded = mappings.isEndpointExcluded(MappingSchema(path = "/foo", method = HttpMethod.POST))
+        val excluded = mappings.isEndpointExcluded(MappingQueryValues(path = "/foo", method = HttpMethod.POST))
         excluded.shouldBeFalse()
 
-        val excludedGet = mappings.isEndpointExcluded(MappingSchema(path = "/foo", method = HttpMethod.GET))
+        val excludedGet = mappings.isEndpointExcluded(MappingQueryValues(path = "/foo", method = HttpMethod.GET))
         excludedGet.shouldBeTrue()
     }
 })

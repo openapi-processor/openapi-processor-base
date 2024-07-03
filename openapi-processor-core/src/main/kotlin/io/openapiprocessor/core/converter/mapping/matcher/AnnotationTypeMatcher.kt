@@ -9,7 +9,7 @@ import io.openapiprocessor.core.converter.mapping.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class AnnotationTypeMatcher(private val schema: MappingSchema, private val allowObject: Boolean = false): MappingMatcher {
+class AnnotationTypeMatcher(private val query: MappingQuery): MappingMatcher {
     val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     override fun match(mapping: Mapping): Boolean {
@@ -19,15 +19,15 @@ class AnnotationTypeMatcher(private val schema: MappingSchema, private val allow
         }
 
         val matchObject = mapping.sourceTypeName == "object"
-        val matchType = mapping.sourceTypeName == schema.getName()
-        val matchFormat = mapping.sourceTypeFormat == schema.getFormat()
-        val match = (matchType && matchFormat) || (allowObject && matchObject)
+        val matchType = mapping.sourceTypeName == query.name
+        val matchFormat = mapping.sourceTypeFormat == query.format
+        val match = (matchType && matchFormat) || (query.allowObject && matchObject)
 
         log.trace("${if (match) "" else "not "}matched: {}", mapping)
         return match
     }
 
     override fun toString(): String {
-        return "${schema.toStringSchema()}, 'object' $allowObject"
+        return query.toString()
     }
 }

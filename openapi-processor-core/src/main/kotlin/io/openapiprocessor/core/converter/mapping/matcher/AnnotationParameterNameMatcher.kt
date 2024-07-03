@@ -9,7 +9,7 @@ import io.openapiprocessor.core.converter.mapping.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class AnnotationParameterNameMatcher(private val schema: MappingSchema): MappingMatcher {
+class AnnotationParameterNameMatcher(private val query: MappingQuery): MappingMatcher {
     val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     override fun match(mapping: Mapping): Boolean {
@@ -18,12 +18,8 @@ class AnnotationParameterNameMatcher(private val schema: MappingSchema): Mapping
             return false
         }
 
-        val match = mapping.name == schema.getName()
+        val match = mapping.name == query.name
         log.trace("${if (match) "" else "not "}matched: {}", mapping)
         return match
-    }
-
-    override fun toString(): String {
-        return schema.toStringSchema()
     }
 }

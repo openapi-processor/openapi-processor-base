@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 https://github.com/openapi-processor/openapi-processor-core
+ * Copyright 2024 https://github.com/openapi-processor/openapi-processor-core
  * PDX-License-Identifier: Apache-2.0
  */
 
@@ -9,8 +9,7 @@ import io.openapiprocessor.core.converter.mapping.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-@Deprecated(message = "obsolete")
-class ParameterTypeMatcher(private val schema: MappingSchema): MappingMatcher, (NameTypeMapping) -> Boolean {
+class ParameterNameTypeMatcher(private val query: MappingQuery): MappingMatcher {
     val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     override fun match(mapping: Mapping): Boolean {
@@ -19,13 +18,8 @@ class ParameterTypeMatcher(private val schema: MappingSchema): MappingMatcher, (
             return false
         }
 
-        val match = this.invoke(mapping)
+        val match = mapping.parameterName == query.name
         log.trace("${if (match) "" else "not "}matched: {}", mapping)
         return match
     }
-
-    override fun invoke(mapping: NameTypeMapping): Boolean {
-        return mapping.parameterName == schema.getName()
-    }
-
 }

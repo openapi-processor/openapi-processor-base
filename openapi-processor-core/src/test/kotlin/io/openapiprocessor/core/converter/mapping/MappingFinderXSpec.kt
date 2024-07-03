@@ -13,7 +13,6 @@ import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.processor.MappingReader
 import io.openapiprocessor.core.processor.mapping.v2.Mapping
 import io.openapiprocessor.core.processor.mapping.v2.MappingConverter
-import io.openapiprocessor.core.support.MappingSchema
 
 
 class MappingFinderXSpec: StringSpec({
@@ -44,19 +43,19 @@ class MappingFinderXSpec: StringSpec({
 
         // then:
         val resultTypeMapping = finder.getResultTypeMapping(
-            MappingSchema(path = "/bar", method = HttpMethod.GET))!!
+            MappingQueryValues(path = "/bar", method = HttpMethod.GET))!!
 
         resultTypeMapping.targetTypeName shouldBe "io.openapiprocessor.WrapGlobal"
         resultTypeMapping.genericTypes.shouldBeEmpty()
 
         val resultTypeMappingPath = mappings.getEndpointResultTypeMapping(
-            MappingSchema(path = "/foo", method = HttpMethod.POST))!!
+            MappingQueryValues(path = "/foo", method = HttpMethod.POST))!!
 
         resultTypeMappingPath.targetTypeName shouldBe "io.openapiprocessor.WrapPath"
         resultTypeMappingPath.genericTypes.shouldBeEmpty()
 
         val resultTypeMappingGet = mappings.getEndpointResultTypeMapping(
-            MappingSchema(path = "/foo", method = HttpMethod.GET)
+            MappingQueryValues(path = "/foo", method = HttpMethod.GET)
         )!!
 
         resultTypeMappingGet.targetTypeName shouldBe "io.openapiprocessor.WrapMethod"
@@ -92,37 +91,37 @@ class MappingFinderXSpec: StringSpec({
 
         // then:
         val singleTypeMappingG = finder.getSingleTypeMapping(
-            MappingSchema(path = "/bar", method = HttpMethod.GET))!!
+            MappingQueryValues(path = "/bar", method = HttpMethod.GET))!!
 
         singleTypeMappingG.sourceTypeName shouldBe "single"
         singleTypeMappingG.targetTypeName shouldBe "reactor.core.publisher.MonoGlobal"
 
         val multiTypeMappingG = finder.getMultiTypeMapping(
-            MappingSchema(path = "/bar", method = HttpMethod.GET))!!
+            MappingQueryValues(path = "/bar", method = HttpMethod.GET))!!
 
         multiTypeMappingG.sourceTypeName shouldBe "multi"
         multiTypeMappingG.targetTypeName shouldBe "reactor.core.publisher.FluxGlobal"
 
         val singleTypeMappingP = finder.getSingleTypeMapping(
-            MappingSchema(path = "/foo", method = HttpMethod.POST))!!
+            MappingQueryValues(path = "/foo", method = HttpMethod.POST))!!
 
         singleTypeMappingP.sourceTypeName shouldBe "single"
         singleTypeMappingP.targetTypeName shouldBe "reactor.core.publisher.MonoPath"
 
         val multiTypeMappingP = finder.getMultiTypeMapping(
-            MappingSchema(path = "/foo", method = HttpMethod.POST))!!
+            MappingQueryValues(path = "/foo", method = HttpMethod.POST))!!
 
         multiTypeMappingP.sourceTypeName shouldBe "multi"
         multiTypeMappingP.targetTypeName shouldBe "reactor.core.publisher.FluxPath"
 
         val singleTypeMappingGet = finder.getSingleTypeMapping(
-            MappingSchema(path = "/foo", method = HttpMethod.GET))!!
+            MappingQueryValues(path = "/foo", method = HttpMethod.GET))!!
 
         singleTypeMappingGet.sourceTypeName shouldBe "single"
         singleTypeMappingGet.targetTypeName shouldBe "reactor.core.publisher.MonoMethod"
 
         val multiTypeMappingGet = finder.getMultiTypeMapping(
-            MappingSchema(path = "/foo", method = HttpMethod.GET))!!
+            MappingQueryValues(path = "/foo", method = HttpMethod.GET))!!
 
         multiTypeMappingGet.sourceTypeName shouldBe "multi"
         multiTypeMappingGet.targetTypeName shouldBe "reactor.core.publisher.FluxMethod"
