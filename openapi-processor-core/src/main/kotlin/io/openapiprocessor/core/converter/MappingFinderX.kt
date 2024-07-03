@@ -77,7 +77,8 @@ class MappingFinderX(private val repository: MappingRepository) {
     }
 
     fun findAnnotationTypeMappings(sourceName: String): List<AnnotationTypeMapping> {
-        return findAnnotationTypeMappings(MappingQueryValues(name = sourceName))
+        val (name, format) = splitTypeName(sourceName)
+        return findAnnotationTypeMappings(MappingQueryValues(name = name, format = format))
     }
 
     fun findAnnotationTypeMappings(query: MappingQuery): List<AnnotationTypeMapping> {
@@ -157,5 +158,19 @@ class MappingFinderX(private val repository: MappingRepository) {
 
     fun isEndpointExcluded(query: MappingQuery): Boolean {
         return repository.isEndpointExcluded(query)
+    }
+
+    private fun splitTypeName(typeName: String): Pair<String, String?> {
+        val split = typeName
+                .split(":")
+                .map { it.trim() }
+
+        val type = split.component1()
+        var format: String? = null
+        if (split.size == 2) {
+            format = split.component2()
+        }
+
+        return Pair(type, format)
     }
 }
