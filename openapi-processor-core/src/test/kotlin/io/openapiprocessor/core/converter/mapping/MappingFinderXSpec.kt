@@ -38,7 +38,7 @@ class MappingFinderXSpec: StringSpec({
 
         // when:
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX()
+        val mappings = MappingConverter(mapping).convertX2()
         val finder = MappingFinderX(mappings)
 
         // then:
@@ -48,13 +48,13 @@ class MappingFinderXSpec: StringSpec({
         resultTypeMapping.targetTypeName shouldBe "io.openapiprocessor.WrapGlobal"
         resultTypeMapping.genericTypes.shouldBeEmpty()
 
-        val resultTypeMappingPath = mappings.getEndpointResultTypeMapping(
+        val resultTypeMappingPath = finder.getResultTypeMapping(
             MappingQueryValues(path = "/foo", method = HttpMethod.POST))!!
 
         resultTypeMappingPath.targetTypeName shouldBe "io.openapiprocessor.WrapPath"
         resultTypeMappingPath.genericTypes.shouldBeEmpty()
 
-        val resultTypeMappingGet = mappings.getEndpointResultTypeMapping(
+        val resultTypeMappingGet = finder.getResultTypeMapping(
             MappingQueryValues(path = "/foo", method = HttpMethod.GET)
         )!!
 
@@ -86,7 +86,7 @@ class MappingFinderXSpec: StringSpec({
 
         // when:
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX()
+        val mappings = MappingConverter(mapping).convertX2()
         val finder = MappingFinderX(mappings)
 
         // then:

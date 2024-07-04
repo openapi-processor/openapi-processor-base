@@ -8,8 +8,7 @@
 package io.openapiprocessor.core.processor
 
 import io.openapiprocessor.core.converter.mapping.Mapping
-import io.openapiprocessor.core.converter.mapping.MappingRepository
-import io.openapiprocessor.core.converter.mapping.Mappings
+import io.openapiprocessor.core.converter.mapping.MappingData
 import io.openapiprocessor.core.processor.mapping.v1.MappingConverter as MappingConverterV1
 import io.openapiprocessor.core.processor.mapping.v1.Mapping as MappingV1
 import io.openapiprocessor.core.processor.mapping.MappingVersion
@@ -34,14 +33,11 @@ class MappingConverter {
        }
    }
 
-    fun convertX(source: MappingVersion?): MappingRepository {
+    fun convertX(source: MappingVersion?): MappingData {
         if (source != null && source.v2) {
-            return MappingConverterV2(source as MappingV2).convertX()
+            return MappingConverterV2(source as MappingV2).convertX2()
         }
 
-        return MappingRepository(
-            Mappings(),
-            emptyMap(),
-            emptyMap())
+        return MappingData()
     }
 }

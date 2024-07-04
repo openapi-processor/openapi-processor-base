@@ -11,9 +11,9 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 class MappingRepository(
-    private val globalMappings: Mappings,
-    private val endpointMappings: Map<String /* path */, EndpointMappings>,
-    private val extensionMappings: Map<String /* x- */, ExtensionMappings>
+    private val globalMappings: Mappings = Mappings(),
+    private val endpointMappings: Map<String /* path */, EndpointMappings> = emptyMap(),
+    private val extensionMappings: Map<String /* x- */, ExtensionMappings> = emptyMap()
 ) {
     val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 

@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory
 class TypeMappings(private val mappings: List<Mapping>): MappingBucket {
     val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
+    constructor(vararg mapping: Mapping): this(mapping.toList())
+
     override fun filter(filter: MappingMatcher): List<Mapping> {
         return mappings
             .filter { filter.match(it) }

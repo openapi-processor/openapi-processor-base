@@ -12,7 +12,7 @@ import io.openapiprocessor.core.support.Empty
 /**
  * Options of the processor.
  */
-class ApiOptions {
+class ApiOptions: MappingSettings {
 
     /**
      * the destination folder for generating interfaces & models. This is the parent of the
@@ -103,13 +103,12 @@ class ApiOptions {
      * override parameter/response type mappings or to add additional parameters on a single
      * endpoint.
      */
-    @Deprecated(message = "use MappingRepository")
+    @Deprecated(message = "use mappings below")
     var typeMappings: List<Mapping> = emptyList()
 
-    var mappingRepository: MappingRepository = MappingRepository(
-        Mappings(),
-        emptyMap(),
-        emptyMap())
+    override var globalMappings: Mappings = Mappings()
+    override var endpointMappings: Map<String /* path */, EndpointMappings> = emptyMap()
+    override var extensionMappings: Map<String /* x- */, ExtensionMappings> = emptyMap()
 
     /**
      * validate that targetDir is set, throws if not.

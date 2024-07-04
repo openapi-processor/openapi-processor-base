@@ -40,7 +40,7 @@ class  ApiConverter(
     val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     private val mappingFinder = MappingFinder(options.typeMappings)
-    private val mappingFinderX = MappingFinderX(options.mappingRepository)
+    private val mappingFinderX = MappingFinderX(options)
     private val dataTypeWrapper = ResultDataTypeWrapper(options, identifier, mappingFinder)
     private val dataTypeConverter = DataTypeConverter(options, identifier, mappingFinder)
     private val singleDataTypeWrapper = SingleDataTypeWrapper(options, mappingFinder)

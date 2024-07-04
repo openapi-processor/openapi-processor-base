@@ -9,8 +9,14 @@ import io.openapiprocessor.core.converter.mapping.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class MappingFinderX(private val repository: MappingRepository) {
+class MappingFinderX(mappings: MappingSettings) {
     val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
+
+    private val repository = MappingRepository(
+        mappings.globalMappings,
+        mappings.endpointMappings,
+        mappings.extensionMappings
+    )
 
     fun getResultTypeMapping(query: MappingQuery): ResultTypeMapping? {
         log.trace("looking for result type mapping {}", query)
@@ -93,6 +99,8 @@ class MappingFinderX(private val repository: MappingRepository) {
     }
 
     fun findParameterTypeMapping(query: MappingQuery): TypeMapping? {
+        log.trace("looking for parameter type mapping {}", query)
+
         val epMapping = repository.findEndpointParameterTypeMapping(query)
         if (epMapping != null) {
             return epMapping
@@ -107,6 +115,8 @@ class MappingFinderX(private val repository: MappingRepository) {
     }
 
     fun findAnnotationParameterTypeMapping(query: MappingQuery): List<AnnotationTypeMapping> {
+        log.trace("looking for endpoint annotation parameter type mapping {}", query)
+
         val epMapping = repository.findEndpointAnnotationParameterTypeMapping(query)
         if (epMapping.isNotEmpty()) {
             return epMapping
@@ -116,6 +126,8 @@ class MappingFinderX(private val repository: MappingRepository) {
     }
 
     fun findParameterNameTypeMapping(query: MappingQuery): NameTypeMapping? {
+        log.trace("looking for parameter name type mapping {}", query)
+
         val epMapping = repository.findEndpointParameterNameTypeMapping(query)
         if (epMapping != null) {
             return epMapping

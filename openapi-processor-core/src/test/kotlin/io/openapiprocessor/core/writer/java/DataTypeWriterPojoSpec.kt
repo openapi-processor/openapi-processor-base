@@ -22,6 +22,7 @@ import io.openapiprocessor.core.support.datatypes.ObjectDataType
 import io.openapiprocessor.core.support.datatypes.ListDataType
 import io.openapiprocessor.core.support.datatypes.propertyDataType
 import io.openapiprocessor.core.support.datatypes.propertyDataTypeString
+import io.openapiprocessor.core.support.parseOptions
 import java.io.StringWriter
 import java.util.*
 
@@ -276,15 +277,38 @@ class DataTypeWriterPojoSpec: StringSpec({
     }
 
     "writes additional annotation import from annotation mapping for a mapped property data type" {
-        options.typeMappings = listOf(
-            AnnotationTypeMappingDefault(
-                "Foo", annotation = MappingAnnotation("foo.Bar")
+        val optionsX = parseOptions(
+            """
+            |openapi-processor-mapping: v8
+            |
+            |options:
+            |  package-name: pkg
+            | 
+            |map:
+            |  types:
+            |    - type: Foo @ foo.Bar
+            """.trimMargin())
+
+        options.globalMappings = Mappings(
+            typeMappings = TypeMappings(
+                AnnotationTypeMappingDefault(
+                    sourceTypeName = "Foo",
+                    annotation = MappingAnnotation("foo.Bar")
+                )
             ))
+
+//        options.typeMappings = listOf(
+//            AnnotationTypeMappingDefault(
+//                "Foo", annotation = MappingAnnotation("foo.Bar")
+//            ))
 
         val dataType = ObjectDataType("Object",
             "pkg", linkedMapOf(
-                "foo" to propertyDataType(MappedDataType("MappedFoo", "pkg",
-                    sourceDataType = ObjectDataType("Foo", "pkg")))
+                "foo" to propertyDataType(
+                    MappedDataType(
+                        "MappedFoo",
+                        "pkg",
+                        sourceDataType = ObjectDataType("Foo", "pkg")))
             ))
 
         // when:
@@ -294,6 +318,53 @@ class DataTypeWriterPojoSpec: StringSpec({
         val imports = extractImports(target)
         imports shouldContain "import foo.Bar;"
     }
+
+    /*
+        "creates 'Excluded' interface when an endpoint should be skipped" {
+        val openApi = parseApi(
+            """
+            |openapi: 3.1.0
+            |info:
+            |  title: API
+            |  version: 1.0.0
+            |
+            |paths:
+            |  /foo:
+            |    get:
+            |      responses:
+            |        '204':
+            |          description: no content
+            |
+            |  /bar:
+            |    get:
+            |      responses:
+            |        '204':
+            |          description: no content
+            """.trimMargin())
+
+        val options = parseOptions(
+            """
+            |openapi-processor-mapping: v8
+            |
+            |options:
+            |  package-name: pkg
+            |
+            |map:
+            |  paths:
+            |    /foo:
+            |      exclude: true
+            """.trimMargin())
+
+        // act
+        val api = apiConverter(options).convert(openApi)
+
+        // assert
+        val itfs = api.getInterfaces()
+        itfs.shouldHaveSize(2)
+        itfs[0].getInterfaceName() shouldBe "Api"
+        itfs[1].getInterfaceName() shouldBe "ExcludedApi"
+    }
+     */
 
     "writes additional annotation from annotation mapping for a mapped property data type" {
         options.typeMappings = listOf(

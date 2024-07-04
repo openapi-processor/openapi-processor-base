@@ -14,9 +14,9 @@ class Mappings(
     private val resultStyle: ResultStyle? = null,
     private val singleTypeMapping: TypeMapping? = null,
     private val multiTypeMapping: TypeMapping? = null,
-    private val typeMappings: TypeMappings = TypeMappings(emptyList()),
-    private val parameterTypeMappings: TypeMappings = TypeMappings(emptyList()),
-    private val responseTypeMappings: TypeMappings = TypeMappings(emptyList()),
+    private val typeMappings: TypeMappings = TypeMappings(),
+    private val parameterTypeMappings: TypeMappings = TypeMappings(),
+    private val responseTypeMappings: TypeMappings = TypeMappings(),
     private val exclude: Boolean = false
 ) {
     val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
