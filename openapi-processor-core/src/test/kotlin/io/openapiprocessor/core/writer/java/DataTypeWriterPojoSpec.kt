@@ -14,17 +14,16 @@ import io.kotest.matchers.string.shouldContain
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.JsonPropertyAnnotationMode
 import io.openapiprocessor.core.converter.mapping.*
-import io.openapiprocessor.core.converter.mapping.Annotation as MappingAnnotation
 import io.openapiprocessor.core.extractImports
 import io.openapiprocessor.core.model.Annotation
 import io.openapiprocessor.core.model.datatypes.*
-import io.openapiprocessor.core.support.datatypes.ObjectDataType
 import io.openapiprocessor.core.support.datatypes.ListDataType
+import io.openapiprocessor.core.support.datatypes.ObjectDataType
 import io.openapiprocessor.core.support.datatypes.propertyDataType
 import io.openapiprocessor.core.support.datatypes.propertyDataTypeString
-import io.openapiprocessor.core.support.parseOptions
 import java.io.StringWriter
 import java.util.*
+import io.openapiprocessor.core.converter.mapping.Annotation as MappingAnnotation
 
 class DataTypeWriterPojoSpec: StringSpec({
     this.isolationMode = IsolationMode.InstancePerTest
@@ -277,18 +276,6 @@ class DataTypeWriterPojoSpec: StringSpec({
     }
 
     "writes additional annotation import from annotation mapping for a mapped property data type" {
-        val optionsX = parseOptions(
-            """
-            |openapi-processor-mapping: v8
-            |
-            |options:
-            |  package-name: pkg
-            | 
-            |map:
-            |  types:
-            |    - type: Foo @ foo.Bar
-            """.trimMargin())
-
         options.globalMappings = Mappings(
             typeMappings = TypeMappings(
                 AnnotationTypeMappingDefault(
@@ -296,11 +283,6 @@ class DataTypeWriterPojoSpec: StringSpec({
                     annotation = MappingAnnotation("foo.Bar")
                 )
             ))
-
-//        options.typeMappings = listOf(
-//            AnnotationTypeMappingDefault(
-//                "Foo", annotation = MappingAnnotation("foo.Bar")
-//            ))
 
         val dataType = ObjectDataType("Object",
             "pkg", linkedMapOf(
@@ -319,60 +301,14 @@ class DataTypeWriterPojoSpec: StringSpec({
         imports shouldContain "import foo.Bar;"
     }
 
-    /*
-        "creates 'Excluded' interface when an endpoint should be skipped" {
-        val openApi = parseApi(
-            """
-            |openapi: 3.1.0
-            |info:
-            |  title: API
-            |  version: 1.0.0
-            |
-            |paths:
-            |  /foo:
-            |    get:
-            |      responses:
-            |        '204':
-            |          description: no content
-            |
-            |  /bar:
-            |    get:
-            |      responses:
-            |        '204':
-            |          description: no content
-            """.trimMargin())
-
-        val options = parseOptions(
-            """
-            |openapi-processor-mapping: v8
-            |
-            |options:
-            |  package-name: pkg
-            |
-            |map:
-            |  paths:
-            |    /foo:
-            |      exclude: true
-            """.trimMargin())
-
-        // act
-        val api = apiConverter(options).convert(openApi)
-
-        // assert
-        val itfs = api.getInterfaces()
-        itfs.shouldHaveSize(2)
-        itfs[0].getInterfaceName() shouldBe "Api"
-        itfs[1].getInterfaceName() shouldBe "ExcludedApi"
-    }
-     */
-
     "writes additional annotation from annotation mapping for a mapped property data type" {
-        options.typeMappings = listOf(
-            AnnotationTypeMappingDefault(
-                "Foo", annotation = MappingAnnotation(
-                    "foo.Bar", linkedMapOf("bar" to SimpleParameterValue(""""rab""""))
-                )
-            ))
+        options.globalMappings = Mappings(
+            typeMappings = TypeMappings(
+                AnnotationTypeMappingDefault(
+                    sourceTypeName = "Foo",
+                    annotation = MappingAnnotation(
+                        "foo.Bar", linkedMapOf("bar" to SimpleParameterValue(""""rab"""")))
+            )))
 
         val dataType = ObjectDataType("Object",
             "pkg", linkedMapOf(
@@ -406,12 +342,14 @@ class DataTypeWriterPojoSpec: StringSpec({
     }
 
     "writes additional annotation from annotation mapping for a simple mapped property data type" {
-        options.typeMappings = listOf(
-            AnnotationTypeMappingDefault(
-                "string", "uuid", annotation = MappingAnnotation(
-                    "foo.Bar", linkedMapOf("bar" to SimpleParameterValue(""""rab""""))
-                )
-            ))
+        options.globalMappings = Mappings(
+            typeMappings = TypeMappings(
+                AnnotationTypeMappingDefault(
+                    sourceTypeName = "string",
+                    sourceTypeFormat = "uuid",
+                    annotation = MappingAnnotation(
+                        "foo.Bar", linkedMapOf("bar" to SimpleParameterValue(""""rab"""")))
+            )))
 
         val dataType = ObjectDataType("Object",
             "pkg", linkedMapOf(
@@ -528,21 +466,25 @@ class DataTypeWriterPojoSpec: StringSpec({
     }
 
     "writes additional property annotation from extension mapping" {
-        options.typeMappings = listOf(
-            ExtensionMapping("x-foo", listOf(
-                AnnotationNameMappingDefault(
-                    "ext", annotation = MappingAnnotation("annotation.Extension", linkedMapOf())
-                )
-            )),
-            ExtensionMapping("x-bar", listOf(
-                AnnotationNameMappingDefault(
-                    "barA", annotation = MappingAnnotation("annotation.BarA", linkedMapOf())
-                ),
-                AnnotationNameMappingDefault(
-                    "barB", annotation = MappingAnnotation("annotation.BarB", linkedMapOf())
-                )
-            ))
-        )
+        options.extensionMappings = mapOf(
+            "x-foo" to ExtensionMappings(
+                mapOf("ext" to listOf(
+                    AnnotationNameMappingDefault(
+                        "ext", annotation = MappingAnnotation("annotation.Extension", linkedMapOf())
+                    )))),
+
+            "x-bar" to ExtensionMappings(
+                mapOf(
+                    "barA" to listOf(
+                        AnnotationNameMappingDefault(
+                            "barA", annotation = MappingAnnotation("annotation.BarA", linkedMapOf())
+                        )),
+                    "barB" to listOf(
+                        AnnotationNameMappingDefault(
+                            "barB", annotation = MappingAnnotation("annotation.BarB", linkedMapOf())
+                        ))
+                    ))
+            )
 
         val dataType = ObjectDataType("Foo", "pkg", linkedMapOf(
                 "foo" to propertyDataType(StringDataType(), mapOf(

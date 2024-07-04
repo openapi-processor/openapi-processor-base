@@ -132,13 +132,13 @@ abstract class DataTypeWriterBase(
     }
 
     private fun collectTypeAnnotations(sourceName: String): Collection<Annotation> {
-        return MappingFinderX(apiOptions.mappingRepository)
+        return MappingFinderX(apiOptions)
             .findAnnotationTypeMappings(sourceName)
             .map { Annotation(it.annotation.type, it.annotation.parameters) }
     }
 
     private fun collectExtensionAnnotations(extensions: Map<String, *>): Collection<Annotation> {
-        val mappingFinder = MappingFinder(apiOptions.typeMappings)
+        val mappingFinder = MappingFinderX(apiOptions)
 
         val annotations = mutableListOf<Annotation>()
 
@@ -148,12 +148,14 @@ abstract class DataTypeWriterBase(
                     val found = mappingFinder
                         .findExtensionAnnotations(ext.key, extVal)
                         .map { Annotation(it.annotation.type, it.annotation.parameters) }
+
                     annotations.addAll(found)
                 }
                 is Collection<*> -> {
                     val found = mappingFinder
                         .findExtensionAnnotations(ext.key, extVal.filterIsInstance<String>())
                         .map { Annotation(it.annotation.type, it.annotation.parameters) }
+
                     annotations.addAll(found)
                 }
             }

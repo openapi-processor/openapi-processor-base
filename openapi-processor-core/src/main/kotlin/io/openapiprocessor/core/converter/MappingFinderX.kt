@@ -164,8 +164,14 @@ class MappingFinderX(mappings: MappingSettings) {
         return null
     }
 
-    fun findExtensionAnnotations(extension: String, value: String): List<AnnotationNameMapping> {
-        return repository.findExtensionAnnotations(extension, value)
+    fun findExtensionAnnotations(extension: String, vararg values: String): List<AnnotationNameMapping> {
+        return findExtensionAnnotations(extension, values.asList())
+    }
+
+    fun findExtensionAnnotations(extension: String, values: List<String>): List<AnnotationNameMapping> {
+        return values
+            .map { repository.findExtensionAnnotations(extension, it) }
+            .flatten()
     }
 
     fun isEndpointExcluded(query: MappingQuery): Boolean {
