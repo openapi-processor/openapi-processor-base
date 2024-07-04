@@ -7,7 +7,6 @@ package io.openapiprocessor.core.writer.java
 
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.JsonPropertyAnnotationMode
-import io.openapiprocessor.core.converter.MappingFinder
 import io.openapiprocessor.core.converter.MappingFinderX
 import io.openapiprocessor.core.model.Annotation
 import io.openapiprocessor.core.model.datatypes.DataType
@@ -240,8 +239,8 @@ abstract class DataTypeWriterBase(
     }
 
     private fun writeAnnotationsMappings(target: Writer, dataType: ModelDataType) {
-        val annotationTypeMappings = MappingFinder(apiOptions.typeMappings)
-            .findTypeAnnotations(dataType.getName(), true)
+        val annotationTypeMappings = MappingFinderX(apiOptions)
+            .findAnnotationTypeMappings(dataType.getName(), true)
 
         annotationTypeMappings.forEach {
             annotationWriter.write(target, Annotation(it.annotation.type, it.annotation.parameters))
@@ -276,8 +275,8 @@ abstract class DataTypeWriterBase(
 
         imports.addAll(dataType.referencedImports)
 
-        val annotationTypeMappings = MappingFinder(apiOptions.typeMappings)
-            .findTypeAnnotations(dataType.getName(), true)
+        val annotationTypeMappings = MappingFinderX(apiOptions)
+            .findAnnotationTypeMappings(dataType.getName(), true)
 
         annotationTypeMappings.forEach {
             imports.add(it.annotation.type)

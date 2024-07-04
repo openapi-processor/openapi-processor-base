@@ -226,12 +226,12 @@ class DataTypeWriterPojoSpec: StringSpec({
     }
 
     "writes additional object annotation from annotation mapping" {
-        options.typeMappings = listOf(
-            AnnotationTypeMappingDefault(
-                "Foo", annotation = MappingAnnotation(
-                    "foo.Bar", linkedMapOf("bar" to SimpleParameterValue(""""rab""""))
-                )
-            ))
+        options.globalMappings = Mappings(
+            typeMappings = TypeMappings(
+                AnnotationTypeMappingDefault(
+                    sourceTypeName = "Foo",
+                    annotation = MappingAnnotation(
+                        "foo.Bar", linkedMapOf("bar" to SimpleParameterValue(""""rab""""))))))
 
         val dataType = ObjectDataType("Foo",
             "pkg", linkedMapOf("foo" to propertyDataTypeString()))
@@ -251,10 +251,13 @@ class DataTypeWriterPojoSpec: StringSpec({
 
     "writes additional object annotation from annotation mapping with model name suffix" {
         options.modelNameSuffix = "X"
-        options.typeMappings = listOf(
-            AnnotationTypeMappingDefault(
-                "Foo", annotation = MappingAnnotation("foo.Bar", linkedMapOf())
-            ))
+        options.globalMappings = Mappings(
+            typeMappings = TypeMappings(
+                AnnotationTypeMappingDefault(
+                    sourceTypeName = "Foo",
+                    annotation = MappingAnnotation(
+                        "foo.Bar", linkedMapOf()
+                    ))))
 
         val dataType = ObjectDataType(DataTypeName("Foo", "FooX"),
             "pkg", linkedMapOf("foo" to propertyDataTypeString()))
@@ -384,6 +387,14 @@ class DataTypeWriterPojoSpec: StringSpec({
     }
 
     "writes additional annotation from 'object' annotation mapping" {
+        options.globalMappings = Mappings(
+            typeMappings = TypeMappings(
+                AnnotationTypeMappingDefault(
+                    sourceTypeName = "object",
+                    annotation = MappingAnnotation(
+                        "foo.Bar", linkedMapOf()
+                    ))))
+
         options.typeMappings = listOf(
             AnnotationTypeMappingDefault(
                 "object", annotation = MappingAnnotation("foo.Bar", linkedMapOf())

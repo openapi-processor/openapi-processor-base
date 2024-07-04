@@ -82,9 +82,12 @@ class MappingFinderX(mappings: MappingSettings) {
         return null
     }
 
-    fun findAnnotationTypeMappings(sourceName: String): List<AnnotationTypeMapping> {
+    fun findAnnotationTypeMappings(sourceName: String, allowObject: Boolean = false): List<AnnotationTypeMapping> {
         val (name, format) = splitTypeName(sourceName)
-        return findAnnotationTypeMappings(MappingQueryValues(name = name, format = format))
+        return findAnnotationTypeMappings(MappingQueryValues(
+            name = name,
+            format = format,
+            allowObject = allowObject))
     }
 
     fun findAnnotationTypeMappings(query: MappingQuery): List<AnnotationTypeMapping> {
