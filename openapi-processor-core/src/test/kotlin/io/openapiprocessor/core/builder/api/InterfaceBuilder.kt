@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 https://github.com/openapi-processor/openapi-processor-core
+ * Copyright 2020 https://github.com/openapi-processor/openapi-processor-core
  * PDX-License-Identifier: Apache-2.0
  */
 
@@ -13,6 +13,17 @@ import io.openapiprocessor.core.writer.java.JavaIdentifier
 import io.openapiprocessor.core.builder.api.endpoint as ep
 
 fun `interface`(
+    name: String = "Foo",
+    pkg: String = "io.openapiprocessor.test",
+    identifier: Identifier = JavaIdentifier(),
+    init: InterfaceBuilder.() -> Unit
+): Interface {
+    val builder = InterfaceBuilder(name, pkg, identifier)
+    init(builder)
+    return builder.build()
+}
+
+fun itf(
     name: String = "Foo",
     pkg: String = "io.openapiprocessor.test",
     identifier: Identifier = JavaIdentifier(),

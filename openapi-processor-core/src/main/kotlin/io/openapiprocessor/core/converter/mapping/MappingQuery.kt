@@ -7,9 +7,39 @@ package io.openapiprocessor.core.converter.mapping
 
 import io.openapiprocessor.core.parser.HttpMethod
 
-interface MappingQuery {
+
+interface MappingQueryEndpoint {
     val path: String?
+        get() = null
+
     val method: HttpMethod?
+        get() = null
+}
+
+interface MappingQueryType {
+    val name: String?
+        get() = null
+
+    val type: String?
+        get() = null
+
+    val format: String?
+        get() = null
+
+    // accept object @ annotation ?
+    val allowObject: Boolean
+        get() = false
+}
+
+
+
+interface MappingQuery : MappingQueryEndpoint,  MappingQueryType {
+//    val path: String?
+//        get() = null
+//
+//    val method: HttpMethod?
+//        get() = null
+//
     /**
      *  name, depends on context.
      *
@@ -19,14 +49,28 @@ interface MappingQuery {
      *  - schema: name
      *  - property: name
      */
-    val name: String?
-    val format: String?
-    val type: String?
+//    val name: String?
+//        get() = null
+//
+//    val format: String?
+//        get() = null
+//
+//    val type: String?
+//        get() = null
+
     val contentType: String?
+        get() = null
+
     val primitive: Boolean
+        get() = false
+
     val array: Boolean
-    val allowObject: Boolean  // use object @ annotation
+        get() = false
+
+//    val allowObject: Boolean  // use object @ annotation
+//        get() = false
 }
+
 
 @Deprecated(message = "migration")
 class MappingQueryInfo(
@@ -60,6 +104,7 @@ class MappingQueryInfo(
         get() = TODO("Not yet implemented")
 }
 
+@Deprecated(message = "use MappingQueryX")
 class MappingQueryValues(
     override val path: String? = null,
     override val method: HttpMethod? = null,

@@ -12,9 +12,8 @@ import io.kotest.matchers.collections.shouldNotContain
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.openapiprocessor.core.builder.api.`interface`
+import io.openapiprocessor.core.builder.api.itf
 import io.openapiprocessor.core.converter.ApiOptions
-import io.openapiprocessor.core.converter.mapping.AnnotationNameMappingDefault
-import io.openapiprocessor.core.converter.mapping.AnnotationTypeMappingDefault
 import io.openapiprocessor.core.converter.mapping.SimpleParameterValue
 import io.openapiprocessor.core.extractBody
 import io.openapiprocessor.core.extractImports
@@ -28,14 +27,10 @@ import io.openapiprocessor.core.model.parameters.ParameterBase
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.support.datatypes.ObjectDataType
 import io.openapiprocessor.core.support.datatypes.propertyDataTypeString
+import io.openapiprocessor.core.support.parseOptions
 import java.io.StringWriter
 import java.io.Writer
-import kotlin.Boolean
-import kotlin.Pair
-import kotlin.String
-import kotlin.to
 import io.mockk.mockk as stub
-import io.openapiprocessor.core.converter.mapping.Annotation as AnnotationMapping
 
 
 class InterfaceWriterSpec: StringSpec({
@@ -53,6 +48,10 @@ class InterfaceWriterSpec: StringSpec({
         writer = InterfaceWriter(options, generatedWriter, methodWriter, annotations)
     }
 
+    fun writer(options: ApiOptions = ApiOptions()): InterfaceWriter {
+        return InterfaceWriter(options, generatedWriter, methodWriter, annotations)
+    }
+
     "writes mapping import" {
         every { annotations.getAnnotation(any<HttpMethod>()) } returns Annotation("annotation.Mapping")
 
@@ -63,7 +62,7 @@ class InterfaceWriterSpec: StringSpec({
         }
 
         // when:
-        writer.write(target, itf)
+        writer().write(target, itf)
 
         // then:
         extractImports(target) shouldContain "import annotation.Mapping;"
@@ -228,18 +227,23 @@ class InterfaceWriterSpec: StringSpec({
     }
 
     "writes additional annotation mapping import" {
-        options.typeMappings = listOf(
-                AnnotationTypeMappingDefault("Foo", annotation = AnnotationMapping(
-                    "io.openapiprocessor.Type")),
-                AnnotationNameMappingDefault("foo", annotation = AnnotationMapping(
-                    "io.openapiprocessor.Name"))
-                )
+        val currentOptions = parseOptions(
+            """
+            |openapi-processor-mapping: v8
+            |options:
+            |  package-name: pkg
+            |map:
+            |  types:
+            |    - type: Foo @ io.openapiprocessor.Type
+            |  parameters:
+            |    - name: foo @ io.openapiprocessor.Name
+            """.trimMargin())
 
-        val itf = `interface` {
+        val itf = itf {
             endpoint("/foo") {
                 parameters {
-                    query("foo", ObjectDataType("Foo", "model", linkedMapOf(
-                        Pair("foo", propertyDataTypeString())
+                    query("foo", ObjectDataType(
+                        "Foo", "model", linkedMapOf("foo" to propertyDataTypeString()
                     )))
                 }
                 responses { status("200") }
@@ -247,7 +251,7 @@ class InterfaceWriterSpec: StringSpec({
         }
 
         // when:
-        writer.write(target, itf)
+        writer(currentOptions).write(target, itf)
 
         // then:
         val imports = extractImports(target)

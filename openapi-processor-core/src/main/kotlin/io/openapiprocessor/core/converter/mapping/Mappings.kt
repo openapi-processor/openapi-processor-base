@@ -57,8 +57,6 @@ class Mappings(
     }
 
     fun findAnnotationTypeMapping(filter: MappingMatcher): List<AnnotationTypeMapping> {
-        log.trace("looking for annotation type mapping of {}", filter)
-
         val mappings = typeMappings.filter(filter)
         if (mappings.isEmpty()) {
             return emptyList()
@@ -83,8 +81,6 @@ class Mappings(
     }
 
     fun findAnnotationParameterTypeMapping(filter: MappingMatcher): List<AnnotationTypeMapping> {
-        log.trace("looking for annotation parameter type mapping of {}", filter)
-
         val mappings = parameterTypeMappings.filter(filter)
         if (mappings.isEmpty()) {
             return emptyList()
@@ -109,8 +105,6 @@ class Mappings(
     }
 
     fun findAnnotationParameterNameTypeMapping(filter: MappingMatcher): List<AnnotationNameMapping> {
-        log.trace("looking for annotation parameter name mapping of {}", filter)
-
         val mappings = parameterTypeMappings.filter(filter)
         if (mappings.isEmpty()) {
             return emptyList()

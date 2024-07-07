@@ -5,9 +5,7 @@
 
 package io.openapiprocessor.core.writer.java
 
-import io.openapiprocessor.core.converter.ApiOptions
-import io.openapiprocessor.core.converter.MappingFinder
-import io.openapiprocessor.core.converter.resultStyle
+import io.openapiprocessor.core.converter.*
 import io.openapiprocessor.core.framework.FrameworkAnnotations
 import io.openapiprocessor.core.model.Endpoint
 import io.openapiprocessor.core.model.EndpointResponse
@@ -100,18 +98,27 @@ class InterfaceWriter(
     }
 
     private fun getMappingAnnotationsImports(endpoint: Endpoint, parameter: Parameter): Set<String> {
-        val mappingFinder = MappingFinder(apiOptions.typeMappings)
+        val mappingFinder = MappingFinderX(apiOptions)
+        val query = MappingQueryX(endpoint, parameter)
 
         val mappingAnnotations = mutableSetOf<String>()
 
+        // type mappings
         mappingAnnotations.addAll(
             mappingFinder
-                .findParameterTypeAnnotations(endpoint.path, endpoint.method, parameter.dataType.getSourceName())
+                .findAnnotationTypeMappings(query)
                 .map { it.annotation.type })
 
+        // parameter type mappings
         mappingAnnotations.addAll(
             mappingFinder
-                .findParameterNameAnnotations(endpoint.path, endpoint.method, parameter.name)
+                .findAnnotationParameterTypeMapping(query)
+                .map { it.annotation.type })
+
+        // parameter name type mappings
+        mappingAnnotations.addAll(
+            mappingFinder
+                .findAnnotationParameterNameTypeMapping(query)
                 .map { it.annotation.type })
 
         return mappingAnnotations

@@ -9,7 +9,7 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
-import io.openapiprocessor.core.converter.mapping.MappingQueryValues
+import io.openapiprocessor.core.converter.MappingQueryX
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.processor.MappingReader
 
@@ -145,14 +145,14 @@ class MappingConverterResultSpec: StringSpec({
 
         // then:
         val resultTypeMapping = mappings.getEndpointResultTypeMapping(
-            MappingQueryValues(path = "/foo", method = HttpMethod.POST)
+            MappingQueryX(path = "/foo", method = HttpMethod.POST)
         )!!
 
         resultTypeMapping.targetTypeName shouldBe "io.openapiprocessor.WrapAll"
         resultTypeMapping.genericTypes.shouldBeEmpty()
 
         val resultTypeMappingGet = mappings.getEndpointResultTypeMapping(
-            MappingQueryValues(path = "/foo", method = HttpMethod.GET)
+            MappingQueryX(path = "/foo", method = HttpMethod.GET)
         )!!
 
         resultTypeMappingGet.targetTypeName shouldBe "io.openapiprocessor.WrapGet"

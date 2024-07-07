@@ -13,10 +13,9 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.maps.shouldBeEmpty
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
-import io.openapiprocessor.core.converter.mapping.AmbiguousTypeMappingException
-import io.openapiprocessor.core.converter.mapping.AnnotationNameMapping
-import io.openapiprocessor.core.converter.mapping.MappingQueryValues
-import io.openapiprocessor.core.converter.mapping.NameTypeMapping
+import io.openapiprocessor.core.converter.mapping.*
+import io.openapiprocessor.core.converter.MappingQueryX
+import io.openapiprocessor.core.converter.mapping.matcher.AnnotationTypeMatcher
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.processor.MappingConverter
 import io.openapiprocessor.core.processor.MappingReader
@@ -254,7 +253,7 @@ class MappingConverterParameterSpec: StringSpec({
     }
 
     "read global annotation parameter type mapping" {
-         val yaml = """
+        val yaml = """
             |openapi-processor-mapping: v8
             |
             |options:
@@ -265,10 +264,12 @@ class MappingConverterParameterSpec: StringSpec({
             |    - type: Foo @ io.openapiprocessor.Foo
             """.trimMargin()
 
-         val mapping = reader.read (yaml) as Mapping
-         val mappings = MappingConverter(mapping).convertX()
+        val mapping = reader.read(yaml) as Mapping
+        val mappings = MappingConverter(mapping).convertX2()
 
-         val annotationMappings = mappings.findGlobalAnnotationParameterTypeMapping(MappingQueryValues(name = "Foo"))
+        val annotationMappings = mappings.globalMappings.findAnnotationParameterTypeMapping(
+            AnnotationTypeMatcher(MappingQueryX(type = "Foo"))
+        )
 
          annotationMappings shouldHaveSize 1
          val annotationMapping = annotationMappings.first()
@@ -292,9 +293,10 @@ class MappingConverterParameterSpec: StringSpec({
             """.trimMargin()
 
          val mapping = reader.read (yaml) as Mapping
-         val mappings = MappingConverter(mapping).convertX()
+         val mappings = MappingConverter(mapping).convertX2()
 
-         val annotationMappings = mappings.findGlobalAnnotationParameterTypeMapping(MappingQueryValues(name = "Foo"))
+         val annotationMappings = mappings.globalMappings.findAnnotationParameterTypeMapping(
+             AnnotationTypeMatcher(MappingQueryX(type = "Foo")))
 
          annotationMappings shouldHaveSize 2
      }
@@ -443,10 +445,11 @@ class MappingConverterParameterSpec: StringSpec({
            """.trimMargin()
 
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX()
+        val mappings = MappingConverter(mapping).convertX2()
+        val repository = MappingRepository(endpointMappings = mappings.endpointMappings)
 
-        val annotationMappings = mappings.findEndpointAnnotationParameterTypeMapping(
-            MappingQueryValues(path = "/foo", method = HttpMethod.POST, name = "Foo"))
+        val annotationMappings = repository.findEndpointAnnotationParameterTypeMapping(
+            MappingQueryX(path = "/foo", method = HttpMethod.POST, type = "Foo"))
 
         annotationMappings shouldHaveSize 2
         annotationMappings[0].sourceTypeName shouldBe  "Foo"
@@ -458,8 +461,8 @@ class MappingConverterParameterSpec: StringSpec({
         annotationMappings[1].annotation.type shouldBe "io.openapiprocessor.Bar"
         annotationMappings[1].annotation.parameters.shouldBeEmpty()
 
-        val annotationMappingsGet = mappings.findEndpointAnnotationParameterTypeMapping(
-            MappingQueryValues(path = "/foo", method = HttpMethod.GET, name = "Foo"))
+        val annotationMappingsGet = repository.findEndpointAnnotationParameterTypeMapping(
+            MappingQueryX(path = "/foo", method = HttpMethod.GET, type = "Foo"))
 
         annotationMappingsGet shouldHaveSize 2
         annotationMappingsGet[0].sourceTypeName shouldBe  "Foo"

@@ -9,7 +9,7 @@ import io.openapiprocessor.core.converter.mapping.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class AnnotationTypeMatcher(private val query: MappingQuery): MappingMatcher {
+class AnnotationTypeMatcher(private val query: MappingQueryType): MappingMatcher {
     val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     override fun match(mapping: Mapping): Boolean {
@@ -19,7 +19,7 @@ class AnnotationTypeMatcher(private val query: MappingQuery): MappingMatcher {
         }
 
         val matchObject = mapping.sourceTypeName == "object"
-        val matchType = mapping.sourceTypeName == query.name
+        val matchType = mapping.sourceTypeName == query.type
         val matchFormat = mapping.sourceTypeFormat == query.format
         val match = (matchType && matchFormat) || (query.allowObject && matchObject)
 

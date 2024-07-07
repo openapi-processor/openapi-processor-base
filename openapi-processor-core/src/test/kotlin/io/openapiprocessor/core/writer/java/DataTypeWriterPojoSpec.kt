@@ -21,6 +21,7 @@ import io.openapiprocessor.core.support.datatypes.ListDataType
 import io.openapiprocessor.core.support.datatypes.ObjectDataType
 import io.openapiprocessor.core.support.datatypes.propertyDataType
 import io.openapiprocessor.core.support.datatypes.propertyDataTypeString
+import io.openapiprocessor.core.support.parseOptions
 import java.io.StringWriter
 import java.util.*
 import io.openapiprocessor.core.converter.mapping.Annotation as MappingAnnotation
@@ -35,6 +36,14 @@ class DataTypeWriterPojoSpec: StringSpec({
 
     fun createWriter(validations: BeanValidationFactory = BeanValidationFactory(options)): DataTypeWriterPojo {
         return DataTypeWriterPojo(options, identifier, generatedWriter, validations)
+    }
+
+    fun writer(opts: ApiOptions = options): DataTypeWriterPojo {
+        return DataTypeWriterPojo(
+            opts,
+            identifier,
+            generatedWriter,
+            BeanValidationFactory(opts))
     }
 
     "writes @Generated annotation import" {
@@ -209,16 +218,21 @@ class DataTypeWriterPojoSpec: StringSpec({
     }
 
     "writes additional object annotation import from annotation mapping" {
-        options.typeMappings = listOf(
-            AnnotationTypeMappingDefault(
-                "Foo", annotation = MappingAnnotation("foo.Bar")
-            ))
+        val opts = parseOptions(
+            """
+            |openapi-processor-mapping: v8
+            |options:
+            |  package-name: pkg
+            |map:
+            |  types:
+            |    - type: Foo @ foo.Bar
+            """.trimMargin())
 
         val dataType = ObjectDataType("Foo",
             "pkg", linkedMapOf("foo" to propertyDataTypeString()))
 
         // when:
-        createWriter().write(target, dataType)
+        writer(opts).write(target, dataType)
 
         // then:
         val imports = extractImports(target)
