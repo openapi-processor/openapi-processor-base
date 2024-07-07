@@ -184,7 +184,7 @@ class MappingConverterTypeSpec: FreeSpec({
 
             // then:
             val typeMapping = mappings.findGlobalTypeMapping(
-                MappingQueryValues(
+                MappingQueryX(
                     name = expected.sourceTypeName,
                     format = expected.sourceTypeFormat
                 )
@@ -217,7 +217,7 @@ class MappingConverterTypeSpec: FreeSpec({
         val mappings = MappingConverter(mapping).convertX()
 
         // then:
-        val typeMapping = mappings.findGlobalTypeMapping(MappingQueryValues(name = "Foo"))
+        val typeMapping = mappings.findGlobalTypeMapping(MappingQueryX(name = "Foo"))
 
         typeMapping.shouldBeNull()
     }
@@ -239,7 +239,7 @@ class MappingConverterTypeSpec: FreeSpec({
         val mappings = MappingConverter(mapping).convertX()
 
         shouldThrow<AmbiguousTypeMappingException> {
-            mappings.findGlobalTypeMapping(MappingQueryValues(name = "Foo"))
+            mappings.findGlobalTypeMapping(MappingQueryX(name = "Foo"))
         }
     }
 
@@ -307,7 +307,7 @@ class MappingConverterTypeSpec: FreeSpec({
         val mappings = MappingConverter(mapping).convertX()
 
         // then:
-        val annotationMappings = mappings.findGlobalAnnotationTypeMapping(MappingQueryValues(name = "Foo"))
+        val annotationMappings = mappings.findGlobalAnnotationTypeMapping(MappingQueryX(name = "Foo"))
 
         annotationMappings.shouldBeEmpty()
     }
@@ -337,14 +337,14 @@ class MappingConverterTypeSpec: FreeSpec({
 
         // then:
         val typeMapping = mappings.findEndpointTypeMapping(
-            MappingQueryValues(path = "/foo", method = HttpMethod.POST, name = "Foo"))!!
+            MappingQueryX(path = "/foo", method = HttpMethod.POST, name = "Foo"))!!
 
         typeMapping.sourceTypeName shouldBe "Foo"
         typeMapping.sourceTypeFormat.shouldBeNull()
         typeMapping.targetTypeName shouldBe "io.openapiprocessor.Foo"
 
         val typeMappingGet = mappings.findEndpointTypeMapping(
-            MappingQueryValues(path = "/foo", method = HttpMethod.GET, name= "Foo"))!!
+            MappingQueryX(path = "/foo", method = HttpMethod.GET, name= "Foo"))!!
 
         typeMappingGet.sourceTypeName shouldBe "Foo"
         typeMappingGet.sourceTypeFormat.shouldBeNull()

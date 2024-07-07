@@ -7,7 +7,7 @@ package io.openapiprocessor.core.processor.mapping.v2
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
-import io.openapiprocessor.core.converter.mapping.MappingQueryValues
+import io.openapiprocessor.core.converter.MappingQueryX
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.processor.MappingReader
 
@@ -65,26 +65,26 @@ class MappingConverterReactiveSpec: StringSpec({
 
         // then:
         val singleTypeMapping = mappings.getEndpointSingleTypeMapping(
-            MappingQueryValues(path = "/foo", method = HttpMethod.POST))!!
+            MappingQueryX(path = "/foo", method = HttpMethod.POST))!!
 
         singleTypeMapping.sourceTypeName shouldBe "single"
         singleTypeMapping.targetTypeName shouldBe "reactor.core.publisher.Mono"
 
         val multiTypeMapping = mappings.getEndpointMultiTypeMapping(
-            MappingQueryValues(path = "/foo", method = HttpMethod.POST))!!
+            MappingQueryX(path = "/foo", method = HttpMethod.POST))!!
 
         multiTypeMapping.sourceTypeName shouldBe "multi"
         multiTypeMapping.targetTypeName shouldBe "reactor.core.publisher.Flux"
 
 
         val singleTypeMappingGet = mappings.getEndpointSingleTypeMapping(
-            MappingQueryValues(path = "/foo", method = HttpMethod.GET))!!
+            MappingQueryX(path = "/foo", method = HttpMethod.GET))!!
 
         singleTypeMappingGet.sourceTypeName shouldBe "single"
         singleTypeMappingGet.targetTypeName shouldBe "reactor.core.publisher.Mono2"
 
         val multiTypeMappingGet = mappings.getEndpointMultiTypeMapping(
-            MappingQueryValues(path = "/foo", method = HttpMethod.GET))!!
+            MappingQueryX(path = "/foo", method = HttpMethod.GET))!!
 
         multiTypeMappingGet.sourceTypeName shouldBe "multi"
         multiTypeMappingGet.targetTypeName shouldBe "reactor.core.publisher.Flux2"

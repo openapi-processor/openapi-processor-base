@@ -77,7 +77,7 @@ class MappingConverterParameterSpec: StringSpec({
         val mappings = MappingConverter(mapping).convertX()
 
         // then:
-        val typeMapping = mappings.findGlobalParameterTypeMapping(MappingQueryValues(name = "Foo"))!!
+        val typeMapping = mappings.findGlobalParameterTypeMapping(MappingQueryX(name = "Foo"))!!
 
         typeMapping.sourceTypeName shouldBe "Foo"
         typeMapping.targetTypeName shouldBe "mapping.Foo"
@@ -99,7 +99,7 @@ class MappingConverterParameterSpec: StringSpec({
         val mappings = MappingConverter(mapping).convertX()
 
         // then:
-        val typeMapping = mappings.findGlobalParameterTypeMapping(MappingQueryValues(name = "Foo"))
+        val typeMapping = mappings.findGlobalParameterTypeMapping(MappingQueryX(name = "Foo"))
 
         typeMapping.shouldBeNull()
     }
@@ -121,7 +121,7 @@ class MappingConverterParameterSpec: StringSpec({
         val mappings = MappingConverter(mapping).convertX()
 
         shouldThrow<AmbiguousTypeMappingException> {
-            mappings.findGlobalParameterTypeMapping(MappingQueryValues(name = "Foo"))
+            mappings.findGlobalParameterTypeMapping(MappingQueryX(name = "Foo"))
         }
     }
 
@@ -138,7 +138,7 @@ class MappingConverterParameterSpec: StringSpec({
         val mappings = MappingConverter(mapping).convertX()
 
         // then:
-        val nameTypeMapping = mappings.findGlobalParameterNameTypeMapping(MappingQueryValues(name = "foo"))!!
+        val nameTypeMapping = mappings.findGlobalParameterNameTypeMapping(MappingQueryX(name = "foo"))!!
 
         nameTypeMapping.parameterName shouldBe "foo"
         nameTypeMapping.mapping.sourceTypeName.shouldBeNull()
@@ -161,7 +161,7 @@ class MappingConverterParameterSpec: StringSpec({
         val mappings = MappingConverter(mapping).convertX()
 
         // then:
-        val nameTypeMapping = mappings.findGlobalParameterNameTypeMapping(MappingQueryValues(name = "foo"))
+        val nameTypeMapping = mappings.findGlobalParameterNameTypeMapping(MappingQueryX(name = "foo"))
 
         nameTypeMapping.shouldBeNull()
     }
@@ -183,7 +183,7 @@ class MappingConverterParameterSpec: StringSpec({
         val mappings = MappingConverter(mapping).convertX()
 
         shouldThrow<AmbiguousTypeMappingException> {
-            mappings.findGlobalParameterNameTypeMapping(MappingQueryValues(name = "foo"))
+            mappings.findGlobalParameterNameTypeMapping(MappingQueryX(name = "foo"))
         }
     }
 
@@ -315,7 +315,7 @@ class MappingConverterParameterSpec: StringSpec({
          val mappings = MappingConverter(mapping).convertX()
 
          // then:
-         val annotationMappings = mappings.findGlobalAnnotationParameterTypeMapping(MappingQueryValues(name = "Foo"))
+         val annotationMappings = mappings.findGlobalAnnotationParameterTypeMapping(MappingQueryX(name = "Foo"))
 
          annotationMappings.shouldBeEmpty()
      }
@@ -335,7 +335,7 @@ class MappingConverterParameterSpec: StringSpec({
          val mapping = reader.read (yaml) as Mapping
          val mappings = MappingConverter(mapping).convertX()
 
-         val annotationMappings = mappings.findGlobalAnnotationParameterNameTypeMapping(MappingQueryValues(name = "foo"))
+         val annotationMappings = mappings.findGlobalAnnotationParameterNameTypeMapping(MappingQueryX(name = "foo"))
 
          annotationMappings shouldHaveSize 1
          val annotationMapping = annotationMappings.first()
@@ -360,7 +360,7 @@ class MappingConverterParameterSpec: StringSpec({
         val mapping = reader.read(yaml) as Mapping
         val mappings = MappingConverter(mapping).convertX()
 
-        val annotationMappings = mappings.findGlobalAnnotationParameterNameTypeMapping(MappingQueryValues(name = "foo"))
+        val annotationMappings = mappings.findGlobalAnnotationParameterNameTypeMapping(MappingQueryX(name = "foo"))
 
         annotationMappings shouldHaveSize 2
     }
@@ -379,7 +379,7 @@ class MappingConverterParameterSpec: StringSpec({
         val mappings = MappingConverter(mapping).convertX()
 
         // then:
-        val annotationMappings = mappings.findGlobalAnnotationParameterNameTypeMapping(MappingQueryValues(name = "foo"))
+        val annotationMappings = mappings.findGlobalAnnotationParameterNameTypeMapping(MappingQueryX(name = "foo"))
 
         annotationMappings.shouldBeEmpty()
     }
@@ -409,14 +409,14 @@ class MappingConverterParameterSpec: StringSpec({
 
         // then:
         val typeMapping = mappings.findEndpointParameterTypeMapping(
-            MappingQueryValues(path = "/foo", method = HttpMethod.POST, name = "Foo"))!!
+            MappingQueryX(path = "/foo", method = HttpMethod.POST, name = "Foo"))!!
 
         typeMapping.sourceTypeName shouldBe "Foo"
         typeMapping.sourceTypeFormat.shouldBeNull()
         typeMapping.targetTypeName shouldBe "io.openapiprocessor.Foo"
 
         val typeMappingGet = mappings.findEndpointParameterTypeMapping(
-            MappingQueryValues(path = "/foo", method = HttpMethod.GET, name= "Foo"))!!
+            MappingQueryX(path = "/foo", method = HttpMethod.GET, name= "Foo"))!!
 
         typeMappingGet.sourceTypeName shouldBe "Foo"
         typeMappingGet.sourceTypeFormat.shouldBeNull()
@@ -500,14 +500,14 @@ class MappingConverterParameterSpec: StringSpec({
 
         // then:
         val typeMapping = mappings.findEndpointParameterNameTypeMapping(
-            MappingQueryValues(path = "/foo", method = HttpMethod.POST, name = "foo"))!!
+            MappingQueryX(path = "/foo", method = HttpMethod.POST, name = "foo"))!!
 
         typeMapping.parameterName shouldBe "foo"
         typeMapping.mapping.sourceTypeName.shouldBeNull()
         typeMapping.mapping.targetTypeName shouldBe "io.openapiprocessor.Foo"
 
         val typeMappingGet = mappings.findEndpointParameterNameTypeMapping(
-            MappingQueryValues(path = "/foo", method = HttpMethod.GET, name= "foo"))!!
+            MappingQueryX(path = "/foo", method = HttpMethod.GET, name= "foo"))!!
 
         typeMappingGet.parameterName shouldBe "foo"
         typeMappingGet.mapping.sourceTypeName.shouldBeNull()
@@ -539,7 +539,7 @@ class MappingConverterParameterSpec: StringSpec({
         val mappings = MappingConverter(mapping).convertX()
 
         val annotationMappings = mappings.findEndpointAnnotationParameterNameTypeMapping(
-            MappingQueryValues(path = "/foo", method = HttpMethod.POST, name = "foo"))
+            MappingQueryX(path = "/foo", method = HttpMethod.POST, name = "foo"))
 
         annotationMappings shouldHaveSize 2
         annotationMappings[0].name shouldBe  "foo"
@@ -548,7 +548,7 @@ class MappingConverterParameterSpec: StringSpec({
         annotationMappings[1].annotation.type shouldBe "io.openapiprocessor.Bar"
 
         val annotationMappingsGet = mappings.findEndpointAnnotationParameterNameTypeMapping(
-            MappingQueryValues(path = "/foo", method = HttpMethod.GET, name = "foo"))
+            MappingQueryX(path = "/foo", method = HttpMethod.GET, name = "foo"))
 
         annotationMappingsGet shouldHaveSize 2
         annotationMappingsGet[0].name shouldBe  "foo"
@@ -584,7 +584,7 @@ class MappingConverterParameterSpec: StringSpec({
 
         // then:
         val addMappings = mappings.findEndpointAddParameterTypeMappings(
-            MappingQueryValues(path = "/foo", method = HttpMethod.POST))
+            MappingQueryX(path = "/foo", method = HttpMethod.POST))
 
         addMappings shouldHaveSize 2
         addMappings[0].parameterName shouldBe "foo"
@@ -593,7 +593,7 @@ class MappingConverterParameterSpec: StringSpec({
         addMappings[1].mapping.targetTypeName shouldBe "io.openapiprocessor.Bar"
 
         val addMappingsGet = mappings.findEndpointAddParameterTypeMappings(
-            MappingQueryValues(path = "/foo", method = HttpMethod.GET))
+            MappingQueryX(path = "/foo", method = HttpMethod.GET))
 
         addMappingsGet shouldHaveSize 2
         addMappingsGet[0].parameterName shouldBe "foo2"

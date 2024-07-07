@@ -10,8 +10,8 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
+import io.openapiprocessor.core.converter.MappingQueryX
 import io.openapiprocessor.core.converter.mapping.AmbiguousTypeMappingException
-import io.openapiprocessor.core.converter.mapping.MappingQueryValues
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.processor.MappingReader
 
@@ -32,7 +32,7 @@ class MappingConverterResponseSpec: StringSpec({
 
         // then:
         val contentMapping = mappings.findGlobalContentTypeMapping(
-            MappingQueryValues(contentType = "application/vnd.array"))!!
+            MappingQueryX(contentType = "application/vnd.array"))!!
 
         contentMapping.contentType shouldBe "application/vnd.array"
         contentMapping.mapping.sourceTypeName.shouldBeNull()
@@ -56,7 +56,7 @@ class MappingConverterResponseSpec: StringSpec({
 
         // then:
         val contentMapping = mappings.findGlobalContentTypeMapping(
-            MappingQueryValues(contentType = "application/vnd.array"))
+            MappingQueryX(contentType = "application/vnd.array"))
 
         contentMapping.shouldBeNull()
     }
@@ -80,7 +80,7 @@ class MappingConverterResponseSpec: StringSpec({
 
         shouldThrow<AmbiguousTypeMappingException> {
             mappings.findGlobalContentTypeMapping(
-                MappingQueryValues(contentType = "application/vnd.array")
+                MappingQueryX(contentType = "application/vnd.array")
             )
         }
     }
@@ -110,7 +110,7 @@ class MappingConverterResponseSpec: StringSpec({
 
         // then:
         val contentMapping = mappings.findEndpointContentTypeMapping(
-            MappingQueryValues(path = "/foo", method = HttpMethod.POST, contentType = "application/vnd.array"))!!
+            MappingQueryX(path = "/foo", method = HttpMethod.POST, contentType = "application/vnd.array"))!!
 
         contentMapping.contentType shouldBe "application/vnd.array"
         contentMapping.mapping.sourceTypeName.shouldBeNull()
@@ -119,7 +119,7 @@ class MappingConverterResponseSpec: StringSpec({
         contentMapping.mapping.genericTypes.shouldBeEmpty()
 
         val contentMappingGet = mappings.findEndpointContentTypeMapping(
-            MappingQueryValues(path = "/foo", method = HttpMethod.GET, contentType = "application/vnd.array"))!!
+            MappingQueryX(path = "/foo", method = HttpMethod.GET, contentType = "application/vnd.array"))!!
 
         contentMappingGet.contentType shouldBe "application/vnd.array"
         contentMappingGet.mapping.sourceTypeName.shouldBeNull()
