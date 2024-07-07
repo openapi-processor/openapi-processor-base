@@ -10,42 +10,38 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.builder.api.endpoint
 import io.openapiprocessor.core.converter.ApiOptions
-import io.openapiprocessor.core.converter.mapping.*
-import io.openapiprocessor.core.converter.mapping.Annotation
 import io.openapiprocessor.core.model.datatypes.DataTypeName
 import io.openapiprocessor.core.model.datatypes.MappedDataType
 import io.openapiprocessor.core.model.datatypes.ObjectDataType
 import io.openapiprocessor.core.model.parameters.ParameterBase
-import io.openapiprocessor.core.processor.MappingConverter
-import io.openapiprocessor.core.processor.MappingReader
 import io.openapiprocessor.core.support.TestMappingAnnotationWriter
 import io.openapiprocessor.core.support.TestParameterAnnotationWriter
+import io.openapiprocessor.core.support.parseOptions
 import java.io.StringWriter
 
 class MethodWriterAnnotationSpec: StringSpec ({
     isolationMode = IsolationMode.InstancePerTest
 
-    val apiOptions = ApiOptions()
-    val identifier = JavaIdentifier()
-    val reader = MappingReader()
-    val converter = MappingConverter()
-
-    val writer = MethodWriter (
-        apiOptions,
-        identifier,
-        TestMappingAnnotationWriter(),
-        TestParameterAnnotationWriter(),
-        BeanValidationFactory(apiOptions))
+    fun writer(options: ApiOptions): MethodWriter {
+        return MethodWriter(
+            options,
+            JavaIdentifier(),
+            TestMappingAnnotationWriter(),
+            TestParameterAnnotationWriter(),
+            BeanValidationFactory(options)
+        )
+    }
 
     val target = StringWriter()
 
 
     "writes additional parameter annotation from annotation mapping" {
-        apiOptions.typeMappings = listOf(
-            AnnotationTypeMappingDefault(
-                "Foo", annotation = Annotation(
-                    "io.openapiprocessor.Bar", linkedMapOf("bar" to SimpleParameterValue("rab")))
-            ))
+        val options = parseOptions(mapping =
+            """
+            |map:
+            |  types:
+            |    - type: Foo @ annotation.Bar(bar = rab)
+            """)
 
         val endpoint = endpoint("/foo") {
             parameters {
@@ -60,7 +56,7 @@ class MethodWriterAnnotationSpec: StringSpec ({
         }
 
         // when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        writer(options).write (target, endpoint, endpoint.endpointResponses.first ())
 
         // then:
         target.toString () shouldBe
@@ -72,12 +68,14 @@ class MethodWriterAnnotationSpec: StringSpec ({
     }
 
     "writes additional parameter annotation from path annotation mapping" {
-        apiOptions.typeMappings = listOf(
-            EndpointTypeMapping(
-                "/foo", null, listOf(
-                    AnnotationTypeMappingDefault("Foo", annotation = Annotation(
-                            "io.openapiprocessor.Bar", linkedMapOf("bar" to SimpleParameterValue("rab")))))
-            ))
+        val options = parseOptions(mapping =
+            """
+            |map:
+            |  paths:
+            |    /foo:
+            |      types:
+            |        - type: Foo @ annotation.Bar(bar = rab)
+            """)
 
         val endpoint = endpoint("/foo") {
             parameters {
@@ -92,7 +90,7 @@ class MethodWriterAnnotationSpec: StringSpec ({
         }
 
         // when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        writer(options).write (target, endpoint, endpoint.endpointResponses.first ())
 
         // then:
         target.toString () shouldBe
@@ -104,16 +102,12 @@ class MethodWriterAnnotationSpec: StringSpec ({
     }
 
     "writes additional parameter annotation from path annotation name mapping" {
-        val yaml = """
-           |openapi-processor-mapping: v6
-           |options:
-           |  package-name: io.openapiprocessor
-           |map:
-           |  parameters:
-           |    - name: foo @ io.openapiprocessor.Bar(bar = "rab")
-           """.trimMargin()
-
-        apiOptions.typeMappings = converter.convert(reader.read(yaml))
+        val options = parseOptions(mapping =
+            """
+            |map:
+            |  parameters:
+            |    - name: foo @ annotation.Bar(bar = rab)
+            """)
 
         val endpoint = endpoint("/foo") {
             parameters {
@@ -128,23 +122,24 @@ class MethodWriterAnnotationSpec: StringSpec ({
         }
 
         // when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        writer(options).write (target, endpoint, endpoint.endpointResponses.first ())
 
         // then:
         target.toString () shouldBe
             """    
             |    @CoreMapping
-            |    void getFoo(@Parameter @Bar(bar = "rab") Foo foo);
+            |    void getFoo(@Parameter @Bar(bar = rab) Foo foo);
             |
             """.trimMargin()
     }
 
     "writes additional parameter annotation on mapped data type from annotation mapping" {
-        apiOptions.typeMappings = listOf(
-            AnnotationTypeMappingDefault("Foo", annotation = Annotation(
-                "io.openapiprocessor.Bar", linkedMapOf("bar" to SimpleParameterValue("rab")))
-            )
-        )
+        val options = parseOptions(mapping =
+            """
+            |map:
+            |  types:
+            |    - type: Foo @ annotation.Bar(bar = rab)
+            """)
 
         val endpoint = endpoint("/foo") {
             parameters {
@@ -166,7 +161,7 @@ class MethodWriterAnnotationSpec: StringSpec ({
         }
 
         // when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        writer(options).write (target, endpoint, endpoint.endpointResponses.first ())
 
         // then:
         target.toString () shouldBe

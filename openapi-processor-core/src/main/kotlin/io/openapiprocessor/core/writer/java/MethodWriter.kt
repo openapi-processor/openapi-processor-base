@@ -5,9 +5,7 @@
 
 package io.openapiprocessor.core.writer.java
 
-import io.openapiprocessor.core.converter.ApiOptions
-import io.openapiprocessor.core.converter.MappingFinder
-import io.openapiprocessor.core.converter.resultStyle
+import io.openapiprocessor.core.converter.*
 import io.openapiprocessor.core.model.Annotation
 import io.openapiprocessor.core.model.Endpoint
 import io.openapiprocessor.core.model.EndpointResponse
@@ -166,18 +164,18 @@ open class MethodWriter(
     }
 
     private fun addAnnotations(endpoint: Endpoint, parameter: Parameter, target: StringWriter) {
-        val mappingFinder = MappingFinder(apiOptions.typeMappings)
+        val mappingFinder = MappingFinderX(apiOptions)
 
         val mappingAnnotations = mutableListOf<io.openapiprocessor.core.converter.mapping.Annotation>()
 
         mappingAnnotations.addAll(
             mappingFinder
-                .findParameterTypeAnnotations(endpoint.path, endpoint.method, parameter.dataType.getSourceName())
+                .findAnnotationParameterTypeMappings(MappingQueryX(endpoint, parameter))
                 .map { it.annotation })
 
         mappingAnnotations.addAll(
             mappingFinder
-                .findParameterNameAnnotations(endpoint.path, endpoint.method, parameter.name)
+                .findAnnotationParameterNameTypeMapping(MappingQueryX(endpoint, parameter))
                 .map { it.annotation })
 
         mappingAnnotations.forEach {
