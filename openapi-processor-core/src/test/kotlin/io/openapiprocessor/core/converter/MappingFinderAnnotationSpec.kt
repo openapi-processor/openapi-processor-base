@@ -16,17 +16,32 @@ import io.openapiprocessor.core.model.datatypes.ArrayDataType
 import io.openapiprocessor.core.model.datatypes.StringDataType
 import io.openapiprocessor.core.support.datatypes.ObjectDataType
 import io.openapiprocessor.core.support.datatypes.propertyDataTypeString
+import io.openapiprocessor.core.support.parseOptions
 
 class MappingFinderAnnotationSpec: StringSpec({
 
     "find global annotation type mapping" {
+        val options = parseOptions(mapping =
+            """
+            |map:
+            |  types:
+            |    - type: Foo @ annotation.Bar
+            |
+            """)
+
+        val finderX = MappingFinderX(options)
+
         val finder = MappingFinder(listOf(
             AnnotationTypeMappingDefault(
                 "Foo", null,
                 Annotation("annotation.Bar"))
         ))
 
+         val mappingX = finderX.findAnnotationTypeMappings(MappingQueryX(type = "Foo"))
         val mapping = finder.findTypeAnnotations("Foo")
+
+        mappingX.size shouldBe 1
+        mappingX.first().sourceTypeName shouldBe "Foo"
 
         mapping.size shouldBe 1
         mapping.first().sourceTypeName shouldBe "Foo"

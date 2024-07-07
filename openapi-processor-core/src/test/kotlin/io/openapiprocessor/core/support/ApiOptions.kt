@@ -11,3 +11,27 @@ import io.openapiprocessor.core.converter.OptionsConverter
 fun parseOptions(mappingYaml: String): ApiOptions {
     return OptionsConverter().convertOptions(mapOf("mapping" to mappingYaml))
 }
+
+fun parseOptions(
+    version: String =
+        """
+        |openapi-processor-mapping: v8
+        |
+        |
+        """,
+    options: String =
+        """
+        |options:
+        |  package-name: pkg
+        |
+        |
+        """,
+    mapping: String
+): ApiOptions {
+    val merged = (
+        version.trimMargin()
+      + options.trimMargin()
+      + mapping.trimMargin()
+    )
+    return OptionsConverter().convertOptions(mapOf("mapping" to merged))
+}
