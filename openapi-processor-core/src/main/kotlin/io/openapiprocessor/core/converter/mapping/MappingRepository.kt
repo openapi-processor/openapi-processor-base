@@ -45,7 +45,7 @@ class MappingRepository(
         return globalMappings.findParameterTypeMapping(TypeMatcher(query))
     }
 
-    fun findGlobalAnnotationParameterTypeMapping(query: MappingQuery): List<AnnotationTypeMapping> {
+    fun findGlobalAnnotationParameterTypeMappings(query: MappingQuery): List<AnnotationTypeMapping> {
         return globalMappings.findAnnotationParameterTypeMapping(AnnotationTypeMatcher(query))
     }
 
@@ -90,7 +90,7 @@ class MappingRepository(
         return endpointMappings[query.path]?.findParameterTypeMapping(query)
     }
 
-    fun findEndpointAnnotationParameterTypeMapping(query: MappingQuery): List<AnnotationTypeMapping> {
+    fun findEndpointAnnotationParameterTypeMappings(query: MappingQuery): List<AnnotationTypeMapping> {
         val mappings = endpointMappings[query.path] ?: return emptyList()
         return mappings.findAnnotationParameterTypeMapping(query)
     }

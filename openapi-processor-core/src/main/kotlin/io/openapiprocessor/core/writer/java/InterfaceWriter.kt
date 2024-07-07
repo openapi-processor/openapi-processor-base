@@ -112,7 +112,7 @@ class InterfaceWriter(
         // parameter type mappings
         mappingAnnotations.addAll(
             mappingFinder
-                .findAnnotationParameterTypeMapping(query)
+                .findAnnotationParameterTypeMappings(query)
                 .map { it.annotation.type })
 
         // parameter name type mappings

@@ -13,11 +13,6 @@ import io.openapiprocessor.core.parser.HttpMethod
  */
 class MappingFinder(private val typeMappings: List<Mapping> = emptyList()) {
 
-    @Deprecated(message = "obsolete")
-    fun findTypeAnnotations(typeName: String, allowObject: Boolean = false): List<AnnotationTypeMapping> {
-        return findTypeAnnotations(typeMappings, typeName, allowObject)
-    }
-
     fun findParameterTypeAnnotations(path: String, method: HttpMethod?, typeName: String): List<AnnotationTypeMapping> {
         val epMappings = findEndpointMappings(typeMappings, path, method)
         if (epMappings.isNotEmpty()) {

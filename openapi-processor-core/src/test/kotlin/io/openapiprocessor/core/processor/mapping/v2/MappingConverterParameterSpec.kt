@@ -315,7 +315,7 @@ class MappingConverterParameterSpec: StringSpec({
          val mappings = MappingConverter(mapping).convertX()
 
          // then:
-         val annotationMappings = mappings.findGlobalAnnotationParameterTypeMapping(MappingQueryX(name = "Foo"))
+         val annotationMappings = mappings.findGlobalAnnotationParameterTypeMappings(MappingQueryX(name = "Foo"))
 
          annotationMappings.shouldBeEmpty()
      }
@@ -448,7 +448,7 @@ class MappingConverterParameterSpec: StringSpec({
         val mappings = MappingConverter(mapping).convertX2()
         val repository = MappingRepository(endpointMappings = mappings.endpointMappings)
 
-        val annotationMappings = repository.findEndpointAnnotationParameterTypeMapping(
+        val annotationMappings = repository.findEndpointAnnotationParameterTypeMappings(
             MappingQueryX(path = "/foo", method = HttpMethod.POST, type = "Foo"))
 
         annotationMappings shouldHaveSize 2
@@ -461,7 +461,7 @@ class MappingConverterParameterSpec: StringSpec({
         annotationMappings[1].annotation.type shouldBe "io.openapiprocessor.Bar"
         annotationMappings[1].annotation.parameters.shouldBeEmpty()
 
-        val annotationMappingsGet = repository.findEndpointAnnotationParameterTypeMapping(
+        val annotationMappingsGet = repository.findEndpointAnnotationParameterTypeMappings(
             MappingQueryX(path = "/foo", method = HttpMethod.GET, type = "Foo"))
 
         annotationMappingsGet shouldHaveSize 2

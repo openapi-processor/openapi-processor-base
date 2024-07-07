@@ -117,15 +117,26 @@ class MappingFinderX(mappings: MappingSettings) {
         return null
     }
 
-    fun findAnnotationParameterTypeMapping(query: MappingQuery): List<AnnotationTypeMapping> {
+    // todo test variants
+    fun findAnnotationParameterTypeMappings(query: MappingQuery): List<AnnotationTypeMapping> {
         log.trace("looking for annotation parameter type mapping {}", query)
 
-        val epMapping = repository.findEndpointAnnotationParameterTypeMapping(query)
+        val eppMapping = repository.findEndpointAnnotationParameterTypeMappings(query)
+        if (eppMapping.isNotEmpty()) {
+            return eppMapping
+        }
+
+        val epMapping = repository.findEndpointAnnotationTypeMapping(query)
         if (epMapping.isNotEmpty()) {
             return epMapping
         }
 
-        return repository.findGlobalAnnotationParameterTypeMapping(query)
+        val pMapping = repository.findGlobalAnnotationParameterTypeMappings(query)
+        if (pMapping.isNotEmpty()) {
+            return pMapping
+        }
+
+        return repository.findGlobalAnnotationTypeMapping(query)
     }
 
     fun findParameterNameTypeMapping(query: MappingQuery): NameTypeMapping? {
