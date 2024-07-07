@@ -8,9 +8,6 @@ package io.openapiprocessor.core.converter
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.shouldBe
-import io.openapiprocessor.core.converter.mapping.Annotation
-import io.openapiprocessor.core.converter.mapping.AnnotationNameMappingDefault
-import io.openapiprocessor.core.converter.mapping.ExtensionMapping
 import io.openapiprocessor.core.support.parseOptions
 
 class MappingFinderAnnotationSpec: StringSpec({
@@ -133,9 +130,14 @@ class MappingFinderAnnotationSpec: StringSpec({
     }
 
     "find extension name/value annotation mapping" {
-        val finder = MappingFinder(listOf(
-            ExtensionMapping("x-foo", listOf(
-                AnnotationNameMappingDefault("foo", Annotation("annotation.Foo"))))))
+        val options = parseOptions(mapping =
+            """
+            |map:
+            |  extensions:
+            |    x-foo: foo @ annotation.Foo
+            """)
+
+        val finder = MappingFinderX(options)
 
         val mapping = finder.findExtensionAnnotations("x-foo", "foo")
 
@@ -144,17 +146,21 @@ class MappingFinderAnnotationSpec: StringSpec({
     }
 
     "find extension name/value annotation mappings" {
-        val finder = MappingFinder(listOf(
-            ExtensionMapping("x-foo", listOf(
-                AnnotationNameMappingDefault("fooA", Annotation("annotation.FooA")),
-                AnnotationNameMappingDefault("fooB", Annotation("annotation.FooB"))
-            ))))
+        val options = parseOptions(mapping =
+            """
+            |map:
+            |  extensions:
+            |    x-foo:
+            |      - fooA @ annotation.FooA
+            |      - fooB @ annotation.FooB
+            """)
 
-        val mapping = finder.findExtensionAnnotations("x-foo", listOf("fooA", "fooB"))
+        val finder = MappingFinderX(options)
+
+        val mapping = finder.findExtensionAnnotations("x-foo", "fooA", "fooB")
 
         mapping.size shouldBe 2
         mapping[0].name shouldBe "fooA"
         mapping[1].name shouldBe "fooB"
     }
 })
-

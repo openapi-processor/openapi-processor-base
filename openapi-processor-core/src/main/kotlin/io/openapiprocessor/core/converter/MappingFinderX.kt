@@ -194,6 +194,8 @@ class MappingFinderX(mappings: MappingSettings) {
     }
 
     fun findExtensionAnnotations(extension: String, values: List<String>): List<AnnotationNameMapping> {
+        log.trace("looking for annotation extension type mapping {} ({})", extension, values)
+
         return values
             .map { repository.findExtensionAnnotations(extension, it) }
             .flatten()
