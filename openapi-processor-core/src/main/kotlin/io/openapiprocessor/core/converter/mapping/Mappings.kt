@@ -14,6 +14,7 @@ class Mappings(
     private val resultStyle: ResultStyle? = null,
     private val singleTypeMapping: TypeMapping? = null,
     private val multiTypeMapping: TypeMapping? = null,
+    private val nullTypeMapping: NullTypeMapping? = null,
     private val typeMappings: TypeMappings = TypeMappings(),
     private val parameterTypeMappings: TypeMappings = TypeMappings(),
     private val responseTypeMappings: TypeMappings = TypeMappings(),
@@ -39,6 +40,10 @@ class Mappings(
     fun getMultiTypeMapping(): TypeMapping? {
         log.trace("looking for multi mapping")
         return multiTypeMapping
+    }
+
+    fun getNullTypeMapping(): NullTypeMapping? {
+        return nullTypeMapping
     }
 
     fun findTypeMapping(filter: MappingMatcher): TypeMapping? {

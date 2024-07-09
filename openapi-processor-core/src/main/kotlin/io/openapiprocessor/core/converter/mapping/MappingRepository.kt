@@ -77,6 +77,10 @@ class MappingRepository(
         return endpointMappings[query.path]?.getMultiTypeMapping(query)
     }
 
+    fun getEndpointNullTypeMapping(query: MappingQuery): NullTypeMapping? {
+        return endpointMappings[query.path]?.getNullTypeMapping(query)
+    }
+
     fun findEndpointTypeMapping(query: MappingQuery): TypeMapping? {
         return endpointMappings[query.path]?.findTypeMapping(query)
     }

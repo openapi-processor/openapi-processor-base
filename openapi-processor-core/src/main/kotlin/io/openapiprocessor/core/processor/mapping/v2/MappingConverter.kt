@@ -126,6 +126,7 @@ class MappingConverter(val mapping: MappingV2) {
             resultStyle,
             singleTypeMapping,
             multiTypeMapping,
+            null,
             TypeMappings(typeMappings),
             TypeMappings(parameterTypeMappings),
             TypeMappings(responseTypeMappings))
@@ -204,7 +205,7 @@ class MappingConverter(val mapping: MappingV2) {
             convertInlineGenerics(mapping.targetGenericTypes2))
     }
 
-    private fun convertNull(value: String): Mapping {
+    private fun convertNull(value: String): NullTypeMapping {
         val split = value
                 .split(" = ")
                 .map { it.trim() }
@@ -412,6 +413,7 @@ class MappingConverter(val mapping: MappingV2) {
         var resultTypeMapping: ResultTypeMapping? = null
         var singleTypeMapping: TypeMapping? = null
         var multiTypeMapping: TypeMapping? = null
+        var nullTypeMapping: NullTypeMapping? = null
         val typeMappings = mutableListOf<Mapping>()
         val parameterTypeMappings = mutableListOf<Mapping>()
         val responseTypeMappings = mutableListOf<Mapping>()
@@ -426,6 +428,10 @@ class MappingConverter(val mapping: MappingV2) {
 
         if(source.multi != null) {
             multiTypeMapping = convertType("multi", source.multi)
+        }
+
+        if(source.`null` != null) {
+            nullTypeMapping = convertNull(source.`null`)
         }
 
         source.types.forEach {
@@ -445,6 +451,7 @@ class MappingConverter(val mapping: MappingV2) {
             null,
             singleTypeMapping,
             multiTypeMapping,
+            nullTypeMapping,
             TypeMappings(typeMappings),
             TypeMappings(parameterTypeMappings),
             TypeMappings(responseTypeMappings),
@@ -527,6 +534,7 @@ class MappingConverter(val mapping: MappingV2) {
         var resultTypeMapping: ResultTypeMapping? = null
         var singleTypeMapping: TypeMapping? = null
         var multiTypeMapping: TypeMapping? = null
+        var nullTypeMapping: NullTypeMapping? = null
         val typeMappings = mutableListOf<Mapping>()
         val parameterTypeMappings = mutableListOf<Mapping>()
         val responseTypeMappings = mutableListOf<Mapping>()
@@ -547,6 +555,10 @@ class MappingConverter(val mapping: MappingV2) {
             multiTypeMapping = convertType("multi", source.multi)
         }
 
+        if(source.`null` != null) {
+            nullTypeMapping = convertNull(source.`null`)
+        }
+
         source.types.forEach {
             typeMappings.add(convertType(it))
         }
@@ -564,6 +576,7 @@ class MappingConverter(val mapping: MappingV2) {
             null,
             singleTypeMapping,
             multiTypeMapping,
+            nullTypeMapping,
             TypeMappings(typeMappings),
             TypeMappings(parameterTypeMappings),
             TypeMappings(responseTypeMappings),

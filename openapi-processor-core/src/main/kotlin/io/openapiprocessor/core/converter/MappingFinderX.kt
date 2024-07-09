@@ -189,6 +189,10 @@ class MappingFinderX(mappings: MappingSettings) {
         return null
     }
 
+    fun findNullTypeMapping(query: MappingQuery): NullTypeMapping? {
+        return repository.getEndpointNullTypeMapping(query)
+    }
+
     fun findExtensionAnnotations(extension: String, vararg values: String): List<AnnotationNameMapping> {
         return findExtensionAnnotations(extension, values.asList())
     }
