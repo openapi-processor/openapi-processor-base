@@ -283,4 +283,40 @@ class AntlrParserSpec: StringSpec({
         mapping.sourceType.shouldBeNull()
         mapping.targetType shouldBe "byte"
     }
+
+    "java primitive target type" {
+        val source = "string:binary => char"
+
+        val mapping = parseMapping(source)
+        mapping.kind shouldBe Mapping.Kind.MAP
+        mapping.sourceType shouldBe "string"
+        mapping.sourceFormat shouldBe "binary"
+        mapping.targetType shouldBe "char"
+        mapping.targetTypePrimitive.shouldBeTrue()
+        mapping.targetTypePrimitiveArray.shouldBeFalse()
+    }
+
+    "java primitive target type array" {
+        val source = "string:binary => byte[]"
+
+        val mapping = parseMapping(source)
+        mapping.kind shouldBe Mapping.Kind.MAP
+        mapping.sourceType shouldBe "string"
+        mapping.sourceFormat shouldBe "binary"
+        mapping.targetType shouldBe "byte"
+        mapping.targetTypePrimitive.shouldBeTrue()
+        mapping.targetTypePrimitiveArray.shouldBeTrue()
+    }
+
+    "java primitive target type with format equal to primitive" {
+        val source = "string:byte => byte"
+
+        val mapping = parseMapping(source)
+        mapping.kind shouldBe Mapping.Kind.MAP
+        mapping.sourceType shouldBe "string"
+        mapping.sourceFormat shouldBe "byte"
+        mapping.targetType shouldBe "byte"
+        mapping.targetTypePrimitive.shouldBeTrue()
+        mapping.targetTypePrimitiveArray.shouldBeFalse()
+    }
 })

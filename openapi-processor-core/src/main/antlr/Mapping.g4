@@ -35,7 +35,7 @@ plainType
     ;
 
 primitiveType
-    : Primitive | Primitive OpenArray CloseArray
+    : primitiveValue | primitiveValue OpenArray CloseArray
     ;
 
 sourceType
@@ -91,7 +91,11 @@ sourceIdentifier
     ;
 
 formatIdentifier
-    : Identifier | Format | String
+    : Identifier | Format | String | primitiveValue
+    ;
+
+primitiveValue
+    : 'byte' | 'short' | 'int' | 'long' | 'float' | 'double' | 'boolean' | 'char'
     ;
 
 
@@ -103,7 +107,6 @@ Arrow: '=>';
 Annotate: '@';
 
 Plain: 'plain';
-Primitive: 'byte' | 'short' | 'int' | 'long' | 'float' | 'double' | 'boolean' | 'char';
 Boolean: 'true' | 'false';
 Package: '{package-name}';
 
