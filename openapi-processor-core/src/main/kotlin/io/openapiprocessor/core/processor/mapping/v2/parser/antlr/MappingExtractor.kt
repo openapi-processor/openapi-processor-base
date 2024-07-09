@@ -127,9 +127,9 @@ class MappingExtractor: MappingBaseListener(), Mapping {
 
         val clazz = ctx.stop.type == MappingLexer.QualifiedTypeClass
         if (clazz) {
-            annotationParameters.put(parameterName, ClassParameterValue(parameterValue))
+            annotationParameters[parameterName] = ClassParameterValue(parameterValue)
         } else {
-            annotationParameters.put(parameterName, SimpleParameterValue(parameterValue))
+            annotationParameters[parameterName] = SimpleParameterValue(parameterValue)
         }
     }
 
@@ -139,9 +139,9 @@ class MappingExtractor: MappingBaseListener(), Mapping {
 
         val clazz = ctx.stop.type == MappingLexer.QualifiedTypeClass
         if (clazz) {
-            annotationParameters.put(parameterName, ClassParameterValue(parameterValue))
+            annotationParameters[parameterName] = ClassParameterValue(parameterValue)
         } else {
-            annotationParameters.put(parameterName, SimpleParameterValue(parameterValue))
+            annotationParameters[parameterName] = SimpleParameterValue(parameterValue)
         }
     }
 }
