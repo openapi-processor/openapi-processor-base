@@ -54,6 +54,22 @@ class MappingQueryX(
                 format
             )
         }
+
+        // callable like constructor
+        operator fun invoke(info: SchemaInfo): MappingQuery {
+            val (type, format) = splitTypeName(info.getTypeFormat())
+
+            return MappingQueryX(
+                info.getPath(),
+                info.getMethod(),
+                info.getName(),
+                type,
+                format,
+                info.getContentType(),
+                info.isPrimitive(),
+                info.isArray()
+            )
+        }
     }
 
     override fun toString(): String {

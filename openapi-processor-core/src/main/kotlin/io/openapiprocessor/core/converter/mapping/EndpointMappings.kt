@@ -68,6 +68,23 @@ class EndpointMappings(
         return null
     }
 
+    fun getNullTypeMapping(query: MappingQuery): NullTypeMapping? {
+        val httpMethodMappings = methodMappings[query.method]
+        val methodMapping = httpMethodMappings?.getNullTypeMapping()
+        if (methodMapping != null) {
+            log.trace("found endpoint method null mapping ({} {})", query.path, query.method)
+            return methodMapping
+        }
+
+        val mapping = mappings.getNullTypeMapping()
+        if (mapping != null) {
+            log.trace("found endpoint null mapping ({})", query.path)
+            return mapping
+        }
+
+        return null
+    }
+
     fun findTypeMapping(query: MappingQuery): TypeMapping? {
         val httpMethodMappings = methodMappings[query.method]
         val methodMapping = httpMethodMappings?.findTypeMapping(TypeMatcher(query))
