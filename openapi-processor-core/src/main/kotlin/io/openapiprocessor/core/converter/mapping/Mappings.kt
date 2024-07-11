@@ -23,22 +23,18 @@ class Mappings(
     val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     fun getResultTypeMapping(): ResultTypeMapping? {
-        log.trace("looking for result type mapping")
         return resultTypeMapping
     }
 
     fun getResultStyle(): ResultStyle? {
-        log.trace("looking for result style")
         return resultStyle
     }
 
     fun getSingleTypeMapping(): TypeMapping? {
-        log.trace("looking for single mapping")
         return singleTypeMapping
     }
 
     fun getMultiTypeMapping(): TypeMapping? {
-        log.trace("looking for multi mapping")
         return multiTypeMapping
     }
 
@@ -47,8 +43,6 @@ class Mappings(
     }
 
     fun findTypeMapping(filter: MappingMatcher): TypeMapping? {
-        log.trace("looking for type mapping of {}", filter)
-
         val mappings = typeMappings.filter(filter)
         if (mappings.isEmpty()) {
             return null
@@ -71,8 +65,6 @@ class Mappings(
     }
 
     fun findParameterTypeMapping(filter: MappingMatcher): TypeMapping? {
-        log.trace("looking for parameter type mapping of {}", filter)
-
         val mappings = parameterTypeMappings.filter(filter)
         if (mappings.isEmpty()) {
             return null
@@ -95,8 +87,6 @@ class Mappings(
     }
 
     fun findParameterNameTypeMapping(filter: MappingMatcher): NameTypeMapping? {
-        log.trace("looking for parameter mapping of {}", filter)
-
         val mappings = parameterTypeMappings.filter(filter)
         if (mappings.isEmpty()) {
             return null
@@ -119,8 +109,6 @@ class Mappings(
     }
 
     fun findAddParameterTypeMappings(filter: MappingMatcher): List<AddParameterTypeMapping>  {
-        log.trace("looking for global additional parameter mapping of {}", filter)
-
         val mappings = parameterTypeMappings.filter(filter)
         if (mappings.isEmpty()) {
             return emptyList()
@@ -130,8 +118,6 @@ class Mappings(
     }
 
     fun findContentTypeMapping(filter: MappingMatcher): ContentTypeMapping? {
-        log.trace("looking for global response type mapping of {}", filter)
-
         val mappings = responseTypeMappings.filter(filter)
         if (mappings.isEmpty()) {
             return null
