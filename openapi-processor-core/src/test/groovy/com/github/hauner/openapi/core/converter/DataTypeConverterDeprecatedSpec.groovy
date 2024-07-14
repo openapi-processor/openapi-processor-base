@@ -1,32 +1,19 @@
 /*
- * Copyright 2020 the original authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2020 https://github.com/openapi-processor/openapi-processor-base
+ * PDX-License-Identifier: Apache-2.0
  */
 
 package com.github.hauner.openapi.core.converter
 
-import io.openapiprocessor.core.converter.ApiConverter
+import com.github.hauner.openapi.core.test.TestSchema
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.DataTypeConverter
+import io.openapiprocessor.core.converter.MappingFinderX
 import io.openapiprocessor.core.converter.SchemaInfo
-import io.openapiprocessor.core.converter.mapping.MappingFinder
 import io.openapiprocessor.core.converter.mapping.TypeMapping
 import io.openapiprocessor.core.converter.wrapper.NullDataTypeWrapper
 import io.openapiprocessor.core.framework.Framework
-import io.openapiprocessor.core.framework.FrameworkBase
 import io.openapiprocessor.core.model.DataTypes
-import com.github.hauner.openapi.core.test.TestSchema
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.parser.RefResolver
 import io.openapiprocessor.core.writer.java.JavaIdentifier
@@ -40,10 +27,12 @@ class DataTypeConverterDeprecatedSpec extends Specification {
 
     @Unroll
     void "converts primitive deprecated schema(#type, #format) to datatype" () {
+        def options = new ApiOptions()
+
         def converter = new DataTypeConverter(
-                new ApiOptions(),
+                options,
                 new JavaIdentifier(),
-                new MappingFinder(),
+                new MappingFinderX(options),
                 Stub(NullDataTypeWrapper))
 
         def schema = new TestSchema (type: type, format: format, deprecated: deprecated)

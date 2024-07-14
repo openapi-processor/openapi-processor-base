@@ -19,8 +19,8 @@ package com.github.hauner.openapi.core.converter
 import com.github.hauner.openapi.core.test.TestSchema
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.DataTypeConverter
+import io.openapiprocessor.core.converter.MappingFinderX
 import io.openapiprocessor.core.converter.SchemaInfo
-import io.openapiprocessor.core.converter.mapping.MappingFinder
 import io.openapiprocessor.core.converter.mapping.UnknownDataTypeException
 import io.openapiprocessor.core.converter.wrapper.NullDataTypeWrapper
 import io.openapiprocessor.core.framework.Framework
@@ -40,8 +40,10 @@ import static com.github.hauner.openapi.core.test.FactoryHelper.apiConverter
 import static com.github.hauner.openapi.core.test.OpenApiParser.parse
 
 class DataTypeConverterSpec extends Specification {
-    def converter = new DataTypeConverter(
-        new ApiOptions(), new JavaIdentifier(), new MappingFinder(), Stub(NullDataTypeWrapper))
+    def options = new ApiOptions()
+    def finder = new MappingFinderX(options)
+
+    def converter = new DataTypeConverter(options, new JavaIdentifier(), finder, Stub(NullDataTypeWrapper))
 
     @Unroll
     void "converts schema(#type, #format) to #javaType" () {

@@ -17,45 +17,43 @@
 package com.github.hauner.openapi.core.converter
 
 
-import io.openapiprocessor.core.converter.ApiOptions
-import io.openapiprocessor.core.converter.mapping.*
+import io.openapiprocessor.core.converter.mapping.AmbiguousTypeMappingException
 import io.openapiprocessor.core.framework.Framework
 import io.openapiprocessor.core.model.Api
 import spock.lang.Specification
 import spock.lang.Unroll
 
 import static com.github.hauner.openapi.core.test.FactoryHelper.apiConverter
-import static com.github.hauner.openapi.core.test.OpenApiParser.parse
+import static io.openapiprocessor.core.support.ApiOptionsKt.parseOptionsMapping
+import static io.openapiprocessor.core.support.OpenApiParserKt.parseApiBody
 
 class DataTypeConverterArrayTypeMappingSpec extends Specification {
 
     @Unroll
     void "maps array schema to #responseTypeName via global type mapping" () {
-        def openApi = parse ("""\
-openapi: 3.0.2
-info:
-  title: API
-  version: 1.0.0
+        def options = parseOptionsMapping("""
+            |map:
+            |  types:
+            |    - type: array => $targetTypeName
+            """)
 
-paths:
-  /array-string:
-    get:
-      responses:
-        '200':
-          content:
-            application/vnd.any:
-              schema:
-                type: array
-                items:
-                  type: string
-          description: none              
-""")
+        def openApi = parseApiBody ("""
+            |paths:
+            |  /array-string:
+            |    get:
+            |      responses:
+            |        '200':
+            |          content:
+            |            application/vnd.any:
+            |              schema:
+            |                type: array
+            |                items:
+            |                  type: string
+            |          description: none              
+            """)
+
         when:
-        def options = new ApiOptions(packageName: 'pkg', typeMappings: [
-            new TypeMapping ('array', targetTypeName)
-        ])
-        Api api = apiConverter (options, Stub (Framework))
-            .convert (openApi)
+        Api api = apiConverter (options, Stub (Framework)).convert (openApi)
 
         then:
         def itf = api.interfaces.first ()
@@ -71,80 +69,61 @@ paths:
     }
 
     void "throws when there are multiple global mappings for the array type" () {
-        def openApi = parse ("""\
-openapi: 3.0.2
-info:
-  title: API
-  version: 1.0.0
+        def options = parseOptionsMapping("""
+            |map:
+            |  types:
+            |    - type: array => java.util.Collection
+            |    - type: array => java.util.Collection
+            """)
 
-paths:
-  /page:
-    get:
-      parameters:
-        - in: query
-          name: date
-          required: false
-          schema:
-            type: array
-            items: 
-              type: string
-      responses:
-        '204':
-          description: none
-""")
+        def openApi = parseApiBody ("""
+            |paths:
+            |  /page:
+            |    get:
+            |      parameters:
+            |        - in: query
+            |          name: date
+            |          required: false
+            |          schema:
+            |            type: array
+            |            items: 
+            |              type: string
+            |      responses:
+            |        '204':
+            |          description: none
+            """)
 
         when:
-        def options = new ApiOptions(
-            packageName: 'pkg',
-            typeMappings: [
-                new TypeMapping (
-                    'array',
-                    'java.util.Collection'),
-                new TypeMapping (
-                    'array',
-                    'java.util.Collection')
-            ])
-
-        apiConverter (options, Stub (Framework))
-            .convert (openApi)
+        apiConverter (options, Stub (Framework)).convert (openApi)
 
         then:
         def e = thrown (AmbiguousTypeMappingException)
-        e.typeMappings == options.typeMappings
+        e.typeMappings.size() == 2
     }
-
 
     @Unroll
     void "throws when there are multiple mappings on the same level: #type" () {
-        def openApi = parse ("""\
-openapi: 3.0.2
-info:
-  title: API
-  version: 1.0.0
+        def options = parseOptionsMapping(mappings)
 
-paths:
-  /foo:
-    get:
-      parameters:
-        - in: query
-          name: param
-          required: false
-          schema:
-            type: array
-            items: 
-              type: string
-      responses:
-        '204':
-          description: none
-""")
+        def openApi = parseApiBody ("""
+            |paths:
+            |  /foo:
+            |    get:
+            |      parameters:
+            |        - in: query
+            |          name: date
+            |          required: false
+            |          schema:
+            |            type: array
+            |            items: 
+            |              type: string
+            |      responses:
+            |        '204':
+            |          description: none
+            """)
 
         when:
-        def options = new ApiOptions(
-            packageName: 'pkg',
-            typeMappings: mappings)
-
-        apiConverter (options, Stub (Framework))
-            .convert (openApi)
+        apiConverter (options, Stub (Framework)).convert (openApi)
 
         then:
         thrown (AmbiguousTypeMappingException)
@@ -152,85 +131,65 @@ paths:
         where:
         type << [
             'global type mappings',
-            'global io mappings',
-            'endpoint mappings'
+            'global parameter/response mappings',
+            'endpoint type mappings'
         ]
 
         mappings << [
-            [
-                new TypeMapping (
-                    'array',
-                    'java.util.Collection'),
-                new TypeMapping (
-                    'array',
-                    'java.util.Collection')
-            ],
-            [
-                new NameTypeMapping (
-                    'param', new TypeMapping (
-                        'array',
-                        'java.util.Collection')
-                ),
-                new NameTypeMapping (
-                    'param', new TypeMapping (
-                        'array',
-                        'java.util.Collection')
-                )
-            ],
-            [
-                new EndpointTypeMapping ('/foo', null, [
-                        new NameTypeMapping (
-                            'param', new TypeMapping (
-                                'array',
-                                'java.util.Collection')
-                        ),
-                        new NameTypeMapping (
-                            'param', new TypeMapping (
-                                'array',
-                                'java.util.Collection')
-                        )
-                    ])
-            ]
+            """
+            |map:
+            |  types:
+            |    - type: array => java.util.Collection
+            |    - type: array => java.util.Collection
+            """,
+            """
+            |map:
+            |  parameters:
+            |    - type: array => java.util.Collection
+            |    - type: array => java.util.Collection
+            """,
+            """
+            |map:
+            |  paths:
+            |    /foo:
+            |      types:
+            |        - type: array => java.util.Collection
+            |        - type: array => java.util.Collection
+            """
         ]
     }
 
     void "converts array response schema to #responseTypeName via endpoint type mapping" () {
-        def openApi = parse ("""\
-openapi: 3.0.2
-info:
-  title: API
-  version: 1.0.0
+        def options = parseOptionsMapping("""
+            |map:
+            |  paths:
+            |    /foo:
+            |      types:
+            |        - type: array => $targetTypeName
+            """)
 
-paths:
-  /foo:
-    get:
-      responses:
-        '200':
-          content:
-            application/vnd.any:
-              schema:
-                type: array
-                items:
-                  type: string
-          description: none
-""")
+        def openApi = parseApiBody ("""
+            |paths:
+            |  /foo:
+            |    get:
+            |      responses:
+            |        '200':
+            |          content:
+            |            application/vnd.any:
+            |              schema:
+            |                type: array
+            |                items:
+            |                  type: string
+            |          description: none
+            """)
 
         when:
-        def options = new ApiOptions(packageName: 'pkg', typeMappings: [
-            new EndpointTypeMapping ('/foo', null, [
-                new TypeMapping (
-                    'array',
-                    targetTypeName)
-            ])
-        ])
-
-        Api api = apiConverter(options, Stub (Framework))
-            .convert (openApi)
+        Api api = apiConverter(options, Stub (Framework)).convert (openApi)
 
         then:
-        def itf = api.interfaces.first ()
-        def ep = itf.endpoints.first ()
-        def rsp = ep.getFirstResponse ('200')
+        def itf = api.interfaces.first()
+        def ep = itf.endpoints.first()
+        def rsp = ep.getFirstResponse('200')
         rsp.responseType.typeName == responseTypeName
         rsp.responseType.packageName == 'java.util'
 
@@ -243,38 +202,32 @@ paths:
 
     @Unroll
     void "converts array parameter schema to java type via #type" () {
-        def openApi = parse ("""\
-openapi: 3.0.2
-info:
-  title: API
-  version: 1.0.0
+        def options = parseOptionsMapping(mappings)
 
-paths:
-  /foobar:
-    get:
-      parameters:
-        - in: query
-          name: foobar
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
-      responses:
-        '204':
-          description: empty
-""")
+        def openApi = parseApiBody ("""
+            |paths:
+            |  /foobar:
+            |    get:
+            |      parameters:
+            |        - in: query
+            |          name: foobar
+            |          required: false
+            |          schema:
+            |            type: array
+            |            items:
+            |              type: string
+            |      responses:
+            |        '204':
+            |          description: empty
+            """)
 
         when:
-        def options = new ApiOptions(packageName: 'pkg', typeMappings: mappings)
-
-        Api api = apiConverter (options)
-            .convert (openApi)
+        Api api = apiConverter (options).convert (openApi)
 
         then:
-        def itf = api.interfaces.first ()
-        def ep = itf.endpoints.first ()
-        def p = ep.parameters.first ()
+        def itf = api.interfaces.first()
+        def ep = itf.endpoints.first()
+        def p = ep.parameters.first()
         p.dataType.typeName == 'Collection<String>'
         p.dataType.packageName == 'java.util'
 
@@ -285,56 +238,47 @@ paths:
         ]
 
         mappings << [
-            [
-                new EndpointTypeMapping ('/foobar', null, [
-                    new NameTypeMapping (
-                        'foobar', new TypeMapping (
-                        'array',
-                        'java.util.Collection')
-                    )
-                ])
-            ], [
-                new NameTypeMapping (
-                    'foobar', new TypeMapping (
-                        'array',
-                        'java.util.Collection')
-                )
-            ]
+            """
+            |map:
+            |  paths:
+            |    /foobar:
+            |      parameters:
+            |        - name: foobar => java.util.Collection
+            """,
+            """
+            |map:
+            |  parameters:
+            |    - name: foobar => java.util.Collection
+            """
         ]
     }
 
     @Unroll
     void "converts array response schema to Collection<> via #type" () {
-        def openApi = parse ("""\
-openapi: 3.0.2
-info:
-  title: API
-  version: 1.0.0
+        def options = parseOptionsMapping(mappings)
 
-paths:
-  /array-string:
-    get:
-      responses:
-        '200':
-          content:
-            application/vnd.any:
-              schema:
-                type: array
-                items:
-                  type: string
-          description: none              
-""")
+        def openApi = parseApiBody ("""
+            |paths:
+            |  /array-string:
+            |    get:
+            |      responses:
+            |        '200':
+            |          content:
+            |            application/vnd.any:
+            |              schema:
+            |                type: array
+            |                items:
+            |                  type: string
+            |          description: none              
+            """)
 
         when:
-        def options = new ApiOptions(packageName: 'pkg', typeMappings: mappings)
-
-        Api api = apiConverter (options, Stub (Framework))
-            .convert (openApi)
+        Api api = apiConverter (options, Stub (Framework)).convert (openApi)
 
         then:
-        def itf = api.interfaces.first ()
-        def ep = itf.endpoints.first ()
-        def rsp = ep.getFirstResponse ('200')
+        def itf = api.interfaces.first()
+        def ep = itf.endpoints.first()
+        def rsp = ep.getFirstResponse('200')
         rsp.responseType.typeName == 'Collection<String>'
         rsp.responseType.imports == ['java.util.Collection', 'java.lang.String'] as Set
 
@@ -347,39 +291,32 @@ paths:
         ]
 
         mappings << [
-            [
-                new EndpointTypeMapping ('/array-string', null, [
-                    new ContentTypeMapping (
-                        'application/vnd.any', new TypeMapping (
-                        'array',
-                        'java.util.Collection')
-                    )
-                ])
-            ], [
-                new ContentTypeMapping (
-                    'application/vnd.any', new TypeMapping (
-                        'array',
-                        'java.util.Collection')
-                )
-            ], [
-                new EndpointTypeMapping ('/array-string', null, [
-                    new ContentTypeMapping (
-                        'application/vnd.any', new TypeMapping (
-                        'array',
-                        'java.util.Collection')
-                    ),
-                    new TypeMapping (
-                        'array',
-                        'java.util.Collection')
-                ])
-            ], [
-                new EndpointTypeMapping ('/array-string', null, [
-                    new TypeMapping (
-                        'array',
-                        'java.util.Collection')
-                ])
-            ]
+            """
+            |map:
+            |  paths:
+            |    /array-string:
+            |      responses:
+            |        - content: application/vnd.any => java.util.Collection
+            """,
+            """
+            |map:
+            |  responses:
+            |    - content: application/vnd.any => java.util.Collection
+            """,
+            """
+            |map:
+            |  types:
+            |    - type: array => java.util.Set
+            |  paths:
+            |    /array-string:
+            |      responses:
+            |        - content: application/vnd.any => java.util.Collection
+            """,
+            """
+            |map:
+            |  types:
+            |    - type: array => java.util.Collection
+            """
         ]
     }
-
 }

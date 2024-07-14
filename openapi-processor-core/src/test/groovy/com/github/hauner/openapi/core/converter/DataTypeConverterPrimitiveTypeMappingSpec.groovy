@@ -16,58 +16,44 @@
 
 package com.github.hauner.openapi.core.converter
 
-import io.openapiprocessor.core.converter.ApiConverter
-import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.mapping.AmbiguousTypeMappingException
-import io.openapiprocessor.core.converter.mapping.EndpointTypeMapping
-import io.openapiprocessor.core.converter.mapping.NameTypeMapping
-import io.openapiprocessor.core.converter.mapping.TypeMapping
 import io.openapiprocessor.core.framework.Framework
-import io.openapiprocessor.core.framework.FrameworkBase
 import io.openapiprocessor.core.model.Api
 import io.openapiprocessor.core.parser.ParserType
 import spock.lang.Specification
 import spock.lang.Unroll
 
 import static com.github.hauner.openapi.core.test.FactoryHelper.apiConverter
-import static com.github.hauner.openapi.core.test.OpenApiParser.parse
+import static io.openapiprocessor.core.support.ApiOptionsKt.parseOptionsMapping
+import static io.openapiprocessor.core.support.OpenApiParserKt.parseApiBody
 
 class DataTypeConverterPrimitiveTypeMappingSpec extends Specification {
 
     void "converts basic types with format to java type via global type mapping" () {
-        def openApi = parse ("""\
-openapi: 3.0.2
-info:
-  title: API
-  version: 1.0.0
+        def options = parseOptionsMapping("""
+            |map:
+            |  types:
+            |    - type: string:date-time => java.time.ZonedDateTime
+            """)
 
-paths:
-  /page:
-    get:
-      parameters:
-        - in: query
-          name: date
-          required: false
-          schema:
-            type: string
-            format: date-time
-      responses:
-        '204':
-          description: none
-""")
+        def openApi = parseApiBody ("""
+            |paths:
+            |  /page:
+            |    get:
+            |      parameters:
+            |        - in: query
+            |          name: date
+            |          required: false
+            |          schema:
+            |            type: string
+            |            format: date-time
+            |      responses:
+            |        '204':
+            |          description: none
+            """)
 
         when:
-        def options = new ApiOptions(
-            packageName: 'pkg',
-            typeMappings: [
-                new TypeMapping (
-                    'string',
-                    'date-time',
-                    'java.time.ZonedDateTime')
-            ])
-
-        Api api = apiConverter (options)
-            .convert (openApi)
+        Api api = apiConverter (options).convert (openApi)
 
         then:
         def itf = api.interfaces.first ()
@@ -78,46 +64,35 @@ paths:
     }
 
     void "primitive type dose not match primitive global type mapping with format" () {
-        def openApi = parse ("""\
-openapi: 3.0.2
+        def options = parseOptionsMapping("""
+            |map:
+            |  types:
+            |    - type: string:binary => io.openapiprocessor.Bar
+            """)
 
-info:
-  title: API
-  version: 1.0.0
-
-paths:
-  /foo:
-    get:
-      parameters:
-        - in: query
-          name: foo
-          schema:
-            type: array
-            items:
-              type: string
-      responses:
-        200:
-          description: response
-          content:
-            application/*:
-              schema:
-                type: string
-                format: binary
-
-""")
+        def openApi = parseApiBody ("""
+            |paths:
+            |  /foo:
+            |    get:
+            |      parameters:
+            |        - in: query
+            |          name: foo
+            |          schema:
+            |            type: array
+            |            items:
+            |              type: string
+            |      responses:
+            |        200:
+            |          description: response
+            |          content:
+            |            application/*:
+            |              schema:
+            |                type: string
+            |                format: binary
+            """)
 
         when:
-        def options = new ApiOptions(
-            packageName: 'pkg',
-            typeMappings: [
-                new TypeMapping (
-                    'string',
-                    'binary',
-                    'io.openapiprocessor.Bar')
-            ])
-
-        Api api = apiConverter (options)
-            .convert (openApi)
+        Api api = apiConverter (options).convert (openApi)
 
         then:
         def itf = api.interfaces.first ()
@@ -128,41 +103,33 @@ paths:
     }
 
     void "converts named primitive type to java type via global type mapping" () {
-        def openApi = parse ("""\
-openapi: 3.0.2
-info:
-  title: API
-  version: 1.0.0
+        def options = parseOptionsMapping("""
+            |map:
+            |  types:
+            |    - type: UUID => java.util.UUID
+            """)
 
-paths:
-  /uuid:
-    get:
-      parameters:
-        - in: query
-          name:  uuid
-          schema:
-            \$ref: '#/components/schemas/UUID'
-      responses:
-        '204':
-          description: none
-
-components:
-  schemas:          
-    UUID:
-      type: string
-""", parser)
+        def openApi = parseApiBody ("""
+            |paths:
+            |  /uuid:
+            |    get:
+            |      parameters:
+            |        - in: query
+            |          name:  uuid
+            |          schema:
+            |            \$ref: '#/components/schemas/UUID'
+            |      responses:
+            |        '204':
+            |          description: none
+            |
+            |components:
+            |  schemas:          
+            |    UUID:
+            |      type: string
+            """)
 
         when:
-        def options = new ApiOptions(
-            packageName: 'pkg',
-            typeMappings: [
-                new TypeMapping (
-                    'UUID',
-                    'java.util.UUID')
-            ])
-
-        Api api = apiConverter (options)
-            .convert (openApi)
+        Api api = apiConverter (options).convert (openApi)
 
         then:
         def itf = api.interfaces.first ()
@@ -176,77 +143,59 @@ components:
     }
 
     void "throws when there are multiple global mappings for a simple type" () {
-        def openApi = parse ("""\
-openapi: 3.0.2
-info:
-  title: API
-  version: 1.0.0
+        def options = parseOptionsMapping("""
+            |map:
+            |  types:
+            |    - type: string:date-time => java.time.ZonedDateTime
+            |    - type: string:date-time => java.time.ZonedDateTime
+            """)
 
-paths:
-  /page:
-    get:
-      parameters:
-        - in: query
-          name: date
-          required: false
-          schema:
-            type: string
-            format: date-time
-      responses:
-        '204':
-          description: none
-""")
+        def openApi = parseApiBody ("""
+            |paths:
+            |  /page:
+            |    get:
+            |      parameters:
+            |        - in: query
+            |          name: date
+            |          required: false
+            |          schema:
+            |            type: string
+            |            format: date-time
+            |      responses:
+            |        '204':
+            |          description: none
+        """)
 
         when:
-        def options = new ApiOptions(
-            packageName: 'pkg',
-            typeMappings: [
-                new TypeMapping (
-                    'string',
-                    'date-time',
-                    'java.time.ZonedDateTime'),
-                new TypeMapping (
-                    'string',
-                    'date-time',
-                    'java.time.ZonedDateTime')
-            ])
-
-        apiConverter (options, Stub (Framework))
-            .convert (openApi)
+        apiConverter (options, Stub (Framework)).convert (openApi)
 
         then:
         def e = thrown (AmbiguousTypeMappingException)
-        e.typeMappings == options.typeMappings
+        e.typeMappings.size() == 2
     }
 
     @Unroll
     void "converts primitive parameter schema to java type via #type" () {
-        def openApi = parse ("""\
-openapi: 3.0.2
-info:
-  title: API
-  version: 1.0.0
+        def options = parseOptionsMapping(mappings)
 
-paths:
-  /foo:
-    get:
-      parameters:
-        - in: query
-          name: bar
-          required: false
-          schema:
-            type: string
-            format: date-time
-      responses:
-        '204':
-          description: none
-""")
+        def openApi = parseApiBody ("""
+            |paths:
+            |  /foo:
+            |    get:
+            |      parameters:
+            |        - in: query
+            |          name: bar
+            |          required: false
+            |          schema:
+            |            type: string
+            |            format: date-time
+            |      responses:
+            |        '204':
+            |          description: none
+            """)
 
         when:
-        def options = new ApiOptions(packageName: 'pkg', typeMappings: mappings)
-
-        Api api = apiConverter (options)
-            .convert (openApi)
+        Api api = apiConverter (options).convert (openApi)
 
         then:
         def itf = api.interfaces.first ()
@@ -263,28 +212,23 @@ paths:
         ]
 
         mappings << [
-            [
-                new EndpointTypeMapping ('/foo', null, [
-                        new NameTypeMapping (
-                            'bar', new TypeMapping (
-                                'string',
-                                'date-time',
-                                'java.time.ZonedDateTime'))
-                    ])
-            ], [
-                new NameTypeMapping (
-                    'bar', new TypeMapping (
-                        'string',
-                        'date-time',
-                        'java.time.ZonedDateTime')
-                )
-            ], [
-                new TypeMapping (
-                    'string',
-                    'date-time',
-                    'java.time.ZonedDateTime')
-            ]
+            """
+            |map:
+            |  paths:
+            |    /foo:
+            |      parameters:
+            |        - name: bar => java.time.ZonedDateTime
+            """,
+            """
+            |map:
+            |  parameters:
+            |    - name: bar => java.time.ZonedDateTime
+            """,
+            """
+            |map:
+            |  types:
+            |    - type: string:date-time => java.time.ZonedDateTime
+            """
         ]
     }
-
 }

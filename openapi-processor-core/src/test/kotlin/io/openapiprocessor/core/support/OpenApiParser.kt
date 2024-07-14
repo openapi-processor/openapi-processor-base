@@ -40,6 +40,14 @@ fun parseApi(
     return parse(merged, parserType)
 }
 
+/** groovy support */
+
+fun parseApiBody(body: String): ParserOpenApi {
+    return parseApi(body = body)
+}
+
+
+
 @Deprecated(message = "use parseApi(header, body, parser)")
 fun parse(apiYaml: String, parserType: ParserType = ParserType.SWAGGER): ParserOpenApi {
     return when (parserType) {

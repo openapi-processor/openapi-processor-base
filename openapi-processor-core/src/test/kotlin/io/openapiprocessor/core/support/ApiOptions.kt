@@ -17,13 +17,11 @@ fun parseOptions(
         """
         |openapi-processor-mapping: v8
         |
-        |
         """,
     options: String =
         """
         |options:
         |  package-name: pkg
-        |
         |
         """,
     mapping: String
@@ -34,4 +32,10 @@ fun parseOptions(
       + mapping.trimMargin()
     )
     return OptionsConverter().convertOptions(mapOf("mapping" to merged))
+}
+
+/** groovy support */
+
+fun parseOptionsMapping(mapping: String): ApiOptions {
+    return parseOptions(mapping = mapping)
 }
