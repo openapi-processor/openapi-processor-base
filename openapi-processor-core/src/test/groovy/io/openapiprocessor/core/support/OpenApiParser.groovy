@@ -13,6 +13,7 @@ import io.openapiprocessor.core.parser.ParserType
  *
  * provide default parameter to groovy
  */
+@Deprecated // use parseApiBody()
 class OpenApiParser {
     static OpenApi parse(String apiYaml, ParserType parserType = ParserType.SWAGGER) {
         return OpenApiParserKt.parse(apiYaml, parserType)
