@@ -6,11 +6,14 @@
 package io.openapiprocessor.core.converter
 
 import io.openapiprocessor.core.converter.mapping.*
+import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 class MappingFinderX(mappings: MappingSettings) {
     val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
+
+    companion object;
 
     private val repository = MappingRepository(
         mappings.globalMappings,
@@ -27,6 +30,22 @@ class MappingFinderX(mappings: MappingSettings) {
         }
 
         val gMapping = repository.getGlobalResultTypeMapping()
+        if(gMapping != null) {
+            return gMapping
+        }
+
+        return null
+    }
+
+    fun findResultStyleMapping(query: MappingQuery): ResultStyle? {
+        log.trace("looking for result style mapping {}", query)
+
+        val epMapping = repository.getEndpointResultStyleMapping(query)
+        if (epMapping != null) {
+            return epMapping
+        }
+
+        val gMapping = repository.getGlobalResultStyleMapping()
         if(gMapping != null) {
             return gMapping
         }

@@ -75,7 +75,7 @@ class MappingConverterResultSpec: StringSpec({
         val mappings = MappingConverter(mapping).convertX()
 
         // then:
-        val resultStyle = mappings.getGlobalResultStyle()
+        val resultStyle = mappings.getGlobalResultStyleMapping()
 
         resultStyle.shouldBeNull()
     }
@@ -96,7 +96,7 @@ class MappingConverterResultSpec: StringSpec({
         val mappings = MappingConverter(mapping).convertX()
 
         // then:
-        val resultStyle = mappings.getGlobalResultStyle()!!
+        val resultStyle = mappings.getGlobalResultStyleMapping()!!
 
         resultStyle.shouldBe(ResultStyle.SUCCESS)
     }
@@ -117,7 +117,7 @@ class MappingConverterResultSpec: StringSpec({
         val mappings = MappingConverter(mapping).convertX()
 
         // then:
-        val resultStyle = mappings.getGlobalResultStyle()!!
+        val resultStyle = mappings.getGlobalResultStyleMapping()!!
 
         resultStyle.shouldBe(ResultStyle.ALL)
     }

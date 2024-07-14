@@ -13,8 +13,6 @@ import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
 
 /**
  * find mappings of a given schema info in the type mapping list.
- *
- * todo move & simplify to parent package
  */
 @Deprecated(message = "use MappingFinderX")
 class MappingFinder(private val typeMappings: List<Mapping> = emptyList()) {

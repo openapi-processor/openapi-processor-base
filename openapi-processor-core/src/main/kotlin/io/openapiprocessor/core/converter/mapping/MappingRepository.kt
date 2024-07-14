@@ -21,7 +21,7 @@ class MappingRepository(
         return globalMappings.getResultTypeMapping()
     }
 
-    fun getGlobalResultStyle(): ResultStyle? {
+    fun getGlobalResultStyleMapping(): ResultStyle? {
         return globalMappings.getResultStyle()
     }
 
@@ -67,6 +67,10 @@ class MappingRepository(
 
     fun getEndpointResultTypeMapping(query: MappingQuery): ResultTypeMapping? {
         return endpointMappings[query.path]?.getResultTypeMapping(query)
+    }
+
+    fun getEndpointResultStyleMapping(query: MappingQuery): ResultStyle? {
+        return endpointMappings[query.path]?.getResultStyle(query)
     }
 
     fun getEndpointSingleTypeMapping(query: MappingQuery): TypeMapping? {

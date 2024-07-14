@@ -7,6 +7,7 @@ package io.openapiprocessor.core.converter.mapping
 
 import io.openapiprocessor.core.converter.mapping.matcher.*
 import io.openapiprocessor.core.parser.HttpMethod
+import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -28,6 +29,16 @@ class EndpointMappings(
         val mapping = mappings.getResultTypeMapping()
         if (mapping != null) {
             log.trace("found endpoint result type mapping ({})", query.path)
+            return mapping
+        }
+
+        return null
+    }
+
+    fun getResultStyle(query: MappingQuery): ResultStyle? {
+        val mapping = mappings.getResultStyle()
+        if (mapping != null) {
+            log.trace("found endpoint result style mapping ({})", query.path)
             return mapping
         }
 
