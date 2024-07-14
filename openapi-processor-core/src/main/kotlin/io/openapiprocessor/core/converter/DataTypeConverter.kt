@@ -5,10 +5,7 @@
 
 package io.openapiprocessor.core.converter
 
-import io.openapiprocessor.core.converter.mapping.MappingFinder
-import io.openapiprocessor.core.converter.mapping.TargetType
-import io.openapiprocessor.core.converter.mapping.TypeMapping
-import io.openapiprocessor.core.converter.mapping.UnknownDataTypeException
+import io.openapiprocessor.core.converter.mapping.*
 import io.openapiprocessor.core.converter.wrapper.NullDataTypeWrapper
 import io.openapiprocessor.core.model.DataTypeCollector
 import io.openapiprocessor.core.model.DataTypes
@@ -24,7 +21,7 @@ import java.util.*
 class DataTypeConverter(
     private val options: ApiOptions,
     private val identifier: Identifier,
-    private val finder: MappingFinder = MappingFinder(options.typeMappings),
+    private val finder: MappingFinderX = MappingFinderX(options),
     private val nullWrapper: NullDataTypeWrapper = NullDataTypeWrapper(options, finder)
 ) {
     private val current: Deque<SchemaInfo> = LinkedList()
@@ -481,32 +478,8 @@ class DataTypeConverter(
         }
     }
 
-    /**
-     * the mappings are checked in the following order and the first match wins:
-     *
-     * - endpoint io (parameter/response)
-     * - endpoint type
-     * - global io (parameter/response)
-     * - global type
-     */
     private fun getDataTypeMapping(info: SchemaInfo): TypeMapping? {
-        // check endpoint mappings
-        val epMatch = finder.findEndpointTypeMapping(info)
-        if (epMatch != null) {
-            return epMatch
-        }
-
-        // check global io (parameter & response) mappings
-        val ioMatch = finder.findIoTypeMapping(info)
-        if (ioMatch != null)
-            return ioMatch
-
-        // check global type mapping
-        val typeMatch = finder.findTypeMapping(info)
-        if (typeMatch != null)
-            return typeMatch
-
-        return null
+        return finder.findAnyTypeMapping(MappingQueryX(info))
     }
 
     /**

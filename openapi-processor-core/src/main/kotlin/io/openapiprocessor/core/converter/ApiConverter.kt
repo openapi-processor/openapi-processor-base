@@ -42,7 +42,7 @@ class  ApiConverter(
     private val mappingFinder = MappingFinder(options.typeMappings)
     private val mappingFinderX = MappingFinderX(options)
     private val dataTypeWrapper = ResultDataTypeWrapper(options, identifier, mappingFinder)
-    private val dataTypeConverter = DataTypeConverter(options, identifier, mappingFinder)
+    private val dataTypeConverter = DataTypeConverter(options, identifier, mappingFinderX)
     private val singleDataTypeWrapper = SingleDataTypeWrapper(options, mappingFinder)
     private val multiDataTypeWrapper = MultiDataTypeWrapper(options, mappingFinder)
 

@@ -66,6 +66,64 @@ class MappingFinderX(mappings: MappingSettings) {
         return null
     }
 
+    /**
+     * find any type mapping. The mappings are checked in the following order and the first match wins:
+     *
+     * - endpoint parameter type
+     * - endpoint parameter name
+     * - endpoint response type
+     * - endpoint type
+     * - global parameter type
+     * - global parameter name
+     * - global response type
+     * - global type
+     */
+    fun findAnyTypeMapping(query: MappingQuery): TypeMapping? {
+        log.trace("looking for any type mapping {}", query)
+
+        val eppMapping = repository.findEndpointParameterTypeMapping(query)
+        if (eppMapping != null) {
+            return eppMapping
+        }
+
+        val eppnMapping = repository.findEndpointParameterNameTypeMapping(query)
+        if (eppnMapping != null) {
+            return eppnMapping.mapping
+        }
+
+        val eprMapping = repository.findEndpointContentTypeMapping(query)
+        if (eprMapping != null) {
+            return eprMapping.mapping
+        }
+
+        val eptMapping = repository.findEndpointTypeMapping(query)
+        if (eptMapping != null) {
+            return eptMapping
+        }
+
+        val gpMapping = repository.findGlobalParameterTypeMapping(query)
+        if (gpMapping != null) {
+            return gpMapping
+        }
+
+        val gpnMapping = repository.findGlobalParameterNameTypeMapping(query)
+        if (gpnMapping != null) {
+            return gpnMapping.mapping
+        }
+
+        val grMapping = repository.findGlobalContentTypeMapping(query)
+        if (grMapping != null) {
+            return grMapping.mapping
+        }
+
+        val gtMapping = repository.findGlobalTypeMapping(query)
+        if (gtMapping != null) {
+            return gtMapping
+        }
+
+        return null
+    }
+
     fun findTypeMapping(query: MappingQuery): TypeMapping? {
         log.trace("looking for type mapping {}", query)
 
