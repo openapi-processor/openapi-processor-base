@@ -20,7 +20,7 @@ import io.openapiprocessor.core.parser.ParserType
 import io.openapiprocessor.core.parser.Schema
 import spock.lang.Specification
 
-import static com.github.hauner.openapi.core.test.OpenApiParser.parse
+import static io.openapiprocessor.core.support.OpenApiParser.parse
 
 class RefResolverSpec extends Specification {
 

@@ -22,7 +22,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import static io.openapiprocessor.core.support.FactoryHelper.apiConverter
-import static com.github.hauner.openapi.core.test.OpenApiParser.parse
+import static io.openapiprocessor.core.support.OpenApiParser.parse
 
 class DataTypeConverterSpec extends Specification {
     def options = new ApiOptions()

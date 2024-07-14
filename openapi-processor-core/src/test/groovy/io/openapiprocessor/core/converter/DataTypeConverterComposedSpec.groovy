@@ -11,7 +11,7 @@ import io.openapiprocessor.core.model.datatypes.ObjectDataType
 import spock.lang.Specification
 
 import static io.openapiprocessor.core.support.FactoryHelper.apiConverter
-import static com.github.hauner.openapi.core.test.OpenApiParser.parse
+import static io.openapiprocessor.core.support.OpenApiParser.parse
 
 class DataTypeConverterComposedSpec extends Specification {
 
