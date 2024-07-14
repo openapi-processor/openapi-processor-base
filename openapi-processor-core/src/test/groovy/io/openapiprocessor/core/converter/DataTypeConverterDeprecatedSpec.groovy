@@ -5,7 +5,7 @@
 
 package io.openapiprocessor.core.converter
 
-import com.github.hauner.openapi.core.test.TestSchema
+import io.openapiprocessor.core.writer.java.TestSchema
 import io.openapiprocessor.core.converter.mapping.TypeMapping
 import io.openapiprocessor.core.converter.wrapper.NullDataTypeWrapper
 import io.openapiprocessor.core.framework.Framework
