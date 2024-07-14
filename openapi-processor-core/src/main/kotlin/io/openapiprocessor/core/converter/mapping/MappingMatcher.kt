@@ -5,6 +5,6 @@
 
 package io.openapiprocessor.core.converter.mapping
 
-interface MappingMatcher {
+fun interface MappingMatcher {
     fun match(mapping: Mapping): Boolean
 }
