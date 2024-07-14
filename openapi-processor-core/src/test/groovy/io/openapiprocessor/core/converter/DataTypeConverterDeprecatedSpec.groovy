@@ -3,13 +3,9 @@
  * PDX-License-Identifier: Apache-2.0
  */
 
-package com.github.hauner.openapi.core.converter
+package io.openapiprocessor.core.converter
 
 import com.github.hauner.openapi.core.test.TestSchema
-import io.openapiprocessor.core.converter.ApiOptions
-import io.openapiprocessor.core.converter.DataTypeConverter
-import io.openapiprocessor.core.converter.MappingFinderX
-import io.openapiprocessor.core.converter.SchemaInfo
 import io.openapiprocessor.core.converter.mapping.TypeMapping
 import io.openapiprocessor.core.converter.wrapper.NullDataTypeWrapper
 import io.openapiprocessor.core.framework.Framework

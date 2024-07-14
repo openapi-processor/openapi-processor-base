@@ -3,10 +3,9 @@
  * PDX-License-Identifier: Apache-2.0
  */
 
-package com.github.hauner.openapi.core.converter
+package io.openapiprocessor.core.converter
 
 import com.github.hauner.openapi.core.test.ModelAsserts
-import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.framework.Framework
 import io.openapiprocessor.core.support.TestFrameworkAnnotations
 import io.openapiprocessor.core.writer.java.*
@@ -16,7 +15,7 @@ import spock.lang.Unroll
 import static com.github.hauner.openapi.core.test.FactoryHelper.apiConverter
 import static com.github.hauner.openapi.core.test.OpenApiParser.parse
 
-class ApiConverterSpec extends Specification implements ModelAsserts {
+class ApiConverterGSpec extends Specification implements ModelAsserts {
 
     void "groups endpoints into interfaces by first operation tag" () {
         def openApi = parse (
