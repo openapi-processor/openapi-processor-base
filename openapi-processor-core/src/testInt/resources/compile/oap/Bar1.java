@@ -1,3 +1,3 @@
 package io.openapiprocessor;
 
-public class Wrap<T> {}
+public class Bar1 {}
