@@ -59,6 +59,7 @@ dependencies {
     antlr (libs.antlr)
 
     compileOnly (libs.openapi.processor.api)
+    compileOnly (libs.logback)
 
     implementation (project(":openapi-processor-core-parser-api"))
     implementation (platform(libs.openapi.parser.bom))
