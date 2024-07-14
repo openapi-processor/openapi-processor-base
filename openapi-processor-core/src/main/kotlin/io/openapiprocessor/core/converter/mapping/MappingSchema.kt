@@ -28,7 +28,7 @@ interface MappingSchema {
     fun getName(): String
     fun getContentType(): String
 
-    /** schema type */
+    /** schema type, i.e. array, string, object etc. */
     fun getType(): String?
     fun getFormat(): String?
 

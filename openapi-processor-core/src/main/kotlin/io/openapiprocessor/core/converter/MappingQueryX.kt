@@ -6,6 +6,7 @@
 package io.openapiprocessor.core.converter
 
 import io.openapiprocessor.core.converter.mapping.MappingQuery
+import io.openapiprocessor.core.converter.mapping.MappingSchema
 import io.openapiprocessor.core.converter.mapping.splitTypeName
 import io.openapiprocessor.core.model.Endpoint
 import io.openapiprocessor.core.model.parameters.Parameter
@@ -56,9 +57,7 @@ class MappingQueryX(
         }
 
         // callable like constructor
-        operator fun invoke(info: SchemaInfo): MappingQuery {
-//            val (type, format) = splitTypeName(info.getTypeFormat())
-
+        operator fun invoke(info: MappingSchema): MappingQuery {
             return MappingQueryX(
                 info.getPath(),
                 info.getMethod(),

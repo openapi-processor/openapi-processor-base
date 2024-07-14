@@ -5,6 +5,7 @@
 
 package io.openapiprocessor.core.converter.mapping
 
+import io.openapiprocessor.core.converter.MappingQueryX
 import io.openapiprocessor.core.converter.SchemaInfo
 import io.openapiprocessor.core.converter.mapping.matcher.*
 import io.openapiprocessor.core.parser.HttpMethod
@@ -15,6 +16,7 @@ import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
  *
  * todo move & simplify to parent package
  */
+@Deprecated(message = "use MappingFinderX")
 class MappingFinder(private val typeMappings: List<Mapping> = emptyList()) {
 
     /**
@@ -41,11 +43,11 @@ class MappingFinder(private val typeMappings: List<Mapping> = emptyList()) {
         if (parameter != null)
             return parameter
 
-        val response = getTypeMapping(filterMappings(ResponseTypeMatcher(MappingQueryInfo(info)), ep))
+        val response = getTypeMapping(filterMappings(ResponseTypeMatcher(MappingQueryX(info)), ep))
         if (response != null)
             return response
 
-        return getTypeMapping(filterMappings(TypeMatcher(MappingQueryInfo(info)), ep))
+        return getTypeMapping(filterMappings(TypeMatcher(MappingQueryX(info)), ep))
     }
 
     /**
@@ -60,7 +62,7 @@ class MappingFinder(private val typeMappings: List<Mapping> = emptyList()) {
         if (parameter != null)
             return parameter
 
-        val response = getTypeMapping(filterMappings(ResponseTypeMatcher(MappingQueryInfo(info)), typeMappings))
+        val response = getTypeMapping(filterMappings(ResponseTypeMatcher(MappingQueryX(info)), typeMappings))
         if (response != null)
             return response
 
@@ -75,7 +77,7 @@ class MappingFinder(private val typeMappings: List<Mapping> = emptyList()) {
      * @throws AmbiguousTypeMappingException if there is more than one match.
      */
     fun findTypeMapping(info: SchemaInfo): TypeMapping? {
-        return getTypeMapping(filterMappings(TypeMatcher(MappingQueryInfo(info)), typeMappings))
+        return getTypeMapping(filterMappings(TypeMatcher(MappingQueryX(info)), typeMappings))
     }
 
     /**

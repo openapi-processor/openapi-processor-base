@@ -52,36 +52,3 @@ interface MappingQuery : MappingQueryEndpoint,  MappingQueryType {
     val array: Boolean
         get() = false
 }
-
-
-@Deprecated(message = "migration, use MappingQueryX")
-class MappingQueryInfo(
-    val info: MappingSchema
-): MappingQuery {
-    override val path: String
-        get() = info.getPath()
-
-    override val method: HttpMethod
-        get() = info.getMethod()
-
-    override val name: String
-        get() = info.getName()
-
-    override val format: String?
-        get() = info.getFormat()
-
-    override val type: String?
-        get() = info.getType()
-
-    override val contentType: String
-        get() = info.getContentType()
-
-    override val primitive: Boolean
-        get() = info.isPrimitive()
-
-    override val array: Boolean
-        get() = info.isArray()
-
-    override val allowObject: Boolean
-        get() = TODO("Not yet implemented")
-}

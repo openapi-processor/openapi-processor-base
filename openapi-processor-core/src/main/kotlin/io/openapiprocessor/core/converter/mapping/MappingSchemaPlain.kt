@@ -7,39 +7,45 @@ package io.openapiprocessor.core.converter.mapping
 
 import io.openapiprocessor.core.parser.HttpMethod
 
-class MappingSchemaSimple(
+class MappingSchemaPlain(
     private val path: String? = null,
-    private val method: HttpMethod
+    private val method: HttpMethod? = null,
+    private val name: String? = null,
+    private val contentType: String? = null,
+    private val type: String? = null,
+    private val format: String? = null,
+    private val primitive: Boolean = false,
+    private val array: Boolean = false
 ): MappingSchema {
     override fun getPath(): String {
         return path ?: ""
     }
 
     override fun getMethod(): HttpMethod {
-        return method
+        return method ?: HttpMethod.GET
     }
 
     override fun getName(): String {
-        TODO("Not yet implemented")
+        return name ?: ""
     }
 
     override fun getContentType(): String {
-        TODO("Not yet implemented")
+        return contentType ?: ""
     }
 
     override fun getType(): String? {
-        TODO("Not yet implemented")
+        return type
     }
 
     override fun getFormat(): String? {
-        TODO("Not yet implemented")
+        return format
     }
 
     override fun isPrimitive(): Boolean {
-        TODO("Not yet implemented")
+        return primitive
     }
 
     override fun isArray(): Boolean {
-        TODO("Not yet implemented")
+        return array
     }
 }

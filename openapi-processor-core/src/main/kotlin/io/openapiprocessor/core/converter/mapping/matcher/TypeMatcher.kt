@@ -31,7 +31,8 @@ class TypeMatcher(private val query: MappingQuery): MappingMatcher, (TypeMapping
 //    }
 
     override fun invoke(mapping: TypeMapping): Boolean {
-        // try to match by name first
+        // try to match by OpenAPI name first, type is the OpenAPI type, i.e. string, object etc.
+
         // the format must match to avoid matching primitive and primitive with format, e.g.
         // string should not match string:binary
         if (matchesName(mapping) && matchesFormat(mapping)) {
