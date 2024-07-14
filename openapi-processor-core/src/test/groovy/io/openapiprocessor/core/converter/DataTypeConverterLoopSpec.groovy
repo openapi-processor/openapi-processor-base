@@ -12,7 +12,7 @@ import io.openapiprocessor.core.model.datatypes.ObjectDataType
 import io.openapiprocessor.core.model.datatypes.PropertyDataType
 import spock.lang.Specification
 
-import static com.github.hauner.openapi.core.test.FactoryHelper.apiConverter
+import static io.openapiprocessor.core.support.FactoryHelper.apiConverter
 import static com.github.hauner.openapi.core.test.OpenApiParser.parse
 
 

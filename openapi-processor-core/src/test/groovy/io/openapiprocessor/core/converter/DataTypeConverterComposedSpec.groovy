@@ -10,7 +10,7 @@ import io.openapiprocessor.core.framework.Framework
 import io.openapiprocessor.core.model.datatypes.ObjectDataType
 import spock.lang.Specification
 
-import static com.github.hauner.openapi.core.test.FactoryHelper.apiConverter
+import static io.openapiprocessor.core.support.FactoryHelper.apiConverter
 import static com.github.hauner.openapi.core.test.OpenApiParser.parse
 
 class DataTypeConverterComposedSpec extends Specification {

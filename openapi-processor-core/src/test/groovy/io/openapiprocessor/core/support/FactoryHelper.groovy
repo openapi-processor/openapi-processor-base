@@ -3,7 +3,7 @@
  * PDX-License-Identifier: Apache-2.0
  */
 
-package com.github.hauner.openapi.core.test
+package io.openapiprocessor.core.support
 
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.framework.Framework

@@ -16,7 +16,7 @@ import io.openapiprocessor.core.writer.java.JavaIdentifier
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static com.github.hauner.openapi.core.test.FactoryHelper.apiConverter
+import static io.openapiprocessor.core.support.FactoryHelper.apiConverter
 import static com.github.hauner.openapi.core.test.OpenApiParser.parse
 
 class DataTypeConverterDeprecatedSpec extends Specification {

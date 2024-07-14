@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.core.test
+package io.openapiprocessor.core.support
 
 import java.util.stream.Collectors
 
