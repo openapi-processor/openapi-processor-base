@@ -1,0 +1,120 @@
+openapi: 3.1.0
+info:
+  title: extensive mappings
+  version: '1'
+
+paths:
+
+  /fooA:
+    get:
+      summary: foo A summary.
+      description: foo A endpoint
+      tags: [foo]
+      parameters:
+        - in: query
+          name: foo1
+          description: parameter foo1
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: foo2
+          description: parameter foo2
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: bar
+          description: parameter bar
+          schema:
+            $ref: '#/components/schemas/Bar'
+      responses:
+        '200':
+          description: results, json or something
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Foo'
+            application/vnd.something:
+              schema:
+                type: object
+                properties:
+                  any:
+                    type: string
+
+
+  /fooB:
+    get:
+      summary: foo B summary.
+      description: foo B endpoint
+      tags: [foo]
+      parameters:
+        - in: query
+          name: foo1
+          description: parameter foo1
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: foo2
+          description: parameter foo2
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: bar
+          description: parameter bar
+          schema:
+            $ref: '#/components/schemas/Bar'
+      responses:
+        '200':
+          description: results, json or something
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Foo'
+            application/vnd.something:
+              schema:
+                type: object
+                properties:
+                  any:
+                    type: string
+
+components:
+  schemas:
+    Foo:
+      type: object
+      properties:
+        foo1:
+          type: integer
+          minimum: 0
+          x-something: foo
+        foo2:
+          type: integer
+          minimum: -10
+          x-something: foo
+
+    Bar:
+      type: object
+      properties:
+        bar1:
+          type: integer
+          x-something-else: foo
+        bar2:
+          type: integer
+          x-something-else: bar
+
+    Doubles:
+      type: object
+      additionalProperties:
+        type: array
+        items:
+          type: number

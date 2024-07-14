@@ -1,0 +1,4 @@
+items:
+  - outputs/api/FooApi.java
+  - outputs/<model>/FooResource.java
+  - outputs/<model>/BarResource.java

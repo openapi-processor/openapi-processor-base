@@ -1,0 +1,110 @@
+# mapping format (required)
+openapi-processor-mapping: v8
+
+##
+## general processor options (required)
+##
+options:
+  # target package (required): io.openapiprocessor.generated (default)
+  package-name: generated
+
+  # validation annotation (optional): true or false (default), javax, jakarta.
+  bean-validation: jakarta
+
+  # generate javadoc from OpenAPI 'description' properties.
+  javadoc: true
+
+  # enable/disable code formatter: true or false (default).
+  format-code: true
+
+  # suffix for model class names and enum names. Default is none.
+  model-name-suffix: Resource
+
+  # default (i.e pojo) or record
+  model-type: default
+
+  # default, string, supplier
+  #enum-type: default
+
+  # generate common interface for an `oneOf` object list (optional): true or false (default)
+  #one-of-interface: true
+
+  # enable/disable deletion of targetDir: true (default) or false.
+  # clear-target-dir: false
+
+  # enable/disable @Generated annotation
+  generated-annotation: true
+
+  # enable/disable date on @Generated annotation
+  generated-date: true
+
+  # control @JsonProperty annotation (always|auto|never)
+  json-property-annotation: always
+
+##
+## the type mappings (optional)
+##
+map:
+  # the mappings here not very useful, they just demonstrate what is possible.
+
+  # global mappings, apply to all paths/endpoints
+
+  # response wrapper (optional)
+  result: io.openapiprocessor.Wrap
+
+  # result style (optional, default "success")
+  #result-style: all
+
+  # reactive single wrapper (optional)
+  #single: reactor.core.publisher.Mono
+
+  # reactive array wrapper (optional)
+  #multi: reactor.core.publisher.Flux
+
+  types: # global type mappings (optional)
+
+    - type: array => java.util.Collection
+    - type: Doubles => java.util.Map<java.lang.String, java.util.List<java.lang.Double>>
+    - type: Foo @ io.openapiprocessor.AnnotationC(java.util.UUID.class)
+
+  parameters: # global parameter mappings (optional)
+
+    - name: foo2 => java.util.List<java.lang.String>
+    - name: bar => io.openapiprocessor.Bar1
+    - name: param @ io.openapiprocessor.ParamAnnotation()
+    - type: Bar @ io.openapiprocessor.ParamAnnotation()
+
+  responses:  # global response mappings (optional)
+
+    - content: application/vnd.something => java.util.List<io.openapiprocessor.Something>
+
+  # path/endpoint specific mappings (optional)
+  # path mappings, allow the same mappings as on the global level (except "paths")
+  # but limit them to the listed path. The path mappings override the global mappings.
+  paths:
+
+    # paths from the openapi.yaml
+
+    /fooB:
+      # override top level "result" property, "plain" means no wrapper
+      result: plain
+#      single: reactor.core.publisher.Mono
+#      multi: reactor.core.publisher.Flux
+
+      types:
+        - type: array => java.util.Set
+
+      parameters:
+        - name: foo2 => java.util.List<java.lang.String>
+        - add: bar2 => io.openapiprocessor.Bar2
+        - type: Foo @ io.openapiprocessor.ParamAnnotation()
+
+      responses:
+        - content: application/vnd.something => io.openapiprocessor.SomethingElse
+        - content: application/json => java.util.LinkedHashSet
+
+  extensions:
+    x-something: foo @ io.openapiprocessor.AnnotationA
+    x-something-else:
+      - foo @ io.openapiprocessor.AnnotationA
+      - bar @ io.openapiprocessor.AnnotationB
