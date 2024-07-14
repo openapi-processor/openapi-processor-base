@@ -5,7 +5,7 @@
 
 package io.openapiprocessor.core.converter
 
-import com.github.hauner.openapi.core.test.ModelAsserts
+import io.openapiprocessor.core.support.ModelAsserts
 import io.openapiprocessor.core.framework.Framework
 import io.openapiprocessor.core.support.TestFrameworkAnnotations
 import io.openapiprocessor.core.writer.java.*
