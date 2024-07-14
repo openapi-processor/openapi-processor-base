@@ -7,4 +7,4 @@ options:
 
 map:
   types:
-    - type: Foos => io.oap.Wrap<{package-name}.model.Foo>
+    - type: Foos => io.openapiprocessor.Wrap<{package-name}.model.Foo>
