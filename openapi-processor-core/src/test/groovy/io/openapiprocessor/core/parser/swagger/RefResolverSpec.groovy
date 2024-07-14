@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.core.parser.swagger
+package io.openapiprocessor.core.parser.swagger
 
 import io.openapiprocessor.core.parser.ParserType
 import io.openapiprocessor.core.parser.Schema

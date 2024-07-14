@@ -1,4 +1,4 @@
-package com.github.hauner.openapi.core.learn
+package io.openapiprocessor.core.learn
 
 import io.openapiprocessor.core.support.datatypes.ObjectDataType
 import io.openapiprocessor.core.model.datatypes.DataType

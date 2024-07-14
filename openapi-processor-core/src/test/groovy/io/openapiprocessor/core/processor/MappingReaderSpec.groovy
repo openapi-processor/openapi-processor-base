@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.core.processor
+package io.openapiprocessor.core.processor
 
 import com.google.common.jimfs.Configuration
 import com.google.common.jimfs.Jimfs

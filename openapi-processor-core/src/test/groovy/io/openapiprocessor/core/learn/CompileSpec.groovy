@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.core.learn
+package io.openapiprocessor.core.learn
 
 import spock.lang.Specification
 import spock.lang.TempDir

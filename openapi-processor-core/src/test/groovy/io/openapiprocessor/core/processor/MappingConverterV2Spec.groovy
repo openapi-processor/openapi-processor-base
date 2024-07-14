@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.hauner.openapi.core.processor
+package io.openapiprocessor.core.processor
 
 import io.openapiprocessor.core.converter.mapping.*
 import io.openapiprocessor.core.processor.MappingConverter
