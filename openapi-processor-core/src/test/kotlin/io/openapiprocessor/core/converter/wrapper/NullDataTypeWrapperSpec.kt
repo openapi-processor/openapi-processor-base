@@ -8,41 +8,47 @@ package io.openapiprocessor.core.converter.wrapper
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeSameInstanceAs
-import io.mockk.every
 import io.mockk.mockk
 import io.openapiprocessor.core.converter.ApiOptions
+import io.openapiprocessor.core.converter.MappingFinderX
 import io.openapiprocessor.core.converter.SchemaInfo
-import io.openapiprocessor.core.converter.mapping.MappingFinder
-import io.openapiprocessor.core.converter.mapping.NullTypeMapping
-import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.model.datatypes.StringDataType
+import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.parser.NullSchema.Companion.nullSchema
 import io.openapiprocessor.core.parser.RefResolver
+import io.openapiprocessor.core.support.parseOptions
 
 class NullDataTypeWrapperSpec : StringSpec({
     val resolver = mockk<RefResolver>()
     val any = SchemaInfo.Endpoint("/any", HttpMethod.GET)
 
     "does not wrap datatype if there is no null mapping" {
-        val finder = mockk<MappingFinder>()
-        every { finder.findEndpointNullTypeMapping(any()) } returns null
+        val options = ApiOptions()
 
-        val wrapper = NullDataTypeWrapper(ApiOptions(), finder)
+        val wrapper = NullDataTypeWrapper(options, MappingFinderX(options))
 
-        val info = SchemaInfo(any, "", "", nullSchema, resolver)
+        val info = SchemaInfo(
+            SchemaInfo.Endpoint("/any", HttpMethod.GET), "", "", nullSchema, resolver
+        )
         val dataType = StringDataType()
 
         wrapper.wrap(dataType, info).shouldBeSameInstanceAs(dataType)
     }
 
-    "does wrap datatype if there is a null mapping" {
-        val finder = mockk<MappingFinder>()
-        every { finder.findEndpointNullTypeMapping(any()) } returns NullTypeMapping(
-            "null", "org.openapitools.jackson.nullable.JsonNullable")
+    "does wrap datatype if there is an endpoint null mapping" {
+        val options = parseOptions(mapping =
+            """
+            |map:
+            |  paths:
+            |    /any:
+            |      null: org.openapitools.jackson.nullable.JsonNullable
+            """)
 
-        val wrapper = NullDataTypeWrapper(ApiOptions(), finder)
+        val wrapper = NullDataTypeWrapper(options, MappingFinderX(options))
 
-        val info = SchemaInfo(any, "", "", nullSchema, resolver)
+        val info = SchemaInfo(
+            SchemaInfo.Endpoint("/any", HttpMethod.GET), "", "", nullSchema, resolver
+        )
         val dataType = StringDataType()
 
         val result = wrapper.wrap(dataType, info)
@@ -50,4 +56,25 @@ class NullDataTypeWrapperSpec : StringSpec({
         result.getPackageName().shouldBe("org.openapitools.jackson.nullable")
     }
 
+    "does wrap datatype if there is an endpoint method null mapping" {
+        val options = parseOptions(mapping =
+            """
+            |map:
+            |  paths:
+            |    /any:
+            |      patch:
+            |       null: org.openapitools.jackson.nullable.JsonNullable
+            """)
+
+        val wrapper = NullDataTypeWrapper(options, MappingFinderX(options))
+
+        val info = SchemaInfo(
+            SchemaInfo.Endpoint("/any", HttpMethod.PATCH), "", "", nullSchema, resolver
+        )
+        val dataType = StringDataType()
+
+        val result = wrapper.wrap(dataType, info)
+        result.getTypeName().shouldBe("JsonNullable<String>")
+        result.getPackageName().shouldBe("org.openapitools.jackson.nullable")
+    }
 })

@@ -13,16 +13,13 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
-import io.openapiprocessor.core.converter.mapping.AddParameterTypeMapping
-import io.openapiprocessor.core.converter.mapping.TargetType
-import io.openapiprocessor.core.converter.mapping.TypeMapping
 import io.openapiprocessor.core.model.DataTypes
-import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.model.datatypes.*
-import io.openapiprocessor.core.parser.ParserType
+import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.support.getParameterSchemaInfo
 import io.openapiprocessor.core.support.getSchemaInfo
-import io.openapiprocessor.core.support.parse
+import io.openapiprocessor.core.support.parseApi
+import io.openapiprocessor.core.support.parseOptions
 import io.openapiprocessor.core.writer.java.JavaIdentifier
 
 class DataTypeConverterMappingSpec: StringSpec({
@@ -32,36 +29,33 @@ class DataTypeConverterMappingSpec: StringSpec({
     val identifier = JavaIdentifier()
 
     "mapped object data type has source data type" {
-        val openApi = parse("""
-           openapi: 3.0.2
-           info:
-             title: API
-             version: 1.0.0
-           
-           paths:
-             /foo:
-               get:
-                 responses:
-                   '200':
-                     description: empty
-                     content:
-                       application/json:
-                         schema:
-                           description: a Foo
-                           type: object
-                           properties:
-                             foo:
-                               type: string
-        """.trimIndent(), ParserType.INTERNAL)
+        val options = parseOptions(mapping =
+            """
+            |map:
+            |  types:
+            |    - type: Foo => package.Bar
+            """)
 
+        val openApi = parseApi(body =
+            """
+            |paths:
+            |  /foo:
+            |    get:
+            |      responses:
+            |        '200':
+            |           description: empty
+            |           content:
+            |             application/json:
+            |               schema:
+            |                 description: a Foo
+            |                 type: object
+            |                 properties:
+            |                   foo:
+            |                     type: string
+            """)
 
-        val options = ApiOptions()
-        options.typeMappings = listOf(
-            TypeMapping("Foo", null, "package.Bar")
-        )
-
-        val schemaInfo = openApi.getSchemaInfo("Foo",
-            "/foo", HttpMethod.GET, "200", "application/json")
+        val schemaInfo = openApi.getSchemaInfo(
+            "Foo", "/foo", HttpMethod.GET, "200", "application/json")
 
         // when:
         val converter = DataTypeConverter(options, identifier)
@@ -73,40 +67,38 @@ class DataTypeConverterMappingSpec: StringSpec({
     }
 
     "mapped composed object has source data type" {
-        val openApi = parse("""
-            openapi: 3.0.3
-            info:
-              title: merge allOf into same object
-              version: 1.0.0
-            
-            paths:
-              /composed:
-                get:
-                  responses:
-                    '200':
-                      description: create result from allOff object
-                      content:
-                        application/json:
-                          schema:
-                            allOf:
-                              - type: object
-                                properties:
-                                  prop1:
-                                    type: string
-                              - type: object
-                                properties:
-                                  prop2:
-                                    type: string
-                              - type: object
-                                properties:
-                                  prop2:
-                                    type: string            
-        """.trimIndent(), ParserType.INTERNAL)
+        val options = parseOptions(mapping =
+            """
+            |map:
+            |  types:
+            |    - type: Foo => package.Bar
+            """)
 
-        val options = ApiOptions()
-        options.typeMappings = listOf(
-            TypeMapping("Foo", null, "package.Bar")
-        )
+        val openApi = parseApi(body =
+            """
+            |paths:
+            |  /composed:
+            |    get:
+            |      responses:
+            |        '200':
+            |          description: create result from allOff object
+            |          content:
+            |            application/json:
+            |              schema:
+            |                allOf:
+            |                  - type: object
+            |                    properties:
+            |                      prop1:
+            |                        type: string
+            |                  - type: object
+            |                    properties:
+            |                      prop2:
+            |                        type: string
+            |                  - type: object
+            |                    properties:
+            |                      prop2:
+            |                        type: string            
+            """)
 
         val schemaInfo = openApi.getSchemaInfo("Foo",
             "/composed", HttpMethod.GET, "200", "application/json")
@@ -121,35 +113,32 @@ class DataTypeConverterMappingSpec: StringSpec({
     }
 
     "mapped array has source data type" {
-        val openApi = parse("""
-            openapi: 3.0.2
-            info:
-              title: test template
-              version: 1.0.0
+        val options = parseOptions(mapping =
+            """
+            |map:
+            |  types:
+            |    - type: array => java.util.List
+            |    - type: ArrayFoo => package.Bar
+            """)
 
-            paths:
-
-              /array:
-                get:
-                  responses:
-                    '200':
-                      description: the foo result
-                      content:
-                        application/json:
-                          schema:
-                            type: array
-                            items:
-                              type: object
-                              properties:
-                                bar:
-                                  type: string
-        """.trimIndent(), ParserType.INTERNAL)
-
-        val options = ApiOptions()
-        options.typeMappings = listOf(
-            TypeMapping("array", null, "java.util.List"),
-            TypeMapping("ArrayFoo", null, "package.Bar"),
-        )
+        val openApi = parseApi(body =
+            """
+            |paths:
+            |  /array:
+            |    get:
+            |      responses:
+            |        '200':
+            |          description: the foo result
+            |          content:
+            |            application/json:
+            |              schema:
+            |                type: array
+            |                items:
+            |                  type: object
+            |                  properties:
+            |                    bar:
+            |                      type: string
+            """)
 
         val schemaInfo = openApi.getSchemaInfo("Foo",
             "/array", HttpMethod.GET, "200", "application/json")
@@ -166,40 +155,34 @@ class DataTypeConverterMappingSpec: StringSpec({
     }
 
     "mapped data type has nested generics" {
-        val openApi = parse("""
-            openapi: 3.0.2
-            info:
-              title: nested generics
-              version: 1.0.0
+        val options = parseOptions(mapping =
+            """
+            |map:
+            |  types:
+            |    - type: Dictionary => java.util.Map
+            |      generics:
+            |        - java.lang.String
+            |        - java.util.List<java.lang.String>
+            |    - type: ArrayFoo => package.Bar
+            """)
 
-            paths:
-              /foo:
-                get:
-                  responses:
-                    '200':
-                      description: OK
-                      content:
-                        '*/*':
-                          schema:
-                            type: object
-                            additionalProperties:
-                              type: array
-                              items:
-                                type: string
-        """.trimIndent(), ParserType.INTERNAL)
-
-        val options = ApiOptions()
-        options.typeMappings = listOf(
-            TypeMapping("Dictionary", null,
-                "java.util.Map",
-                genericTypes = listOf(
-                    TargetType("java.lang.String"),
-                    TargetType("java.util.List",
-                        genericTypes = listOf(
-                            TargetType("java.lang.String")
-                        ))
-                )),
-        )
+        val openApi = parseApi(body =
+            """
+            |paths:
+            |  /foo:
+            |    get:
+            |      responses:
+            |        '200':
+            |          description: OK
+            |          content:
+            |            '*/*':
+            |              schema:
+            |                type: object
+            |                additionalProperties:
+            |                  type: array
+            |                  items:
+            |                    type: string
+            """)
 
         val schemaInfo = openApi.getSchemaInfo("Dictionary",
             "/foo", HttpMethod.GET, "200", "*/*")
@@ -214,14 +197,14 @@ class DataTypeConverterMappingSpec: StringSpec({
     }
 
     "additional parameter has no source type" {
-        val options = ApiOptions()
-        options.typeMappings = listOf(
-            AddParameterTypeMapping("add",
-                TypeMapping(null, null, "additional.Parameter")
-        ))
+        val options = parseOptions(mapping =
+            """
+            |map:
+            |  parameters:
+            |    - add: add => additional.Parameter
+            """)
 
-        // see ApiConvert.createAdditionalParameter()
-        val tm = options.typeMappings.first().getChildMappings().first() as TypeMapping
+        val tm = options.globalMappings.findAddParameterTypeMappings { _ -> true }.first().mapping
 
         // when:
         val converter = DataTypeConverter(options, identifier)
@@ -234,32 +217,27 @@ class DataTypeConverterMappingSpec: StringSpec({
     }
 
     "mapped data type has wildcard generic parameter" {
-        val openApi = parse("""
-            openapi: 3.1.0
-            info:
-              title: wildcard generic parameter
-              version: 1.0.0
+        val options = parseOptions(mapping =
+            """
+            |map:
+            |  types:
+            |    - type: string => bar.Bar<?>
+            """)
 
-            paths:
-              /foo:
-                get:
-                  parameters:
-                    - in: query
-                      name: foo
-                      schema:
-                        type: string
-                  responses:
-                    '204':
-                      description: none
-        """.trimIndent(), ParserType.INTERNAL)
-
-        val options = ApiOptions()
-        options.typeMappings = listOf(
-            TypeMapping("string", null, "bar.Bar",
-                genericTypes = listOf(
-                    TargetType("?")
-                ))
-        )
+        val openApi = parseApi(body =
+            """
+            |paths:
+            |  /foo:
+            |    get:
+            |      parameters:
+            |        - in: query
+            |          name: foo
+            |          schema:
+            |            type: string
+            |      responses:
+            |        '204':
+            |          description: none
+            """)
 
         val schemaInfo = openApi.getParameterSchemaInfo("/foo", HttpMethod.GET, "foo")
 

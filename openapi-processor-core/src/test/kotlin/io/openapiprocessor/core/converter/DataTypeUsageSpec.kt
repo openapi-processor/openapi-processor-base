@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 https://github.com/openapi-processor/openapi-processor-core
+ * Copyright 2021 https://github.com/openapi-processor/openapi-processor-base
  * PDX-License-Identifier: Apache-2.0
  */
 
@@ -14,6 +14,8 @@ import io.openapiprocessor.core.model.DataTypes
 import io.openapiprocessor.core.parser.HttpMethod.GET
 import io.openapiprocessor.core.support.getSchemaInfo
 import io.openapiprocessor.core.support.parse
+import io.openapiprocessor.core.support.parseApi
+import io.openapiprocessor.core.support.parseOptions
 import io.openapiprocessor.core.writer.java.JavaIdentifier
 
 class DataTypeUsageSpec: StringSpec({
@@ -181,51 +183,45 @@ class DataTypeUsageSpec: StringSpec({
     }
 
     "collect usage of object schema that is mapped" {
-        val openApi = parse ("""
-           openapi: 3.0.2
-           info:
-             title: API
-             version: 1.0.0
+        val options = parseOptions(mapping =
+            """
+            |map:
+            |  types:
+            |    - type: Foo => io.openapiprocessor.test.Mapped
+            """)
 
-           paths:
-             /foo:
-               get:
-                 responses:
-                   '200':
-                     description: ...
-                     content:
-                       application/json:
-                         schema:
-                           ${'$'}ref: '#/components/schemas/Foo'
-
-           components:
-             schemas:
-
-               Foo:
-                 description: a Foo
-                 type: object
-                 properties:
-                   foo:
-                     type: string
-                   bar:
-                     ${'$'}ref: '#/components/schemas/Bar'
-
-               Bar:
-                 description: a Bar
-                 type: object
-                 properties:
-                   bar:
-                     type: string
-
-        """.trimIndent())
-
-        val options = ApiOptions()
-        options.typeMappings = listOf(
-            TypeMapping(
-                "Foo",
-                null,
-                "io.openapiprocessor.test.Mapped")
-            )
+        val openApi = parseApi(body =
+            """
+            |paths:
+            |  /foo:
+            |    get:
+            |      responses:
+            |        '200':
+            |          description: ...
+            |          content:
+            |            application/json:
+            |              schema:
+            |                ${'$'}ref: '#/components/schemas/Foo'
+            |
+            |components:
+            |  schemas:
+            |
+            |    Foo:
+            |      description: a Foo
+            |      type: object
+            |      properties:
+            |        foo:
+            |          type: string
+            |        bar:
+            |          ${'$'}ref: '#/components/schemas/Bar'
+            |
+            |    Bar:
+            |      description: a Bar
+            |      type: object
+            |      properties:
+            |        bar:
+            |          type: string
+            """)
 
         val schemaInfo = openApi.getSchemaInfo("FooResponse200",
             "/foo", GET, "200", "application/json")
@@ -241,53 +237,46 @@ class DataTypeUsageSpec: StringSpec({
     }
 
     "collect usage of object schema that is only used in a mapping" {
-        val openApi = parse ("""
-           openapi: 3.0.2
-           info:
-             title: API
-             version: 1.0.0
+        val options = parseOptions(mapping =
+            """
+            |map:
+            |  types:
+            |    - type: Foo => io.openapiprocessor.test.Mapped<pkg.Bar>
+            """)
 
-           paths:
-             /foo:
-               get:
-                 responses:
-                   '200':
-                     description: ...
-                     content:
-                       application/json:
-                         schema:
-                           ${'$'}ref: '#/components/schemas/Foo'
-
-           components:
-             schemas:
-
-               Foo:
-                 description: a Foo
-                 type: object
-                 properties:
-                   foo:
-                     type: string
-                   bar:
-                     ${'$'}ref: '#/components/schemas/Bar'
-
-               Bar:
-                 description: a Bar
-                 type: object
-                 properties:
-                   bar:
-                     type: string
-                     
-        """.trimIndent())
-
-        val options = ApiOptions()
-        options.typeMappings = listOf(
-            TypeMapping(
-                "Foo",
-                null,
-                "io.openapiprocessor.test.Mapped",
-                listOf(TargetType("io.openapiprocessor.generated.model.Bar"))
-            )
-        )
+        val openApi = parseApi (body  =
+            """
+            |paths:
+            |  /foo:
+            |    get:
+            |      responses:
+            |        '200':
+            |          description: ...
+            |          content:
+            |            application/json:
+            |              schema:
+            |                ${'$'}ref: '#/components/schemas/Foo'
+            |
+            |components:
+            |  schemas:
+            |
+            |    Foo:
+            |      description: a Foo
+            |      type: object
+            |      properties:
+            |        foo:
+            |          type: string
+            |        bar:
+            |          ${'$'}ref: '#/components/schemas/Bar'
+            |
+            |    Bar:
+            |      description: a Bar
+            |      type: object
+            |      properties:
+            |        bar:
+            |          type: string
+            |          
+            """)
 
         val schemaInfo = openApi.getSchemaInfo("FooResponse200",
             "/foo", GET, "200", "application/json")
@@ -301,5 +290,4 @@ class DataTypeUsageSpec: StringSpec({
         dataTypes.find("Foo") shouldBe null
         dataTypes.getRefCnt("Bar") shouldBe 1
     }
-
 })

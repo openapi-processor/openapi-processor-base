@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 https://github.com/openapi-processor/openapi-processor-core
+ * Copyright 2020 https://github.com/openapi-processor/openapi-processor-base
  * PDX-License-Identifier: Apache-2.0
  */
 
@@ -14,17 +14,15 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import io.mockk.every
 import io.mockk.mockk
-import io.openapiprocessor.core.converter.mapping.MappingFinder
-import io.openapiprocessor.core.converter.mapping.TypeMapping
 import io.openapiprocessor.core.model.DataTypes
 import io.openapiprocessor.core.model.datatypes.MappedCollectionDataTypePrimitive
 import io.openapiprocessor.core.model.datatypes.MappedDataTypePrimitive
 import io.openapiprocessor.core.parser.HttpMethod
-import io.openapiprocessor.core.parser.ParserType
 import io.openapiprocessor.core.parser.RefResolver
 import io.openapiprocessor.core.parser.Schema
 import io.openapiprocessor.core.support.getParameterSchemaInfo
-import io.openapiprocessor.core.support.parse
+import io.openapiprocessor.core.support.parseApi
+import io.openapiprocessor.core.support.parseOptions
 import io.openapiprocessor.core.writer.java.JavaIdentifier
 
 class DataTypeConverterPrimitiveSpec: StringSpec({
@@ -35,7 +33,7 @@ class DataTypeConverterPrimitiveSpec: StringSpec({
 
     "ignores unknown primitive data type format" {
         val any = SchemaInfo.Endpoint("/any", HttpMethod.GET)
-        val converter = DataTypeConverter(ApiOptions(), identifier, MappingFinder())
+        val converter = DataTypeConverter(ApiOptions(), identifier, MappingFinderX(ApiOptions()))
         val resolver = mockk<RefResolver>()
 
         forAll(
@@ -59,30 +57,28 @@ class DataTypeConverterPrimitiveSpec: StringSpec({
     }
 
     "maps data type to primitive type" {
-        val openApi = parse("""
-            openapi: 3.1.0
-            info:
-              title: primitive mapping
-              version: 1.0.0
+        val options = parseOptions(mapping =
+            """
+            |map:
+            |  types:
+            |    - type: string:byte => byte
+            """)
 
-            paths:
-              /foo:
-                get:
-                  parameters:
-                    - in: query
-                      name: foo
-                      schema:
-                        type: string
-                        format: byte
-                  responses:
-                    '204':
-                      description: none
-        """.trimIndent(), ParserType.INTERNAL)
-
-        val options = ApiOptions()
-        options.typeMappings = listOf(
-            TypeMapping("string", "byte", "byte", primitive = true)
-        )
+        val openApi = parseApi(body =
+            """
+            |paths:
+            |  /foo:
+            |    get:
+            |      parameters:
+            |        - in: query
+            |          name: foo
+            |          schema:
+            |            type: string
+            |            format: byte
+            |      responses:
+            |        '204':
+            |          description: none
+            """)
 
         val schemaInfo = openApi.getParameterSchemaInfo("/foo", HttpMethod.GET, "foo")
 
@@ -98,35 +94,28 @@ class DataTypeConverterPrimitiveSpec: StringSpec({
     }
 
     "maps data type to primitive type array" {
-        val openApi = parse("""
-            openapi: 3.1.0
-            info:
-              title: primitive mapping
-              version: 1.0.0
+        val options = parseOptions(mapping =
+            """
+            |map:
+            |  types:
+            |    - type: string:bytes => byte[]
+            """)
 
-            paths:
-              /foo:
-                get:
-                  parameters:
-                    - in: query
-                      name: foo
-                      schema:
-                        type: string
-                        format: bytes
-                  responses:
-                    '204':
-                      description: none
-        """.trimIndent(), ParserType.INTERNAL)
-
-        val options = ApiOptions()
-        options.typeMappings = listOf(
-            TypeMapping(
-                "string",
-                "bytes",
-                "byte",
-                primitive = true,
-                primitiveArray = true)
-        )
+        val openApi = parseApi(body =
+            """
+            |paths:
+            |  /foo:
+            |    get:
+            |      parameters:
+            |        - in: query
+            |          name: foo
+            |          schema:
+            |            type: string
+            |            format: bytes
+            |      responses:
+            |        '204':
+            |          description: none
+            """)
 
         val schemaInfo = openApi.getParameterSchemaInfo("/foo", HttpMethod.GET, "foo")
 
