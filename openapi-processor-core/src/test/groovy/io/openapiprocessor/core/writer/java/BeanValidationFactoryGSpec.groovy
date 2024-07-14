@@ -3,7 +3,7 @@
  * PDX-License-Identifier: Apache-2.0
  */
 
-package com.github.hauner.openapi.core.writer.java
+package io.openapiprocessor.core.writer.java
 
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.model.Documentation
@@ -18,13 +18,12 @@ import io.openapiprocessor.core.model.datatypes.IntegerDataType
 import io.openapiprocessor.core.model.datatypes.LongDataType
 import io.openapiprocessor.core.model.datatypes.StringDataType
 import io.openapiprocessor.core.support.datatypes.ObjectDataType
-import io.openapiprocessor.core.writer.java.BeanValidationFactory
 import spock.lang.Specification
 import spock.lang.Unroll
 
 import static io.openapiprocessor.core.writer.java.AnnotationWriterKt.buildAnnotation
 
-class BeanValidationFactorySpec extends Specification {
+class BeanValidationFactoryGSpec extends Specification {
     static def options = new ApiOptions()
     static def validation = new BeanValidationFactory (options)
     static def validations = validation.validations

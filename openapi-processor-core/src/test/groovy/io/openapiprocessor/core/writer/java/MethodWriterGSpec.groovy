@@ -3,7 +3,7 @@
  * PDX-License-Identifier: Apache-2.0
  */
 
-package com.github.hauner.openapi.core.writer.java
+package io.openapiprocessor.core.writer.java
 
 import com.github.hauner.openapi.core.test.TestMappingAnnotationWriter
 import com.github.hauner.openapi.core.test.TestParameterAnnotationWriter
@@ -14,17 +14,12 @@ import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.model.parameters.Parameter
 import io.openapiprocessor.core.model.parameters.ParameterBase
 import io.openapiprocessor.core.support.datatypes.ObjectDataType
-import io.openapiprocessor.core.writer.java.BeanValidationFactory
-import io.openapiprocessor.core.writer.java.JavaDocWriter
-import io.openapiprocessor.core.writer.java.JavaIdentifier
-import io.openapiprocessor.core.writer.java.MethodWriter
-import io.openapiprocessor.core.writer.java.ParameterAnnotationWriter
 import spock.lang.Specification
 import spock.lang.Unroll
 
 import static io.openapiprocessor.core.builder.api.EndpointBuilderKt.endpoint
 
-class MethodWriterSpec extends Specification {
+class MethodWriterGSpec extends Specification {
     def apiOptions = new ApiOptions()
     def identifier = new JavaIdentifier()
 

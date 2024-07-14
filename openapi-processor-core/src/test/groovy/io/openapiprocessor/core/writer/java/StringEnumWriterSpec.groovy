@@ -3,14 +3,11 @@
  * PDX-License-Identifier: Apache-2.0
  */
 
-package com.github.hauner.openapi.core.writer.java
+package io.openapiprocessor.core.writer.java
 
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.model.datatypes.StringEnumDataType
 import io.openapiprocessor.core.support.datatypes.DataTypeName
-import io.openapiprocessor.core.writer.java.JavaIdentifier
-import io.openapiprocessor.core.writer.java.SimpleGeneratedWriter
-import io.openapiprocessor.core.writer.java.StringEnumWriter
 import spock.lang.Specification
 
 class StringEnumWriterSpec extends Specification {

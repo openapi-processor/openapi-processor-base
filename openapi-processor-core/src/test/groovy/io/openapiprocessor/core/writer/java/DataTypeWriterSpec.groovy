@@ -3,17 +3,12 @@
  * PDX-License-Identifier: Apache-2.0
  */
 
-package com.github.hauner.openapi.core.writer.java
+package io.openapiprocessor.core.writer.java
 
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.model.datatypes.DataTypeName
 import io.openapiprocessor.core.model.datatypes.StringDataType
 import io.openapiprocessor.core.support.datatypes.ObjectDataType
-import io.openapiprocessor.core.writer.java.BeanValidationFactory
-import io.openapiprocessor.core.writer.java.DataTypeWriterPojo
-import io.openapiprocessor.core.writer.java.JavaDocWriter
-import io.openapiprocessor.core.writer.java.JavaIdentifier
-import io.openapiprocessor.core.writer.java.SimpleGeneratedWriter
 import spock.lang.Specification
 
 import static io.openapiprocessor.core.AssertKt.extractBody

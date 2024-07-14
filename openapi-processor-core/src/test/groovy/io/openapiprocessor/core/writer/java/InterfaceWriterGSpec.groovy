@@ -3,20 +3,14 @@
  * PDX-License-Identifier: Apache-2.0
  */
 
-package com.github.hauner.openapi.core.writer.java
+package io.openapiprocessor.core.writer.java
 
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.framework.FrameworkAnnotations
 import io.openapiprocessor.core.model.Interface
-import io.openapiprocessor.core.writer.java.BeanValidationFactory
-import io.openapiprocessor.core.writer.java.DefaultImportFilter
-import io.openapiprocessor.core.writer.java.InterfaceWriter
-import io.openapiprocessor.core.writer.java.JavaIdentifier
-import io.openapiprocessor.core.writer.java.MethodWriter
-import io.openapiprocessor.core.writer.java.SimpleGeneratedWriter
 import spock.lang.Specification
 
-class InterfaceWriterSpec extends Specification {
+class InterfaceWriterGSpec extends Specification {
     def apiOptions = new ApiOptions()
     def identifier = new JavaIdentifier()
     def generatedWriter = new SimpleGeneratedWriter (apiOptions)
