@@ -7,7 +7,7 @@ package io.openapiprocessor.core.writer.java
 
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.JsonPropertyAnnotationMode
-import io.openapiprocessor.core.converter.MappingFinderX
+import io.openapiprocessor.core.converter.MappingFinder
 import io.openapiprocessor.core.model.Annotation
 import io.openapiprocessor.core.model.datatypes.DataType
 import io.openapiprocessor.core.model.datatypes.ModelDataType
@@ -131,13 +131,13 @@ abstract class DataTypeWriterBase(
     }
 
     private fun collectTypeAnnotations(sourceName: String): Collection<Annotation> {
-        return MappingFinderX(apiOptions)
+        return MappingFinder(apiOptions)
             .findAnnotationTypeMappings(sourceName)
             .map { Annotation(it.annotation.type, it.annotation.parameters) }
     }
 
     private fun collectExtensionAnnotations(extensions: Map<String, *>): Collection<Annotation> {
-        val mappingFinder = MappingFinderX(apiOptions)
+        val mappingFinder = MappingFinder(apiOptions)
 
         val annotations = mutableListOf<Annotation>()
 
@@ -239,7 +239,7 @@ abstract class DataTypeWriterBase(
     }
 
     private fun writeAnnotationsMappings(target: Writer, dataType: ModelDataType) {
-        val annotationTypeMappings = MappingFinderX(apiOptions)
+        val annotationTypeMappings = MappingFinder(apiOptions)
             .findAnnotationTypeMappings(dataType.getName(), true)
 
         annotationTypeMappings.forEach {
@@ -275,7 +275,7 @@ abstract class DataTypeWriterBase(
 
         imports.addAll(dataType.referencedImports)
 
-        val annotationTypeMappings = MappingFinderX(apiOptions)
+        val annotationTypeMappings = MappingFinder(apiOptions)
             .findAnnotationTypeMappings(dataType.getName(), true)
 
         annotationTypeMappings.forEach {

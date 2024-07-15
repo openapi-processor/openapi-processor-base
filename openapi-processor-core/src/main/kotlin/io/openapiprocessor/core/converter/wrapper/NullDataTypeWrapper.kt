@@ -6,7 +6,7 @@
 package io.openapiprocessor.core.converter.wrapper
 
 import io.openapiprocessor.core.converter.ApiOptions
-import io.openapiprocessor.core.converter.MappingFinderX
+import io.openapiprocessor.core.converter.MappingFinder
 import io.openapiprocessor.core.converter.MappingQueryX
 import io.openapiprocessor.core.converter.SchemaInfo
 import io.openapiprocessor.core.converter.mapping.TargetType
@@ -18,7 +18,7 @@ import io.openapiprocessor.core.model.datatypes.NullDataType
  */
 open class NullDataTypeWrapper(
     private val options: ApiOptions,
-    private val finder: MappingFinderX = MappingFinderX(options)
+    private val finder: MappingFinder = MappingFinder(options)
 ) {
 
     /**

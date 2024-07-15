@@ -8,7 +8,7 @@ package io.openapiprocessor.core.converter.mapping
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.shouldBe
-import io.openapiprocessor.core.converter.MappingFinderX
+import io.openapiprocessor.core.converter.MappingFinder
 import io.openapiprocessor.core.converter.MappingQueryX
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.processor.MappingReader
@@ -40,7 +40,7 @@ class MappingFinderXSpec: StringSpec({
         // when:
         val mapping = reader.read (yaml) as Mapping
         val mappings = MappingConverter(mapping).convertX2()
-        val finder = MappingFinderX(mappings)
+        val finder = MappingFinder(mappings)
 
         // then:
         val resultTypeMapping = finder.getResultTypeMapping(
@@ -87,7 +87,7 @@ class MappingFinderXSpec: StringSpec({
         // when:
         val mapping = reader.read (yaml) as Mapping
         val mappings = MappingConverter(mapping).convertX2()
-        val finder = MappingFinderX(mappings)
+        val finder = MappingFinder(mappings)
 
         // then:
         val singleTypeMappingG = finder.getSingleTypeMapping(

@@ -20,7 +20,7 @@ class MappingFinderAnnotationSpec: StringSpec({
             |    - type: Foo @ annotation.Bar
             """)
 
-        val finder = MappingFinderX(options)
+        val finder = MappingFinder(options)
 
         val mapping = finder.findAnnotationTypeMappings(MappingQueryX(type = "Foo"))
 
@@ -36,7 +36,7 @@ class MappingFinderAnnotationSpec: StringSpec({
             |    - type: object @ annotation.Bar
             """)
 
-        val finder = MappingFinderX(options)
+        val finder = MappingFinder(options)
 
         val mapping = finder.findAnnotationTypeMappings(MappingQueryX(type = "Foo", allowObject = true))
 
@@ -52,7 +52,7 @@ class MappingFinderAnnotationSpec: StringSpec({
             |    - type: object @ annotation.Bar
             """)
 
-        val finder = MappingFinderX(options)
+        val finder = MappingFinder(options)
 
         val mappingSimple = finder.findAnnotationTypeMappings(MappingQueryX(type = "Foo"))
         mappingSimple.shouldBeEmpty()
@@ -69,7 +69,7 @@ class MappingFinderAnnotationSpec: StringSpec({
             |    - type: string:uuid @ annotation.Foo
             """)
 
-        val finder = MappingFinderX(options)
+        val finder = MappingFinder(options)
 
         val mapping = finder.findAnnotationTypeMappings(MappingQueryX(type = "string", format = "uuid"))
 
@@ -86,7 +86,7 @@ class MappingFinderAnnotationSpec: StringSpec({
             |    - type: Foo @ annotation.Bar
             """)
 
-        val finder = MappingFinderX(options)
+        val finder = MappingFinder(options)
 
         val mapping = finder.findAnnotationParameterTypeMappings(MappingQueryX(type = "Foo"))
 
@@ -102,7 +102,7 @@ class MappingFinderAnnotationSpec: StringSpec({
             |    - type: string:uuid @ annotation.Foo
             """)
 
-        val finder = MappingFinderX(options)
+        val finder = MappingFinder(options)
 
         val mapping = finder.findAnnotationParameterTypeMappings(MappingQueryX(type = "string", format = "uuid"))
 
@@ -121,7 +121,7 @@ class MappingFinderAnnotationSpec: StringSpec({
             |    - name: foo @ annotation.Bar
             """)
 
-        val finder = MappingFinderX(options)
+        val finder = MappingFinder(options)
 
         val mapping = finder.findAnnotationParameterNameTypeMapping(MappingQueryX(name = "foo"))
 
@@ -137,7 +137,7 @@ class MappingFinderAnnotationSpec: StringSpec({
             |    x-foo: foo @ annotation.Foo
             """)
 
-        val finder = MappingFinderX(options)
+        val finder = MappingFinder(options)
 
         val mapping = finder.findExtensionAnnotations("x-foo", "foo")
 
@@ -155,7 +155,7 @@ class MappingFinderAnnotationSpec: StringSpec({
             |      - fooB @ annotation.FooB
             """)
 
-        val finder = MappingFinderX(options)
+        val finder = MappingFinder(options)
 
         val mapping = finder.findExtensionAnnotations("x-foo", "fooA", "fooB")
 

@@ -61,7 +61,7 @@ open class MethodWriter(
     }
 
     private fun createResult(endpoint: Endpoint, endpointResponse: EndpointResponse): String {
-        val mappingFinder = MappingFinderX(apiOptions)
+        val mappingFinder = MappingFinder(apiOptions)
         val resultStyle = mappingFinder.findResultStyleMapping(MappingQueryX(endpoint))
         return endpointResponse.getResponseType(resultStyle)
     }
@@ -166,7 +166,7 @@ open class MethodWriter(
     }
 
     private fun addAnnotations(endpoint: Endpoint, parameter: Parameter, target: StringWriter) {
-        val mappingFinder = MappingFinderX(apiOptions)
+        val mappingFinder = MappingFinder(apiOptions)
 
         val mappingAnnotations = mutableListOf<io.openapiprocessor.core.converter.mapping.Annotation>()
 

@@ -6,15 +6,15 @@
 package io.openapiprocessor.core.support
 
 import io.openapiprocessor.core.converter.ApiOptions
-import io.openapiprocessor.core.converter.MappingFinderX
+import io.openapiprocessor.core.converter.MappingFinder
 import io.openapiprocessor.core.converter.mapping.MappingData
 
-fun mappingFinder(): MappingFinderX {
-    return MappingFinderX(MappingData())
+fun mappingFinder(): MappingFinder {
+    return MappingFinder(MappingData())
 }
 
-fun mappingFinder(options: ApiOptions): MappingFinderX {
-    return MappingFinderX(MappingData(
+fun mappingFinder(options: ApiOptions): MappingFinder {
+    return MappingFinder(MappingData(
         globalMappings = options.globalMappings,
         endpointMappings = options.endpointMappings,
         extensionMappings = options.extensionMappings

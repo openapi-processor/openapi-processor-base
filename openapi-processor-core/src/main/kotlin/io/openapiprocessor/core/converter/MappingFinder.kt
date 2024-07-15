@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 https://github.com/openapi-processor/openapi-processor-core
+ * Copyright 2024 https://github.com/openapi-processor/openapi-processor-base
  * PDX-License-Identifier: Apache-2.0
  */
 
@@ -10,7 +10,7 @@ import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class MappingFinderX(mappings: MappingSettings) {
+class MappingFinder(mappings: MappingSettings) {
     val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     companion object;
@@ -21,6 +21,7 @@ class MappingFinderX(mappings: MappingSettings) {
         mappings.extensionMappings
     )
 
+    // path/method
     fun getResultTypeMapping(query: MappingQuery): ResultTypeMapping? {
         log.trace("looking for result type mapping {}", query)
 
@@ -53,6 +54,7 @@ class MappingFinderX(mappings: MappingSettings) {
         return ResultStyle.SUCCESS
     }
 
+    // path/method
     fun getSingleTypeMapping(query: MappingQuery): TypeMapping? {
         log.trace("looking for single type mapping {}", query)
 
@@ -69,6 +71,7 @@ class MappingFinderX(mappings: MappingSettings) {
         return null
     }
 
+    // path/method
     fun getMultiTypeMapping(query: MappingQuery): TypeMapping? {
         log.trace("looking for multi type mapping {}", query)
 
@@ -143,6 +146,7 @@ class MappingFinderX(mappings: MappingSettings) {
         return null
     }
 
+    // path/method/name???/format/type
     fun findTypeMapping(query: MappingQuery): TypeMapping? {
         log.trace("looking for type mapping {}", query)
 

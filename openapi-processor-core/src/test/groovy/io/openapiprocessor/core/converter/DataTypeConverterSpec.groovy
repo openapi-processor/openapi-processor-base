@@ -26,7 +26,7 @@ import static io.openapiprocessor.core.support.OpenApiParser.parse
 
 class DataTypeConverterSpec extends Specification {
     def options = new ApiOptions()
-    def finder = new MappingFinderX(options)
+    def finder = new MappingFinder(options)
 
     def converter = new DataTypeConverter(options, new JavaIdentifier(), finder, Stub(NullDataTypeWrapper))
 

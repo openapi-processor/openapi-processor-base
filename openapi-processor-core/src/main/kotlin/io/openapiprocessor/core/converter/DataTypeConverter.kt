@@ -21,7 +21,7 @@ import java.util.*
 class DataTypeConverter(
     private val options: ApiOptions,
     private val identifier: Identifier,
-    private val finder: MappingFinderX = MappingFinderX(options),
+    private val finder: MappingFinder = MappingFinder(options),
     private val nullWrapper: NullDataTypeWrapper = NullDataTypeWrapper(options, finder)
 ) {
     private val current: Deque<SchemaInfo> = LinkedList()

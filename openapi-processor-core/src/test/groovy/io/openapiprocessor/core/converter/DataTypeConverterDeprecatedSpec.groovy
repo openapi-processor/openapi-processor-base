@@ -28,7 +28,7 @@ class DataTypeConverterDeprecatedSpec extends Specification {
         def converter = new DataTypeConverter(
                 options,
                 new JavaIdentifier(),
-                new MappingFinderX(options),
+                new MappingFinder(options),
                 Stub(NullDataTypeWrapper))
 
         def schema = new TestSchema (type: type, format: format, deprecated: deprecated)

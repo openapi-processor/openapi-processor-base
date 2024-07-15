@@ -33,7 +33,7 @@ class DataTypeConverterPrimitiveSpec: StringSpec({
 
     "ignores unknown primitive data type format" {
         val any = SchemaInfo.Endpoint("/any", HttpMethod.GET)
-        val converter = DataTypeConverter(ApiOptions(), identifier, MappingFinderX(ApiOptions()))
+        val converter = DataTypeConverter(ApiOptions(), identifier, MappingFinder(ApiOptions()))
         val resolver = mockk<RefResolver>()
 
         forAll(

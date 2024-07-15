@@ -19,7 +19,7 @@ import io.openapiprocessor.core.writer.Identifier
 class ResultDataTypeWrapper(
     private val options: ApiOptions,
     private val identifier: Identifier,
-    private val finder: MappingFinderX = MappingFinderX(options)
+    private val finder: MappingFinder = MappingFinder(options)
 ) {
     /**
      * wraps a (converted) result data type with the configured result java data type like

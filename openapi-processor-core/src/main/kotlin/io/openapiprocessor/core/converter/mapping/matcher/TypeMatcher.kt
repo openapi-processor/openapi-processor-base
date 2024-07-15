@@ -10,7 +10,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 /**
- * [io.openapiprocessor.core.converter.MappingFinderX] matcher for type mappings.
+ * [io.openapiprocessor.core.converter.MappingFinder] matcher for type mappings.
  */
 class TypeMatcher(private val query: MappingQuery): MappingMatcher, (TypeMapping) -> Boolean {
     val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
