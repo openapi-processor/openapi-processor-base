@@ -6,7 +6,6 @@
 package io.openapiprocessor.core.converter
 
 import io.openapiprocessor.core.converter.mapping.*
-import io.openapiprocessor.core.converter.mapping.MappingFinder
 import io.openapiprocessor.core.converter.wrapper.MultiDataTypeWrapper
 import io.openapiprocessor.core.converter.wrapper.ResultDataTypeWrapper
 import io.openapiprocessor.core.converter.wrapper.SingleDataTypeWrapper
@@ -39,10 +38,9 @@ class  ApiConverter(
 ) {
     val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
-    private val mappingFinder = MappingFinder(options.typeMappings)
-    private val mappingFinderX = MappingFinderX(options)
+    private val mappingFinder = MappingFinderX(options)
     private val dataTypeWrapper = ResultDataTypeWrapper(options, identifier, mappingFinder)
-    private val dataTypeConverter = DataTypeConverter(options, identifier, mappingFinderX)
+    private val dataTypeConverter = DataTypeConverter(options, identifier, mappingFinder)
     private val singleDataTypeWrapper = SingleDataTypeWrapper(options, mappingFinder)
     private val multiDataTypeWrapper = MultiDataTypeWrapper(options, mappingFinder)
 
@@ -126,7 +124,7 @@ class  ApiConverter(
     }
 
     private fun getAdditionalParameter(ep: Endpoint): List<AddParameterTypeMapping> {
-        return mappingFinderX.findAddParameterTypeMappings(MappingQueryX(ep.path, ep.method))
+        return mappingFinder.findAddParameterTypeMappings(MappingQueryX(ep.path, ep.method))
     }
 
     private fun collectRequestBody(requestBody: RequestBody?, ep: Endpoint, dataTypes: DataTypes, resolver: RefResolver) {
@@ -312,7 +310,7 @@ class  ApiConverter(
     }
 
     private fun isExcluded(path: String, method: HttpMethod): Boolean {
-        return mappingFinderX.isEndpointExcluded(MappingQueryX(path, method))
+        return mappingFinder.isEndpointExcluded(MappingQueryX(path, method))
     }
 
     private fun getInterfaceName(op: Operation, excluded: Boolean): String {

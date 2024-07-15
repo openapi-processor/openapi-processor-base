@@ -6,6 +6,8 @@
 package io.openapiprocessor.core.converter.wrapper
 
 import io.openapiprocessor.core.converter.ApiOptions
+import io.openapiprocessor.core.converter.MappingFinderX
+import io.openapiprocessor.core.converter.MappingQueryX
 import io.openapiprocessor.core.converter.SchemaInfo
 import io.openapiprocessor.core.converter.mapping.*
 import io.openapiprocessor.core.model.datatypes.DataType
@@ -19,9 +21,8 @@ import io.openapiprocessor.core.model.datatypes.SingleDataType
  */
 class SingleDataTypeWrapper(
     private val options: ApiOptions,
-    private val finder: MappingFinder = MappingFinder(options.typeMappings)
+    private val finder: MappingFinderX = MappingFinderX(options)
 ) {
-
     /**
      * wraps a (converted) non-array data type with the configured single data type like
      * {@code Mono<>} etc.
@@ -53,14 +54,12 @@ class SingleDataTypeWrapper(
     }
 
     private fun getSingleResultDataType(info: SchemaInfo): TargetType? {
-        // check endpoint result mapping
-        val epMatch = finder.findEndpointSingleTypeMapping(info)
-        if (epMatch != null) {
-            return epMatch.getTargetType()
+        val match = finder.getSingleTypeMapping(MappingQueryX(info))
+        if (match != null) {
+            return match.getTargetType()
         }
 
-        // check global result mapping
-        return finder.findSingleTypeMapping()?.getTargetType()
+        return null
     }
 
     private fun checkNone(dataType: DataType): DataType {

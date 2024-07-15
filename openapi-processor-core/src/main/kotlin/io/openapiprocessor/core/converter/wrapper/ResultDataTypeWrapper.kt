@@ -5,9 +5,7 @@
 
 package io.openapiprocessor.core.converter.wrapper
 
-import io.openapiprocessor.core.converter.ApiOptions
-import io.openapiprocessor.core.converter.GenericDataTypeConverter
-import io.openapiprocessor.core.converter.SchemaInfo
+import io.openapiprocessor.core.converter.*
 import io.openapiprocessor.core.converter.mapping.*
 import io.openapiprocessor.core.model.datatypes.DataType
 import io.openapiprocessor.core.model.datatypes.GenericDataType
@@ -21,7 +19,7 @@ import io.openapiprocessor.core.writer.Identifier
 class ResultDataTypeWrapper(
     private val options: ApiOptions,
     private val identifier: Identifier,
-    private val finder: MappingFinder = MappingFinder(options.typeMappings)
+    private val finder: MappingFinderX = MappingFinderX(options)
 ) {
     /**
      * wraps a (converted) result data type with the configured result java data type like
@@ -63,14 +61,12 @@ class ResultDataTypeWrapper(
     }
 
     private fun getMappedResultDataType(info: SchemaInfo): TargetType? {
-        // check endpoint result mapping
-        val epMatch = finder.findEndpointResultTypeMapping(info)
-        if (epMatch != null) {
-            return epMatch.getTargetType()
+        val match = finder.getResultTypeMapping(MappingQueryX(info))
+        if (match != null) {
+            return match.getTargetType()
         }
 
-        // check global result mapping
-        return finder.findResultTypeMapping()?.getTargetType()
+        return null
     }
 
     private fun convertGenerics(targetType: TargetType): List<GenericDataType> {
