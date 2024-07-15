@@ -11,30 +11,26 @@ import io.kotest.matchers.shouldBe
 import io.mockk.mockk
 import io.openapiprocessor.core.builder.api.endpoint
 import io.openapiprocessor.core.converter.ApiOptions
-import io.openapiprocessor.core.converter.mapping.ResultStyleOptionMapping
-import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.model.datatypes.ResultDataType
 import io.openapiprocessor.core.model.datatypes.StringDataType
-import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
+import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.support.TestMappingAnnotationWriter
 import io.openapiprocessor.core.support.TestParameterAnnotationWriter
+import io.openapiprocessor.core.support.parseOptions
 import java.io.StringWriter
 
 class MethodWriterResponseStyleSpec: FreeSpec() {
-    val apiOptions = ApiOptions()
-    val identifier = JavaIdentifier()
 
-    val writer: MethodWriter
-        get() {
-            return MethodWriter(
-                apiOptions,
-                identifier,
-                TestMappingAnnotationWriter(),
-                TestParameterAnnotationWriter(),
-                mockk<BeanValidationFactory>(),
-                mockk<JavaDocWriter>()
-            )
-        }
+    fun writer(options: ApiOptions = ApiOptions()): MethodWriter {
+        return MethodWriter(
+            options,
+            JavaIdentifier(),
+            TestMappingAnnotationWriter(),
+            TestParameterAnnotationWriter(),
+            mockk<BeanValidationFactory>(),
+            mockk<JavaDocWriter>()
+        )
+    }
 
     val target = StringWriter()
 
@@ -44,7 +40,11 @@ class MethodWriterResponseStyleSpec: FreeSpec() {
         "with response style all" - {
 
             "writes method with 'Object' response when it has multiple result content types (200, default)" {
-                apiOptions.typeMappings = listOf(ResultStyleOptionMapping(ResultStyle.ALL))
+                val options = parseOptions(mapping =
+                    """
+                    |map:
+                    |  result-style: all
+                    """)
 
                 val endpoint = endpoint("/foo", HttpMethod.GET) {
                     responses {
@@ -58,7 +58,7 @@ class MethodWriterResponseStyleSpec: FreeSpec() {
                 }
 
                 // when:
-                writer.write(target, endpoint, endpoint.endpointResponses.first())
+                writer(options).write(target, endpoint, endpoint.endpointResponses.first())
 
                 // then:
                 target.toString() shouldBe
@@ -70,7 +70,11 @@ class MethodWriterResponseStyleSpec: FreeSpec() {
             }
 
             "writes method with success response type when it has only empty error responses" {
-                apiOptions.typeMappings = listOf(ResultStyleOptionMapping(ResultStyle.ALL))
+                val options = parseOptions(mapping =
+                    """
+                    |map:
+                    |  result-style: all
+                    """)
 
                 val endpoint = endpoint("/foo", HttpMethod.GET) {
                     responses {
@@ -87,7 +91,7 @@ class MethodWriterResponseStyleSpec: FreeSpec() {
                 }
 
                 // when:
-                writer.write (target, endpoint, endpoint.endpointResponses.first ())
+                writer(options).write (target, endpoint, endpoint.endpointResponses.first ())
 
                 // then:
                 target.toString() shouldBe
@@ -99,7 +103,11 @@ class MethodWriterResponseStyleSpec: FreeSpec() {
             }
 
             "writes method with '?' response when it has multiple result contents types & wrapper result type" {
-                apiOptions.typeMappings = listOf(ResultStyleOptionMapping(ResultStyle.ALL))
+                val options = parseOptions(mapping =
+                    """
+                    |map:
+                    |  result-style: all
+                    """)
 
                 val endpoint = endpoint("/foo", HttpMethod.GET) {
                     responses {
@@ -123,7 +131,7 @@ class MethodWriterResponseStyleSpec: FreeSpec() {
                 }
 
                 // when:
-                writer.write(target, endpoint, endpoint.endpointResponses.first())
+                writer(options).write(target, endpoint, endpoint.endpointResponses.first())
 
                 // then:
                 target.toString() shouldBe
@@ -151,7 +159,7 @@ class MethodWriterResponseStyleSpec: FreeSpec() {
                 }
 
                 // when:
-                writer.write(target, endpoint, endpoint.endpointResponses.first())
+                writer().write(target, endpoint, endpoint.endpointResponses.first())
 
                 // then:
                 target.toString() shouldBe
@@ -185,7 +193,7 @@ class MethodWriterResponseStyleSpec: FreeSpec() {
                 }
 
                 // when:
-                writer.write(target, endpoint, endpoint.endpointResponses.first())
+                writer().write(target, endpoint, endpoint.endpointResponses.first())
 
                 // then:
                 target.toString() shouldBe
@@ -199,5 +207,4 @@ class MethodWriterResponseStyleSpec: FreeSpec() {
         }
 
     }
-
 }

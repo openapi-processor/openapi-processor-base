@@ -6,7 +6,6 @@
 package io.openapiprocessor.core.converter
 
 import io.openapiprocessor.core.converter.mapping.*
-import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
 import io.openapiprocessor.core.support.Empty
 
 /**
@@ -131,20 +130,3 @@ class ApiOptions: MappingSettings {
      */
     var identifierWordBreakFromDigitToLetter = true
 }
-
-/**
- * get (global) result style option mapping value if set, otherwise [ResultStyle.SUCCESS].
- *
- * this is a shortcut to avoid the dependency on the
- * [io.openapiprocessor.core.converter.mapping.MappingFinder] for this *simple* case.
- */
-val ApiOptions.resultStyle: ResultStyle
-    get() {
-        val matches = typeMappings
-            .filterIsInstance<ResultStyleOptionMapping>()
-
-        if (matches.isEmpty())
-            return ResultStyle.SUCCESS
-
-        return matches.first().value
-    }

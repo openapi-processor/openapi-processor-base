@@ -49,7 +49,7 @@ open class MethodWriter(
         target.write (
             """
             |    ${createMappingAnnotation(endpoint, endpointResponse)}
-            |    ${createResult(endpointResponse)} ${createMethodName(endpoint, endpointResponse)}(${createParameters(endpoint)});
+            |    ${createResult(endpoint, endpointResponse)} ${createMethodName(endpoint, endpointResponse)}(${createParameters(endpoint)});
             |
             """.trimMargin())
     }
@@ -60,8 +60,10 @@ open class MethodWriter(
         return annotation.toString ()
     }
 
-    private fun createResult(endpointResponse: EndpointResponse): String {
-        return endpointResponse.getResponseType(apiOptions.resultStyle)
+    private fun createResult(endpoint: Endpoint, endpointResponse: EndpointResponse): String {
+        val mappingFinder = MappingFinderX(apiOptions)
+        val resultStyle = mappingFinder.findResultStyleMapping(MappingQueryX(endpoint))
+        return endpointResponse.getResponseType(resultStyle)
     }
 
     private fun createMethodName(endpoint: Endpoint, endpointResponse: EndpointResponse): String {

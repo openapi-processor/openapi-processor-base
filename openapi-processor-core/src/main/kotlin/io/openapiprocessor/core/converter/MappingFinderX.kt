@@ -37,7 +37,7 @@ class MappingFinderX(mappings: MappingSettings) {
         return null
     }
 
-    fun findResultStyleMapping(query: MappingQuery): ResultStyle? {
+    fun findResultStyleMapping(query: MappingQuery): ResultStyle {
         log.trace("looking for result style mapping {}", query)
 
         val epMapping = repository.getEndpointResultStyleMapping(query)
@@ -50,7 +50,7 @@ class MappingFinderX(mappings: MappingSettings) {
             return gMapping
         }
 
-        return null
+        return ResultStyle.SUCCESS
     }
 
     fun getSingleTypeMapping(query: MappingQuery): TypeMapping? {
