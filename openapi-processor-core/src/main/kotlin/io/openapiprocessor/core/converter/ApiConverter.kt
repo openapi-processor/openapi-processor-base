@@ -124,7 +124,7 @@ class  ApiConverter(
     }
 
     private fun getAdditionalParameter(ep: Endpoint): List<AddParameterTypeMapping> {
-        return mappingFinder.findAddParameterTypeMappings(MappingQueryX(ep.path, ep.method))
+        return mappingFinder.findAddParameterTypeMappings(MappingQuery(ep.path, ep.method))
     }
 
     private fun collectRequestBody(requestBody: RequestBody?, ep: Endpoint, dataTypes: DataTypes, resolver: RefResolver) {
@@ -310,7 +310,7 @@ class  ApiConverter(
     }
 
     private fun isExcluded(path: String, method: HttpMethod): Boolean {
-        return mappingFinder.isEndpointExcluded(MappingQueryX(path, method))
+        return mappingFinder.isEndpointExcluded(MappingQuery(path, method))
     }
 
     private fun getInterfaceName(op: Operation, excluded: Boolean): String {

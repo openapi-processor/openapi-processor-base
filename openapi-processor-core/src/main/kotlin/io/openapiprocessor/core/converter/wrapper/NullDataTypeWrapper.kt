@@ -7,7 +7,7 @@ package io.openapiprocessor.core.converter.wrapper
 
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.MappingFinder
-import io.openapiprocessor.core.converter.MappingQueryX
+import io.openapiprocessor.core.converter.MappingQuery
 import io.openapiprocessor.core.converter.SchemaInfo
 import io.openapiprocessor.core.converter.mapping.TargetType
 import io.openapiprocessor.core.model.datatypes.DataType
@@ -47,7 +47,7 @@ open class NullDataTypeWrapper(
 
     private fun getNullDataType(info: SchemaInfo): Target {
         // check endpoint result mapping
-        val nullType = finder.findNullTypeMapping(MappingQueryX(info))
+        val nullType = finder.findNullTypeMapping(MappingQuery(info))
         return Target(nullType?.getTargetType(), nullType?.undefined)
 
         // not yet supported

@@ -9,7 +9,7 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.maps.shouldBeEmpty
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
-import io.openapiprocessor.core.converter.MappingQueryX
+import io.openapiprocessor.core.converter.MappingQuery
 import io.openapiprocessor.core.converter.mapping.*
 import io.openapiprocessor.core.converter.mapping.matcher.AnnotationTypeMatcher
 import io.openapiprocessor.core.parser.HttpMethod
@@ -184,7 +184,7 @@ class MappingConverterTypeSpec: FreeSpec({
 
             // then:
             val typeMapping = mappings.findGlobalTypeMapping(
-                MappingQueryX(
+                MappingQuery(
                     name = expected.sourceTypeName,
                     format = expected.sourceTypeFormat
                 )
@@ -217,7 +217,7 @@ class MappingConverterTypeSpec: FreeSpec({
         val mappings = MappingConverter(mapping).convertX()
 
         // then:
-        val typeMapping = mappings.findGlobalTypeMapping(MappingQueryX(name = "Foo"))
+        val typeMapping = mappings.findGlobalTypeMapping(MappingQuery(name = "Foo"))
 
         typeMapping.shouldBeNull()
     }
@@ -239,7 +239,7 @@ class MappingConverterTypeSpec: FreeSpec({
         val mappings = MappingConverter(mapping).convertX()
 
         shouldThrow<AmbiguousTypeMappingException> {
-            mappings.findGlobalTypeMapping(MappingQueryX(name = "Foo"))
+            mappings.findGlobalTypeMapping(MappingQuery(name = "Foo"))
         }
     }
 
@@ -260,7 +260,7 @@ class MappingConverterTypeSpec: FreeSpec({
         val mappings = MappingConverter(mapping).convertX2()
 
         val annotationMappings = mappings.globalMappings.findAnnotationTypeMapping(
-            AnnotationTypeMatcher(MappingQueryX(type = "Foo")))
+            AnnotationTypeMatcher(MappingQuery(type = "Foo")))
 
         annotationMappings shouldHaveSize 1
         val annotationMapping = annotationMappings.first()
@@ -288,7 +288,7 @@ class MappingConverterTypeSpec: FreeSpec({
         val mappings = MappingConverter(mapping).convertX2()
 
         val annotationMappings = mappings.globalMappings.findAnnotationTypeMapping(
-            AnnotationTypeMatcher(MappingQueryX(type = "Foo", allowObject = true)))
+            AnnotationTypeMatcher(MappingQuery(type = "Foo", allowObject = true)))
 
         annotationMappings shouldHaveSize 3
     }
@@ -307,7 +307,7 @@ class MappingConverterTypeSpec: FreeSpec({
         val mappings = MappingConverter(mapping).convertX()
 
         // then:
-        val annotationMappings = mappings.findGlobalAnnotationTypeMapping(MappingQueryX(name = "Foo"))
+        val annotationMappings = mappings.findGlobalAnnotationTypeMapping(MappingQuery(name = "Foo"))
 
         annotationMappings.shouldBeEmpty()
     }
@@ -337,14 +337,16 @@ class MappingConverterTypeSpec: FreeSpec({
 
         // then:
         val typeMapping = mappings.findEndpointTypeMapping(
-            MappingQueryX(path = "/foo", method = HttpMethod.POST, name = "Foo"))!!
+            MappingQuery(path = "/foo", method = HttpMethod.POST, name = "Foo")
+        )!!
 
         typeMapping.sourceTypeName shouldBe "Foo"
         typeMapping.sourceTypeFormat.shouldBeNull()
         typeMapping.targetTypeName shouldBe "io.openapiprocessor.Foo"
 
         val typeMappingGet = mappings.findEndpointTypeMapping(
-            MappingQueryX(path = "/foo", method = HttpMethod.GET, name= "Foo"))!!
+            MappingQuery(path = "/foo", method = HttpMethod.GET, name= "Foo")
+        )!!
 
         typeMappingGet.sourceTypeName shouldBe "Foo"
         typeMappingGet.sourceTypeFormat.shouldBeNull()
@@ -375,7 +377,8 @@ class MappingConverterTypeSpec: FreeSpec({
         val repository = MappingRepository(endpointMappings = mappings.endpointMappings)
 
         val annotationMappings = repository.findEndpointAnnotationTypeMapping(
-            MappingQueryX(path = "/foo", method = HttpMethod.POST, type = "Foo"))
+            MappingQuery(path = "/foo", method = HttpMethod.POST, type = "Foo")
+        )
 
         annotationMappings shouldHaveSize 1
         val annotationMapping = annotationMappings.first()
@@ -385,7 +388,8 @@ class MappingConverterTypeSpec: FreeSpec({
         annotationMapping.annotation.parameters.shouldBeEmpty()
 
         val annotationMappingsGet = repository.findEndpointAnnotationTypeMapping(
-            MappingQueryX(path = "/foo", method = HttpMethod.GET, type = "Foo"))
+            MappingQuery(path = "/foo", method = HttpMethod.GET, type = "Foo")
+        )
 
         annotationMappingsGet shouldHaveSize 1
         val annotationMappingGet = annotationMappingsGet.first()

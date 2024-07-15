@@ -479,7 +479,7 @@ class DataTypeConverter(
     }
 
     private fun getDataTypeMapping(info: SchemaInfo): TypeMapping? {
-        return finder.findAnyTypeMapping(MappingQueryX(info))
+        return finder.findAnyTypeMapping(MappingQuery(info))
     }
 
     /**

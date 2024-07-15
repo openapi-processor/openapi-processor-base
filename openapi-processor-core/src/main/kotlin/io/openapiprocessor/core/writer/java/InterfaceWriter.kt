@@ -7,7 +7,7 @@ package io.openapiprocessor.core.writer.java
 
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.MappingFinder
-import io.openapiprocessor.core.converter.MappingQueryX
+import io.openapiprocessor.core.converter.MappingQuery
 import io.openapiprocessor.core.framework.FrameworkAnnotations
 import io.openapiprocessor.core.model.Endpoint
 import io.openapiprocessor.core.model.EndpointResponse
@@ -101,7 +101,7 @@ class InterfaceWriter(
 
     private fun getMappingAnnotationsImports(endpoint: Endpoint, parameter: Parameter): Set<String> {
         val mappingFinder = MappingFinder(apiOptions)
-        val query = MappingQueryX(endpoint, parameter)
+        val query = MappingQuery(endpoint, parameter)
 
         val mappingAnnotations = mutableSetOf<String>()
 
@@ -128,7 +128,7 @@ class InterfaceWriter(
 
     private fun addImports(endpoint: Endpoint, response: EndpointResponse, imports: MutableSet<String>) {
         val mappingFinder = MappingFinder(apiOptions)
-        val resultStyle = mappingFinder.findResultStyleMapping(MappingQueryX(endpoint))
+        val resultStyle = mappingFinder.findResultStyleMapping(MappingQuery(endpoint))
         val responseImports: MutableSet<String> = response.getResponseImports(resultStyle).toMutableSet()
 
         if (responseImports.isNotEmpty()) {

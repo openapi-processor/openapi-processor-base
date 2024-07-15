@@ -5,7 +5,7 @@
 
 package io.openapiprocessor.core.support
 
-import io.openapiprocessor.core.converter.MappingQueryX
+import io.openapiprocessor.core.converter.MappingQuery as Query
 import io.openapiprocessor.core.converter.mapping.MappingQuery
 import io.openapiprocessor.core.converter.mapping.MappingSchemaPlain
 import io.openapiprocessor.core.parser.HttpMethod
@@ -20,7 +20,7 @@ fun query(
     primitive: Boolean = false,
     array: Boolean = false
 ): MappingQuery {
-    return MappingQueryX(
+    return Query(
         MappingSchemaPlain(
             path,
             method,

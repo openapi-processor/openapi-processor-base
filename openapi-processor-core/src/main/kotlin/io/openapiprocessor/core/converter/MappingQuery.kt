@@ -12,7 +12,7 @@ import io.openapiprocessor.core.model.Endpoint
 import io.openapiprocessor.core.model.parameters.Parameter
 import io.openapiprocessor.core.parser.HttpMethod
 
-class MappingQueryX(
+class MappingQuery(
     override val path: String? = null,
     override val method: HttpMethod? = null,
     /**
@@ -37,7 +37,7 @@ class MappingQueryX(
     companion object {
         // callable like constructor
         operator fun invoke(endpoint: Endpoint): MappingQuery {
-            return MappingQueryX(
+            return MappingQuery(
                 endpoint.path,
                 endpoint.method
             )
@@ -47,7 +47,7 @@ class MappingQueryX(
         operator fun invoke(endpoint: Endpoint, parameter: Parameter): MappingQuery {
             val (type, format) = splitTypeName(parameter.dataType.getSourceName())
 
-            return MappingQueryX(
+            return MappingQuery(
                 endpoint.path,
                 endpoint.method,
                 parameter.name,
@@ -58,7 +58,7 @@ class MappingQueryX(
 
         // callable like constructor
         operator fun invoke(info: MappingSchema): MappingQuery {
-            return MappingQueryX(
+            return MappingQuery(
                 info.getPath(),
                 info.getMethod(),
                 info.getName(),

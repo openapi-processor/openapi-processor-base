@@ -61,7 +61,7 @@ class ResultDataTypeWrapper(
     }
 
     private fun getMappedResultDataType(info: SchemaInfo): TargetType? {
-        val match = finder.getResultTypeMapping(MappingQueryX(info))
+        val match = finder.getResultTypeMapping(MappingQuery(info))
         if (match != null) {
             return match.getTargetType()
         }

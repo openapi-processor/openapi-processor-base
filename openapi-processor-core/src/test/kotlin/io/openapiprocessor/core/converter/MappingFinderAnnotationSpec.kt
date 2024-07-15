@@ -22,7 +22,7 @@ class MappingFinderAnnotationSpec: StringSpec({
 
         val finder = MappingFinder(options)
 
-        val mapping = finder.findAnnotationTypeMappings(MappingQueryX(type = "Foo"))
+        val mapping = finder.findAnnotationTypeMappings(MappingQuery(type = "Foo"))
 
         mapping.size shouldBe 1
         mapping.first().sourceTypeName shouldBe "Foo"
@@ -38,7 +38,7 @@ class MappingFinderAnnotationSpec: StringSpec({
 
         val finder = MappingFinder(options)
 
-        val mapping = finder.findAnnotationTypeMappings(MappingQueryX(type = "Foo", allowObject = true))
+        val mapping = finder.findAnnotationTypeMappings(MappingQuery(type = "Foo", allowObject = true))
 
         mapping.size shouldBe 1
         mapping.first().sourceTypeName shouldBe "object"
@@ -54,10 +54,10 @@ class MappingFinderAnnotationSpec: StringSpec({
 
         val finder = MappingFinder(options)
 
-        val mappingSimple = finder.findAnnotationTypeMappings(MappingQueryX(type = "Foo"))
+        val mappingSimple = finder.findAnnotationTypeMappings(MappingQuery(type = "Foo"))
         mappingSimple.shouldBeEmpty()
 
-        val mappingCollection = finder.findAnnotationTypeMappings(MappingQueryX(type = "Foo[]"))
+        val mappingCollection = finder.findAnnotationTypeMappings(MappingQuery(type = "Foo[]"))
         mappingCollection.shouldBeEmpty()
     }
 
@@ -71,7 +71,7 @@ class MappingFinderAnnotationSpec: StringSpec({
 
         val finder = MappingFinder(options)
 
-        val mapping = finder.findAnnotationTypeMappings(MappingQueryX(type = "string", format = "uuid"))
+        val mapping = finder.findAnnotationTypeMappings(MappingQuery(type = "string", format = "uuid"))
 
         mapping.size shouldBe 1
         mapping.first().sourceTypeName shouldBe "string"
@@ -88,7 +88,7 @@ class MappingFinderAnnotationSpec: StringSpec({
 
         val finder = MappingFinder(options)
 
-        val mapping = finder.findAnnotationParameterTypeMappings(MappingQueryX(type = "Foo"))
+        val mapping = finder.findAnnotationParameterTypeMappings(MappingQuery(type = "Foo"))
 
         mapping.size shouldBe 1
         mapping.first().sourceTypeName shouldBe "Foo"
@@ -104,7 +104,7 @@ class MappingFinderAnnotationSpec: StringSpec({
 
         val finder = MappingFinder(options)
 
-        val mapping = finder.findAnnotationParameterTypeMappings(MappingQueryX(type = "string", format = "uuid"))
+        val mapping = finder.findAnnotationParameterTypeMappings(MappingQuery(type = "string", format = "uuid"))
 
         mapping.size shouldBe 1
         mapping.first().sourceTypeName shouldBe "string"
@@ -123,7 +123,7 @@ class MappingFinderAnnotationSpec: StringSpec({
 
         val finder = MappingFinder(options)
 
-        val mapping = finder.findAnnotationParameterNameTypeMapping(MappingQueryX(name = "foo"))
+        val mapping = finder.findAnnotationParameterNameTypeMapping(MappingQuery(name = "foo"))
 
         mapping.size shouldBe 1
         mapping.first().name shouldBe "foo"
