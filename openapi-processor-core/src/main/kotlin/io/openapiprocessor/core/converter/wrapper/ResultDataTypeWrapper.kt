@@ -6,6 +6,7 @@
 package io.openapiprocessor.core.converter.wrapper
 
 import io.openapiprocessor.core.converter.*
+import io.openapiprocessor.core.converter.MappingQuery
 import io.openapiprocessor.core.converter.mapping.*
 import io.openapiprocessor.core.model.datatypes.DataType
 import io.openapiprocessor.core.model.datatypes.GenericDataType
