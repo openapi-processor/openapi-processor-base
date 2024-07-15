@@ -10,7 +10,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 /**
- * [io.openapiprocessor.core.converter.mapping.MappingFinder] matcher for type mappings.
+ * [io.openapiprocessor.core.converter.MappingFinderX] matcher for type mappings.
  */
 class TypeMatcher(private val query: MappingQuery): MappingMatcher, (TypeMapping) -> Boolean {
     val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
@@ -25,10 +25,6 @@ class TypeMatcher(private val query: MappingQuery): MappingMatcher, (TypeMapping
         log.trace("${if (match) "" else "not "}matched: {}", mapping)
         return match
     }
-
-//    override fun toString(): String {
-//        return query.toStringSchema()
-//    }
 
     override fun invoke(mapping: TypeMapping): Boolean {
         // try to match by OpenAPI name first, type is the OpenAPI type, i.e. string, object etc.
