@@ -8,31 +8,32 @@ package io.openapiprocessor.core.converter.mapping
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.collections.shouldNotBeEmpty
+import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
-import io.mockk.mockk
-import io.openapiprocessor.core.converter.SchemaInfo
-import io.openapiprocessor.core.parser.HttpMethod
-import io.openapiprocessor.core.parser.NullSchema.Companion.nullSchema
-import io.openapiprocessor.core.parser.RefResolver
+import io.openapiprocessor.core.parser.HttpMethod.GET
+import io.openapiprocessor.core.parser.HttpMethod.PATCH
+import io.openapiprocessor.core.support.mappingFinder
+import io.openapiprocessor.core.support.parseOptions
+import io.openapiprocessor.core.support.query
 
 class MappingFinderEndpointMethodSpec: StringSpec({
-    val resolver = mockk<RefResolver>()
-    val foo = SchemaInfo.Endpoint("/foo", HttpMethod.GET)
 
     "endpoint/method type mapping matches single mapping" {
-        val finder = MappingFinder(
-            listOf(
-                EndpointTypeMapping("/foo", null, emptyList()),
-                EndpointTypeMapping("/foo", HttpMethod.GET, listOf(
-                    TypeMapping("Foo", null, "io.openapiprocessor.Foo"),
-                    TypeMapping("Far", null, "io.openapiprocessor.Far"),
-                    TypeMapping("Bar", null, "io.openapiprocessor.Bar")
-            )))
-        )
+        val options = parseOptions(mapping =
+            """
+            |map:
+            | paths:
+            |   /foo:
+            |     get:
+            |       types:
+            |         - type: Foo => io.openapiprocessor.Foo
+            |         - type: Far => io.openapiprocessor.Far
+            |         - type: Bar => io.openapiprocessor.Bar
+            """)
 
-        val info = SchemaInfo(foo, "Foo", "", nullSchema, resolver)
-        val result = finder.findEndpointTypeMapping(info)
+        val finder = mappingFinder(options)
+        val result = finder.findTypeMapping(query(path = "/foo", method = GET, name = "Foo"))
 
         result.shouldNotBeNull()
         result.sourceTypeName.shouldBe("Foo")
@@ -40,64 +41,64 @@ class MappingFinderEndpointMethodSpec: StringSpec({
     }
 
     "endpoint/method parameter mapping matches single mapping" {
-        val finder = MappingFinder(
-            listOf(
-                EndpointTypeMapping("/foo", null, emptyList()),
-                EndpointTypeMapping("/foo", HttpMethod.GET, listOf(
-                    NameTypeMapping("foo param",
-                        TypeMapping("Foo", null, "io.openapiprocessor.Foo")),
-                    NameTypeMapping("far param",
-                        TypeMapping("far", null, "io.openapiprocessor.Far")),
-                    NameTypeMapping("bar param",
-                        TypeMapping("Bar", null,"io.openapiprocessor.Bar"))
-            )))
-        )
+        val options = parseOptions(mapping =
+            """
+            |map:
+            | paths:
+            |   /foo:
+            |     get:
+            |       parameters:
+            |         - name: fooParam => io.openapiprocessor.Foo
+            |         - name: farParam => io.openapiprocessor.Far
+            |         - name: barParam => io.openapiprocessor.Bar
+            """)
 
-        val info = SchemaInfo(foo, "far param", "", nullSchema, resolver)
-        val result = finder.findEndpointTypeMapping(info)
+        val finder = mappingFinder(options)
+        val result = finder.findParameterNameTypeMapping(query(path = "/foo", method = GET, name = "farParam"))
 
         result.shouldNotBeNull()
-        result.sourceTypeName.shouldBe("far")
-        result.targetTypeName.shouldBe("io.openapiprocessor.Far")
+        result.parameterName.shouldBe("farParam")
+        result.mapping.sourceTypeName.shouldBeNull()
+        result.mapping.targetTypeName.shouldBe("io.openapiprocessor.Far")
     }
 
     "endpoint/method response mapping matches single mapping" {
-        val finder = MappingFinder(
-            listOf(
-                EndpointTypeMapping("/foo", null, emptyList()),
-                EndpointTypeMapping("/foo", HttpMethod.GET, listOf(
-                    ContentTypeMapping("application/json",
-                        TypeMapping("Foo", null, "io.openapiprocessor.Foo")),
-                    ContentTypeMapping("application/json-2",
-                        TypeMapping("far", null, "io.openapiprocessor.Far")),
-                    ContentTypeMapping("application/json-3",
-                        TypeMapping("Bar", null, "io.openapiprocessor.Bar"))
-            )))
-        )
+        val options = parseOptions(mapping =
+            """
+            |map:
+            | paths:
+            |   /foo:
+            |     get:
+            |       responses:
+            |         - content: application/json => io.openapiprocessor.Foo
+            |         - content: application/json-2 => io.openapiprocessor.Far
+            |         - content: application/json-3 => io.openapiprocessor.Bar
+            """)
 
-        val info = SchemaInfo(foo, "", "application/json", nullSchema, resolver)
-        val result = finder.findEndpointTypeMapping(info)
+        val finder = mappingFinder(options)
+        val result = finder.findContentTypeMapping(query(path = "/foo", method = GET, contentType = "application/json"))
 
         result.shouldNotBeNull()
-        result.sourceTypeName.shouldBe("Foo")
-        result.targetTypeName.shouldBe("io.openapiprocessor.Foo")
+        result.contentType.shouldBe("application/json")
+        result.mapping.sourceTypeName.shouldBeNull()
+        result.mapping.targetTypeName.shouldBe("io.openapiprocessor.Foo")
     }
 
     "endpoint type mapping matches null mapping" {
-        val finder = MappingFinder(
-            listOf(
-                EndpointTypeMapping("/foo", null, emptyList()),
-                EndpointTypeMapping("/foo", HttpMethod.PATCH, listOf(
-                    NullTypeMapping("null", "org.openapitools.jackson.nullable.JsonNullable"),
-                    TypeMapping("Far", null, "io.openapiprocessor.Far"),
-                    TypeMapping("Bar", null, "io.openapiprocessor.Bar")
-            )))
-        )
+        val options = parseOptions(mapping =
+            """
+            |map:
+            | paths:
+            |   /foo:
+            |     patch:
+            |       null: org.openapitools.jackson.nullable.JsonNullable
+            |       types:
+            |         - type: Far => io.openapiprocessor.Foo
+            |         - type: Bar => io.openapiprocessor.Far
+            """)
 
-        val info = SchemaInfo(
-            SchemaInfo.Endpoint("/foo", HttpMethod.PATCH),
-            "Foo", "", nullSchema, resolver)
-        val result = finder.findEndpointNullTypeMapping(info)
+        val finder = mappingFinder(options)
+        val result = finder.findNullTypeMapping(query(path = "/foo", method = PATCH))
 
         result.shouldNotBeNull()
         result.sourceTypeName.shouldBe("null")
@@ -105,152 +106,152 @@ class MappingFinderEndpointMethodSpec: StringSpec({
     }
 
     "endpoint/method add parameter mapping matches" {
-        val finder = MappingFinder(
-            listOf(
-                EndpointTypeMapping("/foo", null, emptyList()),
-                EndpointTypeMapping("/foo", HttpMethod.GET, listOf(
-                    AddParameterTypeMapping("foo param",
-                        TypeMapping(null, null, "io.openapiprocessor.Foo")),
-                    AddParameterTypeMapping("bar param",
-                        TypeMapping(null, null, "io.openapiprocessor.Foo"))
-            )))
-        )
+        val options = parseOptions(mapping =
+            """
+            |map:
+            | paths:
+            |   /foo:
+            |     get:
+            |       parameters:
+            |         - add: fooParam => io.openapiprocessor.Foo
+            |         - add: barParam => io.openapiprocessor.Foo
+            """)
 
-        val info = SchemaInfo(foo, "", "", nullSchema, resolver)
-        val result = finder.findEndpointAddParameterTypeMappings(info.getPath(), info.getMethod())
+        val finder = mappingFinder(options)
+        val result = finder.findAddParameterTypeMappings(query(path = "/foo", method = GET))
 
         result.shouldNotBeEmpty()
-        result[0].parameterName.shouldBe("foo param")
-        result[1].parameterName.shouldBe("bar param")
+        result[0].parameterName.shouldBe("fooParam")
+        result[1].parameterName.shouldBe("barParam")
     }
 
     "endpoint/method result mapping matches" {
-        val finder = MappingFinder(
-            listOf(
-                EndpointTypeMapping("/foo", null, emptyList()),
-                EndpointTypeMapping("/foo", HttpMethod.GET, listOf(
-                    ResultTypeMapping("io.openapiprocessor.ResultWrapper", emptyList())
-            )))
-        )
+        val options = parseOptions(mapping =
+            """
+            |map:
+            | paths:
+            |   /foo:
+            |     get:
+            |       result: io.openapiprocessor.ResultWrapper
+            """)
 
-        val info = SchemaInfo(foo, "", "", nullSchema, resolver)
-        val result = finder.findEndpointResultTypeMapping(info)
+        val finder = mappingFinder(options)
+        val result = finder.getResultTypeMapping(query(path = "/foo", method = GET))
 
         result.shouldNotBeNull()
         result.targetTypeName.shouldBe("io.openapiprocessor.ResultWrapper")
     }
 
     "endpoint/method single mapping matches" {
-        val finder = MappingFinder(
-            listOf(
-                EndpointTypeMapping("/foo", null, emptyList()),
-                EndpointTypeMapping("/foo", HttpMethod.GET, listOf(
-                    TypeMapping(
-                        "single",
-                        null,
-                        "io.openapiprocessor.SingleWrapper")
-            )))
-        )
+        val options = parseOptions(mapping =
+            """
+            |map:
+            | paths:
+            |   /foo:
+            |     get:
+            |       single: io.openapiprocessor.SingleWrapper
+            """)
 
-        val info = SchemaInfo(foo, "", "", nullSchema, resolver)
-        val result = finder.findEndpointSingleTypeMapping(info)
+        val finder = mappingFinder(options)
+        val result = finder.getSingleTypeMapping(query(path = "/foo", method = GET))
 
         result.shouldNotBeNull()
         result.targetTypeName.shouldBe("io.openapiprocessor.SingleWrapper")
     }
 
     "endpoint single mapping matches" {
-        val finder = MappingFinder(
-            listOf(
-                EndpointTypeMapping("/foo", null, listOf(
-                    TypeMapping(
-                        "single",
-                        null,
-                        "io.openapiprocessor.SingleWrapper")
-            )))
-        )
+        val options = parseOptions(mapping =
+            """
+            |map:
+            | paths:
+            |   /foo:
+            |     single: io.openapiprocessor.SingleWrapper
+            """)
 
-        val info = SchemaInfo(foo, "", "", nullSchema, resolver)
-        val result = finder.findEndpointSingleTypeMapping(info)
+        val finder = mappingFinder(options)
+        val result = finder.getSingleTypeMapping(query(path = "/foo", method = GET))
 
         result.shouldNotBeNull()
         result.targetTypeName.shouldBe("io.openapiprocessor.SingleWrapper")
     }
 
     "endpoint/method multi mapping matches" {
-        val finder = MappingFinder(
-            listOf(
-                EndpointTypeMapping("/foo", null, emptyList()),
-                EndpointTypeMapping("/foo", HttpMethod.GET, listOf(
-                    TypeMapping(
-                        "multi",
-                        null,
-                        "io.openapiprocessor.MultiWrapper")
-            )))
-        )
+        val options = parseOptions(mapping =
+            """
+            |map:
+            | paths:
+            |   /foo:
+            |     get:
+            |       multi: io.openapiprocessor.MultiWrapper
+            """)
 
-        val info = SchemaInfo(foo, "", "", nullSchema, resolver)
-        val result = finder.findEndpointMultiTypeMapping(info)
+        val finder = mappingFinder(options)
+        val result = finder.getMultiTypeMapping(query(path = "/foo", method = GET))
 
         result.shouldNotBeNull()
         result.targetTypeName.shouldBe("io.openapiprocessor.MultiWrapper")
     }
 
     "endpoint multi mapping matches" {
-        val finder = MappingFinder(
-            listOf(
-                EndpointTypeMapping("/foo", null, listOf(
-                    TypeMapping(
-                        "multi",
-                        null,
-                        "io.openapiprocessor.MultiWrapper")
-            )))
-        )
+        val options = parseOptions(mapping =
+            """
+            |map:
+            | paths:
+            |   /foo:
+            |     multi: io.openapiprocessor.MultiWrapper
+            """)
 
-        val info = SchemaInfo(foo, "", "", nullSchema, resolver)
-        val result = finder.findEndpointMultiTypeMapping(info)
+        val finder = mappingFinder(options)
+        val result = finder.getMultiTypeMapping(query(path = "/foo", method = GET))
 
         result.shouldNotBeNull()
         result.targetTypeName.shouldBe("io.openapiprocessor.MultiWrapper")
     }
 
     "endpoint/method exclude" {
-        val finder = MappingFinder(
-            listOf(
-                EndpointTypeMapping("/foo", null, emptyList()),
-                EndpointTypeMapping("/foo", HttpMethod.GET, emptyList(), true)
-            )
-        )
+        val options = parseOptions(mapping =
+            """
+            |map:
+            | paths:
+            |   /foo:
+            |     get:
+            |       exclude: true
+            """)
 
-        val info = SchemaInfo(foo, "", "", nullSchema, resolver)
-        val result = finder.isExcludedEndpoint(info.getPath(), info.getMethod())
+        val finder = mappingFinder(options)
+        val result = finder.isEndpointExcluded(query(path = "/foo", method = GET))
 
         result.shouldBeTrue()
     }
 
     "endpoint exclude" {
-        val finder = MappingFinder(
-            listOf(
-                EndpointTypeMapping("/foo", null, emptyList(), true)
-            )
-        )
+        val options = parseOptions(mapping =
+            """
+            |map:
+            | paths:
+            |   /foo:
+            |     exclude: true
+            """)
 
-        val info = SchemaInfo(foo, "", "", nullSchema, resolver)
-        val result = finder.isExcludedEndpoint(info.getPath(), info.getMethod())
+        val finder = mappingFinder(options)
+        val result = finder.isEndpointExcluded(query(path = "/foo", method = GET))
 
         result.shouldBeTrue()
     }
 
     "endpoint & endpoint/method exclude if any is true" {
-        val finder = MappingFinder(
-            listOf(
-                EndpointTypeMapping("/foo", null, emptyList(), true),
-                EndpointTypeMapping("/foo", HttpMethod.GET, emptyList(), false)
-            )
-        )
+        val options = parseOptions(mapping =
+            """
+            |map:
+            | paths:
+            |   /foo:
+            |     exclude: true
+            |     get:
+            |       exclude: false
+            """)
 
-        val info = SchemaInfo(foo, "", "", nullSchema, resolver)
-        val result = finder.isExcludedEndpoint(info.getPath(), info.getMethod())
+        val finder = mappingFinder(options)
+        val result = finder.isEndpointExcluded(query(path = "/foo", method = GET))
 
         result.shouldBeTrue()
     }
