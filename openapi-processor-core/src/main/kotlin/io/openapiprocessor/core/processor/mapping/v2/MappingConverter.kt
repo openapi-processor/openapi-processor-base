@@ -22,53 +22,6 @@ import io.openapiprocessor.core.processor.mapping.v2.Map as MapV2
  */
 class MappingConverter(val mapping: MappingV2) {
 
-    fun convert(): List<Mapping> {
-        val result = ArrayList<Mapping>()
-
-        if(mapping.map.result != null) {
-            result.add(convertResult(mapping.map.result))
-        }
-
-        if (mapping.map.resultStyle != null) {
-            result.add(convertResultStyleOption(mapping.map.resultStyle))
-        }
-
-        if(mapping.map.single != null) {
-            result.add(convertType("single" , mapping.map.single))
-        }
-
-        if(mapping.map.multi != null) {
-            result.add(convertType("multi", mapping.map.multi))
-        }
-
-        //if(mapping.map.`null` != null) {
-        //    result.add(convertNull(mapping.map.`null`))
-        //}
-
-        mapping.map.types.forEach {
-            result.add(convertType(it))
-        }
-
-        mapping.map.parameters.forEach {
-            result.add (convertParameter (it))
-        }
-
-        mapping.map.responses.forEach {
-            result.add (convertResponse (it))
-        }
-
-        mapping.map.paths.forEach {
-            result.add(convertPath (it.key, it.value))
-            result.addAll(convertPathMethods(it.key, it.value))
-        }
-
-        mapping.map.extensions.forEach {
-            result.add(convertExtension (it.key, it.value))
-        }
-
-        return result
-    }
-
     @Deprecated(message = "use convertX2")
     fun convertX(): MappingRepository {
         return MappingRepository(
@@ -192,10 +145,6 @@ class MappingConverter(val mapping: MappingV2) {
         }
 
         return extensionMappings
-    }
-
-    private fun convertResultStyleOption(value: ResultStyle): ResultStyleOptionMapping {
-        return ResultStyleOptionMapping(value)
     }
 
     private fun convertResult (result: String): ResultTypeMapping {
@@ -375,40 +324,6 @@ class MappingConverter(val mapping: MappingV2) {
             .collect(Collectors.toList())
     }
 
-    private fun convertPath(path: String, source: Path): Mapping {
-        val result = ArrayList<Mapping>()
-
-        if(source.result != null) {
-            result.add(convertResult(source.result))
-        }
-
-        if(source.single != null) {
-            result.add(convertType("single" , source.single))
-        }
-
-        if(source.multi != null) {
-            result.add(convertType("multi", source.multi))
-        }
-
-        if(source.`null` != null) {
-            result.add(convertNull(source.`null`))
-        }
-
-        source.types.forEach {
-            result.add(convertType(it))
-        }
-
-        source.parameters.forEach {
-            result.add (convertParameter (it))
-        }
-
-        source.responses.forEach {
-            result.add (convertResponse (it))
-        }
-
-        return EndpointTypeMapping(path, null, result, source.exclude)
-    }
-
     private fun convertPath(source: Path): Mappings {
         var resultTypeMapping: ResultTypeMapping? = null
         var singleTypeMapping: TypeMapping? = null
@@ -456,78 +371,6 @@ class MappingConverter(val mapping: MappingV2) {
             TypeMappings(parameterTypeMappings),
             TypeMappings(responseTypeMappings),
             source.exclude)
-    }
-
-    private fun convertPathMethods(path: String, source: Path): List<Mapping> {
-        val result = ArrayList<Mapping>()
-
-        if (source.get != null) {
-            result.add(convertPathMethod(path, HttpMethod.GET, source.get))
-        }
-
-        if (source.put != null) {
-            result.add(convertPathMethod(path, HttpMethod.PUT, source.put))
-        }
-
-        if (source.post != null) {
-            result.add(convertPathMethod(path, HttpMethod.POST, source.post))
-        }
-
-        if (source.delete != null) {
-            result.add(convertPathMethod(path, HttpMethod.DELETE, source.delete))
-        }
-
-        if (source.options != null) {
-            result.add(convertPathMethod(path, HttpMethod.OPTIONS, source.options))
-        }
-
-        if (source.head != null) {
-            result.add(convertPathMethod(path, HttpMethod.HEAD, source.head))
-        }
-
-        if (source.patch != null) {
-            result.add(convertPathMethod(path, HttpMethod.PATCH, source.patch))
-        }
-
-        if (source.trace != null) {
-            result.add(convertPathMethod(path, HttpMethod.TRACE, source.trace))
-        }
-
-        return result
-    }
-
-    private fun convertPathMethod(path: String, method: HttpMethod, source: PathMethod): Mapping {
-        val result = ArrayList<Mapping>()
-
-        if(source.result != null) {
-            result.add(convertResult(source.result))
-        }
-
-        if(source.single != null) {
-            result.add(convertType("single" , source.single))
-        }
-
-        if(source.multi != null) {
-            result.add(convertType("multi", source.multi))
-        }
-
-        if(source.`null` != null) {
-            result.add(convertNull(source.`null`))
-        }
-
-        source.types.forEach {
-            result.add(convertType(it))
-        }
-
-        source.parameters.forEach {
-            result.add (convertParameter (it))
-        }
-
-        source.responses.forEach {
-            result.add (convertResponse (it))
-        }
-
-        return EndpointTypeMapping(path, method, result, source.exclude)
     }
 
     private fun convertPathMethod(source: PathMethod): Mappings {
@@ -582,14 +425,6 @@ class MappingConverter(val mapping: MappingV2) {
             TypeMappings(responseTypeMappings),
             source.exclude
         )
-    }
-
-    private fun convertExtension(extension: String, values: List<Type>): Mapping {
-        val mappings = values.map {
-            createExtensionMapping(it)
-        }
-
-        return ExtensionMapping(extension, mappings)
     }
 
     private fun createExtensionMapping(source: Type): Mapping {
