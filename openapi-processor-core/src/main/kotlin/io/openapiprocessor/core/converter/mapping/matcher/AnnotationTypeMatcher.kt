@@ -18,10 +18,14 @@ class AnnotationTypeMatcher(private val query: MappingQueryType): MappingMatcher
             return false
         }
 
+        val matchName = mapping.sourceTypeName == query.name
         val matchObject = mapping.sourceTypeName == "object"
         val matchType = mapping.sourceTypeName == query.type
         val matchFormat = mapping.sourceTypeFormat == query.format
-        val match = (matchType && matchFormat) || (query.allowObject && matchObject)
+
+        val match = (matchName && matchFormat)
+                || (matchType && matchFormat)
+                || (query.allowObject && matchObject)
 
         log.trace("${if (match) "" else "not "}matched: {}", mapping)
         return match

@@ -22,11 +22,6 @@ class NameTypeMapping(
 
 ): Mapping {
 
-    @Override
-    override fun getChildMappings(): List<Mapping> {
-        return listOf(mapping)
-    }
-
     override fun toString(): String {
         return "$parameterName => ${targetType()}"
     }

@@ -21,6 +21,7 @@ import io.openapiprocessor.core.processor.mapping.v2.Mapping as MappingV2
  */
 class MappingConverter {
 
+    @Deprecated(message =  "replace with convert X")
    fun convert(source: MappingVersion?): List<Mapping> {
        if (source == null) {
            return emptyList()

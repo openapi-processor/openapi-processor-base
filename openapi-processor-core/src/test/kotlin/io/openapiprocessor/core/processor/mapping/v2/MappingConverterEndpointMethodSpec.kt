@@ -8,15 +8,14 @@ package io.openapiprocessor.core.processor.mapping.v2
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.data.forAll
 import io.kotest.data.row
-import io.kotest.matchers.booleans.shouldBeTrue
+import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.maps.shouldHaveSize
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.types.shouldBeInstanceOf
-import io.openapiprocessor.core.converter.mapping.EndpointTypeMapping
-import io.openapiprocessor.core.converter.mapping.TypeMapping
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.processor.MappingConverter
 import io.openapiprocessor.core.processor.MappingReader
+import io.openapiprocessor.core.support.query
 
 class MappingConverterEndpointMethodSpec: StringSpec({
 
@@ -36,20 +35,16 @@ class MappingConverterEndpointMethodSpec: StringSpec({
                    """.trimMargin()
 
         // when:
-        val mapping = reader.read (yaml)
-        val mappings = converter.convert (mapping)
+        val mappingData = converter.convertX(reader.read(yaml))
 
-        // then:
-        mappings.size.shouldBe(2)
-        val epAll = mappings[0] as EndpointTypeMapping
-        epAll.path.shouldBe("/foo")
-        epAll.method.shouldBeNull()
-        epAll.getChildMappings().isEmpty().shouldBeTrue()
+        mappingData.endpointMappings.shouldHaveSize(1)
+        val epMappings = mappingData.endpointMappings["/foo"]
+        val mapping = epMappings?.findTypeMapping(query(path = "/foo", method = HttpMethod.GET, name = "Foo"))
 
-        val ep = mappings[1] as EndpointTypeMapping
-        ep.path.shouldBe("/foo")
-        ep.method.shouldBe(HttpMethod.GET)
-        ep.getChildMappings().first().shouldBeInstanceOf<TypeMapping>()
+        mapping!!.sourceTypeName shouldBe "Foo"
+        mapping.sourceTypeFormat.shouldBeNull()
+        mapping.targetTypeName shouldBe "io.openapiprocessor.Foo"
+        mapping.genericTypes.shouldBeEmpty()
     }
 
     "reads any endpoint method type mappings" {
@@ -63,33 +58,29 @@ class MappingConverterEndpointMethodSpec: StringSpec({
             row(HttpMethod.PATCH),
             row(HttpMethod.TRACE)
         ) { method ->
-            val yaml = """
-                       |openapi-processor-mapping: v2
-                       |options: {} 
-                       |map:
-                       |  paths:
-                       |    /foo:
-                       |      ${method.method}:
-                       |        types:
-                       |         - type: Foo => io.openapiprocessor.Foo
-                       """.trimMargin()
+            val yaml =
+                """
+                |openapi-processor-mapping: v2
+                |options: {} 
+                |map:
+                |  paths:
+                |    /foo:
+                |      ${method.method}:
+                |        types:
+                |         - type: Foo => io.openapiprocessor.Foo
+                """.trimMargin()
 
             // when:
-            val mapping = reader.read (yaml)
-            val mappings = converter.convert (mapping)
+            val mappingData = converter.convertX(reader.read(yaml))
 
-            // then:
-            mappings.size.shouldBe(2)
-            val epAll = mappings[0] as EndpointTypeMapping
-            epAll.path.shouldBe("/foo")
-            epAll.method.shouldBeNull()
-            epAll.getChildMappings().isEmpty().shouldBeTrue()
+            mappingData.endpointMappings.shouldHaveSize(1)
+            val epMappings = mappingData.endpointMappings["/foo"]
+            val mapping = epMappings?.findTypeMapping(query(path = "/foo", method = method, name = "Foo"))
 
-            val ep = mappings[1] as EndpointTypeMapping
-            ep.path.shouldBe("/foo")
-            ep.method.shouldBe(method)
-            ep.getChildMappings().first().shouldBeInstanceOf<TypeMapping>()
+            mapping!!.sourceTypeName shouldBe "Foo"
+            mapping.sourceTypeFormat.shouldBeNull()
+            mapping.targetTypeName shouldBe "io.openapiprocessor.Foo"
+            mapping.genericTypes.shouldBeEmpty()
         }
     }
-
 })

@@ -26,10 +26,4 @@ class AddParameterTypeMapping(
      */
     val annotation: Annotation? = null
 
-): Mapping {
-
-    override fun getChildMappings(): List<Mapping> {
-        return listOf(mapping)
-    }
-
-}
+): Mapping

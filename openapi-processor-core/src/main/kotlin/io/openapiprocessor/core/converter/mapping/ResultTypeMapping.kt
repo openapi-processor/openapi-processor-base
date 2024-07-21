@@ -22,11 +22,6 @@ class ResultTypeMapping(
     val genericTypes: List<TargetType> = emptyList()
 
 ): Mapping, TargetTypeMapping {
-
-    override fun getChildMappings(): List<Mapping> {
-        return listOf(this)
-    }
-
     /**
      * Returns the target type of this type mapping.
      *
@@ -35,5 +30,4 @@ class ResultTypeMapping(
     override fun getTargetType(): TargetType {
         return TargetType(targetTypeName, genericTypes)
     }
-
 }

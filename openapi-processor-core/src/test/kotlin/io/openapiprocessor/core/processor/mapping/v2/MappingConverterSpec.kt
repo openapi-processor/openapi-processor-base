@@ -10,14 +10,19 @@ import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.converter.MappingQuery
-import io.openapiprocessor.core.converter.mapping.*
+import io.openapiprocessor.core.converter.mapping.AnnotationTypeMapping
+import io.openapiprocessor.core.converter.mapping.EndpointTypeMapping
+import io.openapiprocessor.core.converter.mapping.matcher.AnnotationTypeMatcher
+import io.openapiprocessor.core.converter.mapping.matcher.TypeMatcher
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.processor.MappingConverter
 import io.openapiprocessor.core.processor.MappingReader
+import io.openapiprocessor.core.support.query
 
 class MappingConverterSpec: StringSpec({
     isolationMode = IsolationMode.InstancePerTest
@@ -38,45 +43,22 @@ class MappingConverterSpec: StringSpec({
            |    - type: Foo => io.openapiprocessor.Foo<{package-name}.Bar>
            """.trimMargin()
 
-        // when:
-        val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX()
+        val mappingData = MappingConverter(reader.read(yaml) as Mapping).convertX2()
 
-        // then:
-        val typeMapping = mappings.findGlobalTypeMapping(MappingQuery(name = "Foo"))!!
+        val epMappings = mappingData.globalMappings
+        val mapping = epMappings.findTypeMapping(TypeMatcher(query(path = "/foo", name = "Foo")))
 
-        typeMapping.targetTypeName shouldBe "io.openapiprocessor.Foo"
-        typeMapping.genericTypes.size shouldBe 1
-        typeMapping.genericTypes[0].typeName shouldBe "io.openapiprocessor.somewhere.Bar"
+        mapping!!.sourceTypeName shouldBe "Foo"
+        mapping.sourceTypeFormat.shouldBeNull()
+        mapping.targetTypeName shouldBe "io.openapiprocessor.Foo"
+        mapping.genericTypes.size shouldBe 1
+        mapping.genericTypes.first().typeName shouldBe "io.openapiprocessor.somewhere.Bar"
     }
 
-    // obsolete
-    "read generic parameter with generated package ref" {
+    // no global null mapping
+    "read global 'null' mapping" {
         val yaml = """
-                   |openapi-processor-mapping: v2
-                   |
-                   |options:
-                   |  package-name: io.openapiprocessor.somewhere
-                   | 
-                   |map:
-                   |  types:
-                   |    - type: Foo => io.openapiprocessor.Foo<{package-name}.Bar>
-                   """.trimMargin()
-
-        // when:
-        val mapping = reader.read (yaml)
-        val mappings = converter.convert (mapping)
-
-        // then:
-        val type = mappings.first() as TypeMapping
-        type.targetTypeName shouldBe "io.openapiprocessor.Foo"
-        type.genericTypes.size shouldBe 1
-        type.genericTypes[0].typeName shouldBe "io.openapiprocessor.somewhere.Bar"
-    }
-
-    "read global 'null' mapping".config(enabled = false) {
-        val yaml = """
-                   |openapi-processor-mapping: v2
+                   |openapi-processor-mapping: v8
                    |
                    |options:
                    |  package-name: io.openapiprocessor.somewhere
@@ -85,13 +67,12 @@ class MappingConverterSpec: StringSpec({
                    |  null: org.openapitools.jackson.nullable.JsonNullable
                    """.trimMargin()
 
-        // when:
-        val mapping = reader.read (yaml)
-        val mappings = converter.convert (mapping)
+        val mappingData = MappingConverter(reader.read(yaml) as Mapping).convertX2()
+        val gMappings = mappingData.globalMappings
 
-        // then:
-        val `null` = mappings.first() as NullTypeMapping
-        `null`.targetTypeName shouldBe "org.openapitools.jackson.nullable.JsonNullable"
+        val mapping = gMappings.getNullTypeMapping()
+        mapping.shouldBeNull()
+        //mapping!!.targetTypeName shouldBe "org.openapitools.jackson.nullable.JsonNullable"
     }
 
     "read endpoint 'null' mapping" {
@@ -107,13 +88,11 @@ class MappingConverterSpec: StringSpec({
                    |      null: org.openapitools.jackson.nullable.JsonNullable
                    """.trimMargin()
 
-        // when:
-        val mapping = reader.read (yaml)
-        val mappings = converter.convert (mapping)
+        val mappingData = MappingConverter(reader.read(yaml) as Mapping).convertX2()
+        val mappings = mappingData.endpointMappings["/foo"]
 
-        // then:
-        val `null` = mappings.first().getChildMappings().first() as NullTypeMapping
-        `null`.targetTypeName shouldBe "org.openapitools.jackson.nullable.JsonNullable"
+        val mapping = mappings?.getNullTypeMapping(query(path = "/foo", method = HttpMethod.GET, name = "Foo"))
+        mapping!!.targetTypeName shouldBe "org.openapitools.jackson.nullable.JsonNullable"
     }
 
     "read endpoint 'null' mapping with init value" {
@@ -129,13 +108,12 @@ class MappingConverterSpec: StringSpec({
                    |      null: org.openapitools.jackson.nullable.JsonNullable = JsonNullable.undefined()
                    """.trimMargin()
 
-        // when:
-        val mapping = reader.read (yaml)
-        val mappings = converter.convert (mapping)
+        val mappingData = MappingConverter(reader.read(yaml) as Mapping).convertX2()
+        val mappings = mappingData.endpointMappings["/foo"]
 
-        // then:
-        val `null` = mappings.first().getChildMappings().first() as NullTypeMapping
-        `null`.targetTypeName shouldBe "org.openapitools.jackson.nullable.JsonNullable"
+        val mapping = mappings?.getNullTypeMapping(query(path = "/foo", method = HttpMethod.GET, name = "Foo"))
+        mapping!!.targetTypeName shouldBe "org.openapitools.jackson.nullable.JsonNullable"
+        mapping.undefined shouldBe "JsonNullable.undefined()"
     }
 
     "read additional source type parameter annotation" {
@@ -150,13 +128,13 @@ class MappingConverterSpec: StringSpec({
                    |    - type: Foo @ io.openapiprocessor.Annotation
                    """.trimMargin()
 
-        // when:
-        val mapping = reader.read (yaml)
-        val mappings = converter.convert (mapping)
+        val mappingData = MappingConverter(reader.read(yaml) as Mapping).convertX2()
+        val mappings = mappingData.globalMappings
 
-        // then:
-        mappings.size.shouldBe(1)
-        val annotation = mappings.first() as AnnotationTypeMapping
+        val annotations = mappings.findAnnotationParameterTypeMapping(AnnotationTypeMatcher(query(name = "Foo")))
+        annotations shouldHaveSize 1
+
+        val annotation = annotations.first()
         annotation.sourceTypeName shouldBe "Foo"
         annotation.sourceTypeFormat.shouldBeNull()
         annotation.annotation.type shouldBe "io.openapiprocessor.Annotation"
@@ -176,15 +154,14 @@ class MappingConverterSpec: StringSpec({
                    |        - type: Foo @ io.openapiprocessor.Annotation
                    """.trimMargin()
 
-        // when:
-        val mapping = reader.read (yaml)
-        val mappings = converter.convert (mapping)
+        val mappingData = MappingConverter(reader.read(yaml) as Mapping).convertX2()
+        val mappings = mappingData.endpointMappings
 
-        // then:
-        mappings.size.shouldBe(1)
-        val ep = mappings[0] as EndpointTypeMapping
+        val annotations = mappings["/foo"]!!.findAnnotationParameterTypeMapping(query(name = "Foo"))
 
-        val annotation = ep.typeMappings.first() as AnnotationTypeMapping
+        annotations shouldHaveSize 1
+
+        val annotation = annotations.first()
         annotation.sourceTypeName shouldBe "Foo"
         annotation.sourceTypeFormat.shouldBeNull()
         annotation.annotation.type shouldBe "io.openapiprocessor.Annotation"

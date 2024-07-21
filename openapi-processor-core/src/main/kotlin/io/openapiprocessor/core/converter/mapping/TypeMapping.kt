@@ -55,10 +55,6 @@ class  TypeMapping @JvmOverloads constructor(
         return TargetType(targetTypeName, genericTypes)
     }
 
-    override fun getChildMappings(): List<Mapping> {
-        return listOf(this)
-    }
-
     override fun toString(): String {
         return "${sourceType()} => ${targetType()}"
     }

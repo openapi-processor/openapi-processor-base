@@ -37,9 +37,4 @@ class NullTypeMapping(
     override fun getTargetType (): TargetType {
         return TargetType(targetTypeName, emptyList())
     }
-
-    override fun getChildMappings(): List<Mapping> {
-        return listOf(this)
-    }
-
 }

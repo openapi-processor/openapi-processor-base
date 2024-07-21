@@ -19,10 +19,4 @@ class ContentTypeMapping(
      */
     val mapping: TypeMapping
 
-): Mapping {
-
-    override fun getChildMappings(): List<Mapping> {
-        return listOf(mapping)
-    }
-
-}
+): Mapping

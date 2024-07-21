@@ -33,10 +33,4 @@ class EndpointTypeMapping @JvmOverloads constructor(
      */
     val exclude: Boolean = false
 
-): Mapping {
-
-    override fun getChildMappings(): List<Mapping> {
-        return typeMappings
-    }
-
-}
+): Mapping

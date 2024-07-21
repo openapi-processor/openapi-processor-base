@@ -16,9 +16,4 @@ class ExtensionMapping(
      */
     val mappings: List<Mapping> = emptyList()
 
-): Mapping {
-    override fun getChildMappings(): List<Mapping> {
-        return mappings
-    }
-}
-
+): Mapping

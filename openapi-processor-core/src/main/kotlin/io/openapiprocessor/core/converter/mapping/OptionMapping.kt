@@ -8,10 +8,4 @@ package io.openapiprocessor.core.converter.mapping
 /**
  * allows to handle simple name/value options in the mappings configuration.
  */
-open class OptionMapping<T>(val name: String, val value: T): Mapping {
-
-    override fun getChildMappings(): List<Mapping> {
-        return listOf(this)
-    }
-
-}
+open class OptionMapping<T>(val name: String, val value: T): Mapping
