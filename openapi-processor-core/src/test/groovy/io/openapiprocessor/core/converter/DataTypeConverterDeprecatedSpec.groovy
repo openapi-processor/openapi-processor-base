@@ -5,19 +5,20 @@
 
 package io.openapiprocessor.core.converter
 
-import io.openapiprocessor.core.writer.java.TestSchema
-import io.openapiprocessor.core.converter.mapping.TypeMapping
 import io.openapiprocessor.core.converter.wrapper.NullDataTypeWrapper
 import io.openapiprocessor.core.framework.Framework
 import io.openapiprocessor.core.model.DataTypes
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.parser.RefResolver
 import io.openapiprocessor.core.writer.java.JavaIdentifier
+import io.openapiprocessor.core.writer.java.TestSchema
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import static io.openapiprocessor.core.support.ApiOptionsKt.parseOptionsMapping
 import static io.openapiprocessor.core.support.FactoryHelper.apiConverter
 import static io.openapiprocessor.core.support.OpenApiParser.parse
+import static io.openapiprocessor.core.support.OpenApiParserKt.parseApiBody
 
 class DataTypeConverterDeprecatedSpec extends Specification {
 
@@ -204,35 +205,27 @@ paths:
     }
 
     void "converts deprecated array type schema" () {
-        def openApi = parse ("""\
-openapi: 3.0.2
-info:
-  title: API
-  version: 1.0.0
+        def options = parseOptionsMapping("")
 
-paths:
-  /foo:
-    get:
-      parameters:
-        - in: query
-          name: foo
-          schema:
-            type: array
-            deprecated: true
-            items: 
-              type: string
-      responses:
-        '204':
-          description: none
-""")
+        def openApi = parseApiBody ("""
+            |paths:
+            |  /foo:
+            |    get:
+            |      parameters:
+            |        - in: query
+            |          name: foo
+            |          schema:
+            |            type: array
+            |            deprecated: true
+            |            items: 
+            |              type: string
+            |      responses:
+            |        '204':
+            |          description: none    
+            """)
 
         when:
-        def options = new ApiOptions(
-            packageName: 'pkg',
-            typeMappings: [])
-
-        def api = apiConverter (options)
-            .convert (openApi)
+        def api = apiConverter (options).convert (openApi)
 
         then:
         def itf = api.interfaces.first ()
@@ -242,37 +235,31 @@ paths:
     }
 
     void "converts deprecated mapped array type schema" () {
-        def openApi = parse ("""\
-openapi: 3.0.2
-info:
-  title: API
-  version: 1.0.0
+        def options = parseOptionsMapping("""
+            |mapping:
+            |  types:
+            |    - type: array => java.util.Collection
+            """)
 
-paths:
-  /foo:
-    get:
-      parameters:
-        - in: query
-          name: foo
-          schema:
-            type: array
-            deprecated: true
-            items: 
-              type: string
-      responses:
-        '204':
-          description: none
-""")
+        def openApi = parseApiBody ("""
+            |paths:
+            |  /foo:
+            |    get:
+            |      parameters:
+            |        - in: query
+            |          name: foo
+            |          schema:
+            |            type: array
+            |            deprecated: true
+            |            items: 
+            |              type: string
+            |      responses:
+            |        '204':
+            |          description: none
+            """)
 
         when:
-        def options = new ApiOptions(
-            packageName: 'pkg',
-            typeMappings: [
-                new TypeMapping ('array', 'java.util.Collection')
-            ])
-
-        def api = apiConverter (options)
-                .convert (openApi)
+        def api = apiConverter (options).convert (openApi)
 
         then:
         def itf = api.interfaces.first ()

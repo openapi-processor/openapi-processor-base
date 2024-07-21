@@ -92,15 +92,7 @@ class ApiOptions: MappingSettings {
     var jsonPropertyAnnotation = JsonPropertyAnnotationMode.Always
 
     /**
-     * provide additional type mapping information to map OpenAPI types to java types. The list can
-     * contain the following mappings:
-     *
-     * [io.openapiprocessor.core.converter.mapping.TypeMapping]: used to globally
-     * override the mapping of an OpenAPI schema to a specific java type.
-     *
-     * [io.openapiprocessor.core.converter.mapping.EndpointTypeMapping]: used to
-     * override parameter/response type mappings or to add additional parameters on a single
-     * endpoint.
+     * provide additional type mapping information to map OpenAPI types to java types.
      */
     @Deprecated(message = "use mappings below")
     var typeMappings: List<Mapping> = emptyList()

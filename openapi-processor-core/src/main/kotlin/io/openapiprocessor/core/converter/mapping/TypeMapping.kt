@@ -6,8 +6,7 @@
 package io.openapiprocessor.core.converter.mapping
 
 /**
- * Used with [io.openapiprocessor.core.converter.ApiOptions.typeMappings] to map OpenAPI schemas
- * to java types.
+ * Used to map OpenAPI schemas to java types.
  *
  * To override the type mapping of the OpenAPI `array` from a simple java array to another
  * collection type the [sourceTypeName] should be set to `array`.

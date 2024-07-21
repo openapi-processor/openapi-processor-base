@@ -6,8 +6,7 @@
 package io.openapiprocessor.core.converter.mapping
 
 /**
- * Used with [io.openapiprocessor.core.converter.ApiOptions.typeMappings] to map an OpenAPI response
- * to a plain java type or to a wrapper type of the plain type.
+ * Used to map an OpenAPI response to a plain java type or to a wrapper type of the plain type.
  */
 class ResultTypeMapping(
 

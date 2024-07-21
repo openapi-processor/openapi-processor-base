@@ -6,8 +6,8 @@
 package io.openapiprocessor.core.converter.mapping
 
 /**
- * Used with [io.openapiprocessor.core.converter.ApiOptions.typeMappings] to map an OpenAPI nullable
- * property to a wrapper type of the plain type. E.g. org.openapitools.jackson.nullable.JsonNullable
+ * Used to map an OpenAPI nullable property to a wrapper type of the plain type.
+ * E.g. org.openapitools.jackson.nullable.JsonNullable
  */
 class NullTypeMapping(
 
