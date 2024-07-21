@@ -22,6 +22,7 @@ import io.openapiprocessor.core.support.datatypes.ObjectDataType
 import io.openapiprocessor.core.support.datatypes.propertyDataType
 import io.openapiprocessor.core.support.datatypes.propertyDataTypeString
 import io.openapiprocessor.core.support.parseOptions
+import io.openapiprocessor.core.support.parseOptionsMapping
 import java.io.StringWriter
 import java.util.*
 import io.openapiprocessor.core.converter.mapping.Annotation as MappingAnnotation
@@ -409,12 +410,6 @@ class DataTypeWriterPojoSpec: StringSpec({
                         "foo.Bar", linkedMapOf()
                     ))))
 
-        options.typeMappings = listOf(
-            AnnotationTypeMappingDefault(
-                "object", annotation = MappingAnnotation("foo.Bar", linkedMapOf())
-            )
-        )
-
         val dataType = ObjectDataType("Object",
             "pkg", linkedMapOf(
                 "foo" to propertyDataType(ObjectDataType("Foo", "model")))
@@ -446,11 +441,11 @@ class DataTypeWriterPojoSpec: StringSpec({
     }
 
     "skips additional annotation from annotation mapping for un-mapped object datatype property" {
-        options.typeMappings = listOf(
-            AnnotationTypeMappingDefault(
-                "Foo", annotation = MappingAnnotation("foo.Bar", linkedMapOf())
-            )
-        )
+        val options = parseOptionsMapping("""
+            |mapping:
+            |  types:
+            |    - type: Foo @ foo.Bar
+            """)
 
         val dataType = ObjectDataType("Object",
             "pkg", linkedMapOf(
@@ -458,7 +453,7 @@ class DataTypeWriterPojoSpec: StringSpec({
             )
 
         // when:
-        createWriter().write(target, dataType)
+        writer(options).write(target, dataType)
 
         // then:
         val t1 = target.toString()

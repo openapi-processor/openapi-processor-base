@@ -12,10 +12,7 @@ import io.openapiprocessor.core.converter.mapping.TargetType
 import io.openapiprocessor.core.converter.mapping.TypeMapping
 import io.openapiprocessor.core.model.DataTypes
 import io.openapiprocessor.core.parser.HttpMethod.GET
-import io.openapiprocessor.core.support.getSchemaInfo
-import io.openapiprocessor.core.support.parse
-import io.openapiprocessor.core.support.parseApi
-import io.openapiprocessor.core.support.parseOptions
+import io.openapiprocessor.core.support.*
 import io.openapiprocessor.core.writer.java.JavaIdentifier
 
 class DataTypeUsageSpec: StringSpec({
@@ -73,50 +70,41 @@ class DataTypeUsageSpec: StringSpec({
     }
 
     "collect usage of array item schema that is only used in a mapping" {
-        val openApi = parse ("""
-           openapi: 3.0.2
-           info:
-             title: API
-             version: 1.0.0
+        val options = parseOptionsMapping("""
+            |mapping:
+            |  types:
+            |    - type: FooArray => io.openapiprocessor.test.Mapped<io.openapiprocessor.generated.model.Foo>
+            """)
 
-           paths:
-             /foo:
-               get:
-                 responses:
-                   '200':
-                     description: ...
-                     content:
-                       application/json:
-                         schema:
-                           ${'$'}ref: '#/components/schemas/FooArray'
-
-           components:
-             schemas:
-
-               FooArray:
-                 description: a Foo array
-                 type: array
-                 items: 
-                   ${'$'}ref: '#/components/schemas/Foo'
-
-               Foo:
-                 description: a Foo
-                 type: object
-                 properties:
-                   foo:
-                     type: string
-
-        """.trimIndent())
-
-        val options = ApiOptions()
-        options.typeMappings = listOf(
-            TypeMapping(
-                "FooArray",
-                null,
-                "io.openapiprocessor.test.Mapped",
-                listOf(TargetType("io.openapiprocessor.generated.model.Foo"))
-            )
-        )
+        val openApi = parseApiBody("""
+           |paths:
+           |  /foo:
+           |    get:
+           |      responses:
+           |        '200':
+           |          description: ...
+           |          content:
+           |            application/json:
+           |              schema:
+           |                ${'$'}ref: '#/components/schemas/FooArray'
+           |
+           |components:
+           |  schemas:
+           |
+           |    FooArray:
+           |      description: a Foo array
+           |      type: array
+           |      items: 
+           |        ${'$'}ref: '#/components/schemas/Foo'
+           |
+           |    Foo:
+           |      description: a Foo
+           |      type: object
+           |      properties:
+           |        foo:
+           |          type: string
+           |
+           """)
 
         val schemaInfo = openApi.getSchemaInfo("FooResponse200",
             "/foo", GET, "200", "application/json")

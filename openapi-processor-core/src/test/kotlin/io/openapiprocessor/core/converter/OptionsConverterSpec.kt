@@ -8,7 +8,7 @@ package io.openapiprocessor.core.converter
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
-import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.support.Empty
 
@@ -30,7 +30,9 @@ class OptionsConverterSpec: StringSpec({
         options.modelNameSuffix shouldBe String.Empty
         options.formatCode.shouldBeFalse()
 
-        options.typeMappings shouldHaveSize 0
+        options.globalMappings.shouldNotBeNull()
+        options.endpointMappings.shouldNotBeNull()
+        options.extensionMappings.shouldNotBeNull()
 
         options.beanValidationValidOnReactive.shouldBeTrue()
         options.identifierWordBreakFromDigitToLetter.shouldBeTrue()
