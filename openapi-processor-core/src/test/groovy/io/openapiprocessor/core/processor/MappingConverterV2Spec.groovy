@@ -28,7 +28,7 @@ map:
 """
 
         when:
-        def mappingData = converter.convertX (reader.read (yaml))
+        def mappingData = converter.convert (reader.read (yaml))
 
         then:
         def response = mappingData.globalMappings.findContentTypeMapping(
@@ -60,7 +60,7 @@ map:
 """
 
         when:
-        def mappingData = converter.convertX (reader.read (yaml))
+        def mappingData = converter.convert (reader.read (yaml))
 
         then:
         def endpoint = mappingData.endpointMappings["/foo"]
@@ -92,7 +92,7 @@ map:
 """
 
         when:
-        def mappingData = converter.convertX (reader.read (yaml))
+        def mappingData = converter.convert (reader.read (yaml))
 
         then:
         def endpoint = mappingData.endpointMappings["/foo"]
@@ -125,7 +125,7 @@ map:
 """
 
         when:
-        def mappingData = converter.convertX (reader.read (yaml))
+        def mappingData = converter.convert (reader.read (yaml))
 
         then:
         def endpoint = mappingData.endpointMappings["/foo"]
@@ -159,7 +159,7 @@ map:
 """
 
         when:
-        def mappingData = converter.convertX (reader.read (yaml))
+        def mappingData = converter.convert (reader.read (yaml))
 
         then:
         def endpoint = mappingData.endpointMappings["/foo"]
@@ -196,7 +196,7 @@ map:
 """
 
         when:
-        def mappingData = converter.convertX (reader.read (yaml))
+        def mappingData = converter.convert (reader.read (yaml))
 
         then:
         def endpoint = mappingData.endpointMappings["/foo"]
@@ -228,7 +228,7 @@ map:
 """
 
         when:
-        def mappingData = converter.convertX (reader.read (yaml))
+        def mappingData = converter.convert (reader.read (yaml))
 
         then:
         def endpoint = mappingData.endpointMappings["/foo"]
@@ -264,7 +264,7 @@ map:
 """
 
         when:
-        def mappingData = converter.convertX (reader.read (yaml))
+        def mappingData = converter.convert (reader.read (yaml))
         def endpoint = mappingData.endpointMappings["/foo"]
 
         then:

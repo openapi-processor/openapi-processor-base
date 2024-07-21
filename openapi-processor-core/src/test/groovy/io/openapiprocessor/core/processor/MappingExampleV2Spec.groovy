@@ -87,7 +87,7 @@ map:
 
     void "parses mapping yaml" () {
         when:
-        def mappings = converter.convertX (reader.read (yaml))
+        def mappings = converter.convert (reader.read (yaml))
 
         then:
         mappings

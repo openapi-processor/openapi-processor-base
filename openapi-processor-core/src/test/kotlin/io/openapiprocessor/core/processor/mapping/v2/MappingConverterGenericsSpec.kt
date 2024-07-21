@@ -36,7 +36,7 @@ class MappingConverterGenericsSpec: StringSpec({
                    |    - type: Foo => java.util.Map<java.lang.String, java.lang.String>
                    """.trimMargin()
 
-        val mappingData = converter.convertX(reader.read(yaml))
+        val mappingData = converter.convert(reader.read(yaml))
         val type = mappingData.globalMappings.findTypeMapping(TypeMatcher(query(name = "Foo")))!!
 
         type.sourceTypeName shouldBe "Foo"
@@ -63,7 +63,7 @@ class MappingConverterGenericsSpec: StringSpec({
                    |        - java.lang.String
                    """.trimMargin()
 
-        val mappingData = converter.convertX(reader.read(yaml))
+        val mappingData = converter.convert(reader.read(yaml))
         val type = mappingData.globalMappings.findTypeMapping(TypeMatcher(query(name = "Foo")))!!
 
         type.sourceTypeName shouldBe "Foo"
@@ -86,7 +86,7 @@ class MappingConverterGenericsSpec: StringSpec({
                    |    - type: Foo => java.util.Map<{package-name}.String, {package-name}.String>
                    """.trimMargin()
 
-        val mappingData = converter.convertX(reader.read(yaml))
+        val mappingData = converter.convert(reader.read(yaml))
         val type = mappingData.globalMappings.findTypeMapping(TypeMatcher(query(name = "Foo")))!!
 
         type.targetTypeName shouldBe "java.util.Map"
@@ -107,7 +107,7 @@ class MappingConverterGenericsSpec: StringSpec({
                    |    - type: Foo => java.util.Map<java.lang.String, java.util.Collection<java.lang.String>>
                    """.trimMargin()
 
-        val mappingData = converter.convertX(reader.read(yaml))
+        val mappingData = converter.convert(reader.read(yaml))
         val type = mappingData.globalMappings.findTypeMapping(TypeMatcher(query(name = "Foo")))!!
 
         type.targetTypeName shouldBe "java.util.Map"
@@ -134,7 +134,7 @@ class MappingConverterGenericsSpec: StringSpec({
                    |        - java.util.Collection<{package-name}.String>
                    """.trimMargin()
 
-        val mappingData = converter.convertX(reader.read(yaml))
+        val mappingData = converter.convert(reader.read(yaml))
         val type = mappingData.globalMappings.findTypeMapping(TypeMatcher(query(name = "Foo")))!!
 
         type.targetTypeName shouldBe "java.util.Map"
@@ -158,7 +158,7 @@ class MappingConverterGenericsSpec: StringSpec({
                    |    - name: foo => java.util.Map<java.lang.String, java.lang.String>
                    """.trimMargin()
 
-        val mappingData = converter.convertX(reader.read(yaml))
+        val mappingData = converter.convert(reader.read(yaml))
         val type = mappingData.globalMappings.findParameterNameTypeMapping(ParameterNameTypeMatcher(query(name = "foo")))!!
 
         type.parameterName shouldBe "foo"
@@ -184,7 +184,7 @@ class MappingConverterGenericsSpec: StringSpec({
                    |        - java.util.Collection<{package-name}.String>
                    """.trimMargin()
 
-        val mappingData = converter.convertX(reader.read(yaml))
+        val mappingData = converter.convert(reader.read(yaml))
         val type = mappingData.globalMappings.findParameterNameTypeMapping(ParameterNameTypeMatcher(query(name = "foo")))!!
 
         type.parameterName shouldBe "foo"
@@ -213,7 +213,7 @@ class MappingConverterGenericsSpec: StringSpec({
                    |        - java.util.Collection<{package-name}.String>
                    """.trimMargin()
 
-        val mappingData = converter.convertX(reader.read(yaml))
+        val mappingData = converter.convert(reader.read(yaml))
         val adds = mappingData.globalMappings.findAddParameterTypeMappings(AddParameterTypeMatcher())
 
         adds shouldHaveSize 1
@@ -245,7 +245,7 @@ class MappingConverterGenericsSpec: StringSpec({
                    |        - java.util.Collection<{package-name}.String>
                    """.trimMargin()
 
-        val mappingData = converter.convertX(reader.read(yaml))
+        val mappingData = converter.convert(reader.read(yaml))
         val type = mappingData.globalMappings.findContentTypeMapping(ResponseTypeMatcher(query(contentType = "foo/bar")))!!
 
         type.contentType shouldBe "foo/bar"
@@ -274,7 +274,7 @@ class MappingConverterGenericsSpec: StringSpec({
                    """.trimMargin()
 
         // when:
-        val mappingData = converter.convertX(reader.read(yaml))
+        val mappingData = converter.convert(reader.read(yaml))
         val types = mappingData.globalMappings.findAddParameterTypeMappings(AddParameterTypeMatcher())
 
         types shouldHaveSize 1

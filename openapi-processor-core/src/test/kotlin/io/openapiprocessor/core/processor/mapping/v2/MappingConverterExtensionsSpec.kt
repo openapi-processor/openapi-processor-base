@@ -33,7 +33,7 @@ class MappingConverterExtensionsSpec: StringSpec({
            |      - bar @ annotation.Bar
            """.trimMargin()
 
-        val mappingData = converter.convertX(reader.read(yaml))
+        val mappingData = converter.convert(reader.read(yaml))
 
         mappingData.extensionMappings.shouldHaveSize(1)
         val mappings = mappingData.extensionMappings["x-foo"]!!
@@ -62,7 +62,7 @@ class MappingConverterExtensionsSpec: StringSpec({
            """.trimMargin()
 
         shouldThrow<BadMappingException> {
-            converter.convertX(reader.read(yaml))
+            converter.convert(reader.read(yaml))
         }
     }
 

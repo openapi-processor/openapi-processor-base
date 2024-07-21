@@ -182,7 +182,7 @@ class MappingConverterSpec: StringSpec({
 
         // when:
         val mapping = reader.read (yaml)
-        val mappings = converter.convertX (mapping)
+        val mappings = converter.convert (mapping)
 
         // then:
 //        mappings.size.shouldBe(2)

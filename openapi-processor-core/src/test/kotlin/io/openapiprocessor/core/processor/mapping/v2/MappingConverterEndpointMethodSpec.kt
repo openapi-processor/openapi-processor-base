@@ -35,7 +35,7 @@ class MappingConverterEndpointMethodSpec: StringSpec({
                    """.trimMargin()
 
         // when:
-        val mappingData = converter.convertX(reader.read(yaml))
+        val mappingData = converter.convert(reader.read(yaml))
 
         mappingData.endpointMappings.shouldHaveSize(1)
         val epMappings = mappingData.endpointMappings["/foo"]
@@ -71,7 +71,7 @@ class MappingConverterEndpointMethodSpec: StringSpec({
                 """.trimMargin()
 
             // when:
-            val mappingData = converter.convertX(reader.read(yaml))
+            val mappingData = converter.convert(reader.read(yaml))
 
             mappingData.endpointMappings.shouldHaveSize(1)
             val epMappings = mappingData.endpointMappings["/foo"]

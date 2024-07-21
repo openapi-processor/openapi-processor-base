@@ -16,7 +16,7 @@ import io.openapiprocessor.core.processor.mapping.v2.MappingConverter as Mapping
  */
 class MappingConverter {
 
-    fun convertX(source: MappingVersion?): MappingData {
+    fun convert(source: MappingVersion?): MappingData {
         if (source != null && source.v2) {
             return MappingConverterV2(source as MappingV2).convertX2()
         }

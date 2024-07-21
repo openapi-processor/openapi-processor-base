@@ -82,7 +82,7 @@ class OptionsConverter(private val checkObsoleteProcessorOptions: Boolean = fals
                         options.identifierWordBreakFromDigitToLetter = identifierWordBreakFromDigitToLetter
                     }
 
-                    val mappings = MappingConverter().convertX(mapping)
+                    val mappings = MappingConverter().convert(mapping)
                     options.globalMappings = mappings.globalMappings
                     options.endpointMappings = mappings.endpointMappings
                     options.extensionMappings = mappings.extensionMappings

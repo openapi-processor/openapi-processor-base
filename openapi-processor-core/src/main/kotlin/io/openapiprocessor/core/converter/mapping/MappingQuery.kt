@@ -42,7 +42,7 @@ interface MappingQueryType {
 
 
 
-interface MappingQuery : MappingQueryEndpoint,  MappingQueryType {
+interface MappingQuery : MappingQueryEndpoint, MappingQueryType {
     val contentType: String?
         get() = null
 
