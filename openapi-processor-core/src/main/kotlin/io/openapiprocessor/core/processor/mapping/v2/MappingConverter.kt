@@ -173,7 +173,7 @@ class MappingConverter(val mapping: MappingV2) {
                 methodMappings[HttpMethod.TRACE] = convertPathMethod(path.trace)
             }
 
-            endpointMappings[it.key] = EndpointMappings(pathMappings, methodMappings, it.value.exclude)
+            endpointMappings[it.key] = EndpointMappings(pathMappings, methodMappings)
         }
 
         return endpointMappings

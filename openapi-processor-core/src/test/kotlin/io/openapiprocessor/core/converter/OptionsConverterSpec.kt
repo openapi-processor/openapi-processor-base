@@ -82,20 +82,6 @@ class OptionsConverterSpec: StringSpec({
         options.packageName shouldBe "generated"
     }
 
-    "should read Mapping options (old, v1)" {
-        val converter = OptionsConverter()
-        val options = converter.convertOptions(mapOf(
-            "mapping" to """
-                options:
-                  package-name: generated
-                  bean-validation: true
-            """.trimIndent()
-        ))
-
-        options.packageName shouldBe "generated"
-        options.beanValidation shouldBe true
-    }
-
     "should read Mapping options (new, v2)" {
         val converter = OptionsConverter()
         val options = converter.convertOptions(mapOf(

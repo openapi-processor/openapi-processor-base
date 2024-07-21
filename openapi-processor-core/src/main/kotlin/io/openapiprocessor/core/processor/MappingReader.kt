@@ -14,18 +14,15 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 import com.fasterxml.jackson.module.kotlin.KotlinFeature
 import com.fasterxml.jackson.module.kotlin.KotlinModule
-import io.openapiprocessor.core.processor.mapping.v1.Mapping
 import io.openapiprocessor.core.processor.mapping.MappingVersion
-import io.openapiprocessor.core.processor.mapping.v1.Parameter
-import io.openapiprocessor.core.processor.mapping.v1.ParameterDeserializer
-import io.openapiprocessor.core.processor.mapping.v2.Mapping as MappingV2
-import io.openapiprocessor.core.processor.mapping.v2.Parameter as ParameterV2
-import io.openapiprocessor.core.processor.mapping.v2.ParameterDeserializer as ParameterDeserializerV2
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.net.MalformedURLException
 import java.net.URL
+import io.openapiprocessor.core.processor.mapping.v2.Mapping as MappingV2
+import io.openapiprocessor.core.processor.mapping.v2.Parameter as ParameterV2
+import io.openapiprocessor.core.processor.mapping.v2.ParameterDeserializer as ParameterDeserializerV2
 import io.openapiprocessor.core.processor.mapping.version.Mapping as VersionMapping
 
 /**
@@ -64,12 +61,9 @@ class MappingReader(private val validator: MappingValidator = MappingValidator()
             val mapper = createV2Parser()
             mapper.readValue (mapping, MappingV2::class.java)
         } else {
-            // assume v1
-            log.info ("please update the mapping to the latest format")
-            log.info ("see https://openapiprocessor.io/spring/mapping/structure.html")
-
-            val mapper = createV1Parser ()
-            mapper.readValue (mapping, Mapping::class.java)
+            log.error("please update the mapping to the latest format")
+            log.error("see https://openapiprocessor.io/spring/mapping/structure.html")
+            throw MappingFormatException()
         }
     }
 
@@ -102,20 +96,6 @@ class MappingReader(private val validator: MappingValidator = MappingValidator()
             .configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS, true)
             .build()
             .setPropertyNamingStrategy(PropertyNamingStrategies.KEBAB_CASE)
-            .registerModules(kotlinModule, module)
-    }
-
-    private fun createV1Parser(): ObjectMapper {
-        val module = SimpleModule ()
-        module.addDeserializer (Parameter::class.java, ParameterDeserializer ())
-
-        val kotlinModule = KotlinModule.Builder()
-            .configure(KotlinFeature.NullIsSameAsDefault, true)
-            .build ()
-
-        return ObjectMapper (YAMLFactory ())
-            .configure (DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-            .setPropertyNamingStrategy (PropertyNamingStrategies.KEBAB_CASE)
             .registerModules(kotlinModule, module)
     }
 

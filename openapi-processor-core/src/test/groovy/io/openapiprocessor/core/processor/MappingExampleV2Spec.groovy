@@ -16,8 +16,7 @@
 
 package io.openapiprocessor.core.processor
 
-import io.openapiprocessor.core.processor.MappingConverter
-import io.openapiprocessor.core.processor.MappingReader
+
 import spock.lang.Specification
 import spock.lang.Subject
 
@@ -88,11 +87,9 @@ map:
 
     void "parses mapping yaml" () {
         when:
-        def mapping = reader.read (yaml)
-        def mappings = converter.convert (mapping)
+        def mappings = converter.convertX (reader.read (yaml))
 
         then:
         mappings
     }
-
 }

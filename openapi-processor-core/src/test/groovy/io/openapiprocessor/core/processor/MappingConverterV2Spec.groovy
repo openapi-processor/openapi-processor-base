@@ -1,26 +1,15 @@
 /*
- * Copyright 2020 the original authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2020 https://github.com/openapi-processor/openapi-processor-base
+ * PDX-License-Identifier: Apache-2.0
  */
 
 package io.openapiprocessor.core.processor
 
-import io.openapiprocessor.core.converter.mapping.*
-import io.openapiprocessor.core.processor.MappingConverter
-import io.openapiprocessor.core.processor.MappingReader
+import io.openapiprocessor.core.converter.mapping.matcher.ResponseTypeMatcher
 import spock.lang.Specification
 import spock.lang.Subject
+
+import static io.openapiprocessor.core.support.MappingQueryKt.query
 
 class MappingConverterV2Spec extends Specification {
 
@@ -39,13 +28,20 @@ map:
 """
 
         when:
-        def mapping = reader.read (yaml)
-        def mappings = converter.convert (mapping)
+        def mappingData = converter.convertX (reader.read (yaml))
 
         then:
-        mappings.size() == 1
+        def response = mappingData.globalMappings.findContentTypeMapping(
+                new ResponseTypeMatcher(query(
+                        null,
+                        null,
+                        null,
+                        "application/vnd.array",
+                        null,
+                        null,
+                        false,
+                        false)))
 
-        def response = mappings.first () as ContentTypeMapping
         response.contentType == 'application/vnd.array'
         response.mapping.sourceTypeName == null
         response.mapping.sourceTypeFormat == null
@@ -64,16 +60,21 @@ map:
 """
 
         when:
-        def mapping = reader.read (yaml)
-        def mappings = converter.convert (mapping)
+        def mappingData = converter.convertX (reader.read (yaml))
 
         then:
-        mappings.size() == 1
+        def endpoint = mappingData.endpointMappings["/foo"]
+        def excluded = endpoint.isExcluded(query(
+                "/foo",
+                null,
+                null,
+                null,
+                null,
+                null,
+                false,
+                false))
 
-        def endpoint = mappings.first () as EndpointTypeMapping
-        endpoint.path == '/foo'
-        endpoint.exclude == exclude
-        endpoint.typeMappings.empty
+        excluded == exclude
 
         where:
         exclude << [true, false]
@@ -91,16 +92,20 @@ map:
 """
 
         when:
-        def mapping = reader.read (yaml)
-        def mappings = converter.convert (mapping)
+        def mappingData = converter.convertX (reader.read (yaml))
 
         then:
-        mappings.size() == 1
+        def endpoint = mappingData.endpointMappings["/foo"]
+        def parameter = endpoint.findParameterNameTypeMapping(query(
+                "/foo",
+                null,
+                "foo",
+                null,
+                null,
+                null,
+                false,
+                false))
 
-        def endpoint = mappings.first () as EndpointTypeMapping
-        endpoint.path == '/foo'
-        endpoint.typeMappings.size () == 1
-        def parameter = endpoint.typeMappings.first () as NameTypeMapping
         parameter.parameterName == 'foo'
         parameter.mapping.sourceTypeName == null
         parameter.mapping.sourceTypeFormat == null
@@ -120,17 +125,21 @@ map:
 """
 
         when:
-        def mapping = reader.read (yaml)
-        def mappings = converter.convert (mapping)
+        def mappingData = converter.convertX (reader.read (yaml))
 
         then:
-        mappings.size () == 1
+        def endpoint = mappingData.endpointMappings["/foo"]
+        def parameters = endpoint.findAddParameterTypeMappings(query(
+                "/foo",
+                null,
+                null,
+                null,
+                null,
+                null,
+                false,
+                false))
 
-        def endpoint = mappings.first () as EndpointTypeMapping
-        endpoint.path == '/foo'
-        endpoint.typeMappings.size () == 1
-
-        def parameter = endpoint.typeMappings.first () as AddParameterTypeMapping
+        def parameter = parameters[0]
         parameter.parameterName == 'request'
         parameter.mapping.sourceTypeName == null
         parameter.mapping.sourceTypeFormat == null
@@ -150,17 +159,21 @@ map:
 """
 
         when:
-        def mapping = reader.read (yaml)
-        def mappings = converter.convert (mapping)
+        def mappingData = converter.convertX (reader.read (yaml))
 
         then:
-        mappings.size () == 1
+        def endpoint = mappingData.endpointMappings["/foo"]
+        def parameters = endpoint.findAddParameterTypeMappings(query(
+                "/foo",
+                null,
+                null,
+                null,
+                null,
+                null,
+                false,
+                false))
 
-        def endpoint = mappings.first () as EndpointTypeMapping
-        endpoint.path == '/foo'
-        endpoint.typeMappings.size () == 1
-
-        def parameter = endpoint.typeMappings.first () as AddParameterTypeMapping
+        def parameter = parameters[0]
         parameter.parameterName == 'foo'
         parameter.mapping.sourceTypeName == null
         parameter.mapping.sourceTypeFormat == null
@@ -183,17 +196,20 @@ map:
 """
 
         when:
-        def mapping = reader.read (yaml)
-        def mappings = converter.convert (mapping)
+        def mappingData = converter.convertX (reader.read (yaml))
 
         then:
-        mappings.size() == 1
+        def endpoint = mappingData.endpointMappings["/foo"]
+        def response = endpoint.findContentTypeMapping(query(
+                "/foo",
+                null,
+                null,
+                "application/vnd.array",
+                null,
+                null,
+                false,
+                false))
 
-        def endpoint = mappings.first () as EndpointTypeMapping
-        endpoint.path == '/foo'
-        endpoint.typeMappings.size () == 1
-
-        def response = endpoint.typeMappings.first () as ContentTypeMapping
         response.contentType == 'application/vnd.array'
         response.mapping.sourceTypeName == null
         response.mapping.sourceTypeFormat == null
@@ -212,17 +228,21 @@ map:
 """
 
         when:
-        def mapping = reader.read (yaml)
-        def mappings = converter.convert (mapping)
+        def mappingData = converter.convertX (reader.read (yaml))
 
         then:
-        mappings.size() == 1
+        def endpoint = mappingData.endpointMappings["/foo"]
+        def type = endpoint.getResultTypeMapping(query(
+                "/foo",
+                null,
+                null,
+                null,
+                null,
+                null,
+                false,
+                false
+        ))
 
-        def endpoint = mappings.first () as EndpointTypeMapping
-        endpoint.path == '/foo'
-        endpoint.typeMappings.size () == 1
-
-        def type = endpoint.typeMappings.first () as ResultTypeMapping
         type.targetTypeName == expected
 
         where:
@@ -244,20 +264,33 @@ map:
 """
 
         when:
-        def mapping = reader.read (yaml)
-        def mappings = converter.convert (mapping)
+        def mappingData = converter.convertX (reader.read (yaml))
+        def endpoint = mappingData.endpointMappings["/foo"]
 
         then:
-        mappings.size() == 1
-
-        def endpoint = mappings.first () as EndpointTypeMapping
-        endpoint.path == '/foo'
-        endpoint.typeMappings.size () == 2
-
-        def typeSingle = endpoint.typeMappings.first () as TypeMapping
+        def typeSingle = endpoint.getSingleTypeMapping(query(
+                "/foo",
+                null,
+                null,
+                null,
+                null,
+                null,
+                false,
+                false
+        ))
         typeSingle.sourceTypeName == 'single'
         typeSingle.targetTypeName == single
-        def typeMulti = endpoint.typeMappings[1] as TypeMapping
+
+        def typeMulti = endpoint.getMultiTypeMapping(query(
+                "/foo",
+                null,
+                null,
+                null,
+                null,
+                null,
+                false,
+                false
+        ))
         typeMulti.sourceTypeName == 'multi'
         typeMulti.targetTypeName == multi
 
@@ -265,5 +298,4 @@ map:
         single << ['reactor.core.publisher.Mono']
         multi << ['reactor.core.publisher.Flux']
     }
-
 }

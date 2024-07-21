@@ -228,7 +228,7 @@ class EndpointMappings(
         val excluded = mappings.isExcluded()
         if(excluded) {
             log.trace("found endpoint exclude ({})", query.path)
-            return excluded
+            return true
         }
 
         return false

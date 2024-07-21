@@ -18,7 +18,6 @@ package io.openapiprocessor.core.processor
 
 import com.google.common.jimfs.Configuration
 import com.google.common.jimfs.Jimfs
-import io.openapiprocessor.core.processor.MappingReader
 import org.slf4j.Logger
 import spock.lang.Shared
 import spock.lang.Specification
@@ -49,12 +48,11 @@ class MappingReaderSpec extends Specification {
 
     void "reads mapping from url" () {
         def yaml = """\
-openapi-processor-mapping: v1.0
+openapi-processor-mapping: v2
     
 map:
   types:
-    - from: array
-      to: java.util.Collection
+    - type: array => java.util.Collection
 """
 
         def yamlFile = fs.getPath ('mapping.yaml')
@@ -70,12 +68,11 @@ map:
 
     void "reads mapping from local file if the scheme is missing" () {
         def yaml = """\
-openapi-processor-mapping: v1.0
+openapi-processor-mapping: v2
     
 map:
   types:
-    - from: array
-      to: java.util.Collection
+    - type: array => java.util.Collection
 """
 
         def yamlFile = new File (folder, 'mapping.yaml')
@@ -91,12 +88,11 @@ map:
 
     void "reads mapping from string" () {
         def yaml = """\
-openapi-processor-mapping: v1.0
+openapi-processor-mapping: v2
     
 map:
   types:
-    - from: array
-      to: java.util.Collection
+    - type: array => java.util.Collection
 """
 
         when:
@@ -119,7 +115,7 @@ openapi-processor-mapping: v1
         reader.read (yaml)
 
         then:
-        2 * log.info (*_)
+        thrown(MappingFormatException)
+        2 * log.error (*_)
     }
-
 }

@@ -50,8 +50,9 @@ class OptionsConverter(private val checkObsoleteProcessorOptions: Boolean = fals
 
             when (mapping) {
                 is MappingV1 -> {
-                    options.packageName = mapping.options.packageName
-                    options.beanValidation = mapping.options.beanValidation
+                    log.error("please update the mapping.yaml")
+                    log.error("this project is using an old mapping format that is no longer supported.")
+                    log.error(" - 2024.4 is the last version that supports this mapping format.")
                 }
 
                 is MappingV2 -> {
@@ -85,14 +86,12 @@ class OptionsConverter(private val checkObsoleteProcessorOptions: Boolean = fals
                     options.globalMappings = mappings.globalMappings
                     options.endpointMappings = mappings.endpointMappings
                     options.extensionMappings = mappings.extensionMappings
+
+                    if (options.packageName == "io.openapiprocessor.generated") {
+                        log.warn("is 'options.package-name' set in mapping? found default: '{}'.", options.packageName)
+                    }
                 }
             }
-
-            if (options.packageName == "io.openapiprocessor.generated") {
-                log.warn("is 'options.package-name' set in mapping? found default: '{}'.", options.packageName)
-            }
-
-            options.typeMappings = MappingConverter().convert(mapping)
         } catch (t: Throwable) {
             throw InvalidMappingException("failed to parse 'mapping.yaml' configuration!", t)
         }

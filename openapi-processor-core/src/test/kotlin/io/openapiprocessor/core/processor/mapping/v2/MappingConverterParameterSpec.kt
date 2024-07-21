@@ -28,41 +28,41 @@ class MappingConverterParameterSpec: StringSpec({
     val converter = MappingConverter()
 
     // obsolete
-    "read global parameter name type mapping, old" {
-        val yaml = """
-           |openapi-processor-mapping: v5
-           |map:
-           |  parameters:
-           |    - name: foo => mapping.Foo
-           """.trimMargin()
-
-        val mappings = converter.convert(reader.read(yaml))
-
-        // then:
-        val parameter = mappings.first() as NameTypeMapping
-        parameter.parameterName shouldBe "foo"
-        parameter.mapping.sourceTypeName.shouldBeNull()
-        parameter.mapping.sourceTypeFormat.shouldBeNull()
-        parameter.mapping.targetTypeName shouldBe "mapping.Foo"
-        parameter.mapping.genericTypes.shouldBeEmpty()
-    }
+//    "read global parameter name type mapping, old" {
+//        val yaml = """
+//           |openapi-processor-mapping: v5
+//           |map:
+//           |  parameters:
+//           |    - name: foo => mapping.Foo
+//           """.trimMargin()
+//
+//        val mappings = converter.convertX(reader.read(yaml))
+//
+//        // then:
+//        val parameter = mappings.first() as NameTypeMapping
+//        parameter.parameterName shouldBe "foo"
+//        parameter.mapping.sourceTypeName.shouldBeNull()
+//        parameter.mapping.sourceTypeFormat.shouldBeNull()
+//        parameter.mapping.targetTypeName shouldBe "mapping.Foo"
+//        parameter.mapping.genericTypes.shouldBeEmpty()
+//    }
 
     // obsolete
-    "read global parameter name annotation mapping, old" {
-        val yaml = """
-           |openapi-processor-mapping: v5
-           |map:
-           |  parameters:
-           |    - name: foo @ annotation.Foo
-           """.trimMargin()
-
-        val mappings = converter.convert(reader.read(yaml))
-
-        mappings.size.shouldBe(1)
-        val annotation = mappings.first() as AnnotationNameMapping
-        annotation.name shouldBe "foo"
-        annotation.annotation.type shouldBe "annotation.Foo"
-    }
+//    "read global parameter name annotation mapping, old" {
+//        val yaml = """
+//           |openapi-processor-mapping: v5
+//           |map:
+//           |  parameters:
+//           |    - name: foo @ annotation.Foo
+//           """.trimMargin()
+//
+//        val mappings = converter.convert(reader.read(yaml))
+//
+//        mappings.size.shouldBe(1)
+//        val annotation = mappings.first() as AnnotationNameMapping
+//        annotation.name shouldBe "foo"
+//        annotation.annotation.type shouldBe "annotation.Foo"
+//    }
 
     "read global parameter type mapping" {
         val yaml = """
