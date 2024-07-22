@@ -10,6 +10,7 @@ import io.openapiprocessor.core.converter.mapping.MappingQuery
 import io.openapiprocessor.core.converter.mapping.MappingSchemaPlain
 import io.openapiprocessor.core.parser.HttpMethod
 
+// todo use MappingQuery()
 fun query(
     path: String? = null,
     method: HttpMethod? = null,

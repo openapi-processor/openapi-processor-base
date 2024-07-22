@@ -5,11 +5,12 @@
 
 package io.openapiprocessor.core.processor
 
-import io.openapiprocessor.core.converter.mapping.matcher.ResponseTypeMatcher
+
 import spock.lang.Specification
 import spock.lang.Subject
 
 import static io.openapiprocessor.core.support.MappingQueryKt.query
+import static io.openapiprocessor.core.support.MatcherKt.responseTypeMatcher
 
 class MappingConverterV2Spec extends Specification {
 
@@ -32,15 +33,14 @@ map:
 
         then:
         def response = mappingData.globalMappings.findContentTypeMapping(
-                new ResponseTypeMatcher(query(
+                responseTypeMatcher(
                         null,
                         null,
-                        null,
-                        "application/vnd.array",
-                        null,
-                        null,
+                        null, null, null,
+                        "application/vnd.array"
+                        ,
                         false,
-                        false)))
+                        false))
 
         response.contentType == 'application/vnd.array'
         response.mapping.sourceTypeName == null
