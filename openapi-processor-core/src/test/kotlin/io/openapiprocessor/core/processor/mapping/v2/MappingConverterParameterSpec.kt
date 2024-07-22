@@ -16,9 +16,11 @@ import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.converter.mapping.*
 import io.openapiprocessor.core.converter.MappingQuery
 import io.openapiprocessor.core.converter.mapping.matcher.AnnotationTypeMatcher
+import io.openapiprocessor.core.converter.mapping.matcher.TypeMatcher
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.processor.MappingConverter
 import io.openapiprocessor.core.processor.MappingReader
+import io.openapiprocessor.core.support.typeMatcher
 
 
 class MappingConverterParameterSpec: StringSpec({
@@ -26,43 +28,6 @@ class MappingConverterParameterSpec: StringSpec({
 
     val reader = MappingReader()
     val converter = MappingConverter()
-
-    // obsolete
-//    "read global parameter name type mapping, old" {
-//        val yaml = """
-//           |openapi-processor-mapping: v5
-//           |map:
-//           |  parameters:
-//           |    - name: foo => mapping.Foo
-//           """.trimMargin()
-//
-//        val mappings = converter.convertX(reader.read(yaml))
-//
-//        // then:
-//        val parameter = mappings.first() as NameTypeMapping
-//        parameter.parameterName shouldBe "foo"
-//        parameter.mapping.sourceTypeName.shouldBeNull()
-//        parameter.mapping.sourceTypeFormat.shouldBeNull()
-//        parameter.mapping.targetTypeName shouldBe "mapping.Foo"
-//        parameter.mapping.genericTypes.shouldBeEmpty()
-//    }
-
-    // obsolete
-//    "read global parameter name annotation mapping, old" {
-//        val yaml = """
-//           |openapi-processor-mapping: v5
-//           |map:
-//           |  parameters:
-//           |    - name: foo @ annotation.Foo
-//           """.trimMargin()
-//
-//        val mappings = converter.convert(reader.read(yaml))
-//
-//        mappings.size.shouldBe(1)
-//        val annotation = mappings.first() as AnnotationNameMapping
-//        annotation.name shouldBe "foo"
-//        annotation.annotation.type shouldBe "annotation.Foo"
-//    }
 
     "read global parameter type mapping" {
         val yaml = """
@@ -74,10 +39,10 @@ class MappingConverterParameterSpec: StringSpec({
 
         // when:
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX()
+        val mappingData = MappingConverter(mapping).convertX2()
 
         // then:
-        val typeMapping = mappings.findGlobalParameterTypeMapping(MappingQuery(name = "Foo"))!!
+        val typeMapping = mappingData.globalMappings.findParameterTypeMapping(typeMatcher(name = "Foo"))!!
 
         typeMapping.sourceTypeName shouldBe "Foo"
         typeMapping.targetTypeName shouldBe "mapping.Foo"
@@ -96,10 +61,10 @@ class MappingConverterParameterSpec: StringSpec({
 
         // when:
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX()
+        val mappingData = MappingConverter(mapping).convertX2()
 
         // then:
-        val typeMapping = mappings.findGlobalParameterTypeMapping(MappingQuery(name = "Foo"))
+        val typeMapping = mappingData.globalMappings.findParameterTypeMapping(typeMatcher(name = "Foo"))
 
         typeMapping.shouldBeNull()
     }

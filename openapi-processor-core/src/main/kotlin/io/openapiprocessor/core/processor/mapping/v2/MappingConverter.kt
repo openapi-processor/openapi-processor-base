@@ -138,7 +138,7 @@ class MappingConverter(val mapping: MappingV2) {
         extensions.forEach { ext ->
             val valueMappings = mutableMapOf<String /* extension value */, MutableList<AnnotationNameMapping>>()
             ext.value.forEach { value ->
-                val xMapping = createExtensionMappingX(value)
+                val xMapping = createExtensionMapping(value)
                 valueMappings.computeIfAbsent(xMapping.name) { mutableListOf() }.add(xMapping)
             }
             extensionMappings[ext.key] = ExtensionMappings(valueMappings)
@@ -427,18 +427,7 @@ class MappingConverter(val mapping: MappingV2) {
         )
     }
 
-    private fun createExtensionMapping(source: Type): Mapping {
-        val (mapping, _) = parseMapping(source.type, source.generics)
-        if (mapping.kind != ANNOTATE) {
-            throw BadMappingException(source.type)
-        }
-
-        return AnnotationNameMappingDefault(mapping.sourceType!!, Annotation(
-                        mapping.annotationType!!,
-                        mapping.annotationParameters))
-    }
-
-    private fun createExtensionMappingX(source: Type): AnnotationNameMapping {
+    private fun createExtensionMapping(source: Type): AnnotationNameMapping {
         val (mapping, _) = parseMapping(source.type, source.generics)
         if (mapping.kind != ANNOTATE) {
             throw BadMappingException(source.type)
