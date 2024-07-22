@@ -28,14 +28,14 @@ class MappingConverterReactiveSpec: StringSpec({
 
         // when:
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX()
+        val mappings = MappingConverter(mapping).convertX2().globalMappings
 
         // then:
-        val singleTypeMapping = mappings.getGlobalSingleTypeMapping()!!
+        val singleTypeMapping = mappings.getSingleTypeMapping()!!
         singleTypeMapping.sourceTypeName shouldBe "single"
         singleTypeMapping.targetTypeName shouldBe "reactor.core.publisher.Mono"
 
-        val multiTypeMapping = mappings.getGlobalMultiTypeMapping()!!
+        val multiTypeMapping = mappings.getMultiTypeMapping()!!
         multiTypeMapping.sourceTypeName shouldBe "multi"
         multiTypeMapping.targetTypeName shouldBe "reactor.core.publisher.Flux"
     }
@@ -61,29 +61,29 @@ class MappingConverterReactiveSpec: StringSpec({
 
         // when:
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX()
+        val mappings = MappingConverter(mapping).convertX2().endpointMappings
 
         // then:
-        val singleTypeMapping = mappings.getEndpointSingleTypeMapping(
+        val singleTypeMapping = mappings["/foo"]!!.getSingleTypeMapping(
             MappingQuery(path = "/foo", method = HttpMethod.POST))!!
 
         singleTypeMapping.sourceTypeName shouldBe "single"
         singleTypeMapping.targetTypeName shouldBe "reactor.core.publisher.Mono"
 
-        val multiTypeMapping = mappings.getEndpointMultiTypeMapping(
+        val multiTypeMapping = mappings["/foo"]!!.getMultiTypeMapping(
             MappingQuery(path = "/foo", method = HttpMethod.POST))!!
 
         multiTypeMapping.sourceTypeName shouldBe "multi"
         multiTypeMapping.targetTypeName shouldBe "reactor.core.publisher.Flux"
 
 
-        val singleTypeMappingGet = mappings.getEndpointSingleTypeMapping(
+        val singleTypeMappingGet = mappings["/foo"]!!.getSingleTypeMapping(
             MappingQuery(path = "/foo", method = HttpMethod.GET))!!
 
         singleTypeMappingGet.sourceTypeName shouldBe "single"
         singleTypeMappingGet.targetTypeName shouldBe "reactor.core.publisher.Mono2"
 
-        val multiTypeMappingGet = mappings.getEndpointMultiTypeMapping(
+        val multiTypeMappingGet = mappings["/foo"]!!.getMultiTypeMapping(
             MappingQuery(path = "/foo", method = HttpMethod.GET))!!
 
         multiTypeMappingGet.sourceTypeName shouldBe "multi"

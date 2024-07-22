@@ -14,6 +14,7 @@ import io.openapiprocessor.core.converter.MappingQuery
 import io.openapiprocessor.core.converter.mapping.AmbiguousTypeMappingException
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.processor.MappingReader
+import io.openapiprocessor.core.support.responseTypeMatcher
 
 class MappingConverterResponseSpec: StringSpec({
     val reader = MappingReader()
@@ -28,11 +29,11 @@ class MappingConverterResponseSpec: StringSpec({
 
         // when:
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX()
+        val mappings = MappingConverter(mapping).convertX2().globalMappings
 
         // then:
-        val contentMapping = mappings.findGlobalContentTypeMapping(
-            MappingQuery(contentType = "application/vnd.array"))!!
+        val contentMapping = mappings.findContentTypeMapping(
+            responseTypeMatcher(contentType = "application/vnd.array"))!!
 
         contentMapping.contentType shouldBe "application/vnd.array"
         contentMapping.mapping.sourceTypeName.shouldBeNull()
@@ -52,11 +53,11 @@ class MappingConverterResponseSpec: StringSpec({
 
         // when:
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX()
+        val mappings = MappingConverter(mapping).convertX2().globalMappings
 
         // then:
-        val contentMapping = mappings.findGlobalContentTypeMapping(
-            MappingQuery(contentType = "application/vnd.array"))
+        val contentMapping = mappings.findContentTypeMapping(
+            responseTypeMatcher(contentType = "application/vnd.array"))
 
         contentMapping.shouldBeNull()
     }
@@ -76,11 +77,11 @@ class MappingConverterResponseSpec: StringSpec({
            """.trimMargin()
 
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX()
+        val mappings = MappingConverter(mapping).convertX2().globalMappings
 
         shouldThrow<AmbiguousTypeMappingException> {
-            mappings.findGlobalContentTypeMapping(
-                MappingQuery(contentType = "application/vnd.array")
+            mappings.findContentTypeMapping(
+                responseTypeMatcher(contentType = "application/vnd.array")
             )
         }
     }
@@ -106,10 +107,10 @@ class MappingConverterResponseSpec: StringSpec({
 
         // when:
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX()
+        val mappings = MappingConverter(mapping).convertX2().endpointMappings
 
         // then:
-        val contentMapping = mappings.findEndpointContentTypeMapping(
+        val contentMapping = mappings["/foo"]!!.findContentTypeMapping(
             MappingQuery(path = "/foo", method = HttpMethod.POST, contentType = "application/vnd.array"))!!
 
         contentMapping.contentType shouldBe "application/vnd.array"
@@ -118,7 +119,7 @@ class MappingConverterResponseSpec: StringSpec({
         contentMapping.mapping.targetTypeName shouldBe "java.util.List"
         contentMapping.mapping.genericTypes.shouldBeEmpty()
 
-        val contentMappingGet = mappings.findEndpointContentTypeMapping(
+        val contentMappingGet = mappings["/foo"]!!.findContentTypeMapping(
             MappingQuery(path = "/foo", method = HttpMethod.GET, contentType = "application/vnd.array"))!!
 
         contentMappingGet.contentType shouldBe "application/vnd.array"

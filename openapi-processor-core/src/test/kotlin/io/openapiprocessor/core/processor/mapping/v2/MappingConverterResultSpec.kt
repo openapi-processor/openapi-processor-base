@@ -29,10 +29,10 @@ class MappingConverterResultSpec: StringSpec({
 
         // when:
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX()
+        val mappings = MappingConverter(mapping).convertX2().globalMappings
 
         // then:
-        val resultTypeMapping = mappings.getGlobalResultTypeMapping()!!
+        val resultTypeMapping = mappings.getResultTypeMapping()!!
 
         resultTypeMapping.targetTypeName shouldBe "plain"
         resultTypeMapping.genericTypes.shouldBeEmpty()
@@ -51,10 +51,10 @@ class MappingConverterResultSpec: StringSpec({
 
         // when:
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX()
+        val mappings = MappingConverter(mapping).convertX2().globalMappings
 
         // then:
-        val resultTypeMapping = mappings.getGlobalResultTypeMapping()!!
+        val resultTypeMapping = mappings.getResultTypeMapping()!!
 
         resultTypeMapping.targetTypeName shouldBe "io.openapiprocessor.Wrap"
         resultTypeMapping.genericTypes.shouldBeEmpty()
@@ -72,10 +72,10 @@ class MappingConverterResultSpec: StringSpec({
 
         // when:
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX()
+        val mappings = MappingConverter(mapping).convertX2().globalMappings
 
         // then:
-        val resultStyle = mappings.getGlobalResultStyleMapping()
+        val resultStyle = mappings.getResultStyle()
 
         resultStyle.shouldBeNull()
     }
@@ -93,10 +93,10 @@ class MappingConverterResultSpec: StringSpec({
 
         // when:
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX()
+        val mappings = MappingConverter(mapping).convertX2().globalMappings
 
         // then:
-        val resultStyle = mappings.getGlobalResultStyleMapping()!!
+        val resultStyle = mappings.getResultStyle()!!
 
         resultStyle.shouldBe(ResultStyle.SUCCESS)
     }
@@ -114,10 +114,10 @@ class MappingConverterResultSpec: StringSpec({
 
         // when:
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX()
+        val mappings = MappingConverter(mapping).convertX2().globalMappings
 
         // then:
-        val resultStyle = mappings.getGlobalResultStyleMapping()!!
+        val resultStyle = mappings.getResultStyle()!!
 
         resultStyle.shouldBe(ResultStyle.ALL)
     }
@@ -141,17 +141,17 @@ class MappingConverterResultSpec: StringSpec({
 
         // when:
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX()
+        val mappings = MappingConverter(mapping).convertX2().endpointMappings
 
         // then:
-        val resultTypeMapping = mappings.getEndpointResultTypeMapping(
+        val resultTypeMapping = mappings["/foo"]!!.getResultTypeMapping(
             MappingQuery(path = "/foo", method = HttpMethod.POST)
         )!!
 
         resultTypeMapping.targetTypeName shouldBe "io.openapiprocessor.WrapAll"
         resultTypeMapping.genericTypes.shouldBeEmpty()
 
-        val resultTypeMappingGet = mappings.getEndpointResultTypeMapping(
+        val resultTypeMappingGet = mappings["/foo"]!!.getResultTypeMapping(
             MappingQuery(path = "/foo", method = HttpMethod.GET)
         )!!
 
