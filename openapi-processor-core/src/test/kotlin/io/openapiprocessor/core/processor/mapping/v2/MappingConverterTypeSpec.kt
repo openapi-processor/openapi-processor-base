@@ -14,6 +14,8 @@ import io.openapiprocessor.core.converter.mapping.*
 import io.openapiprocessor.core.converter.mapping.matcher.AnnotationTypeMatcher
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.processor.MappingReader
+import io.openapiprocessor.core.support.query
+import io.openapiprocessor.core.support.typeMatcher
 
 class MappingConverterTypeSpec: FreeSpec({
     val reader = MappingReader()
@@ -180,14 +182,11 @@ class MappingConverterTypeSpec: FreeSpec({
 
             // when:
             val mapping = reader.read (yaml) as Mapping
-            val mappings = MappingConverter(mapping).convertX()
+            val mappings = MappingConverter(reader.read(yaml) as Mapping).convertX2().globalMappings
 
             // then:
-            val typeMapping = mappings.findGlobalTypeMapping(
-                MappingQuery(
-                    name = expected.sourceTypeName,
-                    format = expected.sourceTypeFormat
-                )
+            val typeMapping = mappings.findTypeMapping(
+                typeMatcher(name = expected.sourceTypeName, format = expected.sourceTypeFormat)
             )!!
 
             typeMapping.sourceTypeName shouldBe expected.sourceTypeName
@@ -214,10 +213,10 @@ class MappingConverterTypeSpec: FreeSpec({
 
         // when:
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX()
+        val mappings = MappingConverter(reader.read(yaml) as Mapping).convertX2().globalMappings
 
         // then:
-        val typeMapping = mappings.findGlobalTypeMapping(MappingQuery(name = "Foo"))
+        val typeMapping = mappings.findTypeMapping(typeMatcher(name = "Foo"))
 
         typeMapping.shouldBeNull()
     }
@@ -236,10 +235,10 @@ class MappingConverterTypeSpec: FreeSpec({
            """.trimMargin()
 
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX()
+        val mappings = MappingConverter(reader.read(yaml) as Mapping).convertX2().globalMappings
 
         shouldThrow<AmbiguousTypeMappingException> {
-            mappings.findGlobalTypeMapping(MappingQuery(name = "Foo"))
+            mappings.findTypeMapping(typeMatcher(name = "Foo"))
         }
     }
 
@@ -304,10 +303,11 @@ class MappingConverterTypeSpec: FreeSpec({
 
         // when:
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX()
+        val mappings = MappingConverter(reader.read(yaml) as Mapping).convertX2().globalMappings
+
 
         // then:
-        val annotationMappings = mappings.findGlobalAnnotationTypeMapping(MappingQuery(name = "Foo"))
+        val annotationMappings = mappings.findAnnotationTypeMapping(AnnotationTypeMatcher(MappingQuery(name = "Foo")))
 
         annotationMappings.shouldBeEmpty()
     }
@@ -333,20 +333,20 @@ class MappingConverterTypeSpec: FreeSpec({
 
         // when:
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX()
+        val mappings = MappingConverter(mapping).convertX2()
+        val epMappings = mappings.endpointMappings["/foo"]
+
 
         // then:
-        val typeMapping = mappings.findEndpointTypeMapping(
-            MappingQuery(path = "/foo", method = HttpMethod.POST, name = "Foo")
-        )!!
+        val typeMapping = epMappings?.findTypeMapping(
+            query(path = "/foo", method = HttpMethod.POST, name = "Foo"))!!
 
         typeMapping.sourceTypeName shouldBe "Foo"
         typeMapping.sourceTypeFormat.shouldBeNull()
         typeMapping.targetTypeName shouldBe "io.openapiprocessor.Foo"
 
-        val typeMappingGet = mappings.findEndpointTypeMapping(
-            MappingQuery(path = "/foo", method = HttpMethod.GET, name= "Foo")
-        )!!
+        val typeMappingGet = epMappings.findTypeMapping(
+            query(path = "/foo", method = HttpMethod.GET, name = "Foo"))!!
 
         typeMappingGet.sourceTypeName shouldBe "Foo"
         typeMappingGet.sourceTypeFormat.shouldBeNull()

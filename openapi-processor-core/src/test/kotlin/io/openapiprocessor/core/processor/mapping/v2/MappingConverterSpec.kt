@@ -15,12 +15,11 @@ import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.converter.MappingQuery
-import io.openapiprocessor.core.converter.mapping.matcher.AnnotationTypeMatcher
-import io.openapiprocessor.core.converter.mapping.matcher.TypeMatcher
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.processor.MappingConverter
 import io.openapiprocessor.core.processor.MappingReader
-import io.openapiprocessor.core.support.query
+import io.openapiprocessor.core.support.annotationTypeMatcher
+import io.openapiprocessor.core.support.typeMatcher
 
 class MappingConverterSpec: StringSpec({
     isolationMode = IsolationMode.InstancePerTest
@@ -41,11 +40,9 @@ class MappingConverterSpec: StringSpec({
            |    - type: Foo => io.openapiprocessor.Foo<{package-name}.Bar>
            """.trimMargin()
 
-        val mappingData = MappingConverter(reader.read(yaml) as Mapping).convertX2()
+        val mappings = MappingConverter(reader.read(yaml) as Mapping).convertX2().globalMappings
 
-        val epMappings = mappingData.globalMappings
-        val mapping = epMappings.findTypeMapping(TypeMatcher(query(path = "/foo", name = "Foo")))
-
+        val mapping = mappings.findTypeMapping(typeMatcher(path = "/foo", name = "Foo"))
         mapping!!.sourceTypeName shouldBe "Foo"
         mapping.sourceTypeFormat.shouldBeNull()
         mapping.targetTypeName shouldBe "io.openapiprocessor.Foo"
@@ -65,10 +62,9 @@ class MappingConverterSpec: StringSpec({
                    |  null: org.openapitools.jackson.nullable.JsonNullable
                    """.trimMargin()
 
-        val mappingData = MappingConverter(reader.read(yaml) as Mapping).convertX2()
-        val gMappings = mappingData.globalMappings
+        val mappings = MappingConverter(reader.read(yaml) as Mapping).convertX2().globalMappings
 
-        val mapping = gMappings.getNullTypeMapping()
+        val mapping = mappings.getNullTypeMapping()
         mapping.shouldBeNull()
         //mapping!!.targetTypeName shouldBe "org.openapitools.jackson.nullable.JsonNullable"
     }
@@ -86,10 +82,11 @@ class MappingConverterSpec: StringSpec({
                    |      null: org.openapitools.jackson.nullable.JsonNullable
                    """.trimMargin()
 
-        val mappingData = MappingConverter(reader.read(yaml) as Mapping).convertX2()
-        val mappings = mappingData.endpointMappings["/foo"]
+        val mappings = MappingConverter(reader.read(yaml) as Mapping).convertX2().endpointMappings
 
-        val mapping = mappings?.getNullTypeMapping(query(path = "/foo", method = HttpMethod.GET, name = "Foo"))
+        val mapping = mappings["/foo"]?.getNullTypeMapping(
+            MappingQuery(path = "/foo", method = HttpMethod.GET, name = "Foo"))
+
         mapping!!.targetTypeName shouldBe "org.openapitools.jackson.nullable.JsonNullable"
     }
 
@@ -106,17 +103,18 @@ class MappingConverterSpec: StringSpec({
                    |      null: org.openapitools.jackson.nullable.JsonNullable = JsonNullable.undefined()
                    """.trimMargin()
 
-        val mappingData = MappingConverter(reader.read(yaml) as Mapping).convertX2()
-        val mappings = mappingData.endpointMappings["/foo"]
+        val mappings = MappingConverter(reader.read(yaml) as Mapping).convertX2().endpointMappings["/foo"]
 
-        val mapping = mappings?.getNullTypeMapping(query(path = "/foo", method = HttpMethod.GET, name = "Foo"))
+        val mapping = mappings?.getNullTypeMapping(
+            MappingQuery(path = "/foo", method = HttpMethod.GET, name = "Foo"))
+
         mapping!!.targetTypeName shouldBe "org.openapitools.jackson.nullable.JsonNullable"
         mapping.undefined shouldBe "JsonNullable.undefined()"
     }
 
     "read additional source type parameter annotation" {
         val yaml = """
-                   |openapi-processor-mapping: v2.1
+                   |openapi-processor-mapping: v2
                    |
                    |options:
                    |  package-name: io.openapiprocessor.somewhere
@@ -126,10 +124,9 @@ class MappingConverterSpec: StringSpec({
                    |    - type: Foo @ io.openapiprocessor.Annotation
                    """.trimMargin()
 
-        val mappingData = MappingConverter(reader.read(yaml) as Mapping).convertX2()
-        val mappings = mappingData.globalMappings
+        val mappings = MappingConverter(reader.read(yaml) as Mapping).convertX2().globalMappings
 
-        val annotations = mappings.findAnnotationParameterTypeMapping(AnnotationTypeMatcher(query(name = "Foo")))
+        val annotations = mappings.findAnnotationParameterTypeMapping(annotationTypeMatcher(name = "Foo"))
         annotations shouldHaveSize 1
 
         val annotation = annotations.first()
@@ -140,7 +137,7 @@ class MappingConverterSpec: StringSpec({
 
     "read additional source type parameter annotation of path" {
         val yaml = """
-                   |openapi-processor-mapping: v2.1
+                   |openapi-processor-mapping: v2
                    |
                    |options:
                    |  package-name: io.openapiprocessor.somewhere
@@ -152,10 +149,8 @@ class MappingConverterSpec: StringSpec({
                    |        - type: Foo @ io.openapiprocessor.Annotation
                    """.trimMargin()
 
-        val mappingData = MappingConverter(reader.read(yaml) as Mapping).convertX2()
-        val mappings = mappingData.endpointMappings
-
-        val annotations = mappings["/foo"]!!.findAnnotationParameterTypeMapping(query(name = "Foo"))
+        val mappings = MappingConverter(reader.read(yaml) as Mapping).convertX2().endpointMappings
+        val annotations = mappings["/foo"]!!.findAnnotationParameterTypeMapping(MappingQuery(name = "Foo"))
 
         annotations shouldHaveSize 1
 
@@ -167,7 +162,7 @@ class MappingConverterSpec: StringSpec({
 
     "read additional source type parameter annotation of path with method" {
         val yaml = """
-                   |openapi-processor-mapping: v2.1
+                   |openapi-processor-mapping: v2
                    |
                    |options:
                    |  package-name: io.openapiprocessor.somewhere
@@ -181,8 +176,8 @@ class MappingConverterSpec: StringSpec({
                    """.trimMargin()
 
         // when:
-        val mapping = reader.read (yaml)
-        val mappings = converter.convert (mapping)
+        val mapping = reader.read (yaml) as Mapping
+        val mappings = MappingConverter(mapping).convertX2 ()
 
         // then:
 //        mappings.size.shouldBe(2)
@@ -204,7 +199,7 @@ class MappingConverterSpec: StringSpec({
         val mapping = reader.read (yaml) as Mapping
 
         val mappings = shouldNotThrow<Exception> {
-            MappingConverter(mapping).convertX()
+            MappingConverter(mapping).convertX2()
         }
 
         mappings.shouldNotBeNull()
@@ -219,14 +214,13 @@ class MappingConverterSpec: StringSpec({
         val mapping = reader.read (yaml) as Mapping
 
         val mappings = shouldNotThrow<Exception> {
-            MappingConverter(mapping).convertX()
+            MappingConverter(mapping).convertX2()
         }
 
         mappings.shouldNotBeNull()
     }
 
     "read endpoint path exclude" {
-
         val yaml =
             """
             |openapi-processor-mapping: v8
@@ -243,13 +237,13 @@ class MappingConverterSpec: StringSpec({
 
         // when:
         val mapping = reader.read(yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX()
+        val mappings = MappingConverter(mapping).convertX2().endpointMappings
 
         // then:
-        val excluded = mappings.isEndpointExcluded(MappingQuery(path = "/foo", method = HttpMethod.POST))
+        val excluded = mappings["/foo"]!!.isExcluded(MappingQuery(path = "/foo", method = HttpMethod.POST))
         excluded.shouldBeFalse()
 
-        val excludedGet = mappings.isEndpointExcluded(MappingQuery(path = "/foo", method = HttpMethod.GET))
+        val excludedGet = mappings["/foo"]!!.isExcluded(MappingQuery(path = "/foo", method = HttpMethod.GET))
         excludedGet.shouldBeTrue()
     }
 })

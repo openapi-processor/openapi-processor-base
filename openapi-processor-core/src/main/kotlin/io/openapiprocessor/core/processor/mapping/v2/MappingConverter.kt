@@ -22,14 +22,6 @@ import io.openapiprocessor.core.processor.mapping.v2.Map as MapV2
  */
 class MappingConverter(val mapping: MappingV2) {
 
-    @Deprecated(message = "use convertX2")
-    fun convertX(): MappingRepository {
-        return MappingRepository(
-            convertGlobalMappings(mapping.map),
-            convertPathsMappings(mapping.map.paths),
-            convertExtensionMappings(mapping.map.extensions))
-    }
-
     fun convertX2(): MappingData {
         return MappingData(
             convertGlobalMappings(mapping.map),
