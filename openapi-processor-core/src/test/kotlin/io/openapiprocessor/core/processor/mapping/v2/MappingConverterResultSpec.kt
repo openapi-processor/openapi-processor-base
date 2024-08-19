@@ -29,7 +29,7 @@ class MappingConverterResultSpec: StringSpec({
 
         // when:
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX2().globalMappings
+        val mappings = MappingConverter(mapping).convert().globalMappings
 
         // then:
         val resultTypeMapping = mappings.getResultTypeMapping()!!
@@ -51,7 +51,7 @@ class MappingConverterResultSpec: StringSpec({
 
         // when:
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX2().globalMappings
+        val mappings = MappingConverter(mapping).convert().globalMappings
 
         // then:
         val resultTypeMapping = mappings.getResultTypeMapping()!!
@@ -72,7 +72,7 @@ class MappingConverterResultSpec: StringSpec({
 
         // when:
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX2().globalMappings
+        val mappings = MappingConverter(mapping).convert().globalMappings
 
         // then:
         val resultStyle = mappings.getResultStyle()
@@ -93,7 +93,7 @@ class MappingConverterResultSpec: StringSpec({
 
         // when:
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX2().globalMappings
+        val mappings = MappingConverter(mapping).convert().globalMappings
 
         // then:
         val resultStyle = mappings.getResultStyle()!!
@@ -114,7 +114,7 @@ class MappingConverterResultSpec: StringSpec({
 
         // when:
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX2().globalMappings
+        val mappings = MappingConverter(mapping).convert().globalMappings
 
         // then:
         val resultStyle = mappings.getResultStyle()!!
@@ -141,7 +141,7 @@ class MappingConverterResultSpec: StringSpec({
 
         // when:
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX2().endpointMappings
+        val mappings = MappingConverter(mapping).convert().endpointMappings
 
         // then:
         val resultTypeMapping = mappings["/foo"]!!.getResultTypeMapping(

@@ -18,7 +18,7 @@ class MappingConverter {
 
     fun convert(source: MappingVersion?): MappingData {
         if (source != null && source.v2) {
-            return MappingConverterV2(source as MappingV2).convertX2()
+            return MappingConverterV2(source as MappingV2).convert()
         }
 
         return MappingData()

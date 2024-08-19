@@ -39,7 +39,7 @@ class MappingFinderXSpec: StringSpec({
 
         // when:
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX2()
+        val mappings = MappingConverter(mapping).convert()
         val finder = MappingFinder(mappings)
 
         // then:
@@ -89,7 +89,7 @@ class MappingFinderXSpec: StringSpec({
 
         // when:
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX2()
+        val mappings = MappingConverter(mapping).convert()
         val finder = MappingFinder(mappings)
 
         // then:

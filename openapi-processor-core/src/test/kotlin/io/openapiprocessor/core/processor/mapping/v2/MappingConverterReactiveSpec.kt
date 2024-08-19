@@ -28,7 +28,7 @@ class MappingConverterReactiveSpec: StringSpec({
 
         // when:
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX2().globalMappings
+        val mappings = MappingConverter(mapping).convert().globalMappings
 
         // then:
         val singleTypeMapping = mappings.getSingleTypeMapping()!!
@@ -61,7 +61,7 @@ class MappingConverterReactiveSpec: StringSpec({
 
         // when:
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX2().endpointMappings
+        val mappings = MappingConverter(mapping).convert().endpointMappings
 
         // then:
         val singleTypeMapping = mappings["/foo"]!!.getSingleTypeMapping(

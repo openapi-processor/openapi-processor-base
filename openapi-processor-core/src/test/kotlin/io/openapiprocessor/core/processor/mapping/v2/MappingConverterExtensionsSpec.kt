@@ -80,7 +80,7 @@ class MappingConverterExtensionsSpec: StringSpec({
            """.trimMargin()
 
         val mapping = reader.read (yaml) as Mapping
-        val mappingData = MappingConverter(mapping).convertX2()
+        val mappingData = MappingConverter(mapping).convert()
 
         mappingData.extensionMappings.shouldHaveSize(1)
         val mappings = mappingData.extensionMappings["x-foo"]!!

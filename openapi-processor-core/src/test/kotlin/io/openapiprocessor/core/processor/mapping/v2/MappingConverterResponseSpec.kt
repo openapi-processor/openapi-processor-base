@@ -29,7 +29,7 @@ class MappingConverterResponseSpec: StringSpec({
 
         // when:
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX2().globalMappings
+        val mappings = MappingConverter(mapping).convert().globalMappings
 
         // then:
         val contentMapping = mappings.findContentTypeMapping(
@@ -53,7 +53,7 @@ class MappingConverterResponseSpec: StringSpec({
 
         // when:
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX2().globalMappings
+        val mappings = MappingConverter(mapping).convert().globalMappings
 
         // then:
         val contentMapping = mappings.findContentTypeMapping(
@@ -77,7 +77,7 @@ class MappingConverterResponseSpec: StringSpec({
            """.trimMargin()
 
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX2().globalMappings
+        val mappings = MappingConverter(mapping).convert().globalMappings
 
         shouldThrow<AmbiguousTypeMappingException> {
             mappings.findContentTypeMapping(
@@ -107,7 +107,7 @@ class MappingConverterResponseSpec: StringSpec({
 
         // when:
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX2().endpointMappings
+        val mappings = MappingConverter(mapping).convert().endpointMappings
 
         // then:
         val contentMapping = mappings["/foo"]!!.findContentTypeMapping(

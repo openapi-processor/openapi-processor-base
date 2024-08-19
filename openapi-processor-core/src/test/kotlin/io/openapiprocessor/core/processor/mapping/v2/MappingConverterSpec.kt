@@ -40,7 +40,7 @@ class MappingConverterSpec: StringSpec({
            |    - type: Foo => io.openapiprocessor.Foo<{package-name}.Bar>
            """.trimMargin()
 
-        val mappings = MappingConverter(reader.read(yaml) as Mapping).convertX2().globalMappings
+        val mappings = MappingConverter(reader.read(yaml) as Mapping).convert().globalMappings
 
         val mapping = mappings.findTypeMapping(typeMatcher(path = "/foo", name = "Foo"))
         mapping!!.sourceTypeName shouldBe "Foo"
@@ -62,7 +62,7 @@ class MappingConverterSpec: StringSpec({
                    |  null: org.openapitools.jackson.nullable.JsonNullable
                    """.trimMargin()
 
-        val mappings = MappingConverter(reader.read(yaml) as Mapping).convertX2().globalMappings
+        val mappings = MappingConverter(reader.read(yaml) as Mapping).convert().globalMappings
 
         val mapping = mappings.getNullTypeMapping()
         mapping.shouldBeNull()
@@ -82,7 +82,7 @@ class MappingConverterSpec: StringSpec({
                    |      null: org.openapitools.jackson.nullable.JsonNullable
                    """.trimMargin()
 
-        val mappings = MappingConverter(reader.read(yaml) as Mapping).convertX2().endpointMappings
+        val mappings = MappingConverter(reader.read(yaml) as Mapping).convert().endpointMappings
 
         val mapping = mappings["/foo"]?.getNullTypeMapping(
             MappingQuery(path = "/foo", method = HttpMethod.GET, name = "Foo"))
@@ -103,7 +103,7 @@ class MappingConverterSpec: StringSpec({
                    |      null: org.openapitools.jackson.nullable.JsonNullable = JsonNullable.undefined()
                    """.trimMargin()
 
-        val mappings = MappingConverter(reader.read(yaml) as Mapping).convertX2().endpointMappings["/foo"]
+        val mappings = MappingConverter(reader.read(yaml) as Mapping).convert().endpointMappings["/foo"]
 
         val mapping = mappings?.getNullTypeMapping(
             MappingQuery(path = "/foo", method = HttpMethod.GET, name = "Foo"))
@@ -124,7 +124,7 @@ class MappingConverterSpec: StringSpec({
                    |    - type: Foo @ io.openapiprocessor.Annotation
                    """.trimMargin()
 
-        val mappings = MappingConverter(reader.read(yaml) as Mapping).convertX2().globalMappings
+        val mappings = MappingConverter(reader.read(yaml) as Mapping).convert().globalMappings
 
         val annotations = mappings.findAnnotationParameterTypeMapping(annotationTypeMatcher(name = "Foo"))
         annotations shouldHaveSize 1
@@ -149,7 +149,7 @@ class MappingConverterSpec: StringSpec({
                    |        - type: Foo @ io.openapiprocessor.Annotation
                    """.trimMargin()
 
-        val mappings = MappingConverter(reader.read(yaml) as Mapping).convertX2().endpointMappings
+        val mappings = MappingConverter(reader.read(yaml) as Mapping).convert().endpointMappings
         val annotations = mappings["/foo"]!!.findAnnotationParameterTypeMapping(MappingQuery(name = "Foo"))
 
         annotations shouldHaveSize 1
@@ -177,7 +177,7 @@ class MappingConverterSpec: StringSpec({
 
         // when:
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX2 ()
+        val mappings = MappingConverter(mapping).convert ()
 
         // then:
 //        mappings.size.shouldBe(2)
@@ -199,7 +199,7 @@ class MappingConverterSpec: StringSpec({
         val mapping = reader.read (yaml) as Mapping
 
         val mappings = shouldNotThrow<Exception> {
-            MappingConverter(mapping).convertX2()
+            MappingConverter(mapping).convert()
         }
 
         mappings.shouldNotBeNull()
@@ -214,7 +214,7 @@ class MappingConverterSpec: StringSpec({
         val mapping = reader.read (yaml) as Mapping
 
         val mappings = shouldNotThrow<Exception> {
-            MappingConverter(mapping).convertX2()
+            MappingConverter(mapping).convert()
         }
 
         mappings.shouldNotBeNull()
@@ -237,7 +237,7 @@ class MappingConverterSpec: StringSpec({
 
         // when:
         val mapping = reader.read(yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX2().endpointMappings
+        val mappings = MappingConverter(mapping).convert().endpointMappings
 
         // then:
         val excluded = mappings["/foo"]!!.isExcluded(MappingQuery(path = "/foo", method = HttpMethod.POST))

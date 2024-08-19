@@ -182,7 +182,7 @@ class MappingConverterTypeSpec: FreeSpec({
 
             // when:
             val mapping = reader.read (yaml) as Mapping
-            val mappings = MappingConverter(reader.read(yaml) as Mapping).convertX2().globalMappings
+            val mappings = MappingConverter(reader.read(yaml) as Mapping).convert().globalMappings
 
             // then:
             val typeMapping = mappings.findTypeMapping(
@@ -213,7 +213,7 @@ class MappingConverterTypeSpec: FreeSpec({
 
         // when:
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(reader.read(yaml) as Mapping).convertX2().globalMappings
+        val mappings = MappingConverter(reader.read(yaml) as Mapping).convert().globalMappings
 
         // then:
         val typeMapping = mappings.findTypeMapping(typeMatcher(name = "Foo"))
@@ -235,7 +235,7 @@ class MappingConverterTypeSpec: FreeSpec({
            """.trimMargin()
 
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(reader.read(yaml) as Mapping).convertX2().globalMappings
+        val mappings = MappingConverter(reader.read(yaml) as Mapping).convert().globalMappings
 
         shouldThrow<AmbiguousTypeMappingException> {
             mappings.findTypeMapping(typeMatcher(name = "Foo"))
@@ -256,7 +256,7 @@ class MappingConverterTypeSpec: FreeSpec({
            """.trimMargin()
 
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX2()
+        val mappings = MappingConverter(mapping).convert()
 
         val annotationMappings = mappings.globalMappings.findAnnotationTypeMapping(
             AnnotationTypeMatcher(MappingQuery(type = "Foo")))
@@ -284,7 +284,7 @@ class MappingConverterTypeSpec: FreeSpec({
            """.trimMargin()
 
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX2()
+        val mappings = MappingConverter(mapping).convert()
 
         val annotationMappings = mappings.globalMappings.findAnnotationTypeMapping(
             AnnotationTypeMatcher(MappingQuery(type = "Foo", allowObject = true)))
@@ -303,7 +303,7 @@ class MappingConverterTypeSpec: FreeSpec({
 
         // when:
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(reader.read(yaml) as Mapping).convertX2().globalMappings
+        val mappings = MappingConverter(reader.read(yaml) as Mapping).convert().globalMappings
 
 
         // then:
@@ -333,7 +333,7 @@ class MappingConverterTypeSpec: FreeSpec({
 
         // when:
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX2()
+        val mappings = MappingConverter(mapping).convert()
         val epMappings = mappings.endpointMappings["/foo"]
 
 
@@ -373,7 +373,7 @@ class MappingConverterTypeSpec: FreeSpec({
            """.trimMargin()
 
         val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convertX2()
+        val mappings = MappingConverter(mapping).convert()
         val repository = MappingRepository(endpointMappings = mappings.endpointMappings)
 
         val annotationMappings = repository.findEndpointAnnotationTypeMapping(

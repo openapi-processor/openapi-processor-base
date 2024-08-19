@@ -22,7 +22,7 @@ import io.openapiprocessor.core.processor.mapping.v2.Map as MapV2
  */
 class MappingConverter(val mapping: MappingV2) {
 
-    fun convertX2(): MappingData {
+    fun convert(): MappingData {
         return MappingData(
             convertGlobalMappings(mapping.map),
             convertPathsMappings(mapping.map.paths),
