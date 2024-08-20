@@ -13,8 +13,7 @@ import org.slf4j.LoggerFactory
 
 class EndpointMappings(
     private val mappings: Mappings,
-    private val methodMappings: Map<HttpMethod, Mappings>,
-    private val exclude: Boolean
+    private val methodMappings: Map<HttpMethod, Mappings>
 ) {
     val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
