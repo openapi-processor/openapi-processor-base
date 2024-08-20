@@ -25,7 +25,7 @@ sourceSets {
 tasks.named('generateGrammarSource') {
     def antlrPkg = 'io.openapiprocessor.core.processor.mapping.v2.parser.antlr'
     arguments += ['-package', antlrPkg]
-    outputDirectory = new File("$buildDir/antlr/${antlrPkg.replace ('.', '/')}".toString())
+    outputDirectory = layout.buildDirectory.dir("antlr/${antlrPkg.replace('.', '/')}").get().asFile
 }
 
 tasks.named('compileTestGroovy') {
@@ -135,7 +135,7 @@ sonarqube {
     property "sonar.projectKey", "openapi-processor_openapi-processor-base-core"
     property "sonar.organization", "openapi-processor"
     property "sonar.host.url", "https://sonarcloud.io"
-    property "sonar.coverage.jacoco.xmlReportPaths", "$buildDir/reports/jacoco/test/jacocoTestReport.xml"
+    property "sonar.coverage.jacoco.xmlReportPaths", layout.buildDirectory.dir("reports/jacoco/test/jacocoTestReport.xml").get().toString()
   }
 }
 
