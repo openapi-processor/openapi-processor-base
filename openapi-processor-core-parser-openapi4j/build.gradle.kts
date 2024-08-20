@@ -1,6 +1,7 @@
 plugins {
     id("openapiprocessor.library")
     id("openapiprocessor.publish")
+    id("openapiprocessor.test")
     `java-test-fixtures`
 }
 
