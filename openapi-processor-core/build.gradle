@@ -107,8 +107,6 @@ dependencies {
     testIntImplementation (libs.jimfs)
 
     constraints {
-        implementation(libs.guava) { because("avoid multiple versions") }
-
         testImplementation(libs.guava) { because("avoid multiple versions") }
         testImplementation(libs.junit.bom) { because("avoid multiple versions") }
 
