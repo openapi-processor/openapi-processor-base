@@ -105,14 +105,6 @@ dependencies {
     testIntImplementation (libs.spock)
     testIntImplementation (libs.logback)
     testIntImplementation (libs.jimfs)
-
-    constraints {
-        testImplementation(libs.guava) { because("avoid multiple versions") }
-        testImplementation(libs.junit.bom) { because("avoid multiple versions") }
-
-        testIntImplementation(libs.guava) { because("avoid multiple versions") }
-        testIntImplementation(libs.junit.bom) { because("avoid multiple versions") }
-    }
 }
 
 tasks.named("dependencyUpdates").configure {
