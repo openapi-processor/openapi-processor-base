@@ -14,6 +14,7 @@ dependencies {
         exclude(group = "io.swagger.parser.v3", module = "swagger-parser-v2-converter")
         exclude(group = "io.swagger.core.v3", module = "swagger-annotations")
     }
+    implementation (libs.uritemplate)
 
     testImplementation (project(":openapi-processor-test"))
     testImplementation (platform(libs.kotest.bom))

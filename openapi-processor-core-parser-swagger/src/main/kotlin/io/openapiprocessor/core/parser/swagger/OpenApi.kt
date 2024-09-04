@@ -21,7 +21,13 @@ class OpenApi(private val result: SwaggerParseResult): ParserOpenApi {
     private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     override fun getServers(): List<Server> {
-        return listOf()
+        val servers = mutableListOf<Server>()
+
+        result.openAPI.servers.forEach { server ->
+            servers.add(Server(server))
+        }
+
+        return servers
     }
 
     override fun getPaths(): Map<String, ParserPath> {
