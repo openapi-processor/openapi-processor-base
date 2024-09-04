@@ -10,6 +10,7 @@ package io.openapiprocessor.core.parser
  */
 interface OpenApi {
 
+    fun getServers(): List<Server>
     fun getPaths(): Map<String, Path>
 
     fun getRefResolver(): RefResolver

@@ -5,6 +5,7 @@
 
 package io.openapiprocessor.core.parser.swagger
 
+import io.openapiprocessor.core.parser.Server
 import io.openapiprocessor.core.parser.OpenApi as ParserOpenApi
 import io.openapiprocessor.core.parser.Path as ParserPath
 import io.openapiprocessor.core.parser.RefResolver as ParserRefResolver
@@ -18,6 +19,10 @@ import org.slf4j.LoggerFactory
  */
 class OpenApi(private val result: SwaggerParseResult): ParserOpenApi {
     private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
+
+    override fun getServers(): List<Server> {
+        return listOf()
+    }
 
     override fun getPaths(): Map<String, ParserPath> {
         val paths = linkedMapOf<String, ParserPath>()

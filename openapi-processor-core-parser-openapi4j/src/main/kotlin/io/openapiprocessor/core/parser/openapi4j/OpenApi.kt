@@ -5,6 +5,7 @@
 
 package io.openapiprocessor.core.parser.openapi4j
 
+import io.openapiprocessor.core.parser.Server
 import io.openapiprocessor.core.parser.OpenApi as ParserOpenApi
 import io.openapiprocessor.core.parser.Path as ParserPath
 import io.openapiprocessor.core.parser.RefResolver as ParserRefResolver
@@ -24,6 +25,10 @@ class OpenApi(
     private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     private val refResolver: RefResolverNative = RefResolverNative(api)
+
+    override fun getServers(): List<Server> {
+        return listOf()
+    }
 
     override fun getPaths(): Map<String, ParserPath> {
         val paths = linkedMapOf<String, ParserPath>()
