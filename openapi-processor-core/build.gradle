@@ -69,6 +69,7 @@ dependencies {
     implementation (platform(libs.jackson.bom))
     implementation (libs.jackson.kotlin)
     implementation (libs.jackson.yaml)
+    implementation (libs.uritemplate)
     implementation (libs.commons.text)
     implementation (libs.commonmark)
     implementation (libs.format.java.google)
