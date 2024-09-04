@@ -27,7 +27,13 @@ class OpenApi(
     private val refResolver: RefResolverNative = RefResolverNative(api)
 
     override fun getServers(): List<Server> {
-        return listOf()
+        val servers = mutableListOf<Server>()
+
+        api.servers.forEach { server ->
+            servers.add(Server(server))
+        }
+
+        return servers
     }
 
     override fun getPaths(): Map<String, ParserPath> {

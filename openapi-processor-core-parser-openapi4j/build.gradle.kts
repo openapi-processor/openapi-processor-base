@@ -11,6 +11,7 @@ repositories {
 dependencies {
     implementation (project(":openapi-processor-core-parser-api"))
     implementation (libs.openapi4j)
+    implementation (libs.uritemplate)
     implementation (libs.slf4j)
 
     testImplementation (project(":openapi-processor-test"))
