@@ -25,7 +25,13 @@ open class OpenApi(
     private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     override fun getServers(): List<Server> {
-        return listOf()
+        val servers = mutableListOf<Server>()
+
+        api.servers.forEach { server ->
+            servers.add(Server(server))
+        }
+
+        return servers
     }
 
     override fun getPaths(): Map<String, Path> {
