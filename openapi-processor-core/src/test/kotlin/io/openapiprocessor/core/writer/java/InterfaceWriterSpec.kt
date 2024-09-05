@@ -10,6 +10,7 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldNotContain
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldContain
 import io.mockk.every
 import io.openapiprocessor.core.builder.api.`interface`
 import io.openapiprocessor.core.builder.api.itf
@@ -17,6 +18,7 @@ import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.mapping.SimpleParameterValue
 import io.openapiprocessor.core.extractBody
 import io.openapiprocessor.core.extractImports
+import io.openapiprocessor.core.framework.AnnotationType
 import io.openapiprocessor.core.framework.FrameworkAnnotations
 import io.openapiprocessor.core.model.Annotation
 import io.openapiprocessor.core.model.Endpoint
@@ -478,6 +480,30 @@ class InterfaceWriterSpec: StringSpec({
 
         writer.write(target, itf)
 
-        target.toString().contains("interface FooBar")
+        target.toString() shouldContain "interface FooBar"
+    }
+
+    "write server uri as path prefix" {
+        every { annotations.getAnnotation(any<AnnotationType>()) } returns Annotation("annotation.Prefix")
+
+        val itf = itf("foo-bar", "api", path = "/prefix") {
+            endpoint("/foo") {
+                responses {
+                    status("200") {
+                        response("text/plain", StringDataType())
+                    }
+                }
+            }
+        }
+
+        options.serverPrefix = true
+        writer.write(target, itf)
+
+        target.toString() shouldContain "import annotation.Prefix;"
+
+        target.toString() shouldContain """
+            |@Prefix("/prefix")
+            |public interface FooBarApi"""
+            .trimMargin()
     }
 })

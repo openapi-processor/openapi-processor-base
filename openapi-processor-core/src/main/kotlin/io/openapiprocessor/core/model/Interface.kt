@@ -14,7 +14,8 @@ import io.openapiprocessor.core.writer.Identifier
 class Interface(
     val name: String,
     private val pkg: String,
-    private val identifier: Identifier
+    private val identifier: Identifier,
+    val path: String? = null
 ) {
     val endpoints: List<Endpoint> = mutableListOf()
 
@@ -36,6 +37,10 @@ class Interface(
     fun add(vararg endpoint: Endpoint) {
         endpoints as MutableList
         endpoints.addAll(endpoint)
+    }
+
+    fun hasPath(): Boolean {
+        return path != null
     }
 
     override fun toString(): String {

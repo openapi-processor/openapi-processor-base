@@ -16,6 +16,7 @@ fun `interface`(
     name: String = "Foo",
     pkg: String = "io.openapiprocessor.test",
     identifier: Identifier = JavaIdentifier(),
+    path: String? = null,
     init: InterfaceBuilder.() -> Unit
 ): Interface {
     val builder = InterfaceBuilder(name, pkg, identifier)
@@ -27,9 +28,10 @@ fun itf(
     name: String = "Foo",
     pkg: String = "io.openapiprocessor.test",
     identifier: Identifier = JavaIdentifier(),
+    path: String? = null,
     init: InterfaceBuilder.() -> Unit
 ): Interface {
-    val builder = InterfaceBuilder(name, pkg, identifier)
+    val builder = InterfaceBuilder(name, pkg, identifier, path)
     init(builder)
     return builder.build()
 }
@@ -37,7 +39,8 @@ fun itf(
 class InterfaceBuilder(
     private val name: String,
     private val pkg: String,
-    private val identifier: Identifier
+    private val identifier: Identifier,
+    private val path: String? = null
 ) {
     private val endpoints = mutableListOf<Endpoint>()
 
@@ -46,7 +49,7 @@ class InterfaceBuilder(
     }
 
     fun build(): Interface {
-        val itf = Interface(name, pkg, identifier)
+        val itf = Interface(name, pkg, identifier, path)
         itf.add(*endpoints.toTypedArray())
         return itf
     }

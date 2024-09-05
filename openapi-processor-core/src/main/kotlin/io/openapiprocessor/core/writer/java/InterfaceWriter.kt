@@ -8,7 +8,9 @@ package io.openapiprocessor.core.writer.java
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.MappingFinder
 import io.openapiprocessor.core.converter.MappingQuery
+import io.openapiprocessor.core.framework.AnnotationType
 import io.openapiprocessor.core.framework.FrameworkAnnotations
+import io.openapiprocessor.core.model.Annotation
 import io.openapiprocessor.core.model.Endpoint
 import io.openapiprocessor.core.model.EndpointResponse
 import io.openapiprocessor.core.model.Interface
@@ -25,18 +27,25 @@ class InterfaceWriter(
     private val methodWriter: MethodWriter,
     private val annotations: FrameworkAnnotations,
     private val validationAnnotations: BeanValidationFactory = BeanValidationFactory(apiOptions),
-    private val importFilter: ImportFilter = DefaultImportFilter()
+    private val importFilter: ImportFilter = DefaultImportFilter(),
 ) {
+    private val annotationWriter: AnnotationWriter = AnnotationWriter()
+
     fun write(target: Writer, itf: Interface) {
         target.write ("package ${itf.getPackageName()};\n\n")
 
-        val imports: List<String> = collectImports (itf.getPackageName(), itf.endpoints)
+        val imports: List<String> = collectImports (itf, itf.getPackageName(), itf.endpoints)
         imports.forEach {
             target.write("import ${it};\n")
         }
         target.write("\n")
 
         generatedWriter.writeUse(target)
+
+        if (apiOptions.serverPrefix && itf.hasPath()) {
+            annotationWriter.write(target, getPrefixAnnotation(itf.path))
+            target.write("\n")
+        }
         target.write("public interface ${itf.getInterfaceName()} {\n\n")
 
         itf.endpoints.forEach { ep ->
@@ -49,7 +58,7 @@ class InterfaceWriter(
         target.write ("}\n")
     }
 
-    private fun collectImports(packageName: String, endpoints: List<Endpoint>): List<String> {
+    private fun collectImports(itf: Interface, packageName: String, endpoints: List<Endpoint>): List<String> {
         val imports: MutableSet<String> = mutableSetOf()
 
         imports.addAll(generatedWriter.getImports())
@@ -58,6 +67,10 @@ class InterfaceWriter(
             val annotation = annotations.getAnnotation (ep.method)
             imports.addAll(annotation.imports)
             imports.addAll(annotation.referencedImports)
+
+            if (apiOptions.serverPrefix && itf.hasPath()) {
+                imports.addAll(getPrefixAnnotation().imports)
+            }
 
             if (ep.deprecated) {
                 imports.add (java.lang.Deprecated::class.java.canonicalName)
@@ -133,6 +146,15 @@ class InterfaceWriter(
 
         if (responseImports.isNotEmpty()) {
             imports.addAll(responseImports)
+        }
+    }
+
+    private fun getPrefixAnnotation(path: String? = null): Annotation {
+        val annotation = annotations.getAnnotation(AnnotationType.INTERFACE_PATH_PREFIX)
+        return if (path == null) {
+            annotation
+        } else {
+            annotation.withParameter(""""$path"""")
         }
     }
 }

@@ -6,6 +6,7 @@
 package io.openapiprocessor.core.model
 
 import io.openapiprocessor.core.converter.mapping.ParameterValue
+import io.openapiprocessor.core.converter.mapping.SimpleParameterValue
 
 open class Annotation(
     private val canonicalName: String,
@@ -35,4 +36,18 @@ open class Annotation(
      */
     val annotationName: String
         get() = "@${typeName}"
+
+    fun withParameter(parameter: String): Annotation {
+        val newParameters = linkedMapOf<String, ParameterValue>()
+        newParameters.putAll(parameters)
+        newParameters[""] = SimpleParameterValue(parameter)
+        return Annotation(canonicalName, newParameters)
+    }
+
+    fun withParameter(key: String, parameter: ParameterValue): Annotation {
+        val m = linkedMapOf<String, ParameterValue>()
+        m.putAll(parameters)
+        m[key] = parameter
+        return Annotation(canonicalName, m)
+    }
 }

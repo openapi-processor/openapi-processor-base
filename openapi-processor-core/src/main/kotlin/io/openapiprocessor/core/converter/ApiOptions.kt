@@ -92,6 +92,16 @@ class ApiOptions: MappingSettings {
     var jsonPropertyAnnotation = JsonPropertyAnnotationMode.Always
 
     /**
+     * enable/disable use of server url (optional).
+     */
+    var serverPrefix = false
+
+    /**
+     * index of the server to use as server prefix.
+     */
+    var serverPrefixIndex: Int = 0
+
+    /**
      * provide additional type mapping information to map OpenAPI types to java types.
      */
     @Deprecated(message = "use mappings below")
