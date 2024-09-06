@@ -486,7 +486,7 @@ class InterfaceWriterSpec: StringSpec({
     "write server uri as path prefix" {
         every { annotations.getAnnotation(any<AnnotationType>()) } returns Annotation("annotation.Prefix")
 
-        val itf = itf("foo-bar", "api", path = "/prefix") {
+        val itf = itf("foo-bar", "api", "/prefix") {
             endpoint("/foo") {
                 responses {
                     status("200") {

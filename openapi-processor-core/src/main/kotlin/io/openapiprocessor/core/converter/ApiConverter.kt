@@ -58,12 +58,13 @@ class  ApiConverter(
 
     private fun createInterfaces(api: OpenApi, target: Api) {
         val interfaces = hashMapOf<String, Interface>()
+        val serverPath = getServerPath(api)
 
         api.getPaths().forEach { (path, pathValue) ->
             val operations = pathValue.getOperations()
 
             operations.forEach { op ->
-                val itf = createInterface(path, op, interfaces)
+                val itf = createInterface(path, serverPath, op, interfaces)
 
                 val ep = createEndpoint(path, op, target.getDataTypes(), api.getRefResolver())
                 if (ep != null) {
@@ -75,7 +76,25 @@ class  ApiConverter(
         target.setInterfaces(interfaces.values.map { it })
     }
 
-    private fun createInterface(path: String, operation: Operation, interfaces: MutableMap<String, Interface>): Interface {
+    private fun getServerPath(api: OpenApi): String? {
+        if (!options.pathPrefix) {
+            return null
+        }
+
+        val servers = api.getServers()
+        if (servers.isEmpty()) {
+            return null
+        }
+
+        return servers[options.pathPrefixServerIndex!!].getUri().path
+    }
+
+    private fun createInterface(
+        path: String,
+        pathPrefix: String?,
+        operation: Operation,
+        interfaces: MutableMap<String, Interface>
+    ): Interface {
         val targetInterfaceName = getInterfaceName(operation, isExcluded(path, operation.getMethod()))
 
         var itf = interfaces[targetInterfaceName]
@@ -83,7 +102,11 @@ class  ApiConverter(
             return itf
         }
 
-        itf = Interface(targetInterfaceName, listOf(options.packageName, "api").joinToString("."), identifier)
+        itf = Interface(
+            targetInterfaceName,
+            listOf(options.packageName, "api").joinToString("."),
+            pathPrefix,
+            identifier)
 
         interfaces[targetInterfaceName] = itf
         return itf

@@ -28,7 +28,7 @@ class InterfaceWriterGSpec extends Specification {
 
     void "writes 'package'" () {
         def pkg = 'com.github.hauner.openapi'
-        def apiItf = new Interface ("", pkg, identifier, null)
+        def apiItf = new Interface ("", pkg, null, identifier)
 
         when:
         writer.write (target, apiItf)
@@ -42,7 +42,7 @@ package $pkg;
     }
 
     void "writes @Generated import" () {
-        def apiItf = new Interface ("", "", identifier, null)
+        def apiItf = new Interface ("", "", null, identifier)
 
         when:
         writer.write (target, apiItf)
@@ -54,7 +54,7 @@ import io.openapiprocessor.generated.support.Generated;
     }
 
     void "writes 'interface' block" () {
-        def apiItf = new Interface ('name', 'pkg', identifier, null)
+        def apiItf = new Interface ('name', 'pkg', null, identifier)
 
         when:
         writer.write (target, apiItf)

@@ -42,8 +42,8 @@ class InterfaceWriter(
 
         generatedWriter.writeUse(target)
 
-        if (apiOptions.pathPrefix && itf.hasPath()) {
-            annotationWriter.write(target, getPrefixAnnotation(itf.path))
+        if (apiOptions.pathPrefix && itf.hasPathPrefix()) {
+            annotationWriter.write(target, getPrefixAnnotation(itf.getPathPrefix()))
             target.write("\n")
         }
         target.write("public interface ${itf.getInterfaceName()} {\n\n")
@@ -68,7 +68,7 @@ class InterfaceWriter(
             imports.addAll(annotation.imports)
             imports.addAll(annotation.referencedImports)
 
-            if (apiOptions.pathPrefix && itf.hasPath()) {
+            if (apiOptions.pathPrefix && itf.hasPathPrefix()) {
                 imports.addAll(getPrefixAnnotation().imports)
             }
 

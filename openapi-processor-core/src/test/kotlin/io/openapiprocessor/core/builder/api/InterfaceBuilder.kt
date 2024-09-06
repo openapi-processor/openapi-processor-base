@@ -15,11 +15,11 @@ import io.openapiprocessor.core.builder.api.endpoint as ep
 fun `interface`(
     name: String = "Foo",
     pkg: String = "io.openapiprocessor.test",
+    pathPrefix: String? = null,
     identifier: Identifier = JavaIdentifier(),
-    path: String? = null,
     init: InterfaceBuilder.() -> Unit
 ): Interface {
-    val builder = InterfaceBuilder(name, pkg, identifier)
+    val builder = InterfaceBuilder(name, pkg, pathPrefix, identifier)
     init(builder)
     return builder.build()
 }
@@ -27,11 +27,11 @@ fun `interface`(
 fun itf(
     name: String = "Foo",
     pkg: String = "io.openapiprocessor.test",
+    pathPrefix: String? = null,
     identifier: Identifier = JavaIdentifier(),
-    path: String? = null,
     init: InterfaceBuilder.() -> Unit
 ): Interface {
-    val builder = InterfaceBuilder(name, pkg, identifier, path)
+    val builder = InterfaceBuilder(name, pkg, pathPrefix, identifier)
     init(builder)
     return builder.build()
 }
@@ -39,8 +39,8 @@ fun itf(
 class InterfaceBuilder(
     private val name: String,
     private val pkg: String,
-    private val identifier: Identifier,
-    private val path: String? = null
+    private val pathPrefix: String? = null,
+    private val identifier: Identifier
 ) {
     private val endpoints = mutableListOf<Endpoint>()
 
@@ -49,7 +49,7 @@ class InterfaceBuilder(
     }
 
     fun build(): Interface {
-        val itf = Interface(name, pkg, identifier, path)
+        val itf = Interface(name, pkg, pathPrefix, identifier)
         itf.add(*endpoints.toTypedArray())
         return itf
     }

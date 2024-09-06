@@ -15,7 +15,7 @@ fun parseOptions(mappingYaml: String): ApiOptions {
 fun parseOptions(
     version: String =
         """
-        |openapi-processor-mapping: v8
+        |openapi-processor-mapping: v9
         |
         """,
     options: String =
