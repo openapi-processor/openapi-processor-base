@@ -69,6 +69,10 @@ class OptionsConverter(private val checkObsoleteProcessorOptions: Boolean = fals
                     options.beanValidation = enable
                     options.beanValidationFormat = format
 
+                    val (enablePathPrefix, pathPrefixServerIndex) = checkServerUrl(mapping.options)
+                    options.pathPrefix = enablePathPrefix
+                    options.pathPrefixServerIndex = pathPrefixServerIndex
+
                     options.javadoc = mapping.options.javadoc
                     options.oneOfInterface = mapping.options.oneOfInterface
                     options.formatCode = mapping.options.formatCode
@@ -103,6 +107,14 @@ class OptionsConverter(private val checkObsoleteProcessorOptions: Boolean = fals
             "javax" -> Pair(true, "javax")
             "jakarta" -> Pair(true, "jakarta")
             else -> Pair(false, null)
+        }
+    }
+
+    private fun checkServerUrl(options: Options): Pair<Boolean, Int?> {
+        return when (options.serverUrl) {
+            "false" -> Pair(false, null)
+            "true" -> Pair(true, 0)
+            else -> Pair(true, options.serverUrl.toInt())
         }
     }
 

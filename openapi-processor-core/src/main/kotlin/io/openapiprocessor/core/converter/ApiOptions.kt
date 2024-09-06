@@ -94,12 +94,12 @@ class ApiOptions: MappingSettings {
     /**
      * enable/disable use of server url (optional).
      */
-    var serverPrefix = false
+    var pathPrefix = false
 
     /**
-     * index of the server to use as server prefix.
+     * index of the server to use as server prefix (optional).
      */
-    var serverPrefixIndex: Int = 0
+    var pathPrefixServerIndex: Int? = null
 
     /**
      * provide additional type mapping information to map OpenAPI types to java types.

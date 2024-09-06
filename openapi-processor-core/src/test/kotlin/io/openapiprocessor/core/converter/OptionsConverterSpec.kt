@@ -28,6 +28,8 @@ class OptionsConverterSpec: StringSpec({
         options.modelType shouldBe "default"
         options.enumType shouldBe "default"
         options.modelNameSuffix shouldBe String.Empty
+        options.pathPrefix shouldBe false
+        options.pathPrefixServerIndex shouldBe null
         options.formatCode.shouldBeFalse()
 
         options.globalMappings.shouldNotBeNull()
@@ -136,6 +138,31 @@ class OptionsConverterSpec: StringSpec({
 
             options.beanValidation shouldBe bd.enabled
             options.beanValidationFormat shouldBe bd.format
+        }
+    }
+
+    data class ServerUrlData(val source: String, val enabled: Boolean, val index: Int?)
+
+    for (su in listOf(
+        ServerUrlData("false", false, null),
+        ServerUrlData("true", true, 0),
+        ServerUrlData("0", true, 0),
+        ServerUrlData("1", true, 1)
+    )) {
+        "should read bean server-url: ${su.source}" {
+            val converter = OptionsConverter()
+
+            val options = converter.convertOptions(mapOf(
+                "mapping" to """
+                    openapi-processor-mapping: v9
+                    options:
+                      package-name: no.warning
+                      server-url: ${su.source}
+                """.trimIndent()
+            ))
+
+            options.pathPrefix shouldBe su.enabled
+            options.pathPrefixServerIndex shouldBe su.index
         }
     }
 })

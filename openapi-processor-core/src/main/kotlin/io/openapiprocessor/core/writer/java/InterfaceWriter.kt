@@ -42,7 +42,7 @@ class InterfaceWriter(
 
         generatedWriter.writeUse(target)
 
-        if (apiOptions.serverPrefix && itf.hasPath()) {
+        if (apiOptions.pathPrefix && itf.hasPath()) {
             annotationWriter.write(target, getPrefixAnnotation(itf.path))
             target.write("\n")
         }
@@ -68,7 +68,7 @@ class InterfaceWriter(
             imports.addAll(annotation.imports)
             imports.addAll(annotation.referencedImports)
 
-            if (apiOptions.serverPrefix && itf.hasPath()) {
+            if (apiOptions.pathPrefix && itf.hasPath()) {
                 imports.addAll(getPrefixAnnotation().imports)
             }
 

@@ -6,6 +6,8 @@ package io.openapiprocessor.core.processor.mapping.v2
 
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.data.forAll
+import io.kotest.data.row
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.maps.shouldHaveSize
 import io.kotest.matchers.shouldBe
@@ -217,5 +219,26 @@ class MappingReaderSpec: StringSpec ({
 
         // then:
         mapping.options.jsonPropertyAnnotation shouldBe "auto"
+    }
+
+    "reads server-url" {
+        forAll(
+            row(true),
+            row(false),
+            row(0),
+            row(1)
+        ) { server ->
+            val yaml =
+                """
+                |openapi-processor-mapping: v9
+                |options:
+                |  package-name: no.warning
+                |  server-url: $server
+                """.trimMargin()
+
+            val mapping = MappingReader().read(yaml) as Mapping
+
+            mapping.options.serverUrl shouldBe "$server"
+        }
     }
 })

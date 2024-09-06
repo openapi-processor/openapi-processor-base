@@ -53,6 +53,11 @@ data class Options(
     val modelNameSuffix: String = String.Empty,
 
     /**
+     * generate interfaces with pth prefix (optional)
+     */
+    val serverUrl: String = "false",
+
+    /**
      * generate common interface for an `oneOf` object list (optional)
      */
     val oneOfInterface: Boolean = false,
