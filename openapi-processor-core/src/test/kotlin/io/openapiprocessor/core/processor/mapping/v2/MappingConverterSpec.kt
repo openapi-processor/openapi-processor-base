@@ -16,7 +16,6 @@ import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.converter.MappingQuery
 import io.openapiprocessor.core.parser.HttpMethod
-import io.openapiprocessor.core.processor.MappingConverter
 import io.openapiprocessor.core.processor.MappingReader
 import io.openapiprocessor.core.support.annotationTypeMatcher
 import io.openapiprocessor.core.support.typeMatcher
@@ -25,8 +24,6 @@ class MappingConverterSpec: StringSpec({
     isolationMode = IsolationMode.InstancePerTest
 
     val reader = MappingReader()
-    val converter = MappingConverter()
-
 
     "read global type mapping with generic parameter using the generated package ref" {
         val yaml = """
@@ -175,18 +172,16 @@ class MappingConverterSpec: StringSpec({
                    |           - type: Foo @ io.openapiprocessor.Annotation
                    """.trimMargin()
 
-        // when:
-        val mapping = reader.read (yaml) as Mapping
-        val mappings = MappingConverter(mapping).convert ()
+        val mappings = MappingConverter(reader.read(yaml) as Mapping).convert().endpointMappings
+        val annotations = mappings["/foo"]!!.findAnnotationParameterTypeMapping(
+            MappingQuery(name = "Foo", method = HttpMethod.GET))
 
-        // then:
-//        mappings.size.shouldBe(2)
-//        val ep = mappings[1] as EndpointTypeMapping
-//
-//        val annotation = ep.typeMappings.first() as AnnotationTypeMapping
-//        annotation.sourceTypeName shouldBe "Foo"
-//        annotation.sourceTypeFormat.shouldBeNull()
-//        annotation.annotation.type shouldBe "io.openapiprocessor.Annotation"
+        annotations shouldHaveSize 1
+
+        val annotation = annotations.first()
+        annotation.sourceTypeName shouldBe "Foo"
+        annotation.sourceTypeFormat.shouldBeNull()
+        annotation.annotation.type shouldBe "io.openapiprocessor.Annotation"
     }
 
     "does not fail on 'empty' options: key" {
