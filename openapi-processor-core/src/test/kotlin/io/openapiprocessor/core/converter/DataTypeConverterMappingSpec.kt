@@ -118,7 +118,7 @@ class DataTypeConverterMappingSpec: StringSpec({
             |map:
             |  types:
             |    - type: array => java.util.List
-            |    - type: ArrayFoo => package.Bar
+            |    - type: FooArrayItem => package.Bar
             """)
 
         val openApi = parseApi(body =

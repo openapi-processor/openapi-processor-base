@@ -412,7 +412,7 @@ open class SchemaInfo(
     }
 
     private fun getArrayItemName(): String {
-        return "Array" + name.capitalizeFirstChar()
+        return name + "ArrayItem"
     }
 
     private fun getNestedTypeName(nestedName: String): String {
