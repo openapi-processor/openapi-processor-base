@@ -62,6 +62,7 @@ class CompileExpectedSpec: StringSpec({
             }
             compilePaths.add(Path.of("src/testInt/resources/compile/Mapping.java"))
             compilePaths.add(Path.of("src/testInt/resources/compile/Parameter.java"))
+            compilePaths.add(Path.of("src/testInt/resources/compile/Prefix.java"))
             compilePaths.add(Path.of("src/testInt/resources/compile/jakarta/Constraint.java"))
             compilePaths.add(Path.of("src/testInt/resources/compile/jakarta/ConstraintValidator.java"))
             compilePaths.add(Path.of("src/testInt/resources/compile/jakarta/ConstraintValidatorContext.java"))
