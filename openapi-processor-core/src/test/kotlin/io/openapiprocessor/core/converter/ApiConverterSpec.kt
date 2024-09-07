@@ -9,10 +9,13 @@ import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
+import io.mockk.mockk
+import io.mockk.verify
 import io.openapiprocessor.core.framework.FrameworkBase
 import io.openapiprocessor.core.model.Api
 import io.openapiprocessor.core.support.*
 import io.openapiprocessor.core.writer.java.JavaIdentifier
+import org.slf4j.Logger
 
 class ApiConverterSpec: StringSpec({
     isolationMode = IsolationMode.InstancePerTest
@@ -144,5 +147,41 @@ class ApiConverterSpec: StringSpec({
         itfs.shouldHaveSize(2)
         itfs[0].getInterfaceName() shouldBe "Api"
         itfs[1].getInterfaceName() shouldBe "ExcludedApi"
+    }
+
+    "warns if endpoint path has no success response" {
+        val options = parseOptions()
+        val openApi = parseApi(
+            """
+            |openapi: 3.1.0
+            |info:
+            |  title: API
+            |  version: 1.0.0
+            |
+            |paths:
+            |  /foo:
+            |    get:
+            |      responses:
+            |        '400':
+            |          description: error 400
+            |          content:
+            |            plain/text:
+            |              schema:
+            |                type: string
+            |        '401':
+            |          description: error 401
+            |          content:
+            |            plain/text:
+            |              schema:
+            |                type: string
+            """.trimMargin())
+
+        val converter = apiConverter(options)
+        val log: Logger = mockk(relaxed = true)
+        converter.log = log
+
+        converter.convert(openApi)
+
+        verify { log.warn("endpoint '/foo' has no success 2xx response.") }
     }
 })

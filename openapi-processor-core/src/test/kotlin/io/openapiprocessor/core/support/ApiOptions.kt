@@ -24,7 +24,7 @@ fun parseOptions(
         |  package-name: pkg
         |
         """,
-    mapping: String
+    mapping: String = ""
 ): ApiOptions {
     val merged = (
         version.trimMargin()

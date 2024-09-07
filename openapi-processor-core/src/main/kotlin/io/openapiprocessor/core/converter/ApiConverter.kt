@@ -36,7 +36,7 @@ class  ApiConverter(
     private val identifier: Identifier,
     private val framework: Framework
 ) {
-    val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
+    var log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     private val mappingFinder = MappingFinder(options)
     private val dataTypeWrapper = ResultDataTypeWrapper(options, identifier, mappingFinder)
@@ -128,10 +128,17 @@ class  ApiConverter(
             collectRequestBody (operation.getRequestBody(), ep, dataTypes, resolver)
             collectResponses (operation.getResponses(), ep, dataTypes, resolver)
             ep.initEndpointResponses ()
+            checkSuccessResponse(ep)
             ep
         } catch (e: UnknownDataTypeException) {
             log.error ("failed to parse endpoint {} {} because of: '{}'", ep.path, ep.method, e.message, e)
             null
+        }
+    }
+
+    private fun checkSuccessResponse(endpoint: Endpoint) {
+        if (endpoint.endpointResponses.isEmpty()) {
+            log.warn("endpoint '${endpoint.path}' has no success 2xx response.")
         }
     }
 
