@@ -40,7 +40,12 @@ open class SchemaInfo(
     /**
      * resolver of $ref'erences
      */
-    private val resolver: ParserRefResolver
+    private val resolver: ParserRefResolver,
+
+    /**
+     * json path like location
+     */
+    private val location: String = ""
 
 ): MappingSchema {
 

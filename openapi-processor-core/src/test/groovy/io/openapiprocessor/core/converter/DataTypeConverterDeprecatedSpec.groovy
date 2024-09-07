@@ -38,7 +38,11 @@ class DataTypeConverterDeprecatedSpec extends Specification {
         def datatype = converter.convert (
             new SchemaInfo (
                 new SchemaInfo.Endpoint ("", HttpMethod.GET),
-                "", "", schema, Stub(RefResolver)),
+                "",
+                "",
+                schema,
+                Stub(RefResolver),
+                ""),
             new DataTypes())
 
         then:

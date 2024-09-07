@@ -38,7 +38,11 @@ class DataTypeConverterSpec extends Specification {
         def datatype = converter.convert (
             new SchemaInfo (
                 new SchemaInfo.Endpoint("", HttpMethod.GET),
-                javaType, "", schema, Stub(RefResolver)),
+                javaType,
+                "",
+                schema,
+                Stub(RefResolver),
+                ""),
             new DataTypes())
 
         then:
@@ -66,7 +70,11 @@ class DataTypeConverterSpec extends Specification {
         def datatype = converter.convert (
             new SchemaInfo (
                 new SchemaInfo.Endpoint("", HttpMethod.GET),
-                javaType, "", schema, Stub(RefResolver)),
+                javaType,
+                "",
+                schema,
+                Stub(RefResolver),
+                ""),
             new DataTypes())
 
         then:
@@ -91,7 +99,11 @@ class DataTypeConverterSpec extends Specification {
         when:
         converter.convert (new SchemaInfo (
             new SchemaInfo.Endpoint("", HttpMethod.GET),
-            "", "", schema, Stub (RefResolver)),
+            "",
+            "",
+            schema,
+            Stub (RefResolver),
+            ""),
             new DataTypes())
 
         then:
@@ -125,12 +137,22 @@ class DataTypeConverterSpec extends Specification {
 
         when:
         converter.convert (
-            new SchemaInfo (new SchemaInfo.Endpoint ("", HttpMethod.GET),
-                'Bar', "", barSchema, Stub(RefResolver)),
+            new SchemaInfo (
+                new SchemaInfo.Endpoint ("", HttpMethod.GET),
+                'Bar',
+                "",
+                barSchema,
+                Stub(RefResolver),
+                ""),
             dt)
         converter.convert (
-            new SchemaInfo (new SchemaInfo.Endpoint ("", HttpMethod.GET),
-                'Foo', "", fooSchema, resolver),
+            new SchemaInfo (
+                new SchemaInfo.Endpoint ("", HttpMethod.GET),
+                'Foo',
+                "",
+                fooSchema,
+                resolver,
+                ""),
             dt)
 
         then:
