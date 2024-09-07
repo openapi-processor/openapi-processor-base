@@ -16,7 +16,6 @@ import io.openapiprocessor.core.writer.java.JavaIdentifier
 class ApiConverterServerUriSpec: StringSpec({
 
     "add server uri as prefix to api path" {
-
         val options = parseOptionsMapping(
             """
             |options:
