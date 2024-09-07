@@ -55,6 +55,10 @@ class ApiOptions: MappingSettings {
      */
     var modelType = "default"
 
+    fun isRecord(): Boolean {
+        return modelType == "record"
+    }
+
     /**
      * enum type. default|string|supplier.
      */

@@ -61,6 +61,12 @@ class DataTypeWriterRecord(
         target.write("\n)")
     }
 
+    override fun writeJavaDoc(target: Writer, dataType: ModelDataType) {
+        if (apiOptions.javadoc) {
+            target.write(javadocWriter.convertForRecord(dataType))
+        }
+    }
+
     private fun writeRecordImplements(target: Writer, dataType: ModelDataType) {
         val implements: DataType? = dataType.implementsDataType
         if (implements != null) {

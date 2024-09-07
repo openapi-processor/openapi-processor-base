@@ -7,6 +7,7 @@ package io.openapiprocessor.core.writer.java
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.datatest.withData
+import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldBeEmpty
 import io.mockk.every
@@ -15,8 +16,11 @@ import io.openapiprocessor.core.builder.api.endpoint
 import io.openapiprocessor.core.model.Documentation
 import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.model.parameters.ParameterBase
+import io.openapiprocessor.core.support.apiConverter
 import io.openapiprocessor.core.support.datatypes.ObjectDataType
 import io.openapiprocessor.core.support.datatypes.propertyDataTypeString
+import io.openapiprocessor.core.support.parseApi
+import io.openapiprocessor.core.support.parseOptions
 
 class JavaDocWriterSpec: StringSpec({
 
@@ -205,7 +209,7 @@ class JavaDocWriterSpec: StringSpec({
         val datatype = mockk<ModelDataType>()
         every { datatype.documentation } returns null
 
-        val html = writer.convert(datatype)
+        val html = writer.convertForPojo(datatype)
 
         html.shouldBeEmpty()
     }
@@ -216,7 +220,7 @@ class JavaDocWriterSpec: StringSpec({
         val datatype = mockk<ModelDataType>()
         every { datatype.documentation } returns Documentation(description = description)
 
-        val html = writer.convert(datatype)
+        val html = writer.convertForPojo(datatype)
 
         html shouldBe """
             |/**
@@ -231,7 +235,7 @@ class JavaDocWriterSpec: StringSpec({
             Pair("bar", propertyDataTypeString())
         ))
 
-        val html = writer.convert(datatype)
+        val html = writer.convertForPojo(datatype)
 
         html.shouldBeEmpty()
     }
@@ -260,5 +264,67 @@ class JavaDocWriterSpec: StringSpec({
             |     */
             |
             """.trimMargin()
+    }
+
+    "record properties are javadoc @params of the record" {
+        val options = parseOptions(
+            """
+            |openapi-processor-mapping: v9
+            |
+            |options:
+            |  package-name: pkg
+            |  javadoc: true
+            |  model-type: record
+            """.trimMargin())
+
+        val openApi = parseApi(
+            """
+            |openapi: 3.1.0
+            |info:
+            |  title: API
+            |  version: 1.0.0
+            |
+            |paths:
+            |  /foo:
+            |    get:
+            |      responses:
+            |        '200':
+            |          description: response description
+            |          content:
+            |            application/json:
+            |              schema:
+            |                ${'$'}ref: '#/components/schemas/Foo'
+            |
+            |components:
+            |  schemas:
+            |    Foo:
+            |      type: object
+            |      description: Foo object
+            |      properties:
+            |        fooA:
+            |          type: string
+            |          description: this a parameter fooA
+            |        fooB:
+            |          type: string
+            |          description: this a parameter fooB
+            """.trimMargin())
+
+        val api = apiConverter(options).convert(openApi)
+        val dto = api.getDataTypes().getModelDataTypes().first()
+
+        val doc = writer.convertForRecord(dto)
+
+        val expected =
+            """
+            /**
+             * Foo object
+             *
+             * @param fooA this a parameter fooA
+             * @param fooB this a parameter fooB
+             */
+
+            """.trimIndent()
+
+        doc shouldBeEqual expected
     }
 })

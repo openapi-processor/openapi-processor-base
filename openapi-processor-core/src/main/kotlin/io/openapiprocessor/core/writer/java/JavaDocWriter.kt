@@ -83,11 +83,25 @@ open class JavaDocWriter(val identifier: Identifier) {
         return indent(wrap(comment))
     }
 
-    fun convert(dataType: ModelDataType): String {
+    fun convertForPojo(dataType: ModelDataType): String {
         var comment = ""
 
         if (dataType.documentation?.description != null) {
             comment += convert(dataType.documentation!!.description) + "\n"
+        }
+
+        return wrap(comment)
+    }
+
+    fun convertForRecord(dataType: ModelDataType): String {
+        var comment = ""
+
+        if (dataType.documentation?.description != null) {
+            comment += convert(dataType.documentation!!.description) + "\n"
+        }
+
+        dataType.forEach { p, dt ->
+            comment += convert(dt.documentation!!.description, "@param ${identifier.toCamelCase (p)}")
         }
 
         return wrap(comment)

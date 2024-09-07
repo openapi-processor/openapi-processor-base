@@ -5,12 +5,11 @@ import generated.support.Generated;
 
 /**
  * this is the <em>Foo</em> schema description
+ *
+ * @param fooBar <em>property</em> description
  */
 @Generated(value = "openapi-processor-core", version = "test")
 public record Foo(
-    /**
-     * <em>property</em> description
-     */
     @JsonProperty("foo-bar")
     String fooBar
 ) {}

@@ -68,6 +68,12 @@ class DataTypeWriterPojo(
         }
     }
 
+    override fun writeJavaDoc(target: Writer, dataType: ModelDataType) {
+        if (apiOptions.javadoc) {
+            target.write(javadocWriter.convertForPojo(dataType))
+        }
+    }
+
     private fun writeClassMethods(target: Writer, dataType: ModelDataType, propsData: List<PropertyData>) {
         propsData.forEach {
             target.write(getGetter(it.baseName, it.propDataType))

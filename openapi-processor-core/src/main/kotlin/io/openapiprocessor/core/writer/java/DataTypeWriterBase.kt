@@ -91,7 +91,7 @@ abstract class DataTypeWriterBase(
         val propDataType = propData.propDataType
         var result = ""
 
-        if (apiOptions.javadoc) {
+        if (apiOptions.javadoc && !apiOptions.isRecord()) {
             result += javadocWriter.convert(propDataType)
         }
 
@@ -217,11 +217,7 @@ abstract class DataTypeWriterBase(
         }
     }
 
-    private fun writeJavaDoc(target: Writer, dataType: ModelDataType) {
-        if (apiOptions.javadoc) {
-            target.write(javadocWriter.convert(dataType))
-        }
-    }
+    protected abstract fun writeJavaDoc(target: Writer, dataType: ModelDataType)
 
     private fun writeDeprecated(target: Writer, dataType: ModelDataType) {
         if (dataType.deprecated) {
