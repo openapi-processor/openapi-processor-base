@@ -6,7 +6,7 @@
 package io.openapiprocessor.core.converter.wrapper
 
 import io.openapiprocessor.core.converter.*
-import io.openapiprocessor.core.converter.MappingQuery
+import io.openapiprocessor.core.converter.MappingFinderQuery
 import io.openapiprocessor.core.converter.mapping.*
 import io.openapiprocessor.core.model.datatypes.DataType
 import io.openapiprocessor.core.model.datatypes.GenericDataType
@@ -62,7 +62,7 @@ class ResultDataTypeWrapper(
     }
 
     private fun getMappedResultDataType(info: SchemaInfo): TargetType? {
-        val match = finder.getResultTypeMapping(MappingQuery(info))
+        val match = finder.getResultTypeMapping(MappingFinderQuery(info))
         if (match != null) {
             return match.getTargetType()
         }

@@ -62,7 +62,7 @@ open class MethodWriter(
 
     private fun createResult(endpoint: Endpoint, endpointResponse: EndpointResponse): String {
         val mappingFinder = MappingFinder(apiOptions)
-        val resultStyle = mappingFinder.findResultStyleMapping(MappingQuery(endpoint))
+        val resultStyle = mappingFinder.findResultStyleMapping(MappingFinderQuery(endpoint))
         return endpointResponse.getResponseType(resultStyle)
     }
 
@@ -172,12 +172,12 @@ open class MethodWriter(
 
         mappingAnnotations.addAll(
             mappingFinder
-                .findAnnotationParameterTypeMappings(MappingQuery(endpoint, parameter))
+                .findAnnotationParameterTypeMappings(MappingFinderQuery(endpoint, parameter))
                 .map { it.annotation })
 
         mappingAnnotations.addAll(
             mappingFinder
-                .findAnnotationParameterNameTypeMapping(MappingQuery(endpoint, parameter))
+                .findAnnotationParameterNameTypeMapping(MappingFinderQuery(endpoint, parameter))
                 .map { it.annotation })
 
         mappingAnnotations.forEach {

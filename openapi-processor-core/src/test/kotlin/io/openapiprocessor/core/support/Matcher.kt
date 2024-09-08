@@ -5,7 +5,7 @@
 
 package io.openapiprocessor.core.support
 
-import io.openapiprocessor.core.converter.MappingQuery
+import io.openapiprocessor.core.converter.MappingFinderQuery
 import io.openapiprocessor.core.converter.mapping.matcher.*
 import io.openapiprocessor.core.parser.HttpMethod
 
@@ -19,7 +19,7 @@ fun typeMatcher(
     primitive: Boolean = false,
     array: Boolean = false
 ): TypeMatcher {
-    return TypeMatcher(MappingQuery(
+    return TypeMatcher(MappingFinderQuery(
         path,
         method,
         name,
@@ -40,7 +40,7 @@ fun annotationTypeMatcher(
     primitive: Boolean = false,
     array: Boolean = false
 ): AnnotationTypeMatcher {
-    return AnnotationTypeMatcher(MappingQuery(
+    return AnnotationTypeMatcher(MappingFinderQuery(
         path,
         method,
         name,
@@ -62,7 +62,7 @@ fun parameterNameMatcher(
     primitive: Boolean = false,
     array: Boolean = false
 ): ParameterNameTypeMatcher {
-    return ParameterNameTypeMatcher(MappingQuery(
+    return ParameterNameTypeMatcher(MappingFinderQuery(
         path,
         method,
         name,
@@ -87,7 +87,7 @@ fun annotationParameterNameTypeMatcher(
     primitive: Boolean = false,
     array: Boolean = false
 ): AnnotationParameterNameMatcher {
-    return AnnotationParameterNameMatcher(MappingQuery(
+    return AnnotationParameterNameMatcher(MappingFinderQuery(
         path,
         method,
         name,
@@ -109,7 +109,7 @@ fun responseTypeMatcher(
     primitive: Boolean = false,
     array: Boolean = false
 ): ResponseTypeMatcher {
-    return ResponseTypeMatcher(MappingQuery(
+    return ResponseTypeMatcher(MappingFinderQuery(
         path,
         method,
         name,

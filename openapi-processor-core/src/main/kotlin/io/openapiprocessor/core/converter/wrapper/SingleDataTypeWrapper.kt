@@ -7,7 +7,7 @@ package io.openapiprocessor.core.converter.wrapper
 
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.MappingFinder
-import io.openapiprocessor.core.converter.MappingQuery
+import io.openapiprocessor.core.converter.MappingFinderQuery
 import io.openapiprocessor.core.converter.SchemaInfo
 import io.openapiprocessor.core.converter.mapping.*
 import io.openapiprocessor.core.model.datatypes.DataType
@@ -54,7 +54,7 @@ class SingleDataTypeWrapper(
     }
 
     private fun getSingleResultDataType(info: SchemaInfo): TargetType? {
-        val match = finder.getSingleTypeMapping(MappingQuery(info))
+        val match = finder.getSingleTypeMapping(MappingFinderQuery(info))
         if (match != null) {
             return match.getTargetType()
         }

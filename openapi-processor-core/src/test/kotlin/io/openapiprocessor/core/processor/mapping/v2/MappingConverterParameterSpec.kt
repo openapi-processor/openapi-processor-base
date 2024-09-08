@@ -12,7 +12,7 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.maps.shouldBeEmpty
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
-import io.openapiprocessor.core.converter.MappingQuery
+import io.openapiprocessor.core.converter.MappingFinderQuery
 import io.openapiprocessor.core.converter.mapping.AmbiguousTypeMappingException
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.processor.MappingReader
@@ -367,14 +367,14 @@ class MappingConverterParameterSpec: StringSpec({
 
         // then:
         val typeMapping = mappings["/foo"]!!.findParameterTypeMapping(
-            MappingQuery(path = "/foo", method = HttpMethod.POST, name = "Foo"))!!
+            MappingFinderQuery(path = "/foo", method = HttpMethod.POST, name = "Foo"))!!
 
         typeMapping.sourceTypeName shouldBe "Foo"
         typeMapping.sourceTypeFormat.shouldBeNull()
         typeMapping.targetTypeName shouldBe "io.openapiprocessor.Foo"
 
         val typeMappingGet = mappings["/foo"]!!.findParameterTypeMapping(
-            MappingQuery(path = "/foo", method = HttpMethod.GET, name= "Foo")
+            MappingFinderQuery(path = "/foo", method = HttpMethod.GET, name= "Foo")
         )!!
 
         typeMappingGet.sourceTypeName shouldBe "Foo"
@@ -407,7 +407,7 @@ class MappingConverterParameterSpec: StringSpec({
         val mappings = MappingConverter(mapping).convert().endpointMappings
 
         val annotationMappings = mappings["/foo"]!!.findAnnotationParameterTypeMapping(
-            MappingQuery(path = "/foo", method = HttpMethod.POST, type = "Foo"))
+            MappingFinderQuery(path = "/foo", method = HttpMethod.POST, type = "Foo"))
 
         annotationMappings shouldHaveSize 2
         annotationMappings[0].sourceTypeName shouldBe  "Foo"
@@ -420,7 +420,7 @@ class MappingConverterParameterSpec: StringSpec({
         annotationMappings[1].annotation.parameters.shouldBeEmpty()
 
         val annotationMappingsGet = mappings["/foo"]!!.findAnnotationParameterTypeMapping(
-            MappingQuery(path = "/foo", method = HttpMethod.GET, type = "Foo")
+            MappingFinderQuery(path = "/foo", method = HttpMethod.GET, type = "Foo")
         )
 
         annotationMappingsGet shouldHaveSize 2
@@ -459,14 +459,14 @@ class MappingConverterParameterSpec: StringSpec({
 
         // then:
         val typeMapping = mappings["/foo"]!!.findParameterNameTypeMapping(
-            MappingQuery(path = "/foo", method = HttpMethod.POST, name = "foo"))!!
+            MappingFinderQuery(path = "/foo", method = HttpMethod.POST, name = "foo"))!!
 
         typeMapping.parameterName shouldBe "foo"
         typeMapping.mapping.sourceTypeName.shouldBeNull()
         typeMapping.mapping.targetTypeName shouldBe "io.openapiprocessor.Foo"
 
         val typeMappingGet = mappings["/foo"]!!.findParameterNameTypeMapping(
-            MappingQuery(path = "/foo", method = HttpMethod.GET, name= "foo")
+            MappingFinderQuery(path = "/foo", method = HttpMethod.GET, name= "foo")
         )!!
 
         typeMappingGet.parameterName shouldBe "foo"
@@ -499,7 +499,7 @@ class MappingConverterParameterSpec: StringSpec({
         val mappings = MappingConverter(mapping).convert().endpointMappings
 
         val annotationMappings = mappings["/foo"]!!.findAnnotationParameterNameTypeMapping(
-            MappingQuery(path = "/foo", method = HttpMethod.POST, name = "foo"))
+            MappingFinderQuery(path = "/foo", method = HttpMethod.POST, name = "foo"))
 
         annotationMappings shouldHaveSize 2
         annotationMappings[0].name shouldBe  "foo"
@@ -508,7 +508,7 @@ class MappingConverterParameterSpec: StringSpec({
         annotationMappings[1].annotation.type shouldBe "io.openapiprocessor.Bar"
 
         val annotationMappingsGet = mappings["/foo"]!!.findAnnotationParameterNameTypeMapping(
-            MappingQuery(path = "/foo", method = HttpMethod.GET, name = "foo"))
+            MappingFinderQuery(path = "/foo", method = HttpMethod.GET, name = "foo"))
 
         annotationMappingsGet shouldHaveSize 2
         annotationMappingsGet[0].name shouldBe  "foo"
@@ -544,7 +544,7 @@ class MappingConverterParameterSpec: StringSpec({
 
         // then:
         val addMappings = mappings["/foo"]!!.findAddParameterTypeMappings(
-            MappingQuery(path = "/foo", method = HttpMethod.POST))
+            MappingFinderQuery(path = "/foo", method = HttpMethod.POST))
 
         addMappings shouldHaveSize 2
         addMappings[0].parameterName shouldBe "foo"
@@ -553,7 +553,7 @@ class MappingConverterParameterSpec: StringSpec({
         addMappings[1].mapping.targetTypeName shouldBe "io.openapiprocessor.Bar"
 
         val addMappingsGet = mappings["/foo"]!!.findAddParameterTypeMappings(
-            MappingQuery(path = "/foo", method = HttpMethod.GET))
+            MappingFinderQuery(path = "/foo", method = HttpMethod.GET))
 
         addMappingsGet shouldHaveSize 2
         addMappingsGet[0].parameterName shouldBe "foo2"

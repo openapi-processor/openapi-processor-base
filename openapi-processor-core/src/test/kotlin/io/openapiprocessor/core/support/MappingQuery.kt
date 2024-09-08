@@ -5,7 +5,7 @@
 
 package io.openapiprocessor.core.support
 
-import io.openapiprocessor.core.converter.MappingQuery as Query
+import io.openapiprocessor.core.converter.MappingFinderQuery as Query
 import io.openapiprocessor.core.converter.mapping.MappingQuery
 import io.openapiprocessor.core.converter.mapping.MappingSchemaPlain
 import io.openapiprocessor.core.parser.HttpMethod

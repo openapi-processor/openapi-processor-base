@@ -14,7 +14,7 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
-import io.openapiprocessor.core.converter.MappingQuery
+import io.openapiprocessor.core.converter.MappingFinderQuery
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.processor.MappingReader
 import io.openapiprocessor.core.support.annotationTypeMatcher
@@ -82,7 +82,7 @@ class MappingConverterSpec: StringSpec({
         val mappings = MappingConverter(reader.read(yaml) as Mapping).convert().endpointMappings
 
         val mapping = mappings["/foo"]?.getNullTypeMapping(
-            MappingQuery(path = "/foo", method = HttpMethod.GET, name = "Foo"))
+            MappingFinderQuery(path = "/foo", method = HttpMethod.GET, name = "Foo"))
 
         mapping!!.targetTypeName shouldBe "org.openapitools.jackson.nullable.JsonNullable"
     }
@@ -103,7 +103,7 @@ class MappingConverterSpec: StringSpec({
         val mappings = MappingConverter(reader.read(yaml) as Mapping).convert().endpointMappings["/foo"]
 
         val mapping = mappings?.getNullTypeMapping(
-            MappingQuery(path = "/foo", method = HttpMethod.GET, name = "Foo"))
+            MappingFinderQuery(path = "/foo", method = HttpMethod.GET, name = "Foo"))
 
         mapping!!.targetTypeName shouldBe "org.openapitools.jackson.nullable.JsonNullable"
         mapping.undefined shouldBe "JsonNullable.undefined()"
@@ -147,7 +147,7 @@ class MappingConverterSpec: StringSpec({
                    """.trimMargin()
 
         val mappings = MappingConverter(reader.read(yaml) as Mapping).convert().endpointMappings
-        val annotations = mappings["/foo"]!!.findAnnotationParameterTypeMapping(MappingQuery(name = "Foo"))
+        val annotations = mappings["/foo"]!!.findAnnotationParameterTypeMapping(MappingFinderQuery(name = "Foo"))
 
         annotations shouldHaveSize 1
 
@@ -174,7 +174,7 @@ class MappingConverterSpec: StringSpec({
 
         val mappings = MappingConverter(reader.read(yaml) as Mapping).convert().endpointMappings
         val annotations = mappings["/foo"]!!.findAnnotationParameterTypeMapping(
-            MappingQuery(name = "Foo", method = HttpMethod.GET))
+            MappingFinderQuery(name = "Foo", method = HttpMethod.GET))
 
         annotations shouldHaveSize 1
 
@@ -235,10 +235,10 @@ class MappingConverterSpec: StringSpec({
         val mappings = MappingConverter(mapping).convert().endpointMappings
 
         // then:
-        val excluded = mappings["/foo"]!!.isExcluded(MappingQuery(path = "/foo", method = HttpMethod.POST))
+        val excluded = mappings["/foo"]!!.isExcluded(MappingFinderQuery(path = "/foo", method = HttpMethod.POST))
         excluded.shouldBeFalse()
 
-        val excludedGet = mappings["/foo"]!!.isExcluded(MappingQuery(path = "/foo", method = HttpMethod.GET))
+        val excludedGet = mappings["/foo"]!!.isExcluded(MappingFinderQuery(path = "/foo", method = HttpMethod.GET))
         excludedGet.shouldBeTrue()
     }
 })

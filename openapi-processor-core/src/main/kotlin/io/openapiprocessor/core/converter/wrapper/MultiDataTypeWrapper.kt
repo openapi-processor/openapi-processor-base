@@ -7,7 +7,7 @@ package io.openapiprocessor.core.converter.wrapper
 
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.MappingFinder
-import io.openapiprocessor.core.converter.MappingQuery
+import io.openapiprocessor.core.converter.MappingFinderQuery
 import io.openapiprocessor.core.converter.SchemaInfo
 import io.openapiprocessor.core.converter.mapping.*
 import io.openapiprocessor.core.model.datatypes.CollectionDataType
@@ -61,7 +61,7 @@ class MultiDataTypeWrapper(
     }
 
     private fun getMultiDataType(info: SchemaInfo): TargetType? {
-        val match = finder.getMultiTypeMapping(MappingQuery(info))
+        val match = finder.getMultiTypeMapping(MappingFinderQuery(info))
         if (match != null) {
             return match.getTargetType()
         }
