@@ -30,11 +30,11 @@ class ValidationWriter(
     }
 
     private fun createAnnotationWriter(writerFactory: WriterFactory): Writer {
-        return writerFactory.createWriter("${options.packageName}.validation", "Values")
+        return writerFactory.createWriter(options.packageValidation, "Values")
     }
 
     private fun createValidatorWriter(writerFactory: WriterFactory): Writer {
-        return writerFactory.createWriter("${options.packageName}.validation", "ValueValidator")
+        return writerFactory.createWriter(options.packageValidation, "ValueValidator")
     }
 
     private fun writeValues(writer: Writer, formatter: SourceFormatter) {

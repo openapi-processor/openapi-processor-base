@@ -10,6 +10,7 @@ import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.converter.ApiOptions
+import io.openapiprocessor.core.converter.TargetDirLayout
 import io.openapiprocessor.core.support.text
 import io.openapiprocessor.core.tempFolder
 import java.io.File
@@ -30,7 +31,10 @@ class DefaultWriterFactorySpec : StringSpec({
         options.beanValidation = false
     }
 
-    "initializes package folders" {
+    "initializes 'classic' package folders" {
+        options.targetDir = listOf(target.toString()).joinToString(File.separator)
+        options.targetDirLayout = TargetDirLayout.CLASSIC.toString().lowercase()
+
         val writerFactory = DefaultWriterFactory(options)
         writerFactory.init()
 
@@ -47,6 +51,31 @@ class DefaultWriterFactorySpec : StringSpec({
         Files.isDirectory(support) shouldBe true
         Files.exists(validation) shouldBe false
         Files.isDirectory(validation) shouldBe false
+    }
+
+    "initializes 'standard' package folders" {
+        options.targetDir = listOf(target.toString()).joinToString(File.separator)
+        options.targetDirLayout = TargetDirLayout.STANDARD.toString().lowercase()
+
+        val writerFactory = DefaultWriterFactory(options)
+        writerFactory.init()
+
+        val api = options.getSourceDir("api")
+        val model = options.getSourceDir("model")
+        val support = options.getSourceDir("support")
+        val validation = options.getSourceDir("validation")
+        val resources = options.getResourceDir()
+
+        Files.exists(api) shouldBe true
+        Files.isDirectory(api) shouldBe true
+        Files.exists(model) shouldBe true
+        Files.isDirectory(model) shouldBe true
+        Files.exists(support) shouldBe true
+        Files.isDirectory(support) shouldBe true
+        Files.exists(validation) shouldBe false
+        Files.isDirectory(validation) shouldBe false
+        Files.exists(resources) shouldBe true
+        Files.isDirectory(resources) shouldBe true
     }
 
     "initializes package folders with validation" {
@@ -207,10 +236,21 @@ private fun ApiOptions.getSourcePath(pkg: String, name: String): Path {
 }
 
 private fun ApiOptions.getSourceDir(pkg: String): Path {
-    return Path.of(
-        listOf(
-            targetDir,
-            packageName.replace(".", File.separator),
-            pkg)
-        .joinToString(File.separator))
+    val items = mutableListOf(targetDir)
+    if (TargetDirLayout.isStandard(targetDirLayout)) {
+        items.add("java")
+    }
+    items.add(packageName.replace(".", File.separator))
+    items.add(pkg)
+
+    return Path.of(items.joinToString(File.separator))
+}
+
+private fun ApiOptions.getResourceDir(): Path {
+    val items = mutableListOf(targetDir)
+    if (TargetDirLayout.isStandard(targetDirLayout)) {
+        items.add("resources")
+    }
+
+    return Path.of(items.joinToString(File.separator))
 }

@@ -6,6 +6,7 @@
 package io.openapiprocessor.core.writer
 
 import io.openapiprocessor.core.converter.ApiOptions
+import io.openapiprocessor.core.converter.TargetDirLayout.Companion.isStandard
 import io.openapiprocessor.core.support.toURI
 import io.openapiprocessor.core.writer.java.PathWriter
 import org.slf4j.Logger
@@ -22,14 +23,14 @@ import kotlin.io.path.deleteRecursively
 /**
  * Writer factory for local file system. Must be initialized via [InitWriterTarget].
  */
-open class DefaultWriterFactory(val options: ApiOptions): WriterFactory, InitWriterTarget
-{
+open class DefaultWriterFactory(val options: ApiOptions): WriterFactory, InitWriterTarget {
     private var log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
-    private lateinit var paths: Map<String, Path>
+    private lateinit var packagePaths: Map<String, Path>
+    private lateinit var resourcesPath: Path
 
     override fun createWriter(packageName: String, className: String): Writer {
-        return createWriter(paths.getValue(packageName), className)
+        return createWriter(packagePaths.getValue(packageName), className)
     }
 
     private fun createWriter(packagePath: Path, className: String): Writer {
@@ -48,6 +49,7 @@ open class DefaultWriterFactory(val options: ApiOptions): WriterFactory, InitWri
         pkgPaths[apiName] = apiPath
         log.debug ("initialized target folder: {}", apiPath.toAbsolutePath ().toString ())
 
+        // should be dto or resources
         val (modelName, modelPath) = initTargetPackage("model")
         pkgPaths[modelName] = modelPath
         log.debug ("initialized target folder: {}", modelPath.toAbsolutePath ().toString ())
@@ -62,9 +64,14 @@ open class DefaultWriterFactory(val options: ApiOptions): WriterFactory, InitWri
             log.debug("initialized target folder: {}", validationPath.toAbsolutePath().toString())
         }
 
+        if (options.standardLayout) {
+            resourcesPath = initTargetResources()
+            log.debug("initialized target folder: {}", resourcesPath.toAbsolutePath().toString())
+        }
+
         pkgPaths.putAll(initAdditionalPackages(options))
 
-        paths = pkgPaths
+        packagePaths = pkgPaths
     }
 
     open fun initAdditionalPackages(options: ApiOptions): Map<String, Path> {
@@ -80,6 +87,14 @@ open class DefaultWriterFactory(val options: ApiOptions): WriterFactory, InitWri
         }
     }
 
+    private fun initTargetResources(): Path {
+        val items = mutableListOf(options.targetDir, "resources")
+        val path = items.joinToString("/")
+        val target = Paths.get (toURI(path))
+        Files.createDirectories(target)
+        return target
+    }
+
     protected fun initTargetPackage(subPackageName: String): Pair<String, Path> {
         val rootPackageFolder = options.packageName.replace(".", "/")
 
@@ -91,8 +106,13 @@ open class DefaultWriterFactory(val options: ApiOptions): WriterFactory, InitWri
     }
 
     private fun createTargetPackage(apiPkg: String): Path {
-        val pkg = listOf(options.targetDir, apiPkg).joinToString("/")
+        val items = mutableListOf(options.targetDir)
+        if (isStandard(options.targetDirLayout)) {
+            items.add("java")
+        }
+        items.add(apiPkg)
 
+        val pkg = items.joinToString("/")
         val target = Paths.get (toURI(pkg))
         Files.createDirectories(target)
         return target

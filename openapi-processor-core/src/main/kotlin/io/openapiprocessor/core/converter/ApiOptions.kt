@@ -25,6 +25,16 @@ class ApiOptions: MappingSettings {
     var clearTargetDir = true
 
     /**
+     * the layout of the target dir
+     *
+     * classic: targetDir/packages...
+     * standard: targetDir/java, targetDir/resources
+     */
+    var targetDirLayout: String = "classic"
+
+    val standardLayout: Boolean get() = TargetDirLayout.isStandard(targetDirLayout)
+
+    /**
      * the root package of the generated interfaces/model. The package folder tree will be created
      * inside {@link #targetDir}. Interfaces and models will be placed into the "api" and "model"
      * subpackages of packageName:
@@ -32,6 +42,16 @@ class ApiOptions: MappingSettings {
      * - models => "${packageName}.model"
      */
     var packageName = "io.openapiprocessor.generated"
+
+    var packageNameApi : String = "api"
+    var packageNameModel: String = "model"
+    var packageNameSupport: String = "support"
+    var packageNameValidation: String = "validation"
+
+    val packageApi get() = "${packageName}.${packageNameApi}"
+    val packageModel get() = "${packageName}.${packageNameModel}"
+    val packageSupport get() = "${packageName}.${packageNameSupport}"
+    val packageValidation get() = "${packageName}.${packageNameValidation}"
 
     /**
      * enable Bean Validation (JSR303) annotations. Default is false (disabled)
