@@ -10,17 +10,18 @@ import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.framework.FrameworkBase
 import io.openapiprocessor.core.model.Api
 import io.openapiprocessor.core.support.parseApiBody
-import io.openapiprocessor.core.support.parseOptionsMapping
+import io.openapiprocessor.core.support.parseOptions
 import io.openapiprocessor.core.writer.java.JavaIdentifier
 
 class ApiConverterServerUriSpec: StringSpec({
 
     "add server uri as prefix to api path" {
-        val options = parseOptionsMapping(
+        val options = parseOptions(options =
             """
             |options:
             |  package-name: pkg
-            |  server-url: 0
+            |  base-path:
+            |    server-url: 0
             """)
 
          val openApi = parseApiBody(
@@ -59,6 +60,6 @@ class ApiConverterServerUriSpec: StringSpec({
         api.getInterfaces().size shouldBe 1
         val iface = api.getInterfaces().first()
         iface.hasPathPrefix() shouldBe true
-        iface.getPathPrefix () shouldBe "/foo/bar/v1"
+        iface.getPathPrefix() shouldBe "/foo/bar/v1"
      }
 })

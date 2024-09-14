@@ -10,7 +10,7 @@ import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.converter.ApiOptions
-import io.openapiprocessor.core.converter.TargetDirLayout
+import io.openapiprocessor.core.converter.options.TargetDirLayout
 import io.openapiprocessor.core.support.text
 import io.openapiprocessor.core.tempFolder
 import java.io.File
@@ -33,7 +33,7 @@ class DefaultWriterFactorySpec : StringSpec({
 
     "initializes 'classic' package folders" {
         options.targetDir = listOf(target.toString()).joinToString(File.separator)
-        options.targetDirLayout = TargetDirLayout.CLASSIC.toString().lowercase()
+        options.targetDirOptions.layout = TargetDirLayout.CLASSIC
 
         val writerFactory = DefaultWriterFactory(options)
         writerFactory.init()
@@ -55,7 +55,7 @@ class DefaultWriterFactorySpec : StringSpec({
 
     "initializes 'standard' package folders" {
         options.targetDir = listOf(target.toString()).joinToString(File.separator)
-        options.targetDirLayout = TargetDirLayout.STANDARD.toString().lowercase()
+        options.targetDirOptions.layout = TargetDirLayout.STANDARD
 
         val writerFactory = DefaultWriterFactory(options)
         writerFactory.init()
@@ -185,7 +185,7 @@ class DefaultWriterFactorySpec : StringSpec({
     }
 
     "skips deleting of target directory if clearTargetDir option is false" {
-        options.clearTargetDir = false
+        options.targetDirOptions.clear = false
 
         val api = options.getSourceDir("api")
         val model = options.getSourceDir("model")
@@ -237,7 +237,7 @@ private fun ApiOptions.getSourcePath(pkg: String, name: String): Path {
 
 private fun ApiOptions.getSourceDir(pkg: String): Path {
     val items = mutableListOf(targetDir)
-    if (TargetDirLayout.isStandard(targetDirLayout)) {
+    if (TargetDirLayout.isStandard(targetDirOptions.layout)) {
         items.add("java")
     }
     items.add(packageName.replace(".", File.separator))
@@ -248,7 +248,7 @@ private fun ApiOptions.getSourceDir(pkg: String): Path {
 
 private fun ApiOptions.getResourceDir(): Path {
     val items = mutableListOf(targetDir)
-    if (TargetDirLayout.isStandard(targetDirLayout)) {
+    if (TargetDirLayout.isStandard(targetDirOptions.layout)) {
         items.add("resources")
     }
 

@@ -77,7 +77,7 @@ class  ApiConverter(
     }
 
     private fun getServerPath(api: OpenApi): String? {
-        if (!options.pathPrefix) {
+        if (!options.basePathOptions.enabled) {
             return null
         }
 
@@ -86,7 +86,7 @@ class  ApiConverter(
             return null
         }
 
-        return servers[options.pathPrefixServerIndex!!].getUri().path
+        return servers[options.basePathOptions.serverUrl!!].getUri().path
     }
 
     private fun createInterface(
@@ -197,7 +197,8 @@ class  ApiConverter(
             parameter.getName(),
             "",
             parameter.getSchema(),
-            resolver)
+            resolver,
+            "parameters")
 
         val dataType = convertDataType(info, dataTypes)
 

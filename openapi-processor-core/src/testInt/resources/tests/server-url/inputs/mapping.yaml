@@ -2,5 +2,6 @@ openapi-processor-mapping: v9
 
 options:
   package-name: generated
-  server-url: 0
   format-code: false
+  base-path:
+    server-url: 0

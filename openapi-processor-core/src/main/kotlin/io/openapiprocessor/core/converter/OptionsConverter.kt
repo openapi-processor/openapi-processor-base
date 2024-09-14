@@ -5,6 +5,7 @@
 
 package io.openapiprocessor.core.converter
 
+import io.openapiprocessor.core.converter.options.TargetDirLayout
 import io.openapiprocessor.core.processor.MappingConverter
 import io.openapiprocessor.core.processor.MappingReader
 import io.openapiprocessor.core.processor.mapping.MappingVersion
@@ -57,7 +58,8 @@ class OptionsConverter(private val checkObsoleteProcessorOptions: Boolean = fals
 
                 is MappingV2 -> {
                     with(mapping.options) {
-                        options.clearTargetDir = clearTargetDir
+                        options.targetDirOptions.clear = targetDir.clear ?: clearTargetDir
+                        options.targetDirOptions.layout = TargetDirLayout.from(targetDir.layout)
                     }
 
                     options.packageName = mapping.options.packageName
@@ -70,8 +72,9 @@ class OptionsConverter(private val checkObsoleteProcessorOptions: Boolean = fals
                     options.beanValidationFormat = format
 
                     val (enablePathPrefix, pathPrefixServerIndex) = checkServerUrl(mapping.options)
-                    options.pathPrefix = enablePathPrefix
-                    options.pathPrefixServerIndex = pathPrefixServerIndex
+                    options.basePathOptions.enabled = enablePathPrefix
+                    options.basePathOptions.serverUrl = pathPrefixServerIndex
+                    options.basePathOptions.profileName = mapping.options.basePath.profileName
 
                     options.javadoc = mapping.options.javadoc
                     options.oneOfInterface = mapping.options.oneOfInterface
@@ -111,10 +114,10 @@ class OptionsConverter(private val checkObsoleteProcessorOptions: Boolean = fals
     }
 
     private fun checkServerUrl(options: Options): Pair<Boolean, Int?> {
-        return when (options.serverUrl) {
+        return when (options.basePath.serverUrl) {
             "false" -> Pair(false, null)
             "true" -> Pair(true, 0)
-            else -> Pair(true, options.serverUrl.toInt())
+            else -> Pair(true, options.basePath.serverUrl?.toInt())
         }
     }
 
@@ -137,6 +140,5 @@ class OptionsConverter(private val checkObsoleteProcessorOptions: Boolean = fals
             log.warn("'typeMappings' option is deprecated, please use 'mapping'!")
         }
     }
-
 }
 

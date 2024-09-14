@@ -10,6 +10,7 @@ import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
+import io.openapiprocessor.core.converter.options.TargetDirLayout
 import io.openapiprocessor.core.support.Empty
 
 class OptionsConverterSpec: StringSpec({
@@ -20,7 +21,8 @@ class OptionsConverterSpec: StringSpec({
         val options = converter.convertOptions(emptyMap())
 
         options.targetDir shouldBe null
-        options.clearTargetDir.shouldBeTrue()
+        options.targetDirOptions.clear.shouldBeTrue()
+        options.targetDirOptions.layout shouldBe TargetDirLayout.CLASSIC
 
         options.packageName shouldBe "io.openapiprocessor.generated"
         options.beanValidation shouldBe false
@@ -28,9 +30,10 @@ class OptionsConverterSpec: StringSpec({
         options.modelType shouldBe "default"
         options.enumType shouldBe "default"
         options.modelNameSuffix shouldBe String.Empty
-        options.pathPrefix shouldBe false
-        options.pathPrefixServerIndex shouldBe null
         options.formatCode.shouldBeFalse()
+        options.basePathOptions.enabled shouldBe false
+        options.basePathOptions.serverUrl shouldBe null
+        options.basePathOptions.profileName shouldBe "api.properties"
 
         options.globalMappings.shouldNotBeNull()
         options.endpointMappings.shouldNotBeNull()
@@ -84,13 +87,15 @@ class OptionsConverterSpec: StringSpec({
         options.packageName shouldBe "generated"
     }
 
-    "should read Mapping options (new, v2)" {
+    "should read mapping options" {
         val converter = OptionsConverter()
         val options = converter.convertOptions(mapOf(
             "mapping" to """
-                openapi-processor-mapping: v7
+                openapi-processor-mapping: v9
                 options:
                   clear-target-dir: false
+                  target-dir:
+                    layout: standard
                   package-name: generated
                   model-name-suffix: Suffix
                   model-type: record
@@ -98,13 +103,17 @@ class OptionsConverterSpec: StringSpec({
                   bean-validation: true
                   javadoc: true
                   format-code: false
+                  base-path:
+                    server-url: 0
+                    profile-name: openapi.properties
                 compatibility:
                   bean-validation-valid-on-reactive: false
                   identifier-word-break-from-digit-to-letter: false
             """.trimIndent()
         ))
 
-        options.clearTargetDir.shouldBeFalse()
+        options.targetDirOptions.clear.shouldBeFalse()
+        options.targetDirOptions.layout.isStandard().shouldBeTrue()
         options.packageName shouldBe "generated"
         options.modelNameSuffix shouldBe "Suffix"
         options.modelType shouldBe "record"
@@ -112,9 +121,27 @@ class OptionsConverterSpec: StringSpec({
         options.beanValidation shouldBe true
         options.javadoc shouldBe true
         options.formatCode.shouldBeFalse()
+        options.basePathOptions.enabled shouldBe true
+        options.basePathOptions.serverUrl shouldBe 0
+        options.basePathOptions.profileName shouldBe "openapi.properties"
 
         options.beanValidationValidOnReactive.shouldBeFalse()
         options.identifierWordBreakFromDigitToLetter.shouldBeFalse()
+    }
+
+    "overrides old target-dir mapping options" {
+        val converter = OptionsConverter()
+        val options = converter.convertOptions(mapOf(
+            "mapping" to """
+                openapi-processor-mapping: v9
+                options:
+                  clear-target-dir: true
+                  target-dir:
+                    clear: false
+            """.trimIndent()
+        ))
+
+        options.targetDirOptions.clear.shouldBeFalse()
     }
 
     data class BeanData(val source: String, val enabled: Boolean, val format: String?)
@@ -157,12 +184,15 @@ class OptionsConverterSpec: StringSpec({
                     openapi-processor-mapping: v9
                     options:
                       package-name: no.warning
-                      server-url: ${su.source}
+                      base-path:
+                        server-url: ${su.source}
+                        profile-name: openapi.properties
                 """.trimIndent()
             ))
 
-            options.pathPrefix shouldBe su.enabled
-            options.pathPrefixServerIndex shouldBe su.index
+            options.basePathOptions.enabled shouldBe su.enabled
+            options.basePathOptions.serverUrl shouldBe su.index
+            options.basePathOptions.profileName shouldBe "openapi.properties"
         }
     }
 })

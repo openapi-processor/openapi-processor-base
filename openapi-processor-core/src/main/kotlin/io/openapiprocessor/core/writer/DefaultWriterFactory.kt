@@ -6,7 +6,6 @@
 package io.openapiprocessor.core.writer
 
 import io.openapiprocessor.core.converter.ApiOptions
-import io.openapiprocessor.core.converter.TargetDirLayout.Companion.isStandard
 import io.openapiprocessor.core.support.toURI
 import io.openapiprocessor.core.writer.java.PathWriter
 import org.slf4j.Logger
@@ -41,7 +40,7 @@ open class DefaultWriterFactory(val options: ApiOptions): WriterFactory, InitWri
         val pkgPaths = HashMap<String, Path>()
 
         log.debug ("initializing target folders")
-        if (options.clearTargetDir) {
+        if (options.targetDirOptions.clear) {
             clearTargetDir()
         }
 
@@ -64,7 +63,7 @@ open class DefaultWriterFactory(val options: ApiOptions): WriterFactory, InitWri
             log.debug("initialized target folder: {}", validationPath.toAbsolutePath().toString())
         }
 
-        if (options.standardLayout) {
+        if (options.targetDirOptions.standardLayout) {
             resourcesPath = initTargetResources()
             log.debug("initialized target folder: {}", resourcesPath.toAbsolutePath().toString())
         }
@@ -107,7 +106,7 @@ open class DefaultWriterFactory(val options: ApiOptions): WriterFactory, InitWri
 
     private fun createTargetPackage(apiPkg: String): Path {
         val items = mutableListOf(options.targetDir)
-        if (isStandard(options.targetDirLayout)) {
+        if (options.targetDirOptions.layout.isStandard()) {
             items.add("java")
         }
         items.add(apiPkg)

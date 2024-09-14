@@ -221,7 +221,27 @@ class MappingReaderSpec: StringSpec ({
         mapping.options.jsonPropertyAnnotation shouldBe "auto"
     }
 
-    "reads server-url" {
+    "reads target-dir options" {
+        val yaml = """
+            |openapi-processor-mapping: v9
+            |options:
+            |  package-name: no.warning
+            |  target-dir:
+            |    clear: true
+            |    layout: standard
+        """.trimMargin()
+
+        val reader = MappingReader()
+
+        // when:
+        val mapping = reader.read (yaml) as Mapping
+
+        // then:
+        mapping.options.targetDir.clear shouldBe true
+        mapping.options.targetDir.layout shouldBe "standard"
+    }
+
+    "reads base-path options" {
         forAll(
             row(true),
             row(false),
@@ -233,12 +253,15 @@ class MappingReaderSpec: StringSpec ({
                 |openapi-processor-mapping: v9
                 |options:
                 |  package-name: no.warning
-                |  server-url: $server
+                |  base-path:
+                |   server-url: $server
+                |   profile-name: base-path.properties
                 """.trimMargin()
 
             val mapping = MappingReader().read(yaml) as Mapping
 
-            mapping.options.serverUrl shouldBe "$server"
+            mapping.options.basePath.serverUrl shouldBe "$server"
+            mapping.options.basePath.profileName shouldBe "base-path.properties"
         }
     }
 })

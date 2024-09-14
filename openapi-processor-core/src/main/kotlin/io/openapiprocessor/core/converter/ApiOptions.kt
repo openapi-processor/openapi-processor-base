@@ -6,6 +6,8 @@
 package io.openapiprocessor.core.converter
 
 import io.openapiprocessor.core.converter.mapping.*
+import io.openapiprocessor.core.converter.options.BasePathOptions
+import io.openapiprocessor.core.converter.options.TargetDirOptions
 import io.openapiprocessor.core.support.Empty
 
 /**
@@ -14,25 +16,15 @@ import io.openapiprocessor.core.support.Empty
 class ApiOptions: MappingSettings {
 
     /**
-     * the destination folder for generating interfaces & models. This is the parent of the
+     * the destination folder for generating interfaces & DTOs. This is the parent of the
      * {@link #packageName} folder tree.
      */
     var targetDir: String? = null
 
     /**
-     * enable/disable clearing of [targetDir] (optional).
+     * target-dir related options.
      */
-    var clearTargetDir = true
-
-    /**
-     * the layout of the target dir
-     *
-     * classic: targetDir/packages...
-     * standard: targetDir/java, targetDir/resources
-     */
-    var targetDirLayout: String = "classic"
-
-    val standardLayout: Boolean get() = TargetDirLayout.isStandard(targetDirLayout)
+    var targetDirOptions: TargetDirOptions = TargetDirOptions()
 
     /**
      * the root package of the generated interfaces/model. The package folder tree will be created
@@ -116,14 +108,9 @@ class ApiOptions: MappingSettings {
     var jsonPropertyAnnotation = JsonPropertyAnnotationMode.Always
 
     /**
-     * enable/disable use of server url (optional).
+     * base path related options
      */
-    var pathPrefix = false
-
-    /**
-     * index of the server to use as server prefix (optional).
-     */
-    var pathPrefixServerIndex: Int? = null
+    var basePathOptions: BasePathOptions = BasePathOptions()
 
     /**
      * provide additional type mapping information to map OpenAPI types to java types.

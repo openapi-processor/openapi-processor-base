@@ -51,15 +51,6 @@
             "Resource", "Dto"
           ]
         },
-        "server-url": {
-          "description": "index of the OpenAPI 'server.url' that is used as prefix for endpoint paths. Default is 'false', i.e. no prefix. 'true' == 0",
-          "default": false,
-          "type": ["boolean", "integer"],
-          "minimum": 0,
-          "examples": [
-            "true", "false", "0", "1"
-          ]
-        },
         "model-type": {
           "description": "generate pojo or record based models. Default is default, i.e. classic pojos.",
           "default": "default",
@@ -91,7 +82,7 @@
           "default": true
         },
         "clear-target-dir": {
-          "description": "enable/disable deletion of targetDir.",
+          "description": "enable/disable deletion of targetDir. (overridden by target-dir.clear)",
           "type": "boolean",
           "default": true
         },
@@ -99,6 +90,42 @@
           "description": "generate @JsonProperty annotation.",
           "default": "always",
           "enum": ["always", "auto", "never"]
+        },
+        "target-dir": {
+          "description": "target-dir related options",
+          "type": "object",
+          "properties": {
+            "clear": {
+              "description": "enable/disable deletion of targetDir.",
+              "type": "boolean",
+              "default": true
+            },
+            "layout": {
+              "description": "target dir layout. classic: targetDir/packages, standard: targetDir/java/packages & targetDir/resources",
+              "default": "classic",
+              "enum": ["classic", "standard"]
+            }
+          }
+        },
+        "base-path": {
+          "description": "base-path related options",
+          "type": "object",
+          "properties": {
+            "server-url": {
+              "description": "index of the OpenAPI 'server.url' that is used as base path. Default is 'false', i.e. no prefix. 'true' == 0",
+              "default": false,
+              "type": ["boolean", "integer"],
+              "minimum": 0,
+              "examples": [
+                "true", "false", "0", "1"
+              ]
+            },
+            "profile-name": {
+              "description": "name of the resource profile properties file with the base path configuration",
+              "default": "api.properties",
+              "examples": ["api.properties", "openapi.properties"]
+            }
+          }
         }
       },
       "additionalProperties": false,

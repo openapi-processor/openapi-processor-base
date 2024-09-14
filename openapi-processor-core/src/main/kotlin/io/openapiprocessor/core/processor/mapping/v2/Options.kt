@@ -28,6 +28,11 @@ data class Options(
     val clearTargetDir: Boolean = true,
 
     /**
+     * target-dir related options.
+     */
+    val targetDir: TargetDir = TargetDir(),
+
+    /**
      * bean validation (optional)
      */
     val beanValidation: String = "false",
@@ -53,9 +58,9 @@ data class Options(
     val modelNameSuffix: String = String.Empty,
 
     /**
-     * generate interfaces with pth prefix (optional)
+     * base path related options (optional)
      */
-    val serverUrl: String = "false",
+    val basePath: BasePath = BasePath(),
 
     /**
      * generate common interface for an `oneOf` object list (optional)

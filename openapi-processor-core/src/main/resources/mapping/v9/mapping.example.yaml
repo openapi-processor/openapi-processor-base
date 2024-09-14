@@ -22,9 +22,6 @@ options: # general processor options [required]
   # suffix for model class names and enum names. Default is none.
   model-name-suffix: Resource
 
-  # path prefix from server-url
-  server-url: 0
-
   # default (i.e pojo) or record
   model-type: default
 
@@ -46,6 +43,17 @@ options: # general processor options [required]
   # control @JsonProperty annotation (always|auto|never)
   json-property-annotation: always
 
+  # target-dir related configuration
+  target-dir:
+    clear: true
+    layout: standard
+
+  # server-url related configuration
+  base-path:
+    # false, true = 0, 1, ..
+    prefix: 0
+    # property resource with the uri base path
+    properties-name: openapi.properties
 
 compatibility:
   bean-validation-valid-on-reactive: false

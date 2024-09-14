@@ -496,7 +496,7 @@ class InterfaceWriterSpec: StringSpec({
             }
         }
 
-        options.pathPrefix = true
+        options.basePathOptions.enabled = true
         writer.write(target, itf)
 
         target.toString() shouldContain "import annotation.Prefix;"

@@ -13,6 +13,7 @@ fun parseOptions(mappingYaml: String): ApiOptions {
 }
 
 fun parseOptions(
+    targetDir: String = "targetDir",
     version: String =
         """
         |openapi-processor-mapping: v9
@@ -24,14 +25,16 @@ fun parseOptions(
         |  package-name: pkg
         |
         """,
-    mapping: String = ""
+    mapping: String = "",
 ): ApiOptions {
     val merged = (
         version.trimMargin()
       + options.trimMargin()
       + mapping.trimMargin()
     )
-    return OptionsConverter().convertOptions(mapOf("mapping" to merged))
+    val apiOptions = OptionsConverter().convertOptions(mapOf("mapping" to merged))
+    apiOptions.targetDir = targetDir
+    return apiOptions
 }
 
 /** groovy support */
