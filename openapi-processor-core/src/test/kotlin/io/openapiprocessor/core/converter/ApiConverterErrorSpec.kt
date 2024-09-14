@@ -16,7 +16,7 @@ import io.kotest.matchers.shouldBe
 import io.mockk.mockk
 import io.openapiprocessor.core.converter.mapping.UnknownDataTypeException
 import io.openapiprocessor.core.framework.Framework
-import io.openapiprocessor.core.support.parse
+import io.openapiprocessor.core.support.parseApi
 import io.openapiprocessor.core.writer.java.JavaIdentifier
 
 class ApiConverterErrorSpec: StringSpec({
@@ -35,12 +35,7 @@ class ApiConverterErrorSpec: StringSpec({
         val converter = ApiConverter(ApiOptions(), JavaIdentifier(), mockk<Framework>())
         val appender = addAppender(converter)
 
-        val openApi = parse ("""
-            openapi: 3.0.2
-            info:
-              title: unknown data type
-              version: 1.0.0
-            
+        val openApi = parseApi (body = """
             paths:
               /book:
                 get:
