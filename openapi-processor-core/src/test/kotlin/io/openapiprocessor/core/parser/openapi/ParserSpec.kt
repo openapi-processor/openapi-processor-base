@@ -18,6 +18,10 @@ class ParserSpec: StringSpec({
 
         Memory.add("openapi.yaml", """
             openapi: 3.0.2
+            info:
+              title: OpenAPI
+              version: "1"
+            paths: {}
         """.trimIndent())
 
         val api = parser.parse("memory:openapi.yaml")
@@ -30,6 +34,10 @@ class ParserSpec: StringSpec({
 
         Memory.add("openapi.yaml", """
             openapi: 3.1.0
+            info:
+              title: OpenAPI
+              version: "1"
+            paths: {}
         """.trimIndent())
 
         val api = parser.parse("memory:openapi.yaml")
