@@ -24,6 +24,8 @@ class ApiConverterErrorSpec: StringSpec({
 
     fun addAppender(converter: ApiConverter): ListAppender<ILoggingEvent> {
         val appender = ListAppender<ILoggingEvent>()
+        (converter.log as Logger).detachAndStopAllAppenders()
+        (converter.log as Logger).setAdditive(false)
         (converter.log as Logger).addAppender(appender)
         appender.start()
         return appender
