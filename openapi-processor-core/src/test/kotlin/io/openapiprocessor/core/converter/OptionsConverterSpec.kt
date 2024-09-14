@@ -10,13 +10,16 @@ import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
+import io.mockk.mockk
 import io.openapiprocessor.core.converter.options.TargetDirLayout
 import io.openapiprocessor.core.support.Empty
+import org.slf4j.Logger
 
 class OptionsConverterSpec: StringSpec({
 
     "produces default options if input options are empty" {
         val converter = OptionsConverter()
+        converter.log = mockk<Logger>(relaxed = true)
 
         val options = converter.convertOptions(emptyMap())
 
@@ -45,6 +48,7 @@ class OptionsConverterSpec: StringSpec({
 
     "should set target dir" {
         val converter = OptionsConverter()
+        converter.log = mockk<Logger>(relaxed = true)
 
         val options = converter.convertOptions(mapOf(
             "targetDir" to "generated target dir"
@@ -55,6 +59,7 @@ class OptionsConverterSpec: StringSpec({
 
     "should accept deprecated packageName map option" {
         val converter = OptionsConverter(true)
+        converter.log = mockk<Logger>(relaxed = true)
 
         val options = converter.convertOptions(mapOf(
             "packageName" to "obsolete"
@@ -65,6 +70,7 @@ class OptionsConverterSpec: StringSpec({
 
     "should accept deprecated beanValidation map option" {
         val converter = OptionsConverter(true)
+        converter.log = mockk<Logger>(relaxed = true)
 
         val options = converter.convertOptions(mapOf(
             "beanValidation" to true
@@ -75,6 +81,7 @@ class OptionsConverterSpec: StringSpec({
 
     "should accept deprecated typeMappings map option" {
         val converter = OptionsConverter(true)
+        converter.log = mockk<Logger>(relaxed = true)
 
         val options = converter.convertOptions(mapOf(
             "typeMappings" to """
@@ -89,6 +96,8 @@ class OptionsConverterSpec: StringSpec({
 
     "should read mapping options" {
         val converter = OptionsConverter()
+        converter.log = mockk<Logger>(relaxed = true)
+
         val options = converter.convertOptions(mapOf(
             "mapping" to """
                 openapi-processor-mapping: v9
@@ -131,10 +140,13 @@ class OptionsConverterSpec: StringSpec({
 
     "overrides old target-dir mapping options" {
         val converter = OptionsConverter()
+        converter.log = mockk<Logger>(relaxed = true)
+
         val options = converter.convertOptions(mapOf(
             "mapping" to """
                 openapi-processor-mapping: v9
                 options:
+                  package-name: pkg
                   clear-target-dir: true
                   target-dir:
                     clear: false
@@ -154,6 +166,7 @@ class OptionsConverterSpec: StringSpec({
     )) {
         "should read bean validation & format: ${bd.source}" {
             val converter = OptionsConverter()
+            converter.log = mockk<Logger>(relaxed = true)
 
             val options = converter.convertOptions(mapOf(
                 "mapping" to """
@@ -178,6 +191,7 @@ class OptionsConverterSpec: StringSpec({
     )) {
         "should read bean server-url: ${su.source}" {
             val converter = OptionsConverter()
+            converter.log = mockk<Logger>(relaxed = true)
 
             val options = converter.convertOptions(mapOf(
                 "mapping" to """
