@@ -115,9 +115,6 @@ class ApiOptions: MappingSettings {
     /**
      * provide additional type mapping information to map OpenAPI types to java types.
      */
-    @Deprecated(message = "use mappings below")
-    var typeMappings: List<Mapping> = emptyList()
-
     override var globalMappings: Mappings = Mappings()
     override var endpointMappings: Map<String /* path */, EndpointMappings> = emptyMap()
     override var extensionMappings: Map<String /* x- */, ExtensionMappings> = emptyMap()
