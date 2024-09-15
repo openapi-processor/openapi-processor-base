@@ -19,7 +19,7 @@ const val SCHEME_RESOURCE = "resource:"
  * swagger parser.
  */
 open class Parser: ApiParser {
-    private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
+    var log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     private enum class Source {URL, STRING}
 

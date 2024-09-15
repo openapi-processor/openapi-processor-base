@@ -8,12 +8,15 @@ package io.openapiprocessor.core.parser.swagger
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
+import io.mockk.mockk
 import io.openapiprocessor.core.parser.ParserException
+import org.slf4j.Logger
 
 class ParserSpec : StringSpec ({
 
     "catch parser resource exception" {
         val parser = Parser()
+        parser.log = mockk<Logger>(relaxed = true)
 
         shouldThrow<ParserException> {
             parser.parse("openapi.yaml")

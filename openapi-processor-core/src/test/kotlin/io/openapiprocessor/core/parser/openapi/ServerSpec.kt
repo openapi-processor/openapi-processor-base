@@ -18,6 +18,10 @@ class ServerSpec: StringSpec({
 
         Memory.add("openapi.yaml", """
             openapi: 3.0.5
+            info:
+              title: OpenAPI
+              version: "1"
+            paths: {}
             servers:
               - url: "{schema}://{host}:{port}/{path1}/{path2}/v{version}"
                 variables:
@@ -50,6 +54,10 @@ class ServerSpec: StringSpec({
 
         Memory.add("openapi.yaml", """
             openapi: 3.1.0
+            info:
+              title: OpenAPI
+              version: "1"
+            paths: {}            
             servers:
               - url: "{schema}://{host}:{port}/{path1}/{path2}/v{version}"
                 variables:
