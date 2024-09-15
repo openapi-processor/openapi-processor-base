@@ -8,6 +8,7 @@ package io.openapiprocessor.core.processor.mapping.v2.parser.antlr
 import io.openapiprocessor.core.processor.mapping.v2.parser.Mapping
 import org.antlr.v4.runtime.CharStreams
 import org.antlr.v4.runtime.CommonTokenStream
+import org.antlr.v4.runtime.ConsoleErrorListener
 import org.antlr.v4.runtime.tree.ParseTreeWalker
 
 /**
@@ -18,6 +19,7 @@ fun parseMapping(mapping: String): Mapping {
         val lexer = MappingLexer(CharStreams.fromString(mapping))
         val tokens = CommonTokenStream(lexer)
         val parser = MappingParser(tokens)
+        parser.removeErrorListener(ConsoleErrorListener.INSTANCE);
         parser.addErrorListener(MappingErrorListener())
         val ctx = parser.mapping()
         val extractor = MappingExtractor()
