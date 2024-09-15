@@ -1,6 +1,6 @@
 [versions]
 processor = "2024.6-SNAPSHOT"
-parser = "2024.3"
+parser = "2024.4-SNAPSHOT"
 
 kotlin = "2.0.20"
 build-jdk = "11"
@@ -18,14 +18,12 @@ openapi-parser-parser = { module = "io.openapiprocessor:openapi-parser" }
 json-schema-validator-bom = { module = "io.openapiprocessor:json-schema-validator-bom", version.ref = "parser" }
 json-schema-validator-validator = { module = "io.openapiprocessor:json-schema-validator" }
 io-jackson = { module = "io.openapiprocessor:io-jackson" }
-#io-snakeyaml = { module = "io.openapiprocessor:io-snakeyaml" }
 
 jackson-bom = "com.fasterxml.jackson:jackson-bom:2.17.2"
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind" }
 jackson-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml" }
 jackson-xml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-xml" }
 jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
-snakeyaml = "org.yaml:snakeyaml:2.3"
 
 openapi4j = "org.openapi4j:openapi-parser:1.0.7"
 swagger = "io.swagger.parser.v3:swagger-parser:2.1.22"
