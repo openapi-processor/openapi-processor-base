@@ -29,13 +29,4 @@ interface FrameworkAnnotations {
      * @return annotation details
      */
     fun getAnnotation(parameter: Parameter): Annotation
-
-    /**
-     * provides the details of the requested annotation.
-     *
-     * @param type annotation type
-     * @return annotation details
-     */
-
-    fun getAnnotation(type: AnnotationType): Annotation
 }

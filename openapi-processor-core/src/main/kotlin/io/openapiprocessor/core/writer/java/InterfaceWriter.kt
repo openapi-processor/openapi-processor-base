@@ -8,9 +8,7 @@ package io.openapiprocessor.core.writer.java
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.MappingFinder
 import io.openapiprocessor.core.converter.MappingFinderQuery
-import io.openapiprocessor.core.framework.AnnotationType
 import io.openapiprocessor.core.framework.FrameworkAnnotations
-import io.openapiprocessor.core.model.Annotation
 import io.openapiprocessor.core.model.Endpoint
 import io.openapiprocessor.core.model.EndpointResponse
 import io.openapiprocessor.core.model.Interface
@@ -29,8 +27,6 @@ class InterfaceWriter(
     private val validationAnnotations: BeanValidationFactory = BeanValidationFactory(apiOptions),
     private val importFilter: ImportFilter = DefaultImportFilter(),
 ) {
-    private val annotationWriter: AnnotationWriter = AnnotationWriter()
-
     fun write(target: Writer, itf: Interface) {
         target.write ("package ${itf.getPackageName()};\n\n")
 
@@ -42,10 +38,6 @@ class InterfaceWriter(
 
         generatedWriter.writeUse(target)
 
-        if (apiOptions.basePathOptions.enabled && itf.hasPathPrefix()) {
-            annotationWriter.write(target, getPrefixAnnotation(itf.getPathPrefix()))
-            target.write("\n")
-        }
         target.write("public interface ${itf.getInterfaceName()} {\n\n")
 
         itf.endpoints.forEach { ep ->
@@ -67,10 +59,6 @@ class InterfaceWriter(
             val annotation = annotations.getAnnotation (ep.method)
             imports.addAll(annotation.imports)
             imports.addAll(annotation.referencedImports)
-
-            if (apiOptions.basePathOptions.enabled && itf.hasPathPrefix()) {
-                imports.addAll(getPrefixAnnotation().imports)
-            }
 
             if (ep.deprecated) {
                 imports.add (java.lang.Deprecated::class.java.canonicalName)
@@ -146,15 +134,6 @@ class InterfaceWriter(
 
         if (responseImports.isNotEmpty()) {
             imports.addAll(responseImports)
-        }
-    }
-
-    private fun getPrefixAnnotation(path: String? = null): Annotation {
-        val annotation = annotations.getAnnotation(AnnotationType.INTERFACE_PATH_PREFIX)
-        return if (path == null) {
-            annotation
-        } else {
-            annotation.withParameter(""""$path"""")
         }
     }
 }
