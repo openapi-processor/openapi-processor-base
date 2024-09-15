@@ -32,11 +32,14 @@ class MappingReaderSpec extends Specification {
 
     @TempDir File folder
 
-    def log = Mock Logger
+    def reader = new MappingReader()
+
+    void setup() {
+        reader.log = Mock(Logger)
+    }
 
     void "ignores empty type mapping" () {
         when:
-        def reader = new MappingReader()
         def mapping = reader.read (yaml)
 
         then:
@@ -49,7 +52,7 @@ class MappingReaderSpec extends Specification {
     void "reads mapping from url" () {
         def yaml = """\
 openapi-processor-mapping: v2
-    
+
 map:
   types:
     - type: array => java.util.Collection
@@ -59,7 +62,6 @@ map:
         yamlFile.text = yaml
 
         when:
-        def reader = new MappingReader()
         def mapping = reader.read (yamlFile.toUri ().toURL ().toString ())
 
         then:
@@ -69,7 +71,7 @@ map:
     void "reads mapping from local file if the scheme is missing" () {
         def yaml = """\
 openapi-processor-mapping: v2
-    
+
 map:
   types:
     - type: array => java.util.Collection
@@ -79,7 +81,6 @@ map:
         yamlFile.text = yaml
 
         when:
-        def reader = new MappingReader()
         def mapping = reader.read (yamlFile.toString ())
 
         then:
@@ -89,14 +90,13 @@ map:
     void "reads mapping from string" () {
         def yaml = """\
 openapi-processor-mapping: v2
-    
+
 map:
   types:
     - type: array => java.util.Collection
 """
 
         when:
-        def reader = new MappingReader()
         def mapping = reader.read (yaml)
 
         then:
@@ -108,14 +108,11 @@ map:
 openapi-processor-mapping: v1
 """
 
-        def reader = new MappingReader()
-        reader.log = log
-
         when:
         reader.read (yaml)
 
         then:
         thrown(MappingFormatException)
-        2 * log.error (*_)
+        2 * reader.log.error (*_)
     }
 }
