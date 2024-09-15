@@ -9,11 +9,14 @@ import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.OptionsConverter
 
 fun parseOptions(mappingYaml: String): ApiOptions {
-    return OptionsConverter().convertOptions(mapOf("mapping" to mappingYaml))
+    return OptionsConverter().convertOptions(mapOf(
+        "targetDir" to "defaultTargetDir",
+        "mapping" to mappingYaml
+    ))
 }
 
 fun parseOptions(
-    targetDir: String = "targetDir",
+    targetDir: String = "defaultTargetDir",
     version: String =
         """
         |openapi-processor-mapping: v9
@@ -32,9 +35,10 @@ fun parseOptions(
       + options.trimMargin()
       + mapping.trimMargin()
     )
-    val apiOptions = OptionsConverter().convertOptions(mapOf("mapping" to merged))
-    apiOptions.targetDir = targetDir
-    return apiOptions
+    return OptionsConverter().convertOptions(mapOf(
+        "targetDir" to targetDir,
+        "mapping" to merged
+    ))
 }
 
 /** groovy support */
