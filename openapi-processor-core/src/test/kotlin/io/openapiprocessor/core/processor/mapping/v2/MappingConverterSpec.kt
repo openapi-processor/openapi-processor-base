@@ -14,16 +14,19 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
+import io.mockk.mockk
 import io.openapiprocessor.core.converter.MappingFinderQuery
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.processor.MappingReader
 import io.openapiprocessor.core.support.annotationTypeMatcher
 import io.openapiprocessor.core.support.typeMatcher
+import org.slf4j.Logger
 
 class MappingConverterSpec: StringSpec({
     isolationMode = IsolationMode.InstancePerTest
 
     val reader = MappingReader()
+    reader.log = mockk<Logger>(relaxed = true)
 
     "read global type mapping with generic parameter using the generated package ref" {
         val yaml = """

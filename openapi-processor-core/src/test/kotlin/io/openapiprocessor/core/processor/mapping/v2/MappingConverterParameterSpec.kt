@@ -12,16 +12,19 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.maps.shouldBeEmpty
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
+import io.mockk.mockk
 import io.openapiprocessor.core.converter.MappingFinderQuery
 import io.openapiprocessor.core.converter.mapping.AmbiguousTypeMappingException
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.processor.MappingReader
 import io.openapiprocessor.core.support.*
 import io.openapiprocessor.core.support.annotationTypeMatcher
+import org.slf4j.Logger
 
 
 class MappingConverterParameterSpec: StringSpec({
     val reader = MappingReader()
+    reader.log = mockk<Logger>(relaxed = true)
 
     "read global parameter type mapping" {
         val yaml = """

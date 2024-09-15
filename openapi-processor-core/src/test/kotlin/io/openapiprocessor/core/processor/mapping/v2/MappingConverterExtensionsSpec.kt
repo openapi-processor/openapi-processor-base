@@ -10,14 +10,18 @@ import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.maps.shouldHaveSize
 import io.kotest.matchers.shouldBe
+import io.mockk.mockk
 import io.openapiprocessor.core.processor.BadMappingException
 import io.openapiprocessor.core.processor.MappingConverter
 import io.openapiprocessor.core.processor.MappingReader
+import org.slf4j.Logger
 
 class MappingConverterExtensionsSpec: StringSpec({
     isolationMode = IsolationMode.InstancePerTest
 
     val reader = MappingReader()
+    reader.log = mockk<Logger>(relaxed = true)
+
     val converter = MappingConverter()
 
     "read extension mappings" {

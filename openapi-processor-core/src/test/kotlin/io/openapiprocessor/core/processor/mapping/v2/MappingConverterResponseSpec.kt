@@ -10,14 +10,17 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
+import io.mockk.mockk
 import io.openapiprocessor.core.converter.MappingFinderQuery
 import io.openapiprocessor.core.converter.mapping.AmbiguousTypeMappingException
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.processor.MappingReader
 import io.openapiprocessor.core.support.responseTypeMatcher
+import org.slf4j.Logger
 
 class MappingConverterResponseSpec: StringSpec({
     val reader = MappingReader()
+    reader.log = mockk<Logger>(relaxed = true)
 
     "read global response type mapping" {
         val yaml = """

@@ -131,6 +131,7 @@ class MappingReaderSpec: StringSpec ({
         val yaml = """
             |openapi-processor-mapping: v8
             |options:
+            |  package-name: no.warning
             |  generated-annotation: false
         """.trimMargin()
 
@@ -147,6 +148,7 @@ class MappingReaderSpec: StringSpec ({
         val yaml = """
             |openapi-processor-mapping: v8
             |options:
+            |  package-name: no.warning
             |  generated-date: false
         """.trimMargin()
 
