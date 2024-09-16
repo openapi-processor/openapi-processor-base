@@ -11,6 +11,7 @@ import io.openapiprocessor.core.converter.OptionsConverter
 import io.openapiprocessor.core.framework.FrameworkBase
 import io.openapiprocessor.core.parser.OpenApiParser
 import io.openapiprocessor.core.writer.java.*
+import io.openapiprocessor.test.OpenApiProcessorTest
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -19,9 +20,12 @@ import org.slf4j.LoggerFactory
  */
 class TestProcessor:
     io.openapiprocessor.api.v2.OpenApiProcessor,
-    io.openapiprocessor.api.v1.OpenApiProcessor
+    io.openapiprocessor.api.v1.OpenApiProcessor,
+    OpenApiProcessorTest
 {
     private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
+
+    private lateinit var apiOptions: ApiOptions
 
     override fun getName(): String {
         return "test"
@@ -36,6 +40,7 @@ class TestProcessor:
             }
 
             val options = convertOptions(processorOptions)
+            apiOptions = options
             val identifier = JavaIdentifier(IdentifierOptions(options.identifierWordBreakFromDigitToLetter))
             val cv = ApiConverter(options, identifier, FrameworkBase())
             val api = cv.convert(openapi)
@@ -97,6 +102,20 @@ class TestProcessor:
             log.error ("processing failed!", e)
             throw e
         }
+    }
+
+    override fun getSourceRoot(): String? {
+        if (apiOptions.targetDirOptions.standardLayout) {
+            return "java"
+        }
+        return null
+    }
+
+    override fun getResourceRoot(): String? {
+        if (apiOptions.targetDirOptions.standardLayout) {
+            return "resources"
+        }
+        return null
     }
 }
 

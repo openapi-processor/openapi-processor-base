@@ -155,9 +155,11 @@ class FileSupport {
      * @param path path of the generated files
      * @return the generated files
      */
-    static SortedSet<String> getGeneratedFiles (Path path) {
+    static Set<String> getGeneratedFiles (Path path) {
         def result = new TreeSet<String> ()
-        result.addAll (collectPaths (path))
+        if (Files.exists(path)) {
+            result.addAll (collectPaths (path))
+        }
         result
     }
 
