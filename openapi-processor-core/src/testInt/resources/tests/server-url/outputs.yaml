@@ -1,2 +1,3 @@
 items:
-  - outputs/api/Api.java
+  - outputs/java/api/Api.java
+  - outputs/resources/api.properties
