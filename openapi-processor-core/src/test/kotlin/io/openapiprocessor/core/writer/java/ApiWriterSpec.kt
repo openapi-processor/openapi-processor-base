@@ -7,13 +7,16 @@ package io.openapiprocessor.core.writer.java
 
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.equals.shouldBeEqual
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import io.openapiprocessor.core.builder.api.`interface`
 import io.openapiprocessor.core.converter.ApiOptions
+import io.openapiprocessor.core.converter.options.TargetDirLayout
 import io.openapiprocessor.core.model.Api
 import io.openapiprocessor.core.model.DataTypes
+import io.openapiprocessor.core.model.Resource
 import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.tempFolder
 import io.openapiprocessor.core.writer.SourceFormatter
@@ -60,8 +63,8 @@ class ApiWriterSpec: StringSpec({
         options.targetDir = listOf(target.toString(), "java", "src").joinToString(File.separator)
         options.formatCode = true
 
-        every { factoryStub.createWriter(any(), any()) }
-            .answers { writer }
+        every { factoryStub.createWriter(any(), any()) }.answers { writer }
+        every { factoryStub.createResourceWriter(any()) }.answers { writer }
     }
 
     "writes model enum data type sources" {
@@ -240,6 +243,18 @@ class ApiWriterSpec: StringSpec({
 
         verify(exactly = 1) { additionalWriterA.invoke(any(), any(), any()) }
         verify(exactly = 1) { additionalWriterB.invoke(any(), any(), any()) }
+    }
+
+    "writes resources" {
+        options.targetDirOptions.layout = TargetDirLayout.STANDARD
+
+        val resource = Resource("api.properties", "anything")
+        val api = Api(resources = listOf(resource))
+
+        createApiWriter().write(api)
+
+        verify (exactly = 1) { factoryStub.createResourceWriter(resource.name) }
+        writer.toString() shouldBeEqual resource.content
     }
 })
 

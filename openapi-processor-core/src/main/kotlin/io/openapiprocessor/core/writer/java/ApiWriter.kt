@@ -45,6 +45,7 @@ class ApiWriter(
         writeObjectDataTypes(api)
         writeInterfaceDataTypes(api)
         writeEnumDataTypes(api)
+        writeResourceFiles(api)
         writeAdditionalFiles()
     }
 
@@ -96,6 +97,18 @@ class ApiWriter(
         }
     }
 
+    private fun writeResourceFiles(api: Api) {
+        if (!options.targetDirOptions.standardLayout) {
+            return
+        }
+
+        api.forEachResource {
+            val writer = getResourceWriter(it.name)
+            writer.write(it.content)
+            writer.close()
+        }
+    }
+
     private fun writeInterface(writer: Writer, itf: Interface) {
         val raw = StringWriter()
         interfaceWriter.write(raw, itf)
@@ -128,6 +141,10 @@ class ApiWriter(
 
     private fun getWriter(packageName: String, className: String): Writer {
         return writerFactory.createWriter(packageName, className)
+    }
+
+    private fun getResourceWriter(resourceName: String): Writer {
+        return writerFactory.createResourceWriter(resourceName)
     }
 
     private fun format(raw: String): String {

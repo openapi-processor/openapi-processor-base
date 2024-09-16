@@ -17,6 +17,11 @@ class Api(
     private var interfaces: List<Interface> = emptyList(),
 
     /**
+     * resources
+     */
+    private var resources: List<Resource> = emptyList(),
+
+    /**
      * named data types (i.e. $ref) used in the OpenAPI description.
      */
     private val dataTypes: DataTypes = DataTypes()
@@ -31,6 +36,10 @@ class Api(
 
     fun setInterfaces(ifs: List<Interface>) {
         interfaces = ifs
+    }
+
+    fun setResources(resources: List<Resource>) {
+        this.resources = resources
     }
 
     fun getDataTypes(): DataTypes {
@@ -51,5 +60,9 @@ class Api(
 
     fun forEachEnumDataType(action: Consumer<StringEnumDataType>) {
         dataTypes.getEnumDataTypes().forEach(action)
+    }
+
+    fun forEachResource(action: Consumer<Resource>) {
+        resources.forEach(action)
     }
 }

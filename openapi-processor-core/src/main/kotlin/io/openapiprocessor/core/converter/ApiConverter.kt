@@ -53,6 +53,7 @@ class  ApiConverter(
     fun convert(api: OpenApi): Api {
         val target = Api()
         createInterfaces(api, target)
+        createResources(api, target)
         return target
     }
 
@@ -74,6 +75,19 @@ class  ApiConverter(
         }
 
         target.setInterfaces(interfaces.values.map { it })
+    }
+
+    private fun createResources(api: OpenApi, target: Api) {
+        val resources = mutableListOf<Resource>()
+
+        val serverPath = getServerPath(api)
+        if (serverPath != null) {
+            resources.add(Resource(options.basePathOptions.propertiesName, """
+                openapi.base.path = $serverPath
+            """.trimIndent()))
+        }
+
+        target.setResources(resources)
     }
 
     private fun getServerPath(api: OpenApi): String? {
