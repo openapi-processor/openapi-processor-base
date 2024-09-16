@@ -7,6 +7,8 @@ package io.openapiprocessor.core.writer
 
 import java.io.Writer
 
-fun interface WriterFactory {
+interface WriterFactory {
+    // todo rename to createSourceWriter()
     fun createWriter(packageName: String, className: String): Writer
+    fun createResourceWriter(resourceName: String): Writer
 }

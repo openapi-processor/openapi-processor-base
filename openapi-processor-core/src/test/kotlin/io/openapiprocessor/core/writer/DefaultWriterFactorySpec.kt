@@ -154,26 +154,47 @@ class DefaultWriterFactorySpec : StringSpec({
         textOfSupport("Model.java") shouldBe "public class Model {}\n"
     }
 
+    "writes file to resource folder" {
+        fun textOfSupport(name: String): String {
+            return options.getResourcePath(name).text
+        }
+
+        options.targetDir = target.toString()
+        options.targetDirOptions.layout = TargetDirLayout.STANDARD
+        val factory = DefaultWriterFactory(options)
+        factory.init()
+
+        val writer = factory.createResourceWriter("api.properties")
+        writer.write("api\n")
+        writer.close()
+
+        textOfSupport("api.properties") shouldBe "api\n"
+    }
+
     "deletes target directory to clear old files" {
         val api = options.getSourceDir("api")
         val model = options.getSourceDir("model")
         val support = options.getSourceDir("support")
         val validation = options.getSourceDir("validation")
+        val resource = options.getResourceDir()
 
         Files.createDirectories(api)
         Files.createDirectories(model)
         Files.createDirectories(support)
         Files.createDirectories(validation)
+        Files.createDirectories(resource)
 
         api.resolve("Old.java").createFile()
         model.resolve("Old.java").createFile()
         support.resolve("Old.java").createFile()
         validation.resolve("Old.java").createFile()
+        resource.resolve("old.properties").createFile()
 
         Files.exists(api.resolve("Old.java")) shouldBe true
         Files.exists(model.resolve("Old.java")) shouldBe true
         Files.exists(support.resolve("Old.java")) shouldBe true
         Files.exists(validation.resolve("Old.java")) shouldBe true
+        Files.exists(resource.resolve("old.properties")) shouldBe true
 
         val factory = DefaultWriterFactory(options)
         factory.init()
@@ -182,6 +203,7 @@ class DefaultWriterFactorySpec : StringSpec({
         Files.exists(model.resolve("Old.java")) shouldBe false
         Files.exists(support.resolve("Old.java")) shouldBe false
         Files.exists(validation.resolve("Old.java")) shouldBe false
+        Files.exists(resource.resolve("old.properties")) shouldBe false
     }
 
     "skips deleting of target directory if clearTargetDir option is false" {
@@ -191,16 +213,19 @@ class DefaultWriterFactorySpec : StringSpec({
         val model = options.getSourceDir("model")
         val support = options.getSourceDir("support")
         val validation = options.getSourceDir("validation")
+        val resource = options.getResourceDir()
 
         Files.createDirectories(api)
         Files.createDirectories(model)
         Files.createDirectories(support)
         Files.createDirectories(validation)
+        Files.createDirectories(resource)
 
         api.resolve("Old.java").createFile()
         model.resolve("Old.java").createFile()
         support.resolve("Old.java").createFile()
         validation.resolve("Old.java").createFile()
+        resource.resolve("old.properties").createFile()
 
         val factory = DefaultWriterFactory(options)
         factory.init()
@@ -209,6 +234,7 @@ class DefaultWriterFactorySpec : StringSpec({
         Files.exists(model.resolve("Old.java")) shouldBe true
         Files.exists(support.resolve("Old.java")) shouldBe true
         Files.exists(validation.resolve("Old.java")) shouldBe true
+        Files.exists(resource.resolve("old.properties")) shouldBe true
     }
 
     "initializes additional package folders" {
@@ -232,6 +258,11 @@ class DefaultWriterFactorySpec : StringSpec({
 
 private fun ApiOptions.getSourcePath(pkg: String, name: String): Path {
     return getSourceDir(pkg)
+        .resolve(name)
+}
+
+private fun ApiOptions.getResourcePath(name: String): Path {
+    return getResourceDir()
         .resolve(name)
 }
 

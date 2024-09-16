@@ -36,6 +36,10 @@ open class DefaultWriterFactory(val options: ApiOptions): WriterFactory, InitWri
         return BufferedWriter(PathWriter(packagePath.resolve("${className}.java")))
     }
 
+    override fun createResourceWriter(resourceName: String): Writer {
+        return BufferedWriter(PathWriter(resourcesPath.resolve(resourceName)))
+    }
+
     override fun init() {
         val pkgPaths = HashMap<String, Path>()
 
