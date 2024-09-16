@@ -17,7 +17,7 @@ class BasePathOptions {
     var serverUrl: Int? = null
 
     /**
-     * profile name for base path.
+     * properties name for base path.
      */
-    var profileName: String = "api.properties"
+    var propertiesName: String = "api.properties"
 }

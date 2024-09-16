@@ -36,7 +36,7 @@ class OptionsConverterSpec: StringSpec({
         options.formatCode.shouldBeFalse()
         options.basePathOptions.enabled shouldBe false
         options.basePathOptions.serverUrl shouldBe null
-        options.basePathOptions.profileName shouldBe "api.properties"
+        options.basePathOptions.propertiesName shouldBe "api.properties"
 
         options.globalMappings.shouldNotBeNull()
         options.endpointMappings.shouldNotBeNull()
@@ -132,7 +132,7 @@ class OptionsConverterSpec: StringSpec({
         options.formatCode.shouldBeFalse()
         options.basePathOptions.enabled shouldBe true
         options.basePathOptions.serverUrl shouldBe 0
-        options.basePathOptions.profileName shouldBe "openapi.properties"
+        options.basePathOptions.propertiesName shouldBe "openapi.properties"
 
         options.beanValidationValidOnReactive.shouldBeFalse()
         options.identifierWordBreakFromDigitToLetter.shouldBeFalse()
@@ -206,7 +206,26 @@ class OptionsConverterSpec: StringSpec({
 
             options.basePathOptions.enabled shouldBe su.enabled
             options.basePathOptions.serverUrl shouldBe su.index
-            options.basePathOptions.profileName shouldBe "openapi.properties"
+            options.basePathOptions.propertiesName shouldBe "openapi.properties"
         }
+    }
+
+    "enabling base path resource will automatically enable target-dir layout standard" {
+        val converter = OptionsConverter()
+        converter.log = mockk<Logger>(relaxed = true)
+
+        val options = converter.convertOptions(mapOf(
+            "mapping" to """
+                openapi-processor-mapping: v9
+                options:
+                  package-name: pkg
+                  base-path:
+                    server-url: true
+                    profile-name: openapi.properties
+            """.trimIndent()
+        ))
+
+        options.basePathOptions.enabled shouldBe true
+        options.targetDirOptions.layout.isStandard() shouldBe true
     }
 })

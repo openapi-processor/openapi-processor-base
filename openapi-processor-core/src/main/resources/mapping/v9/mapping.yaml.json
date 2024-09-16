@@ -120,8 +120,8 @@
                 "true", "false", "0", "1"
               ]
             },
-            "profile-name": {
-              "description": "name of the resource profile properties file with the base path configuration",
+            "properties-name": {
+              "description": "name of the resource properties file with the base path configuration",
               "default": "api.properties",
               "examples": ["api.properties", "openapi.properties"]
             }
