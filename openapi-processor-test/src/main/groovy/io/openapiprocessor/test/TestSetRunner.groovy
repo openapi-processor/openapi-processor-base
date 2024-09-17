@@ -31,16 +31,15 @@ class TestSetRunner {
 
     TestSet testSet
     FileSupport files
+    Class testResourcesBase
+    TestItemsReader itemReader
 
-    ObjectMapper mapper
-
-    TestSetRunner(TestSet testSet, FileSupport files) {
+    TestSetRunner(TestSet testSet, FileSupport files, private Class testResourcesBase) {
         this.testSet = testSet
         this.files = files
 
-        mapper = new ObjectMapper (new YAMLFactory ())
-            .configure (DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-            .setPropertyNamingStrategy (PropertyNamingStrategies.KEBAB_CASE)
+        this.testResourcesBase = testResourcesBase
+        this.itemReader = new TestItemsReader(this.testResourcesBase)
     }
 
     /**
@@ -56,19 +55,16 @@ class TestSetRunner {
             targetDir: targetFolder.absolutePath
         ]
 
-        def mappingYaml = files.getResource ("/tests/${testSet.name}/inputs/mapping.yaml")
-        if(mappingYaml) {
-            options.mapping = mappingYaml.text
-        } else {
-            options.mapping = testSet.defaultOptions
-        }
-        options.mapping = setMappingModelType(options.mapping)
+        def mappingYaml = getMappingX(getResource ("/tests/${testSet.name}/inputs/mapping.yaml"))
+        def mapping = new Mapping(mappingYaml)
+        mapping.setModelType(testSet.modelType)
+        options.mapping = mapping.yaml
 
         when:
         testSet.processor.run (options)
 
         then:
-        def packageName = getPackageName(options.mapping)
+        def packageName = mapping.packageName
         def testProcessor = testSet.processor as OpenApiProcessorTest
         def sourceRoot = testProcessor.sourceRoot
         def resourceRoot = testProcessor.resourceRoot
@@ -151,19 +147,16 @@ class TestSetRunner {
             targetDir: target.toUri ().toURL ().toString ()
         ]
 
-        def mappingYaml = root.resolve ('inputs/mapping.yaml')
-        if(Files.exists (mappingYaml)) {
-            options.mapping = mappingYaml.toUri ().toURL ().text
-        } else {
-            options.mapping = testSet.defaultOptions
-        }
-        options.mapping = setMappingModelType(options.mapping)
+        def mappingYaml = getMappingX(root.resolve ('inputs/mapping.yaml'))
+        def mapping = new Mapping(mappingYaml)
+        mapping.setModelType(testSet.modelType)
+        options.mapping = mapping.yaml
 
         when:
         testSet.processor.run (options)
 
         then:
-        def packageName = getPackageName(options.mapping)
+        def packageName = mapping.packageName
         def testProcessor = testSet.processor as OpenApiProcessorTest
         def sourceRoot = testProcessor.sourceRoot
         def resourceRoot = testProcessor.resourceRoot
@@ -311,18 +304,20 @@ class TestSetRunner {
         }
     }
 
-    private String setMappingModelType(String source) {
-        def mapping = getMapping(source)
-        mapping['options']['model-type'] = testSet.modelType
-        return mapper.writeValueAsString(mapping)
+    private String getMappingOrDefault(String mappingYaml) {
+        return mappingYaml ? mappingYaml : testSet.defaultOptions
     }
 
-    private String getPackageName(String mapping) {
-        return getMapping(mapping).options["package-name"] as String
+    private String getMappingX(InputStream mappingYaml) {
+        return getMappingOrDefault(mappingYaml.text)
     }
 
-    private Map<String, ?> getMapping(String source) {
-        mapper.readValue(source, Map<String,?>)
+    private String getMappingX(Path mappingYaml) {
+        return getMappingOrDefault(Files.exists (mappingYaml) ? mappingYaml.toUri().toURL().text : (String)null)
+    }
+
+    InputStream getResource (String path) {
+        testResourcesBase.getResourceAsStream (path)
     }
 
     private Set<String> resolveFileNames(Collection<String> paths, ResolveType type) {
