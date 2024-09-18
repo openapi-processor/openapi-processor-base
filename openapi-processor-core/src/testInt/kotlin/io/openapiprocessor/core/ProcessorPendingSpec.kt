@@ -31,7 +31,7 @@ class ProcessorPendingSpec: StringSpec({
                 testSet.inputs, testSet.outputs
             )
 
-            TestSetRunner(testSet, support)
+            TestSetRunner(testSet, support, ProcessorPendingSpec::class.java)
             .runOnNativeFileSystem(folder)
             .shouldBeTrue()
         }
@@ -44,7 +44,7 @@ class ProcessorPendingSpec: StringSpec({
                 testSet.inputs, testSet.outputs
             )
 
-            TestSetRunner(testSet, support)
+            TestSetRunner(testSet, support, ProcessorPendingSpec::class.java)
             .runOnCustomFileSystem(Jimfs.newFileSystem (Configuration.unix ()))
             .shouldBeTrue()
         }

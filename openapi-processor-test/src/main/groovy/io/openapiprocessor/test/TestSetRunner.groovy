@@ -5,11 +5,6 @@
 
 package io.openapiprocessor.test
 
-import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.PropertyNamingStrategies
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
-
 import java.nio.file.FileSystem
 import java.nio.file.Files
 import java.nio.file.Path
@@ -48,6 +43,7 @@ class TestSetRunner {
      * @param targetFolder temp folder
      * @return true on success, false on failure, ie. if there were any differences
      */
+
     boolean runOnNativeFileSystem (File targetFolder) {
         def options = [
             parser: testSet.parser,
@@ -55,8 +51,7 @@ class TestSetRunner {
             targetDir: targetFolder.absolutePath
         ]
 
-        def mappingYaml = getMappingX(getResource ("/tests/${testSet.name}/inputs/mapping.yaml"))
-        def mapping = new Mapping(mappingYaml)
+        def mapping = createMapping(getResource ("/tests/${testSet.name}/inputs/mapping.yaml"))
         mapping.setModelType(testSet.modelType)
         options.mapping = mapping.yaml
 
@@ -147,8 +142,7 @@ class TestSetRunner {
             targetDir: target.toUri ().toURL ().toString ()
         ]
 
-        def mappingYaml = getMappingX(root.resolve ('inputs/mapping.yaml'))
-        def mapping = new Mapping(mappingYaml)
+        def mapping = createMapping(root.resolve ('inputs/mapping.yaml'))
         mapping.setModelType(testSet.modelType)
         options.mapping = mapping.yaml
 
@@ -304,16 +298,12 @@ class TestSetRunner {
         }
     }
 
-    private String getMappingOrDefault(String mappingYaml) {
-        return mappingYaml ? mappingYaml : testSet.defaultOptions
+    private Mapping createMapping(InputStream mapping) {
+        return Mapping.createMapping(mapping, testSet.defaultOptions)
     }
 
-    private String getMappingX(InputStream mappingYaml) {
-        return getMappingOrDefault(mappingYaml.text)
-    }
-
-    private String getMappingX(Path mappingYaml) {
-        return getMappingOrDefault(Files.exists (mappingYaml) ? mappingYaml.toUri().toURL().text : (String)null)
+    private Mapping createMapping(Path mapping) {
+        return Mapping.createMapping(mapping, testSet.defaultOptions)
     }
 
     InputStream getResource (String path) {
