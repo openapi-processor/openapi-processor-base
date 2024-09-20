@@ -43,18 +43,16 @@ class TestSetRunner {
      * @param targetFolder temp folder
      * @return true on success, false on failure, ie. if there were any differences
      */
-
     boolean runOnNativeFileSystem (File targetFolder) {
         test.init()
 
+        def mapping = test.mapping
         def options = [
             parser: test.parser,
             apiPath: test.apiPath.toString(),
-            targetDir: test.targetDir.toString()
+            targetDir: test.targetDir.toString(),
+            mapping: mapping.yaml
         ]
-
-        def mapping = test.mapping
-        options.mapping = mapping.yaml
 
         when:
         testSet.processor.run (options)
@@ -127,14 +125,13 @@ class TestSetRunner {
     boolean runOnCustomFileSystem (FileSystem fs) {
         test.init()
 
+        def mapping = test.mapping
         def options = [
             parser: test.parser,
             apiPath: test.apiPath.toString(),
-            targetDir: test.targetDir.toString()
+            targetDir: test.targetDir.toString(),
+            mapping: mapping.yaml
         ]
-
-        def mapping = test.mapping
-        options.mapping = mapping.yaml
 
         when:
         testSet.processor.run (options)
