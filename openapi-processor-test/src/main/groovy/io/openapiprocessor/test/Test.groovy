@@ -29,4 +29,10 @@ class Test {
     String getTargetDir() {
         return testFiles.getTargetDir()
     }
+
+    Mapping getMapping() {
+        def mapping = testFiles.getMapping(testSet)
+        mapping.setModelType(testSet.modelType)
+        return mapping
+    }
 }

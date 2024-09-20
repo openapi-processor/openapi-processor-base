@@ -28,4 +28,11 @@ class TestFilesNative implements TestFiles {
     URI getTargetDir() {
         return target.toURI()
     }
+
+    @Override
+    Mapping getMapping(TestSet testSet) {
+        return Mapping.createMapping(
+                resource.getResource("/tests/${testSet.name}/inputs/mapping.yaml"),
+                testSet.defaultOptions)
+    }
 }

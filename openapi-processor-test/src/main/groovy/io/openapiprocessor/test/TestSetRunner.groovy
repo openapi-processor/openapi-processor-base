@@ -53,8 +53,7 @@ class TestSetRunner {
             targetDir: test.targetDir.toString()
         ]
 
-        def mapping = createMapping(getResource ("/tests/${testSet.name}/inputs/mapping.yaml"))
-        mapping.setModelType(testSet.modelType)
+        def mapping = test.mapping
         options.mapping = mapping.yaml
 
         when:
@@ -134,8 +133,7 @@ class TestSetRunner {
             targetDir: test.targetDir.toString()
         ]
 
-        def mapping = createMapping(root.resolve ('inputs/mapping.yaml'))
-        mapping.setModelType(testSet.modelType)
+        def mapping = test.mapping
         options.mapping = mapping.yaml
 
         when:
@@ -292,14 +290,6 @@ class TestSetRunner {
         return files.each {
             return "${base}/it"
         }
-    }
-
-    private Mapping createMapping(InputStream mapping) {
-        return Mapping.createMapping(mapping, testSet.defaultOptions)
-    }
-
-    private Mapping createMapping(Path mapping) {
-        return Mapping.createMapping(mapping, testSet.defaultOptions)
     }
 
     InputStream getResource (String path) {

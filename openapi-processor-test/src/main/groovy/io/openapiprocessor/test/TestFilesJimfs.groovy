@@ -53,6 +53,11 @@ class TestFilesJimfs implements TestFiles {
         return target.toUri()
     }
 
+    @Override
+    Mapping getMapping(TestSet testSet) {
+        return Mapping.createMapping(source.resolve ('inputs/mapping.yaml'), testSet.defaultOptions)
+    }
+
     private static String getModelTypePath(TestSet testSet) {
         if (testSet.modelType == 'default' || testSet.modelType == 'model') {
             return 'model/default'

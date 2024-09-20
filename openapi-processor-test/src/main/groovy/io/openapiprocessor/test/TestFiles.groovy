@@ -9,4 +9,6 @@ interface TestFiles {
     void init(TestSet testSet)
     URI getApiPath(TestSet testSet)
     URI getTargetDir()
+
+    Mapping getMapping(TestSet testSet)
 }
