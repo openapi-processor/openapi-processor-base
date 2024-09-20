@@ -54,7 +54,7 @@ class TestFilesJimfs implements TestFiles {
     }
 
     private static String getModelTypePath(TestSet testSet) {
-        if (testSet.modelType == 'model') {
+        if (testSet.modelType == 'default' || testSet.modelType == 'model') {
             return 'model/default'
         }
         else if (testSet.modelType == 'record') {
