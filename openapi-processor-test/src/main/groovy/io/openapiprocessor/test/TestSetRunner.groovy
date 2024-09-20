@@ -128,12 +128,6 @@ class TestSetRunner {
     boolean runOnCustomFileSystem (FileSystem fs) {
         test.init()
 
-        printFsTree(fs)
-
-        Path root = fs.getPath ("source")
-        Path target = fs.getPath ('target')
-        def path = "/tests/${testSet.name}"
-
         def options = [
             parser: test.parser,
             apiPath: test.apiPath.toString(),
@@ -152,6 +146,10 @@ class TestSetRunner {
         def testProcessor = testSet.processor as OpenApiProcessorTest
         def sourceRoot = testProcessor.sourceRoot
         def resourceRoot = testProcessor.resourceRoot
+
+        Path root = fs.getPath ("source")
+        Path target = fs.getPath ('target')
+        def path = "/tests/${testSet.name}"
 
         def expectedPath = root.resolve(testSet.expected)
         def expectedFiles = files.getExpectedFiles (path, testSet.expected)
