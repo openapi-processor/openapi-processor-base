@@ -10,10 +10,10 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 
 class TestItemsReader {
-    private Class resourceBase
+    private ResourceReader resource
 
-    TestItemsReader(Class resourceBase) {
-        this.resourceBase = resourceBase
+    TestItemsReader(ResourceReader resource) {
+        this.resource = resource
     }
 
     /**
@@ -23,10 +23,10 @@ class TestItemsReader {
      * @param name of test items yaml file
      * @return content of yaml
      */
-    TestItems read (String path, String itemsYaml) {
-        def source = getResource ("${path}/${itemsYaml}")
+    TestItems read (String path, String itemsYamlName) {
+        def source = getResource ("${path}/${itemsYamlName}")
         if (!source) {
-            println "ERROR: missing '${path}/${itemsYaml}' configuration file!"
+            println "ERROR: missing '${path}/${itemsYamlName}' configuration file!"
         }
 
         def mapper = createYamlParser ()
@@ -34,7 +34,7 @@ class TestItemsReader {
     }
 
     InputStream getResource (String path) {
-        resourceBase.getResourceAsStream (path)
+        resource.getResource (path)
     }
 
     private static ObjectMapper createYamlParser () {

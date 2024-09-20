@@ -9,5 +9,50 @@ package io.openapiprocessor.test
  * input.yaml / output.yaml items.
  */
 class TestItems {
-    List<String> items
+    // find better names
+
+    enum ResolveType {
+        // model
+        PATH_GENERATED,
+        // default/record
+        PATH_DIFF
+    }
+
+    private List<String> items
+
+    TestItems() {
+    }
+
+    TestItems(List<String> items) {
+        this.items = items
+    }
+
+    List<String> getItems() {
+        return items
+    }
+
+    void setItems(List<String> items) {
+        this.items = items
+    }
+
+    /** convert to absolute paths */
+    List<String> addPrefix(String path) {
+        items.collect {
+            "${path}/${it}".toString ()
+        }
+    }
+
+    TestItems resolvePlaceholder(String replacement) {
+        def results = new TreeSet<String> ()
+
+        items.each {
+            results.add(resolveModel(it, replacement))
+        }
+
+        return new TestItems(results as List<String>)
+    }
+
+    private static String resolveModel(String path, String replacement) {
+        return path.replaceFirst("<model>", replacement)
+    }
 }

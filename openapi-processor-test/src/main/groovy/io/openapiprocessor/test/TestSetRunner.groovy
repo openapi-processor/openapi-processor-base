@@ -24,17 +24,17 @@ class TestSetRunner {
         PATH_GENERATED, PATH_DIFF
     }
 
+    Test test
     TestSet testSet
     FileSupport files
     Class testResourcesBase
-    TestItemsReader itemReader
 
-    TestSetRunner(TestSet testSet, FileSupport files, private Class testResourcesBase) {
+    TestSetRunner(Test test, TestSet testSet, FileSupport files, private Class testResourcesBase) {
+        this.test = test
         this.testSet = testSet
         this.files = files
 
         this.testResourcesBase = testResourcesBase
-        this.itemReader = new TestItemsReader(this.testResourcesBase)
     }
 
     /**
@@ -45,10 +45,12 @@ class TestSetRunner {
      */
 
     boolean runOnNativeFileSystem (File targetFolder) {
+        test.init()
+
         def options = [
-            parser: testSet.parser,
-            apiPath: "resource:/tests/${testSet.name}/inputs/${testSet.openapi}",
-            targetDir: targetFolder.absolutePath
+            parser: test.parser,
+            apiPath: test.apiPath.toString(),
+            targetDir: test.targetDir.toString()
         ]
 
         def mapping = createMapping(getResource ("/tests/${testSet.name}/inputs/mapping.yaml"))
@@ -124,22 +126,18 @@ class TestSetRunner {
      * @return true on success, false on failure, ie. if there were any differences
      */
     boolean runOnCustomFileSystem (FileSystem fs) {
-        Path root = Files.createDirectory (fs.getPath ("source"))
+        test.init()
 
-        def path = "/tests/${testSet.name}"
-        files.copy (path, files.collectAbsoluteInputPaths (path), root)
+        printFsTree(fs)
 
-        def outputs = files.collectAbsoluteOutputPaths (path)
-        outputs = resolveFileNames(outputs, PATH_DIFF).asList()
-        files.copy (path, outputs, root)
-
-        Path api = root.resolve ("inputs/${testSet.openapi}")
+        Path root = fs.getPath ("source")
         Path target = fs.getPath ('target')
+        def path = "/tests/${testSet.name}"
 
         def options = [
-            parser: testSet.parser,
-            apiPath: api.toUri ().toURL ().toString (),
-            targetDir: target.toUri ().toURL ().toString ()
+            parser: test.parser,
+            apiPath: test.apiPath.toString(),
+            targetDir: test.targetDir.toString()
         ]
 
         def mapping = createMapping(root.resolve ('inputs/mapping.yaml'))

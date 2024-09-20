@@ -114,7 +114,7 @@ class FileSupport {
     /**
      * collect output paths
      */
-    List<String> collectAbsoluteOutputPaths (String path) {
+    List<String>  collectAbsoluteOutputPaths (String path) {
         collectAbsoluteResourcePaths (path, generated)
     }
 
