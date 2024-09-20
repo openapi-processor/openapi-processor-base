@@ -89,7 +89,8 @@ class CompileExpectedSpec: StringSpec({
             compilePaths.add(Path.of("src/testInt/resources/compile/reactor/Flux.java"))
             compilePaths.add(Path.of("src/testInt/resources/compile/spring/ResponseEntity.java"))
 
-            val expected = support.readTestItems(sourcePath, "outputs.yaml").items
+            var expected = support.readTestItems(sourcePath, "outputs.yaml").items
+            expected = expected.filter { ! it.endsWith("properties") }
             val expectedFileNames = expected.map { it.replaceFirst("<model>", "model/${testSet.modelType}") }
             expectedFileNames.forEach {
                 compilePaths.add(Path.of("src/testInt/resources${sourcePath}/$it"))
