@@ -23,7 +23,7 @@ class TestItems {
     TestItems() {
     }
 
-    TestItems(List<String> items) {
+    private TestItems(List<String> items) {
         this.items = items
     }
 

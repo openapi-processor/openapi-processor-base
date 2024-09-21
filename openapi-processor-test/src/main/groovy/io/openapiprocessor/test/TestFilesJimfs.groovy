@@ -58,6 +58,11 @@ class TestFilesJimfs implements TestFiles {
         return Mapping.createMapping(source.resolve ('inputs/mapping.yaml'), testSet.defaultOptions)
     }
 
+    @Override
+    TestItems getOutputFiles(TestSet testSet) {
+        return new TestItemsReader(resource).read( "/tests/${testSet.name}", testSet.outputs)
+    }
+
     private static String getModelTypePath(TestSet testSet) {
         if (testSet.modelType == 'default' || testSet.modelType == 'model') {
             return 'model/default'

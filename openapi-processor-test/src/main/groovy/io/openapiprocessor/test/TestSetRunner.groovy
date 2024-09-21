@@ -58,6 +58,9 @@ class TestSetRunner {
         testSet.processor.run (options)
 
         then:
+        def expectedFiles = test.expectedFiles
+
+
         def packageName = mapping.packageName
         def testProcessor = testSet.processor as OpenApiProcessorTest
         def sourceRoot = testProcessor.sourceRoot
@@ -65,9 +68,6 @@ class TestSetRunner {
 
         def sourcePath = "/tests/${testSet.name}"
         def expectedPath = "${sourcePath}/${testSet.expected}"
-        def expectedFiles = files.getExpectedFiles (sourcePath, testSet.expected)
-        def expectedCheck = stripBase(expectedFiles, sourceRoot, resourceRoot)
-
         def generatedPath = Path.of (targetFolder.absolutePath)
         def generatedSourcePath = getGeneratedSourcePath(targetFolder, sourceRoot, packageName)
         def generatedResourcePath = getGeneratedResourcePath(targetFolder, resourceRoot)
@@ -79,21 +79,21 @@ class TestSetRunner {
         }
 
         def generatedFilesCheck = filterGeneratedFiles(
-                expectedCheck,
+                expectedFiles,
                 generatedSourceFiles, [
                 "support/Generated.java",
                 "validation/Values.java",
                 "validation/ValueValidator.java"
         ] as Set<String>)
 
-        def expectedFileKeys = expectedCheck.keySet()
+        def expectedFileKeys = expectedFiles.keySet()
         def generatedFileKeys = generatedFilesCheck.keySet()
         def expectedFileNames = resolveFileNames(expectedFileKeys, PATH_GENERATED)
         assert expectedFileNames == generatedFileKeys
 
         // compare expected files with the generated files
         def success = true
-        expectedCheck.each {
+        expectedFiles.each {
             def expectedFilePath = it.key
             if (it.value != null) {
                 expectedFilePath = "${it.value}/${it.key}"
@@ -137,18 +137,19 @@ class TestSetRunner {
         testSet.processor.run (options)
 
         then:
+        def expectedFiles = test.expectedFiles
+
+
         def packageName = mapping.packageName
         def testProcessor = testSet.processor as OpenApiProcessorTest
         def sourceRoot = testProcessor.sourceRoot
         def resourceRoot = testProcessor.resourceRoot
 
+        printFsTree(fs)
+
         Path root = fs.getPath ("source")
         Path target = fs.getPath ('target')
-        def path = "/tests/${testSet.name}"
-
         def expectedPath = root.resolve(testSet.expected)
-        def expectedFiles = files.getExpectedFiles (path, testSet.expected)
-        def expectedCheck = stripBase(expectedFiles, sourceRoot, resourceRoot)
 
         def generatedPath = target
         def generatedSourcePath = getGeneratedSourcePath(target, sourceRoot, packageName)
@@ -161,20 +162,20 @@ class TestSetRunner {
         }
 
         def generatedFilesCheck = filterGeneratedFiles(
-                expectedCheck,
+                expectedFiles,
                 generatedSourceFiles, [
                 "support/Generated.java",
                 "validation/Values.java",
                 "validation/ValueValidator.java"
         ] as Set<String>)
 
-        def expectedFileKeys = expectedCheck.keySet()
+        def expectedFileKeys = expectedFiles.keySet()
         def generatedFileKeys = generatedFilesCheck.keySet()
         def expectedFileNames = resolveFileNames(expectedFileKeys, PATH_GENERATED)
         assert expectedFileNames == generatedFileKeys
 
         def success = true
-        expectedCheck.each {
+        expectedFiles.each {
             def expectedFilePath = it.key
             if (it.value != null) {
                 expectedFilePath = "${it.value}/${it.key}"

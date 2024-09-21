@@ -11,4 +11,5 @@ interface TestFiles {
     URI getTargetDir()
 
     Mapping getMapping(TestSet testSet)
+    TestItems getOutputFiles(TestSet testSet)
 }

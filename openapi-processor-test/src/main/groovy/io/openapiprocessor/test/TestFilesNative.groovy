@@ -35,4 +35,9 @@ class TestFilesNative implements TestFiles {
                 resource.getResource("/tests/${testSet.name}/inputs/mapping.yaml"),
                 testSet.defaultOptions)
     }
+
+    @Override
+    TestItems getOutputFiles(TestSet testSet) {
+        return new TestItemsReader(resource).read( "/tests/${testSet.name}", testSet.outputs)
+    }
 }
