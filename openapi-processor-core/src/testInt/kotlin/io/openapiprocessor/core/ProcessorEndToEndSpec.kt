@@ -24,13 +24,8 @@ class ProcessorEndToEndSpec: StringSpec({
             val testFiles = TestFilesNative(folder, reader)
             val test = Test(testSet, testFiles)
 
-            val support = FileSupport(
-                ProcessorPendingSpec::class.java,
-                testSet.inputs, testSet.outputs
-            )
-
-            TestSetRunner(test, testSet, support, ProcessorPendingSpec::class.java)
-                .runOnNativeFileSystem(folder)
+            TestSetRunner(test, testSet)
+                .runOnNativeFileSystem()
                 .shouldBeTrue()
         }
     }

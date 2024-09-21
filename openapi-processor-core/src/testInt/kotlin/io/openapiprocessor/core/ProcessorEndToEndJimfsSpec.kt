@@ -25,13 +25,8 @@ class ProcessorEndToEndJimfsSpec: StringSpec({
             val testFiles = TestFilesJimfs(fs, reader)
             val test = Test(testSet, testFiles)
 
-            val support = FileSupport(
-                ProcessorPendingSpec::class.java,
-                testSet.inputs, testSet.outputs
-            )
-
-            TestSetRunner(test, testSet, support, ProcessorPendingSpec::class.java)
-                .runOnCustomFileSystem(fs)
+            TestSetRunner(test, testSet)
+                .runOnCustomFileSystem()
                 .shouldBeTrue()
         }
     }

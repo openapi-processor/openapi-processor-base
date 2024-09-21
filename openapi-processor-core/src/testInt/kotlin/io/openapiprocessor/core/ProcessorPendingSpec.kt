@@ -10,15 +10,9 @@ import com.google.common.jimfs.Jimfs
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.booleans.shouldBeTrue
-import io.openapiprocessor.core.parser.ParserType.*
-import io.openapiprocessor.test.API_30
-import io.openapiprocessor.test.FileSupport
-import io.openapiprocessor.test.ResourceReader
-import io.openapiprocessor.test.TestFilesNative
-import io.openapiprocessor.test.Test
-import io.openapiprocessor.test.TestFilesJimfs
-import io.openapiprocessor.test.TestSet
-import io.openapiprocessor.test.TestSetRunner
+import io.openapiprocessor.core.parser.ParserType.INTERNAL
+import io.openapiprocessor.core.parser.ParserType.OPENAPI4J
+import io.openapiprocessor.test.*
 
 /**
  * helper to run selected integration tests.
@@ -33,13 +27,8 @@ class ProcessorPendingSpec: StringSpec({
             val testFiles = TestFilesNative(folder, reader)
             val test = Test(testSet, testFiles)
 
-            val support = FileSupport(
-                ProcessorPendingSpec::class.java,
-                testSet.inputs, testSet.outputs
-            )
-
-            TestSetRunner(test, testSet, support, ProcessorPendingSpec::class.java)
-                .runOnNativeFileSystem(folder)
+            TestSetRunner(test, testSet)
+                .runOnNativeFileSystem()
                 .shouldBeTrue()
         }
     }
@@ -52,13 +41,8 @@ class ProcessorPendingSpec: StringSpec({
             val testFiles = TestFilesJimfs(fs, reader)
             val test = Test(testSet, testFiles)
 
-            val support = FileSupport(
-                ProcessorPendingSpec::class.java,
-                testSet.inputs, testSet.outputs
-            )
-
-            TestSetRunner(test, testSet, support, ProcessorPendingSpec::class.java)
-                .runOnCustomFileSystem(fs)
+            TestSetRunner(test, testSet)
+                .runOnCustomFileSystem()
                 .shouldBeTrue()
         }
     }
@@ -66,6 +50,10 @@ class ProcessorPendingSpec: StringSpec({
 
 private fun sources(): Collection<TestSet> {
     return listOf(
+        testSet("annotation-mapping-class", INTERNAL, API_30, model = "model", outputs = "outputs.yaml", expected = "outputs"),
+//        testSet("annotation-mapping-class", SWAGGER, API_30, model = "model", outputs = "outputs.yaml", expected = "outputs"),
+        testSet("annotation-mapping-class", OPENAPI4J, API_30, model = "model", outputs = "outputs.yaml", expected = "outputs"),
+        testSet("server-url", INTERNAL, API_30, model = "model", outputs = "outputs.yaml", expected = "outputs"),
 //        testSet("javadoc", INTERNAL, API_30, model = "model", outputs = "outputs.yaml", expected = "outputs"),
 //        testSet("javadoc", INTERNAL, API_30, model = "record", outputs = "outputs.yaml", expected = "outputs"),
 //        testSet("map-many", INTERNAL, API_31, model = "record", outputs = "outputs.yaml", expected = "outputs"),
