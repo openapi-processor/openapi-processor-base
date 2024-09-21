@@ -5,17 +5,29 @@
 
 package io.openapiprocessor.test
 
+import java.nio.file.Files
+import java.nio.file.Path
+
 class Test {
     private TestSet testSet
     private TestFiles testFiles
+    private OpenApiProcessorTest testProcessor
+
+    private Mapping mapping
+    private String packageName
 
     Test(TestSet testSet, TestFiles testFiles) {
         this.testSet = testSet
         this.testFiles = testFiles
+        this.testProcessor = testSet.processor as OpenApiProcessorTest
     }
 
     void init() {
         testFiles.init(testSet)
+
+        mapping = testFiles.getMapping(testSet)
+        mapping.setModelType(testSet.modelType)
+        packageName = mapping.packageName
     }
 
     String getParser() {
@@ -31,8 +43,6 @@ class Test {
     }
 
     Mapping getMapping() {
-        def mapping = testFiles.getMapping(testSet)
-        mapping.setModelType(testSet.modelType)
         return mapping
     }
 
@@ -43,7 +53,6 @@ class Test {
      * @return the expected files map
      */
     Map<String, String> getExpectedFiles() {
-        def testProcessor = testSet.processor as OpenApiProcessorTest
         def sourceRoot = testProcessor.sourceRoot
         def resourceRoot = testProcessor.resourceRoot
 
@@ -67,5 +76,77 @@ class Test {
         }
 
         return result
+    }
+
+    Set<String> getGeneratedSourceFiles() {
+        def sourceRoot = testProcessor.sourceRoot
+        def targetPath = Path.of(testFiles.targetDir)
+        def sourcePath = getGeneratedSourcePath(targetPath, sourceRoot, packageName)
+        return getGeneratedFiles(sourcePath)
+    }
+
+    Set<String> getGeneratedResourceFiles() {
+        def resourceRoot = testProcessor.resourceRoot
+        if (resourceRoot == null) {
+            return Set.of()
+        }
+
+        def targetPath = Path.of(testFiles.targetDir)
+        def sourcePath = getGeneratedResourcePath(targetPath, resourceRoot)
+        return getGeneratedFiles(sourcePath)
+    }
+
+    private static Path getGeneratedSourcePath(Path target, String source, String packageName) {
+        def path = target
+        if (source != null) {
+            path = path.resolve(source)
+        }
+        return path.resolve (packageName)
+    }
+
+    private static Path getGeneratedResourcePath(Path target, String resource) {
+        def path = target
+        if (resource != null) {
+            path = path.resolve(resource)
+        }
+        return path
+    }
+
+    /**
+     * get the generated files.
+     *
+     * @param path path of the generated files
+     * @return the generated files
+     */
+    static Set<String> getGeneratedFiles (Path path) {
+        def result = new TreeSet<String> ()
+        if (Files.exists(path)) {
+            result.addAll (collectPaths (path))
+        }
+        result
+    }
+
+    /**
+     * collect paths in source path.
+     *
+     * @param source source path
+     * will convert all paths to use "/" as path separator
+     */
+    static List<String> collectPaths(Path source) {
+        List<String> files = []
+
+        def found = Files.walk (source)
+            .filter ({ f ->
+                !Files.isDirectory (f)
+            })
+
+        found.forEach ({f ->
+                files << source.relativize (f).toString ()
+            })
+        found.close ()
+
+        files.collect {
+            it.replace ('\\', '/')
+        }
     }
 }

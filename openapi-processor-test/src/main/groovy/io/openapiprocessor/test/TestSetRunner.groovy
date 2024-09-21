@@ -64,19 +64,13 @@ class TestSetRunner {
         def packageName = mapping.packageName
         def testProcessor = testSet.processor as OpenApiProcessorTest
         def sourceRoot = testProcessor.sourceRoot
-        def resourceRoot = testProcessor.resourceRoot
-
         def sourcePath = "/tests/${testSet.name}"
         def expectedPath = "${sourcePath}/${testSet.expected}"
         def generatedPath = Path.of (targetFolder.absolutePath)
-        def generatedSourcePath = getGeneratedSourcePath(targetFolder, sourceRoot, packageName)
-        def generatedResourcePath = getGeneratedResourcePath(targetFolder, resourceRoot)
 
-        Set<String> generatedSourceFiles = files.getGeneratedFiles (generatedSourcePath)
-        if (resourceRoot != null) {
-            Set<String> generatedResourceFiles = files.getGeneratedFiles (generatedResourcePath)
-            generatedSourceFiles.addAll(generatedResourceFiles)
-        }
+        def generatedSourceFiles = test.generatedSourceFiles
+        def generatedResourceFiles = test.generatedResourceFiles
+        generatedSourceFiles.addAll(generatedResourceFiles)
 
         def generatedFilesCheck = filterGeneratedFiles(
                 expectedFiles,
@@ -143,7 +137,6 @@ class TestSetRunner {
         def packageName = mapping.packageName
         def testProcessor = testSet.processor as OpenApiProcessorTest
         def sourceRoot = testProcessor.sourceRoot
-        def resourceRoot = testProcessor.resourceRoot
 
         printFsTree(fs)
 
@@ -152,14 +145,10 @@ class TestSetRunner {
         def expectedPath = root.resolve(testSet.expected)
 
         def generatedPath = target
-        def generatedSourcePath = getGeneratedSourcePath(target, sourceRoot, packageName)
-        def generatedResourcePath = getGeneratedResourcePath(target, resourceRoot)
 
-        Set<String> generatedSourceFiles = files.getGeneratedFiles (generatedSourcePath)
-        if (resourceRoot != null) {
-            Set<String> generatedResourceFiles = files.getGeneratedFiles (generatedResourcePath)
-            generatedSourceFiles.addAll(generatedResourceFiles)
-        }
+        def generatedSourceFiles = test.generatedSourceFiles
+        def generatedResourceFiles = test.generatedResourceFiles
+        generatedSourceFiles.addAll(generatedResourceFiles)
 
         def generatedFilesCheck = filterGeneratedFiles(
                 expectedFiles,
@@ -246,38 +235,6 @@ class TestSetRunner {
             generated.add(it)
         }
         return generated as SortedSet<String>
-    }
-
-    private static Path getGeneratedSourcePath(File targetFolder, String source, String packageName) {
-        def path = Path.of (targetFolder.absolutePath)
-        if (source != null) {
-            path = path.resolve(source)
-        }
-        return path.resolve (packageName)
-    }
-
-    private static Path getGeneratedSourcePath(Path target, String source, String packageName) {
-        def path = target
-        if (source != null) {
-            path = path.resolve(source)
-        }
-        return path.resolve (packageName)
-    }
-
-    private static Path getGeneratedResourcePath(File targetFolder, String resource) {
-        def path = Path.of (targetFolder.absolutePath)
-        if (resource != null) {
-            path = path.resolve(resource)
-        }
-        return path
-    }
-
-    private static Path getGeneratedResourcePath(Path target, String resource) {
-        def path = target
-        if (resource != null) {
-            path = path.resolve(resource)
-        }
-        return path
     }
 
     private static SortedSet<String> addBase(SortedSet<String> files, String base) {
