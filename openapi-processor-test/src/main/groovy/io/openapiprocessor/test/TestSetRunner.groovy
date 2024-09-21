@@ -59,6 +59,8 @@ class TestSetRunner {
 
         then:
         def expectedFiles = test.expectedFiles
+        def generatedFiles = getGeneratedFiles(expectedFiles)
+
 
 
         def packageName = mapping.packageName
@@ -68,20 +70,8 @@ class TestSetRunner {
         def expectedPath = "${sourcePath}/${testSet.expected}"
         def generatedPath = Path.of (targetFolder.absolutePath)
 
-        def generatedSourceFiles = test.generatedSourceFiles
-        def generatedResourceFiles = test.generatedResourceFiles
-        generatedSourceFiles.addAll(generatedResourceFiles)
-
-        def generatedFilesCheck = filterGeneratedFiles(
-                expectedFiles,
-                generatedSourceFiles, [
-                "support/Generated.java",
-                "validation/Values.java",
-                "validation/ValueValidator.java"
-        ] as Set<String>)
-
         def expectedFileKeys = expectedFiles.keySet()
-        def generatedFileKeys = generatedFilesCheck.keySet()
+        def generatedFileKeys = generatedFiles.keySet()
         def expectedFileNames = resolveFileNames(expectedFileKeys, PATH_GENERATED)
         assert expectedFileNames == generatedFileKeys
 
@@ -132,34 +122,19 @@ class TestSetRunner {
 
         then:
         def expectedFiles = test.expectedFiles
+        def generatedFiles = getGeneratedFiles(expectedFiles)
 
 
         def packageName = mapping.packageName
         def testProcessor = testSet.processor as OpenApiProcessorTest
         def sourceRoot = testProcessor.sourceRoot
-
-        printFsTree(fs)
-
         Path root = fs.getPath ("source")
         Path target = fs.getPath ('target')
         def expectedPath = root.resolve(testSet.expected)
-
         def generatedPath = target
 
-        def generatedSourceFiles = test.generatedSourceFiles
-        def generatedResourceFiles = test.generatedResourceFiles
-        generatedSourceFiles.addAll(generatedResourceFiles)
-
-        def generatedFilesCheck = filterGeneratedFiles(
-                expectedFiles,
-                generatedSourceFiles, [
-                "support/Generated.java",
-                "validation/Values.java",
-                "validation/ValueValidator.java"
-        ] as Set<String>)
-
         def expectedFileKeys = expectedFiles.keySet()
-        def generatedFileKeys = generatedFilesCheck.keySet()
+        def generatedFileKeys = generatedFiles.keySet()
         def expectedFileNames = resolveFileNames(expectedFileKeys, PATH_GENERATED)
         assert expectedFileNames == generatedFileKeys
 
@@ -187,25 +162,22 @@ class TestSetRunner {
         success
     }
 
-    private static Map<String, String> stripBase(SortedSet<String> files, String source, String resource) {
-        def result = new TreeMap<String, String>()
+    private Map<String, String> getGeneratedFiles(Map<String, String> expectedFiles) {
+        def generatedFilesAll = test.generatedSourceFiles
+        generatedFilesAll.addAll(test.generatedResourceFiles)
 
-        files.each {
-            if (source != null && it.startsWith(source)) {
-                result[it.substring(source.length() + 1)] = source
+        def generatedFiles = filterUnexpectedFiles(
+                expectedFiles,
+                generatedFilesAll, [
+                "support/Generated.java",
+                "validation/Values.java",
+                "validation/ValueValidator.java"
+        ] as Set<String>)
 
-            } else if (resource != null && it.startsWith(resource)) {
-                result[it.substring(resource.length() + 1)] = resource
-
-            } else {
-                result[it] = null
-            }
-        }
-
-        return result
+        return generatedFiles
     }
 
-    private static Map<String, String> filterGeneratedFiles(
+    private static Map<String, String> filterUnexpectedFiles(
             Map<String, String> expectedFiles,
             Set<String> generatedFiles,
             Set<String> unexpectedFiles
@@ -222,21 +194,6 @@ class TestSetRunner {
         return generated
     }
 
-    private static Set<String> filterUnexpectedFiles(
-            Set<String> expectedFiles,
-            Set<String> generatedFiles,
-            Set<String> unexpectedFiles
-    ) {
-        def generated = new TreeSet<String>()
-        generatedFiles.each {
-            if (!expectedFiles.contains(it) && unexpectedFiles.contains(it)) {
-                return
-            }
-            generated.add(it)
-        }
-        return generated as SortedSet<String>
-    }
-
     private static SortedSet<String> addBase(SortedSet<String> files, String base) {
         if (base.isEmpty()) {
             return files
@@ -245,10 +202,6 @@ class TestSetRunner {
         return files.each {
             return "${base}/it"
         }
-    }
-
-    InputStream getResource (String path) {
-        testResourcesBase.getResourceAsStream (path)
     }
 
     private Set<String> resolveFileNames(Collection<String> paths, ResolveType type) {
