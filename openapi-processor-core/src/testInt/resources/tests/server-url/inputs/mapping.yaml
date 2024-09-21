@@ -3,5 +3,8 @@ openapi-processor-mapping: v9
 options:
   package-name: generated
   format-code: false
+  target-dir:
+    layout: standard
   base-path:
     server-url: 0
+    profile-name: api.properties
