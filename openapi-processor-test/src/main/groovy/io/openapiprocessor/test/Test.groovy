@@ -5,6 +5,9 @@
 
 package io.openapiprocessor.test
 
+import com.github.difflib.DiffUtils
+import com.github.difflib.UnifiedDiffUtils
+
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -101,21 +104,88 @@ class Test {
         return getGeneratedFiles(sourcePath)
     }
 
+    Path getExpectedFilePath(String file, String sourcePrefix) {
+        def expectedFilePath = file
+        if (sourcePrefix != null) {
+            expectedFilePath = "${sourcePrefix}/${file}"
+        }
+
+        return resolveModelTypeInSource(expectedFilePath)
+    }
+
+    Path getGeneratedFilePath(String file, String sourcePrefix) {
+        def sourceRoot = testProcessor.sourceRoot
+        def generatedFilePath = file
+
+        if (sourcePrefix == sourceRoot) {
+            generatedFilePath = "${packageName}/${generatedFilePath}"
+        }
+
+        if (sourcePrefix != null) {
+            generatedFilePath = "${sourcePrefix}/${generatedFilePath}"
+        }
+
+        return resolveModelTypeInTarget(generatedFilePath)
+    }
+
+    /**
+     * unified diff file path <=> file path
+     *
+     * @param expected file path
+     * @param generated file path
+     *
+     * @return true if there is a difference
+     */
+    static boolean printUnifiedDiff (Path expected, Path generated) {
+        def patch = DiffUtils.diff (
+            expected.readLines (),
+            generated.readLines ())
+
+        def diff = UnifiedDiffUtils.generateUnifiedDiff (
+            expected.toString (),
+            generated.toString (),
+            expected.readLines (),
+            patch,
+            4
+        )
+
+        if (!patch.deltas.isEmpty()) {
+            println "$expected"
+        }
+        diff.each {
+            println it
+        }
+
+        return !patch.deltas.isEmpty ()
+    }
+
     Set<String> resolveModelTypeInTarget(Collection<String> paths) {
         return resolveModelType(paths, ResolveType.PATH_IN_TARGET)
     }
 
-    Set<String> resolveModelType(Collection<String> paths, ResolveType type) {
+    Path resolveModelTypeInTarget(String path) {
+        return testFiles.getTargetPath(resolveModelTypeName(path, ResolveType.PATH_IN_TARGET))
+    }
+
+    Path resolveModelTypeInSource(String path) {
+        return testFiles.getSourcePath(testSet, resolveModelTypeName(path, ResolveType.PATH_IN_SOURCE))
+    }
+
+    void print() {
+        testFiles.printTree()
+    }
+
+    private Set<String> resolveModelType(Collection<String> paths, ResolveType type) {
         def result = new TreeSet<String> ()
 
         paths.each {
-            result.add(resolveFileName(it, type))
+            result.add(resolveModelTypeName(it, type))
         }
 
         result
     }
 
-    private String resolveFileName(String path, ResolveType type) {
+    private String resolveModelTypeName(String path, ResolveType type) {
         def model = "unset"
 
         if (type == ResolveType.PATH_IN_TARGET) {

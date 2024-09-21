@@ -22,15 +22,6 @@ class Mapping {
         this.mappingYaml = mappingYaml
     }
 
-    static Mapping createMapping(InputStream mappingStream, String defaultOptions) {
-        def mapping = mappingStream.text
-        if (mapping != null) {
-            return new Mapping(mapping)
-        } else {
-            return new Mapping(defaultOptions)
-        }
-    }
-
     static Mapping createMapping(Path mappingPath, String defaultOptions) {
         if (Files.exists(mappingPath)) {
             return new Mapping(mappingPath.toUri().toURL().text)

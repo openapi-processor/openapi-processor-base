@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory
 import java.nio.file.FileSystem
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.Paths
 
 class TestFilesJimfs implements TestFiles {
     private static final Logger log = LoggerFactory.getLogger (TestFilesJimfs)
@@ -61,6 +62,24 @@ class TestFilesJimfs implements TestFiles {
     @Override
     TestItems getOutputFiles(TestSet testSet) {
         return new TestItemsReader(resource).read( "/tests/${testSet.name}", testSet.outputs)
+    }
+
+    @Override
+    Path getSourcePath(TestSet testSet, String file) {
+        return Paths.get(source.resolve("${testSet.expected}/${file}").toUri())
+    }
+
+    @Override
+    Path getTargetPath(String file) {
+        return Paths.get(target.resolve(file).toUri())
+    }
+
+    @Override
+    void printTree() {
+        Files.walk(fs.getPath("/"))
+            .forEach {
+                println "${it.toAbsolutePath()}"
+            }
     }
 
     private static String getModelTypePath(TestSet testSet) {

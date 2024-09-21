@@ -15,4 +15,8 @@ class ResourceReader {
     InputStream getResource (String path) {
         resourceBase.getResourceAsStream (path)
     }
+
+    URL getResourceUrl (String path) {
+        resourceBase.getResource (path)
+    }
 }

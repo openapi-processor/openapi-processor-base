@@ -5,6 +5,9 @@
 
 package io.openapiprocessor.test
 
+import java.nio.file.Path
+import java.nio.file.Paths
+
 class TestFilesNative implements TestFiles {
     private File target
     private ResourceReader resource
@@ -32,12 +35,27 @@ class TestFilesNative implements TestFiles {
     @Override
     Mapping getMapping(TestSet testSet) {
         return Mapping.createMapping(
-                resource.getResource("/tests/${testSet.name}/inputs/mapping.yaml"),
+                Paths.get(resource.getResourceUrl("/tests/${testSet.name}/inputs/mapping.yaml").toURI()),
                 testSet.defaultOptions)
     }
 
     @Override
     TestItems getOutputFiles(TestSet testSet) {
         return new TestItemsReader(resource).read( "/tests/${testSet.name}", testSet.outputs)
+    }
+
+    @Override
+    Path getSourcePath(TestSet testSet, String path) {
+        return Paths.get(resource.getResourceUrl("/tests/${testSet.name}/${testSet.expected}/$path").toURI())
+    }
+
+    @Override
+    Path getTargetPath(String file) {
+        return Paths.get(target.toURI().resolve(file))
+    }
+
+    @Override
+    void printTree() {
+        // todo
     }
 }

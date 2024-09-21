@@ -5,6 +5,8 @@
 
 package io.openapiprocessor.test
 
+import java.nio.file.Path
+
 interface TestFiles {
     void init(TestSet testSet)
     URI getApiPath(TestSet testSet)
@@ -12,4 +14,9 @@ interface TestFiles {
 
     Mapping getMapping(TestSet testSet)
     TestItems getOutputFiles(TestSet testSet)
+
+    Path getSourcePath(TestSet testSet, String file)
+    Path getTargetPath(String file)
+
+    void printTree()
 }

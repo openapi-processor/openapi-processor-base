@@ -105,65 +105,6 @@ class FileSupport {
     }
 
     /**
-     * collect input paths
-     */
-    List<String> collectAbsoluteInputPaths (String path) {
-        collectAbsoluteResourcePaths (path, inputs)
-    }
-
-    /**
-     * collect output paths
-     */
-    List<String>  collectAbsoluteOutputPaths (String path) {
-        collectAbsoluteResourcePaths (path, generated)
-    }
-
-    /**
-     * collect output paths, relative to packageName
-     */
-    List<String> collectRelativeOutputPaths (String path, String packageName) {
-        def testItems = readTestItems (path, generated)
-
-        def items = []
-        testItems.items.forEach {
-            items.add (it.substring (packageName.size () + 1))
-        }
-
-        items
-    }
-
-    /**
-     * collect absolute paths from items listed in the test items yaml file
-     */
-    List<String> collectAbsoluteResourcePaths (String path, String itemsYaml) {
-        collectRelativeResourcePaths (path, itemsYaml).collect {
-            "${path}/${it}".toString ()
-        }
-    }
-
-    /**
-     * collect paths from test items yaml file (input.yaml/generated.yaml)
-     */
-    List<String> collectRelativeResourcePaths (String path, String itemsYaml) {
-        def testItems = readTestItems (path, itemsYaml)
-        testItems.items
-    }
-
-    /**
-     * get the generated files.
-     *
-     * @param path path of the generated files
-     * @return the generated files
-     */
-    static Set<String> getGeneratedFiles (Path path) {
-        def result = new TreeSet<String> ()
-        if (Files.exists(path)) {
-            result.addAll (collectPaths (path))
-        }
-        result
-    }
-
-    /**
      * get the expected files (from generated.yaml) and strips the prefix.
      *
      * @param path the resource path of the test
@@ -181,30 +122,6 @@ class FileSupport {
         result.addAll (wanted)
         result
     }
-
-    /**
-     * read expected files and strip package name.
-     *
-     * @param path the resource path of the test
-     * @param packageName stripped package name
-     * @return the expected files
-    TestItems getExpectedFiles (String path, String packageName) {
-        def items = readTestItems (path, generated)
-
-        def wanted = items.items.collect {
-            it.substring (packageName.size () + 1)
-        }
-
-        def ignore = items.ignore.collect {
-            it.substring (packageName.size () + 1)
-        }
-
-        def expected = new TestItems ()
-        expected.items = wanted.sort ()
-        expected.ignore = ignore.sort ()
-        expected
-    }
-    */
 
     /**
      * check existence test items yaml
@@ -259,37 +176,6 @@ class FileSupport {
             getResource (expected).text,
             generated.toString (),
             expectedLines,
-            patch,
-            4
-        )
-
-        if (!patch.deltas.isEmpty()) {
-            println "$expected"
-        }
-        diff.each {
-            println it
-        }
-
-        return !patch.deltas.isEmpty ()
-    }
-
-    /**
-     * unified diff file system <=> file system.
-     *
-     * @param expected file system path
-     * @param generated file system path
-     *
-     * @return true if there is a difference
-     */
-    static boolean printUnifiedDiffFs (Path expected, Path generated) {
-        def patch = DiffUtils.diff (
-            expected.readLines (),
-            generated.readLines ())
-
-        def diff = UnifiedDiffUtils.generateUnifiedDiff (
-            expected.toString (),
-            generated.toString (),
-            expected.readLines (),
             patch,
             4
         )

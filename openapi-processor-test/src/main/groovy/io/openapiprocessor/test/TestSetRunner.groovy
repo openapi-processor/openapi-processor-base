@@ -4,14 +4,6 @@
  */
 
 package io.openapiprocessor.test
-
-import java.nio.file.FileSystem
-import java.nio.file.Files
-import java.nio.file.Path
-
-import static io.openapiprocessor.test.TestSetRunner.ResolveType.PATH_DIFF
-import static io.openapiprocessor.test.TestSetRunner.ResolveType.PATH_GENERATED
-
 /**
  * used to execute test sets.
  *
@@ -26,24 +18,18 @@ class TestSetRunner {
 
     Test test
     TestSet testSet
-    FileSupport files
-    Class testResourcesBase
 
-    TestSetRunner(Test test, TestSet testSet, FileSupport files, private Class testResourcesBase) {
+    TestSetRunner(Test test, TestSet testSet) {
         this.test = test
         this.testSet = testSet
-        this.files = files
-
-        this.testResourcesBase = testResourcesBase
     }
 
     /**
      * runs test set on the native file system
      *
-     * @param targetFolder temp folder
-     * @return true on success, false on failure, ie. if there were any differences
+     * @return true on success, false on failure, i.e. if there were any differences
      */
-    boolean runOnNativeFileSystem (File targetFolder) {
+    boolean runOnNativeFileSystem () {
         test.init()
 
         def mapping = test.mapping
@@ -67,35 +53,13 @@ class TestSetRunner {
         def expectedFileNames = test.resolveModelTypeInTarget(expectedFileKeys)
         assert expectedFileNames == generatedFileKeys
 
-
-        def packageName = mapping.packageName
-        def testProcessor = testSet.processor as OpenApiProcessorTest
-        def sourceRoot = testProcessor.sourceRoot
-        def sourcePath = "/tests/${testSet.name}"
-        def expectedPath = "${sourcePath}/${testSet.expected}"
-        def generatedPath = Path.of (targetFolder.absolutePath)
-
         // compare expected files with the generated files
         def success = true
         expectedFiles.each {
-            def expectedFilePath = it.key
-            if (it.value != null) {
-                expectedFilePath = "${it.value}/${it.key}"
-            }
-
-            expectedFilePath = "${expectedPath}/${resolveFileName(expectedFilePath, PATH_DIFF)}"
-
-
-            def generatedFilePath = generatedPath
-            if (it.value != null) {
-                generatedFilePath = generatedFilePath.resolve(it.value)
-            }
-            if (it.value == sourceRoot) {
-                generatedFilePath = generatedFilePath.resolve(packageName)
-            }
-            generatedFilePath = generatedFilePath.resolve(resolveFileName(it.key, PATH_GENERATED))
-
-            success &= !files.printUnifiedDiff (expectedFilePath, generatedFilePath)
+            def expectedFilePath = test.getExpectedFilePath(it.key, it.value)
+            def generatedFilePath = test.getGeneratedFilePath(it.key, it.value)
+            def equalContent = !test.printUnifiedDiff (expectedFilePath, generatedFilePath)
+            success &= equalContent
         }
 
         success
@@ -107,7 +71,7 @@ class TestSetRunner {
      * @param fs the file system
      * @return true on success, false on failure, ie. if there were any differences
      */
-    boolean runOnCustomFileSystem (FileSystem fs) {
+    boolean runOnCustomFileSystem () {
         test.init()
 
         def mapping = test.mapping
@@ -131,34 +95,13 @@ class TestSetRunner {
         def expectedFileNames = test.resolveModelTypeInTarget(expectedFileKeys)
         assert expectedFileNames == generatedFileKeys
 
-        def packageName = mapping.packageName
-        def testProcessor = testSet.processor as OpenApiProcessorTest
-        def sourceRoot = testProcessor.sourceRoot
-        Path root = fs.getPath ("source")
-        Path target = fs.getPath ('target')
-        def expectedPath = root.resolve(testSet.expected)
-        def generatedPath = target
-
+        // compare expected files with the generated files
         def success = true
         expectedFiles.each {
-            def expectedFilePath = it.key
-            if (it.value != null) {
-                expectedFilePath = "${it.value}/${it.key}"
-            }
-
-            expectedFilePath = fs.getPath("${expectedPath}/${resolveFileName(expectedFilePath, PATH_DIFF)}")
-
-
-            def generatedFilePath = generatedPath
-            if (it.value != null) {
-                generatedFilePath = generatedFilePath.resolve(it.value)
-            }
-            if (it.value == sourceRoot) {
-                generatedFilePath = generatedFilePath.resolve(packageName)
-            }
-            generatedFilePath = generatedFilePath.resolve(resolveFileName(it.key, PATH_GENERATED))
-
-            success &= !files.printUnifiedDiffFs (expectedFilePath, generatedFilePath)
+            def expectedFilePath = test.getExpectedFilePath(it.key, it.value)
+            def generatedFilePath = test.getGeneratedFilePath(it.key, it.value)
+            def equalContent = !test.printUnifiedDiff (expectedFilePath, generatedFilePath)
+            success &= equalContent
         }
 
         success
@@ -194,50 +137,5 @@ class TestSetRunner {
             generated.put(it, value)
         }
         return generated
-    }
-
-    private static SortedSet<String> addBase(SortedSet<String> files, String base) {
-        if (base.isEmpty()) {
-            return files
-        }
-
-        return files.each {
-            return "${base}/it"
-        }
-    }
-
-    private Set<String> resolveFileNames(Collection<String> paths, ResolveType type) {
-        def result = new TreeSet<String> ()
-
-        paths.each {
-            result.add(resolveFileName(it, type))
-        }
-
-        result
-    }
-
-    private String resolveFileName(String path, ResolveType type) {
-        def model = "unset"
-
-        if (type == PATH_GENERATED) {
-            model = 'model'
-
-        } else if (type == PATH_DIFF) {
-            model = 'model/default'
-
-            if (testSet.modelType == 'record') {
-                model = 'model/record'
-            }
-        }
-
-        def result = path.replaceFirst("<model>", model)
-        return result
-    }
-
-    private printFsTree(FileSystem fs) {
-        Files.walk (fs.getPath("/"))
-            .forEach {
-                println "${it.toAbsolutePath()}"
-            }
     }
 }
