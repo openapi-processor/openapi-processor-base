@@ -8,9 +8,7 @@ package io.openapiprocessor.core
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.openapiprocessor.core.parser.ParserType
-import io.openapiprocessor.test.FileSupport
-import io.openapiprocessor.test.ModelTypes
-import io.openapiprocessor.test.TestSet
+import io.openapiprocessor.test.*
 import java.io.ByteArrayOutputStream
 import java.io.OutputStream
 import java.net.URI
@@ -46,12 +44,10 @@ class CompileExpectedSpec: StringSpec({
         }
     }
 
+
     for (testSet in sources()) {
         "compile - $testSet".config(enabled = true) {
-            val support = FileSupport(
-                CompileExpectedSpec::class.java,
-                testSet.inputs, testSet.outputs
-            )
+            val itemsReader = TestItemsReader(ResourceReader(CompileExpectedSpec::class.java))
 
             val source = testSet.name
             val sourcePath = "/tests/$source"
@@ -89,15 +85,15 @@ class CompileExpectedSpec: StringSpec({
             compilePaths.add(Path.of("src/testInt/resources/compile/reactor/Flux.java"))
             compilePaths.add(Path.of("src/testInt/resources/compile/spring/ResponseEntity.java"))
 
-            var expected = support.readTestItems(sourcePath, "outputs.yaml").items
+            var expected = itemsReader.read(sourcePath, "outputs.yaml").items
             expected = expected.filter { ! it.endsWith("properties") }
             val expectedFileNames = expected.map { it.replaceFirst("<model>", "model/${testSet.modelType}") }
             expectedFileNames.forEach {
                 compilePaths.add(Path.of("src/testInt/resources${sourcePath}/$it"))
             }
 
-            if (support.checkTestItems(sourcePath, "compile.yaml")) {
-                val additionalFileNames = support.readTestItems(sourcePath, "compile.yaml").items
+            if (itemsReader.exists(sourcePath, "compile.yaml")) {
+                val additionalFileNames = itemsReader.read(sourcePath, "compile.yaml").items
                 additionalFileNames.forEach {
                     compilePaths.add(Path.of("src/testInt/resources/$it"))
                 }
