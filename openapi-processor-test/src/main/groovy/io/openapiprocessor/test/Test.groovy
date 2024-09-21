@@ -5,9 +5,6 @@
 
 package io.openapiprocessor.test
 
-import com.github.difflib.DiffUtils
-import com.github.difflib.UnifiedDiffUtils
-
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -128,37 +125,6 @@ class Test {
         return resolveModelTypeInTarget(generatedFilePath)
     }
 
-    /**
-     * unified diff file path <=> file path
-     *
-     * @param expected file path
-     * @param generated file path
-     *
-     * @return true if there is a difference
-     */
-    static boolean printUnifiedDiff (Path expected, Path generated) {
-        def patch = DiffUtils.diff (
-            expected.readLines (),
-            generated.readLines ())
-
-        def diff = UnifiedDiffUtils.generateUnifiedDiff (
-            expected.toString (),
-            generated.toString (),
-            expected.readLines (),
-            patch,
-            4
-        )
-
-        if (!patch.deltas.isEmpty()) {
-            println "$expected"
-        }
-        diff.each {
-            println it
-        }
-
-        return !patch.deltas.isEmpty ()
-    }
-
     Set<String> resolveModelTypeInTarget(Collection<String> paths) {
         return resolveModelType(paths, ResolveType.PATH_IN_TARGET)
     }
@@ -169,6 +135,10 @@ class Test {
 
     Path resolveModelTypeInSource(String path) {
         return testFiles.getSourcePath(testSet, resolveModelTypeName(path, ResolveType.PATH_IN_SOURCE))
+    }
+
+    static boolean printUnifiedDiff (Path expected, Path generated) {
+        return Diff.printUnifiedDiff(expected, generated)
     }
 
     void print() {
@@ -228,32 +198,8 @@ class Test {
     private static Set<String> getGeneratedFiles (Path path) {
         def result = new TreeSet<String> ()
         if (Files.exists(path)) {
-            result.addAll (collectPaths (path))
+            result.addAll (Collector.collectPaths (path))
         }
         result
-    }
-
-    /**
-     * collect paths in source path.
-     *
-     * @param source source path
-     * will convert all paths to use "/" as path separator
-     */
-    private static List<String> collectPaths(Path source) {
-        List<String> files = []
-
-        def found = Files.walk (source)
-            .filter ({ f ->
-                !Files.isDirectory (f)
-            })
-
-        found.forEach ({f ->
-                files << source.relativize (f).toString ()
-            })
-        found.close ()
-
-        files.collect {
-            it.replace ('\\', '/')
-        }
     }
 }
