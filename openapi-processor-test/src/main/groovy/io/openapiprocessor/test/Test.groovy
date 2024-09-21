@@ -9,6 +9,11 @@ import java.nio.file.Files
 import java.nio.file.Path
 
 class Test {
+    enum ResolveType {
+        PATH_IN_TARGET, // resolve to package name in targetDir, i.e. to "model" sub package
+        PATH_IN_SOURCE // resolve to path in test outputs, i.e. "model/default"/"model/record"
+    }
+
     private TestSet testSet
     private TestFiles testFiles
     private OpenApiProcessorTest testProcessor
@@ -96,6 +101,38 @@ class Test {
         return getGeneratedFiles(sourcePath)
     }
 
+    Set<String> resolveModelTypeInTarget(Collection<String> paths) {
+        return resolveModelType(paths, ResolveType.PATH_IN_TARGET)
+    }
+
+    Set<String> resolveModelType(Collection<String> paths, ResolveType type) {
+        def result = new TreeSet<String> ()
+
+        paths.each {
+            result.add(resolveFileName(it, type))
+        }
+
+        result
+    }
+
+    private String resolveFileName(String path, ResolveType type) {
+        def model = "unset"
+
+        if (type == ResolveType.PATH_IN_TARGET) {
+            model = 'model'
+
+        } else if (type == ResolveType.PATH_IN_SOURCE) {
+            model = 'model/default'
+
+            if (testSet.modelType == 'record') {
+                model = 'model/record'
+            }
+        }
+
+        def result = path.replaceFirst("<model>", model)
+        return result
+    }
+
     private static Path getGeneratedSourcePath(Path target, String source, String packageName) {
         def path = target
         if (source != null) {
@@ -118,7 +155,7 @@ class Test {
      * @param path path of the generated files
      * @return the generated files
      */
-    static Set<String> getGeneratedFiles (Path path) {
+    private static Set<String> getGeneratedFiles (Path path) {
         def result = new TreeSet<String> ()
         if (Files.exists(path)) {
             result.addAll (collectPaths (path))
@@ -132,7 +169,7 @@ class Test {
      * @param source source path
      * will convert all paths to use "/" as path separator
      */
-    static List<String> collectPaths(Path source) {
+    private static List<String> collectPaths(Path source) {
         List<String> files = []
 
         def found = Files.walk (source)

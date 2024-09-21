@@ -61,6 +61,11 @@ class TestSetRunner {
         def expectedFiles = test.expectedFiles
         def generatedFiles = getGeneratedFiles(expectedFiles)
 
+        // check expected file names match generated file names
+        def expectedFileKeys = expectedFiles.keySet()
+        def generatedFileKeys = generatedFiles.keySet()
+        def expectedFileNames = test.resolveModelTypeInTarget(expectedFileKeys)
+        assert expectedFileNames == generatedFileKeys
 
 
         def packageName = mapping.packageName
@@ -70,11 +75,6 @@ class TestSetRunner {
         def expectedPath = "${sourcePath}/${testSet.expected}"
         def generatedPath = Path.of (targetFolder.absolutePath)
 
-        def expectedFileKeys = expectedFiles.keySet()
-        def generatedFileKeys = generatedFiles.keySet()
-        def expectedFileNames = resolveFileNames(expectedFileKeys, PATH_GENERATED)
-        assert expectedFileNames == generatedFileKeys
-
         // compare expected files with the generated files
         def success = true
         expectedFiles.each {
@@ -82,6 +82,7 @@ class TestSetRunner {
             if (it.value != null) {
                 expectedFilePath = "${it.value}/${it.key}"
             }
+
             expectedFilePath = "${expectedPath}/${resolveFileName(expectedFilePath, PATH_DIFF)}"
 
 
@@ -124,6 +125,11 @@ class TestSetRunner {
         def expectedFiles = test.expectedFiles
         def generatedFiles = getGeneratedFiles(expectedFiles)
 
+        // check expected file names match generated file names
+        def expectedFileKeys = expectedFiles.keySet()
+        def generatedFileKeys = generatedFiles.keySet()
+        def expectedFileNames = test.resolveModelTypeInTarget(expectedFileKeys)
+        assert expectedFileNames == generatedFileKeys
 
         def packageName = mapping.packageName
         def testProcessor = testSet.processor as OpenApiProcessorTest
@@ -133,17 +139,13 @@ class TestSetRunner {
         def expectedPath = root.resolve(testSet.expected)
         def generatedPath = target
 
-        def expectedFileKeys = expectedFiles.keySet()
-        def generatedFileKeys = generatedFiles.keySet()
-        def expectedFileNames = resolveFileNames(expectedFileKeys, PATH_GENERATED)
-        assert expectedFileNames == generatedFileKeys
-
         def success = true
         expectedFiles.each {
             def expectedFilePath = it.key
             if (it.value != null) {
                 expectedFilePath = "${it.value}/${it.key}"
             }
+
             expectedFilePath = fs.getPath("${expectedPath}/${resolveFileName(expectedFilePath, PATH_DIFF)}")
 
 
