@@ -11,7 +11,6 @@ import io.openapiprocessor.core.converter.OptionsConverter
 import io.openapiprocessor.core.framework.FrameworkBase
 import io.openapiprocessor.core.parser.OpenApiParser
 import io.openapiprocessor.core.writer.java.*
-import io.openapiprocessor.test.OpenApiProcessorTest
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -21,7 +20,7 @@ import org.slf4j.LoggerFactory
 class TestProcessor:
     io.openapiprocessor.api.v2.OpenApiProcessor,
     io.openapiprocessor.api.v1.OpenApiProcessor,
-    OpenApiProcessorTest
+    io.openapiprocessor.api.v2.OpenApiProcessorTest
 {
     private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
