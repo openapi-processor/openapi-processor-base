@@ -84,6 +84,7 @@ class  ApiConverter(
         if (serverPath != null) {
             resources.add(Resource(options.basePathOptions.propertiesName, """
                 openapi.base.path = $serverPath
+                
             """.trimIndent()))
         }
 
