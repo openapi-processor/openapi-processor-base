@@ -9,14 +9,6 @@ package io.openapiprocessor.test
  * input.yaml / output.yaml items.
  */
 class TestItems {
-    // find better names
-
-    enum ResolveType {
-        // model
-        PATH_GENERATED,
-        // default/record
-        PATH_DIFF
-    }
 
     private List<String> items
 
