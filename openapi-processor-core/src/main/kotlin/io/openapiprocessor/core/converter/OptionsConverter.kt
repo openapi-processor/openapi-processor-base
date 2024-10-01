@@ -122,7 +122,7 @@ class OptionsConverter(private val checkObsoleteProcessorOptions: Boolean = fals
         return when (options.basePath.serverUrl) {
             "false" -> Pair(false, null)
             "true" -> Pair(true, 0)
-            else -> Pair(true, options.basePath.serverUrl?.toInt())
+            else -> Pair(true, options.basePath.serverUrl.toInt())
         }
     }
 
