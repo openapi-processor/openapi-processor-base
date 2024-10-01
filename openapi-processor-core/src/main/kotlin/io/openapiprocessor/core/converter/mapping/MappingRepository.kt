@@ -62,7 +62,7 @@ class MappingRepository(
     }
 
     fun findGlobalContentTypeMapping(query: MappingQuery): ContentTypeMapping? {
-        return globalMappings.findContentTypeMapping(ResponseTypeMatcher(query))
+        return globalMappings.findContentTypeMapping(ContentTypeMatcher(query))
     }
 
     fun getEndpointResultTypeMapping(query: MappingQuery): ResultTypeMapping? {

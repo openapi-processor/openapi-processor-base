@@ -12,7 +12,7 @@ import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.converter.mapping.matcher.AddParameterTypeMatcher
 import io.openapiprocessor.core.converter.mapping.matcher.ParameterNameTypeMatcher
-import io.openapiprocessor.core.converter.mapping.matcher.ResponseTypeMatcher
+import io.openapiprocessor.core.converter.mapping.matcher.ContentTypeMatcher
 import io.openapiprocessor.core.converter.mapping.matcher.TypeMatcher
 import io.openapiprocessor.core.processor.MappingConverter
 import io.openapiprocessor.core.processor.MappingReader
@@ -246,7 +246,7 @@ class MappingConverterGenericsSpec: StringSpec({
                    """.trimMargin()
 
         val mappingData = converter.convert(reader.read(yaml))
-        val type = mappingData.globalMappings.findContentTypeMapping(ResponseTypeMatcher(query(contentType = "foo/bar")))!!
+        val type = mappingData.globalMappings.findContentTypeMapping(ContentTypeMatcher(query(contentType = "foo/bar")))!!
 
         type.contentType shouldBe "foo/bar"
         val tm = type.mapping

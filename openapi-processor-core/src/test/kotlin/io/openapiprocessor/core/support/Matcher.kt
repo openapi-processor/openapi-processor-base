@@ -108,8 +108,8 @@ fun responseTypeMatcher(
     contentType: String? = null,
     primitive: Boolean = false,
     array: Boolean = false
-): ResponseTypeMatcher {
-    return ResponseTypeMatcher(MappingFinderQuery(
+): ContentTypeMatcher {
+    return ContentTypeMatcher(MappingFinderQuery(
         path,
         method,
         name,

@@ -201,13 +201,13 @@ class EndpointMappings(
 
     fun findContentTypeMapping(query: MappingQuery): ContentTypeMapping? {
         val httpMethodMappings = methodMappings[query.method]
-        val methodMapping = httpMethodMappings?.findContentTypeMapping(ResponseTypeMatcher(query))
+        val methodMapping = httpMethodMappings?.findContentTypeMapping(ContentTypeMatcher(query))
         if (methodMapping != null) {
             log.trace("found endpoint method content type mapping ({} {})", query.path, query.method)
             return methodMapping
         }
 
-        val mapping = mappings.findContentTypeMapping(ResponseTypeMatcher(query))
+        val mapping = mappings.findContentTypeMapping(ContentTypeMatcher(query))
         if (mapping != null) {
             log.trace("found endpoint content type mapping ({})", query.path)
             return mapping

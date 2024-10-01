@@ -9,8 +9,7 @@ import io.openapiprocessor.core.converter.mapping.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-// todo ContentTypeMatcher
-class ResponseTypeMatcher(private val query: MappingQuery): MappingMatcher, (ContentTypeMapping) -> Boolean {
+class ContentTypeMatcher(private val query: MappingQuery): MappingMatcher, (ContentTypeMapping) -> Boolean {
     val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     override fun match(mapping: Mapping): Boolean {
