@@ -86,8 +86,8 @@ fun annotationParameterNameTypeMatcher(
     contentType: String? = null,
     primitive: Boolean = false,
     array: Boolean = false
-): AnnotationParameterNameMatcher {
-    return AnnotationParameterNameMatcher(MappingFinderQuery(
+): AnnotationParameterNameTypeMatcher {
+    return AnnotationParameterNameTypeMatcher(MappingFinderQuery(
         path,
         method,
         name,

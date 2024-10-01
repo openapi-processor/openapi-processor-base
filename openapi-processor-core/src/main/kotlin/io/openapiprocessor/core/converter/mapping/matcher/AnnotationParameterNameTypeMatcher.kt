@@ -9,8 +9,7 @@ import io.openapiprocessor.core.converter.mapping.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-// todo AnnotationParameterNameTypeMatcher
-class AnnotationParameterNameMatcher(private val query: MappingQuery): MappingMatcher {
+class AnnotationParameterNameTypeMatcher(private val query: MappingQuery): MappingMatcher {
     val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     override fun match(mapping: Mapping): Boolean {

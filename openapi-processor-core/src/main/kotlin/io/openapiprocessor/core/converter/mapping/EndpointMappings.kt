@@ -175,13 +175,13 @@ class EndpointMappings(
     fun findAnnotationParameterNameTypeMapping(query: MappingQuery): List<AnnotationNameMapping> {
         val httpMethodMappings = methodMappings[query.method]
         val methodMappings = httpMethodMappings?.findAnnotationParameterNameTypeMapping(
-            AnnotationParameterNameMatcher(query))
+            AnnotationParameterNameTypeMatcher(query))
         if (!methodMappings.isNullOrEmpty()) {
             log.trace("found endpoint method annotation parameter name type mappings ({} {})", query.path, query.method)
             return methodMappings
         }
 
-        val mappings = mappings.findAnnotationParameterNameTypeMapping(AnnotationParameterNameMatcher(query))
+        val mappings = mappings.findAnnotationParameterNameTypeMapping(AnnotationParameterNameTypeMatcher(query))
         log.trace("found endpoint annotation parameter name type mapping ({})", query.path)
         return mappings
     }
