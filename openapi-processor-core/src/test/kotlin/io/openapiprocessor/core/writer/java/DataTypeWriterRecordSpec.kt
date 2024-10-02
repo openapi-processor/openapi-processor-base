@@ -15,7 +15,7 @@ import io.kotest.matchers.string.shouldStartWith
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.JsonPropertyAnnotationMode
 import io.openapiprocessor.core.converter.mapping.Annotation
-import io.openapiprocessor.core.converter.mapping.AnnotationNameMappingDefault
+import io.openapiprocessor.core.converter.mapping.AnnotationNameTypeMappingDefault
 import io.openapiprocessor.core.converter.mapping.ExtensionMappings
 import io.openapiprocessor.core.extractImports
 import io.openapiprocessor.core.model.datatypes.*
@@ -313,18 +313,18 @@ class DataTypeWriterRecordSpec: StringSpec({
         options.extensionMappings = mapOf(
             "x-foo" to ExtensionMappings(
                 mapOf("ext" to listOf(
-                    AnnotationNameMappingDefault(
+                    AnnotationNameTypeMappingDefault(
                         "ext", annotation = Annotation("annotation.Extension", linkedMapOf())
                     )))),
 
             "x-bar" to ExtensionMappings(
                 mapOf(
                     "barA" to listOf(
-                        AnnotationNameMappingDefault(
+                        AnnotationNameTypeMappingDefault(
                             "barA", annotation = Annotation("annotation.BarA", linkedMapOf())
                         )),
                     "barB" to listOf(
-                        AnnotationNameMappingDefault(
+                        AnnotationNameTypeMappingDefault(
                             "barB", annotation = Annotation("annotation.BarB", linkedMapOf())
                         ))
                     ))

@@ -489,18 +489,18 @@ class DataTypeWriterPojoSpec: StringSpec({
         options.extensionMappings = mapOf(
             "x-foo" to ExtensionMappings(
                 mapOf("ext" to listOf(
-                    AnnotationNameMappingDefault(
+                    AnnotationNameTypeMappingDefault(
                         "ext", annotation = MappingAnnotation("annotation.Extension", linkedMapOf())
                     )))),
 
             "x-bar" to ExtensionMappings(
                 mapOf(
                     "barA" to listOf(
-                        AnnotationNameMappingDefault(
+                        AnnotationNameTypeMappingDefault(
                             "barA", annotation = MappingAnnotation("annotation.BarA", linkedMapOf())
                         )),
                     "barB" to listOf(
-                        AnnotationNameMappingDefault(
+                        AnnotationNameTypeMappingDefault(
                             "barB", annotation = MappingAnnotation("annotation.BarB", linkedMapOf())
                         ))
                     ))
