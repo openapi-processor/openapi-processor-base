@@ -114,7 +114,7 @@ class OptionsConverterSpec: StringSpec({
                   format-code: false
                   base-path:
                     server-url: 0
-                    profile-name: openapi.properties
+                    properties-name: openapi.properties
                 compatibility:
                   bean-validation-valid-on-reactive: false
                   identifier-word-break-from-digit-to-letter: false
@@ -200,7 +200,7 @@ class OptionsConverterSpec: StringSpec({
                       package-name: no.warning
                       base-path:
                         server-url: ${su.source}
-                        profile-name: openapi.properties
+                        properties-name: openapi.properties
                 """.trimIndent()
             ))
 
@@ -221,7 +221,7 @@ class OptionsConverterSpec: StringSpec({
                   package-name: pkg
                   base-path:
                     server-url: true
-                    profile-name: openapi.properties
+                    properties-name: openapi.properties
             """.trimIndent()
         ))
 
