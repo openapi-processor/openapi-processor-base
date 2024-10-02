@@ -113,7 +113,7 @@ class AnnotationNameTypeMappingBuilder(val sourceTypeName: String) {
     lateinit var type: String
 
     fun annotation(): Mapping {
-        return AnnotationNameMappingDefault(
+        return AnnotationNameTypeMappingDefault(
             sourceTypeName,
             Annotation(type, linkedMapOf()))
     }

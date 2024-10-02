@@ -218,7 +218,7 @@ class MappingConverter(val mapping: MappingV2) {
         val (mapping, genericTypes) = parseMapping(source.name, source.generics)
 
         return if (mapping.kind == ANNOTATE) {
-            AnnotationNameMappingDefault(mapping.sourceType!!, Annotation(
+            AnnotationNameTypeMappingDefault(mapping.sourceType!!, Annotation(
                 mapping.annotationType!!,
                 mapping.annotationParameters)
                 )
@@ -425,7 +425,7 @@ class MappingConverter(val mapping: MappingV2) {
             throw BadMappingException(source.type)
         }
 
-        return AnnotationNameMappingDefault(mapping.sourceType!!, Annotation(
+        return AnnotationNameTypeMappingDefault(mapping.sourceType!!, Annotation(
                         mapping.annotationType!!,
                         mapping.annotationParameters))
     }

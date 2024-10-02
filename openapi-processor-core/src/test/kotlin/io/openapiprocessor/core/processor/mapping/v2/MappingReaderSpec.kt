@@ -257,13 +257,13 @@ class MappingReaderSpec: StringSpec ({
                 |  package-name: no.warning
                 |  base-path:
                 |   server-url: $server
-                |   profile-name: base-path.properties
+                |   properties-name: base-path.properties
                 """.trimMargin()
 
             val mapping = MappingReader().read(yaml) as Mapping
 
             mapping.options.basePath.serverUrl shouldBe "$server"
-            mapping.options.basePath.profileName shouldBe "base-path.properties"
+            mapping.options.basePath.propertiesName shouldBe "base-path.properties"
         }
     }
 })

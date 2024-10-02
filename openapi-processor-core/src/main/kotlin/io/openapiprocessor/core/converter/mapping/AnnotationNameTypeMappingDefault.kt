@@ -5,7 +5,7 @@
 
 package io.openapiprocessor.core.converter.mapping
 
-open class AnnotationNameMappingDefault(
+open class AnnotationNameTypeMappingDefault(
     /**
      * The parameter name of this mapping. Must match 1:1 with what is written in the api.
      */

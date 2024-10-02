@@ -14,5 +14,5 @@ data class BasePath(
     /**
      * profile name for base path.
      */
-    val profileName: String = "api.properties"
+    val propertiesName: String = "api.properties"
 )

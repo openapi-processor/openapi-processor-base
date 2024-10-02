@@ -74,7 +74,7 @@ class OptionsConverter(private val checkObsoleteProcessorOptions: Boolean = fals
                     val (enablePathPrefix, pathPrefixServerIndex) = checkServerUrl(mapping.options)
                     options.basePathOptions.enabled = enablePathPrefix
                     options.basePathOptions.serverUrl = pathPrefixServerIndex
-                    options.basePathOptions.propertiesName = mapping.options.basePath.profileName
+                    options.basePathOptions.propertiesName = mapping.options.basePath.propertiesName
                     // to write the base path resource we need standard layout
                     if (options.basePathOptions.enabled && !options.targetDirOptions.standardLayout) {
                         log.warn("base-path is enabled, forcing target-dir.layout = standard")
@@ -122,7 +122,7 @@ class OptionsConverter(private val checkObsoleteProcessorOptions: Boolean = fals
         return when (options.basePath.serverUrl) {
             "false" -> Pair(false, null)
             "true" -> Pair(true, 0)
-            else -> Pair(true, options.basePath.serverUrl?.toInt())
+            else -> Pair(true, options.basePath.serverUrl.toInt())
         }
     }
 

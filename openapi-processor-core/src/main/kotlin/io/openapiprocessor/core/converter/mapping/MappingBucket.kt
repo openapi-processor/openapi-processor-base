@@ -5,7 +5,7 @@
 
 package io.openapiprocessor.core.converter.mapping
 
-interface MappingBucket {
+fun interface MappingBucket {
     /**
      * filter the mapping(s) by the given filter.
      *

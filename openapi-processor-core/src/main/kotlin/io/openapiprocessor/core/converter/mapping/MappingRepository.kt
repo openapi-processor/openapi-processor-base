@@ -54,7 +54,7 @@ class MappingRepository(
     }
 
     fun findGlobalAnnotationParameterNameTypeMapping(query: MappingQuery): List<AnnotationNameMapping> {
-        return globalMappings.findAnnotationParameterNameTypeMapping(AnnotationParameterNameMatcher(query))
+        return globalMappings.findAnnotationParameterNameTypeMapping(AnnotationParameterNameTypeMatcher(query))
     }
 
     fun findGlobalAddParameterTypeMappings(): List<AddParameterTypeMapping>  {
@@ -62,7 +62,7 @@ class MappingRepository(
     }
 
     fun findGlobalContentTypeMapping(query: MappingQuery): ContentTypeMapping? {
-        return globalMappings.findContentTypeMapping(ResponseTypeMatcher(query))
+        return globalMappings.findContentTypeMapping(ContentTypeMatcher(query))
     }
 
     fun getEndpointResultTypeMapping(query: MappingQuery): ResultTypeMapping? {
