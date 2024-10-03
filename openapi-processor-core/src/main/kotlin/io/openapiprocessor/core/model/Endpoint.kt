@@ -18,27 +18,13 @@ class Endpoint(
     val method: HttpMethod,
     val parameters: List<Parameter>,
     val requestBodies: List<RequestBody>,
+    val responses: Map<String, List<Response>>,
     val operationId: String? = null,
     val deprecated: Boolean = false,
     private val documentation: Documentation? = null
 ) {
-    // todo
-    private /*val*/ var responses: MutableMap<String, List<Response>>  = mutableMapOf()
-
     // grouped responses
-    lateinit var endpointResponses: List<EndpointResponse>// = emptyList()
-
-    // todo move to constructor
-    fun addResponses(httpStatus: String, statusResponses: List<Response>) {
-        responses[httpStatus] = statusResponses
-    }
-
-    // todo move addResponse() to constructor then run this from constructor
-    // fluent
-    fun initEndpointResponses (): Endpoint {
-        endpointResponses = createEndpointResponses ()
-        return this
-    }
+    val endpointResponses: List<EndpointResponse> = createEndpointResponses()
 
     // hmmm
     fun getRequestBody(): RequestBody {
@@ -199,5 +185,4 @@ class Endpoint(
     private fun isSuccessCode(code: String) = code.startsWith("2")
 
     private fun hasContentType(response: Response) = response.contentType != "?"
-
 }

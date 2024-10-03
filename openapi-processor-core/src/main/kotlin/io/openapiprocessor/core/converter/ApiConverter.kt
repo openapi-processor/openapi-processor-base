@@ -133,22 +133,21 @@ class  ApiConverter(
 
             val parameters = collectParameters(operation, ctx)
             val requestBodies = collectRequestBodies(operation, ctx)
+            val responses = collectResponses (operation, ctx)
 
             val ep = Endpoint(
                 path,
                 operation.getMethod(),
                 parameters + requestBodies.parameters,
                 requestBodies.bodies,
+                responses,
                 operation.getOperationId(),
                 operation.isDeprecated(),
                 Documentation(
                     summary = operation.summary,
                     description = operation.description
-                )
-            )
+                ))
 
-            collectResponses (operation.getResponses(), ep, dataTypes, resolver)
-            ep.initEndpointResponses ()
             checkSuccessResponse(ep)
             ep
         } catch (e: UnknownDataTypeException) {
@@ -216,17 +215,20 @@ class  ApiConverter(
         return RequestBodies(bodies, params)
     }
 
-    private fun collectResponses(responses: Map<String, Response>, ep: Endpoint, dataTypes: DataTypes, resolver: RefResolver) {
-        responses.forEach { (httpStatus, httpResponse) ->
+    private fun collectResponses(operation: Operation, ctx: ConverterContext): Map<String, List<ModelResponse>> {
+        val responses: MutableMap<String, List<ModelResponse>>  = mutableMapOf()
+
+        operation.getResponses().forEach { (httpStatus, httpResponse) ->
             val results = createResponses(
-                ep,
+                operation,
                 httpStatus,
                 httpResponse,
-                dataTypes,
-                resolver)
+                ctx)
 
-            ep.addResponses (httpStatus, results)
+            responses[httpStatus] = results
         }
+
+        return responses
     }
 
     private fun createParameter(op: Operation, parameter: Parameter, ctx: ConverterContext): ModelParameter {
@@ -327,11 +329,14 @@ class  ApiConverter(
         return parameters
     }
 
-    private fun createResponses(ep: Endpoint, httpStatus: String, response: Response, dataTypes: DataTypes, resolver: RefResolver): List<ModelResponse> {
+    private fun createResponses(operation: Operation, httpStatus: String, response: Response, ctx: ConverterContext): List<ModelResponse> {
         if (response.getContent().isEmpty()) {
             val info = SchemaInfo (
-                SchemaInfo.Endpoint(ep.path, ep.method),
-                "", "", nullSchema, resolver)
+                SchemaInfo.Endpoint(ctx.path, operation.getMethod()),
+                "",
+                "",
+                nullSchema,
+                ctx.resolver)
 
             val dataType = NoneDataType()
             val singleDataType = singleDataTypeWrapper.wrap (dataType, info)
@@ -345,13 +350,13 @@ class  ApiConverter(
             val schema = mediaType.getSchema()
 
             val info = SchemaInfo (
-                SchemaInfo.Endpoint(ep.path, ep.method),
-                getInlineResponseName (ep.path, ep.method, httpStatus),
+                SchemaInfo.Endpoint(ctx.path, operation.getMethod()),
+                getInlineResponseName (ctx.path, operation.getMethod(), httpStatus),
                 contentType,
                 schema,
-                resolver)
+                ctx.resolver)
 
-            val dataType = convertDataType(info, dataTypes)
+            val dataType = convertDataType(info, ctx.dataTypes)
             val changedType = if (!info.isArray ()) { // todo fails if ref
                 singleDataTypeWrapper.wrap(dataType, info)
             } else {
