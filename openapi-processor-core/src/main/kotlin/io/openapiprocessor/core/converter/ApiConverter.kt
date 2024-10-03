@@ -128,6 +128,10 @@ class  ApiConverter(
     }
 
     private fun createEndpoint(path: String, operation: Operation, dataTypes: DataTypes, resolver: RefResolver): Endpoint? {
+        val ctx = ConverterContext(path, dataTypes, resolver)
+
+        val parameters = collectParameters(operation, ctx)
+
         val ep = Endpoint(
             path,
             operation.getMethod(),
@@ -139,7 +143,7 @@ class  ApiConverter(
         )
 
         return try {
-            collectParameters (operation.getParameters(), ep, dataTypes, resolver)
+            ep.parameters.addAll(parameters)
             collectRequestBody (operation.getRequestBody(), ep, dataTypes, resolver)
             collectResponses (operation.getResponses(), ep, dataTypes, resolver)
             ep.initEndpointResponses ()
@@ -157,19 +161,28 @@ class  ApiConverter(
         }
     }
 
-    private fun collectParameters(parameters: List<Parameter>, ep: Endpoint, dataTypes: DataTypes, resolver: RefResolver) {
-        parameters.forEach { parameter ->
-            ep.parameters.add (createParameter (ep, parameter, dataTypes, resolver))
+    data class ConverterContext(
+        val path: String,
+        val dataTypes: DataTypes,
+        val resolver: RefResolver)
+
+    private fun collectParameters(operation: Operation, ctx: ConverterContext): List<ModelParameter> {
+        val parameters: MutableList<ModelParameter> = mutableListOf()
+
+        operation.getParameters().forEach {
+            parameters.add(createParameter(operation, it, ctx))
         }
 
-        val addMappings = getAdditionalParameter (ep)
+        val addMappings = getAdditionalParameterMappings (ctx.path, operation.getMethod())
         addMappings.forEach {
-            ep.parameters.add (createAdditionalParameter (it, dataTypes, resolver))
+            parameters.add (createAdditionalParameter (it))
         }
+
+        return parameters
     }
 
-    private fun getAdditionalParameter(ep: Endpoint): List<AddParameterTypeMapping> {
-        return mappingFinder.findAddParameterTypeMappings(MappingFinderQuery(ep.path, ep.method))
+    private fun getAdditionalParameterMappings(path: String, method: HttpMethod): List<AddParameterTypeMapping> {
+        return mappingFinder.findAddParameterTypeMappings(MappingFinderQuery(path, method))
     }
 
     private fun collectRequestBody(requestBody: RequestBody?, ep: Endpoint, dataTypes: DataTypes, resolver: RefResolver) {
@@ -206,16 +219,16 @@ class  ApiConverter(
         }
     }
 
-    private fun createParameter(ep: Endpoint, parameter: Parameter, dataTypes: DataTypes, resolver: RefResolver): ModelParameter {
+    private fun createParameter(op: Operation, parameter: Parameter, ctx: ConverterContext): ModelParameter {
         val info = SchemaInfo (
-            SchemaInfo.Endpoint(ep.path, ep.method),
+            SchemaInfo.Endpoint(ctx.path, op.getMethod()),
             parameter.getName(),
             "",
             parameter.getSchema(),
-            resolver,
+            ctx.resolver,
             "parameters")
 
-        val dataType = convertDataType(info, dataTypes)
+        val dataType = convertDataType(info, ctx.dataTypes)
 
         return when (parameter.getIn()) {
             "query" ->
@@ -232,8 +245,7 @@ class  ApiConverter(
         }
     }
 
-    @Suppress("UNUSED_PARAMETER")
-    private fun createAdditionalParameter(mapping: AddParameterTypeMapping, dataTypes: DataTypes, resolver: RefResolver): ModelParameter {
+    private fun createAdditionalParameter(mapping: AddParameterTypeMapping): ModelParameter {
         val addType = dataTypeConverter.createAdditionalParameterDataType(mapping.mapping)
 
         var annotationType: AnnotationDataType? = null
