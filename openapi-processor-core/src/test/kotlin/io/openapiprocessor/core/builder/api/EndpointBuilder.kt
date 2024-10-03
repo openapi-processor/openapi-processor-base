@@ -60,14 +60,15 @@ class EndpointBuilder(
     }
 
     fun build(): Endpoint {
-        val ep = Endpoint(path, method,
+        val ep = Endpoint(
+            path,
+            method,
+            parameters,
+            bodies,
             operationId = operationId,
             deprecated = deprecated,
             documentation = Documentation(summary, description)
         )
-
-        ep.parameters = parameters.toMutableList()
-        ep.requestBodies = bodies.toMutableList()
 
         responses.forEach  { (k, v) ->
             ep.addResponses(k, v)

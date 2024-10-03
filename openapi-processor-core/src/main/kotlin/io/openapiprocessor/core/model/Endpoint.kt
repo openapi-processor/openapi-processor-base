@@ -16,14 +16,13 @@ import io.openapiprocessor.core.parser.HttpMethod
 class Endpoint(
     val path: String,
     val method: HttpMethod,
+    val parameters: List<Parameter>,
+    val requestBodies: List<RequestBody>,
     val operationId: String? = null,
     val deprecated: Boolean = false,
     private val documentation: Documentation? = null
 ) {
-
     // todo
-    /*private val*/ var parameters: MutableList<Parameter> = mutableListOf() // todo not mutable
-    /*private val*/ var requestBodies: MutableList<RequestBody> = mutableListOf() // todo not mutable
     private /*val*/ var responses: MutableMap<String, List<Response>>  = mutableMapOf()
 
     // grouped responses

@@ -128,29 +128,31 @@ class  ApiConverter(
     }
 
     private fun createEndpoint(path: String, operation: Operation, dataTypes: DataTypes, resolver: RefResolver): Endpoint? {
-        val ctx = ConverterContext(path, dataTypes, resolver)
-
-        val parameters = collectParameters(operation, ctx)
-
-        val ep = Endpoint(
-            path,
-            operation.getMethod(),
-            operation.getOperationId(),
-            operation.isDeprecated(),
-            Documentation(
-                summary = operation.summary,
-                description = operation.description)
-        )
-
         return try {
-            ep.parameters.addAll(parameters)
-            collectRequestBody (operation.getRequestBody(), ep, dataTypes, resolver)
+            val ctx = ConverterContext(path, dataTypes, resolver)
+
+            val parameters = collectParameters(operation, ctx)
+            val requestBodies = collectRequestBodies(operation, ctx)
+
+            val ep = Endpoint(
+                path,
+                operation.getMethod(),
+                parameters + requestBodies.parameters,
+                requestBodies.bodies,
+                operation.getOperationId(),
+                operation.isDeprecated(),
+                Documentation(
+                    summary = operation.summary,
+                    description = operation.description
+                )
+            )
+
             collectResponses (operation.getResponses(), ep, dataTypes, resolver)
             ep.initEndpointResponses ()
             checkSuccessResponse(ep)
             ep
         } catch (e: UnknownDataTypeException) {
-            log.error ("failed to parse endpoint {} {} because of: '{}'", ep.path, ep.method, e.message, e)
+            log.error ("failed to parse endpoint {} {} because of: '{}'", path, operation.getMethod(), e.message, e)
             null
         }
     }
@@ -185,25 +187,33 @@ class  ApiConverter(
         return mappingFinder.findAddParameterTypeMappings(MappingFinderQuery(path, method))
     }
 
-    private fun collectRequestBody(requestBody: RequestBody?, ep: Endpoint, dataTypes: DataTypes, resolver: RefResolver) {
+    data class RequestBodies(val bodies: List<ModelRequestBody>, val parameters: List<ModelParameter>)
+
+    private fun collectRequestBodies(operation: Operation, ctx: ConverterContext): RequestBodies {
+        val requestBody = operation.getRequestBody()
         if (requestBody == null) {
-            return
+            return RequestBodies(emptyList(), emptyList())
         }
+
+        val bodies: MutableList<ModelRequestBody> = mutableListOf()
+        val params: MutableList<ModelParameter> = mutableListOf()
 
         requestBody.getContent().forEach { (contentType, mediaType) ->
             val info = SchemaInfo(
-                SchemaInfo.Endpoint(ep.path, ep.method),
-                getInlineRequestBodyName (ep.path, ep.method),
+                SchemaInfo.Endpoint(ctx.path, operation.getMethod()),
+                getInlineRequestBodyName (ctx.path, operation.getMethod()),
                 "",
                 mediaType.getSchema(),
-                resolver)
+                ctx.resolver)
 
             if (contentType.startsWith(MULTIPART)) {
-                ep.parameters.addAll (createMultipartParameter(info, mediaType.encodings, dataTypes))
+                params.addAll(createMultipartParameter(info, mediaType.encodings, ctx.dataTypes))
             } else {
-                ep.requestBodies.add (createRequestBody (contentType, info, requestBody, dataTypes))
+                bodies.add (createRequestBody (contentType, info, requestBody, ctx.dataTypes))
             }
         }
+
+        return RequestBodies(bodies, params)
     }
 
     private fun collectResponses(responses: Map<String, Response>, ep: Endpoint, dataTypes: DataTypes, resolver: RefResolver) {
