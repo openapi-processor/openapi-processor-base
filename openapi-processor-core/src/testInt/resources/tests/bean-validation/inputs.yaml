@@ -3,7 +3,8 @@ items:
   - inputs/openapi31.yaml
   - inputs/required.yaml
   - inputs/length.yaml
-  - inputs/minmax.yaml
+  - inputs/minmax30.yaml
+  - inputs/minmax31.yaml
   - inputs/items.yaml
   - inputs/obj.yaml
   - inputs/obj-components.yaml

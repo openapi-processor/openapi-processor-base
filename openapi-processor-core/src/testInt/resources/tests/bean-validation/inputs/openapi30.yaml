@@ -11,7 +11,7 @@ paths:
     $ref: 'length.yaml'
 
   /endpoint/minmax:
-    $ref: 'minmax.yaml'
+    $ref: 'minmax30.yaml'
 
   /endpoint/items:
     $ref: 'items.yaml'

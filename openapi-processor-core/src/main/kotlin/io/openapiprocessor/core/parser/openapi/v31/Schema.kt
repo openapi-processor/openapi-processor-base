@@ -137,13 +137,13 @@ class Schema(val schema: Schema31) : ParserSchema {
 
     override fun getMaxItems(): Int? = schema.maxItems
 
-    override fun getMaximum (): Number? = schema.maximum
+    override fun getMaximum (): Number? = schema.maximum ?: schema.exclusiveMaximum
 
-    override fun isExclusiveMaximum(): Boolean = schema.exclusiveMaximum
+    override fun isExclusiveMaximum(): Boolean = schema.exclusiveMaximum != null
 
-    override fun getMinimum(): Number? = schema.minimum
+    override fun getMinimum(): Number? = schema.minimum ?: schema.exclusiveMinimum
 
-    override fun isExclusiveMinimum(): Boolean = schema.exclusiveMinimum
+    override fun isExclusiveMinimum(): Boolean = schema.exclusiveMinimum != null
 
     override val pattern: String?
         get() = schema.pattern
