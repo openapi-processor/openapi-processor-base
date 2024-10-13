@@ -12,10 +12,6 @@ import io.openapiprocessor.core.converter.mapping.steps.MappingStep
 
 class AddParameterTypeMatcher: MappingMatcher {
 
-    override fun match(mapping: Mapping): Boolean {
-        TODO("Not yet implemented")
-    }
-
     override fun match(mapping: Mapping, step: MappingStep): Boolean {
         return mapping is AddParameterTypeMapping
     }

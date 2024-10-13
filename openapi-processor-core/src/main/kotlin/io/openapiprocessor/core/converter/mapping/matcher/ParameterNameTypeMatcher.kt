@@ -11,10 +11,6 @@ import io.openapiprocessor.core.converter.mapping.steps.MatcherStep
 
 class ParameterNameTypeMatcher(private val query: MappingQuery): MappingMatcher {
 
-    override fun match(mapping: Mapping): Boolean {
-        TODO("Not yet implemented")
-    }
-
     override fun match(mapping: Mapping, step: MappingStep): Boolean {
         if (mapping !is NameTypeMapping) {
             step.add(MatcherStep(mapping, false))

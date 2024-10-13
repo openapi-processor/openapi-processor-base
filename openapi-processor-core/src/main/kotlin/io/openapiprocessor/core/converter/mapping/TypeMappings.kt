@@ -14,12 +14,7 @@ class TypeMappings(private val mappings: List<Mapping>): MappingBucket {
 
     constructor(vararg mapping: Mapping): this(mapping.toList())
 
-    override fun filter(filter: MappingMatcher): List<Mapping> {
-        return mappings
-            .filter { filter.match(it) }
-    }
-
-    fun filter(filter: MappingMatcher, step: MappingStep): List<Mapping> {
+    override fun filter(filter: MappingMatcher, step: MappingStep): List<Mapping> {
         return mappings
             .filter { filter.match(it, step) }
     }

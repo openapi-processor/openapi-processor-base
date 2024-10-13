@@ -11,10 +11,6 @@ import io.openapiprocessor.core.converter.mapping.steps.MappingStep
 import io.openapiprocessor.core.converter.mapping.steps.MatcherStep
 
 class AnyMatcher: MappingMatcher {
-    @Deprecated("replace", replaceWith = ReplaceWith("match(mapping, step)"))
-    override fun match(mapping: Mapping): Boolean {
-        TODO("Not yet implemented")
-    }
 
     override fun match(mapping: Mapping, step: MappingStep): Boolean {
         step.add(MatcherStep(mapping, true))
