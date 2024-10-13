@@ -15,10 +15,10 @@ import io.kotest.matchers.shouldBe
 import io.mockk.mockk
 import io.openapiprocessor.core.converter.MappingFinderQuery
 import io.openapiprocessor.core.converter.mapping.AmbiguousTypeMappingException
+import io.openapiprocessor.core.converter.mapping.steps.EndpointStep
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.processor.MappingReader
 import io.openapiprocessor.core.support.*
-import io.openapiprocessor.core.support.annotationTypeMatcher
 import org.slf4j.Logger
 
 
@@ -369,16 +369,15 @@ class MappingConverterParameterSpec: StringSpec({
         val mappings = MappingConverter(mapping).convert().endpointMappings
 
         // then:
-        val typeMapping = mappings["/foo"]!!.findParameterTypeMapping(
-            MappingFinderQuery(path = "/foo", method = HttpMethod.POST, name = "Foo"))!!
+        val postQuery = MappingFinderQuery(path = "/foo", method = HttpMethod.POST, name = "Foo")
+        val typeMapping = mappings["/foo"]!!.findParameterTypeMapping(postQuery, EndpointStep(postQuery))!!
 
         typeMapping.sourceTypeName shouldBe "Foo"
         typeMapping.sourceTypeFormat.shouldBeNull()
         typeMapping.targetTypeName shouldBe "io.openapiprocessor.Foo"
 
-        val typeMappingGet = mappings["/foo"]!!.findParameterTypeMapping(
-            MappingFinderQuery(path = "/foo", method = HttpMethod.GET, name= "Foo")
-        )!!
+        val getQuery = MappingFinderQuery(path = "/foo", method = HttpMethod.GET, name= "Foo")
+        val typeMappingGet = mappings["/foo"]!!.findParameterTypeMapping(getQuery, EndpointStep(getQuery))!!
 
         typeMappingGet.sourceTypeName shouldBe "Foo"
         typeMappingGet.sourceTypeFormat.shouldBeNull()

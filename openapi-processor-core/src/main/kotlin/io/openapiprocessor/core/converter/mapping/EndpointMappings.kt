@@ -6,6 +6,7 @@
 package io.openapiprocessor.core.converter.mapping
 
 import io.openapiprocessor.core.converter.mapping.matcher.*
+import io.openapiprocessor.core.converter.mapping.steps.MappingStep
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
 import org.slf4j.Logger
@@ -125,17 +126,17 @@ class EndpointMappings(
         return mappings
     }
 
-    fun findParameterTypeMapping(query: MappingQuery): TypeMapping? {
+    fun findParameterTypeMapping(query: MappingQuery, step: MappingStep): TypeMapping? {
         val httpMethodMappings = methodMappings[query.method]
-        val methodMapping = httpMethodMappings?.findParameterTypeMapping(TypeMatcher(query))
-        if (methodMapping != null) {
-            log.trace("found endpoint method parameter type mapping ({} {})", query.path, query.method)
-            return methodMapping
+        if (httpMethodMappings != null) {
+            val methodMapping = httpMethodMappings.findParameterTypeMapping(TypeMatcher(query)/*, step.add(MethodStep(query))*/)
+            if (methodMapping != null) {
+                return methodMapping
+            }
         }
 
-        val mapping = mappings.findParameterTypeMapping(TypeMatcher(query))
+        val mapping = mappings.findParameterTypeMapping(TypeMatcher(query)/*, step*/)
         if (mapping != null) {
-            log.trace("found endpoint parameter type mapping ({})", query.path)
             return mapping
         }
 
