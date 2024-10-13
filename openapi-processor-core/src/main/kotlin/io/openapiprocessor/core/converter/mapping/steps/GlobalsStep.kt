@@ -17,6 +17,10 @@ class GlobalsStep: MappingStep {
         return steps.any { it.isMatch() }
     }
 
+    override fun hasMappings(): Boolean {
+        return steps.any { it.hasMappings() }
+    }
+
     override fun add(step: MappingStep): MappingStep {
         val found = steps.find { it.isEqual(step) }
         if(found != null) {
@@ -32,6 +36,10 @@ class GlobalsStep: MappingStep {
     }
 
     override fun log(indent: String) {
+        if (!hasMappings()) {
+            return
+        }
+
         val prefix = if (isMatch()) {
             "$indent$MATCH"
         } else {

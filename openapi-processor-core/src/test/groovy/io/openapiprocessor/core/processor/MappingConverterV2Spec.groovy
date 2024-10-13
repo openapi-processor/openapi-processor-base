@@ -5,7 +5,8 @@
 
 package io.openapiprocessor.core.processor
 
-
+import io.openapiprocessor.core.converter.mapping.steps.EndpointsStep
+import io.openapiprocessor.core.converter.mapping.steps.GlobalsStep
 import spock.lang.Specification
 import spock.lang.Subject
 
@@ -37,10 +38,10 @@ map:
                         null,
                         null,
                         null, null, null,
-                        "application/vnd.array"
-                        ,
+                        "application/vnd.array",
                         false,
-                        false))
+                        false),
+                new GlobalsStep())
 
         response.contentType == 'application/vnd.array'
         response.mapping.sourceTypeName == null
@@ -95,8 +96,7 @@ map:
         def mappingData = converter.convert (reader.read (yaml))
 
         then:
-        def endpoint = mappingData.endpointMappings["/foo"]
-        def parameter = endpoint.findParameterNameTypeMapping(query(
+        def query = query(
                 "/foo",
                 null,
                 "foo",
@@ -104,7 +104,9 @@ map:
                 null,
                 null,
                 false,
-                false))
+                false)
+        def endpoint = mappingData.endpointMappings["/foo"]
+        def parameter = endpoint.findParameterNameTypeMapping(query, new EndpointsStep(query))
 
         parameter.parameterName == 'foo'
         parameter.mapping.sourceTypeName == null
@@ -128,16 +130,18 @@ map:
         def mappingData = converter.convert (reader.read (yaml))
 
         then:
+        def query = query(
+                        "/foo",
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        false,
+                        false)
         def endpoint = mappingData.endpointMappings["/foo"]
-        def parameters = endpoint.findAddParameterTypeMappings(query(
-                "/foo",
-                null,
-                null,
-                null,
-                null,
-                null,
-                false,
-                false))
+        def parameters = endpoint.findAddParameterTypeMappings(
+                query, new EndpointsStep(query))
 
         def parameter = parameters[0]
         parameter.parameterName == 'request'
@@ -162,16 +166,18 @@ map:
         def mappingData = converter.convert (reader.read (yaml))
 
         then:
+        def query = query(
+                        "/foo",
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        false,
+                        false)
         def endpoint = mappingData.endpointMappings["/foo"]
-        def parameters = endpoint.findAddParameterTypeMappings(query(
-                "/foo",
-                null,
-                null,
-                null,
-                null,
-                null,
-                false,
-                false))
+        def parameters = endpoint.findAddParameterTypeMappings(
+                query, new EndpointsStep(query))
 
         def parameter = parameters[0]
         parameter.parameterName == 'foo'
@@ -199,16 +205,17 @@ map:
         def mappingData = converter.convert (reader.read (yaml))
 
         then:
+        def query = query(
+                        "/foo",
+                        null,
+                        null,
+                        "application/vnd.array",
+                        null,
+                        null,
+                        false,
+                        false)
         def endpoint = mappingData.endpointMappings["/foo"]
-        def response = endpoint.findContentTypeMapping(query(
-                "/foo",
-                null,
-                null,
-                "application/vnd.array",
-                null,
-                null,
-                false,
-                false))
+        def response = endpoint.findContentTypeMapping(query, new EndpointsStep(query))
 
         response.contentType == 'application/vnd.array'
         response.mapping.sourceTypeName == null

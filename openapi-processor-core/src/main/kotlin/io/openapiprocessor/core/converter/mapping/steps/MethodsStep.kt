@@ -6,12 +6,20 @@
 package io.openapiprocessor.core.converter.mapping.steps
 
 import io.openapiprocessor.core.converter.mapping.MappingQuery
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 class MethodsStep(val query: MappingQuery): MappingStep {
+    private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
+
     private val steps: MutableCollection<MappingStep> = ArrayList()
 
     override fun isMatch(): Boolean {
         return steps.any { it.isMatch() }
+    }
+
+    override fun hasMappings(): Boolean {
+        return steps.any { it.hasMappings() }
     }
 
     override fun add(step: MappingStep): MappingStep {
@@ -33,6 +41,19 @@ class MethodsStep(val query: MappingQuery): MappingStep {
     }
 
     override fun log(indent: String) {
-        TODO("Not yet implemented")
+        if (!hasMappings()) {
+            return
+        }
+
+        val prefix = if (isMatch()) {
+            "$indent$MATCH"
+        } else {
+            "$indent$NO_MATCH"
+        }
+
+        log.trace(prefix, "methods")
+        steps.forEach {
+            it.log("$indent  ")
+        }
     }
 }

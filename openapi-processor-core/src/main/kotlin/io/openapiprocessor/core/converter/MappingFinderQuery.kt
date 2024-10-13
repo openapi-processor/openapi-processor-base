@@ -75,7 +75,7 @@ class MappingFinderQuery(
         val parts = mutableListOf<String>()
 
         if (name != null) {
-            parts.add("name: $name")
+            parts.add("name: '$name'")
         }
 
         if (path != null) {
@@ -85,7 +85,7 @@ class MappingFinderQuery(
                 part += "$method "
             }
 
-            part += "$path"
+            part += "'$path'"
             parts.add(part)
         }
 
@@ -94,10 +94,11 @@ class MappingFinderQuery(
         }
 
         if (type != null) {
-            var part = "type: $type"
+            var part = "type: '$type"
             if (format != null) {
-                part += ": $format"
+                part += ":$format"
             }
+            part += "'"
             parts.add(part)
         }
 

@@ -97,33 +97,36 @@ class EndpointMappings(
         return null
     }
 
-    fun findTypeMapping(query: MappingQuery): TypeMapping? {
+    fun findTypeMapping(query: MappingQuery, step: MappingStep): TypeMapping? {
         val httpMethodMappings = methodMappings[query.method]
-        val methodMapping = httpMethodMappings?.findTypeMapping(TypeMatcher(query))
-        if (methodMapping != null) {
-            log.trace("found endpoint method type mapping ({} {})", query.path, query.method)
-            return methodMapping
+        if (httpMethodMappings != null) {
+            val methodMapping = httpMethodMappings.findTypeMapping(TypeMatcher(query), step.add(MethodsStep(query)))
+            if (methodMapping != null) {
+                return methodMapping
+            }
         }
 
-        val mapping = mappings.findTypeMapping(TypeMatcher(query))
+        val mapping = mappings.findTypeMapping(TypeMatcher(query), step)
         if (mapping != null) {
-            log.trace("found endpoint type mapping ({})", query.path)
             return mapping
         }
 
         return null
     }
 
-    fun findAnnotationTypeMappings(query: MappingQuery): List<AnnotationTypeMapping> {
+    fun findAnnotationTypeMappings(query: MappingQuery, step: MappingStep): List<AnnotationTypeMapping> {
         val httpMethodMappings = methodMappings[query.method]
-        val methodMappings = httpMethodMappings?.findAnnotationTypeMapping(AnnotationTypeMatcher(query))
-        if (!methodMappings.isNullOrEmpty()) {
-            log.trace("found endpoint method annotation type mappings ({} {})", query.path, query.method)
-            return methodMappings
+        if (httpMethodMappings != null) {
+            val methodMappings = httpMethodMappings.findAnnotationTypeMapping(
+                AnnotationTypeMatcher(query),
+                step.add(MethodsStep(query)))
+
+            if (methodMappings.isNotEmpty()) {
+                return methodMappings
+            }
         }
 
-        val mappings = mappings.findAnnotationTypeMapping(AnnotationTypeMatcher(query))
-        log.trace("found endpoint annotation type mapping ({})", query.path)
+        val mappings = mappings.findAnnotationTypeMapping(AnnotationTypeMatcher(query), step)
         return mappings
     }
 
@@ -147,74 +150,88 @@ class EndpointMappings(
         return null
     }
 
-    fun findAnnotationParameterTypeMapping(query: MappingQuery): List<AnnotationTypeMapping> {
+    fun findAnnotationParameterTypeMapping(query: MappingQuery, step: MappingStep): List<AnnotationTypeMapping> {
         val httpMethodMappings = methodMappings[query.method]
-        val methodMappings = httpMethodMappings?.findAnnotationParameterTypeMapping(AnnotationTypeMatcher(query))
-        if (!methodMappings.isNullOrEmpty()) {
-            log.trace("found endpoint method annotation parameter type mappings ({} {})", query.path, query.method)
-            return methodMappings
+        if (httpMethodMappings != null) {
+            val methodMappings = httpMethodMappings.findAnnotationParameterTypeMapping(
+                AnnotationTypeMatcher(query),
+                step.add(MethodsStep(query)))
+
+            if (methodMappings.isNotEmpty()) {
+                return methodMappings
+            }
         }
 
-        val mappings = mappings.findAnnotationParameterTypeMapping(AnnotationTypeMatcher(query))
-        log.trace("found endpoint annotation parameter type mapping ({})", query.path)
+        val mappings = mappings.findAnnotationParameterTypeMapping(AnnotationTypeMatcher(query), step)
         return mappings
     }
 
-    fun findParameterNameTypeMapping(query: MappingQuery): NameTypeMapping? {
+    fun findParameterNameTypeMapping(query: MappingQuery, step: MappingStep): NameTypeMapping? {
         val httpMethodMappings = methodMappings[query.method]
-        val methodMapping = httpMethodMappings?.findParameterNameTypeMapping(ParameterNameTypeMatcher(query))
-        if (methodMapping != null) {
-            log.trace("found endpoint method parameter name type mapping ({} {})", query.path, query.method)
-            return methodMapping
+        if (httpMethodMappings != null) {
+            val methodMapping = httpMethodMappings.findParameterNameTypeMapping(
+                ParameterNameTypeMatcher(query),
+                step.add(MethodsStep(query)))
+
+            if (methodMapping != null) {
+                return methodMapping
+            }
         }
 
-        val mapping = mappings.findParameterNameTypeMapping(ParameterNameTypeMatcher(query))
+        val mapping = mappings.findParameterNameTypeMapping(ParameterNameTypeMatcher(query), step)
         if (mapping != null) {
-            log.trace("found endpoint parameter name type mapping ({})", query.path)
             return mapping
         }
 
         return null
     }
 
-    fun findAnnotationParameterNameTypeMapping(query: MappingQuery): List<AnnotationNameMapping> {
+    fun findAnnotationParameterNameTypeMapping(query: MappingQuery, step: MappingStep): List<AnnotationNameMapping> {
         val httpMethodMappings = methodMappings[query.method]
-        val methodMappings = httpMethodMappings?.findAnnotationParameterNameTypeMapping(
-            AnnotationParameterNameTypeMatcher(query))
-        if (!methodMappings.isNullOrEmpty()) {
-            log.trace("found endpoint method annotation parameter name type mappings ({} {})", query.path, query.method)
-            return methodMappings
+        if (httpMethodMappings != null) {
+            val methodMappings = httpMethodMappings.findAnnotationParameterNameTypeMapping(
+                AnnotationParameterNameTypeMatcher(query),
+                step.add(MethodsStep(query)))
+
+            if (methodMappings.isNotEmpty()) {
+                return methodMappings
+            }
         }
 
-        val mappings = mappings.findAnnotationParameterNameTypeMapping(AnnotationParameterNameTypeMatcher(query))
-        log.trace("found endpoint annotation parameter name type mapping ({})", query.path)
+        val mappings = mappings.findAnnotationParameterNameTypeMapping(AnnotationParameterNameTypeMatcher(query), step)
         return mappings
     }
 
-    fun findAddParameterTypeMappings(query: MappingQuery): List<AddParameterTypeMapping> {
+    fun findAddParameterTypeMappings(query: MappingQuery, step: MappingStep): List<AddParameterTypeMapping> {
         val httpMethodMappings = methodMappings[query.method]
-        val methodMappings = httpMethodMappings?.findAddParameterTypeMappings(AddParameterTypeMatcher())
-        if (!methodMappings.isNullOrEmpty()) {
-            log.trace("found endpoint method add parameter type mappings ({} {})", query.path, query.method)
-            return methodMappings
+        if (httpMethodMappings != null) {
+            val methodMappings = httpMethodMappings.findAddParameterTypeMappings(
+                AddParameterTypeMatcher(),
+                step.add(MethodsStep(query)))
+
+            if (methodMappings.isNotEmpty()) {
+                return methodMappings
+            }
         }
 
-        val mappings = mappings.findAddParameterTypeMappings(AddParameterTypeMatcher())
-        log.trace("found endpoint add parameter type mapping ({})", query.path)
+        val mappings = mappings.findAddParameterTypeMappings(AddParameterTypeMatcher(), step)
         return mappings
     }
 
-    fun findContentTypeMapping(query: MappingQuery): ContentTypeMapping? {
+    fun findContentTypeMapping(query: MappingQuery, step: MappingStep): ContentTypeMapping? {
         val httpMethodMappings = methodMappings[query.method]
-        val methodMapping = httpMethodMappings?.findContentTypeMapping(ContentTypeMatcher(query))
-        if (methodMapping != null) {
-            log.trace("found endpoint method content type mapping ({} {})", query.path, query.method)
-            return methodMapping
+        if (httpMethodMappings != null) {
+            val methodMapping = httpMethodMappings.findContentTypeMapping(
+                ContentTypeMatcher(query),
+                step.add(MethodsStep(query)))
+
+            if (methodMapping != null) {
+                return methodMapping
+            }
         }
 
-        val mapping = mappings.findContentTypeMapping(ContentTypeMatcher(query))
+        val mapping = mappings.findContentTypeMapping(ContentTypeMatcher(query), step)
         if (mapping != null) {
-            log.trace("found endpoint content type mapping ({})", query.path)
             return mapping
         }
 

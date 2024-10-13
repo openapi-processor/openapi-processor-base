@@ -10,10 +10,15 @@ import org.slf4j.LoggerFactory
 
 class ParametersStep(): MappingStep {
     private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
+
     private val steps: MutableCollection<MappingStep> = ArrayList()
 
     override fun isMatch(): Boolean {
         return steps.any { it.isMatch() }
+    }
+
+    override fun hasMappings(): Boolean {
+        return steps.any { it.hasMappings() }
     }
 
     override fun add(step: MappingStep): MappingStep {
@@ -31,6 +36,10 @@ class ParametersStep(): MappingStep {
     }
 
     override fun log(indent: String) {
+        if (!hasMappings()) {
+            return
+        }
+
         val prefix = if (isMatch()) {
             "$indent$MATCH"
         } else {

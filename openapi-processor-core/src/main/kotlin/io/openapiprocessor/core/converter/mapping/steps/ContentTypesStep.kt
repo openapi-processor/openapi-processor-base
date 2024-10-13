@@ -5,11 +5,10 @@
 
 package io.openapiprocessor.core.converter.mapping.steps
 
-import io.openapiprocessor.core.converter.mapping.MappingQuery
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class EndpointsStep(val query: MappingQuery): MappingStep {
+class ContentTypesStep: MappingStep {
     private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     private val steps: MutableCollection<MappingStep> = ArrayList()
@@ -33,11 +32,7 @@ class EndpointsStep(val query: MappingQuery): MappingStep {
     }
 
     override fun isEqual(step: MappingStep): Boolean {
-        if (step !is EndpointsStep) {
-            return false
-        }
-
-        return query.path == step.query.path
+        return step is ContentTypesStep
     }
 
     override fun log(indent: String) {
@@ -51,7 +46,7 @@ class EndpointsStep(val query: MappingQuery): MappingStep {
             "$indent$NO_MATCH"
         }
 
-        log.trace(prefix, query.path)
+        log.trace(prefix, "responses")
         steps.forEach {
             it.log("$indent  ")
         }

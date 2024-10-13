@@ -102,7 +102,6 @@ class MappingFinder(mappings: MappingSettings) {
      * - global response type
      * - global type
      */
-
     fun findAnyTypeMapping(query: MappingQuery): TypeMapping? {
         val step = RootStep("looking for any type mapping of", query)
         try {
@@ -118,17 +117,17 @@ class MappingFinder(mappings: MappingSettings) {
             return eppMapping
         }
 
-        val eppnMapping = repository.findEndpointParameterNameTypeMapping(query)
+        val eppnMapping = repository.findEndpointParameterNameTypeMapping(query, step)
         if (eppnMapping != null) {
             return eppnMapping.mapping
         }
 
-        val eprMapping = repository.findEndpointContentTypeMapping(query)
+        val eprMapping = repository.findEndpointContentTypeMapping(query, step)
         if (eprMapping != null) {
             return eprMapping.mapping
         }
 
-        val eptMapping = repository.findEndpointTypeMapping(query)
+        val eptMapping = repository.findEndpointTypeMapping(query, step)
         if (eptMapping != null) {
             return eptMapping
         }
@@ -138,17 +137,17 @@ class MappingFinder(mappings: MappingSettings) {
             return gpMapping
         }
 
-        val gpnMapping = repository.findGlobalParameterNameTypeMapping(query)
+        val gpnMapping = repository.findGlobalParameterNameTypeMapping(query, step)
         if (gpnMapping != null) {
             return gpnMapping.mapping
         }
 
-        val grMapping = repository.findGlobalContentTypeMapping(query)
+        val grMapping = repository.findGlobalContentTypeMapping(query, step)
         if (grMapping != null) {
             return grMapping.mapping
         }
 
-        val gtMapping = repository.findGlobalTypeMapping(query)
+        val gtMapping = repository.findGlobalTypeMapping(query, step)
         if (gtMapping != null) {
             return gtMapping
         }
@@ -156,16 +155,23 @@ class MappingFinder(mappings: MappingSettings) {
         return null
     }
 
-    // path/method/name???/format/type
+    // path/method/name/format/type
     fun findTypeMapping(query: MappingQuery): TypeMapping? {
-        log.trace("looking for type mapping {}", query)
+        val step = RootStep("looking for type mapping of", query)
+        try {
+            return findTypeMapping(query, step)
+        } finally {
+            step.log()
+        }
+    }
 
-        val epMapping = repository.findEndpointTypeMapping(query)
+    private fun findTypeMapping(query: MappingQuery, step: MappingStep): TypeMapping? {
+        val epMapping = repository.findEndpointTypeMapping(query, step)
         if (epMapping != null) {
             return epMapping
         }
 
-        val gMapping = repository.findGlobalTypeMapping(query)
+        val gMapping = repository.findGlobalTypeMapping(query, step)
         if(gMapping != null) {
             return gMapping
         }
@@ -184,14 +190,21 @@ class MappingFinder(mappings: MappingSettings) {
     }
 
     fun findAnnotationTypeMappings(query: MappingQuery): List<AnnotationTypeMapping> {
-        log.trace("looking for annotation type mapping {}", query)
+        val step = RootStep("looking for annotation type mapping of", query)
+        try {
+            return findAnnotationTypeMappings(query, step)
+        } finally {
+            step.log()
+        }
+    }
 
-        val epMapping = repository.findEndpointAnnotationTypeMapping(query)
+    private fun findAnnotationTypeMappings(query: MappingQuery, step: MappingStep): List<AnnotationTypeMapping> {
+        val epMapping = repository.findEndpointAnnotationTypeMapping(query, step)
         if (epMapping.isNotEmpty()) {
             return epMapping
         }
 
-        return repository.findGlobalAnnotationTypeMapping(query)
+        return repository.findGlobalAnnotationTypeMapping(query, step)
     }
 
     fun findParameterTypeMapping(query: MappingQuery): TypeMapping? {
@@ -217,37 +230,51 @@ class MappingFinder(mappings: MappingSettings) {
         return null
     }
 
-    // todo test variants
     fun findAnnotationParameterTypeMappings(query: MappingQuery): List<AnnotationTypeMapping> {
-        log.trace("looking for annotation parameter type mapping {}", query)
+        val step = RootStep("looking for annotation parameter type mapping of", query)
+        try {
+            return findAnnotationParameterTypeMappings(query, step)
+        } finally {
+            step.log()
+        }
+    }
 
-        val eppMapping = repository.findEndpointAnnotationParameterTypeMappings(query)
+    // todo test variants
+    private fun findAnnotationParameterTypeMappings(query: MappingQuery, step: MappingStep): List<AnnotationTypeMapping> {
+        val eppMapping = repository.findEndpointAnnotationParameterTypeMappings(query, step)
         if (eppMapping.isNotEmpty()) {
             return eppMapping
         }
 
-        val epMapping = repository.findEndpointAnnotationTypeMapping(query)
+        val epMapping = repository.findEndpointAnnotationTypeMapping(query, step)
         if (epMapping.isNotEmpty()) {
             return epMapping
         }
 
-        val pMapping = repository.findGlobalAnnotationParameterTypeMappings(query)
+        val pMapping = repository.findGlobalAnnotationParameterTypeMappings(query, step)
         if (pMapping.isNotEmpty()) {
             return pMapping
         }
 
-        return repository.findGlobalAnnotationTypeMapping(query)
+        return repository.findGlobalAnnotationTypeMapping(query, step)
     }
 
     fun findParameterNameTypeMapping(query: MappingQuery): NameTypeMapping? {
-        log.trace("looking for parameter name type mapping {}", query)
+        val step = RootStep("looking for parameter name type mapping of", query)
+        try {
+            return findParameterNameTypeMapping(query, step)
+        } finally {
+            step.log()
+        }
+    }
 
-        val epMapping = repository.findEndpointParameterNameTypeMapping(query)
+    private fun findParameterNameTypeMapping(query: MappingQuery, step: MappingStep): NameTypeMapping? {
+        val epMapping = repository.findEndpointParameterNameTypeMapping(query, step)
         if (epMapping != null) {
             return epMapping
         }
 
-        val gMapping = repository.findGlobalParameterNameTypeMapping(query)
+        val gMapping = repository.findGlobalParameterNameTypeMapping(query, step)
         if(gMapping != null) {
             return gMapping
         }
@@ -256,32 +283,57 @@ class MappingFinder(mappings: MappingSettings) {
     }
 
     fun findAnnotationParameterNameTypeMapping(query: MappingQuery): List<AnnotationNameMapping> {
-        log.trace("looking for annotation parameter name type mapping {}", query)
+        val step = RootStep("looking for annotation parameter name type mapping of", query)
+        try {
+            return findAnnotationParameterNameTypeMapping(query, step)
+        } finally {
+            step.log()
+        }
+    }
 
-        val epMapping = repository.findEndpointAnnotationParameterNameTypeMapping(query)
+    private fun findAnnotationParameterNameTypeMapping(query: MappingQuery, step: MappingStep): List<AnnotationNameMapping> {
+        val epMapping = repository.findEndpointAnnotationParameterNameTypeMapping(query, step)
         if (epMapping.isNotEmpty()) {
             return epMapping
         }
 
-        return repository.findGlobalAnnotationParameterNameTypeMapping(query)
+        return repository.findGlobalAnnotationParameterNameTypeMapping(query, step)
     }
 
     fun findAddParameterTypeMappings(query: MappingQuery): List<AddParameterTypeMapping> {
-        val epMapping = repository.findEndpointAddParameterTypeMappings(query)
+        val step = RootStep("looking for additional parameter type mapping of", query)
+        try {
+            return findAddParameterTypeMappings(query, step)
+        } finally {
+            step.log()
+        }
+    }
+
+    private fun findAddParameterTypeMappings(query: MappingQuery, step: MappingStep): List<AddParameterTypeMapping> {
+        val epMapping = repository.findEndpointAddParameterTypeMappings(query, step)
         if (epMapping.isNotEmpty()) {
             return epMapping
         }
 
-        return repository.findGlobalAddParameterTypeMappings()
+        return repository.findGlobalAddParameterTypeMappings(step)
     }
 
     fun findContentTypeMapping(query: MappingQuery): ContentTypeMapping? {
-        val epMapping = repository.findEndpointContentTypeMapping(query)
+        val step = RootStep("looking for content type type mapping of", query)
+        try {
+            return findContentTypeMapping(query, step)
+        } finally {
+            step.log()
+        }
+    }
+
+    fun findContentTypeMapping(query: MappingQuery, step: MappingStep): ContentTypeMapping? {
+        val epMapping = repository.findEndpointContentTypeMapping(query, step)
         if (epMapping != null) {
             return epMapping
         }
 
-        val gMapping = repository.findGlobalContentTypeMapping(query)
+        val gMapping = repository.findGlobalContentTypeMapping(query, step)
         if(gMapping != null) {
             return gMapping
         }

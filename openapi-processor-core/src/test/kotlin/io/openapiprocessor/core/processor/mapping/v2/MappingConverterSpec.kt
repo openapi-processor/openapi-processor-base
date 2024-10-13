@@ -16,6 +16,8 @@ import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.mockk.mockk
 import io.openapiprocessor.core.converter.MappingFinderQuery
+import io.openapiprocessor.core.converter.mapping.steps.ParametersStep
+import io.openapiprocessor.core.converter.mapping.steps.TypesStep
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.processor.MappingReader
 import io.openapiprocessor.core.support.annotationTypeMatcher
@@ -42,7 +44,7 @@ class MappingConverterSpec: StringSpec({
 
         val mappings = MappingConverter(reader.read(yaml) as Mapping).convert().globalMappings
 
-        val mapping = mappings.findTypeMapping(typeMatcher(path = "/foo", name = "Foo"))
+        val mapping = mappings.findTypeMapping(typeMatcher(path = "/foo", name = "Foo"), TypesStep())
         mapping!!.sourceTypeName shouldBe "Foo"
         mapping.sourceTypeFormat.shouldBeNull()
         mapping.targetTypeName shouldBe "io.openapiprocessor.Foo"
@@ -126,9 +128,10 @@ class MappingConverterSpec: StringSpec({
 
         val mappings = MappingConverter(reader.read(yaml) as Mapping).convert().globalMappings
 
-        val annotations = mappings.findAnnotationParameterTypeMapping(annotationTypeMatcher(name = "Foo"))
-        annotations shouldHaveSize 1
+        val annotations = mappings.findAnnotationParameterTypeMapping(
+            annotationTypeMatcher(name = "Foo"), ParametersStep())
 
+        annotations shouldHaveSize 1
         val annotation = annotations.first()
         annotation.sourceTypeName shouldBe "Foo"
         annotation.sourceTypeFormat.shouldBeNull()
@@ -150,7 +153,8 @@ class MappingConverterSpec: StringSpec({
                    """.trimMargin()
 
         val mappings = MappingConverter(reader.read(yaml) as Mapping).convert().endpointMappings
-        val annotations = mappings["/foo"]!!.findAnnotationParameterTypeMapping(MappingFinderQuery(name = "Foo"))
+        val annotations = mappings["/foo"]!!.findAnnotationParameterTypeMapping(
+            MappingFinderQuery(name = "Foo"), ParametersStep())
 
         annotations shouldHaveSize 1
 
@@ -177,7 +181,7 @@ class MappingConverterSpec: StringSpec({
 
         val mappings = MappingConverter(reader.read(yaml) as Mapping).convert().endpointMappings
         val annotations = mappings["/foo"]!!.findAnnotationParameterTypeMapping(
-            MappingFinderQuery(name = "Foo", method = HttpMethod.GET))
+            MappingFinderQuery(name = "Foo", method = HttpMethod.GET), ParametersStep())
 
         annotations shouldHaveSize 1
 

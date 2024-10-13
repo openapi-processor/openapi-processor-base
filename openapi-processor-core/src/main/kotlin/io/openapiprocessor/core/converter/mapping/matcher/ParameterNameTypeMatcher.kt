@@ -6,20 +6,23 @@
 package io.openapiprocessor.core.converter.mapping.matcher
 
 import io.openapiprocessor.core.converter.mapping.*
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import io.openapiprocessor.core.converter.mapping.steps.MappingStep
+import io.openapiprocessor.core.converter.mapping.steps.MatcherStep
 
 class ParameterNameTypeMatcher(private val query: MappingQuery): MappingMatcher {
-    val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     override fun match(mapping: Mapping): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun match(mapping: Mapping, step: MappingStep): Boolean {
         if (mapping !is NameTypeMapping) {
-            log.trace("not matched: {}", mapping)
+            step.add(MatcherStep(mapping, false))
             return false
         }
 
         val match = mapping.parameterName == query.name
-        log.trace("${if (match) "" else "not "}matched: {}", mapping)
+        step.add(MatcherStep(mapping, match))
         return match
     }
 }

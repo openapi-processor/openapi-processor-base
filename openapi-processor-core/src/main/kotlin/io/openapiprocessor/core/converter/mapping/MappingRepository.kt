@@ -36,36 +36,37 @@ class MappingRepository(
         return globalMappings.getMultiTypeMapping()
     }
 
-    fun findGlobalTypeMapping(query: MappingQuery): TypeMapping? {
-        return globalMappings.findTypeMapping(TypeMatcher(query))
+    fun findGlobalTypeMapping(query: MappingQuery, step: MappingStep): TypeMapping? {
+        return globalMappings.findTypeMapping(TypeMatcher(query), step.add(GlobalsStep()))
     }
 
-    fun findGlobalAnnotationTypeMapping(query: MappingQuery): List<AnnotationTypeMapping> {
-        return globalMappings.findAnnotationTypeMapping(AnnotationTypeMatcher(query))
+    fun findGlobalAnnotationTypeMapping(query: MappingQuery, step: MappingStep): List<AnnotationTypeMapping> {
+        return globalMappings.findAnnotationTypeMapping(AnnotationTypeMatcher(query), step.add(GlobalsStep()))
     }
 
     fun findGlobalParameterTypeMapping(query: MappingQuery, step: MappingStep): TypeMapping? {
         return globalMappings.findParameterTypeMapping(TypeMatcher(query), step.add(GlobalsStep()))
     }
 
-    fun findGlobalAnnotationParameterTypeMappings(query: MappingQuery): List<AnnotationTypeMapping> {
-        return globalMappings.findAnnotationParameterTypeMapping(AnnotationTypeMatcher(query))
+    fun findGlobalAnnotationParameterTypeMappings(query: MappingQuery, step: MappingStep): List<AnnotationTypeMapping> {
+        return globalMappings.findAnnotationParameterTypeMapping(AnnotationTypeMatcher(query), step.add(GlobalsStep()))
     }
 
-    fun findGlobalParameterNameTypeMapping(query: MappingQuery): NameTypeMapping? {
-        return globalMappings.findParameterNameTypeMapping(ParameterNameTypeMatcher(query))
+    fun findGlobalParameterNameTypeMapping(query: MappingQuery, step: MappingStep): NameTypeMapping? {
+        return globalMappings.findParameterNameTypeMapping(ParameterNameTypeMatcher(query), step.add(GlobalsStep()))
     }
 
-    fun findGlobalAnnotationParameterNameTypeMapping(query: MappingQuery): List<AnnotationNameMapping> {
-        return globalMappings.findAnnotationParameterNameTypeMapping(AnnotationParameterNameTypeMatcher(query))
+    fun findGlobalAnnotationParameterNameTypeMapping(query: MappingQuery, step: MappingStep): List<AnnotationNameMapping> {
+        return globalMappings.findAnnotationParameterNameTypeMapping(AnnotationParameterNameTypeMatcher(query),
+            step.add(GlobalsStep()))
     }
 
-    fun findGlobalAddParameterTypeMappings(): List<AddParameterTypeMapping>  {
-        return globalMappings.findAddParameterTypeMappings(AddParameterTypeMatcher())
+    fun findGlobalAddParameterTypeMappings(step: MappingStep): List<AddParameterTypeMapping>  {
+        return globalMappings.findAddParameterTypeMappings(AddParameterTypeMatcher(), step.add(GlobalsStep()))
     }
 
-    fun findGlobalContentTypeMapping(query: MappingQuery): ContentTypeMapping? {
-        return globalMappings.findContentTypeMapping(ContentTypeMatcher(query))
+    fun findGlobalContentTypeMapping(query: MappingQuery, step: MappingStep): ContentTypeMapping? {
+        return globalMappings.findContentTypeMapping(ContentTypeMatcher(query), step.add(GlobalsStep()))
     }
 
     fun getEndpointResultTypeMapping(query: MappingQuery): ResultTypeMapping? {
@@ -88,40 +89,40 @@ class MappingRepository(
         return endpointMappings[query.path]?.getNullTypeMapping(query)
     }
 
-    fun findEndpointTypeMapping(query: MappingQuery): TypeMapping? {
-        return endpointMappings[query.path]?.findTypeMapping(query)
+    fun findEndpointTypeMapping(query: MappingQuery, step: MappingStep): TypeMapping? {
+        return endpointMappings[query.path]?.findTypeMapping(query, step.add(EndpointsStep(query)))
     }
 
-    fun findEndpointAnnotationTypeMapping(query: MappingQuery): List<AnnotationTypeMapping> {
-        val mappings = endpointMappings[query.path] ?: return emptyList()
-        return mappings.findAnnotationTypeMappings(query)
+    fun findEndpointAnnotationTypeMapping(query: MappingQuery, step: MappingStep): List<AnnotationTypeMapping> {
+        val pathMappings = endpointMappings[query.path] ?: return emptyList()
+        return pathMappings.findAnnotationTypeMappings(query, step.add(EndpointsStep(query)))
     }
 
     fun findEndpointParameterTypeMapping(query: MappingQuery, step: MappingStep): TypeMapping? {
         return endpointMappings[query.path]?.findParameterTypeMapping(query, step.add(EndpointsStep(query)))
     }
 
-    fun findEndpointAnnotationParameterTypeMappings(query: MappingQuery): List<AnnotationTypeMapping> {
+    fun findEndpointAnnotationParameterTypeMappings(query: MappingQuery, step: MappingStep): List<AnnotationTypeMapping> {
         val mappings = endpointMappings[query.path] ?: return emptyList()
-        return mappings.findAnnotationParameterTypeMapping(query)
+        return mappings.findAnnotationParameterTypeMapping(query, step.add(EndpointsStep(query)))
     }
 
-    fun findEndpointParameterNameTypeMapping(query: MappingQuery): NameTypeMapping? {
-        return endpointMappings[query.path]?.findParameterNameTypeMapping(query)
+    fun findEndpointParameterNameTypeMapping(query: MappingQuery, step: MappingStep): NameTypeMapping? {
+        return endpointMappings[query.path]?.findParameterNameTypeMapping(query, step.add(EndpointsStep(query)))
     }
 
-    fun findEndpointAnnotationParameterNameTypeMapping(query: MappingQuery): List<AnnotationNameMapping> {
+    fun findEndpointAnnotationParameterNameTypeMapping(query: MappingQuery, step: MappingStep): List<AnnotationNameMapping> {
         val mappings = endpointMappings[query.path] ?: return emptyList()
-        return mappings.findAnnotationParameterNameTypeMapping(query)
+        return mappings.findAnnotationParameterNameTypeMapping(query, step.add(EndpointsStep(query)))
     }
 
-    fun findEndpointAddParameterTypeMappings(query: MappingQuery): List<AddParameterTypeMapping> {
+    fun findEndpointAddParameterTypeMappings(query: MappingQuery, step: MappingStep): List<AddParameterTypeMapping> {
         val mappings = endpointMappings[query.path] ?: return emptyList()
-        return mappings.findAddParameterTypeMappings(query)
+        return mappings.findAddParameterTypeMappings(query, step.add(EndpointsStep(query)))
     }
 
-    fun findEndpointContentTypeMapping(query: MappingQuery): ContentTypeMapping? {
-        return endpointMappings[query.path]?.findContentTypeMapping(query)
+    fun findEndpointContentTypeMapping(query: MappingQuery, step: MappingStep): ContentTypeMapping? {
+        return endpointMappings[query.path]?.findContentTypeMapping(query, step.add(EndpointsStep(query)))
     }
 
     fun findExtensionAnnotations(extension: String, value: String): List<AnnotationNameMapping> {

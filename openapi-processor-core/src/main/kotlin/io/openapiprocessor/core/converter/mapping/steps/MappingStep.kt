@@ -7,6 +7,7 @@ package io.openapiprocessor.core.converter.mapping.steps
 
 interface MappingStep {
     fun isMatch(): Boolean
+    fun hasMappings(): Boolean
     fun add(step: MappingStep): MappingStep
     fun isEqual(step: MappingStep): Boolean
     fun log(indent: String = "")

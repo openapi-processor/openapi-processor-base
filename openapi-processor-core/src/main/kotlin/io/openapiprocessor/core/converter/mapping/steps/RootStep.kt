@@ -18,12 +18,19 @@ class RootStep(val message: String = "", val query: MappingQuery) : MappingStep 
         return steps.any { it.isMatch() }
     }
 
+    override fun hasMappings(): Boolean {
+        return steps.any { it.hasMappings() }
+    }
+
     override fun log(indent: String) {
         log.trace("{} {}", message, query)
-
-        steps.forEach {
-            it.log("$indent  ")
+        if (!hasMappings()) {
+            log.trace("$indent  $NO_MATCH", "no mappings")
+            return
         }
+
+        steps.filter { it.hasMappings() }
+            .forEach { it.log("$indent  ") }
     }
 
     override fun add(step: MappingStep): MappingStep {

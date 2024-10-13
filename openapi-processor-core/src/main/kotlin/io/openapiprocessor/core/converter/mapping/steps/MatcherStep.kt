@@ -16,6 +16,10 @@ class MatcherStep(val mapping: Mapping, val match: Boolean): MappingStep {
         return match
     }
 
+    override fun hasMappings(): Boolean {
+        return true
+    }
+
     override fun add(step: MappingStep): MappingStep {
         TODO("never called")
     }

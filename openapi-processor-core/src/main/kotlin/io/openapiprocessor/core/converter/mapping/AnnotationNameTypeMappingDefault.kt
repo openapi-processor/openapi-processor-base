@@ -16,4 +16,9 @@ open class AnnotationNameTypeMappingDefault(
      */
     override val annotation: Annotation
 
-): Mapping, AnnotationNameMapping
+): Mapping, AnnotationNameMapping {
+
+    override fun toString(): String {
+        return "name: $name @ $annotation"
+    }
+}

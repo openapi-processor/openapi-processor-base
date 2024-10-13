@@ -55,7 +55,11 @@ class  TypeMapping @JvmOverloads constructor(
     }
 
     override fun toString(): String {
-        return "${sourceType()} => ${targetType()}"
+        if (hasType()) {
+            return "type: ${sourceType()} => ${targetType()}"
+        } else {
+            return targetType()
+        }
     }
 
     private fun sourceType(): String {
@@ -76,6 +80,11 @@ class  TypeMapping @JvmOverloads constructor(
         } else {
             genericTypes.joinToString(",", "<", ">") { it.toString() }
         }
+    }
+
+    // it has no type if it is only used to configure a target type
+    private fun hasType(): Boolean {
+        return sourceTypeName != null
     }
 }
 
