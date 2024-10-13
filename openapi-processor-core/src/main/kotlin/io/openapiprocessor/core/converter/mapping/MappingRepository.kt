@@ -6,7 +6,8 @@
 package io.openapiprocessor.core.converter.mapping
 
 import io.openapiprocessor.core.converter.mapping.matcher.*
-import io.openapiprocessor.core.converter.mapping.steps.EndpointStep
+import io.openapiprocessor.core.converter.mapping.steps.EndpointsStep
+import io.openapiprocessor.core.converter.mapping.steps.GlobalsStep
 import io.openapiprocessor.core.converter.mapping.steps.MappingStep
 import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
 import org.slf4j.Logger
@@ -43,8 +44,8 @@ class MappingRepository(
         return globalMappings.findAnnotationTypeMapping(AnnotationTypeMatcher(query))
     }
 
-    fun findGlobalParameterTypeMapping(query: MappingQuery): TypeMapping? {
-        return globalMappings.findParameterTypeMapping(TypeMatcher(query))
+    fun findGlobalParameterTypeMapping(query: MappingQuery, step: MappingStep): TypeMapping? {
+        return globalMappings.findParameterTypeMapping(TypeMatcher(query), step.add(GlobalsStep()))
     }
 
     fun findGlobalAnnotationParameterTypeMappings(query: MappingQuery): List<AnnotationTypeMapping> {
@@ -97,7 +98,7 @@ class MappingRepository(
     }
 
     fun findEndpointParameterTypeMapping(query: MappingQuery, step: MappingStep): TypeMapping? {
-        return endpointMappings[query.path]?.findParameterTypeMapping(query, step.add(EndpointStep(query)))
+        return endpointMappings[query.path]?.findParameterTypeMapping(query, step.add(EndpointsStep(query)))
     }
 
     fun findEndpointAnnotationParameterTypeMappings(query: MappingQuery): List<AnnotationTypeMapping> {

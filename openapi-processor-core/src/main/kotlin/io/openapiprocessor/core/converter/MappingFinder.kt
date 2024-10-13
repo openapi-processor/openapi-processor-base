@@ -133,7 +133,7 @@ class MappingFinder(mappings: MappingSettings) {
             return eptMapping
         }
 
-        val gpMapping = repository.findGlobalParameterTypeMapping(query)
+        val gpMapping = repository.findGlobalParameterTypeMapping(query, step)
         if (gpMapping != null) {
             return gpMapping
         }
@@ -209,7 +209,7 @@ class MappingFinder(mappings: MappingSettings) {
             return epMapping
         }
 
-        val gMapping = repository.findGlobalParameterTypeMapping(query)
+        val gMapping = repository.findGlobalParameterTypeMapping(query, step)
         if (gMapping != null) {
             return gMapping
         }

@@ -9,7 +9,7 @@ import io.openapiprocessor.core.converter.mapping.MappingQuery
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class EndpointStep(val query: MappingQuery): MappingStep {
+class EndpointsStep(val query: MappingQuery): MappingStep {
     private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     private val steps: MutableCollection<MappingStep> = ArrayList()
@@ -29,7 +29,7 @@ class EndpointStep(val query: MappingQuery): MappingStep {
     }
 
     override fun isEqual(step: MappingStep): Boolean {
-        if (step !is EndpointStep) {
+        if (step !is EndpointsStep) {
             return false
         }
 

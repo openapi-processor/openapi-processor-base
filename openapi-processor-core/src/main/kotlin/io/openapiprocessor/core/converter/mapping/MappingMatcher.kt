@@ -5,6 +5,13 @@
 
 package io.openapiprocessor.core.converter.mapping
 
+import io.openapiprocessor.core.converter.mapping.steps.MappingStep
+
 fun interface MappingMatcher {
+    @Deprecated(message = "replace", replaceWith = ReplaceWith("match(mapping, step)") )
     fun match(mapping: Mapping): Boolean
+
+    fun match(mapping: Mapping, step: MappingStep): Boolean {
+        return false
+    }
 }

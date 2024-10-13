@@ -5,6 +5,7 @@
 
 package io.openapiprocessor.core.converter.mapping
 
+import io.openapiprocessor.core.converter.mapping.steps.MappingStep
 import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -64,8 +65,8 @@ class Mappings(
         return mappings.map { it as AnnotationTypeMapping }
     }
 
-    fun findParameterTypeMapping(filter: MappingMatcher): TypeMapping? {
-        val mappings = parameterTypeMappings.filter(filter)
+    fun findParameterTypeMapping(filter: MappingMatcher, step: MappingStep): TypeMapping? {
+        val mappings = parameterTypeMappings.filter(filter/*step.add(ParameterStep())*/)
         if (mappings.isEmpty()) {
             return null
         }
