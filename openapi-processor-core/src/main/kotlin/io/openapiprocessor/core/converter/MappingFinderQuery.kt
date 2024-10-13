@@ -74,42 +74,52 @@ class MappingFinderQuery(
     override fun toString(): String {
         val parts = mutableListOf<String>()
 
-        if (path != null) {
-            parts.add("path: $path")
-        }
-
-        if (method != null) {
-            parts.add("method: $method")
-        }
-
         if (name != null) {
             parts.add("name: $name")
         }
 
-        if (format != null) {
-            parts.add("format: $format")
+        if (path != null) {
+            var part = "path: "
+
+            if (method != null) {
+                part += "$method "
+            }
+
+            part += "$path"
+            parts.add(part)
+        }
+
+        if (!contentType.isNullOrBlank()) {
+            parts.add("$contentType")
         }
 
         if (type != null) {
-            parts.add("type: $type")
+            var part = "type: $type"
+            if (format != null) {
+                part += ": $format"
+            }
+            parts.add(part)
         }
 
-        if (contentType != null) {
-            parts.add("contentType: $contentType")
-        }
+        // flags
+        var flags = ""
 
         if (primitive) {
-            parts.add("primitive")
+            flags += "P"
         }
 
         if (array) {
-            parts.add("array")
+            flags += "A"
         }
 
         if (allowObject) {
-            parts.add("allow object")
+            flags += "O"
         }
 
-        return parts.joinToString(", ")
+        if (flags.isNotEmpty()) {
+            parts.add(flags)
+        }
+
+        return parts.joinToString(" ")
     }
 }
