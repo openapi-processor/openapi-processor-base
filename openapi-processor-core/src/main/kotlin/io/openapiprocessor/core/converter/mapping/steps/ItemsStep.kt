@@ -15,4 +15,14 @@ abstract class ItemsStep: MappingStep {
     override fun hasMappings(): Boolean {
         return steps.any { it.hasMappings() }
     }
+
+    override fun add(step: MappingStep): MappingStep {
+        val found = steps.find { it.isEqual(step) }
+        if(found != null) {
+            return found
+        }
+
+        steps.add(step)
+        return step
+    }
 }

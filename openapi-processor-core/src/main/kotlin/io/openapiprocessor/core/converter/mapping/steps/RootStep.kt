@@ -23,16 +23,6 @@ class RootStep(val message: String = "", val query: MappingQuery) : ItemsStep() 
             .forEach { it.log("$indent  ") }
     }
 
-    override fun add(step: MappingStep): MappingStep {
-        val found = steps.find { it.isEqual(step) }
-        if(found != null) {
-            return found
-        }
-
-        steps.add(step)
-        return step
-    }
-
     override fun isEqual(step: MappingStep): Boolean {
         return false
     }

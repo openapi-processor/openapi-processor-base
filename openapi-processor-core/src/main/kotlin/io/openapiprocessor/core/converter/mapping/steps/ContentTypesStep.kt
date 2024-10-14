@@ -11,15 +11,7 @@ import org.slf4j.LoggerFactory
 class ContentTypesStep: ItemsStep() {
     private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
-    override fun add(step: MappingStep): MappingStep {
-        val found = steps.find { it.isEqual(step) }
-        if(found != null) {
-            return found
-        }
 
-        steps.add(step)
-        return step
-    }
 
     override fun isEqual(step: MappingStep): Boolean {
         return step is ContentTypesStep
