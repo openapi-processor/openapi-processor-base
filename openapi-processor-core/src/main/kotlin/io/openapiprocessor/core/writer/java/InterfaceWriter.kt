@@ -30,7 +30,7 @@ class InterfaceWriter(
     fun write(target: Writer, itf: Interface) {
         target.write ("package ${itf.getPackageName()};\n\n")
 
-        val imports: List<String> = collectImports (itf, itf.getPackageName(), itf.endpoints)
+        val imports: List<String> = collectImports (itf.getPackageName(), itf.endpoints)
         imports.forEach {
             target.write("import ${it};\n")
         }
@@ -50,7 +50,7 @@ class InterfaceWriter(
         target.write ("}\n")
     }
 
-    private fun collectImports(itf: Interface, packageName: String, endpoints: List<Endpoint>): List<String> {
+    private fun collectImports(packageName: String, endpoints: List<Endpoint>): List<String> {
         val imports: MutableSet<String> = mutableSetOf()
 
         imports.addAll(generatedWriter.getImports())
