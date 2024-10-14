@@ -9,14 +9,8 @@ import io.openapiprocessor.core.converter.mapping.MappingQuery
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class RootStep(val message: String = "", val query: MappingQuery) : MappingStep {
+class RootStep(val message: String = "", val query: MappingQuery) : ItemsStep() {
     private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
-
-    private val steps: MutableCollection<MappingStep> = ArrayList()
-
-    override fun isMatch(): Boolean {
-        return steps.any { it.isMatch() }
-    }
 
     override fun hasMappings(): Boolean {
         return steps.any { it.hasMappings() }

@@ -8,14 +8,8 @@ package io.openapiprocessor.core.converter.mapping.steps
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class ContentTypesStep: MappingStep {
+class ContentTypesStep: ItemsStep() {
     private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
-
-    private val steps: MutableCollection<MappingStep> = ArrayList()
-
-    override fun isMatch(): Boolean {
-        return steps.any { it.isMatch() }
-    }
 
     override fun hasMappings(): Boolean {
         return steps.any { it.hasMappings() }
