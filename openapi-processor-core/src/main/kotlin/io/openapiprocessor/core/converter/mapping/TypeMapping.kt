@@ -55,10 +55,10 @@ class  TypeMapping @JvmOverloads constructor(
     }
 
     override fun toString(): String {
-        if (hasType()) {
-            return "type: ${sourceType()} => ${targetType()}"
+        return if (hasType()) {
+            "type: ${sourceType()} => ${targetType()}"
         } else {
-            return targetType()
+            targetType()
         }
     }
 
