@@ -86,36 +86,31 @@ class MappingConverter(val mapping: MappingV2) {
             val pathMappings = convertPath(path)
             val methodMappings = HashMap<HttpMethod, Mappings>()
 
-            if (path.get != null) {
-                methodMappings[HttpMethod.GET] = convertPathMethod(path.get)
-            }
-
-            if (path.put != null) {
-                methodMappings[HttpMethod.PUT] = convertPathMethod(path.put)
-            }
-
-            if (path.post != null) {
-                methodMappings[HttpMethod.POST] = convertPathMethod(path.post)
-            }
-
-            if (path.delete != null) {
-                methodMappings[HttpMethod.DELETE] = convertPathMethod(path.delete)
-            }
-
-            if (path.options != null) {
-                methodMappings[HttpMethod.OPTIONS] = convertPathMethod(path.options)
-            }
-
-            if (path.head != null) {
-                methodMappings[HttpMethod.HEAD] = convertPathMethod(path.head)
-            }
-
-            if (path.patch != null) {
-                methodMappings[HttpMethod.PATCH] = convertPathMethod(path.patch)
-            }
-
-            if (path.trace != null) {
-                methodMappings[HttpMethod.TRACE] = convertPathMethod(path.trace)
+            when {
+                path.get != null -> {
+                    methodMappings[HttpMethod.GET] = convertPathMethod(path.get)
+                }
+                path.put != null -> {
+                    methodMappings[HttpMethod.PUT] = convertPathMethod(path.put)
+                }
+                path.post != null -> {
+                    methodMappings[HttpMethod.POST] = convertPathMethod(path.post)
+                }
+                path.delete != null -> {
+                    methodMappings[HttpMethod.DELETE] = convertPathMethod(path.delete)
+                }
+                path.options != null -> {
+                    methodMappings[HttpMethod.OPTIONS] = convertPathMethod(path.options)
+                }
+                path.head != null -> {
+                    methodMappings[HttpMethod.HEAD] = convertPathMethod(path.head)
+                }
+                path.patch != null -> {
+                    methodMappings[HttpMethod.PATCH] = convertPathMethod(path.patch)
+                }
+                path.trace != null -> {
+                    methodMappings[HttpMethod.TRACE] = convertPathMethod(path.trace)
+                }
             }
 
             endpointMappings[it.key] = EndpointMappings(pathMappings, methodMappings)
