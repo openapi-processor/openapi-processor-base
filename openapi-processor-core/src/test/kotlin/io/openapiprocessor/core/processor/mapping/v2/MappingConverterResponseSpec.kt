@@ -13,6 +13,7 @@ import io.kotest.matchers.shouldBe
 import io.mockk.mockk
 import io.openapiprocessor.core.converter.MappingFinderQuery
 import io.openapiprocessor.core.converter.mapping.AmbiguousTypeMappingException
+import io.openapiprocessor.core.converter.mapping.steps.ContentTypesStep
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.processor.MappingReader
 import io.openapiprocessor.core.support.responseTypeMatcher
@@ -36,7 +37,7 @@ class MappingConverterResponseSpec: StringSpec({
 
         // then:
         val contentMapping = mappings.findContentTypeMapping(
-            responseTypeMatcher(contentType = "application/vnd.array"))!!
+            responseTypeMatcher(contentType = "application/vnd.array"), ContentTypesStep())!!
 
         contentMapping.contentType shouldBe "application/vnd.array"
         contentMapping.mapping.sourceTypeName.shouldBeNull()
@@ -60,7 +61,7 @@ class MappingConverterResponseSpec: StringSpec({
 
         // then:
         val contentMapping = mappings.findContentTypeMapping(
-            responseTypeMatcher(contentType = "application/vnd.array"))
+            responseTypeMatcher(contentType = "application/vnd.array"), ContentTypesStep())
 
         contentMapping.shouldBeNull()
     }
@@ -84,8 +85,7 @@ class MappingConverterResponseSpec: StringSpec({
 
         shouldThrow<AmbiguousTypeMappingException> {
             mappings.findContentTypeMapping(
-                responseTypeMatcher(contentType = "application/vnd.array")
-            )
+                responseTypeMatcher(contentType = "application/vnd.array"), ContentTypesStep())
         }
     }
 
@@ -113,8 +113,8 @@ class MappingConverterResponseSpec: StringSpec({
         val mappings = MappingConverter(mapping).convert().endpointMappings
 
         // then:
-        val contentMapping = mappings["/foo"]!!.findContentTypeMapping(
-            MappingFinderQuery(path = "/foo", method = HttpMethod.POST, contentType = "application/vnd.array"))!!
+        val query = MappingFinderQuery(path = "/foo", method = HttpMethod.POST, contentType = "application/vnd.array")
+        val contentMapping = mappings["/foo"]!!.findContentTypeMapping(query, ContentTypesStep())!!
 
         contentMapping.contentType shouldBe "application/vnd.array"
         contentMapping.mapping.sourceTypeName.shouldBeNull()
@@ -122,8 +122,8 @@ class MappingConverterResponseSpec: StringSpec({
         contentMapping.mapping.targetTypeName shouldBe "java.util.List"
         contentMapping.mapping.genericTypes.shouldBeEmpty()
 
-        val contentMappingGet = mappings["/foo"]!!.findContentTypeMapping(
-            MappingFinderQuery(path = "/foo", method = HttpMethod.GET, contentType = "application/vnd.array"))!!
+        val queryGet = MappingFinderQuery(path = "/foo", method = HttpMethod.GET, contentType = "application/vnd.array")
+        val contentMappingGet = mappings["/foo"]!!.findContentTypeMapping(queryGet, ContentTypesStep())!!
 
         contentMappingGet.contentType shouldBe "application/vnd.array"
         contentMappingGet.mapping.sourceTypeName.shouldBeNull()

@@ -19,4 +19,9 @@ class ContentTypeMapping(
      */
     val mapping: TypeMapping
 
-): Mapping
+): Mapping {
+
+    override fun toString(): String {
+        return "$contentType => $mapping"
+    }
+}

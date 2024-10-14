@@ -23,7 +23,7 @@ class NameTypeMapping(
 ): Mapping {
 
     override fun toString(): String {
-        return "$parameterName => ${targetType()}"
+        return "name: $parameterName => ${targetType()}"
     }
 
     private fun targetType(): String {

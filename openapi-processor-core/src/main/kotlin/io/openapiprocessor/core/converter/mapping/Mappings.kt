@@ -5,6 +5,9 @@
 
 package io.openapiprocessor.core.converter.mapping
 
+import io.openapiprocessor.core.converter.mapping.steps.MappingStep
+import io.openapiprocessor.core.converter.mapping.steps.ParametersStep
+import io.openapiprocessor.core.converter.mapping.steps.TypesStep
 import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -42,8 +45,8 @@ class Mappings(
         return nullTypeMapping
     }
 
-    fun findTypeMapping(filter: MappingMatcher): TypeMapping? {
-        val mappings = typeMappings.filter(filter)
+    fun findTypeMapping(filter: MappingMatcher, step: MappingStep): TypeMapping? {
+        val mappings = typeMappings.filter(filter, step.add(TypesStep()))
         if (mappings.isEmpty()) {
             return null
         }
@@ -55,8 +58,8 @@ class Mappings(
         return mappings.first() as TypeMapping
     }
 
-    fun findAnnotationTypeMapping(filter: MappingMatcher): List<AnnotationTypeMapping> {
-        val mappings = typeMappings.filter(filter)
+    fun findAnnotationTypeMapping(filter: MappingMatcher, step: MappingStep): List<AnnotationTypeMapping> {
+        val mappings = typeMappings.filter(filter, step.add(TypesStep()))
         if (mappings.isEmpty()) {
             return emptyList()
         }
@@ -64,8 +67,8 @@ class Mappings(
         return mappings.map { it as AnnotationTypeMapping }
     }
 
-    fun findParameterTypeMapping(filter: MappingMatcher): TypeMapping? {
-        val mappings = parameterTypeMappings.filter(filter)
+    fun findParameterTypeMapping(filter: MappingMatcher, step: MappingStep): TypeMapping? {
+        val mappings = parameterTypeMappings.filter(filter, step.add(ParametersStep()))
         if (mappings.isEmpty()) {
             return null
         }
@@ -77,8 +80,8 @@ class Mappings(
         return mappings.first() as TypeMapping
     }
 
-    fun findAnnotationParameterTypeMapping(filter: MappingMatcher): List<AnnotationTypeMapping> {
-        val mappings = parameterTypeMappings.filter(filter)
+    fun findAnnotationParameterTypeMapping(filter: MappingMatcher, step: MappingStep): List<AnnotationTypeMapping> {
+        val mappings = parameterTypeMappings.filter(filter, step.add(ParametersStep()))
         if (mappings.isEmpty()) {
             return emptyList()
         }
@@ -86,8 +89,8 @@ class Mappings(
         return mappings.map { it as AnnotationTypeMapping }
     }
 
-    fun findParameterNameTypeMapping(filter: MappingMatcher): NameTypeMapping? {
-        val mappings = parameterTypeMappings.filter(filter)
+    fun findParameterNameTypeMapping(filter: MappingMatcher, step: MappingStep): NameTypeMapping? {
+        val mappings = parameterTypeMappings.filter(filter, step.add(ParametersStep()))
         if (mappings.isEmpty()) {
             return null
         }
@@ -99,8 +102,8 @@ class Mappings(
         return mappings.first() as NameTypeMapping
     }
 
-    fun findAnnotationParameterNameTypeMapping(filter: MappingMatcher): List<AnnotationNameMapping> {
-        val mappings = parameterTypeMappings.filter(filter)
+    fun findAnnotationParameterNameTypeMapping(filter: MappingMatcher, step: MappingStep): List<AnnotationNameMapping> {
+        val mappings = parameterTypeMappings.filter(filter, step.add(ParametersStep()))
         if (mappings.isEmpty()) {
             return emptyList()
         }
@@ -108,8 +111,8 @@ class Mappings(
         return mappings.map { it as AnnotationNameMapping }
     }
 
-    fun findAddParameterTypeMappings(filter: MappingMatcher): List<AddParameterTypeMapping>  {
-        val mappings = parameterTypeMappings.filter(filter)
+    fun findAddParameterTypeMappings(filter: MappingMatcher, step: MappingStep): List<AddParameterTypeMapping>  {
+        val mappings = parameterTypeMappings.filter(filter, step.add(ParametersStep()))
         if (mappings.isEmpty()) {
             return emptyList()
         }
@@ -117,8 +120,8 @@ class Mappings(
         return mappings.map { it as AddParameterTypeMapping }
     }
 
-    fun findContentTypeMapping(filter: MappingMatcher): ContentTypeMapping? {
-        val mappings = responseTypeMappings.filter(filter)
+    fun findContentTypeMapping(filter: MappingMatcher, step: MappingStep): ContentTypeMapping? {
+        val mappings = responseTypeMappings.filter(filter, step)
         if (mappings.isEmpty()) {
             return null
         }

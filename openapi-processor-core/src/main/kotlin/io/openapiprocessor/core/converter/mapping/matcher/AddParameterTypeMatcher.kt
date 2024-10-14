@@ -8,9 +8,11 @@ package io.openapiprocessor.core.converter.mapping.matcher
 import io.openapiprocessor.core.converter.mapping.AddParameterTypeMapping
 import io.openapiprocessor.core.converter.mapping.Mapping
 import io.openapiprocessor.core.converter.mapping.MappingMatcher
+import io.openapiprocessor.core.converter.mapping.steps.MappingStep
 
 class AddParameterTypeMatcher: MappingMatcher {
-    override fun match(mapping: Mapping): Boolean {
+
+    override fun match(mapping: Mapping, step: MappingStep): Boolean {
         return mapping is AddParameterTypeMapping
     }
 

@@ -12,6 +12,7 @@ import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.maps.shouldHaveSize
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
+import io.openapiprocessor.core.converter.mapping.steps.EndpointsStep
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.processor.MappingConverter
 import io.openapiprocessor.core.processor.MappingReader
@@ -38,8 +39,10 @@ class MappingConverterEndpointMethodSpec: StringSpec({
         val mappingData = converter.convert(reader.read(yaml))
 
         mappingData.endpointMappings.shouldHaveSize(1)
+
+        val query = query(path = "/foo", method = HttpMethod.GET, name = "Foo")
         val epMappings = mappingData.endpointMappings["/foo"]
-        val mapping = epMappings?.findTypeMapping(query(path = "/foo", method = HttpMethod.GET, name = "Foo"))
+        val mapping = epMappings?.findTypeMapping(query, EndpointsStep(query))
 
         mapping!!.sourceTypeName shouldBe "Foo"
         mapping.sourceTypeFormat.shouldBeNull()
@@ -74,8 +77,10 @@ class MappingConverterEndpointMethodSpec: StringSpec({
             val mappingData = converter.convert(reader.read(yaml))
 
             mappingData.endpointMappings.shouldHaveSize(1)
+
+            val query = query(path = "/foo", method = method, name = "Foo")
             val epMappings = mappingData.endpointMappings["/foo"]
-            val mapping = epMappings?.findTypeMapping(query(path = "/foo", method = method, name = "Foo"))
+            val mapping = epMappings?.findTypeMapping(query, EndpointsStep(query))
 
             mapping!!.sourceTypeName shouldBe "Foo"
             mapping.sourceTypeFormat.shouldBeNull()

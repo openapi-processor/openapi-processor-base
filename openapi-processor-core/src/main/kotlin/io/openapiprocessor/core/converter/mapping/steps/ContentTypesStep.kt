@@ -1,0 +1,48 @@
+/*
+ * Copyright 2024 https://github.com/openapi-processor-base/openapi-processor-core
+ * PDX-License-Identifier: Apache-2.0
+ */
+
+package io.openapiprocessor.core.converter.mapping.steps
+
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
+class ContentTypesStep: ItemsStep() {
+    private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
+
+    override fun hasMappings(): Boolean {
+        return steps.any { it.hasMappings() }
+    }
+
+    override fun add(step: MappingStep): MappingStep {
+        val found = steps.find { it.isEqual(step) }
+        if(found != null) {
+            return found
+        }
+
+        steps.add(step)
+        return step
+    }
+
+    override fun isEqual(step: MappingStep): Boolean {
+        return step is ContentTypesStep
+    }
+
+    override fun log(indent: String) {
+        if (!hasMappings()) {
+            return
+        }
+
+        val prefix = if (isMatch()) {
+            "$indent$MATCH"
+        } else {
+            "$indent$NO_MATCH"
+        }
+
+        log.trace(prefix, "responses")
+        steps.forEach {
+            it.log("$indent  ")
+        }
+    }
+}

@@ -13,13 +13,11 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
+import io.openapiprocessor.core.converter.mapping.steps.GlobalsStep
 import io.openapiprocessor.core.model.DataTypes
 import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.parser.HttpMethod
-import io.openapiprocessor.core.support.getParameterSchemaInfo
-import io.openapiprocessor.core.support.getSchemaInfo
-import io.openapiprocessor.core.support.parseApi
-import io.openapiprocessor.core.support.parseOptions
+import io.openapiprocessor.core.support.*
 import io.openapiprocessor.core.writer.java.JavaIdentifier
 
 class DataTypeConverterMappingSpec: StringSpec({
@@ -204,7 +202,7 @@ class DataTypeConverterMappingSpec: StringSpec({
             |    - add: add => additional.Parameter
             """)
 
-        val tm = options.globalMappings.findAddParameterTypeMappings { _ -> true }.first().mapping
+        val tm = options.globalMappings.findAddParameterTypeMappings(AnyMatcher(), GlobalsStep()).first().mapping
 
         // when:
         val converter = DataTypeConverter(options, identifier)

@@ -21,4 +21,17 @@ open class AnnotationTypeMappingDefault(
      */
     override val annotation: Annotation
 
-): Mapping, AnnotationTypeMapping
+): Mapping, AnnotationTypeMapping {
+
+    override fun toString(): String {
+        return "type: ${sourceType()} @ $annotation"
+    }
+
+    private fun sourceType(): String {
+        return if (sourceTypeFormat == null) {
+            sourceTypeName
+        } else {
+            "${sourceTypeName}:${sourceTypeFormat}"
+        }
+    }
+}

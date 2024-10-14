@@ -5,11 +5,14 @@
 
 package io.openapiprocessor.core.converter.mapping
 
+import io.openapiprocessor.core.converter.mapping.steps.MappingStep
+
 fun interface MappingBucket {
     /**
      * filter the mapping(s) by the given filter.
      *
      * @param filter matching conditions
+     * @param step mapping trace collector
      */
-    fun filter(filter: MappingMatcher): List<Mapping>
+    fun filter(filter: MappingMatcher, step: MappingStep): List<Mapping>
 }

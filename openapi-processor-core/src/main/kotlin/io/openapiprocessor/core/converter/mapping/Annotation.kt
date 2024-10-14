@@ -19,19 +19,53 @@ class Annotation(
      * parameter key/value map.
      */
     val parameters: LinkedHashMap<String, ParameterValue> = linkedMapOf()
-)
+) {
+
+    override fun toString(): String {
+        return "$type${parameters()}"
+    }
+
+    private fun parameters(): String {
+        return if (parameters.isEmpty()) {
+            ""
+        } else {
+            parameters.map {
+                if (it.key.isEmpty()) {
+                    "${it.value}"
+                } else {
+                    "${it.key} = ${it.value}"
+                }
+            }
+            .joinToString(", ", "(", ")") {
+                it
+            }
+        }
+    }
+}
 
 interface ParameterValue {
     val value: String
     val import: String?
 }
 
-class SimpleParameterValue(override val value: String, override val import: String? = null): ParameterValue
+class SimpleParameterValue(override val value: String, override val import: String? = null)
+    : ParameterValue {
 
-class ClassParameterValue(private val clazz: String): ParameterValue {
+    override fun toString(): String {
+        return value
+    }
+}
+
+class ClassParameterValue(private val clazz: String)
+    : ParameterValue {
+
     override val value: String
         get() = clazz.substring(import.substringBeforeLast('.').length + 1)
 
     override val import: String
         get() = clazz.substringBeforeLast('.')
+
+    override fun toString(): String {
+        return clazz
+    }
 }

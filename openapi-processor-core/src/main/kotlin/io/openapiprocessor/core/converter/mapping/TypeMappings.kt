@@ -5,6 +5,7 @@
 
 package io.openapiprocessor.core.converter.mapping
 
+import io.openapiprocessor.core.converter.mapping.steps.MappingStep
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -13,8 +14,8 @@ class TypeMappings(private val mappings: List<Mapping>): MappingBucket {
 
     constructor(vararg mapping: Mapping): this(mapping.toList())
 
-    override fun filter(filter: MappingMatcher): List<Mapping> {
+    override fun filter(filter: MappingMatcher, step: MappingStep): List<Mapping> {
         return mappings
-            .filter { filter.match(it) }
+            .filter { filter.match(it, step) }
     }
 }
