@@ -11,4 +11,8 @@ abstract class ItemsStep: MappingStep {
     override fun isMatch(): Boolean {
         return steps.any { it.isMatch() }
     }
+
+    override fun hasMappings(): Boolean {
+        return steps.any { it.hasMappings() }
+    }
 }

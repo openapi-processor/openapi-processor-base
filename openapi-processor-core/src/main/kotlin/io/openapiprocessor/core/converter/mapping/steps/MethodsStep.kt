@@ -12,10 +12,6 @@ import org.slf4j.LoggerFactory
 class MethodsStep(val query: MappingQuery): ItemsStep() {
     private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
-    override fun hasMappings(): Boolean {
-        return steps.any { it.hasMappings() }
-    }
-
     override fun add(step: MappingStep): MappingStep {
         val found = steps.find { it.isEqual(step) }
         if(found != null) {

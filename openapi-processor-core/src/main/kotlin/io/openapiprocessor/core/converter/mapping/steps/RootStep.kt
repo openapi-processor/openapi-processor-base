@@ -12,10 +12,6 @@ import org.slf4j.LoggerFactory
 class RootStep(val message: String = "", val query: MappingQuery) : ItemsStep() {
     private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
-    override fun hasMappings(): Boolean {
-        return steps.any { it.hasMappings() }
-    }
-
     override fun log(indent: String) {
         log.trace("{} {}", message, query)
         if (!hasMappings()) {
