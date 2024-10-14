@@ -14,7 +14,7 @@ import io.openapiprocessor.core.model.*
 import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.parser.*
 import io.openapiprocessor.core.parser.HttpMethod
-import io.openapiprocessor.core.parser.NullSchema.Companion.nullSchema
+import io.openapiprocessor.core.parser.NullSchema
 import io.openapiprocessor.core.parser.RequestBody
 import io.openapiprocessor.core.parser.Response
 import io.openapiprocessor.core.writer.Identifier
@@ -335,7 +335,7 @@ class  ApiConverter(
                 SchemaInfo.Endpoint(ctx.path, operation.getMethod()),
                 "",
                 "",
-                nullSchema,
+                NullSchema,
                 ctx.resolver)
 
             val dataType = NoneDataType()

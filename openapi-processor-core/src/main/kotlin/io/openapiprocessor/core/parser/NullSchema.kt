@@ -5,11 +5,7 @@
 
 package io.openapiprocessor.core.parser
 
-
-class NullSchema private constructor(): Schema {
-    companion object {
-        val nullSchema: NullSchema = NullSchema()
-    }
+object NullSchema: Schema {
 
     override fun getType(): String? {
         return null

@@ -14,7 +14,7 @@ import io.openapiprocessor.core.converter.MappingFinder
 import io.openapiprocessor.core.converter.SchemaInfo
 import io.openapiprocessor.core.model.datatypes.StringDataType
 import io.openapiprocessor.core.parser.HttpMethod
-import io.openapiprocessor.core.parser.NullSchema.Companion.nullSchema
+import io.openapiprocessor.core.parser.NullSchema
 import io.openapiprocessor.core.parser.RefResolver
 import io.openapiprocessor.core.support.parseOptions
 
@@ -28,7 +28,7 @@ class NullDataTypeWrapperSpec : StringSpec({
         val wrapper = NullDataTypeWrapper(options, MappingFinder(options))
 
         val info = SchemaInfo(
-            SchemaInfo.Endpoint("/any", HttpMethod.GET), "", "", nullSchema, resolver
+            SchemaInfo.Endpoint("/any", HttpMethod.GET), "", "", NullSchema, resolver
         )
         val dataType = StringDataType()
 
@@ -47,7 +47,7 @@ class NullDataTypeWrapperSpec : StringSpec({
         val wrapper = NullDataTypeWrapper(options, MappingFinder(options))
 
         val info = SchemaInfo(
-            SchemaInfo.Endpoint("/any", HttpMethod.GET), "", "", nullSchema, resolver
+            SchemaInfo.Endpoint("/any", HttpMethod.GET), "", "", NullSchema, resolver
         )
         val dataType = StringDataType()
 
@@ -69,7 +69,7 @@ class NullDataTypeWrapperSpec : StringSpec({
         val wrapper = NullDataTypeWrapper(options, MappingFinder(options))
 
         val info = SchemaInfo(
-            SchemaInfo.Endpoint("/any", HttpMethod.PATCH), "", "", nullSchema, resolver
+            SchemaInfo.Endpoint("/any", HttpMethod.PATCH), "", "", NullSchema, resolver
         )
         val dataType = StringDataType()
 
