@@ -5,12 +5,8 @@
 
 package io.openapiprocessor.core.converter.mapping
 
-import io.openapiprocessor.core.converter.mapping.steps.MappingStep
-import io.openapiprocessor.core.converter.mapping.steps.ParametersStep
-import io.openapiprocessor.core.converter.mapping.steps.TypesStep
+import io.openapiprocessor.core.converter.mapping.steps.*
 import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 class Mappings(
     private val resultTypeMapping: ResultTypeMapping? = null,
@@ -23,25 +19,23 @@ class Mappings(
     private val responseTypeMappings: TypeMappings = TypeMappings(),
     private val exclude: Boolean = false
 ) {
-    val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
-
-    fun getResultTypeMapping(): ResultTypeMapping? {
+    fun getResultTypeMapping(step: MappingStep): ResultTypeMapping? {
         return resultTypeMapping
     }
 
-    fun getResultStyle(): ResultStyle? {
+    fun getResultStyle(step: MappingStep): ResultStyle? {
         return resultStyle
     }
 
-    fun getSingleTypeMapping(): TypeMapping? {
+    fun getSingleTypeMapping(step: MappingStep): TypeMapping? {
         return singleTypeMapping
     }
 
-    fun getMultiTypeMapping(): TypeMapping? {
+    fun getMultiTypeMapping(step: MappingStep): TypeMapping? {
         return multiTypeMapping
     }
 
-    fun getNullTypeMapping(): NullTypeMapping? {
+    fun getNullTypeMapping(step: MappingStep): NullTypeMapping? {
         return nullTypeMapping
     }
 
@@ -121,7 +115,7 @@ class Mappings(
     }
 
     fun findContentTypeMapping(filter: MappingMatcher, step: MappingStep): ContentTypeMapping? {
-        val mappings = responseTypeMappings.filter(filter, step)
+        val mappings = responseTypeMappings.filter(filter, step.add(ContentTypesStep()))
         if (mappings.isEmpty()) {
             return null
         }
@@ -133,7 +127,8 @@ class Mappings(
         return mappings.first() as ContentTypeMapping
     }
 
-    fun isExcluded(): Boolean {
+    fun isExcluded(step: MappingStep): Boolean {
+        step.add(StringStep("exclude: $exclude", exclude))
         return exclude
     }
 }

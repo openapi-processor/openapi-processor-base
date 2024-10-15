@@ -10,6 +10,8 @@ import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.converter.MappingFinderQuery
+import io.openapiprocessor.core.converter.mapping.steps.EndpointsStep
+import io.openapiprocessor.core.converter.mapping.steps.GlobalsStep
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.processor.MappingReader
 
@@ -32,7 +34,7 @@ class MappingConverterResultSpec: StringSpec({
         val mappings = MappingConverter(mapping).convert().globalMappings
 
         // then:
-        val resultTypeMapping = mappings.getResultTypeMapping()!!
+        val resultTypeMapping = mappings.getResultTypeMapping(GlobalsStep())!!
 
         resultTypeMapping.targetTypeName shouldBe "plain"
         resultTypeMapping.genericTypes.shouldBeEmpty()
@@ -54,7 +56,7 @@ class MappingConverterResultSpec: StringSpec({
         val mappings = MappingConverter(mapping).convert().globalMappings
 
         // then:
-        val resultTypeMapping = mappings.getResultTypeMapping()!!
+        val resultTypeMapping = mappings.getResultTypeMapping(GlobalsStep())!!
 
         resultTypeMapping.targetTypeName shouldBe "io.openapiprocessor.Wrap"
         resultTypeMapping.genericTypes.shouldBeEmpty()
@@ -75,7 +77,7 @@ class MappingConverterResultSpec: StringSpec({
         val mappings = MappingConverter(mapping).convert().globalMappings
 
         // then:
-        val resultStyle = mappings.getResultStyle()
+        val resultStyle = mappings.getResultStyle(GlobalsStep())
 
         resultStyle.shouldBeNull()
     }
@@ -96,7 +98,7 @@ class MappingConverterResultSpec: StringSpec({
         val mappings = MappingConverter(mapping).convert().globalMappings
 
         // then:
-        val resultStyle = mappings.getResultStyle()!!
+        val resultStyle = mappings.getResultStyle(GlobalsStep())!!
 
         resultStyle.shouldBe(ResultStyle.SUCCESS)
     }
@@ -117,7 +119,7 @@ class MappingConverterResultSpec: StringSpec({
         val mappings = MappingConverter(mapping).convert().globalMappings
 
         // then:
-        val resultStyle = mappings.getResultStyle()!!
+        val resultStyle = mappings.getResultStyle(GlobalsStep())!!
 
         resultStyle.shouldBe(ResultStyle.ALL)
     }
@@ -144,16 +146,14 @@ class MappingConverterResultSpec: StringSpec({
         val mappings = MappingConverter(mapping).convert().endpointMappings
 
         // then:
-        val resultTypeMapping = mappings["/foo"]!!.getResultTypeMapping(
-            MappingFinderQuery(path = "/foo", method = HttpMethod.POST)
-        )!!
+        val resultQuery = MappingFinderQuery(path = "/foo", method = HttpMethod.POST)
+        val resultTypeMapping = mappings["/foo"]!!.getResultTypeMapping(resultQuery, EndpointsStep(resultQuery))!!
 
         resultTypeMapping.targetTypeName shouldBe "io.openapiprocessor.WrapAll"
         resultTypeMapping.genericTypes.shouldBeEmpty()
 
-        val resultTypeMappingGet = mappings["/foo"]!!.getResultTypeMapping(
-            MappingFinderQuery(path = "/foo", method = HttpMethod.GET)
-        )!!
+        val resultQueryGet = MappingFinderQuery(path = "/foo", method = HttpMethod.GET)
+        val resultTypeMappingGet = mappings["/foo"]!!.getResultTypeMapping(resultQueryGet, EndpointsStep(resultQueryGet))!!
 
         resultTypeMappingGet.targetTypeName shouldBe "io.openapiprocessor.WrapGet"
         resultTypeMappingGet.genericTypes.shouldBeEmpty()

@@ -8,27 +8,30 @@ package io.openapiprocessor.core.converter.mapping.steps
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class ContentTypesStep: ItemsStep() {
+class StringStep(val mapping: String, val match: Boolean): MappingStep {
     private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
+    override fun isMatch(): Boolean {
+        return match
+    }
+
+    override fun hasMappings(): Boolean {
+        return true
+    }
+
+    override fun add(step: MappingStep): MappingStep {
+        TODO("Never called")
+    }
+
     override fun isEqual(step: MappingStep): Boolean {
-        return step is ContentTypesStep
+        return false
     }
 
     override fun log(indent: String) {
-        if (!hasMappings()) {
-            return
-        }
-
-        val prefix = if (isMatch()) {
-            "$indent$MATCH"
+        if (isMatch()) {
+            log.trace("$indent$MATCH", mapping)
         } else {
-            "$indent$NO_MATCH"
-        }
-
-        log.trace(prefix, "responses")
-        steps.forEach {
-            it.log("$indent  ")
+            log.trace("$indent$NO_MATCH", mapping)
         }
     }
 }

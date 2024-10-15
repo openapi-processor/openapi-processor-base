@@ -8,6 +8,8 @@ package io.openapiprocessor.core.processor.mapping.v2
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.converter.MappingFinderQuery
+import io.openapiprocessor.core.converter.mapping.steps.EndpointsStep
+import io.openapiprocessor.core.converter.mapping.steps.GlobalsStep
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.processor.MappingReader
 
@@ -31,11 +33,11 @@ class MappingConverterReactiveSpec: StringSpec({
         val mappings = MappingConverter(mapping).convert().globalMappings
 
         // then:
-        val singleTypeMapping = mappings.getSingleTypeMapping()!!
+        val singleTypeMapping = mappings.getSingleTypeMapping(GlobalsStep())!!
         singleTypeMapping.sourceTypeName shouldBe "single"
         singleTypeMapping.targetTypeName shouldBe "reactor.core.publisher.Mono"
 
-        val multiTypeMapping = mappings.getMultiTypeMapping()!!
+        val multiTypeMapping = mappings.getMultiTypeMapping(GlobalsStep())!!
         multiTypeMapping.sourceTypeName shouldBe "multi"
         multiTypeMapping.targetTypeName shouldBe "reactor.core.publisher.Flux"
     }
@@ -64,27 +66,26 @@ class MappingConverterReactiveSpec: StringSpec({
         val mappings = MappingConverter(mapping).convert().endpointMappings
 
         // then:
-        val singleTypeMapping = mappings["/foo"]!!.getSingleTypeMapping(
-            MappingFinderQuery(path = "/foo", method = HttpMethod.POST))!!
+        val singleQuery = MappingFinderQuery(path = "/foo", method = HttpMethod.POST)
+        val singleTypeMapping = mappings["/foo"]!!.getSingleTypeMapping(singleQuery, EndpointsStep(singleQuery))!!
 
         singleTypeMapping.sourceTypeName shouldBe "single"
         singleTypeMapping.targetTypeName shouldBe "reactor.core.publisher.Mono"
 
-        val multiTypeMapping = mappings["/foo"]!!.getMultiTypeMapping(
-            MappingFinderQuery(path = "/foo", method = HttpMethod.POST))!!
+        val multiQuery = MappingFinderQuery(path = "/foo", method = HttpMethod.POST)
+        val multiTypeMapping = mappings["/foo"]!!.getMultiTypeMapping(multiQuery, EndpointsStep(multiQuery))!!
 
         multiTypeMapping.sourceTypeName shouldBe "multi"
         multiTypeMapping.targetTypeName shouldBe "reactor.core.publisher.Flux"
 
-
-        val singleTypeMappingGet = mappings["/foo"]!!.getSingleTypeMapping(
-            MappingFinderQuery(path = "/foo", method = HttpMethod.GET))!!
+        val singleGet = MappingFinderQuery(path = "/foo", method = HttpMethod.GET)
+        val singleTypeMappingGet = mappings["/foo"]!!.getSingleTypeMapping(singleGet, EndpointsStep(singleGet))!!
 
         singleTypeMappingGet.sourceTypeName shouldBe "single"
         singleTypeMappingGet.targetTypeName shouldBe "reactor.core.publisher.Mono2"
 
-        val multiTypeMappingGet = mappings["/foo"]!!.getMultiTypeMapping(
-            MappingFinderQuery(path = "/foo", method = HttpMethod.GET))!!
+        val multiGet = MappingFinderQuery(path = "/foo", method = HttpMethod.GET)
+        val multiTypeMappingGet = mappings["/foo"]!!.getMultiTypeMapping(multiGet, EndpointsStep(multiGet))!!
 
         multiTypeMappingGet.sourceTypeName shouldBe "multi"
         multiTypeMappingGet.targetTypeName shouldBe "reactor.core.publisher.Flux2"

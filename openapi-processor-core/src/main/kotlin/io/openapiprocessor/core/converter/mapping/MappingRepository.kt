@@ -20,20 +20,20 @@ class MappingRepository(
 ) {
     val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
-    fun getGlobalResultTypeMapping(): ResultTypeMapping? {
-        return globalMappings.getResultTypeMapping()
+    fun getGlobalResultTypeMapping(step: MappingStep): ResultTypeMapping? {
+        return globalMappings.getResultTypeMapping(step.add(GlobalsStep()))
     }
 
-    fun getGlobalResultStyleMapping(): ResultStyle? {
-        return globalMappings.getResultStyle()
+    fun getGlobalResultStyleMapping(step: MappingStep): ResultStyle? {
+        return globalMappings.getResultStyle(step.add(GlobalsStep()))
     }
 
-    fun getGlobalSingleTypeMapping(): TypeMapping? {
-        return globalMappings.getSingleTypeMapping()
+    fun getGlobalSingleTypeMapping(step: MappingStep): TypeMapping? {
+        return globalMappings.getSingleTypeMapping(step.add(GlobalsStep()))
     }
 
-    fun getGlobalMultiTypeMapping(): TypeMapping? {
-        return globalMappings.getMultiTypeMapping()
+    fun getGlobalMultiTypeMapping(step: MappingStep): TypeMapping? {
+        return globalMappings.getMultiTypeMapping(step.add(GlobalsStep()))
     }
 
     fun findGlobalTypeMapping(query: MappingQuery, step: MappingStep): TypeMapping? {
@@ -69,24 +69,24 @@ class MappingRepository(
         return globalMappings.findContentTypeMapping(ContentTypeMatcher(query), step.add(GlobalsStep()))
     }
 
-    fun getEndpointResultTypeMapping(query: MappingQuery): ResultTypeMapping? {
-        return endpointMappings[query.path]?.getResultTypeMapping(query)
+    fun getEndpointResultTypeMapping(query: MappingQuery, step: MappingStep): ResultTypeMapping? {
+        return endpointMappings[query.path]?.getResultTypeMapping(query, step.add(EndpointsStep(query)))
     }
 
-    fun getEndpointResultStyleMapping(query: MappingQuery): ResultStyle? {
-        return endpointMappings[query.path]?.getResultStyle(query)
+    fun getEndpointResultStyleMapping(query: MappingQuery, step: MappingStep): ResultStyle? {
+        return endpointMappings[query.path]?.getResultStyle(query, step.add(EndpointsStep(query)))
     }
 
-    fun getEndpointSingleTypeMapping(query: MappingQuery): TypeMapping? {
-        return endpointMappings[query.path]?.getSingleTypeMapping(query)
+    fun getEndpointSingleTypeMapping(query: MappingQuery, step: MappingStep): TypeMapping? {
+        return endpointMappings[query.path]?.getSingleTypeMapping(query, step.add(EndpointsStep(query)))
     }
 
-    fun getEndpointMultiTypeMapping(query: MappingQuery): TypeMapping? {
-        return endpointMappings[query.path]?.getMultiTypeMapping(query)
+    fun getEndpointMultiTypeMapping(query: MappingQuery, step: MappingStep): TypeMapping? {
+        return endpointMappings[query.path]?.getMultiTypeMapping(query, step.add(EndpointsStep(query)))
     }
 
-    fun getEndpointNullTypeMapping(query: MappingQuery): NullTypeMapping? {
-        return endpointMappings[query.path]?.getNullTypeMapping(query)
+    fun getEndpointNullTypeMapping(query: MappingQuery, step: MappingStep): NullTypeMapping? {
+        return endpointMappings[query.path]?.getNullTypeMapping(query, step.add(EndpointsStep(query)))
     }
 
     fun findEndpointTypeMapping(query: MappingQuery, step: MappingStep): TypeMapping? {
@@ -130,8 +130,8 @@ class MappingRepository(
         return extMappings.get(value)
     }
 
-    fun isEndpointExcluded(query: MappingQuery): Boolean {
+    fun isEndpointExcluded(query: MappingQuery, step: MappingStep): Boolean {
         val mappings = endpointMappings[query.path]?: return false
-        return mappings.isExcluded(query)
+        return mappings.isExcluded(query, step.add(EndpointsStep(query)))
     }
 }

@@ -64,8 +64,7 @@ map:
         def mappingData = converter.convert (reader.read (yaml))
 
         then:
-        def endpoint = mappingData.endpointMappings["/foo"]
-        def excluded = endpoint.isExcluded(query(
+        def query = query(
                 "/foo",
                 null,
                 null,
@@ -73,7 +72,9 @@ map:
                 null,
                 null,
                 false,
-                false))
+                false)
+        def endpoint = mappingData.endpointMappings["/foo"]
+        def excluded = endpoint.isExcluded(query, new EndpointsStep(query))
 
         excluded == exclude
 
@@ -238,17 +239,18 @@ map:
         def mappingData = converter.convert (reader.read (yaml))
 
         then:
+        def query = query(
+                        "/foo",
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        false,
+                        false
+                )
         def endpoint = mappingData.endpointMappings["/foo"]
-        def type = endpoint.getResultTypeMapping(query(
-                "/foo",
-                null,
-                null,
-                null,
-                null,
-                null,
-                false,
-                false
-        ))
+        def type = endpoint.getResultTypeMapping(query, new EndpointsStep(query))
 
         type.targetTypeName == expected
 
@@ -257,7 +259,6 @@ map:
         'plain'                                   | 'plain'
         'org.springframework.http.ResponseEntity' | 'org.springframework.http.ResponseEntity'
     }
-
 
     void "reads endpoint single & multi mapping" () {
         String yaml = """\
@@ -275,29 +276,31 @@ map:
         def endpoint = mappingData.endpointMappings["/foo"]
 
         then:
-        def typeSingle = endpoint.getSingleTypeMapping(query(
-                "/foo",
-                null,
-                null,
-                null,
-                null,
-                null,
-                false,
-                false
-        ))
+        def querySingle = query(
+                        "/foo",
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        false,
+                        false
+                )
+        def typeSingle = endpoint.getSingleTypeMapping(querySingle, new EndpointsStep(querySingle))
         typeSingle.sourceTypeName == 'single'
         typeSingle.targetTypeName == single
 
-        def typeMulti = endpoint.getMultiTypeMapping(query(
-                "/foo",
-                null,
-                null,
-                null,
-                null,
-                null,
-                false,
-                false
-        ))
+        def queryMulti = query(
+                        "/foo",
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        false,
+                        false
+                )
+        def typeMulti = endpoint.getMultiTypeMapping(queryMulti, new EndpointsStep(queryMulti))
         typeMulti.sourceTypeName == 'multi'
         typeMulti.targetTypeName == multi
 

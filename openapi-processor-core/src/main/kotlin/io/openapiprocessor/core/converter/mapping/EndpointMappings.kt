@@ -10,87 +10,82 @@ import io.openapiprocessor.core.converter.mapping.steps.MappingStep
 import io.openapiprocessor.core.converter.mapping.steps.MethodsStep
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 class EndpointMappings(
     private val mappings: Mappings,
     private val methodMappings: Map<HttpMethod, Mappings>
 ) {
-    val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
-
-    fun getResultTypeMapping(query: MappingQuery): ResultTypeMapping? {
+    fun getResultTypeMapping(query: MappingQuery, step: MappingStep): ResultTypeMapping? {
         val httpMethodMappings = methodMappings[query.method]
-        val methodMapping = httpMethodMappings?.getResultTypeMapping()
-        if (methodMapping != null) {
-            log.trace("found endpoint method result type mapping ({} {})", query.path, query.method)
-            return methodMapping
+        if (httpMethodMappings != null) {
+            val methodMapping = httpMethodMappings.getResultTypeMapping(step.add(MethodsStep(query)))
+            if (methodMapping != null) {
+                return methodMapping
+            }
         }
 
-        val mapping = mappings.getResultTypeMapping()
+        val mapping = mappings.getResultTypeMapping(step)
         if (mapping != null) {
-            log.trace("found endpoint result type mapping ({})", query.path)
             return mapping
         }
 
         return null
     }
 
-    fun getResultStyle(query: MappingQuery): ResultStyle? {
-        val mapping = mappings.getResultStyle()
+    fun getResultStyle(query: MappingQuery, step: MappingStep): ResultStyle? {
+        val mapping = mappings.getResultStyle(step)
         if (mapping != null) {
-            log.trace("found endpoint result style mapping ({})", query.path)
             return mapping
         }
 
         return null
     }
 
-    fun getSingleTypeMapping(query: MappingQuery): TypeMapping? {
+    fun getSingleTypeMapping(query: MappingQuery, step: MappingStep): TypeMapping? {
         val httpMethodMappings = methodMappings[query.method]
-        val methodMapping = httpMethodMappings?.getSingleTypeMapping()
-        if (methodMapping != null) {
-            log.trace("found endpoint method single mapping ({} {})", query.path, query.method)
-            return methodMapping
+        if (httpMethodMappings != null) {
+            val methodMapping = httpMethodMappings.getSingleTypeMapping(step.add(MethodsStep(query)))
+            if (methodMapping != null) {
+                return methodMapping
+            }
         }
 
-        val mapping = mappings.getSingleTypeMapping()
+        val mapping = mappings.getSingleTypeMapping(step)
         if (mapping != null) {
-            log.trace("found endpoint single mapping ({})", query.path)
             return mapping
         }
 
         return null
     }
 
-    fun getMultiTypeMapping(query: MappingQuery): TypeMapping? {
+    fun getMultiTypeMapping(query: MappingQuery, step: MappingStep): TypeMapping? {
         val httpMethodMappings = methodMappings[query.method]
-        val methodMapping = httpMethodMappings?.getMultiTypeMapping()
-        if (methodMapping != null) {
-            log.trace("found endpoint method multi mapping ({} {})", query.path, query.method)
-            return methodMapping
+        if (httpMethodMappings != null) {
+            val methodMapping = httpMethodMappings.getMultiTypeMapping(step.add(MethodsStep(query)))
+            if (methodMapping != null) {
+                return methodMapping
+            }
         }
 
-        val mapping = mappings.getMultiTypeMapping()
+        val mapping = mappings.getMultiTypeMapping(step)
         if (mapping != null) {
-            log.trace("found endpoint multi mapping ({})", query.path)
             return mapping
         }
 
         return null
     }
 
-    fun getNullTypeMapping(query: MappingQuery): NullTypeMapping? {
+    fun getNullTypeMapping(query: MappingQuery, step: MappingStep): NullTypeMapping? {
         val httpMethodMappings = methodMappings[query.method]
-        val methodMapping = httpMethodMappings?.getNullTypeMapping()
-        if (methodMapping != null) {
-            log.trace("found endpoint method null mapping ({} {})", query.path, query.method)
-            return methodMapping
+        if (httpMethodMappings != null) {
+            val methodMapping = httpMethodMappings.getNullTypeMapping(step.add(MethodsStep(query)))
+            if (methodMapping != null) {
+                return methodMapping
+            }
         }
 
-        val mapping = mappings.getNullTypeMapping()
+        val mapping = mappings.getNullTypeMapping(step)
         if (mapping != null) {
-            log.trace("found endpoint null mapping ({})", query.path)
             return mapping
         }
 
@@ -100,7 +95,10 @@ class EndpointMappings(
     fun findTypeMapping(query: MappingQuery, step: MappingStep): TypeMapping? {
         val httpMethodMappings = methodMappings[query.method]
         if (httpMethodMappings != null) {
-            val methodMapping = httpMethodMappings.findTypeMapping(TypeMatcher(query), step.add(MethodsStep(query)))
+            val methodMapping = httpMethodMappings.findTypeMapping(
+                TypeMatcher(query),
+                step.add(MethodsStep(query)))
+
             if (methodMapping != null) {
                 return methodMapping
             }
@@ -238,20 +236,15 @@ class EndpointMappings(
         return null
     }
 
-    fun isExcluded(query: MappingQuery): Boolean {
+    fun isExcluded(query: MappingQuery, step: MappingStep): Boolean {
         val httpMethodMappings = methodMappings[query.method]
-        val methodExcluded = httpMethodMappings?.isExcluded()
-        if(methodExcluded != null && methodExcluded == true) {
-            log.trace("found endpoint method exclude ({} {})", query.path, query.method)
-            return methodExcluded
+        if (httpMethodMappings != null) {
+            val methodExcluded = httpMethodMappings.isExcluded(step.add(MethodsStep(query)))
+            if (methodExcluded) {
+                return true
+            }
         }
 
-        val excluded = mappings.isExcluded()
-        if(excluded) {
-            log.trace("found endpoint exclude ({})", query.path)
-            return true
-        }
-
-        return false
+        return mappings.isExcluded(step)
     }
 }

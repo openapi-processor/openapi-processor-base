@@ -16,6 +16,8 @@ import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.mockk.mockk
 import io.openapiprocessor.core.converter.MappingFinderQuery
+import io.openapiprocessor.core.converter.mapping.steps.EndpointsStep
+import io.openapiprocessor.core.converter.mapping.steps.GlobalsStep
 import io.openapiprocessor.core.converter.mapping.steps.ParametersStep
 import io.openapiprocessor.core.converter.mapping.steps.TypesStep
 import io.openapiprocessor.core.parser.HttpMethod
@@ -66,7 +68,7 @@ class MappingConverterSpec: StringSpec({
 
         val mappings = MappingConverter(reader.read(yaml) as Mapping).convert().globalMappings
 
-        val mapping = mappings.getNullTypeMapping()
+        val mapping = mappings.getNullTypeMapping(GlobalsStep())
         mapping.shouldBeNull()
         //mapping!!.targetTypeName shouldBe "org.openapitools.jackson.nullable.JsonNullable"
     }
@@ -86,8 +88,8 @@ class MappingConverterSpec: StringSpec({
 
         val mappings = MappingConverter(reader.read(yaml) as Mapping).convert().endpointMappings
 
-        val mapping = mappings["/foo"]?.getNullTypeMapping(
-            MappingFinderQuery(path = "/foo", method = HttpMethod.GET, name = "Foo"))
+        val query = MappingFinderQuery(path = "/foo", method = HttpMethod.GET, name = "Foo")
+        val mapping = mappings["/foo"]?.getNullTypeMapping(query, EndpointsStep(query))
 
         mapping!!.targetTypeName shouldBe "org.openapitools.jackson.nullable.JsonNullable"
     }
@@ -107,8 +109,8 @@ class MappingConverterSpec: StringSpec({
 
         val mappings = MappingConverter(reader.read(yaml) as Mapping).convert().endpointMappings["/foo"]
 
-        val mapping = mappings?.getNullTypeMapping(
-            MappingFinderQuery(path = "/foo", method = HttpMethod.GET, name = "Foo"))
+        val query = MappingFinderQuery(path = "/foo", method = HttpMethod.GET, name = "Foo")
+        val mapping = mappings?.getNullTypeMapping(query, EndpointsStep(query))
 
         mapping!!.targetTypeName shouldBe "org.openapitools.jackson.nullable.JsonNullable"
         mapping.undefined shouldBe "JsonNullable.undefined()"
@@ -242,10 +244,12 @@ class MappingConverterSpec: StringSpec({
         val mappings = MappingConverter(mapping).convert().endpointMappings
 
         // then:
-        val excluded = mappings["/foo"]!!.isExcluded(MappingFinderQuery(path = "/foo", method = HttpMethod.POST))
+        val query = MappingFinderQuery(path = "/foo", method = HttpMethod.POST)
+        val excluded = mappings["/foo"]!!.isExcluded(query, EndpointsStep(query))
         excluded.shouldBeFalse()
 
-        val excludedGet = mappings["/foo"]!!.isExcluded(MappingFinderQuery(path = "/foo", method = HttpMethod.GET))
+        val queryGet = MappingFinderQuery(path = "/foo", method = HttpMethod.GET)
+        val excludedGet = mappings["/foo"]!!.isExcluded(queryGet, EndpointsStep(queryGet))
         excludedGet.shouldBeTrue()
     }
 })

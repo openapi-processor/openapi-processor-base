@@ -25,14 +25,21 @@ class MappingFinder(mappings: MappingSettings) {
 
     // path/method
     fun getResultTypeMapping(query: MappingQuery): ResultTypeMapping? {
-        log.trace("looking for result type mapping {}", query)
+        val step = RootStep("looking for result type mapping of", query)
+        try {
+            return getResultTypeMapping(query, step)
+        } finally {
+            step.log()
+        }
+    }
 
-        val epMapping = repository.getEndpointResultTypeMapping(query)
+    private fun getResultTypeMapping(query: MappingQuery, step: MappingStep): ResultTypeMapping? {
+        val epMapping = repository.getEndpointResultTypeMapping(query, step)
         if (epMapping != null) {
             return epMapping
         }
 
-        val gMapping = repository.getGlobalResultTypeMapping()
+        val gMapping = repository.getGlobalResultTypeMapping(step)
         if(gMapping != null) {
             return gMapping
         }
@@ -41,14 +48,21 @@ class MappingFinder(mappings: MappingSettings) {
     }
 
     fun findResultStyleMapping(query: MappingQuery): ResultStyle {
-        log.trace("looking for result style mapping {}", query)
+        val step = RootStep("looking for result style mapping of", query)
+        try {
+            return findResultStyleMapping(query, step)
+        } finally {
+            step.log()
+        }
+    }
 
-        val epMapping = repository.getEndpointResultStyleMapping(query)
+    private fun findResultStyleMapping(query: MappingQuery, step: MappingStep): ResultStyle {
+        val epMapping = repository.getEndpointResultStyleMapping(query, step)
         if (epMapping != null) {
             return epMapping
         }
 
-        val gMapping = repository.getGlobalResultStyleMapping()
+        val gMapping = repository.getGlobalResultStyleMapping(step)
         if(gMapping != null) {
             return gMapping
         }
@@ -58,14 +72,21 @@ class MappingFinder(mappings: MappingSettings) {
 
     // path/method
     fun getSingleTypeMapping(query: MappingQuery): TypeMapping? {
-        log.trace("looking for single type mapping {}", query)
+        val step = RootStep("looking for single type style mapping of", query)
+        try {
+            return getSingleTypeMapping(query, step)
+        } finally {
+            step.log()
+        }
+    }
 
-        val epMapping = repository.getEndpointSingleTypeMapping(query)
+    private fun getSingleTypeMapping(query: MappingQuery, step: MappingStep): TypeMapping? {
+        val epMapping = repository.getEndpointSingleTypeMapping(query, step)
         if (epMapping != null) {
             return epMapping
         }
 
-        val gMapping = repository.getGlobalSingleTypeMapping()
+        val gMapping = repository.getGlobalSingleTypeMapping(step)
         if(gMapping != null) {
             return gMapping
         }
@@ -75,14 +96,21 @@ class MappingFinder(mappings: MappingSettings) {
 
     // path/method
     fun getMultiTypeMapping(query: MappingQuery): TypeMapping? {
-        log.trace("looking for multi type mapping {}", query)
+        val step = RootStep("looking for multi type mapping of", query)
+        try {
+            return getMultiTypeMapping(query, step)
+        } finally {
+            step.log()
+        }
+    }
 
-        val epMapping = repository.getEndpointMultiTypeMapping(query)
+    private fun getMultiTypeMapping(query: MappingQuery, step: MappingStep): TypeMapping? {
+        val epMapping = repository.getEndpointMultiTypeMapping(query, step)
         if (epMapping != null) {
             return epMapping
         }
 
-        val gMapping = repository.getGlobalMultiTypeMapping()
+        val gMapping = repository.getGlobalMultiTypeMapping(step)
         if(gMapping != null) {
             return gMapping
         }
@@ -327,7 +355,7 @@ class MappingFinder(mappings: MappingSettings) {
         }
     }
 
-    fun findContentTypeMapping(query: MappingQuery, step: MappingStep): ContentTypeMapping? {
+    private fun findContentTypeMapping(query: MappingQuery, step: MappingStep): ContentTypeMapping? {
         val epMapping = repository.findEndpointContentTypeMapping(query, step)
         if (epMapping != null) {
             return epMapping
@@ -342,7 +370,16 @@ class MappingFinder(mappings: MappingSettings) {
     }
 
     fun findNullTypeMapping(query: MappingQuery): NullTypeMapping? {
-        return repository.getEndpointNullTypeMapping(query)
+        val step = RootStep("looking for null type mapping of", query)
+        try {
+            return findNullTypeMapping(query, step)
+        } finally {
+            step.log()
+        }
+    }
+
+    private fun findNullTypeMapping(query: MappingQuery, step: MappingStep): NullTypeMapping? {
+        return repository.getEndpointNullTypeMapping(query, step)
     }
 
     fun findExtensionAnnotations(extension: String, vararg values: String): List<AnnotationNameMapping> {
@@ -358,6 +395,15 @@ class MappingFinder(mappings: MappingSettings) {
     }
 
     fun isEndpointExcluded(query: MappingQuery): Boolean {
-        return repository.isEndpointExcluded(query)
+        val step = RootStep("looking for exclude mapping of", query)
+        try {
+            return isEndpointExcluded(query, step)
+        } finally {
+            step.log()
+        }
+    }
+
+    private fun isEndpointExcluded(query: MappingQuery, step: MappingStep): Boolean {
+        return repository.isEndpointExcluded(query, step)
     }
 }
