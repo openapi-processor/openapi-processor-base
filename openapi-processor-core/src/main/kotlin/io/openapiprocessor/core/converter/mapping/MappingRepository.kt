@@ -6,9 +6,7 @@
 package io.openapiprocessor.core.converter.mapping
 
 import io.openapiprocessor.core.converter.mapping.matcher.*
-import io.openapiprocessor.core.converter.mapping.steps.EndpointsStep
-import io.openapiprocessor.core.converter.mapping.steps.GlobalsStep
-import io.openapiprocessor.core.converter.mapping.steps.MappingStep
+import io.openapiprocessor.core.converter.mapping.steps.*
 import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -125,9 +123,9 @@ class MappingRepository(
         return endpointMappings[query.path]?.findContentTypeMapping(query, step.add(EndpointsStep(query)))
     }
 
-    fun findExtensionAnnotations(extension: String, value: String): List<AnnotationNameMapping> {
+    fun findExtensionAnnotations(extension: String, value: String, step: MappingStep): List<AnnotationNameMapping> {
         val extMappings = extensionMappings[extension] ?: return emptyList()
-        return extMappings.get(value)
+        return extMappings.get(value, step.add(ExtensionsStep(extension)))
     }
 
     fun isEndpointExcluded(query: MappingQuery, step: MappingStep): Boolean {

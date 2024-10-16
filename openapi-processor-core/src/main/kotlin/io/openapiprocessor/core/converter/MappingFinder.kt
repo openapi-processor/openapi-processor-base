@@ -8,6 +8,7 @@ package io.openapiprocessor.core.converter
 import io.openapiprocessor.core.converter.mapping.*
 import io.openapiprocessor.core.converter.mapping.steps.MappingStep
 import io.openapiprocessor.core.converter.mapping.steps.RootStep
+import io.openapiprocessor.core.converter.mapping.steps.RootStepX
 import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -267,7 +268,6 @@ class MappingFinder(mappings: MappingSettings) {
         }
     }
 
-    // todo test variants
     private fun findAnnotationParameterTypeMappings(query: MappingQuery, step: MappingStep): List<AnnotationTypeMapping> {
         val eppMapping = repository.findEndpointAnnotationParameterTypeMappings(query, step)
         if (eppMapping.isNotEmpty()) {
@@ -387,10 +387,17 @@ class MappingFinder(mappings: MappingSettings) {
     }
 
     fun findExtensionAnnotations(extension: String, values: List<String>): List<AnnotationNameMapping> {
-        log.trace("looking for annotation extension type mapping {} ({})", extension, values)
+        val step = RootStepX("looking for annotation extension type mapping", extension)
+        try {
+            return findExtensionAnnotations(extension, values, step)
+        } finally {
+            step.log()
+        }
+    }
 
+    private fun findExtensionAnnotations(extension: String, values: List<String>, step: MappingStep): List<AnnotationNameMapping> {
         return values
-            .map { repository.findExtensionAnnotations(extension, it) }
+            .map { repository.findExtensionAnnotations(extension, it, step) }
             .flatten()
     }
 

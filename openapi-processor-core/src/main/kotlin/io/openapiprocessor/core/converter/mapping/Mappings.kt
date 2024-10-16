@@ -20,22 +20,37 @@ class Mappings(
     private val exclude: Boolean = false
 ) {
     fun getResultTypeMapping(step: MappingStep): ResultTypeMapping? {
+        if (resultTypeMapping != null) {
+            step.add(StringStep("result-type: ${resultTypeMapping.targetTypeName}", true))
+        }
         return resultTypeMapping
     }
 
     fun getResultStyle(step: MappingStep): ResultStyle? {
+        if (resultStyle != null) {
+            step.add(StringStep("result-style: $resultStyle", true))
+        }
         return resultStyle
     }
 
     fun getSingleTypeMapping(step: MappingStep): TypeMapping? {
+        if (singleTypeMapping != null) {
+            step.add(StringStep("single: ${singleTypeMapping.targetTypeName}", true))
+        }
         return singleTypeMapping
     }
 
     fun getMultiTypeMapping(step: MappingStep): TypeMapping? {
+        if (multiTypeMapping != null) {
+            step.add(StringStep("multi: ${multiTypeMapping.targetTypeName}", true))
+        }
         return multiTypeMapping
     }
 
     fun getNullTypeMapping(step: MappingStep): NullTypeMapping? {
+        if (nullTypeMapping != null) {
+            step.add(StringStep("null: $nullTypeMapping", true))
+        }
         return nullTypeMapping
     }
 
@@ -128,7 +143,9 @@ class Mappings(
     }
 
     fun isExcluded(step: MappingStep): Boolean {
-        step.add(StringStep("exclude: $exclude", exclude))
+        if (exclude) {
+            step.add(StringStep("exclude: true", true))
+        }
         return exclude
     }
 }
