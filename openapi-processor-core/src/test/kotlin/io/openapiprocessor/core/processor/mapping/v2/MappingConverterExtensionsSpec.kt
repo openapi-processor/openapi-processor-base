@@ -11,6 +11,7 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.maps.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import io.mockk.mockk
+import io.openapiprocessor.core.converter.mapping.steps.ExtensionsStep
 import io.openapiprocessor.core.processor.BadMappingException
 import io.openapiprocessor.core.processor.MappingConverter
 import io.openapiprocessor.core.processor.MappingReader
@@ -42,12 +43,12 @@ class MappingConverterExtensionsSpec: StringSpec({
         mappingData.extensionMappings.shouldHaveSize(1)
         val mappings = mappingData.extensionMappings["x-foo"]!!
 
-        val foo = mappings.get("foo")
+        val foo = mappings.get("foo", ExtensionsStep("x-foo"))
         val xFoo1 = foo[0]
         xFoo1.name shouldBe "foo"
         xFoo1.annotation.type shouldBe "annotation.Foo"
 
-        val bar = mappings.get("bar")
+        val bar = mappings.get("bar", ExtensionsStep("x-foo"))
         val xFoo2 = bar[0]
         xFoo2.name shouldBe "bar"
         xFoo2.annotation.type shouldBe "annotation.Bar"
@@ -89,12 +90,12 @@ class MappingConverterExtensionsSpec: StringSpec({
         mappingData.extensionMappings.shouldHaveSize(1)
         val mappings = mappingData.extensionMappings["x-foo"]!!
 
-        val foo = mappings.get("foo")
+        val foo = mappings.get("foo", ExtensionsStep("x-foo"))
         val xFoo1 = foo[0]
         xFoo1.name shouldBe "foo"
         xFoo1.annotation.type shouldBe "annotation.Foo"
 
-        val bar = mappings.get("bar")
+        val bar = mappings.get("bar", ExtensionsStep("x-foo"))
         val xFoo2 = bar[0]
         xFoo2.name shouldBe "bar"
         xFoo2.annotation.type shouldBe "annotation.Bar"
