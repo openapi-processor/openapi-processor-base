@@ -17,10 +17,10 @@ val ALL_30: List<TestParams> = listOf(
     test30_D_("bean-validation-requestbody"),
     test30_D_("bean-validation-requestbody-mapping"),
     test30_DR("components-requestbodies"),
-    test30_DR("extension-mapping"),
     test30_DR("deprecated"),
     test30_D_("endpoint-exclude"),
     test30_D_("endpoint-http-mapping"), // framework specific
+    test30_DR("extension-mapping"),
     test30_DR("generated"),
     test30_DR("javadoc"),
     test30_DR("javadoc-with-mapping"),
