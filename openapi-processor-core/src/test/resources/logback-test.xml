@@ -6,12 +6,25 @@
     </encoder>
   </appender>
 
+  <appender name="io.openapiprocessor.mapping" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%msg%n</pattern>
+    </encoder>
+  </appender>
+
 <!--  <root level="debug">-->
 <!--    <appender-ref ref="STDOUT" />-->
 <!--  </root>-->
 
-  <logger name="io.openapiprocessor.core.processor.MappingReader" level="WARN" additivity="false">
+  <root level="warn">
     <appender-ref ref="STDOUT" />
+  </root>
+
+  <logger name="io.openapiprocessor.core.parser.OpenApiParser" level="WARN" />
+  <logger name="io.openapiprocessor.core.processor.MappingReader" level="ERROR" />
+
+  <logger name="io.openapiprocessor.core.converter.mapping" level="OFF" additivity="false">
+    <appender-ref ref="io.openapiprocessor.mapping" />
   </logger>
 
   <logger name="io.swagger.v3.parser" level="OFF" />

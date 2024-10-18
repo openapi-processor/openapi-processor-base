@@ -5,15 +5,16 @@
 
 package io.openapiprocessor.core.converter
 
+import io.openapiprocessor.core.converter.mapping.enableMappingLookupTracing
 import io.openapiprocessor.core.converter.options.TargetDirLayout
 import io.openapiprocessor.core.processor.MappingConverter
 import io.openapiprocessor.core.processor.MappingReader
 import io.openapiprocessor.core.processor.mapping.MappingVersion
 import io.openapiprocessor.core.processor.mapping.v2.Options
-import io.openapiprocessor.core.processor.mapping.v1.Mapping as MappingV1
-import io.openapiprocessor.core.processor.mapping.v2.Mapping as MappingV2
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import io.openapiprocessor.core.processor.mapping.v1.Mapping as MappingV1
+import io.openapiprocessor.core.processor.mapping.v2.Mapping as MappingV2
 
 /**
  * creates [ApiOptions] from processor options and mapping.yaml.
@@ -101,6 +102,10 @@ class OptionsConverter(private val checkObsoleteProcessorOptions: Boolean = fals
 
                     if (options.packageName == "io.openapiprocessor.generated") {
                         log.warn("is 'options.package-name' set in mapping? found default: '{}'.", options.packageName)
+                    }
+
+                    if (mapping.debug.mapping) {
+                        enableMappingLookupTracing()
                     }
                 }
             }

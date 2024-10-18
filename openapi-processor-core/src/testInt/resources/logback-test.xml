@@ -19,7 +19,7 @@
   <logger name="io.openapiprocessor.core.parser.OpenApiParser" level="WARN" />
   <logger name="io.openapiprocessor.core.processor.MappingReader" level="ERROR" />
 
-  <logger name="io.openapiprocessor.core.converter.mapping" level="TRACE" additivity="false">
+  <logger name="io.openapiprocessor.core.converter.mapping" level="OFF" additivity="false">
     <appender-ref ref="io.openapiprocessor.mapping" />
   </logger>
 

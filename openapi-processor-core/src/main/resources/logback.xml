@@ -1,0 +1,13 @@
+<configuration>
+
+  <appender name="io.openapiprocessor.mapping" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <logger name="io.openapiprocessor.core.converter.mapping" level="OFF" additivity="false">
+    <appender-ref ref="io.openapiprocessor.mapping" />
+  </logger>
+
+</configuration>

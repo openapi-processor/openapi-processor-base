@@ -34,7 +34,12 @@ data class Mapping(
     /**
      * compatibility options
      */
-    val compatibility: Compatibility = Compatibility()
+    val compatibility: Compatibility = Compatibility(),
+
+    /**
+     * debug options
+     */
+    val debug: Debug = Debug()
 
 ): MappingVersion {
     override val v2: Boolean = true
