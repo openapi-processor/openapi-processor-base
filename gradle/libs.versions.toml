@@ -42,7 +42,7 @@ uritemplate = "io.github.std-uritemplate:std-uritemplate:1.0.6"
 checker = "org.checkerframework:checker:3.48.1"
 jimfs = "com.google.jimfs:jimfs:1.3.0"
 slf4j = "org.slf4j:slf4j-api:2.0.16"
-logback = "ch.qos.logback:logback-classic:1.5.8"
+logback = "ch.qos.logback:logback-classic:1.5.11"
 
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
 kotest-bom = "io.kotest:kotest-bom:5.9.1"
