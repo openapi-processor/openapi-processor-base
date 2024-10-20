@@ -12,6 +12,7 @@ import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
+import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.MappingFinder
 import io.openapiprocessor.core.converter.MappingFinderQuery
 import io.openapiprocessor.core.parser.HttpMethod
@@ -312,7 +313,11 @@ class MappingFinderSpec: StringSpec({
         val reader = MappingReader()
         val mapping = reader.read (yaml) as Mapping
         val mappings = MappingConverter(mapping).convert()
-        val finder = MappingFinder(mappings)
+        val finder = MappingFinder(ApiOptions().apply {
+            globalMappings = mappings.globalMappings
+            endpointMappings = mappings.endpointMappings
+            extensionMappings = mappings.extensionMappings
+        })
 
         // then:
         val resultTypeMapping = finder.getResultTypeMapping(
@@ -363,7 +368,11 @@ class MappingFinderSpec: StringSpec({
         val reader = MappingReader()
         val mapping = reader.read (yaml) as Mapping
         val mappings = MappingConverter(mapping).convert()
-        val finder = MappingFinder(mappings)
+        val finder = MappingFinder(ApiOptions().apply {
+            globalMappings = mappings.globalMappings
+            endpointMappings = mappings.endpointMappings
+            extensionMappings = mappings.extensionMappings
+        })
 
         // then:
         val singleTypeMappingG = finder.getSingleTypeMapping(

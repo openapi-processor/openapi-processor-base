@@ -10,13 +10,14 @@ import io.openapiprocessor.core.converter.MappingFinder
 import io.openapiprocessor.core.converter.mapping.MappingData
 
 fun mappingFinder(): MappingFinder {
-    return MappingFinder(MappingData())
+    val data = MappingData()
+    return MappingFinder(ApiOptions().apply {
+        globalMappings = data.globalMappings
+        endpointMappings = data.endpointMappings
+        extensionMappings = data.extensionMappings
+    })
 }
 
 fun mappingFinder(options: ApiOptions): MappingFinder {
-    return MappingFinder(MappingData(
-        globalMappings = options.globalMappings,
-        endpointMappings = options.endpointMappings,
-        extensionMappings = options.extensionMappings
-    ))
+    return MappingFinder(options)
 }
