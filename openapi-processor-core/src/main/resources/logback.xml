@@ -6,7 +6,7 @@
     </encoder>
   </appender>
 
-  <logger name="io.openapiprocessor.core.converter.mapping" level="OFF" additivity="false">
+  <logger name="io.openapiprocessor.core.converter.mapping" level="WARN" additivity="false">
     <appender-ref ref="io.openapiprocessor.mapping" />
   </logger>
 
