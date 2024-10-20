@@ -120,6 +120,11 @@ class ApiOptions: MappingSettings {
     override var extensionMappings: Map<String /* x- */, ExtensionMappings> = emptyMap()
 
     /**
+     * logging related options
+     */
+    var loggingOptions = LoggingOptions()
+
+    /**
      * validate that targetDir is set, throws if not.
      */
     fun validate() {

@@ -5,7 +5,6 @@
 
 package io.openapiprocessor.core.converter
 
-import io.openapiprocessor.core.converter.mapping.enableMappingLookupTracing
 import io.openapiprocessor.core.converter.options.TargetDirLayout
 import io.openapiprocessor.core.processor.MappingConverter
 import io.openapiprocessor.core.processor.MappingReader
@@ -105,7 +104,7 @@ class OptionsConverter(private val checkObsoleteProcessorOptions: Boolean = fals
                     }
 
                     if (mapping.debug.mapping) {
-                        enableMappingLookupTracing()
+                        options.loggingOptions.mapping = true
                     }
                 }
             }
