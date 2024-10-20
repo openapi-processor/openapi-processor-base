@@ -5,16 +5,12 @@
 
 package io.openapiprocessor.core.converter.mapping.steps
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
 class RootStepX(val message: String = "", val extension: String) : ItemsStep() {
-    private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     override fun log(indent: String) {
-        log.trace("{} '{}'", message, extension)
+        log("{} '{}'", message, extension)
         if (!hasMappings()) {
-            log.trace("$indent  $NO_MATCH", "no mappings")
+            log("$indent  $NO_MATCH", "no mappings")
             return
         }
 

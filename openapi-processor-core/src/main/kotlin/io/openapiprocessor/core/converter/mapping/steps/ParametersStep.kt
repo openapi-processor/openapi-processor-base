@@ -5,11 +5,7 @@
 
 package io.openapiprocessor.core.converter.mapping.steps
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
-class ParametersStep(): ItemsStep() {
-    private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
+class ParametersStep: ItemsStep() {
 
     override fun isEqual(step: MappingStep): Boolean {
         return step is ParametersStep
@@ -26,7 +22,7 @@ class ParametersStep(): ItemsStep() {
             "$indent$NO_MATCH"
         }
 
-        log.trace(prefix, "parameters")
+        log(prefix, "parameters")
         steps.forEach {
             it.log("$indent  ")
         }

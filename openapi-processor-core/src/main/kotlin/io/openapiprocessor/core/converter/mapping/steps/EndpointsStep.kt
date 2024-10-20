@@ -6,11 +6,8 @@
 package io.openapiprocessor.core.converter.mapping.steps
 
 import io.openapiprocessor.core.converter.mapping.MappingQuery
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 class EndpointsStep(val query: MappingQuery): ItemsStep() {
-    private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     override fun isEqual(step: MappingStep): Boolean {
         if (step !is EndpointsStep) {
@@ -31,7 +28,7 @@ class EndpointsStep(val query: MappingQuery): ItemsStep() {
             "$indent$NO_MATCH"
         }
 
-        log.trace(prefix, query.path)
+        log(prefix, query.path)
         steps.forEach {
             it.log("$indent  ")
         }

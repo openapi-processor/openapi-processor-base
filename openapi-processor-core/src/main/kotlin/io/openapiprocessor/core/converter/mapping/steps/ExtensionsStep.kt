@@ -5,11 +5,7 @@
 
 package io.openapiprocessor.core.converter.mapping.steps
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
 class ExtensionsStep(val extension: String): ItemsStep() {
-    private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     override fun isEqual(step: MappingStep): Boolean {
         return step is ExtensionsStep
@@ -26,7 +22,7 @@ class ExtensionsStep(val extension: String): ItemsStep() {
             "$indent$NO_MATCH"
         }
 
-        log.trace(prefix, extension)
+        log(prefix, extension)
         steps.forEach {
             it.log("$indent  ")
         }

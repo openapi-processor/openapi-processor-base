@@ -6,11 +6,8 @@
 package io.openapiprocessor.core.converter.mapping.steps
 
 import io.openapiprocessor.core.converter.mapping.Mapping
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
-class MatcherStep(val mapping: Mapping, val match: Boolean): MappingStep {
-    private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
+class MatcherStep(val mapping: Mapping, val match: Boolean): MappingStepBase() {
 
     override fun isMatch(): Boolean {
         return match
@@ -21,7 +18,7 @@ class MatcherStep(val mapping: Mapping, val match: Boolean): MappingStep {
     }
 
     override fun add(step: MappingStep): MappingStep {
-        TODO("never called")
+        throw NotImplementedError("nop")
     }
 
     override fun isEqual(step: MappingStep): Boolean {
@@ -30,9 +27,9 @@ class MatcherStep(val mapping: Mapping, val match: Boolean): MappingStep {
 
     override fun log(indent: String) {
         if (isMatch()) {
-            log.trace("$indent$MATCH", mapping)
+            log("$indent$MATCH", mapping)
         } else {
-            log.trace("$indent$NO_MATCH", mapping)
+            log("$indent$NO_MATCH", mapping)
         }
     }
 }

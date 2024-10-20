@@ -5,7 +5,7 @@
 
 package io.openapiprocessor.core.converter.mapping.steps
 
-abstract class ItemsStep: MappingStep {
+abstract class ItemsStep: MappingStepBase() {
     protected val steps: MutableCollection<MappingStep> = ArrayList()
 
     override fun isMatch(): Boolean {

@@ -5,11 +5,7 @@
 
 package io.openapiprocessor.core.converter.mapping.steps
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
 class GlobalsStep: ItemsStep() {
-    private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     override fun isEqual(step: MappingStep): Boolean {
         return step is GlobalsStep
@@ -26,7 +22,7 @@ class GlobalsStep: ItemsStep() {
             "$indent$NO_MATCH"
         }
 
-        log.trace(prefix, "global")
+        log(prefix, "global")
         steps.forEach {
             it.log("$indent  ")
         }
