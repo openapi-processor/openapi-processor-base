@@ -10,27 +10,22 @@ import io.openapiprocessor.core.converter.mapping.steps.MappingStep
 import io.openapiprocessor.core.converter.mapping.steps.RootStep
 import io.openapiprocessor.core.converter.mapping.steps.RootStepX
 import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
-class MappingFinder(mappings: MappingSettings) {
-    val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
-
-    companion object;
+class MappingFinder(val options: ApiOptions) {
 
     private val repository = MappingRepository(
-        mappings.globalMappings,
-        mappings.endpointMappings,
-        mappings.extensionMappings
+        options.globalMappings,
+        options.endpointMappings,
+        options.extensionMappings
     )
 
     // path/method
     fun getResultTypeMapping(query: MappingQuery): ResultTypeMapping? {
-        val step = RootStep("looking for result type mapping of", query)
+        val step = rootStep("looking for result type mapping of", query)
         try {
             return getResultTypeMapping(query, step)
         } finally {
-            step.log()
+            step.write()
         }
     }
 
@@ -49,11 +44,11 @@ class MappingFinder(mappings: MappingSettings) {
     }
 
     fun findResultStyleMapping(query: MappingQuery): ResultStyle {
-        val step = RootStep("looking for result style mapping of", query)
+        val step = rootStep("looking for result style mapping of", query)
         try {
             return findResultStyleMapping(query, step)
         } finally {
-            step.log()
+            step.write()
         }
     }
 
@@ -73,11 +68,11 @@ class MappingFinder(mappings: MappingSettings) {
 
     // path/method
     fun getSingleTypeMapping(query: MappingQuery): TypeMapping? {
-        val step = RootStep("looking for single type style mapping of", query)
+        val step = rootStep("looking for single type style mapping of", query)
         try {
             return getSingleTypeMapping(query, step)
         } finally {
-            step.log()
+            step.write()
         }
     }
 
@@ -97,11 +92,11 @@ class MappingFinder(mappings: MappingSettings) {
 
     // path/method
     fun getMultiTypeMapping(query: MappingQuery): TypeMapping? {
-        val step = RootStep("looking for multi type mapping of", query)
+        val step = rootStep("looking for multi type mapping of", query)
         try {
             return getMultiTypeMapping(query, step)
         } finally {
-            step.log()
+            step.write()
         }
     }
 
@@ -132,11 +127,11 @@ class MappingFinder(mappings: MappingSettings) {
      * - global type
      */
     fun findAnyTypeMapping(query: MappingQuery): TypeMapping? {
-        val step = RootStep("looking for any type mapping of", query)
+        val step = rootStep("looking for any type mapping of", query)
         try {
             return findAnyTypeMapping(query, step)
         } finally {
-            step.log()
+            step.write()
         }
     }
 
@@ -186,11 +181,11 @@ class MappingFinder(mappings: MappingSettings) {
 
     // path/method/name/format/type
     fun findTypeMapping(query: MappingQuery): TypeMapping? {
-        val step = RootStep("looking for type mapping of", query)
+        val step = rootStep("looking for type mapping of", query)
         try {
             return findTypeMapping(query, step)
         } finally {
-            step.log()
+            step.write()
         }
     }
 
@@ -219,11 +214,11 @@ class MappingFinder(mappings: MappingSettings) {
     }
 
     fun findAnnotationTypeMappings(query: MappingQuery): List<AnnotationTypeMapping> {
-        val step = RootStep("looking for annotation type mapping of", query)
+        val step = rootStep("looking for annotation type mapping of", query)
         try {
             return findAnnotationTypeMappings(query, step)
         } finally {
-            step.log()
+            step.write()
         }
     }
 
@@ -237,11 +232,11 @@ class MappingFinder(mappings: MappingSettings) {
     }
 
     fun findParameterTypeMapping(query: MappingQuery): TypeMapping? {
-        val step = RootStep("looking for parameter type mapping of", query)
+        val step = rootStep("looking for parameter type mapping of", query)
         try {
             return findParameterTypeMapping(query, step)
         } finally {
-            step.log()
+            step.write()
         }
     }
 
@@ -260,11 +255,11 @@ class MappingFinder(mappings: MappingSettings) {
     }
 
     fun findAnnotationParameterTypeMappings(query: MappingQuery): List<AnnotationTypeMapping> {
-        val step = RootStep("looking for annotation parameter type mapping of", query)
+        val step = rootStep("looking for annotation parameter type mapping of", query)
         try {
             return findAnnotationParameterTypeMappings(query, step)
         } finally {
-            step.log()
+            step.write()
         }
     }
 
@@ -288,11 +283,11 @@ class MappingFinder(mappings: MappingSettings) {
     }
 
     fun findParameterNameTypeMapping(query: MappingQuery): NameTypeMapping? {
-        val step = RootStep("looking for parameter name type mapping of", query)
+        val step = rootStep("looking for parameter name type mapping of", query)
         try {
             return findParameterNameTypeMapping(query, step)
         } finally {
-            step.log()
+            step.write()
         }
     }
 
@@ -311,11 +306,11 @@ class MappingFinder(mappings: MappingSettings) {
     }
 
     fun findAnnotationParameterNameTypeMapping(query: MappingQuery): List<AnnotationNameMapping> {
-        val step = RootStep("looking for annotation parameter name type mapping of", query)
+        val step = rootStep("looking for annotation parameter name type mapping of", query)
         try {
             return findAnnotationParameterNameTypeMapping(query, step)
         } finally {
-            step.log()
+            step.write()
         }
     }
 
@@ -329,11 +324,11 @@ class MappingFinder(mappings: MappingSettings) {
     }
 
     fun findAddParameterTypeMappings(query: MappingQuery): List<AddParameterTypeMapping> {
-        val step = RootStep("looking for additional parameter type mapping of", query)
+        val step = rootStep("looking for additional parameter type mapping of", query)
         try {
             return findAddParameterTypeMappings(query, step)
         } finally {
-            step.log()
+            step.write()
         }
     }
 
@@ -347,11 +342,11 @@ class MappingFinder(mappings: MappingSettings) {
     }
 
     fun findContentTypeMapping(query: MappingQuery): ContentTypeMapping? {
-        val step = RootStep("looking for content type type mapping of", query)
+        val step = rootStep("looking for content type type mapping of", query)
         try {
             return findContentTypeMapping(query, step)
         } finally {
-            step.log()
+            step.write()
         }
     }
 
@@ -370,11 +365,11 @@ class MappingFinder(mappings: MappingSettings) {
     }
 
     fun findNullTypeMapping(query: MappingQuery): NullTypeMapping? {
-        val step = RootStep("looking for null type mapping of", query)
+        val step = rootStep("looking for null type mapping of", query)
         try {
             return findNullTypeMapping(query, step)
         } finally {
-            step.log()
+            step.write()
         }
     }
 
@@ -387,11 +382,11 @@ class MappingFinder(mappings: MappingSettings) {
     }
 
     fun findExtensionAnnotations(extension: String, values: List<String>): List<AnnotationNameMapping> {
-        val step = RootStepX("looking for annotation extension type mapping", extension)
+        val step = rootStep("looking for annotation extension type mapping", extension)
         try {
             return findExtensionAnnotations(extension, values, step)
         } finally {
-            step.log()
+            step.write()
         }
     }
 
@@ -402,15 +397,29 @@ class MappingFinder(mappings: MappingSettings) {
     }
 
     fun isEndpointExcluded(query: MappingQuery): Boolean {
-        val step = RootStep("looking for exclude mapping of", query)
+        val step = rootStep("looking for exclude mapping of", query)
         try {
             return isEndpointExcluded(query, step)
         } finally {
-            step.log()
+            step.write()
         }
     }
 
     private fun isEndpointExcluded(query: MappingQuery, step: MappingStep): Boolean {
         return repository.isEndpointExcluded(query, step)
+    }
+
+    private fun rootStep(message: String, query: MappingQuery): MappingStep {
+        return RootStep(message, query)
+    }
+
+    private fun rootStep(message: String, extension: String): MappingStep {
+        return RootStepX(message, extension)
+    }
+
+    private fun MappingStep.write() {
+        if (options.loggingOptions.mapping) {
+            log()
+        }
     }
 }
