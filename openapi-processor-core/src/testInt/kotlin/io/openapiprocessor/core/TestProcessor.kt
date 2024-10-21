@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory
 class TestProcessor:
     io.openapiprocessor.api.v2.OpenApiProcessor,
     io.openapiprocessor.api.v1.OpenApiProcessor,
-    io.openapiprocessor.api.v2.OpenApiProcessorTest
+    io.openapiprocessor.test.api.OpenApiProcessorTest
 {
     private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 

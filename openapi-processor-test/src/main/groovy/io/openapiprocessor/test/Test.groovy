@@ -5,7 +5,7 @@
 
 package io.openapiprocessor.test
 
-import io.openapiprocessor.api.v2.OpenApiProcessorTest
+import io.openapiprocessor.test.api.OpenApiProcessorTest
 
 import java.nio.file.Files
 import java.nio.file.Path

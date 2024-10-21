@@ -61,6 +61,7 @@ dependencies {
     compileOnly (libs.openapi.processor.api)
     compileOnly (libs.logback)
 
+    implementation (project(":openapi-processor-test-api"))
     implementation (project(":openapi-processor-core-parser-api"))
     implementation (platform(libs.openapi.parser.bom))
     implementation (libs.openapi.parser.parser)
@@ -97,6 +98,7 @@ dependencies {
     testIntImplementation (testFixtures(project(":openapi-processor-core-parser-swagger")))
     testIntImplementation (testFixtures(project(":openapi-processor-core-parser-openapi4j")))
     testIntImplementation (project(":openapi-processor-test"))
+    testIntImplementation (project(":openapi-processor-test-api"))
     testIntImplementation (libs.openapi.processor.api)
     testIntImplementation (platform(libs.groovy.bom))
     testIntImplementation (platform(libs.kotest.bom))

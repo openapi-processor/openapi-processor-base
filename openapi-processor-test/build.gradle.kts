@@ -9,6 +9,7 @@ repositories {
 
 dependencies {
     compileOnly(libs.openapi.processor.api)
+    compileOnly(project(":openapi-processor-test-api"))
 
     implementation(platform(libs.jackson.bom))
     implementation("com.fasterxml.jackson.core:jackson-databind")
