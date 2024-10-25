@@ -26,7 +26,7 @@ jackson-xml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-xm
 jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
 
 openapi4j = "org.openapi4j:openapi-parser:1.0.7"
-swagger = "io.swagger.parser.v3:swagger-parser:2.1.22"
+swagger = "io.swagger.parser.v3:swagger-parser:2.1.23"
 
 antlr = "org.antlr:antlr4:4.13.2"
 
