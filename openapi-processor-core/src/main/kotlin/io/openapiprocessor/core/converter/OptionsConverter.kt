@@ -5,6 +5,8 @@
 
 package io.openapiprocessor.core.converter
 
+import io.openapiprocessor.core.converter.mapping.steps.MappingStepBase
+import io.openapiprocessor.core.converter.mapping.steps.Target
 import io.openapiprocessor.core.converter.options.TargetDirLayout
 import io.openapiprocessor.core.processor.MappingConverter
 import io.openapiprocessor.core.processor.MappingReader
@@ -103,8 +105,12 @@ class OptionsConverter(private val checkObsoleteProcessorOptions: Boolean = fals
                         log.warn("is 'options.package-name' set in mapping? found default: '{}'.", options.packageName)
                     }
 
-                    if (mapping.debug.mapping) {
-                        options.loggingOptions.mapping = true
+                    with(mapping) {
+                        options.loggingOptions.mapping = debug.mapping
+                        if (debug.mappingTarget == "stdout") {
+                            options.loggingOptions.mappingTarget = Target.STDOUT
+                        }
+                        MappingStepBase.options.set(options.loggingOptions)
                     }
                 }
             }

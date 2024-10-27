@@ -25,7 +25,7 @@ class MappingFinder(val options: ApiOptions) {
         try {
             return getResultTypeMapping(query, step)
         } finally {
-            step.write()
+            step.log()
         }
     }
 
@@ -48,7 +48,7 @@ class MappingFinder(val options: ApiOptions) {
         try {
             return findResultStyleMapping(query, step)
         } finally {
-            step.write()
+            step.log()
         }
     }
 
@@ -72,7 +72,7 @@ class MappingFinder(val options: ApiOptions) {
         try {
             return getSingleTypeMapping(query, step)
         } finally {
-            step.write()
+            step.log()
         }
     }
 
@@ -96,7 +96,7 @@ class MappingFinder(val options: ApiOptions) {
         try {
             return getMultiTypeMapping(query, step)
         } finally {
-            step.write()
+            step.log()
         }
     }
 
@@ -131,7 +131,7 @@ class MappingFinder(val options: ApiOptions) {
         try {
             return findAnyTypeMapping(query, step)
         } finally {
-            step.write()
+            step.log()
         }
     }
 
@@ -185,7 +185,7 @@ class MappingFinder(val options: ApiOptions) {
         try {
             return findTypeMapping(query, step)
         } finally {
-            step.write()
+            step.log()
         }
     }
 
@@ -218,7 +218,7 @@ class MappingFinder(val options: ApiOptions) {
         try {
             return findAnnotationTypeMappings(query, step)
         } finally {
-            step.write()
+            step.log()
         }
     }
 
@@ -236,7 +236,7 @@ class MappingFinder(val options: ApiOptions) {
         try {
             return findParameterTypeMapping(query, step)
         } finally {
-            step.write()
+            step.log()
         }
     }
 
@@ -259,7 +259,7 @@ class MappingFinder(val options: ApiOptions) {
         try {
             return findAnnotationParameterTypeMappings(query, step)
         } finally {
-            step.write()
+            step.log()
         }
     }
 
@@ -287,7 +287,7 @@ class MappingFinder(val options: ApiOptions) {
         try {
             return findParameterNameTypeMapping(query, step)
         } finally {
-            step.write()
+            step.log()
         }
     }
 
@@ -310,7 +310,7 @@ class MappingFinder(val options: ApiOptions) {
         try {
             return findAnnotationParameterNameTypeMapping(query, step)
         } finally {
-            step.write()
+            step.log()
         }
     }
 
@@ -328,7 +328,7 @@ class MappingFinder(val options: ApiOptions) {
         try {
             return findAddParameterTypeMappings(query, step)
         } finally {
-            step.write()
+            step.log()
         }
     }
 
@@ -346,7 +346,7 @@ class MappingFinder(val options: ApiOptions) {
         try {
             return findContentTypeMapping(query, step)
         } finally {
-            step.write()
+            step.log()
         }
     }
 
@@ -369,7 +369,7 @@ class MappingFinder(val options: ApiOptions) {
         try {
             return findNullTypeMapping(query, step)
         } finally {
-            step.write()
+            step.log()
         }
     }
 
@@ -386,7 +386,7 @@ class MappingFinder(val options: ApiOptions) {
         try {
             return findExtensionAnnotations(extension, values, step)
         } finally {
-            step.write()
+            step.log()
         }
     }
 
@@ -401,7 +401,7 @@ class MappingFinder(val options: ApiOptions) {
         try {
             return isEndpointExcluded(query, step)
         } finally {
-            step.write()
+            step.log()
         }
     }
 
@@ -415,11 +415,5 @@ class MappingFinder(val options: ApiOptions) {
 
     private fun rootStep(message: String, extension: String): MappingStep {
         return RootStepX(message, extension)
-    }
-
-    private fun MappingStep.write() {
-        if (options.loggingOptions.mapping) {
-            log()
-        }
     }
 }

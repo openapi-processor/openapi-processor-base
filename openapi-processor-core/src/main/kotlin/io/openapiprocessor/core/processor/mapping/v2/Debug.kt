@@ -9,5 +9,10 @@ data class Debug(
     /**
      * enable/disable tracing of mapping lookups (optional).
      */
-    val mapping: Boolean = false
+    val mapping: Boolean = false,
+
+    /**
+     * logging target
+     */
+    val mappingTarget: String = "logger"
 )
