@@ -46,6 +46,7 @@ open class Parser: ApiParser {
         // loads $refs to other files into #/components/schema and replaces the $refs to the
         // external files with $refs to #/components/schema.
         opts.isResolve = true
+        opts.isResolveResponses = true
 
         val result = when(source) {
             Source.URL -> {
