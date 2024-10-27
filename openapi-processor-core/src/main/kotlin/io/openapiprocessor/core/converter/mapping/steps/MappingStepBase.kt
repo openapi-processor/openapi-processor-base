@@ -15,7 +15,7 @@ abstract class MappingStepBase : MappingStep {
             return
 
         if (useLogger()) {
-            log.debug(message, *args)
+            log.info(message, *args)
         } else {
             var resolved = message
             args.forEach {
