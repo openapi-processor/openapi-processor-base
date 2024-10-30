@@ -106,8 +106,8 @@ class OptionsConverter(private val checkObsoleteProcessorOptions: Boolean = fals
                     }
 
                     with(mapping) {
-                        options.loggingOptions.mapping = debug.mapping
-                        if (debug.mappingTarget == "stdout") {
+                        options.loggingOptions.mapping = logging.mapping
+                        if (logging.mappingTarget == "stdout") {
                             options.loggingOptions.mappingTarget = Target.STDOUT
                         }
                         MappingStepBase.options.set(options.loggingOptions)
