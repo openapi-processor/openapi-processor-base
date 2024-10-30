@@ -5,7 +5,7 @@
 
 package io.openapiprocessor.core.processor.mapping.v2
 
-data class Debug(
+data class Logging(
     /**
      * enable/disable tracing of mapping lookups (optional).
      */

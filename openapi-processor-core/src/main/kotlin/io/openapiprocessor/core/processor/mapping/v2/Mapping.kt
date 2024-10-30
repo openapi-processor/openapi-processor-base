@@ -37,9 +37,9 @@ data class Mapping(
     val compatibility: Compatibility = Compatibility(),
 
     /**
-     * debug options
+     * logging options
      */
-    val debug: Debug = Debug()
+    val logging: Logging = Logging()
 
 ): MappingVersion {
     override val v2: Boolean = true
