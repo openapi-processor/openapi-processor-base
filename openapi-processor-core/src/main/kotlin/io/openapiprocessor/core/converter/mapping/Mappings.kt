@@ -77,7 +77,7 @@ class Mappings(
     }
 
     fun findParameterTypeMapping(filter: MappingMatcher, step: MappingStep): TypeMapping? {
-        val mappings = parameterTypeMappings.filter(filter, step.add(ParametersStep()))
+        val mappings = parameterTypeMappings.filter(filter, step.add(ParametersStep("type")))
         if (mappings.isEmpty()) {
             return null
         }
@@ -90,7 +90,7 @@ class Mappings(
     }
 
     fun findAnnotationParameterTypeMapping(filter: MappingMatcher, step: MappingStep): List<AnnotationTypeMapping> {
-        val mappings = parameterTypeMappings.filter(filter, step.add(ParametersStep()))
+        val mappings = parameterTypeMappings.filter(filter, step.add(ParametersStep("type")))
         if (mappings.isEmpty()) {
             return emptyList()
         }
@@ -99,7 +99,7 @@ class Mappings(
     }
 
     fun findParameterNameTypeMapping(filter: MappingMatcher, step: MappingStep): NameTypeMapping? {
-        val mappings = parameterTypeMappings.filter(filter, step.add(ParametersStep()))
+        val mappings = parameterTypeMappings.filter(filter, step.add(ParametersStep("name")))
         if (mappings.isEmpty()) {
             return null
         }
@@ -112,7 +112,7 @@ class Mappings(
     }
 
     fun findAnnotationParameterNameTypeMapping(filter: MappingMatcher, step: MappingStep): List<AnnotationNameMapping> {
-        val mappings = parameterTypeMappings.filter(filter, step.add(ParametersStep()))
+        val mappings = parameterTypeMappings.filter(filter, step.add(ParametersStep("name")))
         if (mappings.isEmpty()) {
             return emptyList()
         }
@@ -121,7 +121,7 @@ class Mappings(
     }
 
     fun findAddParameterTypeMappings(filter: MappingMatcher, step: MappingStep): List<AddParameterTypeMapping>  {
-        val mappings = parameterTypeMappings.filter(filter, step.add(ParametersStep()))
+        val mappings = parameterTypeMappings.filter(filter, step.add(ParametersStep("type")))
         if (mappings.isEmpty()) {
             return emptyList()
         }

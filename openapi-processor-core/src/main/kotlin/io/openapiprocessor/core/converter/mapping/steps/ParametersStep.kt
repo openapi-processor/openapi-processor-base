@@ -5,10 +5,10 @@
 
 package io.openapiprocessor.core.converter.mapping.steps
 
-class ParametersStep: ItemsStep() {
+class ParametersStep(val kind: String): ItemsStep() {
 
     override fun isEqual(step: MappingStep): Boolean {
-        return step is ParametersStep
+        return step is ParametersStep && step.kind == kind
     }
 
     override fun log(indent: String) {
@@ -22,7 +22,7 @@ class ParametersStep: ItemsStep() {
             "$indent$NO_MATCH"
         }
 
-        log(prefix, "parameters")
+        log(prefix, "parameters ($kind)")
         steps.forEach {
             it.log("$indent  ")
         }
