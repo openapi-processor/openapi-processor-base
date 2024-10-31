@@ -131,7 +131,7 @@ class MappingConverterSpec: StringSpec({
         val mappings = MappingConverter(reader.read(yaml) as Mapping).convert().globalMappings
 
         val annotations = mappings.findAnnotationParameterTypeMapping(
-            annotationTypeMatcher(name = "Foo"), ParametersStep())
+            annotationTypeMatcher(name = "Foo"), ParametersStep("add"))
 
         annotations shouldHaveSize 1
         val annotation = annotations.first()
@@ -156,7 +156,7 @@ class MappingConverterSpec: StringSpec({
 
         val mappings = MappingConverter(reader.read(yaml) as Mapping).convert().endpointMappings
         val annotations = mappings["/foo"]!!.findAnnotationParameterTypeMapping(
-            MappingFinderQuery(name = "Foo"), ParametersStep())
+            MappingFinderQuery(name = "Foo"), ParametersStep("add"))
 
         annotations shouldHaveSize 1
 
@@ -183,7 +183,7 @@ class MappingConverterSpec: StringSpec({
 
         val mappings = MappingConverter(reader.read(yaml) as Mapping).convert().endpointMappings
         val annotations = mappings["/foo"]!!.findAnnotationParameterTypeMapping(
-            MappingFinderQuery(name = "Foo", method = HttpMethod.GET), ParametersStep())
+            MappingFinderQuery(name = "Foo", method = HttpMethod.GET), ParametersStep("add"))
 
         annotations shouldHaveSize 1
 

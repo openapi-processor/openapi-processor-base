@@ -5,7 +5,7 @@
 
 package io.openapiprocessor.core.converter.mapping.steps
 
-class ParametersStep(val kind: String): ItemsStep() {
+class ParametersStep(private val kind: String): ItemsStep() {
 
     override fun isEqual(step: MappingStep): Boolean {
         return step is ParametersStep && step.kind == kind

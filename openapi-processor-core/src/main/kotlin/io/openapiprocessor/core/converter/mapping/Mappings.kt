@@ -121,7 +121,7 @@ class Mappings(
     }
 
     fun findAddParameterTypeMappings(filter: MappingMatcher, step: MappingStep): List<AddParameterTypeMapping>  {
-        val mappings = parameterTypeMappings.filter(filter, step.add(ParametersStep("type")))
+        val mappings = parameterTypeMappings.filter(filter, step.add(ParametersStep("add")))
         if (mappings.isEmpty()) {
             return emptyList()
         }
