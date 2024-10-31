@@ -16,7 +16,7 @@ data class Mapping(
 ) {
 
     fun isV2(): Boolean {
-        return ! getSafeVersion().startsWith("v1")
+        return getSafeVersion().substring(1).toInt() > 1
     }
 
     fun isDeprecatedVersionKey (): Boolean {
