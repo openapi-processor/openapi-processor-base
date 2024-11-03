@@ -1,6 +1,6 @@
 [versions]
-processor = "2024.7-SNAPSHOT"
-parser = "2024.5-SNAPSHOT"
+processor = "2024.7"
+parser = "2024.5"
 
 kotlin = "2.0.21"
 build-jdk = "11"
