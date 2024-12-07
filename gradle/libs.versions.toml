@@ -50,7 +50,7 @@ kotest-runner = { module = "io.kotest:kotest-runner-junit5" }
 kotest-datatest = { module = "io.kotest:kotest-framework-datatest" }
 mockk = "io.mockk:mockk:1.13.13"
 
-diff-utils = "io.github.java-diff-utils:java-diff-utils:4.12"
+diff-utils = "io.github.java-diff-utils:java-diff-utils:4.15"
 
 groovy-bom = "org.apache.groovy:groovy-bom:4.0.24"
 spock = "org.spockframework:spock-core:2.3-groovy-4.0"
