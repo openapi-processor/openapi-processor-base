@@ -85,7 +85,11 @@ class OptionsConverter(private val checkObsoleteProcessorOptions: Boolean = fals
 
                     options.javadoc = mapping.options.javadoc
                     options.oneOfInterface = mapping.options.oneOfInterface
-                    options.formatCode = mapping.options.formatCode
+
+                    val (enableFormatCode, formatCodeFormatter) = checkFormatter(mapping.options)
+                    options.formatCode = enableFormatCode
+                    options.formatCodeFormatter = formatCodeFormatter
+
                     options.generatedAnnotation = mapping.options.generatedAnnotation
                     options.generatedDate = mapping.options.generatedDate
                     options.jsonPropertyAnnotation = JsonPropertyAnnotationMode.findBy(
@@ -124,6 +128,15 @@ class OptionsConverter(private val checkObsoleteProcessorOptions: Boolean = fals
             "true" -> Pair(true, "javax")
             "javax" -> Pair(true, "javax")
             "jakarta" -> Pair(true, "jakarta")
+            else -> Pair(false, null)
+        }
+    }
+
+    private fun checkFormatter(options: Options): Pair<Boolean, String?> {
+        return when (options.formatCode) {
+            "true" -> Pair(true, "google")
+            "google" -> Pair(true, "google")
+            "eclipse" -> Pair(true, "eclipse")
             else -> Pair(false, null)
         }
     }

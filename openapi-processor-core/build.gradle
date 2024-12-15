@@ -74,6 +74,7 @@ dependencies {
     implementation (libs.commons.text)
     implementation (libs.commonmark)
     implementation (libs.format.java.google)
+    implementation (libs.format.java.eclipse)
     implementation (libs.slf4j)
 
     testImplementation (project(":openapi-processor-core-parser-api"))

@@ -10,6 +10,7 @@ import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.OptionsConverter
 import io.openapiprocessor.core.framework.FrameworkBase
 import io.openapiprocessor.core.parser.OpenApiParser
+import io.openapiprocessor.core.writer.SourceFormatter
 import io.openapiprocessor.core.writer.java.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -49,7 +50,7 @@ class TestProcessor:
             val validationWriter = ValidationWriter(options, generatedWriter)
             val beanValidation = BeanValidationFactory(options)
             val javaDocWriter = JavaDocWriter(identifier)
-            val formatter = GoogleFormatter()
+            val formatter = getFormatter()
 
             val writer = ApiWriter(
                 options,
@@ -115,6 +116,18 @@ class TestProcessor:
             return "resources"
         }
         return null
+    }
+
+    private fun getFormatter(): SourceFormatter {
+        return if (apiOptions.formatCode) {
+            when (apiOptions.formatCodeFormatter) {
+                "google" -> GoogleFormatter()
+                "eclipse" -> EclipseFormatter()
+                else -> GoogleFormatter()
+            }
+        } else {
+            GoogleFormatter()
+        }
     }
 }
 

@@ -124,7 +124,7 @@ class MappingReaderSpec: StringSpec ({
         val mapping = reader.read (yaml) as Mapping
 
         // then:
-        mapping.options.formatCode shouldBe false
+        mapping.options.formatCode shouldBe "false"
     }
 
     "reads generated-annotation" {

@@ -228,4 +228,29 @@ class OptionsConverterSpec: StringSpec({
         options.basePathOptions.enabled shouldBe true
         options.targetDirOptions.layout.isStandard() shouldBe true
     }
+
+    data class FormatterData(val source: String, val enabled: Boolean, val formatter: String?)
+
+    for (fd in listOf(
+        FormatterData("false", false, null),
+        FormatterData("true", true, "google"),
+        FormatterData("google", true, "google"),
+        FormatterData("eclipse", true, "eclipse")
+    )) {
+        "should read formatter option: ${fd.source}" {
+            val converter = OptionsConverter()
+            converter.log = mockk<Logger>(relaxed = true)
+
+            val options = converter.convertOptions(mapOf(
+                "mapping" to """
+                    openapi-processor-mapping: v11
+                    options:
+                      format-code: ${fd.source}
+                """.trimIndent()
+            ))
+
+            options.formatCode shouldBe fd.enabled
+            options.formatCodeFormatter shouldBe fd.formatter
+        }
+    }
 })

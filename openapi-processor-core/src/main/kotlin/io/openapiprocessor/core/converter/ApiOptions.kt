@@ -93,6 +93,11 @@ class ApiOptions: MappingSettings {
     var formatCode = false
 
     /**
+     * formatter: google or eclipse
+     */
+    var formatCodeFormatter: String? = null
+
+    /**
      *  enable/disable the @Generated annotation (optional).
      */
     var generatedAnnotation = true

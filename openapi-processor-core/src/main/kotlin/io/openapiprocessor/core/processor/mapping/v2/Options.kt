@@ -70,7 +70,7 @@ data class Options(
     /**
      * enable/disable the code formatter (optional)
      */
-    val formatCode: Boolean = false,
+    val formatCode: String = "false",
 
     /**
      * enable/disable the @Generated annotation (optional)
