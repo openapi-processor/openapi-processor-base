@@ -1,6 +1,7 @@
 [versions]
 processor = "2025.1-SNAPSHOT"
 parser = "2025.1-SNAPSHOT"
+api = "2024.2"
 
 kotlin = "2.1.0"
 build-jdk = "11"
@@ -11,8 +12,7 @@ junit = "5.11.4"
 jacoco = "0.8.11"
 
 [libraries]
-openapi-processor-api = "io.openapiprocessor:openapi-processor-api:2024.2"
-
+openapi-processor-api = { module = "io.openapiprocessor:openapi-processor-api", version.ref = "api" }
 openapi-parser-bom = { module = "io.openapiprocessor:openapi-parser-bom", version.ref = "parser" }
 openapi-parser-parser = { module = "io.openapiprocessor:openapi-parser" }
 json-schema-validator-bom = { module = "io.openapiprocessor:json-schema-validator-bom", version.ref = "parser" }
