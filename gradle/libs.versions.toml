@@ -11,7 +11,7 @@ junit = "5.11.4"
 jacoco = "0.8.11"
 
 [libraries]
-openapi-processor-api = "io.openapiprocessor:openapi-processor-api:2024.1"
+openapi-processor-api = "io.openapiprocessor:openapi-processor-api:2024.2"
 
 openapi-parser-bom = { module = "io.openapiprocessor:openapi-parser-bom", version.ref = "parser" }
 openapi-parser-parser = { module = "io.openapiprocessor:openapi-parser" }
