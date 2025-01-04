@@ -31,7 +31,7 @@ swagger = "io.swagger.parser.v3:swagger-parser:2.1.24"
 antlr = "org.antlr:antlr4:4.13.2"
 
 format-java-eclipse = "org.eclipse.jdt:org.eclipse.jdt.core:3.40.0"
-format-java-google = "com.google.googlejavaformat:google-java-format:1.24.0"
+format-java-google = "com.google.googlejavaformat:google-java-format:1.25.2"
 simple-xml = "org.simpleframework:simple-xml:2.7.1"
 
 guava = "com.google.guava:guava:33.4.0-jre"
