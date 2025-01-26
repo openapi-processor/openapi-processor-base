@@ -1,0 +1,34 @@
+openapi: 3.0.2
+info:
+  title: schema mapping
+  version: 1.0.0
+
+paths:
+
+  /foo:
+    get:
+      parameters:
+        - name: year
+          description: year parameter
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: year
+      responses:
+        '200':
+          description: the foo result
+          content:
+            application/json:
+                schema:
+                  $ref: '#/components/schemas/Foo'
+
+components:
+  schemas:
+
+    Foo:
+      type: object
+      properties:
+        year:
+          type: integer
+          format: year
