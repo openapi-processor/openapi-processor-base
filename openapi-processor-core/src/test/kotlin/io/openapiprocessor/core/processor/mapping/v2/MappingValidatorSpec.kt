@@ -38,6 +38,8 @@ class MappingValidatorSpec: StringSpec({
             row("v7"),
             row("v8"),
             row("v9"),
+            row("v10"),
+            row("v11"),
         ) { v ->
             val yaml = """
                 |openapi-processor-mapping: $v
@@ -139,6 +141,14 @@ class MappingValidatorSpec: StringSpec({
 
     "validates example mapping v9" {
         validator.validate("/mapping/v9/mapping.example.yaml".fromResource(), "v9").isValid.shouldBeTrue()
+    }
+
+    "validates example mapping v10" {
+        validator.validate("/mapping/v10/mapping.example.yaml".fromResource(), "v10").isValid.shouldBeTrue()
+    }
+
+    "validates example mapping v11" {
+        validator.validate("/mapping/v11/mapping.example.yaml".fromResource(), "v11").isValid.shouldBeTrue()
     }
 
     "validates mapping with result key on multiple levels" {

@@ -30,7 +30,7 @@ class MappingExampleV2Spec extends Specification {
 
 
     String yaml = """
-openapi-processor-mapping: v2.1
+openapi-processor-mapping: v11
 
 options:
     package-name: com.github.hauner.openapi
@@ -52,6 +52,10 @@ map:
       generics:
         - java.lang.String
         - java.lang.Double
+
+  schemas:
+    - type: array => java.util.Collection
+    - type: Foo @ fully.qualified.Annotation
 
   parameters:
     - type: Foo @ fully.qualified.Annotation 
