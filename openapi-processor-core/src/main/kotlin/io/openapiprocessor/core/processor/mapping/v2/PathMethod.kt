@@ -36,17 +36,22 @@ class PathMethod(
     val `null`: String?,
 
     /**
-     * path limited type mappings
+     * path/method limited type mappings
      */
     val types: List<Type> = emptyList(),
 
     /**
-     * path limited parameter mappings
+     * path/method limited schema mappings
+     */
+    val schemas: List<Type> = emptyList(),
+
+    /**
+     * path/method limited parameter mappings
      */
     val parameters: List<Parameter> = emptyList(),
 
     /**
-     * path limited response mappings
+     * path/method limited response mappings
      */
     val responses: List<Response> = emptyList()
 

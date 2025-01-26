@@ -48,6 +48,11 @@ data class Map(
     val types: List<Type> = emptyList(),
 
     /**
+     * global schema mappings
+     */
+    val schemas: List<Type> = emptyList(),
+
+    /**
      * global parameter mappings
      */
     val parameters: List<Parameter> = emptyList(),

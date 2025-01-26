@@ -54,6 +54,11 @@ data class Path(
     val types: List<Type> = emptyList(),
 
     /**
+     * path limited schema mappings
+     */
+    val schemas: List<Type> = emptyList(),
+
+    /**
      * path limited parameter mappings
      */
     val parameters: List<Parameter> = emptyList(),
