@@ -59,11 +59,11 @@ annotationParameters
     ;
 
 annotationParameterUnnamed
-    : (Identifier | Boolean | String | Number | QualifiedTypeClass)
+    : (Identifier | Boolean | String | Number | QualifiedType | QualifiedTypeClass)
     ;
 
 annotationParameterNamed
-    : Identifier '=' (Identifier | Boolean | String | Number | QualifiedTypeClass)
+    : Identifier '=' (Identifier | Boolean | String | Number | QualifiedType | QualifiedTypeClass)
     ;
 
 qualifiedTargetType

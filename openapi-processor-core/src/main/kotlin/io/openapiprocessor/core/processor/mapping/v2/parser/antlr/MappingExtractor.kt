@@ -8,6 +8,7 @@ package io.openapiprocessor.core.processor.mapping.v2.parser.antlr
 import io.openapiprocessor.core.converter.mapping.ClassParameterValue
 import io.openapiprocessor.core.converter.mapping.ParameterValue
 import io.openapiprocessor.core.converter.mapping.SimpleParameterValue
+import io.openapiprocessor.core.converter.mapping.TypeParameterValue
 import io.openapiprocessor.core.processor.mapping.v2.parser.Mapping
 import io.openapiprocessor.core.processor.mapping.v2.parser.MappingType
 
@@ -137,11 +138,16 @@ class MappingExtractor: MappingBaseListener(), Mapping {
         val parameterName = ctx.getChild(0).text
         val parameterValue = ctx.getChild(2).text
 
-        val clazz = ctx.stop.type == MappingLexer.QualifiedTypeClass
-        if (clazz) {
-            annotationParameters[parameterName] = ClassParameterValue(parameterValue)
-        } else {
-            annotationParameters[parameterName] = SimpleParameterValue(parameterValue)
+        when(ctx.stop.type) {
+            MappingLexer.QualifiedType -> {
+                annotationParameters[parameterName] = TypeParameterValue(parameterValue)
+            }
+            MappingLexer.QualifiedTypeClass -> {
+                annotationParameters[parameterName] = ClassParameterValue(parameterValue)
+            }
+            else -> {
+                annotationParameters[parameterName] = SimpleParameterValue(parameterValue)
+            }
         }
     }
 }

@@ -48,16 +48,24 @@ interface ParameterValue {
     val import: String?
 }
 
-class SimpleParameterValue(override val value: String, override val import: String? = null)
-    : ParameterValue {
+class SimpleParameterValue(override val value: String, override val import: String? = null): ParameterValue {
 
     override fun toString(): String {
         return value
     }
 }
 
-class ClassParameterValue(private val clazz: String)
-    : ParameterValue {
+class TypeParameterValue(val type: String): ParameterValue {
+    private val qualifiedType: QualifiedType = QualifiedType(type)
+
+    override val value: String = qualifiedType.type
+
+    override val import: String? = qualifiedType.import
+
+    override fun toString(): String = qualifiedType.toString()
+}
+
+class ClassParameterValue(private val clazz: String): ParameterValue {
 
     override val value: String
         get() = clazz.substring(import.substringBeforeLast('.').length + 1)

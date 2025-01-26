@@ -319,4 +319,37 @@ class AntlrParserSpec: StringSpec({
         mapping.targetTypePrimitive.shouldBeTrue()
         mapping.targetTypePrimitiveArray.shouldBeFalse()
     }
+
+    "annotate source type with fully qualified java annotation and nested type parameter" {
+        val source = """integer:year @ com.fasterxml.jackson.annotation.JsonFormat(shape = JsonFormat.Shape.NUMBER, pattern = "yyyy")"""
+
+        val mapping = parseMapping(source)
+        mapping.kind shouldBe Mapping.Kind.ANNOTATE
+        mapping.sourceType shouldBe "integer"
+        mapping.sourceFormat shouldBe "year"
+        mapping.targetType.shouldBeNull()
+        mapping.targetGenericTypes.shouldBeEmpty()
+        mapping.annotationType shouldBe "com.fasterxml.jackson.annotation.JsonFormat"
+        val shape = mapping.annotationParameters["shape"]!!
+        shape.value shouldBe "JsonFormat.Shape.NUMBER"
+        shape.import.shouldBeNull()
+        mapping.annotationParameters["pattern"]!!.value shouldBe """"yyyy""""
+    }
+
+    "annotate source type with fully qualified java annotation and qualified type parameter" {
+        val source = """integer:year @ com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.NUMBER, pattern = "yyyy")"""
+
+        val mapping = parseMapping(source)
+        mapping.kind shouldBe Mapping.Kind.ANNOTATE
+        mapping.sourceType shouldBe "integer"
+        mapping.sourceFormat shouldBe "year"
+        mapping.targetType.shouldBeNull()
+        mapping.targetGenericTypes.shouldBeEmpty()
+        mapping.annotationType shouldBe "com.fasterxml.jackson.annotation.JsonFormat"
+        val shape = mapping.annotationParameters["shape"]!!
+        shape.value shouldBe "JsonFormat.Shape.NUMBER"
+        shape.import shouldBe "com.fasterxml.jackson.annotation.JsonFormat"
+        mapping.annotationParameters["pattern"]!!.value shouldBe """"yyyy""""
+    }
+
 })
