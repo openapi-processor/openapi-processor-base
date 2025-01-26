@@ -9,4 +9,4 @@ map:
     - type: integer:year => java.time.Year
 
   schemas:
-    integer:year @ com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.NUMBER, pattern = "yyyy")
+    - type: integer:year @ com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.NUMBER, pattern = "yyyy")
