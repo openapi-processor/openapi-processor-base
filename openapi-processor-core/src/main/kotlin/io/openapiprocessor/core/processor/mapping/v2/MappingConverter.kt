@@ -35,6 +35,7 @@ class MappingConverter(val mapping: MappingV2) {
         var singleTypeMapping: TypeMapping? = null
         var multiTypeMapping: TypeMapping? = null
         val typeMappings = mutableListOf<Mapping>()
+        val schemaTypeMappings = mutableListOf<Mapping>()
         val parameterTypeMappings = mutableListOf<Mapping>()
         val responseTypeMappings = mutableListOf<Mapping>()
 
@@ -58,6 +59,10 @@ class MappingConverter(val mapping: MappingV2) {
             typeMappings.add(convertType(it))
         }
 
+        map.schemas.forEach {
+            schemaTypeMappings.add(convertType(it))
+        }
+
         map.parameters.forEach {
             parameterTypeMappings.add (convertParameter (it))
         }
@@ -73,6 +78,7 @@ class MappingConverter(val mapping: MappingV2) {
             multiTypeMapping,
             null,
             TypeMappings(typeMappings),
+            TypeMappings(schemaTypeMappings),
             TypeMappings(parameterTypeMappings),
             TypeMappings(responseTypeMappings))
     }
@@ -317,6 +323,7 @@ class MappingConverter(val mapping: MappingV2) {
         var multiTypeMapping: TypeMapping? = null
         var nullTypeMapping: NullTypeMapping? = null
         val typeMappings = mutableListOf<Mapping>()
+        val schemaTypeMappings = mutableListOf<Mapping>()
         val parameterTypeMappings = mutableListOf<Mapping>()
         val responseTypeMappings = mutableListOf<Mapping>()
 
@@ -340,6 +347,10 @@ class MappingConverter(val mapping: MappingV2) {
             typeMappings.add(convertType(it))
         }
 
+        source.schemas.forEach {
+            schemaTypeMappings.add(convertType(it))
+        }
+
         source.parameters.forEach {
             parameterTypeMappings.add (convertParameter (it))
         }
@@ -355,6 +366,7 @@ class MappingConverter(val mapping: MappingV2) {
             multiTypeMapping,
             nullTypeMapping,
             TypeMappings(typeMappings),
+            TypeMappings(schemaTypeMappings),
             TypeMappings(parameterTypeMappings),
             TypeMappings(responseTypeMappings),
             source.exclude)
@@ -366,6 +378,7 @@ class MappingConverter(val mapping: MappingV2) {
         var multiTypeMapping: TypeMapping? = null
         var nullTypeMapping: NullTypeMapping? = null
         val typeMappings = mutableListOf<Mapping>()
+        val schemaTypeMappings = mutableListOf<Mapping>()
         val parameterTypeMappings = mutableListOf<Mapping>()
         val responseTypeMappings = mutableListOf<Mapping>()
 
@@ -393,6 +406,10 @@ class MappingConverter(val mapping: MappingV2) {
             typeMappings.add(convertType(it))
         }
 
+        source.schemas.forEach {
+            schemaTypeMappings.add(convertType(it))
+        }
+
         source.parameters.forEach {
             parameterTypeMappings.add (convertParameter (it))
         }
@@ -408,6 +425,7 @@ class MappingConverter(val mapping: MappingV2) {
             multiTypeMapping,
             nullTypeMapping,
             TypeMappings(typeMappings),
+            TypeMappings(schemaTypeMappings),
             TypeMappings(parameterTypeMappings),
             TypeMappings(responseTypeMappings),
             source.exclude

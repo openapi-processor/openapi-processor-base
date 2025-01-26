@@ -113,6 +113,10 @@ abstract class DataTypeWriterBase(
             result += builder.toString()
         }
 
+        val schemaBuilder = StringBuilder()
+        writeAnnotations(schemaBuilder, collectSchemaAnnotations(propDataType.dataType.getSourceName()))
+        result += schemaBuilder.toString()
+
         val extBuilder = StringBuilder()
         writeAnnotations(extBuilder, collectExtensionAnnotations(propDataType.extensions))
         result += extBuilder.toString()
@@ -133,6 +137,12 @@ abstract class DataTypeWriterBase(
     private fun collectTypeAnnotations(sourceName: String): Collection<Annotation> {
         return MappingFinder(apiOptions)
             .findAnnotationTypeMappings(sourceName)
+            .map { Annotation(it.annotation.type, it.annotation.parameters) }
+    }
+
+    private fun collectSchemaAnnotations(sourceName: String): Collection<Annotation> {
+        return MappingFinder(apiOptions)
+            .findAnnotationSchemaTypeMappings(sourceName)
             .map { Annotation(it.annotation.type, it.annotation.parameters) }
     }
 
@@ -316,6 +326,17 @@ abstract class DataTypeWriterBase(
 
         val typeAnnotations = collectTypeAnnotations(target.getSourceName())
         typeAnnotations.forEach { annotation ->
+            imports.addAll(annotation.imports)
+
+            annotation.parameters.forEach {
+                val import = it.value.import
+                if (import != null)
+                    imports.add(import)
+            }
+        }
+
+        val schemaAnnotations = collectSchemaAnnotations(target.getSourceName())
+        schemaAnnotations.forEach { annotation ->
             imports.addAll(annotation.imports)
 
             annotation.parameters.forEach {

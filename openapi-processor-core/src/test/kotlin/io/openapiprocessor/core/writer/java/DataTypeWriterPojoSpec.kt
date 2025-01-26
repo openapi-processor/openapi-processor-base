@@ -686,4 +686,56 @@ class DataTypeWriterPojoSpec: StringSpec({
             |
             """.trimMargin()
     }
+
+    "writes additional annotation from schema annotation mapping" {
+        val opts = parseOptions(
+            """
+            |openapi-processor-mapping: v11
+            |options:
+            |  package-name: pkg
+            |map:
+            |  types:
+            |    - type: integer:year => java.time.Year
+            |  schemas:
+            |    - type: integer:year @ foo.Bar
+            """.trimMargin())
+
+        val dataType = ObjectDataType("Foo",
+            "pkg", linkedMapOf(
+                "foo" to propertyDataType(
+                    MappedDataType("Year", "java.time",
+                        sourceDataType = StringDataType("integer:year")))
+            ))
+
+        // when:
+        writer(opts).write(target, dataType)
+
+        // then:
+        target.toString() shouldBeEqual
+            """package pkg;
+            |
+            |import com.fasterxml.jackson.annotation.JsonProperty;
+            |import foo.Bar;
+            |import io.openapiprocessor.generated.support.Generated;
+            |import java.time.Year;
+            |
+            |@Generated
+            |public class Foo {
+            |
+            |    @Bar
+            |    @JsonProperty("foo")
+            |    private Year foo;
+            |
+            |    public Year getFoo() {
+            |        return foo;
+            |    }
+            |
+            |    public void setFoo(Year foo) {
+            |        this.foo = foo;
+            |    }
+            |
+            |}
+            |
+            """.trimMargin()
+    }
 })

@@ -42,6 +42,10 @@ class MappingRepository(
         return globalMappings.findAnnotationTypeMapping(AnnotationTypeMatcher(query), step.add(GlobalsStep()))
     }
 
+    fun findGlobalAnnotationSchemaTypeMapping(query: MappingQuery, step: MappingStep): List<AnnotationTypeMapping> {
+        return globalMappings.findAnnotationSchemaTypeMapping(AnnotationTypeMatcher(query), step.add(GlobalsStep()))
+    }
+
     fun findGlobalParameterTypeMapping(query: MappingQuery, step: MappingStep): TypeMapping? {
         return globalMappings.findParameterTypeMapping(TypeMatcher(query), step.add(GlobalsStep()))
     }

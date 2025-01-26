@@ -231,6 +231,28 @@ class MappingFinder(val options: ApiOptions) {
         return repository.findGlobalAnnotationTypeMapping(query, step)
     }
 
+    fun findAnnotationSchemaTypeMappings(sourceName: String): List<AnnotationTypeMapping> {
+        val (type, format) = splitTypeName(sourceName)
+        return findAnnotationSchemaTypeMappings(
+            MappingFinderQuery(
+                type = type,
+                format = format)
+        )
+    }
+
+    private fun findAnnotationSchemaTypeMappings(query: MappingQuery): List<AnnotationTypeMapping> {
+        val step = rootStep("looking for annotation schema type mapping of", query)
+        try {
+            return findAnnotationSchemaTypeMappings(query, step)
+        } finally {
+            step.log()
+        }
+    }
+
+    private fun findAnnotationSchemaTypeMappings(query: MappingQuery, step: MappingStep): List<AnnotationTypeMapping> {
+        return repository.findGlobalAnnotationSchemaTypeMapping(query, step)
+    }
+
     fun findParameterTypeMapping(query: MappingQuery): TypeMapping? {
         val step = rootStep("looking for parameter type mapping of", query)
         try {

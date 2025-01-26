@@ -22,6 +22,7 @@ import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.support.datatypes.ListDataType
 import io.openapiprocessor.core.support.datatypes.propertyDataType
 import io.openapiprocessor.core.support.datatypes.propertyDataTypeString
+import io.openapiprocessor.core.support.parseOptions
 import java.io.StringWriter
 import java.util.*
 import io.openapiprocessor.core.support.datatypes.ObjectDataType as ObjectDataTypeId
@@ -30,9 +31,18 @@ class DataTypeWriterRecordSpec: StringSpec({
     this.isolationMode = IsolationMode.InstancePerTest
 
     val options = ApiOptions()
+    val identifier = JavaIdentifier()
     val generatedWriter = SimpleGeneratedWriter(options)
     val writer = DataTypeWriterRecord(options, JavaIdentifier(), generatedWriter, BeanValidationFactory(options))
     val target = StringWriter()
+
+    fun writer(opts: ApiOptions = options): DataTypeWriterRecord {
+        return DataTypeWriterRecord(
+            opts,
+            identifier,
+            generatedWriter,
+            BeanValidationFactory(opts))
+    }
 
     "writes 'package'" {
         val pkg = "io.openapiprocessor.generated"
@@ -469,6 +479,53 @@ class DataTypeWriterRecordSpec: StringSpec({
             |public record Foo(
             |    @JsonProperty(value = "foo", access = JsonProperty.Access.READ_ONLY)
             |    String foo
+            |) {}
+            |
+            """.trimMargin()
+    }
+
+    "writes additional annotation from schema annotation mapping" {
+        val opts = parseOptions(
+            """
+            |openapi-processor-mapping: v11
+            |options:
+            |  package-name: pkg
+            |map:
+            |  types:
+            |    - type: integer:year => java.time.Year
+            |  schemas:
+            |    - type: integer:year @ foo.Bar
+            """.trimMargin())
+
+        val dataType = io.openapiprocessor.core.support.datatypes.ObjectDataType(
+            "Foo",
+            "pkg", linkedMapOf(
+                "foo" to propertyDataType(
+                    MappedDataType(
+                        "Year", "java.time",
+                        sourceDataType = StringDataType("integer:year")
+                    )
+                )
+            )
+        )
+
+        // when:
+        writer(opts).write(target, dataType)
+
+        // then:
+        target.toString() shouldBeEqual
+            """package pkg;
+            |
+            |import com.fasterxml.jackson.annotation.JsonProperty;
+            |import foo.Bar;
+            |import io.openapiprocessor.generated.support.Generated;
+            |import java.time.Year;
+            |
+            |@Generated
+            |public record Foo(
+            |    @Bar
+            |    @JsonProperty("foo")
+            |    Year foo
             |) {}
             |
             """.trimMargin()

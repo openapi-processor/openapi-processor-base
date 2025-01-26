@@ -15,6 +15,7 @@ class Mappings(
     private val multiTypeMapping: TypeMapping? = null,
     private val nullTypeMapping: NullTypeMapping? = null,
     private val typeMappings: TypeMappings = TypeMappings(),
+    private val schemaMappings: TypeMappings = TypeMappings(),
     private val parameterTypeMappings: TypeMappings = TypeMappings(),
     private val responseTypeMappings: TypeMappings = TypeMappings(),
     private val exclude: Boolean = false
@@ -69,6 +70,28 @@ class Mappings(
 
     fun findAnnotationTypeMapping(filter: MappingMatcher, step: MappingStep): List<AnnotationTypeMapping> {
         val mappings = typeMappings.filter(filter, step.add(TypesStep()))
+        if (mappings.isEmpty()) {
+            return emptyList()
+        }
+
+        return mappings.map { it as AnnotationTypeMapping }
+    }
+
+    fun findSchemaTypeMapping(filter: MappingMatcher, step: MappingStep): TypeMapping? {
+        val mappings = schemaMappings.filter(filter, step.add(SchemasStep()))
+        if (mappings.isEmpty()) {
+            return null
+        }
+
+        if (mappings.size > 1) {
+            throw AmbiguousTypeMappingException(mappings)
+        }
+
+        return mappings.first() as TypeMapping
+    }
+
+    fun findAnnotationSchemaTypeMapping(filter: MappingMatcher, step: MappingStep): List<AnnotationTypeMapping> {
+        val mappings = schemaMappings.filter(filter, step.add(SchemasStep()))
         if (mappings.isEmpty()) {
             return emptyList()
         }
