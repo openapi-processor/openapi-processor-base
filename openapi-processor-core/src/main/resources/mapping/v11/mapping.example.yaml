@@ -3,7 +3,7 @@
 ##
 
 # mapping format [required]
-openapi-processor-mapping: v10
+openapi-processor-mapping: v11
 
 options: # general processor options [required]
 
@@ -80,7 +80,6 @@ map: # the type mappings
   multi: reactor.core.publisher.Flux
 
   types: # global type mappings (optional)
-
     - type: array => java.util.Collection
 
     - type: Schema => java.util.Map
@@ -90,18 +89,18 @@ map: # the type mappings
 
     - type: Schema @ io.openapiprocessor.Annotation()
 
-  parameters: # global parameter mappings (optional)
+  schemas: # global schema mappings (optional)
+    - type: Schema @ io.openapiprocessor.Annotation()
 
+  parameters: # global parameter mappings (optional)
     - name: foo => java.util.List
     - name: bar => com.github.hauner.openapi.Bar
     - name: param @ io.openapiprocessor.Annotation()
     - type: Schema @ io.openapiprocessor.Annotation()
 
   responses:  # global response mappings (optional)
-
     - content: application/vnd.something => java.util.List
     - content: application/json => com.github.hauner.openapi.FooBar
-
 
   paths: # path/endpoint specific mappings (optional)
 
@@ -122,6 +121,9 @@ map: # the type mappings
 
       types:
         - type: Schema => java.util.Collection
+
+      schemas:
+        - type: Schema @ io.openapiprocessor.Annotation()
 
       parameters:
         - name: foo => java.util.List

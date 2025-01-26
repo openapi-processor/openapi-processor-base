@@ -210,6 +210,9 @@
         "types": {
           "$ref": "#/definitions/TypeMappings"
         },
+        "schemas": {
+          "$ref": "#/definitions/TypeMappings"
+        },
         "parameters": {
           "$ref": "#/definitions/ParameterMappings"
         },
