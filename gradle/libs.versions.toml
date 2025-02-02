@@ -1,6 +1,6 @@
 [versions]
 processor = "2025.1-SNAPSHOT"
-parser = "2025.1-SNAPSHOT"
+parser = "2025.1"
 api = "2024.2"
 
 kotlin = "2.1.10"
