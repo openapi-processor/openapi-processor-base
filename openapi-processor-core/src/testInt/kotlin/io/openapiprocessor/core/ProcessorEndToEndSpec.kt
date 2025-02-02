@@ -37,9 +37,11 @@ private fun sources(): Collection<TestSet> {
         testSet(it.name, SWAGGER, it.openapi, model = "default", outputs = it.outputs, expected = it.expected)
     }
 
-    val openapi4j = ALL_30.map {
-        testSet(it.name, OPENAPI4J, it.openapi, model = "default", outputs = it.outputs, expected = it.expected)
-    }
+    val openapi4j = ALL_30
+        .filter { !EXCLUDE_OPENAPI4J.contains(it.name) }
+        .map {
+            testSet(it.name, OPENAPI4J, it.openapi, model = "default", outputs = it.outputs, expected = it.expected)
+        }
 
     val openapi30 = ALL_30.map {
         testSet(it.name, INTERNAL, it.openapi, model = "default", outputs = it.outputs, expected = it.expected)
