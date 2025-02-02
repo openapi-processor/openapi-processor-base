@@ -59,6 +59,11 @@
           "default": "default",
           "enum": ["default", "record"]
         },
+        "model-accessors": {
+          "description": "enable/disable generation of pojo accessor methods.",
+          "type": "boolean",
+          "default": true
+        },
         "enum-type": {
           "description": "generate default enum, string or framework enum. Default is default.",
           "default": "default",

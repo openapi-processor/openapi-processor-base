@@ -34,7 +34,9 @@ class DataTypeWriterPojo(
     private fun writeClass(target: Writer, dataType: ModelDataType, propsData: List<PropertyData>) {
         writeClassOpen(target, dataType)
         writeClassProperties(target, dataType, propsData)
-        writeClassMethods(target, dataType, propsData)
+        if (apiOptions.modelAccessors) {
+            writeClassMethods(target, dataType, propsData)
+        }
         writeClassClose(target)
     }
 
