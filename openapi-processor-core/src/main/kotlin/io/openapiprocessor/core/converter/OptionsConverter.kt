@@ -66,6 +66,7 @@ class OptionsConverter(private val checkObsoleteProcessorOptions: Boolean = fals
 
                     options.packageName = mapping.options.packageName
                     options.modelType = mapping.options.modelType
+                    options.modelAccessors = mapping.options.modelAccessors
                     options.enumType = mapping.options.enumType
                     options.modelNameSuffix = mapping.options.modelNameSuffix
 

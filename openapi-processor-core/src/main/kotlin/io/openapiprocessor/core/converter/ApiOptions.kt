@@ -72,6 +72,11 @@ class ApiOptions: MappingSettings {
     }
 
     /**
+     * model accessors. enable/disable generation of model accessors (i.e. pojo getter and setter).
+     */
+    var modelAccessors = true
+
+    /**
      * enum type. default|string|supplier.
      */
     var enumType = "default"

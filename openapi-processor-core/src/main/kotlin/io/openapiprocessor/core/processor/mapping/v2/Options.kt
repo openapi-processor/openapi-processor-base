@@ -48,6 +48,11 @@ data class Options(
     val modelType: String = "default",
 
     /**
+     * generate pojo getter and setter methods (optional)
+     */
+    val modelAccessors: Boolean = true,
+
+    /**
      * generate enum default|string|framework (optional)
      */
     val enumType: String = "default",
