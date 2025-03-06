@@ -17,7 +17,8 @@ import java.io.Writer
 open class StringEnumWriter(
     private val apiOptions: ApiOptions,
     private val identifier: Identifier,
-    private val generatedWriter: GeneratedWriter
+    private val generatedWriter: GeneratedWriter,
+    private val javadocWriter: JavaDocWriter = JavaDocWriter(identifier)
 ) {
 
     fun write(target: Writer, dataType: StringEnumDataType) {
@@ -30,6 +31,8 @@ open class StringEnumWriter(
         if(imports.isNotEmpty()) {
             target.write("\n")
         }
+
+        writeJavaDoc(target, dataType)
 
         generatedWriter.writeUse(target)
         target.write("public enum ${dataType.getTypeName()}")
@@ -112,5 +115,11 @@ open class StringEnumWriter(
 
     private fun isSupplier(): Boolean {
         return apiOptions.enumType == "framework"
+    }
+
+    private fun writeJavaDoc(target: Writer, dataType: DataType) {
+        if (apiOptions.javadoc) {
+            target.write(javadocWriter.convertForDataType(dataType))
+        }
     }
 }

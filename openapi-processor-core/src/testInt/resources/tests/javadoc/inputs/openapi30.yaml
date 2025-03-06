@@ -60,3 +60,12 @@ components:
           description: >
             *property* description
           type: string
+        enum:
+#          description: >
+#            *enum* property description
+          $ref: '#/components/schemas/FooEnum'
+
+    FooEnum:
+        description: "this is an *enum* description"
+        type: string
+        enum: ['foo', 'bar']

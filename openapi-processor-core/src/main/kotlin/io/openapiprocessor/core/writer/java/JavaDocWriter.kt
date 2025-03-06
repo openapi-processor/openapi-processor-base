@@ -107,6 +107,18 @@ open class JavaDocWriter(val identifier: Identifier) {
         return wrap(comment)
     }
 
+    // todo forEnum?
+    fun convertForDataType(dataType: DataType): String {
+        var comment = ""
+
+        if (dataType.documentation?.description != null) {
+            comment += convert(dataType.documentation!!.description) + "\n"
+        }
+
+        return wrap(comment)
+    }
+
+    // todo convertForProperty?
     fun convert(dataType: DataType): String {
         var comment = ""
 

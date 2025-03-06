@@ -327,4 +327,20 @@ class JavaDocWriterSpec: StringSpec({
 
         doc shouldBeEqual expected
     }
+
+    "converts enum schema description to javadoc comment" {
+        val description = "*markdown* description with **text**"
+
+        val datatype = mockk<StringEnumDataType>()
+        every { datatype.documentation } returns Documentation(description = description)
+
+        val html = writer.convertForDataType(datatype)
+
+        html shouldBe """
+            |/**
+            | * <em>markdown</em> description with <strong>text</strong>
+            | */
+            |
+            """.trimMargin()
+    }
 })

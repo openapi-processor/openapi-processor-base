@@ -15,12 +15,26 @@ public class Foo {
     @JsonProperty("foo-bar")
     private String fooBar;
 
+    /**
+     * this is an <em>enum</em> description
+     */
+    @JsonProperty("enum")
+    private FooEnum aEnum;
+
     public String getFooBar() {
         return fooBar;
     }
 
     public void setFooBar(String fooBar) {
         this.fooBar = fooBar;
+    }
+
+    public FooEnum getEnum() {
+        return aEnum;
+    }
+
+    public void setEnum(FooEnum aEnum) {
+        this.aEnum = aEnum;
     }
 
 }

@@ -402,7 +402,8 @@ class DataTypeConverter(
             listOf(options.packageName, "model").joinToString("."),
             schemaInfo.getEnumValues() as List<String>,
             constraints,
-            schemaInfo.getDeprecated())
+            schemaInfo.getDeprecated(),
+            Documentation(description = schemaInfo.description))
 
         dataTypes.add(enumName, enumType)
         return enumType

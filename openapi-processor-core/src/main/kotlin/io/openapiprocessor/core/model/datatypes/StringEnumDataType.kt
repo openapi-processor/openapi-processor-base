@@ -5,6 +5,8 @@
 
 package io.openapiprocessor.core.model.datatypes
 
+import io.openapiprocessor.core.model.Documentation
+
 /**
  * OpenAPI type 'string' with enum constraint maps to enum class.
  */
@@ -13,7 +15,8 @@ class StringEnumDataType(
     private val pkg: String,
     val values: List<String> = emptyList(),
     override val constraints: DataTypeConstraints? = null,
-    override val deprecated: Boolean = false
+    override val deprecated: Boolean = false,
+    override val documentation: Documentation? = null
 ): DataType {
 
     override fun getName(): String {
