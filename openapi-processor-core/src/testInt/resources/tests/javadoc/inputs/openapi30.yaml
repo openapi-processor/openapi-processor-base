@@ -61,8 +61,9 @@ components:
             *property* description
           type: string
         enum:
-#          description: >
-#            *enum* property description
+          # actually OpenAPI 3.0 doesn't allow this, but it is easier to support it instead of being strict.
+          description: >
+            enum *property* description
           $ref: '#/components/schemas/FooEnum'
 
     FooEnum:

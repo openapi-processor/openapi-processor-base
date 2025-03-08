@@ -39,6 +39,7 @@ paths:
               type: array
               items:
                 $ref: '#/components/schemas/Foo'
+        required: true
       responses:
         '200':
           description: this is a *response* description
@@ -60,8 +61,8 @@ components:
             *property* description
           type: string
         enum:
-#          description: >
-#            *enum* description
+          description: >
+            enum *property* description
           $ref: '#/components/schemas/FooEnum'
 
     FooEnum:

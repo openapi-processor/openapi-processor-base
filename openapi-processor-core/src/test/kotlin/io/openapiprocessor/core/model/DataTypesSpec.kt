@@ -22,7 +22,8 @@ class DataTypesSpec : StringSpec({
             Pair("foo", PropertyDataType(
                 readOnly = false,
                 writeOnly = false,
-                dataType = StringDataType()))
+                dataType = StringDataType(),
+                documentation = Documentation()))
         )))
 
         dataTypes.getModelDataTypes().size shouldBe 0
@@ -33,8 +34,8 @@ class DataTypesSpec : StringSpec({
             Pair("foo", PropertyDataType(
                 readOnly = false,
                 writeOnly = false,
-                dataType = StringDataType()
-            ))
+                dataType = StringDataType(),
+                documentation = Documentation()))
         )))
         dataTypes.addRef("Foo")
 

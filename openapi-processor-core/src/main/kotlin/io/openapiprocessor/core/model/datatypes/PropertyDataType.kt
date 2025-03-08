@@ -15,6 +15,7 @@ open class PropertyDataType(
     val readOnly: Boolean,
     val writeOnly: Boolean,
     val dataType: DataType,
+    override val documentation: Documentation?,
     val extensions: Map<String, *> = emptyMap<String, Any>()
 ): DataType by dataType {
 
@@ -26,7 +27,4 @@ open class PropertyDataType(
 
     override val deprecated: Boolean
         get() = dataType.deprecated
-
-    override val documentation: Documentation?
-        get() = dataType.documentation
 }

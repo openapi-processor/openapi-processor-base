@@ -196,6 +196,7 @@ class DataTypeConverter(
                 propSchemaInfo.readOnly,
                 propSchemaInfo.writeOnly,
                 propDataType,
+                Documentation(description = propSchemaInfo.description),
                 propSchemaInfo.getExtensions()
             )
 

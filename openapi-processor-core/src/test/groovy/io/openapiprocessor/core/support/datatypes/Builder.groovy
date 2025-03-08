@@ -19,7 +19,7 @@ class Builder {
         Boolean readOnly = false,
         Boolean writeOnly = false
     ) {
-        return new PropertyDataType(readOnly, writeOnly, dataType, [:])
+        return new PropertyDataType(readOnly, writeOnly, dataType, new Documentation(), [:])
     }
 
     static ObjectDataType objectDataType (

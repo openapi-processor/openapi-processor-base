@@ -16,7 +16,7 @@ public class Foo {
     private String fooBar;
 
     /**
-     * this is an <em>enum</em> description
+     * enum <em>property</em> description
      */
     @JsonProperty("enum")
     private FooEnum aEnum;

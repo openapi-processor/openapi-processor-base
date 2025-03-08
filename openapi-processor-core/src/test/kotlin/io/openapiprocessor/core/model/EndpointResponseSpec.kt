@@ -40,8 +40,8 @@ class EndpointResponseSpec: StringSpec({
                 "bar" to PropertyDataType(
                     readOnly = false,
                     writeOnly = false,
-                    dataType = StringDataType()
-                )
+                    dataType = StringDataType(),
+                    documentation = Documentation())
             ))),
             emptySet()
         )
@@ -56,8 +56,8 @@ class EndpointResponseSpec: StringSpec({
                 "bar" to PropertyDataType(
                     readOnly = false,
                     writeOnly = false,
-                    dataType = StringDataType()
-                )
+                    dataType = StringDataType(),
+                    documentation = Documentation())
             ))),
             setOf(Response("text/plain", StringDataType()))
         )

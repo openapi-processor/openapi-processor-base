@@ -33,7 +33,9 @@ class ProcessorEndToEndSpec: StringSpec({
 })
 
 private fun sources(): Collection<TestSet> {
-    val swagger = ALL_30.map {
+    val swagger = ALL_30
+        .filter { !EXCLUDE_SWAGGER_30.contains(it.name) }
+        .map {
         testSet(it.name, SWAGGER, it.openapi, model = "default", outputs = it.outputs, expected = it.expected)
     }
 

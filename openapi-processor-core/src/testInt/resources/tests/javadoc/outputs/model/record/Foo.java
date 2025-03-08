@@ -7,7 +7,7 @@ import generated.support.Generated;
  * this is the <em>Foo</em> schema description
  *
  * @param fooBar <em>property</em> description
- * @param enum this is an <em>enum</em> description
+ * @param enum enum <em>property</em> description
  */
 @Generated(value = "openapi-processor-core", version = "test")
 public record Foo(

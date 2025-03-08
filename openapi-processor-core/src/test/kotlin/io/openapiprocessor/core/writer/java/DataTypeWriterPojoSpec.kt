@@ -16,6 +16,7 @@ import io.openapiprocessor.core.converter.JsonPropertyAnnotationMode
 import io.openapiprocessor.core.converter.mapping.*
 import io.openapiprocessor.core.extractImports
 import io.openapiprocessor.core.model.Annotation
+import io.openapiprocessor.core.model.Documentation
 import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.support.datatypes.ListDataType
 import io.openapiprocessor.core.support.datatypes.ObjectDataType
@@ -173,12 +174,14 @@ class DataTypeWriterPojoSpec: StringSpec({
             "foo" to PropertyDataType (
                 readOnly = true,
                 writeOnly = false,
-                dataType = StringDataType ()
+                dataType = StringDataType (),
+                documentation = Documentation()
             ),
             "bar" to PropertyDataType (
                 readOnly = false,
                 writeOnly = true,
-                dataType = StringDataType ()
+                dataType = StringDataType (),
+                documentation = Documentation()
             )
         ))
 
@@ -203,7 +206,8 @@ class DataTypeWriterPojoSpec: StringSpec({
             "foo" to PropertyDataType (
                 readOnly = false,
                 writeOnly = false,
-                dataType = StringDataType ()
+                dataType = StringDataType (),
+                documentation = Documentation()
             )
         ))
 
