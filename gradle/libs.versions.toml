@@ -5,7 +5,7 @@ api = "2024.2"
 
 kotlin = "2.1.10"
 build-jdk = "11"
-target-jdk = "11"
+#target-jdk = "11"
 test-jdk = "17"
 
 junit = "5.12.0"
@@ -15,14 +15,14 @@ jacoco = "0.8.11"
 openapi-processor-api = { module = "io.openapiprocessor:openapi-processor-api", version.ref = "api" }
 openapi-parser-bom = { module = "io.openapiprocessor:openapi-parser-bom", version.ref = "parser" }
 openapi-parser-parser = { module = "io.openapiprocessor:openapi-parser" }
-json-schema-validator-bom = { module = "io.openapiprocessor:json-schema-validator-bom", version.ref = "parser" }
-json-schema-validator-validator = { module = "io.openapiprocessor:json-schema-validator" }
+#json-schema-validator-bom = { module = "io.openapiprocessor:json-schema-validator-bom", version.ref = "parser" }
+#json-schema-validator-validator = { module = "io.openapiprocessor:json-schema-validator" }
 io-jackson = { module = "io.openapiprocessor:io-jackson" }
 
 jackson-bom = "com.fasterxml.jackson:jackson-bom:2.18.2"
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind" }
 jackson-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml" }
-jackson-xml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-xml" }
+#jackson-xml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-xml" }
 jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
 
 openapi4j = "org.openapi4j:openapi-parser:1.0.7"
@@ -32,9 +32,7 @@ antlr = "org.antlr:antlr4:4.13.2"
 
 format-java-eclipse = "org.eclipse.jdt:org.eclipse.jdt.core:3.40.0"
 format-java-google = "com.google.googlejavaformat:google-java-format:1.24.0"
-simple-xml = "org.simpleframework:simple-xml:2.7.1"
 
-guava = "com.google.guava:guava:33.4.0-jre"
 commons-text = "org.apache.commons:commons-text:1.13.0"
 commonmark = "com.atlassian.commonmark:commonmark:0.17.0"
 uritemplate = "io.github.std-uritemplate:std-uritemplate:2.0.3"
@@ -60,11 +58,11 @@ plugin-checker = "org.checkerframework:checkerframework-gradle-plugin:0.6.16"
 plugin-outdated = "com.github.ben-manes:gradle-versions-plugin:0.42.0"
 
 [bundles]
-jackson = ["jackson-databind", "jackson-yaml", "jackson-kotlin"]
-openapi-parser = ["openapi-parser-parser", "io-jackson"]
+#jackson = ["jackson-databind", "jackson-yaml", "jackson-kotlin"]
+#openapi-parser = ["openapi-parser-parser", "io-jackson"]
 
 [plugins]
-kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+#kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 nexus = { id = "io.github.gradle-nexus.publish-plugin", version = "2.0.0" }
 jacoco = { id = "org.barfuin.gradle.jacocolog", version = "3.1.0" }
 sonar = { id = "org.sonarqube", version =  "6.0.1.5171" }
