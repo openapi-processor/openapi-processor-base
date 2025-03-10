@@ -1,5 +1,5 @@
 [versions]
-processor = "2025.1"
+processor = "2025.1.1-SNAPSHOT"
 parser = "2025.2"
 api = "2024.2"
 
