@@ -76,7 +76,6 @@
         },
         "format-code": {
           "description": "enable/disable code formatting.",
-          "type": "boolean",
           "default": false,
           "enum": [false, true, "google", "eclipse"]
         },
