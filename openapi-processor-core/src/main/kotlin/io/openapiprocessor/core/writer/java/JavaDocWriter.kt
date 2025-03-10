@@ -22,7 +22,7 @@ import org.commonmark.renderer.html.HtmlRenderer
 /**
  * Do not wrap the top level items in (unwanted) paragraphs.
  */
-class SkipParentWrapperParagraphsRenderer(val context: HtmlNodeRendererContext)
+class SkipParentWrapperParagraphsRenderer(context: HtmlNodeRendererContext)
     : CoreHtmlNodeRenderer(context), NodeRenderer {
 
     override fun getNodeTypes(): Set<Class<out Node>> {
@@ -67,11 +67,11 @@ open class JavaDocWriter(val identifier: Identifier) {
             comment += "\n"
 
         endpoint.parameters.forEach {
-            comment += convert(it.description, "@param ${identifier.toCamelCase (it.name)}")
+            comment += convert(it.description, "@param ${identifier.toIdentifier (it.name)}")
         }
 
         endpoint.requestBodies.forEach {
-            comment += convert(it.description, "@param ${identifier.toCamelCase (it.name)}")
+            comment += convert(it.description, "@param ${identifier.toIdentifier (it.name)}")
         }
 
         val response = convert(endpointResponse.description, "@return")
@@ -101,7 +101,7 @@ open class JavaDocWriter(val identifier: Identifier) {
         }
 
         dataType.forEach { p, dt ->
-            comment += convert(dt.documentation!!.description, "@param ${identifier.toCamelCase (p)}")
+            comment += convert(dt.documentation!!.description, "@param ${identifier.toIdentifier (p)}")
         }
 
         return wrap(comment)
