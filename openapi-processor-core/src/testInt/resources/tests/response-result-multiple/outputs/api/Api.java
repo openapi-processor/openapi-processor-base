@@ -7,9 +7,9 @@ import generated.support.Generated;
 public interface Api {
 
     @Mapping("/fooBar")
-    Object getFooBarpplicationJson();
+    Object getFooBarApplicationJson();
 
     @Mapping("/fooBar")
-    Object getFooBarTextPlain();
+    String getFooBarTextPlain();
 
 }

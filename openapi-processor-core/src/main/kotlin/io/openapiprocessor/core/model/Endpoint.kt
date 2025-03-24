@@ -26,7 +26,6 @@ class Endpoint(
     // grouped responses
     val endpointResponses: List<EndpointResponse> = createEndpointResponses()
 
-    // hmmm
     fun getRequestBody(): RequestBody {
         return requestBodies.first ()
     }
@@ -140,32 +139,41 @@ class Endpoint(
     private fun createEndpointResponses(): List<EndpointResponse> {
         val successes = getSuccessResponses()
         val errors = getErrorResponses()
-        return successes.map {
-            EndpointResponse(it, errors)
+
+        return successes.map { (key, responses) ->
+            EndpointResponse(responses.first(), errors, responses)
         }
     }
 
-    private fun getSuccessResponses(): Set<Response> {
-        val result = mutableMapOf<String, Response>()
+    private fun getSuccessResponses(): MutableMap<String, MutableList<Response>> {
+        val result = mutableMapOf<String, MutableList<Response>>()
 
         // prefer responses with content type.
         filterSuccessResponses()
             .filter { hasContentType(it) }
             .forEach {
-                result[it.contentType] = it
+                var contentValues = result[it.contentType]
+                if (contentValues == null) {
+                    contentValues = mutableListOf()
+                    result[it.contentType] = contentValues
+                }
+                contentValues += it
             }
 
         // check for responses without content type (e.g. 204) to generate a void method.
         if (result.isEmpty()) {
             filterSuccessResponses()
                 .forEach {
-                    result[it.contentType] = it
+                    var contentValues = result[it.contentType]
+                    if (contentValues == null) {
+                        contentValues = mutableListOf()
+                        result[it.contentType] = contentValues
+                    }
+                    contentValues += it
                 }
         }
 
         return result
-            .values
-            .toSet()
     }
 
     private fun getErrorResponses(): Set<Response> {

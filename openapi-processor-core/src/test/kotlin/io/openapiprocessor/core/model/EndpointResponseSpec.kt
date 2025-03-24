@@ -35,15 +35,19 @@ class EndpointResponseSpec: StringSpec({
     }
 
     "result style all without errors uses single response" {
-        val er = EndpointResponse(
-            Response("", ObjectDataType(DataTypeName("Foo"), "pkg", linkedMapOf(
+        val response = Response("", ObjectDataType(DataTypeName("Foo"),
+            "pkg",
+            linkedMapOf(
                 "bar" to PropertyDataType(
                     readOnly = false,
                     writeOnly = false,
                     dataType = StringDataType(),
-                    documentation = Documentation())
-            ))),
-            emptySet()
+                    documentation = Documentation()))))
+
+        val er = EndpointResponse(
+            response,
+            emptySet(),
+            listOf(response)
         )
 
         er.getResponseType(ResultStyle.ALL) shouldBe "Foo"
@@ -51,15 +55,19 @@ class EndpointResponseSpec: StringSpec({
     }
 
     "result style single uses single response" {
-        val er = EndpointResponse(
-            Response("", ObjectDataType(DataTypeName("Foo"), "pkg", linkedMapOf(
+        val response = Response("", ObjectDataType(DataTypeName("Foo"),
+            "pkg",
+            linkedMapOf(
                 "bar" to PropertyDataType(
                     readOnly = false,
                     writeOnly = false,
                     dataType = StringDataType(),
-                    documentation = Documentation())
-            ))),
-            setOf(Response("text/plain", StringDataType()))
+                    documentation = Documentation()))))
+
+        val er = EndpointResponse(
+            response,
+            setOf(Response("text/plain", StringDataType())),
+            listOf(response)
         )
 
         er.getResponseType(ResultStyle.SUCCESS) shouldBe "Foo"

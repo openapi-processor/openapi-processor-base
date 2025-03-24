@@ -22,8 +22,13 @@ class EndpointResponse(
     /**
      * additional (error) responses
      */
-    private val errors: Set<Response>
+    private val errors: Set<Response>,
 
+    /**
+     * todo replace main
+     * success responses
+     */
+    private val successes: List<Response> = listOf()
 ) {
 
     val contentType: String
@@ -49,6 +54,10 @@ class EndpointResponse(
             return getMultiResponseTypeName()
 
         if (style == ResultStyle.ALL && errors.isNotEmpty())
+            return getMultiResponseTypeName()
+
+        val distinct = getDistinctResponseTypes()
+        if (distinct.size > 1)
             return getMultiResponseTypeName()
 
         return getSingleResponseTypeName()
@@ -77,6 +86,10 @@ class EndpointResponse(
             return getImportsMulti()
 
         if (style == ResultStyle.ALL && errors.isNotEmpty())
+            return getImportsMulti()
+
+        val distinct = getDistinctResponseTypes()
+        if (distinct.size > 1)
             return getImportsMulti()
 
         return getImportsSingle()
@@ -113,7 +126,16 @@ class EndpointResponse(
         return "Object"
     }
 
-    private fun getSingleResponseTypeName(): String = main.responseType.getTypeName()
+    private fun getSingleResponseTypeName(): String {
+        val types = getDistinctResponseTypes()
+            .map { r -> r.responseType.getTypeName() }
+
+        if(types.size != 1) {
+            throw IllegalStateException("ambiguous response types: $types")
+        }
+
+        return types.first()
+    }
 
     private fun getImportsMulti(): Set<String> {
         val rt = main.responseType
@@ -128,4 +150,7 @@ class EndpointResponse(
         return main.imports
     }
 
+    private fun getDistinctResponseTypes(): List<Response> {
+        return successes.distinctBy { response ->  response.responseType.getTypeName() }
+    }
 }
