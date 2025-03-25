@@ -119,15 +119,7 @@ class TestProcessor:
     }
 
     private fun getFormatter(): SourceFormatter {
-        return if (apiOptions.formatCode) {
-            when (apiOptions.formatCodeFormatter) {
-                "google" -> GoogleFormatter()
-                "eclipse" -> EclipseFormatter()
-                else -> GoogleFormatter()
-            }
-        } else {
-            GoogleFormatter()
-        }
+        return SourceFormatterFactory().getFormatter(apiOptions)
     }
 }
 
