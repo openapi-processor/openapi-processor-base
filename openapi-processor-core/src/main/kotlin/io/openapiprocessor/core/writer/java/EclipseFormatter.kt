@@ -6,15 +6,17 @@
 package io.openapiprocessor.core.writer.java
 
 import io.openapiprocessor.core.writer.SourceFormatter
-import org.eclipse.jdt.core.formatter.CodeFormatter
 import org.eclipse.jdt.core.ToolFactory
+import org.eclipse.jdt.core.formatter.CodeFormatter
+import org.eclipse.jdt.core.formatter.DefaultCodeFormatterConstants
 import org.eclipse.jface.text.Document
 import java.io.StringReader
 import java.util.*
-import java.util.stream.Collectors
 
 
-class EclipseFormatter: SourceFormatter {
+private const val LINE_SEPARATOR = "\n"
+
+class EclipseFormatter : SourceFormatter {
     private lateinit var formatter: CodeFormatter
 
     init {
@@ -29,46 +31,41 @@ class EclipseFormatter: SourceFormatter {
                 0,
                 raw.length,
                 0,
-                "\n"
+                LINE_SEPARATOR
             )
 
             val document = Document(raw)
             textEdit.apply(document)
 
-            return correctEndOfFile(document.get())
+            val text =  document.get()
+            val trimmed = trimEnd(text)
+            return trimmed
+
         } catch (e: Exception) {
             throw FormattingException("failed to format the generated source: \n>>\n$raw\n<<", e)
         }
     }
 
-    private fun correctEndOfFile(formatted: String): String {
-        return StringBuilder()
-            .append(formatted)
-            .append("\n")
-            .toString()
+    fun trimEnd(source: String): String {
+        return source.lines()
+            .joinToString(LINE_SEPARATOR) {
+                it.trimEnd()
+            }
     }
 
     private fun initFormatter() {
-        formatter = ToolFactory.createCodeFormatter(convertOptions(loadStyleOptions()))
+        formatter = ToolFactory.createCodeFormatter(loadStyleOptions())
     }
 
-    private fun loadStyleOptions(): Properties {
+    private fun loadStyleOptions(): Map<String, String> {
+        val conventions = DefaultCodeFormatterConstants.getJavaConventionsSettings()
         val content = this.javaClass.getResource("/formatter.properties")!!.readText()
         val reader = StringReader(content)
         val properties = Properties()
         properties.load(reader)
-        return properties
-    }
 
-    private fun convertOptions(prop: Properties): HashMap<String, String> {
-        return prop.entries
-            .stream()
-            .collect(
-                Collectors.toMap(
-                    { e -> e.toString() },
-                    { v -> v.toString() },
-                    { _, next -> next })
-                { HashMap() }
-            )
+        conventions.putAll(properties as Map<out String, String>)
+
+        return conventions
     }
 }

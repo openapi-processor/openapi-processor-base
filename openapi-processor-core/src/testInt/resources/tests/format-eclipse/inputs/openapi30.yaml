@@ -1,0 +1,72 @@
+openapi: 3.0.3
+info:
+  title: test javadoc
+  version: 1.0.0
+
+paths:
+  /foo:
+    get:
+      description: |
+          a *markdown* description with **text**
+
+          - one list item
+          - second list item
+
+          ```
+          code block
+          ```
+
+          more
+
+      parameters:
+        - name: f-o-o
+          description: this is a *parameter* description
+          example: this is an example
+          in: query
+          schema:
+            $ref: '#/components/schemas/Foo'
+        - name: bar
+          description: this is another *parameter* description
+          example: this is another example
+          in: query
+          schema:
+            type: string
+      requestBody:
+        description: this is the request body
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Foo'
+        required: true
+      responses:
+        '200':
+          description: this is a *response* description
+          content:
+            application/json:
+                schema:
+                  $ref: '#/components/schemas/Foo'
+
+components:
+  schemas:
+
+    Foo:
+      description: >
+        this is the *Foo* schema description
+      type: object
+      properties:
+        foo-bar:
+          description: >
+            *property* description
+          type: string
+        enum:
+          # actually OpenAPI 3.0 doesn't allow this, but it is easier to support it instead of being strict.
+          description: >
+            enum *property* description
+          $ref: '#/components/schemas/FooEnum'
+
+    FooEnum:
+        description: "this is an *enum* description"
+        type: string
+        enum: ['foo', 'bar']

@@ -21,6 +21,7 @@ val ALL_30: List<TestParams> = listOf(
     test30_D_("endpoint-exclude"),
     test30_D_("endpoint-http-mapping"), // framework specific
     test30_DR("extension-mapping"),
+    test30_DR("format-eclipse"),
     test30_DR("generated"),
     test30_DR("javadoc"),
     test30_DR("javadoc-with-mapping"),
@@ -97,6 +98,7 @@ val ALL_31: List<TestParams> = listOf(
     test31_D_("bean-validation-requestbody-mapping"),
     test31_DR("components-requestbodies"),
     test31_DR("extension-mapping"),
+    test31_DR("format-eclipse"),
     test31_DR("deprecated"),
     test31_D_("endpoint-exclude"),
     test31_D_("endpoint-http-mapping"), // framework specific
