@@ -52,9 +52,6 @@ class Parser {
                 validate30(loader, apiPath, result)
                 createApi30(result)
             }
-            else -> {
-                TODO() // unknown openapi version
-            }
         }
     }
 
