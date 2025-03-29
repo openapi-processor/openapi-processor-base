@@ -46,7 +46,7 @@ class EclipseFormatter : SourceFormatter {
         }
     }
 
-    fun trimEnd(source: String): String {
+    private fun trimEnd(source: String): String {
         return source.lines()
             .joinToString(LINE_SEPARATOR) {
                 it.trimEnd()
