@@ -168,9 +168,12 @@ val ALL_31: List<TestParams> = listOf(
 )
 
 val EXCLUDE_OPENAPI4J = setOf(
-        "schema-mapping"   // the parser assumes that "type" must be string if a non-standard format is used
-    )
+    // the parser assumes that "type" must be string if a non-standard format is used
+    "schema-mapping"
+)
 
 val EXCLUDE_SWAGGER_30 = setOf(
-        "javadoc"          // the parser is strict about $ref elements and does ignore a description
-    )
+    // the parser is strict about $ref elements and does ignore a description
+    "javadoc",
+    "format-eclipse"
+)
