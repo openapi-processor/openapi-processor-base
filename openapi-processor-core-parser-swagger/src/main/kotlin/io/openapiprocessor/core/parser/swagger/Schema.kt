@@ -5,10 +5,10 @@
 
 package io.openapiprocessor.core.parser.swagger
 
+import io.swagger.v3.oas.models.SpecVersion
 import io.openapiprocessor.core.parser.Schema as ParserSchema
-import io.swagger.v3.oas.models.media.Schema as SwaggerSchema
-import io.swagger.v3.oas.models.media.ArraySchema as SwaggerArraySchema
 import io.swagger.v3.oas.models.media.ComposedSchema as SwaggerComposedSchema
+import io.swagger.v3.oas.models.media.Schema as SwaggerSchema
 
 /**
  * Swagger Schema abstraction.
@@ -19,7 +19,15 @@ class Schema(private val schema: SwaggerSchema<*>): ParserSchema {
         if (itemsOf () != null) {
             return "composed"
         }
-        return schema.type
+
+        if (getRef() != null) {
+            return null
+        }
+
+        return when (schema.specVersion) {
+            SpecVersion.V30 -> schema.type
+            SpecVersion.V31 -> schema.types.first { it != "null" }
+        }
     }
 
     override fun getFormat(): String? = schema.format
@@ -33,7 +41,9 @@ class Schema(private val schema: SwaggerSchema<*>): ParserSchema {
         return schema.enum
     }
 
-    override fun getItem(): ParserSchema = Schema((schema as SwaggerArraySchema).items)
+    override fun getItem(): ParserSchema {
+        return Schema(schema.items)
+    }
 
     override fun getProperties(): Map<String, ParserSchema> {
         val props = LinkedHashMap<String, ParserSchema> ()
@@ -53,7 +63,7 @@ class Schema(private val schema: SwaggerSchema<*>): ParserSchema {
             return Schema(additional)
         }
 
-        return null;
+        return null
     }
 
     override fun getItems(): List<ParserSchema> {
@@ -106,7 +116,12 @@ class Schema(private val schema: SwaggerSchema<*>): ParserSchema {
 
     override fun getRequired(): List<String> = schema.required ?: emptyList()
 
-    override fun getNullable(): Boolean = schema.nullable ?: false
+    override fun getNullable(): Boolean {
+        return when (schema.specVersion) {
+            SpecVersion.V30 -> schema.nullable ?: false
+            SpecVersion.V31 -> schema.types?.contains("null") ?: false
+        }
+    }
 
     override fun getMinLength(): Int? = schema.minLength ?: 0
 
