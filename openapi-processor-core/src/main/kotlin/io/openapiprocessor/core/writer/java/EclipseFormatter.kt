@@ -64,6 +64,7 @@ class EclipseFormatter : SourceFormatter {
         val properties = Properties()
         properties.load(reader)
 
+        @Suppress("UNCHECKED_CAST")
         conventions.putAll(properties as Map<out String, String>)
 
         return conventions
