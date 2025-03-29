@@ -26,7 +26,7 @@ class Schema(private val schema: SwaggerSchema<*>): ParserSchema {
 
         return when (schema.specVersion) {
             SpecVersion.V30 -> schema.type
-            SpecVersion.V31 -> schema.types.first { it != "null" }
+            SpecVersion.V31 -> schema.types?.first { it != "null" }
         }
     }
 
