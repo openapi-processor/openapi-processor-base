@@ -64,6 +64,10 @@ open class Parser: ApiParser {
             throw FailedException()
         }
 
+        if (result.isOpenapi31) {
+            log.warn("OpenAPI 3.1 is not supported with the SWAGGER parser, use the INTERNAL OpenAPI parser.")
+        }
+
         return OpenApi(result)
     }
 
