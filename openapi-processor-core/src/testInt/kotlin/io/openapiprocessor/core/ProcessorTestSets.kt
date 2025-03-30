@@ -177,3 +177,5 @@ val EXCLUDE_SWAGGER_30 = setOf(
     "javadoc",
     "format-eclipse"
 )
+
+val EXCLUDE_SWAGGER_31 = setOf<String>()

@@ -29,21 +29,28 @@ class ProcessorEndToEndSpec: StringSpec({
                 .shouldBeTrue()
         }
     }
-
 })
 
 private fun sources(): Collection<TestSet> {
-    val swagger = ALL_30
-        .filter { !EXCLUDE_SWAGGER_30.contains(it.name) }
-        .map {
+    val openapi4j = ALL_30.filter { !EXCLUDE_OPENAPI4J.contains(it.name) }.map {
+        testSet(it.name, OPENAPI4J, it.openapi, model = "default", outputs = it.outputs, expected = it.expected)
+    }
+
+    val swagger30 = ALL_30.filter { !EXCLUDE_SWAGGER_30.contains(it.name) }.map {
         testSet(it.name, SWAGGER, it.openapi, model = "default", outputs = it.outputs, expected = it.expected)
     }
 
-    val openapi4j = ALL_30
-        .filter { !EXCLUDE_OPENAPI4J.contains(it.name) }
-        .map {
-            testSet(it.name, OPENAPI4J, it.openapi, model = "default", outputs = it.outputs, expected = it.expected)
-        }
+    val swagger30r = ALL_30.filter { !EXCLUDE_SWAGGER_30.contains(it.name) }.map {
+        testSet(it.name, SWAGGER, it.openapi, model = "record", outputs = it.outputs, expected = it.expected)
+    }
+
+//    val swagger31 = ALL_31.filter { !EXCLUDE_SWAGGER_31.contains(it.name) }.map {
+//        testSet(it.name, SWAGGER, it.openapi, model = "default", outputs = it.outputs, expected = it.expected)
+//    }
+//
+//    val swagger31r = ALL_31.filter { !EXCLUDE_SWAGGER_31.contains(it.name) }.map {
+//        testSet(it.name, SWAGGER, it.openapi, model = "record", outputs = it.outputs, expected = it.expected)
+//    }
 
     val openapi30 = ALL_30.map {
         testSet(it.name, INTERNAL, it.openapi, model = "default", outputs = it.outputs, expected = it.expected)
@@ -61,5 +68,19 @@ private fun sources(): Collection<TestSet> {
         testSet(it.name, INTERNAL, it.openapi, model = "record", outputs = it.outputs, expected = it.expected)
     }
 
-    return swagger + openapi4j + openapi30 + openapi30r + openapi31 + openapi31r
+    return join(
+        openapi4j,
+        swagger30,
+        swagger30r,
+//        swagger31,
+//        swagger31r,
+        openapi30,
+        openapi30r,
+        openapi31,
+        openapi31r
+    )
+}
+
+private fun join(vararg collections: Collection<TestSet>): List<TestSet> {
+    return collections.flatMap { it }
 }
