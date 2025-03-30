@@ -37,7 +37,10 @@ class OpenApiParser {
             else -> {
                 if (parser != null) {
                     log.warn("unknown parser type: {}", parser)
-                    log.warn("available parsers: INTERNAL, SWAGGER, OPENAPI4J")
+                    log.warn("available parser:")
+                    log.warn("  INTERNAL  (OpenAPI 3.1/0) - preferred")
+                    log.warn("  SWAGGER   (OpenAPI 3.0)   - alternative")
+                    log.warn("  OPENAPI4J (OpenAPI 3.0)   - deprecated")
                 }
                 OpenApiParser().parse(apiPath)
             }
