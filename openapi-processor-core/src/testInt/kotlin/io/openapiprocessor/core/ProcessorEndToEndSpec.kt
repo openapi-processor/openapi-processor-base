@@ -40,7 +40,7 @@ private fun sources(): Collection<TestSet> {
         testSet(it.name, SWAGGER, it.openapi, model = "default", outputs = it.outputs, expected = it.expected)
     }
 
-    val swagger30r = ALL_30.filter { !EXCLUDE_SWAGGER_30.contains(it.name) }.map {
+    val swagger30r = ALL_30.filter { !EXCLUDE_SWAGGER_30.contains(it.name) && it.modelTypes.contains(ModelTypes.RECORD) }.map {
         testSet(it.name, SWAGGER, it.openapi, model = "record", outputs = it.outputs, expected = it.expected)
     }
 
