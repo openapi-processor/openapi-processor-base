@@ -6,6 +6,7 @@
 package io.openapiprocessor.core.converter
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.model.DataTypes
 import io.openapiprocessor.core.parser.HttpMethod
@@ -82,7 +83,7 @@ class DataTypeConverterOneOfSpec: StringSpec({
         ifDataType.getName() shouldBe "GenericProperties"
         ifDataType.items.size shouldBe 2
         ifDataType.items.forEach {
-            (it as ModelDataType).implementsDataType shouldBe ifDataType
+            (it as ModelDataType).implementsDataTypes shouldContainExactly listOf(ifDataType)
         }
     }
 

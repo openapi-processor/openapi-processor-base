@@ -7,6 +7,7 @@ package io.openapiprocessor.core.writer.java
 
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.model.datatypes.DataType
+import io.openapiprocessor.core.model.datatypes.InterfaceDataType
 import io.openapiprocessor.core.model.datatypes.ModelDataType
 import io.openapiprocessor.core.writer.Identifier
 import java.io.Writer
@@ -68,9 +69,11 @@ class DataTypeWriterRecord(
     }
 
     private fun writeRecordImplements(target: Writer, dataType: ModelDataType) {
-        val implements: DataType? = dataType.implementsDataType
-        if (implements != null) {
-            target.write(" implements ${implements.getTypeName()}")
+        val implements: Collection<InterfaceDataType> = dataType.implementsDataTypes
+        if (implements.isNotEmpty()) {
+            var result = " implements "
+            result += implements.joinToString(", ") { it.getTypeName() }
+            target.write(result)
         }
     }
 

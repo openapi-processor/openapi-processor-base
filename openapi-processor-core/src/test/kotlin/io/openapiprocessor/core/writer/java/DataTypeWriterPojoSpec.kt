@@ -214,12 +214,38 @@ class DataTypeWriterPojoSpec: StringSpec({
         val ifDataType = InterfaceDataType(
             DataTypeName("MarkerInterface"), "pkg", listOf(dataType))
 
-        dataType.implementsDataType = ifDataType
+        dataType.addInterface(ifDataType)
 
         // when:
         createWriter().write (target, dataType)
 
         target.toString() shouldContain ("public class Foo implements MarkerInterface {")
+    }
+
+    "writes class with multiple implements" {
+        options.oneOfInterface = true
+
+        val dataType = ObjectDataType ("Foo", "pkg", linkedMapOf(
+            "foo" to PropertyDataType (
+                readOnly = false,
+                writeOnly = false,
+                dataType = StringDataType (),
+                documentation = Documentation()
+            )
+        ))
+
+        val ifDataTypeA = InterfaceDataType(
+            DataTypeName("MarkerInterfaceA"), "pkg", listOf(dataType))
+        val ifDataTypeB = InterfaceDataType(
+            DataTypeName("MarkerInterfaceB"), "pkg", listOf(dataType))
+
+        dataType.addInterface(ifDataTypeA)
+        dataType.addInterface(ifDataTypeB)
+
+        // when:
+        createWriter().write (target, dataType)
+
+        target.toString() shouldContain ("public class Foo implements MarkerInterfaceA, MarkerInterfaceB {")
     }
 
     "writes additional object annotation import from annotation mapping" {

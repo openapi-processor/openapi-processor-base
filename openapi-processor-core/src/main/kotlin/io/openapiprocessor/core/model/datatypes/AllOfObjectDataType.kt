@@ -14,7 +14,9 @@ class AllOfObjectDataType(
     private val items: List<DataType> = emptyList(),
     override val deprecated: Boolean = false
 ): ModelDataType {
-    override var implementsDataType: InterfaceDataType? = null
+    private val _implementsDataTypes: MutableCollection<InterfaceDataType> = mutableListOf()
+    override val implementsDataTypes: Collection<InterfaceDataType>
+        get() = _implementsDataTypes.toList()
 
     override fun getName(): String {
         return name.id
@@ -53,6 +55,10 @@ class AllOfObjectDataType(
 
     override fun isRequired(prop: String): Boolean {
         return constraints?.isRequired(prop) ?: false
+    }
+
+    override fun addInterface(implement: InterfaceDataType) {
+        _implementsDataTypes.add(implement)
     }
 
     override fun forEach(action: (property: String, dataType: DataType) -> Unit) {

@@ -7,9 +7,9 @@ package io.openapiprocessor.core.model.datatypes
 
 interface ModelDataType: DataType {
     /**
-     * implements this interface.
+     * implements interfaces.
      */
-    var implementsDataType: InterfaceDataType?
+    val implementsDataTypes: Collection<InterfaceDataType>
 
     /**
      * loop object properties.
@@ -18,4 +18,5 @@ interface ModelDataType: DataType {
 
     fun isRequired(prop: String): Boolean
 
+    fun addInterface(implement: InterfaceDataType)
 }

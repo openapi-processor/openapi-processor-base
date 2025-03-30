@@ -19,7 +19,9 @@ open class ObjectDataType(
     override val deprecated: Boolean = false,
     override val documentation: Documentation? = null
 ): ModelDataType {
-    override var implementsDataType: InterfaceDataType? = null
+    private val _implementsDataTypes: MutableCollection<InterfaceDataType> = mutableListOf()
+    override val implementsDataTypes: Collection<InterfaceDataType>
+        get() = _implementsDataTypes.toList()
 
     override fun getName(): String {
         return name.id
@@ -58,6 +60,10 @@ open class ObjectDataType(
         return constraints?.isRequired(prop) ?: false
     }
 
+    override fun addInterface(implement: InterfaceDataType) {
+        _implementsDataTypes.add(implement)
+    }
+
     override fun forEach(action: (property: String, dataType: DataType) -> Unit) {
         for (p in properties) action(p.key, p.value)
     }
@@ -72,6 +78,9 @@ open class ObjectDataType(
 
     private val implementsImports: Set<String>
         get() {
-            return implementsDataType?.getImports() ?: emptySet()
+            return implementsDataTypes
+                .map { it.getImports() }
+                .flatten()
+                .toSet()
         }
 }

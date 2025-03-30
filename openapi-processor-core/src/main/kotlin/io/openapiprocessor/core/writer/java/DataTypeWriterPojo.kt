@@ -7,6 +7,7 @@ package io.openapiprocessor.core.writer.java
 
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.model.datatypes.DataType
+import io.openapiprocessor.core.model.datatypes.InterfaceDataType
 import io.openapiprocessor.core.model.datatypes.ModelDataType
 import io.openapiprocessor.core.model.datatypes.NullDataType
 import io.openapiprocessor.core.support.capitalizeFirstChar
@@ -41,8 +42,8 @@ class DataTypeWriterPojo(
     }
 
     private fun writeClassOpen(target: Writer, dataType: ModelDataType) {
-        val implements: DataType? = dataType.implementsDataType
-        if (implements != null) {
+        val implements: Collection<InterfaceDataType> = dataType.implementsDataTypes
+        if (implements.isNotEmpty()) {
             writeClassImplementsHeader(target, dataType, implements)
         } else {
             writeClassHeader(target, dataType)
@@ -90,9 +91,13 @@ class DataTypeWriterPojo(
     private fun writeClassImplementsHeader(
         target: Writer,
         dataType: ModelDataType,
-        implements: DataType
+        implements: Collection<InterfaceDataType>
     ) {
-        target.write("public class ${dataType.getTypeName()} implements ${implements.getTypeName()} {\n\n")
+        var result = "public class ${dataType.getTypeName()} implements "
+        result += implements.joinToString(", ") { it.getTypeName() }
+        result += " {\n\n"
+
+        target.write(result)
     }
 
     private fun writeClassHeader(
