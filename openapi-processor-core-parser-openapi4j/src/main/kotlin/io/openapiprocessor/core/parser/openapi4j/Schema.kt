@@ -126,4 +126,6 @@ class Schema(val schema: O4jSchema) : ParserSchema {
     override val extensions: Map<String, *>
         get() = schema.extensions ?: emptyMap<String, Any>()
 
+    override val title: String?
+        get() = schema.title
 }

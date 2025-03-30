@@ -154,4 +154,7 @@ class Schema(val schema: Schema30) : ParserSchema {
 
     override val extensions: Map<String, *>
         get() = schema.extensions
+
+    override val title: String?
+        get() = schema.title
 }

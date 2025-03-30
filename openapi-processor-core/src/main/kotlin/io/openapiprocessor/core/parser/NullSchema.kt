@@ -105,4 +105,7 @@ object NullSchema: Schema {
 
     override val extensions: Map<String, *>
         get() = emptyMap<String, Any>()
+
+    override val title: String?
+        get() = null
 }

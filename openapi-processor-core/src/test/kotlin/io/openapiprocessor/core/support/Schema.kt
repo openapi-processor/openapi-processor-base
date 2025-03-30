@@ -114,4 +114,7 @@ class Schema(
 
     override val extensions: Map<String, *>
         get() = TODO("Not yet implemented")
+
+    override val title: String?
+        get() = TODO("Not yet implemented")
 }
