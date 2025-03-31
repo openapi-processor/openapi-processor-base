@@ -6,15 +6,17 @@
 package io.openapiprocessor.core.processor.mapping.v2
 
 import io.openapiprocessor.core.converter.mapping.*
+import io.openapiprocessor.core.converter.mapping.Annotation
+import io.openapiprocessor.core.converter.mapping.Mapping
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.processor.BadMappingException
-import io.openapiprocessor.core.processor.mapping.v2.parser.Mapping as ParserMapping
 import io.openapiprocessor.core.processor.mapping.v2.parser.Mapping.Kind.ANNOTATE
 import io.openapiprocessor.core.processor.mapping.v2.parser.MappingType
 import io.openapiprocessor.core.processor.mapping.v2.parser.antlr.parseMapping
-import java.util.stream.Collectors
-import io.openapiprocessor.core.processor.mapping.v2.Mapping as MappingV2
 import io.openapiprocessor.core.processor.mapping.v2.Map as MapV2
+import io.openapiprocessor.core.processor.mapping.v2.Mapping as MappingV2
+import io.openapiprocessor.core.processor.mapping.v2.parser.Mapping as ParserMapping
+import java.util.stream.Collectors
 
 /**
  *  Converter for the type mapping from the mapping yaml. It converts the type mapping information
@@ -247,10 +249,9 @@ class MappingConverter(val mapping: MappingV2) {
             mapping.targetTypePrimitiveArray
         )
 
-        var annotation: io.openapiprocessor.core.converter.mapping.Annotation? = null
+        var annotation: Annotation? = null
         if(mapping.annotationType != null) {
-            annotation = Annotation(
-                mapping.annotationType!!, mapping.annotationParameters)
+            annotation = Annotation(mapping.annotationType!!, mapping.annotationParameters)
         }
 
         return AddParameterTypeMapping(mapping.sourceType!!, typeMapping, annotation)
