@@ -9,6 +9,7 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
+import io.openapiprocessor.core.support.MappingConstants.VERSION
 import io.openapiprocessor.core.converter.MappingFinderQuery
 import io.openapiprocessor.core.converter.mapping.steps.EndpointsStep
 import io.openapiprocessor.core.converter.mapping.steps.GlobalsStep
@@ -20,7 +21,7 @@ class MappingConverterResultSpec: StringSpec({
 
     "read global result type mapping, plain" {
         val yaml = """
-           |openapi-processor-mapping: v8
+           |openapi-processor-mapping: $VERSION
            |
            |options:
            |  package-name: io.openapiprocessor.somewhere
@@ -42,7 +43,7 @@ class MappingConverterResultSpec: StringSpec({
 
     "read global result type mapping, class" {
         val yaml = """
-           |openapi-processor-mapping: v8
+           |openapi-processor-mapping: $VERSION
            |
            |options:
            |  package-name: io.openapiprocessor.somewhere
@@ -64,7 +65,7 @@ class MappingConverterResultSpec: StringSpec({
 
     "read global result style, null" {
         val yaml = """
-           |openapi-processor-mapping: v8
+           |openapi-processor-mapping: $VERSION
            |
            |options:
            |  package-name: io.openapiprocessor.somewhere
@@ -84,7 +85,7 @@ class MappingConverterResultSpec: StringSpec({
 
     "read global result style, success" {
         val yaml = """
-           |openapi-processor-mapping: v8
+           |openapi-processor-mapping: $VERSION
            |
            |options:
            |  package-name: io.openapiprocessor.somewhere
@@ -105,7 +106,7 @@ class MappingConverterResultSpec: StringSpec({
 
     "read global result style, all" {
         val yaml = """
-           |openapi-processor-mapping: v8
+           |openapi-processor-mapping: $VERSION
            |
            |options:
            |  package-name: io.openapiprocessor.somewhere
@@ -126,7 +127,7 @@ class MappingConverterResultSpec: StringSpec({
 
     "read endpoint result type mapping" {
         val yaml = """
-           |openapi-processor-mapping: v8
+           |openapi-processor-mapping: $VERSION
            |
            |options:
            |  package-name: io.openapiprocessor.somewhere
