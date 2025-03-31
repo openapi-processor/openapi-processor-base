@@ -319,6 +319,7 @@ class MappingConverter(val mapping: MappingV2) {
 
     private fun convertPath(source: Path): Mappings {
         var resultTypeMapping: ResultTypeMapping? = null
+        var resultStyle: ResultStyle? = null
         var singleTypeMapping: TypeMapping? = null
         var multiTypeMapping: TypeMapping? = null
         var nullTypeMapping: NullTypeMapping? = null
@@ -329,6 +330,10 @@ class MappingConverter(val mapping: MappingV2) {
 
         if (source.result != null) {
             resultTypeMapping = convertResult(source.result)
+        }
+
+        if (source.resultStyle != null) {
+            resultStyle = source.resultStyle
         }
 
         if(source.single != null) {
@@ -361,7 +366,7 @@ class MappingConverter(val mapping: MappingV2) {
 
         return Mappings(
             resultTypeMapping,
-            null,
+            resultStyle,
             singleTypeMapping,
             multiTypeMapping,
             nullTypeMapping,
@@ -374,6 +379,7 @@ class MappingConverter(val mapping: MappingV2) {
 
     private fun convertPathMethod(source: PathMethod): Mappings {
         var resultTypeMapping: ResultTypeMapping? = null
+        var resultStyle: ResultStyle? = null
         var singleTypeMapping: TypeMapping? = null
         var multiTypeMapping: TypeMapping? = null
         var nullTypeMapping: NullTypeMapping? = null
@@ -386,9 +392,9 @@ class MappingConverter(val mapping: MappingV2) {
             resultTypeMapping = convertResult(source.result)
         }
 
-        // if (source.resultStyle != null) {
-        //    resultStyle = source.resultStyle
-        // }
+         if (source.resultStyle != null) {
+            resultStyle = source.resultStyle
+         }
 
         if(source.single != null) {
             singleTypeMapping = convertType("single" , source.single)
@@ -420,7 +426,7 @@ class MappingConverter(val mapping: MappingV2) {
 
         return Mappings(
             resultTypeMapping,
-            null,
+            resultStyle,
             singleTypeMapping,
             multiTypeMapping,
             nullTypeMapping,

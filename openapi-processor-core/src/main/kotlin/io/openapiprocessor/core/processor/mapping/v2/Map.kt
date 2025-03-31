@@ -18,7 +18,7 @@ data class Map(
     val result: String? = null,
 
     /**
-     * controller method return type, eg. **success** response or **all** responses
+     * controller method return type, e.g. **success** response or **all** responses
      */
     val resultStyle: ResultStyle? = null,
 

@@ -33,6 +33,14 @@ class EndpointMappings(
     }
 
     fun getResultStyle(query: MappingQuery, step: MappingStep): ResultStyle? {
+        val httpMethodMappings = methodMappings[query.method]
+        if (httpMethodMappings != null) {
+            val methodMapping = httpMethodMappings.getResultStyle(step.add(MethodsStep(query)))
+            if (methodMapping != null) {
+                return methodMapping
+            }
+        }
+
         val mapping = mappings.getResultStyle(step)
         if (mapping != null) {
             return mapping

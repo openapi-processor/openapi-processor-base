@@ -34,6 +34,11 @@ data class Path(
     val result: String?,
 
     /**
+     * controller method return type, e.g. **success** response or **all** responses
+     */
+    val resultStyle: ResultStyle? = null,
+
+    /**
      * single mapping, i.e. Mono<>
      */
     val single: String?,

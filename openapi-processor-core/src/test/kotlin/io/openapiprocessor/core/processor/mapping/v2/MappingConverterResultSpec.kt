@@ -159,4 +159,35 @@ class MappingConverterResultSpec: StringSpec({
         resultTypeMappingGet.targetTypeName shouldBe "io.openapiprocessor.WrapGet"
         resultTypeMappingGet.genericTypes.shouldBeEmpty()
     }
+
+    "read endpoint result style" {
+        val yaml = """
+           |openapi-processor-mapping: $VERSION
+           |
+           |options:
+           |  package-name: io.openapiprocessor.somewhere
+           | 
+           |map:
+           |  paths:
+           |    /foo:
+           |      result-style: success
+           |
+           |      get:
+           |        result-style: all
+           |        
+           """.trimMargin()
+
+        // when:
+        val mapping = reader.read (yaml) as Mapping
+        val mappings = MappingConverter(mapping).convert().endpointMappings
+
+        // then:
+        val resultQuery = MappingFinderQuery(path = "/foo", method = HttpMethod.POST)
+        val resultStyle = mappings["/foo"]!!.getResultStyle(resultQuery, EndpointsStep(resultQuery))!!
+        resultStyle.shouldBe(ResultStyle.SUCCESS)
+
+        val resultQueryGet = MappingFinderQuery(path = "/foo", method = HttpMethod.GET)
+        val resultStyleGet = mappings["/foo"]!!.getResultStyle(resultQueryGet, EndpointsStep(resultQueryGet))!!
+        resultStyleGet.shouldBe(ResultStyle.ALL)
+    }
 })
