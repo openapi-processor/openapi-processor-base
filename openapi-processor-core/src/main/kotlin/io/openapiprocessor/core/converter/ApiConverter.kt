@@ -5,7 +5,10 @@
 
 package io.openapiprocessor.core.converter
 
-import io.openapiprocessor.core.converter.mapping.*
+import io.openapiprocessor.core.converter.mapping.AddParameterTypeMapping
+import io.openapiprocessor.core.converter.mapping.TargetType
+import io.openapiprocessor.core.converter.mapping.UnknownDataTypeException
+import io.openapiprocessor.core.converter.mapping.UnknownParameterTypeException
 import io.openapiprocessor.core.converter.wrapper.MultiDataTypeWrapper
 import io.openapiprocessor.core.converter.wrapper.ResultDataTypeWrapper
 import io.openapiprocessor.core.converter.wrapper.SingleDataTypeWrapper
@@ -14,14 +17,12 @@ import io.openapiprocessor.core.model.*
 import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.parser.*
 import io.openapiprocessor.core.parser.HttpMethod
-import io.openapiprocessor.core.parser.NullSchema
 import io.openapiprocessor.core.parser.RequestBody
 import io.openapiprocessor.core.parser.Response
 import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
 import io.openapiprocessor.core.writer.Identifier
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import kotlin.collections.mutableMapOf
 import io.openapiprocessor.core.model.RequestBody as ModelRequestBody
 import io.openapiprocessor.core.model.Response as ModelResponse
 import io.openapiprocessor.core.model.parameters.Parameter as ModelParameter
