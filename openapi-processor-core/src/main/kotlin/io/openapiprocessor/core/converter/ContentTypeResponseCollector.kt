@@ -3,7 +3,7 @@
  * PDX-License-Identifier: Apache-2.0
  */
 
-package io.openapiprocessor.core.model
+package io.openapiprocessor.core.converter
 
 import io.openapiprocessor.core.parser.ContentType
 import io.openapiprocessor.core.parser.HttpStatus
@@ -31,14 +31,10 @@ private const val EMPTY: String = ""
  *                    success 2x  void
  *                    errors  4x
  */
-class EndpointResponseCollector(val responses: Map<HttpStatus, Response>, private val resultStyle: ResultStyle) {
-    val contentTypeResponses: Map<ContentType, Map<HttpStatus, Response>>
+class ContentTypeResponseCollector(val responses: Map<HttpStatus, Response>, private val resultStyle: ResultStyle) {
+    val contentTypeResponses: Map<ContentType, Map<HttpStatus, Response>> = collectResponses(responses)
 
-    init {
-        contentTypeResponses = collect(responses)
-    }
-
-    private fun collect(responses: Map<HttpStatus, Response>): Map<ContentType, Map<HttpStatus, Response>> {
+    private fun collectResponses(responses: Map<HttpStatus, Response>): Map<ContentType, Map<HttpStatus, Response>> {
         val contentTypeResponses = mutableMapOf<ContentType, MutableMap<HttpStatus, Response>>()
 
         responses.forEach { (httpStatus, response) ->
@@ -72,7 +68,6 @@ class EndpointResponseCollector(val responses: Map<HttpStatus, Response>, privat
 
         return contentTypeResponses
     }
-
 
     private fun isError(status: HttpStatus): Boolean {
         return status.startsWith("4")

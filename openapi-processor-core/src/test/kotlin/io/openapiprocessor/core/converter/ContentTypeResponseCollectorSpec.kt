@@ -1,17 +1,13 @@
-/*
- * Copyright 2025 https://github.com/openapi-processor/openapi-processor-base
- * PDX-License-Identifier: Apache-2.0
- */
-
-package io.openapiprocessor.core.model
+package io.openapiprocessor.core.converter
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.core.spec.style.scopes.StringSpecRootScope.invoke
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
 import io.openapiprocessor.core.support.parseApi
 
-class EndpointResponseCollectorSpec: StringSpec({
+class ContentTypeResponseCollectorSpec: StringSpec({
 
     "single empty success response" {
         val openApi = parseApi(
@@ -26,11 +22,12 @@ class EndpointResponseCollectorSpec: StringSpec({
             |      responses:
             |        '204':
             |          description: empty
-        """.trimMargin())
+        """.trimMargin()
+        )
 
         val operation = openApi.getPaths()["/foo"]!!.getOperations().first()
 
-        val collector = EndpointResponseCollector(operation.getResponses(), ResultStyle.SUCCESS)
+        val collector = ContentTypeResponseCollector(operation.getResponses(), ResultStyle.SUCCESS)
 
         collector.contentTypeResponses[""]!!["204"].shouldNotBeNull()
     }
@@ -52,11 +49,12 @@ class EndpointResponseCollectorSpec: StringSpec({
             |            application/json:
             |                schema:
             |                  type: string
-        """.trimMargin())
+        """.trimMargin()
+        )
 
         val operation = openApi.getPaths()["/foo"]!!.getOperations().first()
 
-        val collector = EndpointResponseCollector(operation.getResponses(), ResultStyle.SUCCESS)
+        val collector = ContentTypeResponseCollector(operation.getResponses(), ResultStyle.SUCCESS)
 
         collector.contentTypeResponses["application/json"]!!["200"].shouldNotBeNull()
     }
@@ -87,11 +85,12 @@ class EndpointResponseCollectorSpec: StringSpec({
             |            application/json:
             |                schema:
             |                  type: string
-        """.trimMargin())
+        """.trimMargin()
+        )
 
         val operation = openApi.getPaths()["/foo"]!!.getOperations().first()
 
-        val collector = EndpointResponseCollector(operation.getResponses(), ResultStyle.SUCCESS)
+        val collector = ContentTypeResponseCollector(operation.getResponses(), ResultStyle.SUCCESS)
 
         collector.contentTypeResponses["application/json"]!!["200"].shouldNotBeNull()
         collector.contentTypeResponses["application/json"]!!["201"].shouldNotBeNull()
@@ -122,11 +121,12 @@ class EndpointResponseCollectorSpec: StringSpec({
             |                schema:
             |                  type: string
             |                  format: two
-        """.trimMargin())
+        """.trimMargin()
+        )
 
         val operation = openApi.getPaths()["/foo"]!!.getOperations().first()
 
-        val collector = EndpointResponseCollector(operation.getResponses(), ResultStyle.SUCCESS)
+        val collector = ContentTypeResponseCollector(operation.getResponses(), ResultStyle.SUCCESS)
 
         collector.contentTypeResponses["application/json"]!!["200"].shouldNotBeNull()
         collector.contentTypeResponses["application/json"]!!["201"].shouldNotBeNull()
@@ -167,16 +167,17 @@ class EndpointResponseCollectorSpec: StringSpec({
             |                  type: string
             |                  format: error
             | 
-        """.trimMargin())
+        """.trimMargin()
+        )
 
         val operation = openApi.getPaths()["/foo"]!!.getOperations().first()
 
-        val collectorA = EndpointResponseCollector(operation.getResponses(), ResultStyle.ALL)
+        val collectorA = ContentTypeResponseCollector(operation.getResponses(), ResultStyle.ALL)
         collectorA.contentTypeResponses["application/json"]!!["200"].shouldNotBeNull()
         collectorA.contentTypeResponses["application/json"]!!["201"].shouldNotBeNull()
         collectorA.contentTypeResponses["application/json"]!!["400"].shouldNotBeNull()
 
-        val collectorS = EndpointResponseCollector(operation.getResponses(), ResultStyle.SUCCESS)
+        val collectorS = ContentTypeResponseCollector(operation.getResponses(), ResultStyle.SUCCESS)
         collectorS.contentTypeResponses["application/json"]!!["200"].shouldNotBeNull()
         collectorS.contentTypeResponses["application/json"]!!["201"].shouldNotBeNull()
         collectorS.contentTypeResponses["application/json"]!!["400"].shouldBeNull()
