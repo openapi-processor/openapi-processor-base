@@ -131,11 +131,16 @@ class  ApiConverter(
 
     private fun createEndpoint(path: String, operation: Operation, dataTypes: DataTypes, resolver: RefResolver): Endpoint? {
         return try {
-            val ctx = ConverterContext(path, dataTypes, resolver)
+            val ctx = ApiConverterContext(
+                path,
+                operation.getMethod(),
+                dataTypes,
+                resolver
+            )
 
-            val parameters = collectParameters(operation, ctx)
-            val requestBodies = collectRequestBodies(operation, ctx)
-            val responses = collectResponses (operation, ctx)
+            val parameters = collectParameters(operation.getParameters(), ctx)
+            val requestBodies = collectRequestBodies(operation.getRequestBody(), ctx)
+            val responses = collectResponses (operation.getResponses(), ctx)
 
             val ep = Endpoint(
                 path,
@@ -164,24 +169,19 @@ class  ApiConverter(
         }
     }
 
-    data class ConverterContext(
-        val path: String,
-        val dataTypes: DataTypes,
-        val resolver: RefResolver)
+    private fun collectParameters(parameters: List<Parameter>, ctx: ApiConverterContext): List<ModelParameter> {
+        val resultParameters: MutableList<ModelParameter> = mutableListOf()
 
-    private fun collectParameters(operation: Operation, ctx: ConverterContext): List<ModelParameter> {
-        val parameters: MutableList<ModelParameter> = mutableListOf()
-
-        operation.getParameters().forEach {
-            parameters.add(createParameter(operation, it, ctx))
+        parameters.forEach {
+            resultParameters.add(createParameter(it, ctx))
         }
 
-        val addMappings = getAdditionalParameterMappings (ctx.path, operation.getMethod())
+        val addMappings = getAdditionalParameterMappings (ctx.path, ctx.method)
         addMappings.forEach {
-            parameters.add (createAdditionalParameter (it))
+            resultParameters.add (createAdditionalParameter (it))
         }
 
-        return parameters
+        return resultParameters
     }
 
     private fun getAdditionalParameterMappings(path: String, method: HttpMethod): List<AddParameterTypeMapping> {
@@ -190,8 +190,7 @@ class  ApiConverter(
 
     data class RequestBodies(val bodies: List<ModelRequestBody>, val parameters: List<ModelParameter>)
 
-    private fun collectRequestBodies(operation: Operation, ctx: ConverterContext): RequestBodies {
-        val requestBody = operation.getRequestBody()
+    private fun collectRequestBodies(requestBody: RequestBody?, ctx: ApiConverterContext): RequestBodies {
         if (requestBody == null) {
             return RequestBodies(emptyList(), emptyList())
         }
@@ -201,8 +200,8 @@ class  ApiConverter(
 
         requestBody.getContent().forEach { (contentType, mediaType) ->
             val info = SchemaInfo(
-                SchemaInfo.Endpoint(ctx.path, operation.getMethod()),
-                getInlineRequestBodyName (ctx.path, operation.getMethod()),
+                SchemaInfo.Endpoint(ctx.path, ctx.method),
+                getInlineRequestBodyName (ctx.path, ctx.method),
                 "",
                 mediaType.getSchema(),
                 ctx.resolver)
@@ -217,31 +216,28 @@ class  ApiConverter(
         return RequestBodies(bodies, params)
     }
 
-    private fun collectResponses(operation: Operation, ctx: ConverterContext): Map<String, List<ModelResponse>> {
-        val responses: MutableMap<String, List<ModelResponse>>  = mutableMapOf()
+    private fun collectResponses(responses: Map<HttpStatus, Response>, ctx: ApiConverterContext): Map<String, List<ModelResponse>> {
+        val resultResponses: MutableMap<String, List<ModelResponse>>  = mutableMapOf()
 
-        val opResponses = operation.getResponses()
+        val resultStyle = getResultStyle(ctx.path, ctx.method)
+        val responseCollector = ContentTypeResponseCollector(responses, resultStyle)
+        val interfaceCollector = ContentTypeInterfaceCollector(ctx.path, ctx.method, responseCollector)
 
-        val resultStyle = getResultStyle(ctx.path, operation.getMethod())
-        val responseCollector = ContentTypeResponseCollector(opResponses, resultStyle)
-        val interfaceCollector = ContentTypeInterfaceCollector(ctx.path, operation.getMethod(), responseCollector)
-
-        opResponses.forEach { (httpStatus, httpResponse) ->
+        responses.forEach { (httpStatus, httpResponse) ->
             val results = createResponses(
-                operation,
                 httpStatus,
                 httpResponse,
                 ctx)
 
-            responses[httpStatus] = results
+            resultResponses[httpStatus] = results
         }
 
-        return responses
+        return resultResponses
     }
 
-    private fun createParameter(op: Operation, parameter: Parameter, ctx: ConverterContext): ModelParameter {
+    private fun createParameter(parameter: Parameter, ctx: ApiConverterContext): ModelParameter {
         val info = SchemaInfo (
-            SchemaInfo.Endpoint(ctx.path, op.getMethod()),
+            SchemaInfo.Endpoint(ctx.path, ctx.method),
             parameter.getName(),
             "",
             parameter.getSchema(),
@@ -337,10 +333,10 @@ class  ApiConverter(
         return parameters
     }
 
-    private fun createResponses(operation: Operation, httpStatus: String, response: Response, ctx: ConverterContext): List<ModelResponse> {
+    private fun createResponses(httpStatus: String, response: Response, ctx: ApiConverterContext): List<ModelResponse> {
         if (response.getContent().isEmpty()) {
             val info = SchemaInfo (
-                SchemaInfo.Endpoint(ctx.path, operation.getMethod()),
+                SchemaInfo.Endpoint(ctx.path, ctx.method),
                 "",
                 "",
                 NullSchema,
@@ -358,8 +354,8 @@ class  ApiConverter(
             val schema = mediaType.getSchema()
 
             val info = SchemaInfo (
-                SchemaInfo.Endpoint(ctx.path, operation.getMethod()),
-                getInlineResponseName (ctx.path, operation.getMethod(), httpStatus),
+                SchemaInfo.Endpoint(ctx.path, ctx.method),
+                getInlineResponseName (ctx.path, ctx.method, httpStatus),
                 contentType,
                 schema,
                 ctx.resolver)
