@@ -17,9 +17,11 @@ import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.parser.NullSchema
 import io.openapiprocessor.core.parser.RequestBody
 import io.openapiprocessor.core.parser.Response
+import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
 import io.openapiprocessor.core.writer.Identifier
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import kotlin.collections.mutableMapOf
 import io.openapiprocessor.core.model.RequestBody as ModelRequestBody
 import io.openapiprocessor.core.model.Response as ModelResponse
 import io.openapiprocessor.core.model.parameters.Parameter as ModelParameter
@@ -218,7 +220,13 @@ class  ApiConverter(
     private fun collectResponses(operation: Operation, ctx: ConverterContext): Map<String, List<ModelResponse>> {
         val responses: MutableMap<String, List<ModelResponse>>  = mutableMapOf()
 
-        operation.getResponses().forEach { (httpStatus, httpResponse) ->
+        val opResponses = operation.getResponses()
+
+        val resultStyle = getResultStyle(ctx.path, operation.getMethod())
+        val responseCollector = ContentTypeResponseCollector(opResponses, resultStyle)
+        val interfaceCollector = ContentTypeInterfaceCollector(ctx.path, operation.getMethod(), responseCollector)
+
+        opResponses.forEach { (httpStatus, httpResponse) ->
             val results = createResponses(
                 operation,
                 httpStatus,
@@ -384,6 +392,10 @@ class  ApiConverter(
 
     private fun isExcluded(path: String, method: HttpMethod): Boolean {
         return mappingFinder.isEndpointExcluded(MappingFinderQuery(path, method))
+    }
+
+    private fun getResultStyle(path: String, method: HttpMethod): ResultStyle {
+        return mappingFinder.findResultStyleMapping(MappingFinderQuery(path, method))
     }
 
     private fun getInterfaceName(op: Operation, excluded: Boolean): String {
