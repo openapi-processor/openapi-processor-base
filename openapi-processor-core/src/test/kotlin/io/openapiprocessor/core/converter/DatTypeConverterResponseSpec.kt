@@ -79,8 +79,8 @@ class DatTypeConverterResponseSpec: StringSpec({
             "application/json",
             false)
 
-        val datatype200 = converter.convert(schemaInfo200, dataTypes)
-        val datatype202 = converter.convert(schemaInfo202, dataTypes)
+        converter.convert(schemaInfo200, dataTypes)
+        converter.convert(schemaInfo202, dataTypes)
 
         val dataType = dataTypes.find("Foo")
         dataType.shouldBeInstanceOf<ObjectDataType>()
@@ -150,8 +150,8 @@ class DatTypeConverterResponseSpec: StringSpec({
             true,
             "GetFooApplicationJsonResponse")
 
-        val datatype200 = converter.convert(schemaInfo200, dataTypes)
-        val datatype202 = converter.convert(schemaInfo202, dataTypes)
+        converter.convert(schemaInfo200, dataTypes)
+        converter.convert(schemaInfo202, dataTypes)
 
         val dataType = dataTypes.find("Foo")
         dataType.shouldBeInstanceOf<ObjectDataType>()
@@ -256,10 +256,10 @@ class DatTypeConverterResponseSpec: StringSpec({
             true,
             "GetBarApplicationJsonResponse")
 
-        val datatype200 = converter.convert(schemaInfo200, dataTypes)
-        val datatype202 = converter.convert(schemaInfo202, dataTypes)
-        val datatypeBar200 = converter.convert(schemaInfoBar200, dataTypes)
-        val datatypeBar202 = converter.convert(schemaInfoBar202, dataTypes)
+        converter.convert(schemaInfo200, dataTypes)
+        converter.convert(schemaInfo202, dataTypes)
+        converter.convert(schemaInfoBar200, dataTypes)
+        converter.convert(schemaInfoBar202, dataTypes)
 
         val dataType = dataTypes.find("Foo")
         dataType.shouldBeInstanceOf<ObjectDataType>()
