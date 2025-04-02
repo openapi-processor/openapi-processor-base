@@ -5,27 +5,42 @@
 
 package io.openapiprocessor.core.converter
 
+import io.openapiprocessor.core.model.datatypes.DataType
 import io.openapiprocessor.core.parser.ContentType
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.parser.HttpStatus
 import io.openapiprocessor.core.parser.Response
+import io.openapiprocessor.core.model.Response as ModelResponse
 
 class ContentTypeInterfaceCollector(
     private val path: String,
-    private val method: HttpMethod,
-    responseCollector: ContentTypeResponseCollector
+    private val method: HttpMethod
 ) {
-    val contentTypeInterfaces: Map<String, ContentTypeInterface> = collectInterfaces(
-        responseCollector.contentTypeResponses
-    )
 
-    private fun collectInterfaces(contentTypeResponses: Map<ContentType, Map<HttpStatus, Response>>)
-    : Map<String, ContentTypeInterface> {
-        val contentTypeInterfaces = mutableMapOf<String, ContentTypeInterface>()
+    fun collectContentTypeInterfaces(
+        contentTypeResponses: Map<ContentType, Map<HttpStatus, Response>>,
+        statusResultResponses: Map<HttpStatus, List<ModelResponse>>
+    ): Map<ContentType, ContentTypeInterface> {
+        val contentTypeInterfaces = mutableMapOf<ContentType, ContentTypeInterface>()
 
-        contentTypeResponses.forEach { (contentType, statusResponses) ->
-            if (statusResponses.size > 1) {
-                contentTypeInterfaces[contentType] = ContentTypeInterface(path, method)
+        contentTypeResponses.forEach { (contentType, statusResponse) ->
+            if (statusResponse.size == 1) {
+                return@forEach
+            }
+
+            var dataType: DataType? = null
+            statusResponse.forEach { (status, response) ->
+                val match = statusResultResponses[status]?.find { r -> r.contentType == contentType }
+                if (match != null) {
+                    if (dataType == null) {
+                        dataType = match.responseType
+                    } else {
+                        if (match.responseType !== dataType) {
+                            contentTypeInterfaces[contentType] = ContentTypeInterface(path, method)
+                            return@forEach
+                        }
+                    }
+                }
             }
         }
 

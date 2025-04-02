@@ -31,7 +31,7 @@ private const val EMPTY: String = ""
  *                    success 2x  void
  *                    errors  4x
  */
-class ContentTypeResponseCollector(val responses: Map<HttpStatus, Response>, private val resultStyle: ResultStyle) {
+class ContentTypeResponseCollector(responses: Map<HttpStatus, Response>, private val resultStyle: ResultStyle) {
     val contentTypeResponses: Map<ContentType, Map<HttpStatus, Response>> = collectResponses(responses)
 
     private fun collectResponses(responses: Map<HttpStatus, Response>): Map<ContentType, Map<HttpStatus, Response>> {

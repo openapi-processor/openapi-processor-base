@@ -1,7 +1,11 @@
+/*
+ * Copyright 2025 https://github.com/openapi-processor/openapi-processor-base
+ * PDX-License-Identifier: Apache-2.0
+ */
+
 package io.openapiprocessor.core.converter
 
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.core.spec.style.scopes.StringSpecRootScope.invoke
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
@@ -59,9 +63,6 @@ class ContentTypeResponseCollectorSpec: StringSpec({
         collector.contentTypeResponses["application/json"]!!["200"].shouldNotBeNull()
     }
 
-    // same result, no need to create interface, has to know if types are identical
-    // "light" call to data type converter ?
-    // ask if it is the same type? could use own DataTypes object???? might work...
     "multiple success responses without marker interface" {
         val openApi = parseApi(
             """
