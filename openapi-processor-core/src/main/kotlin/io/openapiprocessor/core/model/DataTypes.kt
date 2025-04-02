@@ -130,6 +130,19 @@ class DataTypes {
         get() = dataTypeInfos.size
 
     /**
+     * copy the data types. The data types itself are not copied but referenced. The ref count is not copied.
+     */
+    fun copy(): DataTypes {
+        val copy = DataTypes()
+
+        for ((k, v) in dataTypeInfos) {
+            copy.dataTypeInfos.put(k, DataTypeInfo(v.dataType))
+        }
+
+        return copy
+    }
+
+    /**
      * test only. Provides all named data types (including simple data types) used by the api endpoints.
      *
      * @return list of data types

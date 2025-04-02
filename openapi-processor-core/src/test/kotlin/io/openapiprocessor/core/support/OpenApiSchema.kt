@@ -107,12 +107,28 @@ fun OpenApi.getParameterSchemaInfo(path: String, method: HttpMethod, name: Strin
  * @param path the endpoint path
  * @param method the http method
  * @param status the http response status
+ * @param contentTypeInterface if it should use a marker interface
  * @return the [SchemaInfo]
  */
-fun OpenApi.getSchemaInfo(name: String, path: String, method: HttpMethod, status: String,
-                          mediaType: String): SchemaInfo {
+fun OpenApi.getSchemaInfo(
+    name: String,
+    path: String,
+    method: HttpMethod,
+    status: String,
+    mediaType: String,
+    contentTypeInterface: Boolean = false,
+    contentTypeInterfaceName: String? = null)
+: SchemaInfo {
     val schema = getSchema(path, method, status, mediaType)
-    return SchemaInfo(SchemaInfo.Endpoint(path, method), name, mediaType, schema, getRefResolver())
+    return SchemaInfo(
+        SchemaInfo.Endpoint(path, method),
+        name,
+        mediaType,
+        schema,
+        getRefResolver(),
+        "response",
+        contentTypeInterface,
+        contentTypeInterfaceName)
 }
 
 /**

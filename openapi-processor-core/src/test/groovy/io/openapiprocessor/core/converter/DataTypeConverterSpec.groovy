@@ -42,7 +42,9 @@ class DataTypeConverterSpec extends Specification {
                 "",
                 schema,
                 Stub(RefResolver),
-                ""),
+                "",
+                false,
+                null),
             new DataTypes())
 
         then:
@@ -74,7 +76,9 @@ class DataTypeConverterSpec extends Specification {
                 "",
                 schema,
                 Stub(RefResolver),
-                ""),
+                "",
+                false,
+                null),
             new DataTypes())
 
         then:
@@ -103,7 +107,9 @@ class DataTypeConverterSpec extends Specification {
             "",
             schema,
             Stub (RefResolver),
-            ""),
+            "",
+            false,
+            null),
             new DataTypes())
 
         then:
@@ -143,7 +149,9 @@ class DataTypeConverterSpec extends Specification {
                 "",
                 barSchema,
                 Stub(RefResolver),
-                ""),
+                "",
+                false,
+                null),
             dt)
         converter.convert (
             new SchemaInfo (
@@ -152,7 +160,9 @@ class DataTypeConverterSpec extends Specification {
                 "",
                 fooSchema,
                 resolver,
-                ""),
+                "",
+                false,
+                null),
             dt)
 
         then:

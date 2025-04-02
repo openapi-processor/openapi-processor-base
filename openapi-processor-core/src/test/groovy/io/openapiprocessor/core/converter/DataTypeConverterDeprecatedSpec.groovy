@@ -42,7 +42,9 @@ class DataTypeConverterDeprecatedSpec extends Specification {
                 "",
                 schema,
                 Stub(RefResolver),
-                ""),
+                "",
+                false,
+                null),
             new DataTypes())
 
         then:

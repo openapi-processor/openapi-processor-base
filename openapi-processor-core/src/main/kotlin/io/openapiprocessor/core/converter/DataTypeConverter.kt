@@ -217,12 +217,44 @@ class DataTypeConverter(
         }
 
         val found = dataTypes.find(schemaInfo.getName())
-        if (found != null) {
+        if (found != null && found is ObjectDataType) {
+            if (schemaInfo.withInterface()) {
+                return createInterface(schemaInfo, found, dataTypes)
+            }
+
             return found
         }
 
         dataTypes.add (schemaInfo.getName(), objectType)
         return objectType
+    }
+
+    private fun createInterface(schemaInfo: SchemaInfo, objectType: ObjectDataType, dataTypes: DataTypes): DataType {
+        val constraints = DataTypeConstraints(
+            nullable = schemaInfo.getNullable(),
+            required = schemaInfo.getRequired())
+
+        val interfaceName = schemaInfo.interfaceName!!
+        val interfaceType = InterfaceDataType(
+            DataTypeName(interfaceName, getTypeNameWithSuffix2(interfaceName)),
+            listOf(options.packageName, "model").joinToString("."),
+            emptyList(),
+            constraints,
+            schemaInfo.getDeprecated(),
+            Documentation(description = schemaInfo.description)
+        )
+
+        val found = dataTypes.find(interfaceType.getName())
+        if (found != null && found is InterfaceDataType) {
+            found.addItem(objectType)
+            objectType.addInterface(found)
+            return found
+        }
+
+        interfaceType.addItem(objectType)
+        objectType.addInterface(interfaceType)
+        dataTypes.add (interfaceType.getName(), interfaceType)
+        return interfaceType
     }
 
     private fun createObjectDataType(
@@ -524,5 +556,9 @@ class DataTypeConverter(
 
     private fun getTypeNameWithSuffix(name: String): String {
         return identifier.toClass(name, options.modelNameSuffix)
+    }
+
+    private fun getTypeNameWithSuffix2(name: String): String {
+        return name + options.modelNameSuffix
     }
 }

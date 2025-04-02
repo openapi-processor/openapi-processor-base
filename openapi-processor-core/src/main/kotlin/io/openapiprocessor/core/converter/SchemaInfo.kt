@@ -353,6 +353,8 @@ open class SchemaInfo(
             resolver = resolver)
     }
 
+    val interfaceName: String? = contentTypeInterfaceName
+
     /**
      * all constraints
      */
