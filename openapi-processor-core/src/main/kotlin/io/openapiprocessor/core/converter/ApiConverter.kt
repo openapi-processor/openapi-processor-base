@@ -20,6 +20,7 @@ import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.parser.RequestBody
 import io.openapiprocessor.core.parser.Response
 import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
+import io.openapiprocessor.core.support.capitalizeFirstChar
 import io.openapiprocessor.core.writer.Identifier
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -219,10 +220,7 @@ class  ApiConverter(
 
     private fun collectResponses(responses: Map<HttpStatus, Response>, ctx: ApiConverterContext): Map<String, List<ModelResponse>> {
         val resultResponses: MutableMap<String, List<ModelResponse>>  = mutableMapOf()
-
-        val resultStyle = getResultStyle(ctx.path, ctx.method)
-        val responseCollector = ContentTypeResponseCollector(responses, resultStyle)
-        val interfaceCollector = ContentTypeInterfaceCollector(ctx.path, ctx.method, responseCollector)
+        val contentTypeInterfaces = collectContentTypeInterfaces(responses, ctx)
 
         responses.forEach { (httpStatus, httpResponse) ->
             val results = createResponses(
@@ -234,6 +232,38 @@ class  ApiConverter(
         }
 
         return resultResponses
+    }
+
+    private fun collectContentTypeInterfaces(responses: Map<HttpStatus, Response>, ctx: ApiConverterContext)
+    : Map<ContentType, ContentTypeInterface> {
+        val resultStyle = getResultStyle(ctx.path, ctx.method)
+        val responseCollector = ContentTypeResponseCollector(responses, resultStyle)
+
+        // to check if a response marker interface is wanted it is necessary to know if the responses have the same
+        // result data type. In case they have the same data type we do not need the marker interface.
+        //
+        // Unfortunately we have to calculate the result data types to achieve this because it is currently not possible
+        // to detect this from the parsed OpenAPI.
+
+        val checkResponses: MutableMap<String, List<ModelResponse>> = mutableMapOf()
+
+        val checkDataTypes = ctx.dataTypes.copy()
+        responses.forEach { (httpStatus, httpResponse) ->
+            val results = createResponses(
+                httpStatus,
+                httpResponse,
+                ctx.with(checkDataTypes)
+            )
+
+            checkResponses[httpStatus] = results
+        }
+
+        val interfaceCollector = ContentTypeInterfaceCollector(ctx.path, ctx.method)
+        val contentTypeInterfaces = interfaceCollector.collectContentTypeInterfaces(
+            responseCollector.contentTypeResponses,
+            checkResponses
+        )
+        return contentTypeInterfaces
     }
 
     private fun createParameter(parameter: Parameter, ctx: ApiConverterContext): ModelParameter {
@@ -409,4 +439,12 @@ class  ApiConverter(
         return targetInterfaceName
     }
 
+    private fun getResponseMarkerInterfaceName(path: String, method: HttpMethod, contentType: String): String {
+        return listOf(
+            method.method.capitalizeFirstChar(),
+            identifier.toClass(path),
+            identifier.toClass(contentType),
+            "Response"
+        ).joinToString("")
+    }
 }
