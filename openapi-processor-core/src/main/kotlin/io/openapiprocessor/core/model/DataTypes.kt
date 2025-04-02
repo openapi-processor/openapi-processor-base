@@ -16,25 +16,12 @@ class DataTypes {
     private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     class DataTypeInfo(val dataType: DataType, var refCount: Long = 0) {
-
         fun addRef() {
             refCount++
         }
-
     }
 
     private val dataTypeInfos: MutableMap<String, DataTypeInfo> = mutableMapOf()
-
-    /** test only
-     * provides all named data types (including simple data types) used by the api endpoint.
-     *
-     * @return list of data types
-     */
-    fun getDataTypes(): Collection<DataType> {
-        return dataTypeInfos.values
-            .filter { it.dataType !is MappedDataType }
-            .map { it.dataType }
-    }
 
     /**
      * provides the *object* data types (model classes) used by the api endpoints.
@@ -143,7 +130,18 @@ class DataTypes {
         get() = dataTypeInfos.size
 
     /**
-     * test.
+     * test only. Provides all named data types (including simple data types) used by the api endpoints.
+     *
+     * @return list of data types
+     */
+    fun getDataTypes(): Collection<DataType> {
+        return dataTypeInfos.values
+            .filter { it.dataType !is MappedDataType }
+            .map { it.dataType }
+    }
+
+    /**
+     * test only.
      */
     fun getRefCnt(name: String): Long {
         return dataTypeInfos[name]?.refCount!!
@@ -157,5 +155,4 @@ class DataTypes {
             println("${it.key} (${it.value.dataType.getPackageName()}) ${it.value.refCount}")
         }
     }
-
 }
