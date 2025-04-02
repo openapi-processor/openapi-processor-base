@@ -2,3 +2,5 @@ items:
   - outputs/api/Api.java
   - outputs/<model>/Foo.java
   - outputs/<model>/Bar.java
+  - outputs/<model>/GetFooBarAApplicationJsonResponse.java
+  - outputs/<model>/GetFooBarBApplicationJsonResponse.java

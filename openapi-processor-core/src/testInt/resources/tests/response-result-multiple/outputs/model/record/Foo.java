@@ -7,4 +7,4 @@ import generated.support.Generated;
 public record Foo(
     @JsonProperty("foo")
     String foo
-) {}
+) implements GetFooBarAApplicationJsonResponse, GetFooBarBApplicationJsonResponse {}

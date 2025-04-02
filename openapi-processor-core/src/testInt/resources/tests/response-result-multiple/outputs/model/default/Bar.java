@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import generated.support.Generated;
 
 @Generated(value = "openapi-processor-core", version = "test")
-public class Bar {
+public class Bar implements GetFooBarAApplicationJsonResponse, GetFooBarBApplicationJsonResponse {
 
     @JsonProperty("bar")
     private String bar;
