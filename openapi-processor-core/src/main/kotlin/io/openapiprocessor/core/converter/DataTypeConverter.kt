@@ -135,7 +135,7 @@ class DataTypeConverter(
                 )
 
                 items.forEach {
-                    (it as ModelDataType).implementsDataType = objectType
+                    (it as ModelDataType).addInterface(objectType)
                 }
 
                 objectType
@@ -226,6 +226,11 @@ class DataTypeConverter(
         }
 
         dataTypes.add (schemaInfo.getName(), objectType)
+
+        if (schemaInfo.withInterface()) {
+            return createInterface(schemaInfo, objectType, dataTypes)
+        }
+
         return objectType
     }
 

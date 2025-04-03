@@ -45,7 +45,17 @@ open class SchemaInfo(
     /**
      * json path like location
      */
-    private val location: String = ""
+    private val location: String = "",
+
+    /**
+     * add content type interface
+     */
+    private val contentTypeInterface: Boolean = false,
+
+    /**
+     * content type interface name.
+     */
+    private val contentTypeInterfaceName: String? = null
 
 ): MappingSchema {
 
@@ -63,6 +73,10 @@ open class SchemaInfo(
      * schema is lost.
      */
     private var refName: Boolean = false
+
+    fun withInterface(): Boolean {
+        return location == "response" && contentTypeInterface
+    }
 
     override fun getPath(): String {
         return endpoint.path
@@ -299,7 +313,12 @@ open class SchemaInfo(
             endpoint = endpoint,
             name = resolvedName,
             schema = resolved.schema,
-            resolver = resolver)
+            resolver = resolver,
+            location = location,
+            contentType = contentType,
+            contentTypeInterface = contentTypeInterface,
+            contentTypeInterfaceName = contentTypeInterfaceName
+        )
 
         info.refName = true
 
