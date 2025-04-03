@@ -86,6 +86,7 @@ class OptionsConverter(private val checkObsoleteProcessorOptions: Boolean = fals
 
                     options.javadoc = mapping.options.javadoc
                     options.oneOfInterface = mapping.options.oneOfInterface
+                    options.responseInterface = mapping.options.responseInterface
 
                     val (enableFormatCode, formatCodeFormatter) = checkFormatter(mapping.options)
                     options.formatCode = enableFormatCode

@@ -73,6 +73,11 @@ data class Options(
     val oneOfInterface: Boolean = false,
 
     /**
+     * generate common interface for different responses of same content type (optional)
+     */
+    val responseInterface: Boolean = false,
+
+    /**
      * enable/disable the code formatter (optional)
      */
     val formatCode: String = "false",

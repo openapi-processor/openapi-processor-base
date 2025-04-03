@@ -38,6 +38,8 @@ class OptionsConverterSpec: StringSpec({
         options.basePathOptions.enabled shouldBe false
         options.basePathOptions.serverUrl shouldBe null
         options.basePathOptions.propertiesName shouldBe "api.properties"
+        options.oneOfInterface.shouldBeFalse()
+        options.responseInterface.shouldBeFalse()
 
         options.globalMappings.shouldNotBeNull()
         options.endpointMappings.shouldNotBeNull()
@@ -117,6 +119,8 @@ class OptionsConverterSpec: StringSpec({
                   base-path:
                     server-url: 0
                     properties-name: openapi.properties
+                  one-of-interface: true
+                  response-interface: true
                 compatibility:
                   bean-validation-valid-on-reactive: false
                   identifier-word-break-from-digit-to-letter: false
@@ -136,6 +140,8 @@ class OptionsConverterSpec: StringSpec({
         options.basePathOptions.enabled shouldBe true
         options.basePathOptions.serverUrl shouldBe 0
         options.basePathOptions.propertiesName shouldBe "openapi.properties"
+        options.oneOfInterface.shouldBeTrue()
+        options.responseInterface.shouldBeTrue()
 
         options.beanValidationValidOnReactive.shouldBeFalse()
         options.identifierWordBreakFromDigitToLetter.shouldBeFalse()

@@ -93,6 +93,13 @@ class ApiOptions: MappingSettings {
     var oneOfInterface = false
 
     /**
+     * enable/disable generation of a marker interface for responses. If a response has multiple different responses
+     * (multiple status codes for the same content type) all objects will implement the marker interface. If enabled
+     * an endpoint will return the interface data type, if disabled it will return Object.
+     */
+    var responseInterface = false
+
+    /**
      * enable/disable the code formatter (optional).
      */
     var formatCode = false
