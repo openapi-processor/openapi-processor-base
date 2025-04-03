@@ -124,4 +124,21 @@ class ContentTypeInterfaceCollectorSpec: StringSpec({
         cti["application/json"].shouldNotBeNull()
     }
 
+    "returns interface result with different response data types, with primitve" {
+        val collector = ContentTypeInterfaceCollector("/foo", HttpMethod.GET)
+
+        val ctr = mutableMapOf<ContentType, Map<HttpStatus, Response>>()
+        ctr["application/json"] = mapOf(
+            "200" to mockk<Response>(),
+            "201" to mockk<Response>(),
+        )
+
+        val srr = mutableMapOf<HttpStatus, List<ModelResponse>>()
+        srr["200"] = listOf(ModelResponse("application/json", foo))
+        srr["201"] = listOf(ModelResponse("application/json", StringDataType()))
+
+        val cti = collector.collectContentTypeInterfaces(ctr, srr)
+
+        cti.shouldBeEmpty()
+    }
 })

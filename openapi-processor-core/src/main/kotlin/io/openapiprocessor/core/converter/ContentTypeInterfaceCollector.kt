@@ -6,6 +6,7 @@
 package io.openapiprocessor.core.converter
 
 import io.openapiprocessor.core.model.datatypes.DataType
+import io.openapiprocessor.core.model.datatypes.SimpleDataType
 import io.openapiprocessor.core.parser.ContentType
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.parser.HttpStatus
@@ -29,13 +30,13 @@ class ContentTypeInterfaceCollector(
             }
 
             var dataType: DataType? = null
-            statusResponse.forEach { (status, response) ->
+            statusResponse.forEach { (status, _) ->
                 val match = statusResultResponses[status]?.find { r -> r.contentType == contentType }
                 if (match != null) {
                     if (dataType == null) {
                         dataType = match.responseType
                     } else {
-                        if (match.responseType !== dataType) {
+                        if (match.responseType !== dataType && match.responseType !is SimpleDataType) {
                             contentTypeInterfaces[contentType] = ContentTypeInterface(path, method)
                             return@forEach
                         }
