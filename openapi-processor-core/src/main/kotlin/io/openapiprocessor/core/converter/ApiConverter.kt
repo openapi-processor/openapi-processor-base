@@ -26,6 +26,8 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import io.openapiprocessor.core.model.RequestBody as ModelRequestBody
 import io.openapiprocessor.core.model.Response as ModelResponse
+import io.openapiprocessor.core.model.HttpStatus as ModelHttpStatus
+import io.openapiprocessor.core.model.ContentType as ModelContentType
 import io.openapiprocessor.core.model.parameters.Parameter as ModelParameter
 
 const val MULTIPART = "multipart/"
@@ -218,8 +220,8 @@ class  ApiConverter(
         return RequestBodies(bodies, params)
     }
 
-    private fun collectResponses(responses: Map<HttpStatus, Response>, ctx: ApiConverterContext): Map<String, List<ModelResponse>> {
-        val resultResponses: MutableMap<String, List<ModelResponse>>  = mutableMapOf()
+    private fun collectResponses(responses: Map<HttpStatus, Response>, ctx: ApiConverterContext): Map<ModelHttpStatus, List<ModelResponse>> {
+        val resultResponses: MutableMap<HttpStatus, List<ModelResponse>>  = mutableMapOf()
         val contentTypeInterfaces = collectContentTypeInterfaces(responses, ctx)
 
         responses.forEach { (httpStatus, httpResponse) ->
@@ -235,7 +237,7 @@ class  ApiConverter(
     }
 
     private fun collectContentTypeInterfaces(responses: Map<HttpStatus, Response>, ctx: ApiConverterContext)
-    : Map<ContentType, ContentTypeInterface> {
+    : Map<ModelContentType, ContentTypeInterface> {
         if (!options.responseInterface) {
             return emptyMap()
         }
@@ -249,7 +251,7 @@ class  ApiConverter(
         // Unfortunately we have to calculate the result data types to achieve this because it is currently not possible
         // to detect this from the parsed OpenAPI.
 
-        val checkResponses: MutableMap<String, List<ModelResponse>> = mutableMapOf()
+        val checkResponses: MutableMap<ModelHttpStatus, List<ModelResponse>> = mutableMapOf()
 
         val checkDataTypes = ctx.dataTypes.copy()
         responses.forEach { (httpStatus, httpResponse) ->

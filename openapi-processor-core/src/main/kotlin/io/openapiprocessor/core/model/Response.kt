@@ -11,7 +11,7 @@ import io.openapiprocessor.core.model.datatypes.DataType
  * Endpoint response properties.
  */
 open class Response(
-    val contentType: String,
+    val contentType: ContentType,
     val responseType: DataType,
     val description: String? = null
 ) {

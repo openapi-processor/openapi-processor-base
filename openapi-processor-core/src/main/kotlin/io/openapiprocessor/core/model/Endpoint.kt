@@ -18,7 +18,7 @@ class Endpoint(
     val method: HttpMethod,
     val parameters: List<Parameter>,
     val requestBodies: List<RequestBody>,
-    val responses: Map<String, List<Response>>,
+    val responses: Map<HttpStatus, List<Response>>,
     val operationId: String? = null,
     val deprecated: Boolean = false,
     private val documentation: Documentation? = null
@@ -145,8 +145,8 @@ class Endpoint(
         }
     }
 
-    private fun getSuccessResponses(): MutableMap<String, MutableList<Response>> {
-        val result = mutableMapOf<String, MutableList<Response>>()
+    private fun getSuccessResponses(): MutableMap<ContentType, MutableList<Response>> {
+        val result = mutableMapOf<ContentType, MutableList<Response>>()
 
         // prefer responses with content type.
         filterSuccessResponses()
