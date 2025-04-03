@@ -19,7 +19,7 @@ import io.openapiprocessor.core.support.parseApi
 import io.openapiprocessor.core.support.parseOptions
 import io.openapiprocessor.core.writer.java.JavaIdentifier
 
-class DatTypeConverterResponseSpec: StringSpec({
+class DataTypeConverterResponseSpec: StringSpec({
     isolationMode = IsolationMode.InstancePerTest
 
     val dataTypes = DataTypes()
