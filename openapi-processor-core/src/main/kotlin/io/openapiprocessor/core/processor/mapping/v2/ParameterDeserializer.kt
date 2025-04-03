@@ -34,6 +34,12 @@ class ParameterDeserializer : StdDeserializer<Parameter>(Parameter::class.java) 
             return AdditionalParameter(name, generics)
         }
 
+        if (props != null && isUnnecessaryParameter(props)) {
+            val name = props["drop"] as String
+
+            return UnnecessaryParameter(name)
+        }
+
         if (props != null && isType(props)) {
             val type = props["type"] as String
             val generics = props["generics"] as List<String>?
@@ -50,6 +56,10 @@ class ParameterDeserializer : StdDeserializer<Parameter>(Parameter::class.java) 
 
     private fun isAdditionalParameter(source: Map<*, *>): Boolean {
         return source.contains("add")
+    }
+
+    private fun isUnnecessaryParameter(source: Map<*, *>): Boolean {
+        return source.contains("drop")
     }
 
     private fun isType(source: Map<*, *>): Boolean {

@@ -363,6 +363,24 @@ class MappingFinder(val options: ApiOptions) {
         return repository.findGlobalAddParameterTypeMappings(step)
     }
 
+    fun findDropParameterTypeMappings(query: MappingQuery): List<DropParameterTypeMapping> {
+        val step = rootStep("looking for drop parameter type mapping of", query)
+        try {
+            return findDropParameterTypeMappings(query, step)
+        } finally {
+            step.log()
+        }
+    }
+
+    private fun findDropParameterTypeMappings(query: MappingQuery, step: MappingStep): List<DropParameterTypeMapping> {
+        val epMapping = repository.findEndpointDropParameterTypeMappings(query, step)
+        if (epMapping.isNotEmpty()) {
+            return epMapping
+        }
+
+        return repository.findGlobalDropParameterTypeMappings(step)
+    }
+
     fun findContentTypeMapping(query: MappingQuery): ContentTypeMapping? {
         val step = rootStep("looking for content type type mapping of", query)
         try {

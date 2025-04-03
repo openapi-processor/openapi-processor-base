@@ -206,6 +206,10 @@ class MappingConverter(val mapping: MappingV2) {
             is AdditionalParameter -> {
                 createAddParameterTypeMapping(source)
             }
+            // - drop: parameter name
+            is UnnecessaryParameter -> {
+                createDropParameterTypeMapping(source)
+            }
             // - type: OpenAPI type => target type
             // - type: OpenAPI type @ annotation
             is Type -> {
@@ -255,6 +259,12 @@ class MappingConverter(val mapping: MappingV2) {
         }
 
         return AddParameterTypeMapping(mapping.sourceType!!, typeMapping, annotation)
+    }
+
+    private fun createDropParameterTypeMapping(source: UnnecessaryParameter): DropParameterTypeMapping {
+        val (mapping, _) = parseMapping(source.drop, emptyList())
+
+        return DropParameterTypeMapping(mapping.sourceType!!)
     }
 
     private fun convertResponse(source: Response): Mapping {

@@ -152,6 +152,15 @@ class Mappings(
         return mappings.map { it as AddParameterTypeMapping }
     }
 
+    fun findDropParameterTypeMappings(filter: MappingMatcher, step: MappingStep): List<DropParameterTypeMapping>  {
+        val mappings = parameterTypeMappings.filter(filter, step.add(ParametersStep("drop")))
+        if (mappings.isEmpty()) {
+            return emptyList()
+        }
+
+        return mappings.map { it as DropParameterTypeMapping }
+    }
+
     fun findContentTypeMapping(filter: MappingMatcher, step: MappingStep): ContentTypeMapping? {
         val mappings = responseTypeMappings.filter(filter, step.add(ContentTypesStep()))
         if (mappings.isEmpty()) {

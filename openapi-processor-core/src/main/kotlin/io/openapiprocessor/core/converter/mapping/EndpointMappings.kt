@@ -224,6 +224,22 @@ class EndpointMappings(
         return mappings
     }
 
+    fun findDropParameterTypeMappings(query: MappingQuery, step: MappingStep): List<DropParameterTypeMapping> {
+        val httpMethodMappings = methodMappings[query.method]
+        if (httpMethodMappings != null) {
+            val methodMappings = httpMethodMappings.findDropParameterTypeMappings(
+                DropParameterTypeMatcher(),
+                step.add(MethodsStep(query)))
+
+            if (methodMappings.isNotEmpty()) {
+                return methodMappings
+            }
+        }
+
+        val mappings = mappings.findDropParameterTypeMappings(DropParameterTypeMatcher(), step)
+        return mappings
+    }
+
     fun findContentTypeMapping(query: MappingQuery, step: MappingStep): ContentTypeMapping? {
         val httpMethodMappings = methodMappings[query.method]
         if (httpMethodMappings != null) {

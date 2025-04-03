@@ -67,6 +67,10 @@ class MappingRepository(
         return globalMappings.findAddParameterTypeMappings(AddParameterTypeMatcher(), step.add(GlobalsStep()))
     }
 
+    fun findGlobalDropParameterTypeMappings(step: MappingStep): List<DropParameterTypeMapping>  {
+        return globalMappings.findDropParameterTypeMappings(DropParameterTypeMatcher(), step.add(GlobalsStep()))
+    }
+
     fun findGlobalContentTypeMapping(query: MappingQuery, step: MappingStep): ContentTypeMapping? {
         return globalMappings.findContentTypeMapping(ContentTypeMatcher(query), step.add(GlobalsStep()))
     }
@@ -121,6 +125,11 @@ class MappingRepository(
     fun findEndpointAddParameterTypeMappings(query: MappingQuery, step: MappingStep): List<AddParameterTypeMapping> {
         val mappings = endpointMappings[query.path] ?: return emptyList()
         return mappings.findAddParameterTypeMappings(query, step.add(EndpointsStep(query)))
+    }
+
+    fun findEndpointDropParameterTypeMappings(query: MappingQuery, step: MappingStep): List<DropParameterTypeMapping> {
+        val mappings = endpointMappings[query.path] ?: return emptyList()
+        return mappings.findDropParameterTypeMappings(query, step.add(EndpointsStep(query)))
     }
 
     fun findEndpointContentTypeMapping(query: MappingQuery, step: MappingStep): ContentTypeMapping? {

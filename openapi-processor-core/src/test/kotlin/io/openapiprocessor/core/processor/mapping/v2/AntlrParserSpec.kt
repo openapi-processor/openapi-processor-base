@@ -352,4 +352,12 @@ class AntlrParserSpec: StringSpec({
         mapping.annotationParameters["pattern"]!!.value shouldBe """"yyyy""""
     }
 
+    "map simple string" {
+        val source = "name"
+
+        val mapping = parseMapping(source)
+        mapping.kind shouldBe Mapping.Kind.MAP
+        mapping.sourceType shouldBe "name"
+        mapping.targetType shouldBe null
+    }
 })

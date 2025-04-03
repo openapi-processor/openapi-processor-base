@@ -6,6 +6,7 @@
 package io.openapiprocessor.core.converter
 
 import io.openapiprocessor.core.converter.mapping.AddParameterTypeMapping
+import io.openapiprocessor.core.converter.mapping.DropParameterTypeMapping
 import io.openapiprocessor.core.converter.mapping.TargetType
 import io.openapiprocessor.core.converter.mapping.UnknownDataTypeException
 import io.openapiprocessor.core.converter.mapping.UnknownParameterTypeException
@@ -176,9 +177,13 @@ class  ApiConverter(
     private fun collectParameters(parameters: List<Parameter>, ctx: ApiConverterContext): List<ModelParameter> {
         val resultParameters: MutableList<ModelParameter> = mutableListOf()
 
-        parameters.forEach {
-            resultParameters.add(createParameter(it, ctx))
-        }
+        val dropMappings = getDropParameterMappings(ctx.path, ctx.method)
+
+        parameters
+            .filter { p -> dropMappings.find { it.parameterName == p.getName() } == null }
+            .forEach {
+                resultParameters.add(createParameter(it, ctx))
+            }
 
         val addMappings = getAdditionalParameterMappings (ctx.path, ctx.method)
         addMappings.forEach {
@@ -190,6 +195,10 @@ class  ApiConverter(
 
     private fun getAdditionalParameterMappings(path: String, method: HttpMethod): List<AddParameterTypeMapping> {
         return mappingFinder.findAddParameterTypeMappings(MappingFinderQuery(path, method))
+    }
+
+    private fun getDropParameterMappings(path: String, method: HttpMethod): List<DropParameterTypeMapping> {
+        return mappingFinder.findDropParameterTypeMappings(MappingFinderQuery(path, method))
     }
 
     data class RequestBodies(val bodies: List<ModelRequestBody>, val parameters: List<ModelParameter>)

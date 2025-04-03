@@ -373,6 +373,9 @@
           "add": {
             "$ref": "#/definitions/TypeMappingFormat"
           },
+          "drop": {
+            "type": "string"
+          },
           "type": {
             "anyOf": [{
               "$ref": "#/definitions/TypeMappingFormat"

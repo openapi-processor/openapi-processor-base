@@ -7,7 +7,7 @@ grammar Mapping;
 
 // root:
 mapping
-    : type | map | annotate | content
+    : type | map | annotate | content | name
     ;
 
 type
@@ -24,6 +24,10 @@ content
 
 annotate
     : sourceType Annotate annotationType
+    ;
+
+name
+    : sourceIdentifier
     ;
 
 anyType

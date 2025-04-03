@@ -125,6 +125,26 @@ class MappingFinderEndpointMethodSpec: StringSpec({
         result[1].parameterName.shouldBe("barParam")
     }
 
+    "endpoint/method drop parameter mapping matches" {
+        val options = parseOptions(mapping =
+            """
+            |map:
+            | paths:
+            |   /foo:
+            |     get:
+            |       parameters:
+            |         - drop: fooParam
+            |         - drop: barParam
+            """)
+
+        val finder = mappingFinder(options)
+        val result = finder.findDropParameterTypeMappings(query(path = "/foo", method = GET))
+
+        result.shouldNotBeEmpty()
+        result[0].parameterName.shouldBe("fooParam")
+        result[1].parameterName.shouldBe("barParam")
+    }
+
     "endpoint/method result mapping matches" {
         val options = parseOptions(mapping =
             """
