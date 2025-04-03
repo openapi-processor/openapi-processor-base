@@ -226,7 +226,7 @@ class  ApiConverter(
             val results = createResponses(
                 httpStatus,
                 httpResponse,
-                ctx)
+                ctx.with(contentTypeInterfaces))
 
             resultResponses[httpStatus] = results
         }
@@ -371,7 +371,8 @@ class  ApiConverter(
                 "",
                 "",
                 NullSchema,
-                ctx.resolver)
+                ctx.resolver,
+                "response")
 
             val dataType = NoneDataType()
             val singleDataType = singleDataTypeWrapper.wrap (dataType, info)
@@ -382,6 +383,7 @@ class  ApiConverter(
 
         val responses = mutableListOf<ModelResponse>()
         response.getContent().forEach { (contentType, mediaType) ->
+            val ctInterface = ctx.getContentTypeInterface(contentType)
             val schema = mediaType.getSchema()
 
             val info = SchemaInfo (
@@ -389,7 +391,10 @@ class  ApiConverter(
                 getInlineResponseName (ctx.path, ctx.method, httpStatus),
                 contentType,
                 schema,
-                ctx.resolver)
+                ctx.resolver,
+                "response",
+                ctInterface != null,
+                getResponseMarkerInterfaceName(ctx.path, ctx.method, contentType))
 
             val dataType = convertDataType(info, ctx.dataTypes)
             val changedType = if (!info.isArray ()) { // todo fails if ref

@@ -16,11 +16,23 @@ import io.openapiprocessor.core.model.Documentation
 class InterfaceDataType(
     private val name: DataTypeName,
     private val pkg: String,
-    val items: List<DataType> = emptyList(),
+    items: List<DataType> = emptyList(),
     override val constraints: DataTypeConstraints? = null,
     override val deprecated: Boolean = false,
     override val documentation: Documentation? = null
 ): DataType {
+    private val _items: MutableCollection<DataType> = mutableListOf()
+
+    init {
+        _items.addAll(items)
+    }
+
+    val items: Collection<DataType>
+        get() = _items.toList()
+
+    fun addItem(item: DataType) {
+        _items.add(item)
+    }
 
     override fun getName(): String {
         return name.id
