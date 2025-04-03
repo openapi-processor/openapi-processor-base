@@ -5,6 +5,8 @@
 
 package io.openapiprocessor.core.parser
 
+typealias HttpStatus = String
+
 /**
  * OpenAPI Operation abstraction.
  */
@@ -15,7 +17,7 @@ interface Operation {
     fun getParameters(): List<Parameter>
 
     fun getRequestBody(): RequestBody?
-    fun getResponses(): Map<String, Response>
+    fun getResponses(): Map<HttpStatus, Response>
 
     fun isDeprecated(): Boolean
     fun hasTags(): Boolean

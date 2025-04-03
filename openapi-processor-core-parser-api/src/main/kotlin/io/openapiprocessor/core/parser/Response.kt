@@ -5,12 +5,14 @@
 
 package io.openapiprocessor.core.parser
 
+typealias ContentType = String
+
 /**
  * OpenAPI Response abstraction.
  */
 interface Response {
 
-    fun getContent(): Map<String, MediaType>
+    fun getContent(): Map<ContentType, MediaType>
     val description: String?
 
 }
