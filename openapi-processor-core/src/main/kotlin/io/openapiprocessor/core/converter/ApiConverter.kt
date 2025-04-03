@@ -236,6 +236,10 @@ class  ApiConverter(
 
     private fun collectContentTypeInterfaces(responses: Map<HttpStatus, Response>, ctx: ApiConverterContext)
     : Map<ContentType, ContentTypeInterface> {
+        if (!options.responseInterface) {
+            return emptyMap()
+        }
+
         val resultStyle = getResultStyle(ctx.path, ctx.method)
         val responseCollector = ContentTypeResponseCollector(responses, resultStyle)
 

@@ -3,4 +3,4 @@ openapi-processor-mapping: v12
 options:
   package-name: generated
   format-code: false
-  response-interface: true
+  response-interface: false
