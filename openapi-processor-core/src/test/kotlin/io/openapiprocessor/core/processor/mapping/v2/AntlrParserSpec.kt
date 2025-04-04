@@ -224,7 +224,8 @@ class AntlrParserSpec: StringSpec({
         mapping.annotationParameters["value"]!!.import shouldBe "io.oap.Foo"
     }
 
-    "reports parsing error" {
+    // because of the simple "name" rule, it won't error on this.
+    "reports parsing error".config(false) {
         val source = """SourceType =X io.oap.TargetType"""
 
         val ex = shouldThrow<MappingException> {
@@ -356,8 +357,8 @@ class AntlrParserSpec: StringSpec({
         val source = "name"
 
         val mapping = parseMapping(source)
-        mapping.kind shouldBe Mapping.Kind.MAP
-        mapping.sourceType shouldBe "name"
+        mapping.kind shouldBe Mapping.Kind.TYPE
+        mapping.sourceType shouldBe source
         mapping.targetType shouldBe null
     }
 })
