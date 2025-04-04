@@ -48,6 +48,7 @@ val ALL_30: List<TestParams> = listOf(
     test30_DR("params-request-body"), // framework specific
     test30_D_("params-request-body-multipart-form-data"), // framework specific
     test30_D_("params-simple-data-types"), // framework specific
+    test30_D_("params-unnecessary"),
     test30_DR("ref-array-items-nested"),
     test30_DR("ref-chain-spring-124.1"),
     test30_DR("ref-chain-spring-124.2"),
@@ -129,6 +130,7 @@ val ALL_31: List<TestParams> = listOf(
     test31_DR("params-request-body"), // framework specific
     test31_D_("params-request-body-multipart-form-data"), // framework specific
     test31_D_("params-simple-data-types"), // framework specific
+    test31_D_("params-unnecessary"),
     test31_DR("ref-array-items-nested"),
     test31_DR("ref-chain-spring-124.1"),
     test31_DR("ref-chain-spring-124.2"),

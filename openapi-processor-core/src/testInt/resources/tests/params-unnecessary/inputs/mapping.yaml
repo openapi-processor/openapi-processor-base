@@ -1,0 +1,12 @@
+openapi-processor-mapping: v12
+
+options:
+  package-name: generated
+  format-code: false
+
+map:
+
+  paths:
+    /foo:
+      parameters:
+        - drop: foo
