@@ -30,7 +30,7 @@ class EndpointResponse(
      */
     private val successes: List<Response> = listOf()
 ) {
-
+    // todo all have the same, maybe pass as parameter
     val contentType: String
         get() = main.contentType
 
@@ -97,6 +97,8 @@ class EndpointResponse(
 
     /**
      * returns a list with all content types.
+     *
+     * todo only called by test code
      */
     val contentTypes: Set<String>
         get() {

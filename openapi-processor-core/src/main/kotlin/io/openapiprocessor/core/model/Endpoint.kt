@@ -31,12 +31,13 @@ class Endpoint(
     }
 
     /**
-     * all possible responses for an openapi status ('200', '2xx',... or 'default'). If the given
-     * status has no responses the result is an empty list.
+     * all possible responses for an openapi status ('200', '2xx', ... or 'default'). If the given
+     * status has no responses, the result is an empty list.
      *
      * @param status the response status
      * @return the list of responses
      */
+    @Deprecated("only used in class")
     private fun getResponses (status: String): List<Response> {
         if (!responses.containsKey (status)) {
             return emptyList()
@@ -53,6 +54,7 @@ class Endpoint(
      *
      * @return the set of content types
      */
+    @Deprecated("only used in test")
     fun getConsumesContentTypes(): Set<String> {
         val contentTypes = requestBodies
             .map { it.contentType }
@@ -70,7 +72,7 @@ class Endpoint(
     }
 
     // not needed.... => EndpointResponse.getContentTypes()
-    // only called by tests?
+    @Deprecated("only used in test")
     fun getProducesContentTypes (status: String): List<String> {
         val responses = getResponses (status)
         val errors = getErrorResponses ()
@@ -96,6 +98,8 @@ class Endpoint(
      *
      * @param status the response status
      * @return first response of status
+     *
+     * only used in test
      */
     fun getFirstResponse (status: String): Response? {
         if (!responses.containsKey (status)) {
