@@ -25,7 +25,7 @@ import kotlin.io.path.deleteRecursively
 open class DefaultWriterFactory(val options: ApiOptions): WriterFactory, InitWriterTarget {
     private var log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
-    private lateinit var packagePaths: Map<String, Path>
+    private var packagePaths: MutableMap<String, Path> = HashMap()
     private lateinit var resourcesPath: Path
 
     override fun createWriter(packageName: String, className: String): Writer {
@@ -41,29 +41,27 @@ open class DefaultWriterFactory(val options: ApiOptions): WriterFactory, InitWri
     }
 
     override fun init() {
-        val pkgPaths = HashMap<String, Path>()
-
         log.debug ("initializing target folders")
         if (options.targetDirOptions.clear) {
             clearTargetDir()
         }
 
         val (apiName, apiPath) = initTargetPackage("api")
-        pkgPaths[apiName] = apiPath
+        packagePaths[apiName] = apiPath
         log.debug ("initialized target folder: {}", apiPath.toAbsolutePath ().toString ())
 
         // should be dto or resources
         val (modelName, modelPath) = initTargetPackage("model")
-        pkgPaths[modelName] = modelPath
+        packagePaths[modelName] = modelPath
         log.debug ("initialized target folder: {}", modelPath.toAbsolutePath ().toString ())
 
         val (supportName, supportPath) = initTargetPackage("support")
-        pkgPaths[supportName] = supportPath
+        packagePaths[supportName] = supportPath
         log.debug ("initialized target folder: {}", supportPath.toAbsolutePath ().toString ())
 
         if (options.beanValidation) {
             val (validationName, validationPath) = initTargetPackage("validation")
-            pkgPaths[validationName] = validationPath
+            packagePaths[validationName] = validationPath
             log.debug("initialized target folder: {}", validationPath.toAbsolutePath().toString())
         }
 
@@ -72,9 +70,7 @@ open class DefaultWriterFactory(val options: ApiOptions): WriterFactory, InitWri
             log.debug("initialized target folder: {}", resourcesPath.toAbsolutePath().toString())
         }
 
-        pkgPaths.putAll(initAdditionalPackages(options))
-
-        packagePaths = pkgPaths
+        packagePaths.putAll(initAdditionalPackages(options))
     }
 
     open fun initAdditionalPackages(options: ApiOptions): Map<String, Path> {
