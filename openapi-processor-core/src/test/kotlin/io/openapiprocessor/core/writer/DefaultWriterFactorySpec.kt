@@ -253,6 +253,19 @@ class DefaultWriterFactorySpec : StringSpec({
         Files.exists(additional) shouldBe true
         Files.isDirectory(additional) shouldBe true
     }
+
+    "lazy initialize additional package folders" {
+        options.targetDir = listOf(target.toString()).joinToString(File.separator)
+        options.targetDirOptions.layout = TargetDirLayout.CLASSIC
+
+        val writerFactory = DefaultWriterFactory(options)
+        writerFactory.init()
+        writerFactory.createWriter("io.openapiprocessor.foo.bar", "Foo")
+
+        val lazy = options.getSourceDir("foo/bar")
+        Files.exists(lazy) shouldBe true
+        Files.isDirectory(lazy) shouldBe true
+    }
 })
 
 

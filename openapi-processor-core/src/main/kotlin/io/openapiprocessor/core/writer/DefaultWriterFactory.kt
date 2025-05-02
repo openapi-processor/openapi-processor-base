@@ -29,6 +29,12 @@ open class DefaultWriterFactory(val options: ApiOptions): WriterFactory, InitWri
     private lateinit var resourcesPath: Path
 
     override fun createWriter(packageName: String, className: String): Writer {
+        if (packagePaths[packageName] == null) {
+            val pkg = packageName.substring(options.packageName.length + 1)
+            val (name, path) = initTargetPackage(pkg)
+            packagePaths[name] = path
+        }
+
         return createWriter(packagePaths.getValue(packageName), className)
     }
 
@@ -96,12 +102,13 @@ open class DefaultWriterFactory(val options: ApiOptions): WriterFactory, InitWri
 
     protected fun initTargetPackage(subPackageName: String): Pair<String, Path> {
         val rootPackageFolder = options.packageName.replace(".", "/")
+        val subPackageFolder = subPackageName.replace(".", "/")
 
-        val apiPackage = options.packageName.plus(".$subPackageName")
-        val apiFolder = listOf(rootPackageFolder, subPackageName).joinToString("/")
-        val apiPath = createTargetPackage(apiFolder)
+        val targetPackage = options.packageName.plus(".$subPackageName")
+        val packageFolder = listOf(rootPackageFolder, subPackageFolder).joinToString("/")
+        val packagePath = createTargetPackage(packageFolder)
 
-        return Pair(apiPackage, apiPath)
+        return Pair(targetPackage, packagePath)
     }
 
     private fun createTargetPackage(apiPkg: String): Path {
