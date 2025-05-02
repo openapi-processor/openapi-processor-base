@@ -11,6 +11,7 @@ import io.kotest.data.row
 import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.NotWindows
 import io.openapiprocessor.core.Windows
+import java.net.URI
 import java.nio.file.Paths
 
 class UriSpec: StringSpec({
@@ -41,6 +42,23 @@ class UriSpec: StringSpec({
             row("/some/path", "file:///some/path"),
         ) { source, uri ->
             toURI(source).toString() shouldBe uri
+        }
+    }
+
+    "extract package name from document location" {
+        forAll(
+            row(
+                "file:///user/folder/project/src/main/api/openapi.yaml",
+                "io.openapiprocessor",
+                "io.openapiprocessor"
+            ),
+            row(
+                "file:///user/folder/project/src/main/kotlin/io/openapiprocessor/foo/foo.yaml",
+                "io.openapiprocessor",
+                "io.openapiprocessor.foo"
+            )
+        ) { docUri, rootPkg, expectedPkg ->
+            toPackageName(URI.create(docUri), rootPkg) shouldBe expectedPkg
         }
     }
 })
