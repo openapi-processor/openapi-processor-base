@@ -6,6 +6,7 @@
 package io.openapiprocessor.core.parser.openapi.v31
 
 import io.openapiprocessor.core.parser.HttpMethod
+import java.net.URI
 import io.openapiparser.model.v31.Operation as Operation31
 import io.openapiparser.model.v31.Parameter as Parameter31
 import io.openapiparser.model.v31.PathItem as Path31
@@ -86,4 +87,7 @@ class Operation(
 
     override fun getFirstTag(): String? = if (hasTags()) operation.tags.first () else null
 
+    override fun getDocumentUri(): URI {
+        return path.documentUri
+    }
 }

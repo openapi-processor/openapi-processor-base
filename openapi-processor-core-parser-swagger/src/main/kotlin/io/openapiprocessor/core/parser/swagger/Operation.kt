@@ -6,6 +6,7 @@
 package io.openapiprocessor.core.parser.swagger
 
 import io.openapiprocessor.core.parser.HttpMethod
+import java.net.URI
 import io.openapiprocessor.core.parser.Operation as ParserOperation
 import io.openapiprocessor.core.parser.Parameter as ParserParameter
 import io.openapiprocessor.core.parser.RequestBody as ParserRequestBody
@@ -79,4 +80,7 @@ class Operation(
 
     override fun getFirstTag(): String? = operation.tags?.first()
 
+    override fun getDocumentUri(): URI {
+        TODO("deriving the package name from the document location is not supported with the swagger parser.")
+    }
 }

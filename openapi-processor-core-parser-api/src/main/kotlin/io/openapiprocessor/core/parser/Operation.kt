@@ -5,6 +5,8 @@
 
 package io.openapiprocessor.core.parser
 
+import java.net.URI
+
 typealias HttpStatus = String
 
 /**
@@ -26,4 +28,5 @@ interface Operation {
 
     fun getFirstTag(): String?
 
+    fun getDocumentUri(): URI
 }
