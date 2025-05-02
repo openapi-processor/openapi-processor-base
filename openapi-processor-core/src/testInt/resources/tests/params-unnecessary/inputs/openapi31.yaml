@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: test additional endpoint parameters
+  title: test unnecessary endpoint parameter
   version: 1.0.0
 
 paths:
