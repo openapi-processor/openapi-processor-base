@@ -45,7 +45,7 @@ junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
 kotest-bom = "io.kotest:kotest-bom:5.9.1"
 kotest-runner = { module = "io.kotest:kotest-runner-junit5" }
 kotest-datatest = { module = "io.kotest:kotest-framework-datatest" }
-mockk = "io.mockk:mockk:1.14.0"
+mockk = "io.mockk:mockk:1.14.2"
 
 diff-utils = "io.github.java-diff-utils:java-diff-utils:4.15"
 
