@@ -81,6 +81,7 @@ class CompileExpectedSpec: StringSpec({
             compilePaths.add(Path.of("src/testInt/resources/compile/oap/AnnotationB.java"))
             compilePaths.add(Path.of("src/testInt/resources/compile/oap/AnnotationC.java"))
             compilePaths.add(Path.of("src/testInt/resources/compile/oap/ParamAnnotation.java"))
+            compilePaths.add(Path.of("src/testInt/resources/compile/oap/Generated.java"))
             compilePaths.add(Path.of("src/testInt/resources/compile/reactor/Mono.java"))
             compilePaths.add(Path.of("src/testInt/resources/compile/reactor/Flux.java"))
             compilePaths.add(Path.of("src/testInt/resources/compile/spring/ResponseEntity.java"))
