@@ -31,17 +31,7 @@ class TestFilesJimfs implements TestFiles {
 
     @Override
     void init(TestSet testSet) {
-        def reader = new TestItemsReader(resource)
-        def testSetPath = "/tests/${testSet.name}"
-
-        // copy input files to file system
-        def inputs = reader.read(testSetPath, testSet.inputs)
-        copy(testSetPath, inputs.items, source)
-
-        // copy expected files to file system
-        def outputs = reader.read(testSetPath, testSet.outputs)
-        outputs = outputs.resolvePlaceholder(getModelTypePath(testSet))
-        copy(testSetPath, outputs.items, source)
+        copyTestFiles("/tests/${testSet.name}", source)
     }
 
     @Override
@@ -56,7 +46,12 @@ class TestFilesJimfs implements TestFiles {
 
     @Override
     Mapping getMapping(TestSet testSet) {
-        return Mapping.createMapping(source.resolve ('inputs/mapping.yaml'), testSet.defaultOptions)
+        def api = URI.create("/tests/${testSet.name}/inputs/${testSet.openapi}")
+        def mapping = api.resolve("mapping.yaml").toString()
+
+        return Mapping.createMapping(
+                Paths.get(resource.getResourceUrl(mapping).toURI()),
+                testSet.defaultOptions)
     }
 
     @Override
@@ -82,17 +77,23 @@ class TestFilesJimfs implements TestFiles {
             }
     }
 
-    private static String getModelTypePath(TestSet testSet) {
-        if (testSet.modelType == 'default' || testSet.modelType == 'model') {
-            return 'model/default'
+    /**
+     * copy all files from resource folder to the target path
+     * @param parent the root resource folder
+     * @param target the target path
+     */
+    private copyTestFiles(String parent, Path target) {
+        def sourcePath = Paths.get(resource.getResourceUrl(parent).toURI())
+        def sourceFiles =  getSourceFiles(sourcePath)
+        copy(parent, sourceFiles, target)
+    }
+
+    private static List<String> getSourceFiles (Path path) {
+        def result = new ArrayList<String> ()
+        if (Files.exists(path)) {
+            result.addAll (Collector.collectPaths (path))
         }
-        else if (testSet.modelType == 'record') {
-            return 'model/record'
-        }
-        else {
-            // error
-            return "unset"
-        }
+        result
     }
 
     /**

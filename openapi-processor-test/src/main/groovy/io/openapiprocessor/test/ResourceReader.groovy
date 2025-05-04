@@ -16,6 +16,7 @@ class ResourceReader {
         resourceBase.getResourceAsStream (path)
     }
 
+    /** get absolute resource uri */
     URL getResourceUrl (String path) {
         resourceBase.getResource (path)
     }

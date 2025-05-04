@@ -9,7 +9,7 @@ package io.openapiprocessor.test
  * input.yaml / output.yaml items.
  */
 class TestItems {
-
+    private String prefix
     private List<String> items
 
     TestItems() {
@@ -17,6 +17,10 @@ class TestItems {
 
     private TestItems(List<String> items) {
         this.items = items
+    }
+
+    String getPrefix() {
+        return prefix
     }
 
     List<String> getItems() {

@@ -11,7 +11,7 @@ import io.openapiprocessor.api.v2.OpenApiProcessor
 class TestSet {
 
     static String DEFAULT_MAPPING = """\
-openapi-processor-mapping: v4
+openapi-processor-mapping: v12
 
 options:
   package-name: generated
@@ -34,7 +34,7 @@ options:
     String packageName = 'generated'
 
     /**
-     * parser type: "SWAGGER" or "OPENAPI4J"
+     * parser type: "INTERNAL", "SWAGGER" or "OPENAPI4J" (deprecated)
      */
     String parser
 

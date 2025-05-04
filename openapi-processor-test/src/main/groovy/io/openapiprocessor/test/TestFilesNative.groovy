@@ -34,8 +34,11 @@ class TestFilesNative implements TestFiles {
 
     @Override
     Mapping getMapping(TestSet testSet) {
+        def api = URI.create("/tests/${testSet.name}/inputs/${testSet.openapi}")
+        def mapping = api.resolve("mapping.yaml").toString()
+
         return Mapping.createMapping(
-                Paths.get(resource.getResourceUrl("/tests/${testSet.name}/inputs/mapping.yaml").toURI()),
+                Paths.get(resource.getResourceUrl(mapping).toURI()),
                 testSet.defaultOptions)
     }
 

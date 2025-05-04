@@ -11,11 +11,6 @@ import java.nio.file.Files
 import java.nio.file.Path
 
 class Test {
-    enum ResolveType {
-        PATH_IN_TARGET, // resolve to package name in targetDir, i.e. to "model" sub package
-        PATH_IN_SOURCE // resolve to path in test outputs, i.e. "model/default"/"model/record"
-    }
-
     private TestSet testSet
     private TestFiles testFiles
     private OpenApiProcessorTest testProcessor
@@ -53,53 +48,59 @@ class Test {
         return mapping
     }
 
+    String getPackagePath() {
+        return packageName.replace(".", "/")
+    }
+
+    // relative key (i.e., with prefix and no placeholder) => absolute path (to resource source folder)
+    Map<String, Path> getExpectedFilePaths() {
+        def testItems = testFiles.getOutputFiles(testSet)
+        def expected = getExpectedFiles(testItems)
+
+        def result = new TreeMap<String, Path>()
+        def prefix = testItems.prefix
+        expected.forEach {k, v ->
+            def kNoPlaceholder = k.replace("<model>/", "")
+
+            if (prefix != null) {
+                kNoPlaceholder = "$prefix/$kNoPlaceholder"
+            }
+
+            result.put(kNoPlaceholder.toString(), getExpectedFilePath(k, v))
+        }
+        return result
+    }
+
     /**
      * get the expected files (from outputs.yaml). Returns a map of file to location. The location may be null
      * (with classic layout) or "src" or "resources" (with standard layout).
      *
      * @return the expected files map
      */
-    Map<String, String> getExpectedFiles() {
-        def sourceRoot = testProcessor.sourceRoot
-        def resourceRoot = testProcessor.resourceRoot
-
+    Map<String, String> getExpectedFiles(TestItems testItems) {
         def result = new TreeMap<String, String>()
 
-        def testItems = testFiles.getOutputFiles(testSet)
+        // strip "outputs" part
         def files = testItems.items.collect {
             it.substring (testSet.expected.size () + 1)
         }
 
         files.each {
-            if (sourceRoot != null && it.startsWith(sourceRoot)) {
-                result[it.substring(sourceRoot.length() + 1)] = sourceRoot
-
-            } else if (resourceRoot != null && it.startsWith(resourceRoot)) {
-                result[it.substring(resourceRoot.length() + 1)] = resourceRoot
-
-            } else {
-                result[it] = null
-            }
+            result[it] = null
         }
 
         return result
     }
 
     Set<String> getGeneratedSourceFiles() {
-        def sourceRoot = testProcessor.sourceRoot
         def targetPath = Path.of(testFiles.targetDir)
-        def sourcePath = getGeneratedSourcePath(targetPath, sourceRoot, packageName)
+        def sourcePath = getGeneratedSourcePath(targetPath, null)
         return getGeneratedFiles(sourcePath)
     }
 
     Set<String> getGeneratedResourceFiles() {
-        def resourceRoot = testProcessor.resourceRoot
-        if (resourceRoot == null) {
-            return Set.of()
-        }
-
         def targetPath = Path.of(testFiles.targetDir)
-        def sourcePath = getGeneratedResourcePath(targetPath, resourceRoot)
+        def sourcePath = getGeneratedResourcePath(targetPath, null)
         return getGeneratedFiles(sourcePath)
     }
 
@@ -112,31 +113,8 @@ class Test {
         return resolveModelTypeInSource(expectedFilePath)
     }
 
-    Path getGeneratedFilePath(String file, String sourcePrefix) {
-        def sourceRoot = testProcessor.sourceRoot
-        def generatedFilePath = file
-
-        if (sourcePrefix == sourceRoot) {
-            generatedFilePath = "${packageName}/${generatedFilePath}"
-        }
-
-        if (sourcePrefix != null) {
-            generatedFilePath = "${sourcePrefix}/${generatedFilePath}"
-        }
-
-        return resolveModelTypeInTarget(generatedFilePath)
-    }
-
-    Set<String> resolveModelTypeInTarget(Collection<String> paths) {
-        return resolveModelType(paths, ResolveType.PATH_IN_TARGET)
-    }
-
-    Path resolveModelTypeInTarget(String path) {
-        return testFiles.getTargetPath(resolveModelTypeName(path, ResolveType.PATH_IN_TARGET))
-    }
-
     Path resolveModelTypeInSource(String path) {
-        return testFiles.getSourcePath(testSet, resolveModelTypeName(path, ResolveType.PATH_IN_SOURCE))
+        return testFiles.getSourcePath(testSet, resolveModelTypeName(path))
     }
 
     static boolean printUnifiedDiff (Path expected, Path generated) {
@@ -147,40 +125,23 @@ class Test {
         testFiles.printTree()
     }
 
-    private Set<String> resolveModelType(Collection<String> paths, ResolveType type) {
-        def result = new TreeSet<String> ()
+    private String resolveModelTypeName(String path) {
+        def model = '_default_'
 
-        paths.each {
-            result.add(resolveModelTypeName(it, type))
-        }
-
-        result
-    }
-
-    private String resolveModelTypeName(String path, ResolveType type) {
-        def model = "unset"
-
-        if (type == ResolveType.PATH_IN_TARGET) {
-            model = 'model'
-
-        } else if (type == ResolveType.PATH_IN_SOURCE) {
-            model = 'model/default'
-
-            if (testSet.modelType == 'record') {
-                model = 'model/record'
-            }
+        if (testSet.modelType == 'record') {
+            model = '_record_'
         }
 
         def result = path.replaceFirst("<model>", model)
         return result
     }
 
-    private static Path getGeneratedSourcePath(Path target, String source, String packageName) {
+    private static Path getGeneratedSourcePath(Path target, String source) {
         def path = target
         if (source != null) {
             path = path.resolve(source)
         }
-        return path.resolve (packageName)
+        return path
     }
 
     private static Path getGeneratedResourcePath(Path target, String resource) {
