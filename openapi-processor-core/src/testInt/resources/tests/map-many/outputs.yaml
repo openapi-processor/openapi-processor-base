@@ -1,4 +1,5 @@
+prefix: generated
 items:
   - outputs/api/FooApi.java
-  - outputs/<model>/FooResource.java
-  - outputs/<model>/BarResource.java
+  - outputs/model/<model>/FooResource.java
+  - outputs/model/<model>/BarResource.java

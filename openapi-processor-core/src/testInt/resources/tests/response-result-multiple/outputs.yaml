@@ -1,6 +1,7 @@
+prefix: generated
 items:
   - outputs/api/Api.java
-  - outputs/<model>/Foo.java
-  - outputs/<model>/Bar.java
-  - outputs/<model>/GetFooBarAApplicationJsonResponse.java
-  - outputs/<model>/GetFooBarBApplicationJsonResponse.java
+  - outputs/model/<model>/Foo.java
+  - outputs/model/<model>/Bar.java
+  - outputs/model/<model>/GetFooBarAApplicationJsonResponse.java
+  - outputs/model/<model>/GetFooBarBApplicationJsonResponse.java

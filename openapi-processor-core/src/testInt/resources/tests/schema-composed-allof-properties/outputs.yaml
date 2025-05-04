@@ -1,3 +1,4 @@
+prefix: generated
 items:
   - outputs/api/Api.java
-  - outputs/<model>/QueryGetResponse200.java
+  - outputs/model/<model>/QueryGetResponse200.java

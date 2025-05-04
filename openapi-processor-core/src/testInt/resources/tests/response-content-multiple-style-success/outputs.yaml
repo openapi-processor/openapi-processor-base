@@ -1,6 +1,7 @@
+prefix: generated
 items:
   - outputs/api/Api.java
   - outputs/api/MixedApi.java
   - outputs/api/NoneApi.java
-  - outputs/<model>/Error.java
-  - outputs/<model>/Foo.java
+  - outputs/model/<model>/Error.java
+  - outputs/model/<model>/Foo.java

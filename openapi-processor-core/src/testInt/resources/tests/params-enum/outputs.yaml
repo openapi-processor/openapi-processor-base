@@ -1,5 +1,6 @@
+prefix: generated
 items:
   - outputs/api/EnumApi.java
-  - outputs/<model>/Bar.java
-  - outputs/<model>/Foo.java
-  - outputs/<model>/FooFoo.java
+  - outputs/model/<model>/Bar.java
+  - outputs/model/<model>/Foo.java
+  - outputs/model/<model>/FooFoo.java

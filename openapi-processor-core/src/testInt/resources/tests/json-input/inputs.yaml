@@ -1,3 +1,4 @@
+prefix: api
 items:
   - inputs/openapi30.json
   - inputs/openapi31.json

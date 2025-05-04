@@ -1,4 +1,5 @@
+prefix: api
 items:
+  - inputs/mapping.yaml
   - inputs/openapi30.yaml
   - inputs/openapi31.yaml
-  - inputs/mapping.yaml

@@ -1,6 +1,7 @@
+prefix: generated
 items:
   - outputs/api/Api.java
-  - outputs/<model>/Foo.java
-  - outputs/<model>/GenericProperties.java
-  - outputs/<model>/SpecificPropertiesOne.java
-  - outputs/<model>/SpecificPropertiesTwo.java
+  - outputs/model/<model>/Foo.java
+  - outputs/model/<model>/GenericProperties.java
+  - outputs/model/<model>/SpecificPropertiesOne.java
+  - outputs/model/<model>/SpecificPropertiesTwo.java

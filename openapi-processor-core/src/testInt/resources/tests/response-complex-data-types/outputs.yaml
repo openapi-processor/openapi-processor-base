@@ -1,6 +1,7 @@
+prefix: generated
 items:
   - outputs/api/Api.java
-  - outputs/<model>/Author.java
-  - outputs/<model>/Book.java
-  - outputs/<model>/BookInlineGetResponse200.java
-  - outputs/<model>/BookNested.java
+  - outputs/model/<model>/Author.java
+  - outputs/model/<model>/Book.java
+  - outputs/model/<model>/BookInlineGetResponse200.java
+  - outputs/model/<model>/BookNested.java
