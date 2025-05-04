@@ -11,7 +11,7 @@ import io.openapiprocessor.api.v2.OpenApiProcessor
 class TestSet {
 
     static String DEFAULT_MAPPING = """\
-openapi-processor-mapping: v12
+openapi-processor-mapping: v13
 
 options:
   package-name: generated
@@ -54,14 +54,14 @@ options:
     String inputs = "inputs.yaml"
 
     /**
-     * the generated.yaml
+     * the outputs.yaml
      */
-    String outputs = "generated.yaml"
+    String outputs = "outputs.yaml"
 
     /**
      * folder with expected files
      */
-    String expected = "generated"
+    String expected = "outputs"
 
     static String getDefaultOptions() {
         DEFAULT_MAPPING

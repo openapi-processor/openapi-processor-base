@@ -7,7 +7,6 @@ package io.openapiprocessor.test
 
 import io.openapiprocessor.test.api.OpenApiProcessorTest
 
-import java.nio.file.Files
 import java.nio.file.Path
 
 class Test {
@@ -52,65 +51,44 @@ class Test {
         return packageName.replace(".", "/")
     }
 
-    // relative key (i.e., with prefix and no placeholder) => absolute path (to resource source folder)
+    /**
+     * create a map of relative file names to their absolute path in the resource source folder.
+     * @returnmap of relative file name to absolute path
+     */
     Map<String, Path> getExpectedFilePaths() {
         def testItems = testFiles.getOutputFiles(testSet)
         def expected = getExpectedFiles(testItems)
 
         def result = new TreeMap<String, Path>()
         def prefix = testItems.prefix
-        expected.forEach {k, v ->
-            def kNoPlaceholder = k.replace("<model>/", "")
-
+        expected.forEach {item ->
+            def key = stripModelType(item)
             if (prefix != null) {
-                kNoPlaceholder = "$prefix/$kNoPlaceholder"
+                key = "$prefix/$key".toString()
             }
-
-            result.put(kNoPlaceholder.toString(), getExpectedFilePath(k, v))
+            result.put(key, resolveModelTypeInSource(item))
         }
         return result
+    }
+
+    private static String stripModelType(String itemName) {
+        return itemName.replace("<model>/", "")
     }
 
     /**
-     * get the expected files (from outputs.yaml). Returns a map of file to location. The location may be null
-     * (with classic layout) or "src" or "resources" (with standard layout).
+     * create a map of relative file names to their absolute path in the generated folder.
      *
-     * @return the expected files map
+     * @return map of relative file name to absolute path
      */
-    Map<String, String> getExpectedFiles(TestItems testItems) {
-        def result = new TreeMap<String, String>()
+    Map<String, Path> getGeneratedFilePaths() {
+        return Collector.collectPathDictionary(Path.of(testFiles.targetDir))
+    }
 
+    Set<String> getExpectedFiles(TestItems testItems) {
         // strip "outputs" part
-        def files = testItems.items.collect {
+        return testItems.items.collect {
             it.substring (testSet.expected.size () + 1)
         }
-
-        files.each {
-            result[it] = null
-        }
-
-        return result
-    }
-
-    Set<String> getGeneratedSourceFiles() {
-        def targetPath = Path.of(testFiles.targetDir)
-        def sourcePath = getGeneratedSourcePath(targetPath, null)
-        return getGeneratedFiles(sourcePath)
-    }
-
-    Set<String> getGeneratedResourceFiles() {
-        def targetPath = Path.of(testFiles.targetDir)
-        def sourcePath = getGeneratedResourcePath(targetPath, null)
-        return getGeneratedFiles(sourcePath)
-    }
-
-    Path getExpectedFilePath(String file, String sourcePrefix) {
-        def expectedFilePath = file
-        if (sourcePrefix != null) {
-            expectedFilePath = "${sourcePrefix}/${file}"
-        }
-
-        return resolveModelTypeInSource(expectedFilePath)
     }
 
     Path resolveModelTypeInSource(String path) {
@@ -134,35 +112,5 @@ class Test {
 
         def result = path.replaceFirst("<model>", model)
         return result
-    }
-
-    private static Path getGeneratedSourcePath(Path target, String source) {
-        def path = target
-        if (source != null) {
-            path = path.resolve(source)
-        }
-        return path
-    }
-
-    private static Path getGeneratedResourcePath(Path target, String resource) {
-        def path = target
-        if (resource != null) {
-            path = path.resolve(resource)
-        }
-        return path
-    }
-
-    /**
-     * get the generated files.
-     *
-     * @param path path of the generated files
-     * @return the generated files
-     */
-    private static Set<String> getGeneratedFiles (Path path) {
-        def result = new TreeSet<String> ()
-        if (Files.exists(path)) {
-            result.addAll (Collector.collectPaths (path))
-        }
-        result
     }
 }

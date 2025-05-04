@@ -19,8 +19,8 @@ class TestItemsReader {
     /**
      * check existence of items yaml
      *
-     * @param resource path
-     * @param name of the items yaml file
+     * @param resource path to test case
+     * @param name of the test items yaml file
      * @return true if it exists, else false
      */
     boolean exists(String path, String name) {
@@ -28,11 +28,11 @@ class TestItemsReader {
     }
 
     /**
-     * read test items yaml
+     * read a test items yaml
      *
-     * @param resource path
-     * @param name of the items yaml file
-     * @return content of yaml
+     * @param resource path to test case
+     * @param name of the test items yaml file
+     * @return content of the test items yaml file
      */
     TestItems read (String path, String name) {
         def source = getResource ("${path}/${name}")

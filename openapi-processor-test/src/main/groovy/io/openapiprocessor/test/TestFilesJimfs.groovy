@@ -48,10 +48,12 @@ class TestFilesJimfs implements TestFiles {
     Mapping getMapping(TestSet testSet) {
         def api = URI.create("/tests/${testSet.name}/inputs/${testSet.openapi}")
         def mapping = api.resolve("mapping.yaml").toString()
+        def url = resource.getResourceUrl(mapping)
+        if (url == null) {
+            println("ERROR: missing mapping file '$mapping'!")
+        }
 
-        return Mapping.createMapping(
-                Paths.get(resource.getResourceUrl(mapping).toURI()),
-                testSet.defaultOptions)
+        return Mapping.createMapping(Paths.get(url.toURI()), testSet.defaultOptions)
     }
 
     @Override

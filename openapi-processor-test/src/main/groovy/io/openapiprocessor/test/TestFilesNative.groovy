@@ -5,12 +5,9 @@
 
 package io.openapiprocessor.test
 
-import groovy.util.logging.Slf4j
-
 import java.nio.file.Path
 import java.nio.file.Paths
 
-@Slf4j
 class TestFilesNative implements TestFiles {
     private File target
     private ResourceReader resource
@@ -41,7 +38,7 @@ class TestFilesNative implements TestFiles {
         def mapping = api.resolve("mapping.yaml").toString()
         def url = resource.getResourceUrl(mapping)
         if (url == null) {
-            log.error("did not find resource url of {}", mapping)
+            println("ERROR: missing mapping file '$mapping'!")
         }
 
         return Mapping.createMapping(Paths.get(url.toURI()), testSet.defaultOptions)

@@ -30,25 +30,4 @@ class TestItems {
     void setItems(List<String> items) {
         this.items = items
     }
-
-    /** convert to absolute paths */
-    List<String> addPrefix(String path) {
-        items.collect {
-            "${path}/${it}".toString ()
-        }
-    }
-
-    TestItems resolvePlaceholder(String replacement) {
-        def results = new TreeSet<String> ()
-
-        items.each {
-            results.add(resolveModel(it, replacement))
-        }
-
-        return new TestItems(results as List<String>)
-    }
-
-    private static String resolveModel(String path, String replacement) {
-        return path.replaceFirst("<model>", replacement)
-    }
 }

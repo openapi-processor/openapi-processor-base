@@ -43,7 +43,8 @@ class TestSetRunner {
 
         then:
         def expectedFiles = test.getExpectedFilePaths()
-        def generatedFiles = getGeneratedFilePaths(expectedFiles)
+        def generatedFiles = test.getGeneratedFilePaths()
+        generatedFiles = filterUnexpectedFiles(generatedFiles, expectedFiles)
 
         // check expected file names match generated file names
         assert expectedFiles.keySet() == generatedFiles.keySet()
@@ -58,31 +59,28 @@ class TestSetRunner {
         success
     }
 
-    // relative key => absolute path (to target folder)
-    private Map<String, Path> getGeneratedFilePaths(Map<String, Path> expectedFiles) {
-        return getGeneratedFiles(expectedFiles)
-    }
-
-    private Map<String, Path> getGeneratedFiles(Map<String, Path> expectedFiles) {
+    Map<String, Path> filterUnexpectedFiles(Map<String, Path> generatedFiles, Map<String, Path> expectedFiles) {
         def unexpectedFiles = [
             "${test.packagePath}/support/Generated.java".toString(),
             "${test.packagePath}/validation/Values.java".toString(),
             "${test.packagePath}/validation/ValueValidator.java".toString()
         ] as Set<String>
 
-        def generatedFilesAll = test.generatedSourceFiles
-        generatedFilesAll.addAll(test.generatedResourceFiles)
+        def expectedKeys = expectedFiles.keySet()
 
-        def generatedFiles = new TreeMap<String, Path>()
-        generatedFilesAll.each {
-            if (!expectedFiles.containsKey(it) && (unexpectedFiles.find { u -> it.endsWith(u) } != null)) {
+        def result = new TreeMap<String, Path>()
+
+        generatedFiles.forEach {k, v ->
+            def isExpected = expectedKeys.contains(k)
+            def isUnexpected = unexpectedFiles.find { u -> k.endsWith(u) } != null
+
+            if(!isExpected && isUnexpected) {
                 return
             }
 
-            def value = expectedFiles.get(it)
-            generatedFiles.put(it, value)
+            result.put(k, v)
         }
 
-        return generatedFiles
+        return result
     }
 }
