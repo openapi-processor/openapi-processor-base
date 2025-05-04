@@ -6,6 +6,7 @@
 package io.openapiprocessor.core.support
 
 import io.openapiprocessor.core.parser.Schema
+import java.net.URI
 import io.openapiprocessor.core.parser.Schema as ParserSchema
 
 /**
@@ -116,5 +117,8 @@ class Schema(
         get() = TODO("Not yet implemented")
 
     override val title: String?
+        get() = TODO("Not yet implemented")
+
+    override val documentUri: URI
         get() = TODO("Not yet implemented")
 }

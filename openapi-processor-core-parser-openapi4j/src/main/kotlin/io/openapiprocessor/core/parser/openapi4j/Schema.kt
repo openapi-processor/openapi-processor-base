@@ -5,6 +5,7 @@
 
 package io.openapiprocessor.core.parser.openapi4j
 
+import java.net.URI
 import io.openapiprocessor.core.parser.Schema as ParserSchema
 import org.openapi4j.parser.model.v3.Schema as O4jSchema
 
@@ -128,4 +129,7 @@ class Schema(val schema: O4jSchema) : ParserSchema {
 
     override val title: String?
         get() = schema.title
+
+    override val documentUri: URI
+        get() = TODO("deriving the package name from the document location is not supported with the openapi4j parser.")
 }

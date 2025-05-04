@@ -83,4 +83,9 @@ class TestSchema implements Schema {
     String getTitle() {
         return null
     }
+
+    @Override
+    URI getDocumentUri() {
+        return URI.create("null")
+    }
 }

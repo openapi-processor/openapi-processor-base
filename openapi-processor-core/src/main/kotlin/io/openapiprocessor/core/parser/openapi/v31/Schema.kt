@@ -5,6 +5,7 @@
 
 package io.openapiprocessor.core.parser.openapi.v31
 
+import java.net.URI
 import io.openapiparser.model.v31.Schema as Schema31
 import io.openapiprocessor.core.parser.Schema as ParserSchema
 
@@ -159,4 +160,7 @@ class Schema(val schema: Schema31) : ParserSchema {
 
     override val title: String?
         get() = schema.title
+
+    override val documentUri: URI
+        get() = schema.documentUri
 }

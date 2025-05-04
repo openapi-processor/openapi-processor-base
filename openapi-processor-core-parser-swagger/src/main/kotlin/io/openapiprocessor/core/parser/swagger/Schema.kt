@@ -6,6 +6,7 @@
 package io.openapiprocessor.core.parser.swagger
 
 import io.swagger.v3.oas.models.SpecVersion
+import java.net.URI
 import io.openapiprocessor.core.parser.Schema as ParserSchema
 import io.swagger.v3.oas.models.media.ComposedSchema as SwaggerComposedSchema
 import io.swagger.v3.oas.models.media.Schema as SwaggerSchema
@@ -153,4 +154,7 @@ class Schema(private val schema: SwaggerSchema<*>): ParserSchema {
 
     override val title: String?
         get() = schema.title
+
+    override val documentUri: URI
+        get() = TODO("deriving the package name from the document location is not supported with the swagger parser.")
 }

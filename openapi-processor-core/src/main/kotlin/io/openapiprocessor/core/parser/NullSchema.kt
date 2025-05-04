@@ -5,6 +5,8 @@
 
 package io.openapiprocessor.core.parser
 
+import java.net.URI
+
 object NullSchema: Schema {
 
     override fun getType(): String? {
@@ -108,4 +110,7 @@ object NullSchema: Schema {
 
     override val title: String?
         get() = null
+
+    override val documentUri: URI
+        get() = URI.create("should/not/be/called")
 }

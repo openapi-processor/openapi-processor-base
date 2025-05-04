@@ -10,6 +10,7 @@ import io.openapiprocessor.core.model.datatypes.DataTypeConstraints
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.parser.Schema
 import io.openapiprocessor.core.support.capitalizeFirstChar
+import java.net.URI
 import io.openapiprocessor.core.parser.RefResolver as ParserRefResolver
 
 /**
@@ -443,5 +444,9 @@ open class SchemaInfo(
 
     private fun getNestedTypeName(nestedName: String): String {
         return name + nestedName.capitalizeFirstChar()
+    }
+
+    fun getDocumentUri(): URI {
+        return schema.documentUri
     }
 }

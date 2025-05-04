@@ -5,6 +5,8 @@
 
 package io.openapiprocessor.core.parser
 
+import java.net.URI
+
 /**
  * OpenAPI Schema abstraction.
  */
@@ -65,4 +67,6 @@ interface Schema {
     val extensions: Map<String, *>
 
     val title: String?
+
+    val documentUri: URI
 }
