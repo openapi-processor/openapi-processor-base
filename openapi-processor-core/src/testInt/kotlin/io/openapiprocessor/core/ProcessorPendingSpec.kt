@@ -50,15 +50,7 @@ class ProcessorPendingSpec: StringSpec({
 
 private fun sources(): Collection<TestSet> {
     return listOf(
-        testSet("annotation-mapping-class", INTERNAL, API_30, model = "model", outputs = "outputs.yaml", expected = "outputs"),
-//        testSet("annotation-mapping-class", SWAGGER, API_30, model = "model", outputs = "outputs.yaml", expected = "outputs"),
-        testSet("annotation-mapping-class", OPENAPI4J, API_30, model = "model", outputs = "outputs.yaml", expected = "outputs"),
-        testSet("server-url", INTERNAL, API_30, model = "model", outputs = "outputs.yaml", expected = "outputs"),
-//        testSet("javadoc", INTERNAL, API_30, model = "model", outputs = "outputs.yaml", expected = "outputs"),
-//        testSet("javadoc", INTERNAL, API_30, model = "record", outputs = "outputs.yaml", expected = "outputs"),
-//        testSet("map-many", INTERNAL, API_31, model = "record", outputs = "outputs.yaml", expected = "outputs"),
-//        testSet("map-many", INTERNAL, API_31, model = "default", outputs = "outputs.yaml", expected = "outputs"),
-//        testSet("map-many", INTERNAL, API_30, model = "record", outputs = "outputs.yaml", expected = "outputs"),
-//        testSet("map-many", INTERNAL, API_30, model = "default", outputs = "outputs.yaml", expected = "outputs"),
+        testSet("packages", INTERNAL, "api/$API_30", model = "model", outputs = "outputs.yaml", expected = "outputs"),
+        testSet("packages", INTERNAL, "api/$API_30", model = "record", outputs = "outputs.yaml", expected = "outputs"),
     )
 }

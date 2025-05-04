@@ -38,6 +38,7 @@ val ALL_30: List<TestParams> = listOf(
     test30_DR("object-nullable-properties"),
     test30_DR("object-read-write-properties"),
     test30_DR("object-without-properties"),
+    test30_DR("package"),
     test30_D_("params-additional"),
     test30_D_("params-additional-global"),
     test30_DR("params-complex-data-types"), // framework specific
@@ -120,6 +121,7 @@ val ALL_31: List<TestParams> = listOf(
     test31_DR("object-nullable-properties"),
     test31_DR("object-read-write-properties"),
     test31_DR("object-without-properties"),
+    test31_DR("package"),
     test31_D_("params-additional"),
     test31_D_("params-additional-global"),
     test31_DR("params-complex-data-types"), // framework specific
