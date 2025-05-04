@@ -38,7 +38,7 @@ val ALL_30: List<TestParams> = listOf(
     test30_DR("object-nullable-properties"),
     test30_DR("object-read-write-properties"),
     test30_DR("object-without-properties"),
-    test30_DR("package"),
+    test30_DR(name = "packages", openapi = "api/$API_30"),
     test30_D_("params-additional"),
     test30_D_("params-additional-global"),
     test30_DR("params-complex-data-types"), // framework specific
@@ -121,7 +121,7 @@ val ALL_31: List<TestParams> = listOf(
     test31_DR("object-nullable-properties"),
     test31_DR("object-read-write-properties"),
     test31_DR("object-without-properties"),
-    test31_DR("package"),
+    test31_DR(name = "packages", openapi = "api/$API_31"),
     test31_D_("params-additional"),
     test31_D_("params-additional-global"),
     test31_DR("params-complex-data-types"), // framework specific
@@ -175,13 +175,17 @@ val ALL_31: List<TestParams> = listOf(
 
 val EXCLUDE_OPENAPI4J = setOf(
     // the parser assumes that "type" must be string if a non-standard format is used
-    "schema-mapping"
+    "schema-mapping",
+    // can't get uri of a document
+    "packages"
 )
 
 val EXCLUDE_SWAGGER_30 = setOf(
     // the parser is strict about $ref elements and does ignore a description
     "javadoc",
-    "format-eclipse"
+    "format-eclipse",
+    // can't get uri of a document
+    "packages"
 )
 
 val EXCLUDE_SWAGGER_31 = setOf<String>()

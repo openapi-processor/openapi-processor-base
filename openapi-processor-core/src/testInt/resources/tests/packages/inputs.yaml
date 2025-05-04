@@ -1,12 +1,6 @@
-prefix: api
 items:
   - inputs/api/openapi30.yaml
   - inputs/api/openapi31.yaml
   - inputs/api/mapping.yaml
   - inputs/main/kotlin/io/openapiprocessor/foo/foo.yaml
   - inputs/main/kotlin/io/openapiprocessor/foo/resources.yaml
-
-# src/api
-# src/main
-# src/main/java
-# src/main/resources

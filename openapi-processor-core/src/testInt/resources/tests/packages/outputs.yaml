@@ -1,4 +1,3 @@
-prefix: generated
 items:
   - outputs/io/openapiprocessor/foo/Api.java
-  - outputs/io/openapiprocessor/foo/model/<model>/Foo.java
+  - outputs/io/openapiprocessor/foo/<model>/Foo.java
