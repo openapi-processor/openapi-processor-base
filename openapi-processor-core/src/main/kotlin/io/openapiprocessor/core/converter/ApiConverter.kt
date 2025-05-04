@@ -22,6 +22,7 @@ import io.openapiprocessor.core.parser.RequestBody
 import io.openapiprocessor.core.parser.Response
 import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
 import io.openapiprocessor.core.support.capitalizeFirstChar
+import io.openapiprocessor.core.support.toPackageName
 import io.openapiprocessor.core.writer.Identifier
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -124,14 +125,17 @@ class  ApiConverter(
             return itf
         }
 
-        itf = Interface(
-            targetInterfaceName,
-            listOf(options.packageName, "api").joinToString("."),
-            pathPrefix,
-            identifier)
-
+        itf = Interface(targetInterfaceName, getPackageName(operation), pathPrefix, identifier)
         interfaces[targetInterfaceName] = itf
         return itf
+    }
+
+    private fun getPackageName(operation: Operation): String {
+        if (options.packageNameFromPath) {
+            return toPackageName(operation.getDocumentUri(), options.packageName)
+        } else {
+            return listOf(options.packageName, "api").joinToString(".")
+        }
     }
 
     private fun createEndpoint(path: String, operation: Operation, dataTypes: DataTypes, resolver: RefResolver): Endpoint? {

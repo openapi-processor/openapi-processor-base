@@ -257,6 +257,7 @@ class DefaultWriterFactorySpec : StringSpec({
     "lazy initialize additional package folders" {
         options.targetDir = listOf(target.toString()).joinToString(File.separator)
         options.targetDirOptions.layout = TargetDirLayout.CLASSIC
+        options.packageNameFromPath = true
 
         val writerFactory = DefaultWriterFactory(options)
         writerFactory.init()

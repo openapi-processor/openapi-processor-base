@@ -29,7 +29,7 @@ open class DefaultWriterFactory(val options: ApiOptions): WriterFactory, InitWri
     private lateinit var resourcesPath: Path
 
     override fun createWriter(packageName: String, className: String): Writer {
-        if (packagePaths[packageName] == null) {
+        if (options.packageNameFromPath && packagePaths[packageName] == null) {
             val pkg = packageName.substring(options.packageName.length + 1)
             val (name, path) = initTargetPackage(pkg)
             packagePaths[name] = path

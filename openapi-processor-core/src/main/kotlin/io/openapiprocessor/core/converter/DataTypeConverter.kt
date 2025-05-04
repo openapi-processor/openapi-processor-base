@@ -5,13 +5,16 @@
 
 package io.openapiprocessor.core.converter
 
-import io.openapiprocessor.core.converter.mapping.*
+import io.openapiprocessor.core.converter.mapping.TargetType
+import io.openapiprocessor.core.converter.mapping.TypeMapping
+import io.openapiprocessor.core.converter.mapping.UnknownDataTypeException
 import io.openapiprocessor.core.converter.wrapper.NullDataTypeWrapper
 import io.openapiprocessor.core.model.DataTypeCollector
 import io.openapiprocessor.core.model.DataTypes
 import io.openapiprocessor.core.model.Documentation
 import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.support.capitalizeFirstChar
+import io.openapiprocessor.core.support.toPackageName
 import io.openapiprocessor.core.writer.Identifier
 import java.util.*
 
@@ -273,12 +276,20 @@ class DataTypeConverter(
 
         return ObjectDataType(
             DataTypeName(schemaInfo.getName(), getTypeNameWithSuffix(schemaInfo.getName())),
-            listOf(options.packageName, "model").joinToString("."),
+            getPackageName(schemaInfo),
             properties = properties,
             constraints = constraints,
             deprecated = schemaInfo.getDeprecated(),
             documentation = Documentation(description = schemaInfo.description)
         )
+    }
+
+    private fun getPackageName(schemaInfo: SchemaInfo): String {
+        if (options.packageNameFromPath) {
+            return toPackageName(schemaInfo.getDocumentUri(), options.packageName)
+        } else {
+            return listOf(options.packageName, "model").joinToString(".")
+        }
     }
 
     private fun createSimpleDataType(schemaInfo: SchemaInfo, dataTypes: DataTypes): DataType {
