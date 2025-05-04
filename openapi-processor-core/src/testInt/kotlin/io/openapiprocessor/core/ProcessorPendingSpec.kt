@@ -11,7 +11,7 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.openapiprocessor.core.parser.ParserType.INTERNAL
-import io.openapiprocessor.core.parser.ParserType.OPENAPI4J
+import io.openapiprocessor.core.parser.ParserType.SWAGGER
 import io.openapiprocessor.test.*
 
 /**
@@ -28,7 +28,7 @@ class ProcessorPendingSpec: StringSpec({
             val test = Test(testSet, testFiles)
 
             TestSetRunner(test, testSet)
-                .runOnNativeFileSystem()
+                .run()
                 .shouldBeTrue()
         }
     }
@@ -42,7 +42,7 @@ class ProcessorPendingSpec: StringSpec({
             val test = Test(testSet, testFiles)
 
             TestSetRunner(test, testSet)
-                .runOnCustomFileSystem()
+                .run()
                 .shouldBeTrue()
         }
     }
