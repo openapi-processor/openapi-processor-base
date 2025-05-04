@@ -64,34 +64,25 @@ class TestSetRunner {
     }
 
     private Map<String, Path> getGeneratedFiles(Map<String, Path> expectedFiles) {
+        def unexpectedFiles = [
+            "${test.packagePath}/support/Generated.java".toString(),
+            "${test.packagePath}/validation/Values.java".toString(),
+            "${test.packagePath}/validation/ValueValidator.java".toString()
+        ] as Set<String>
+
         def generatedFilesAll = test.generatedSourceFiles
         generatedFilesAll.addAll(test.generatedResourceFiles)
 
-        def generatedFiles = filterUnexpectedFiles(
-                expectedFiles,
-                generatedFilesAll, [
-                    "${test.packagePath}/support/Generated.java".toString(),
-                    "${test.packagePath}/validation/Values.java".toString(),
-                    "${test.packagePath}/validation/ValueValidator.java".toString()
-                ] as Set<String>)
-
-        return generatedFiles
-    }
-
-    private static Map<String, Path> filterUnexpectedFiles(
-            Map<String, Path> expectedFiles,
-            Set<String> generatedFiles,
-            Set<String> unexpectedFiles
-    ) {
-        def generated = new TreeMap<String, Path>()
-        generatedFiles.each {
-            if (!expectedFiles.containsKey(it) && unexpectedFiles.find { u -> it.endsWith(u) } != null) {
+        def generatedFiles = new TreeMap<String, Path>()
+        generatedFilesAll.each {
+            if (!expectedFiles.containsKey(it) && (unexpectedFiles.find { u -> it.endsWith(u) } != null)) {
                 return
             }
 
             def value = expectedFiles.get(it)
-            generated.put(it, value)
+            generatedFiles.put(it, value)
         }
-        return generated
+
+        return generatedFiles
     }
 }
