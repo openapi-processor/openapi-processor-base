@@ -1,5 +1,5 @@
 items:
-  - compile/oap/Bar.java
   - compile/oap/Annotation.java
+  - compile/oap/Bar.java
   - compile/oap/ClassAnnotation.java
   - compile/oap/Param.java

@@ -1,0 +1,7 @@
+items:
+  - compile/jakarta/NotNull.java
+  - compile/jakarta/Constraint.java
+  - compile/jakarta/Payload.java
+  - compile/jakarta/ConstraintValidator.java
+  - compile/jakarta/ConstraintValidatorContext.java
+

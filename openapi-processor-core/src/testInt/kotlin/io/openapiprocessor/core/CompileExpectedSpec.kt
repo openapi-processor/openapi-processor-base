@@ -44,7 +44,6 @@ class CompileExpectedSpec: StringSpec({
         }
     }
 
-
     for (testSet in sources()) {
         "compile - $testSet".config(enabled = true) {
             val itemsReader = TestItemsReader(ResourceReader(CompileExpectedSpec::class.java))
@@ -53,38 +52,11 @@ class CompileExpectedSpec: StringSpec({
             val sourcePath = "/tests/$source"
 
             val compilePaths = mutableListOf<Path>()
-            if (source != "generated") {
-                compilePaths.add(Path.of("src/testInt/resources/compile/Generated.java"))
-            }
+
+            // stuff used by all tests
+            compilePaths.add(Path.of("src/testInt/resources/compile/Generated.java"))
             compilePaths.add(Path.of("src/testInt/resources/compile/Mapping.java"))
             compilePaths.add(Path.of("src/testInt/resources/compile/Parameter.java"))
-            compilePaths.add(Path.of("src/testInt/resources/compile/Prefix.java"))
-            compilePaths.add(Path.of("src/testInt/resources/compile/jakarta/Constraint.java"))
-            compilePaths.add(Path.of("src/testInt/resources/compile/jakarta/ConstraintValidator.java"))
-            compilePaths.add(Path.of("src/testInt/resources/compile/jakarta/ConstraintValidatorContext.java"))
-            compilePaths.add(Path.of("src/testInt/resources/compile/jakarta/NotNull.java"))
-            compilePaths.add(Path.of("src/testInt/resources/compile/jakarta/Payload.java"))
-            compilePaths.add(Path.of("src/testInt/resources/compile/jakarta/Size.java"))
-            compilePaths.add(Path.of("src/testInt/resources/compile/jakarta/DecimalMin.java"))
-            compilePaths.add(Path.of("src/testInt/resources/compile/jakarta/Valid.java"))
-            compilePaths.add(Path.of("src/testInt/resources/compile/javax/Valid.java"))
-            compilePaths.add(Path.of("src/testInt/resources/compile/oap/FooA.java"))
-            compilePaths.add(Path.of("src/testInt/resources/compile/oap/FooB.java"))
-            compilePaths.add(Path.of("src/testInt/resources/compile/oap/FooC.java"))
-            compilePaths.add(Path.of("src/testInt/resources/compile/oap/Wrap.java"))
-            compilePaths.add(Path.of("src/testInt/resources/compile/oap/Bar1.java"))
-            compilePaths.add(Path.of("src/testInt/resources/compile/oap/Bar2.java"))
-            compilePaths.add(Path.of("src/testInt/resources/compile/oap/Something.java"))
-            compilePaths.add(Path.of("src/testInt/resources/compile/oap/SomethingElse.java"))
-            compilePaths.add(Path.of("src/testInt/resources/compile/oap/Annotation.java"))
-            compilePaths.add(Path.of("src/testInt/resources/compile/oap/AnnotationA.java"))
-            compilePaths.add(Path.of("src/testInt/resources/compile/oap/AnnotationB.java"))
-            compilePaths.add(Path.of("src/testInt/resources/compile/oap/AnnotationC.java"))
-            compilePaths.add(Path.of("src/testInt/resources/compile/oap/ParamAnnotation.java"))
-            compilePaths.add(Path.of("src/testInt/resources/compile/oap/Generated.java"))
-            compilePaths.add(Path.of("src/testInt/resources/compile/reactor/Mono.java"))
-            compilePaths.add(Path.of("src/testInt/resources/compile/reactor/Flux.java"))
-            compilePaths.add(Path.of("src/testInt/resources/compile/spring/ResponseEntity.java"))
 
             var expected = itemsReader.read(sourcePath, "outputs.yaml").items
             expected = expected.filter { ! it.endsWith("properties") }
@@ -95,8 +67,13 @@ class CompileExpectedSpec: StringSpec({
 
             if (itemsReader.exists(sourcePath, "compile.yaml")) {
                 val additionalFileNames = itemsReader.read(sourcePath, "compile.yaml").items
+
                 additionalFileNames.forEach {
-                    compilePaths.add(Path.of("src/testInt/resources/$it"))
+                    if (it.startsWith("not ")) {
+                        compilePaths.remove(Path.of("src/testInt/resources/${it.substring(4)}"))
+                    } else {
+                        compilePaths.add(Path.of("src/testInt/resources/$it"))
+                    }
                 }
             }
 

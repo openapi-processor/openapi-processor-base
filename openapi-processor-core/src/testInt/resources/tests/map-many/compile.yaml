@@ -1,0 +1,11 @@
+items:
+  - compile/oap/AnnotationA.java
+  - compile/oap/AnnotationB.java
+  - compile/oap/AnnotationC.java
+  - compile/oap/Bar2.java
+  - compile/oap/ParamAnnotation.java
+  - compile/oap/Something.java
+  - compile/oap/SomethingElse.java
+  - compile/oap/Wrap.java
+  - compile/jakarta/Valid.java
+  - compile/jakarta/DecimalMin.java
