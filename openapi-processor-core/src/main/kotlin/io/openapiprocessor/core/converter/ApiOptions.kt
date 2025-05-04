@@ -34,6 +34,7 @@ class ApiOptions: MappingSettings {
      * - models => "${packageName}.model"
      */
     var packageName = "io.openapiprocessor.generated"
+    var packageNameFromPath = false
 
     var packageNameApi : String = "api"
     var packageNameModel: String = "model"

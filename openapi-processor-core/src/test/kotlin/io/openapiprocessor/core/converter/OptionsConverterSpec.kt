@@ -28,6 +28,7 @@ class OptionsConverterSpec: StringSpec({
         options.targetDirOptions.layout shouldBe TargetDirLayout.CLASSIC
 
         options.packageName shouldBe "io.openapiprocessor.generated"
+        options.packageNameFromPath shouldBe false
         options.beanValidation shouldBe false
         options.javadoc shouldBe false
         options.modelType shouldBe "default"
@@ -109,6 +110,7 @@ class OptionsConverterSpec: StringSpec({
                   target-dir:
                     layout: standard
                   package-name: generated
+                  package-name-from-path: true
                   model-name-suffix: Suffix
                   model-type: record
                   model-accessors: false
@@ -130,6 +132,7 @@ class OptionsConverterSpec: StringSpec({
         options.targetDirOptions.clear.shouldBeFalse()
         options.targetDirOptions.layout.isStandard().shouldBeTrue()
         options.packageName shouldBe "generated"
+        options.packageNameFromPath shouldBe true
         options.modelNameSuffix shouldBe "Suffix"
         options.modelType shouldBe "record"
         options.modelAccessors shouldBe false
