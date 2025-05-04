@@ -5,9 +5,12 @@
 
 package io.openapiprocessor.test
 
+import groovy.util.logging.Slf4j
+
 import java.nio.file.Path
 import java.nio.file.Paths
 
+@Slf4j
 class TestFilesNative implements TestFiles {
     private File target
     private ResourceReader resource
@@ -36,10 +39,12 @@ class TestFilesNative implements TestFiles {
     Mapping getMapping(TestSet testSet) {
         def api = URI.create("/tests/${testSet.name}/inputs/${testSet.openapi}")
         def mapping = api.resolve("mapping.yaml").toString()
+        def url = resource.getResourceUrl(mapping)
+        if (url == null) {
+            log.error("did not find resource url of {}", mapping)
+        }
 
-        return Mapping.createMapping(
-                Paths.get(resource.getResourceUrl(mapping).toURI()),
-                testSet.defaultOptions)
+        return Mapping.createMapping(Paths.get(url.toURI()), testSet.defaultOptions)
     }
 
     @Override
