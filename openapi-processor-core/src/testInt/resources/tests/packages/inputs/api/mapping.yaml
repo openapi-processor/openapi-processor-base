@@ -1,0 +1,6 @@
+openapi-processor-mapping: v12
+
+options:
+  package-name: io.openapiprocessor
+  package-name-from-path: true
+  format-code: false

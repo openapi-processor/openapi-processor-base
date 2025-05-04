@@ -1,0 +1,9 @@
+openapi: 3.1.0
+info:
+  title: test template
+  version: 1.0.0
+
+paths:
+
+  /foo:
+    $ref: '../main/kotlin/io/openapiprocessor/foo/foo.yaml'
