@@ -87,7 +87,7 @@ class CompileExpectedSpec: StringSpec({
 
             var expected = itemsReader.read(sourcePath, "outputs.yaml").items
             expected = expected.filter { ! it.endsWith("properties") }
-            val expectedFileNames = expected.map { it.replaceFirst("<model>", "model/${testSet.modelType}") }
+            val expectedFileNames = expected.map { it.replaceFirst("<model>", "_${testSet.modelType}_") }
             expectedFileNames.forEach {
                 compilePaths.add(Path.of("src/testInt/resources${sourcePath}/$it"))
             }

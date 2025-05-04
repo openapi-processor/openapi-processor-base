@@ -26,7 +26,7 @@ class ProcessorEndToEndJimfsSpec: StringSpec({
             val test = Test(testSet, testFiles)
 
             TestSetRunner(test, testSet)
-                .runOnCustomFileSystem()
+                .run()
                 .shouldBeTrue()
         }
     }

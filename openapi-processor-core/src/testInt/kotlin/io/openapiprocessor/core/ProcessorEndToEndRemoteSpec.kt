@@ -90,15 +90,15 @@ class ProcessorEndToEndRemoteSpec: StringSpec({
             val generatedPath = Path.of (folder.canonicalPath).resolve (pkg)
 
             val expectedFiles = getExpectedFiles(sourcePath, "outputs")
-            val expectedFileNames = resolveModelFiles(expectedFiles, "model")
             val generatedFiles = Collector.collectPaths (generatedPath)
 
+            val expectedFileNames = expectedFiles.map { it.replaceFirst("<model>/", "") }
             generatedFiles.shouldContainAll(expectedFileNames)
 
             var success = true
             expectedFiles.forEach {
-                val expected = getExpectedFile(resolveModelFile("$expectedPath/$it", "model/default"))
-                val generated = generatedPath.resolve (resolveModelFile(it, "model"))
+                val expected = getExpectedFile(resolveModelFile("$expectedPath/$it", "_default_"))
+                val generated = generatedPath.resolve (resolveModelFile(it, ""))
 
                 val hasDiff = !Diff.printUnifiedDiff (expected, generated)
                 success = success && hasDiff
