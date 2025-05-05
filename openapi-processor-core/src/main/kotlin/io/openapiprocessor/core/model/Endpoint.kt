@@ -52,9 +52,10 @@ class Endpoint(
      * converted to multiple {@link MultipartParameter}s in the internal model. The request body
      * information is no longer available.
      *
+     * used by openapi-processor-spring, ...
+     *
      * @return the set of content types
      */
-    @Deprecated("only used in test")
     fun getConsumesContentTypes(): Set<String> {
         val contentTypes = requestBodies
             .map { it.contentType }
