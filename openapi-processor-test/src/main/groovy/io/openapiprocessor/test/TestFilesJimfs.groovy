@@ -62,6 +62,18 @@ class TestFilesJimfs implements TestFiles {
     }
 
     @Override
+    TestItems getCompileFiles(TestSet testSet) {
+        def itemsReader = new TestItemsReader(resource)
+        def sourcePath = "/tests/${testSet.name}"
+
+        if (!itemsReader.exists(sourcePath, "compile.yaml")) {
+            return null
+        }
+
+        return new TestItemsReader(resource).read(sourcePath, "compile.yaml")
+    }
+
+    @Override
     Path getSourcePath(TestSet testSet, String file) {
         return Paths.get(source.resolve("${testSet.expected}/${file}").toUri())
     }

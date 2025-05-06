@@ -5,6 +5,9 @@
 
 package io.openapiprocessor.test
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class ResourceReader {
     private Class resourceBase
 

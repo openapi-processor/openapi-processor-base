@@ -14,6 +14,7 @@ interface TestFiles {
 
     Mapping getMapping(TestSet testSet)
     TestItems getOutputFiles(TestSet testSet)
+    TestItems getCompileFiles(TestSet testSet)
 
     Path getSourcePath(TestSet testSet, String file)
     Path getTargetPath(String file)

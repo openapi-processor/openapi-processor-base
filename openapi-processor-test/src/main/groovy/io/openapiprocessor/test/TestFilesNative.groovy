@@ -46,7 +46,19 @@ class TestFilesNative implements TestFiles {
 
     @Override
     TestItems getOutputFiles(TestSet testSet) {
-        return new TestItemsReader(resource).read( "/tests/${testSet.name}", testSet.outputs)
+        return new TestItemsReader(resource).read("/tests/${testSet.name}", testSet.outputs)
+    }
+
+    @Override
+    TestItems getCompileFiles(TestSet testSet) {
+        def itemsReader = new TestItemsReader(resource)
+        def sourcePath = "/tests/${testSet.name}"
+
+        if (!itemsReader.exists(sourcePath, "compile.yaml")) {
+            return null
+        }
+
+        return new TestItemsReader(resource).read(sourcePath, "compile.yaml")
     }
 
     @Override
