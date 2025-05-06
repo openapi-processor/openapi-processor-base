@@ -6,92 +6,24 @@
 package io.openapiprocessor.core
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.openapiprocessor.core.parser.ParserType
 import io.openapiprocessor.test.*
-import java.io.ByteArrayOutputStream
-import java.io.OutputStream
-import java.net.URI
-import java.nio.file.Path
-import java.util.*
-import javax.tools.*
 
 
 class CompileExpectedSpec: StringSpec({
 
-    class MemoryFile(name: String, kind: JavaFileObject.Kind)
-        : SimpleJavaFileObject(URI("string:///${name}"), kind) {
-
-        override fun openOutputStream(): OutputStream {
-            return ByteArrayOutputStream()
-        }
-    }
-
-    class MemoryFileManager(fileManager: StandardJavaFileManager)
-        : ForwardingJavaFileManager<StandardJavaFileManager>(fileManager) {
-
-        override fun getJavaFileForOutput(
-            location: JavaFileManager.Location,
-            className: String,
-            kind: JavaFileObject.Kind,
-            sibling: FileObject
-        ): JavaFileObject {
-            return MemoryFile(className, kind)
-        }
-
-        fun getJavaFileObjectsFromPaths(paths: Iterable<Path>): Iterable<JavaFileObject> {
-            return fileManager.getJavaFileObjectsFromPaths(paths)
-        }
-    }
-
     for (testSet in sources()) {
         "compile - $testSet".config(enabled = true) {
-            val itemsReader = TestItemsReader(ResourceReader(CompileExpectedSpec::class.java))
+            val folder = tempdir()
+            val reader = ResourceReader(CompileExpectedSpec::class.java)
 
-            val source = testSet.name
-            val sourcePath = "/tests/$source"
+            val testFiles = TestFilesNative(folder, reader)
 
-            val compilePaths = mutableListOf<Path>()
-
-            // stuff used by all tests
-            compilePaths.add(Path.of("src/testInt/resources/compile/Generated.java"))
-            compilePaths.add(Path.of("src/testInt/resources/compile/Mapping.java"))
-            compilePaths.add(Path.of("src/testInt/resources/compile/Parameter.java"))
-
-            var expected = itemsReader.read(sourcePath, "outputs.yaml").items
-            expected = expected.filter { ! it.endsWith("properties") }
-            val expectedFileNames = expected.map { it.replaceFirst("<model>", "_${testSet.modelType}_") }
-            expectedFileNames.forEach {
-                compilePaths.add(Path.of("src/testInt/resources${sourcePath}/$it"))
-            }
-
-            if (itemsReader.exists(sourcePath, "compile.yaml")) {
-                val additionalFileNames = itemsReader.read(sourcePath, "compile.yaml").items
-
-                additionalFileNames.forEach {
-                    if (it.startsWith("not ")) {
-                        compilePaths.remove(Path.of("src/testInt/resources/${it.substring(4)}"))
-                    } else {
-                        compilePaths.add(Path.of("src/testInt/resources/$it"))
-                    }
-                }
-            }
-
-            val diagnostics = DiagnosticCollector<JavaFileObject>()
-            val compiler = ToolProvider.getSystemJavaCompiler()
-            val manager = MemoryFileManager(compiler.getStandardFileManager(diagnostics, null, null))
-
-            val options = listOf<String>()
-            val compilationUnit = manager.getJavaFileObjectsFromPaths(compilePaths)
-            val task = compiler.getTask(null, manager, diagnostics, options, null, compilationUnit)
-            val success = task.call()
-            if(!success) {
-                for (diagnostic in diagnostics.diagnostics) {
-                    println("CompileSpec: compile error at ${diagnostic.source.name}:${diagnostic.lineNumber}, ${diagnostic.getMessage(Locale.ENGLISH)}")
-                }
-            }
-
-            success.shouldBeTrue()
+            TestSetCompiler(testSet, testFiles)
+                .run()
+                .shouldBeTrue()
         }
     }
 })
