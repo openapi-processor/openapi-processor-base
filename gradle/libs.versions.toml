@@ -31,7 +31,7 @@ swagger = "io.swagger.parser.v3:swagger-parser:2.1.26"
 antlr = "org.antlr:antlr4:4.13.2"
 
 format-java-eclipse = "org.eclipse.jdt:org.eclipse.jdt.core:3.41.0"
-format-java-google = "com.google.googlejavaformat:google-java-format:1.24.0"
+format-java-google = "com.google.googlejavaformat:google-java-format:1.27.0"
 
 commons-text = "org.apache.commons:commons-text:1.13.1"
 commonmark = "com.atlassian.commonmark:commonmark:0.17.0"
