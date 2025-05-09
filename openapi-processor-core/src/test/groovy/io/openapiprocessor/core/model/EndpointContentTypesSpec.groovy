@@ -67,7 +67,7 @@ class EndpointContentTypesSpec extends Specification {
         }
 
         expect:
-        endpoint.getProducesContentTypes ('204') == []
+        endpoint.getProducesContentTypes ('204') == [] as Set
     }
 
     void "provides producing content types" () {

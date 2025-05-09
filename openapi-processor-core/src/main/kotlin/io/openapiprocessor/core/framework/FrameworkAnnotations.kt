@@ -5,9 +5,10 @@
 
 package io.openapiprocessor.core.framework
 
+import io.openapiprocessor.core.model.Annotation
+import io.openapiprocessor.core.model.EndpointResponseStatus
 import io.openapiprocessor.core.model.parameters.Parameter
 import io.openapiprocessor.core.parser.HttpMethod
-import io.openapiprocessor.core.model.Annotation
 
 /**
  * provides annotation details of the framework.
@@ -29,4 +30,9 @@ interface FrameworkAnnotations {
      * @return annotation details
      */
     fun getAnnotation(parameter: Parameter): Annotation
+
+    /**
+     * provides the details of a response status annotation
+     */
+    fun getAnnotation(status: EndpointResponseStatus): Annotation
 }

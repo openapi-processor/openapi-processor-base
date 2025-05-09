@@ -31,7 +31,7 @@ class EndpointMethodResponseSpec extends Specification {
 
         then:
         result.size () == 1
-        result[0].main.contentType == 'application/json'
+        result[0].success.contentType == 'application/json'
         result[0].errors as List == []
     }
 
@@ -59,10 +59,10 @@ class EndpointMethodResponseSpec extends Specification {
 
         then:
         result.size () == 2
-        result[0].main.contentType == 'application/json'
-        result[0].errors.collect {it.contentType} == ['text/plain']
-        result[1].main.contentType == 'application/xml'
-        result[1].errors.collect {it.contentType} == ['text/plain']
+        result[0].success.contentType == 'application/json'
+        result[0].errors.collect {it.response.contentType} == ['text/plain']
+        result[1].success.contentType == 'application/xml'
+        result[1].errors.collect {it.response.contentType} == ['text/plain']
     }
 
     void "provides distinct response content type groups" () {

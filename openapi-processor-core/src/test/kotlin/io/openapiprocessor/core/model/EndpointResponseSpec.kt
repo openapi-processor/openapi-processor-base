@@ -13,9 +13,16 @@ import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
 class EndpointResponseSpec: StringSpec({
 
     "anyOf/oneOf always uses multi response" {
+        val rw = ResponseWithStatus(
+            "200",
+            Response(
+                "application/json",
+                AnyOneOfObjectDataType("Foo", "pkg", "anyOf")))
+
         val er = EndpointResponse(
-            Response("", AnyOneOfObjectDataType("Foo", "pkg", "anyOf")),
-            emptySet()
+            rw,
+            emptySet(),
+            listOf(rw)
         )
 
         er.getResponseType(ResultStyle.ALL) shouldBe "Object"
@@ -25,9 +32,18 @@ class EndpointResponseSpec: StringSpec({
     }
 
     "result style all with errors uses multi response" {
+        val rw = ResponseWithStatus(
+            "200",
+            Response(
+                "application/json",
+                StringDataType()))
+
         val er = EndpointResponse(
-            Response("", StringDataType()),
-            setOf(Response("text/plain", StringDataType()))
+            rw,
+            setOf(ResponseWithStatus(
+                "500", Response("text/plain", StringDataType())
+            )),
+            listOf(rw)
         )
 
         er.getResponseType(ResultStyle.ALL) shouldBe "Object"
@@ -35,43 +51,101 @@ class EndpointResponseSpec: StringSpec({
     }
 
     "result style all without errors uses single response" {
-        val response = Response("", ObjectDataType(DataTypeName("Foo"),
-            "pkg",
-            linkedMapOf(
-                "bar" to PropertyDataType(
-                    readOnly = false,
-                    writeOnly = false,
-                    dataType = StringDataType(),
-                    documentation = Documentation()))))
+        val rw = ResponseWithStatus(
+            "200",
+            Response(
+                "", ObjectDataType(
+                    DataTypeName("Foo"),
+                    "pkg",
+                    linkedMapOf(
+                        "bar" to PropertyDataType(
+                            readOnly = false,
+                            writeOnly = false,
+                            dataType = StringDataType(),
+                            documentation = Documentation())))))
 
         val er = EndpointResponse(
-            response,
+            rw,
             emptySet(),
-            listOf(response)
-        )
+            listOf(rw))
 
         er.getResponseType(ResultStyle.ALL) shouldBe "Foo"
         er.getResponseImports(ResultStyle.ALL) shouldBe setOf("pkg.Foo")
     }
 
-    "result style single uses single response" {
-        val response = Response("", ObjectDataType(DataTypeName("Foo"),
-            "pkg",
-            linkedMapOf(
-                "bar" to PropertyDataType(
-                    readOnly = false,
-                    writeOnly = false,
-                    dataType = StringDataType(),
-                    documentation = Documentation()))))
+    "result style success uses single response" {
+        val rw = ResponseWithStatus(
+            "200",
+            Response(
+                "", ObjectDataType(
+                    DataTypeName("Foo"),
+                    "pkg",
+                    linkedMapOf(
+                        "bar" to PropertyDataType(
+                            readOnly = false,
+                            writeOnly = false,
+                            dataType = StringDataType(),
+                            documentation = Documentation())))))
 
         val er = EndpointResponse(
-            response,
-            setOf(Response("text/plain", StringDataType())),
-            listOf(response)
+            rw,
+            setOf(
+                ResponseWithStatus(
+                    "404",
+                    Response("text/plain", StringDataType())
+            )),
+            listOf(rw)
         )
 
         er.getResponseType(ResultStyle.SUCCESS) shouldBe "Foo"
         er.getResponseImports(ResultStyle.SUCCESS) shouldBe setOf("pkg.Foo")
     }
 
+    "result style SUCCESS has single response" {
+        val rw = ResponseWithStatus(
+            "201",
+            Response("application/json", StringDataType()))
+
+        val er = EndpointResponse(
+            rw,
+            setOf(ResponseWithStatus(
+                "500", Response("text/plain", StringDataType())
+            )),
+            listOf(rw)
+        )
+
+        er.hasSingleResponse(ResultStyle.SUCCESS) shouldBe true
+    }
+
+    "result style SUCCESS has single response 200" {
+        val rw = ResponseWithStatus(
+            "200",
+            Response("application/json", StringDataType()))
+
+        val er = EndpointResponse(
+            rw,
+            setOf(ResponseWithStatus(
+                "500", Response("text/plain", StringDataType())
+            )),
+            listOf(rw)
+        )
+
+        er.hasSingleResponse(ResultStyle.SUCCESS) shouldBe false
+    }
+
+    "result style ALL has no single response" {
+        val rw = ResponseWithStatus(
+            "201",
+            Response("application/json", StringDataType()))
+
+        val er = EndpointResponse(
+            rw,
+            setOf(ResponseWithStatus(
+                "500", Response("text/plain", StringDataType())
+            )),
+            listOf(rw)
+        )
+
+        er.hasSingleResponse(ResultStyle.ALL) shouldBe false
+    }
 })

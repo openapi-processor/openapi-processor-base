@@ -1,5 +1,5 @@
 /*
- * Copyright © 2019 https://github.com/openapi-processor/openapi-processor-core
+ * Copyright 2019 https://github.com/openapi-processor/openapi-processor-core
  * PDX-License-Identifier: Apache-2.0
  */
 
@@ -9,6 +9,7 @@ package io.openapiprocessor.core.model
 import io.openapiprocessor.core.model.parameters.MultipartParameter
 import io.openapiprocessor.core.model.parameters.Parameter
 import io.openapiprocessor.core.parser.HttpMethod
+import kotlin.collections.plusAssign
 
 /**
  * Endpoint properties.
@@ -38,11 +39,12 @@ class Endpoint(
      * @return the list of responses
      */
     @Deprecated("only used in class")
-    private fun getResponses (status: String): List<Response> {
+    private fun getResponses (status: String): List<ResponseWithStatus> {
         if (!responses.containsKey (status)) {
             return emptyList()
         }
         return responses.getOrDefault(status, emptyList())
+            .map { ResponseWithStatus(status, it) }
     }
 
     /**
@@ -72,30 +74,16 @@ class Endpoint(
         return contentTypes
     }
 
-    // not needed.... => EndpointResponse.getContentTypes()
     @Deprecated("only used in test")
-    fun getProducesContentTypes (status: String): List<String> {
-        val responses = getResponses (status)
-        val errors = getErrorResponses ()
-
-        val contentTypes = mutableSetOf<String>()
-        responses.forEach {
-            if (it.empty) {
-                return@forEach
-            }
-
-            contentTypes.add (it.contentType)
-        }
-
-        errors.forEach {
-            contentTypes.add (it.contentType)
-        }
-
-        return contentTypes.toList ()
+    fun getProducesContentTypes (status: String): Set<String> {
+        return endpointResponses
+            .map { it.contentTypes }
+            .flatten()
+            .toSet()
     }
 
     /**
-     * test support => extension function ?
+     * test support => extension function?
      *
      * @param status the response status
      * @return first response of status
@@ -124,7 +112,7 @@ class Endpoint(
     /**
      * checks if the endpoint has multiple success responses with different content types.
      *
-     * @return true if condition is met, otherwise false.
+     * @return true if the condition is met, otherwise false.
      */
     fun hasMultipleEndpointResponses(): Boolean {
         return endpointResponses.size > 1
@@ -134,7 +122,7 @@ class Endpoint(
      * creates groups from the responses.
      *
      * if the endpoint does provide its result in multiple content types it will create one entry
-     * for each response kind (main response). if error responses are defined they are added as
+     * for each response kind (main response). if error responses are defined, they are added as
      * error responses.
      *
      * this is used to create one controller method for each (successful) response definition.
@@ -145,55 +133,64 @@ class Endpoint(
         val successes = getSuccessResponses()
         val errors = getErrorResponses()
 
-        return successes.map { (key, responses) ->
-            EndpointResponse(responses.first(), errors, responses)
+        return successes.map { (_, statusResponses) ->
+            EndpointResponse(statusResponses.first(), errors, statusResponses)
         }
     }
 
-    private fun getSuccessResponses(): MutableMap<ContentType, MutableList<Response>> {
-        val result = mutableMapOf<ContentType, MutableList<Response>>()
+    private fun getSuccessResponses(): MutableMap<ContentType, MutableList<ResponseWithStatus>> {
+        val result = mutableMapOf<ContentType, MutableList<ResponseWithStatus>>()
 
-        // prefer responses with content type.
-        filterSuccessResponses()
-            .filter { hasContentType(it) }
-            .forEach {
-                var contentValues = result[it.contentType]
-                if (contentValues == null) {
-                    contentValues = mutableListOf()
-                    result[it.contentType] = contentValues
-                }
-                contentValues += it
+        responses
+            .filterKeys { isSuccessCode(it) }
+            .forEach { entry ->
+                val status = entry.key
+
+                entry.value
+                    .filter { hasContentType(it) }
+                    .forEach { response ->
+                        var contentValues = result[response.contentType]
+                        if (contentValues == null) {
+                            contentValues = mutableListOf()
+                            result[response.contentType] = contentValues
+                        }
+                        contentValues += ResponseWithStatus(status, response)
+                    }
             }
 
-        // check for responses without content type (e.g. 204) to generate a void method.
+        // check for responses without a content type (e.g., 204) to generate a void method.
         if (result.isEmpty()) {
-            filterSuccessResponses()
-                .forEach {
-                    var contentValues = result[it.contentType]
-                    if (contentValues == null) {
-                        contentValues = mutableListOf()
-                        result[it.contentType] = contentValues
-                    }
-                    contentValues += it
+            responses
+                .filterKeys { isSuccessCode(it) }
+                .forEach { entry ->
+                    val status = entry.key
+
+                    entry.value
+                        .forEach { response ->
+                            var contentValues = result[response.contentType]
+                            if (contentValues == null) {
+                                contentValues = mutableListOf()
+                                result[response.contentType] = contentValues
+                            }
+                            contentValues += ResponseWithStatus(status, response)
+                        }
                 }
         }
 
         return result
     }
 
-    private fun getErrorResponses(): Set<Response> {
+    private fun getErrorResponses(): Set<ResponseWithStatus> {
         return responses
             .filterKeys { !isSuccessCode(it) }
-            .values
-            .map { it.first() }
-            .filter { !it.empty }
+            .map { entry ->
+                val status = entry.key
+                val response = entry.value.first()
+                ResponseWithStatus(status, response)
+            }
+            .filter { !it.response.empty }
             .toSet()
     }
-
-    private fun filterSuccessResponses() = responses
-        .filterKeys { isSuccessCode(it) }
-        .values
-        .flatten()
 
     private fun isSuccessCode(code: String) = code.startsWith("2")
 
