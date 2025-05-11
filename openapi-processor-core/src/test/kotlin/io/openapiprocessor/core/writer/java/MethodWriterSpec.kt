@@ -313,7 +313,7 @@ class MethodWriterSpec: StringSpec({
         }
 
         writer.write (target, endpoint, endpoint.endpointResponses.first ())
-
+        
         target.toString () shouldBe
             """
             |    @Status
