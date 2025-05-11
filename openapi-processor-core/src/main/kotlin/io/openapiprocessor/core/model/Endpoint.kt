@@ -121,7 +121,7 @@ class Endpoint(
     /**
      * creates groups from the responses.
      *
-     * if the endpoint does provide its result in multiple content types it will create one entry
+     * if the endpoint does provide its result in multiple content types, it will create one entry
      * for each response kind (main response). if error responses are defined, they are added as
      * error responses.
      *
