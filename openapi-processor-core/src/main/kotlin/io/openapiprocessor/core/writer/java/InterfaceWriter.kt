@@ -139,7 +139,9 @@ class InterfaceWriter(
         }
 
         if (resultStatus && response.hasSingleResponse(resultStyle)) {
-            imports.addAll(annotations.getAnnotation(response).imports)
+            val annotation = annotations.getAnnotation(response)
+            imports.addAll(annotation.imports)
+            imports.addAll(annotation.referencedImports)
         }
     }
 }
