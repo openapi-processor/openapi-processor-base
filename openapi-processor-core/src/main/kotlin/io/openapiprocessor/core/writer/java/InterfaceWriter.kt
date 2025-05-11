@@ -129,11 +129,17 @@ class InterfaceWriter(
 
     private fun addImports(endpoint: Endpoint, response: EndpointResponse, imports: MutableSet<String>) {
         val mappingFinder = MappingFinder(apiOptions)
-        val resultStyle = mappingFinder.findResultStyleMapping(MappingFinderQuery(endpoint))
-        val responseImports: MutableSet<String> = response.getResponseImports(resultStyle).toMutableSet()
+        val query = MappingFinderQuery(endpoint)
+        val resultStyle = mappingFinder.findResultStyleMapping(query)
+        val resultStatus = mappingFinder.getResultStatusOption(query)
 
+        val responseImports: MutableSet<String> = response.getResponseImports(resultStyle).toMutableSet()
         if (responseImports.isNotEmpty()) {
             imports.addAll(responseImports)
+        }
+
+        if (resultStatus && response.hasSingleResponse(resultStyle)) {
+            imports.addAll(annotations.getAnnotation(response).imports)
         }
     }
 }
