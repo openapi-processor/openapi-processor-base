@@ -34,6 +34,7 @@ class TestSetCompiler {
         compilePaths.add(Path.of("src/testInt/resources/compile/Generated.java"))
         compilePaths.add(Path.of("src/testInt/resources/compile/Mapping.java"))
         compilePaths.add(Path.of("src/testInt/resources/compile/Parameter.java"))
+        compilePaths.add(Path.of("src/testInt/resources/compile/Status.java"))
 
         def expectedFiles = testFiles.getOutputFiles(testSet).items
         expectedFiles = expectedFiles.findAll { item -> !item.endsWith(".properties") }
