@@ -212,6 +212,9 @@
         "result-style": {
           "$ref": "#/definitions/ResultStyleMapping"
         },
+        "result-status": {
+          "$ref": "#/definitions/ResultStatus"
+        },
         "single": {
           "$ref": "#/definitions/SingleMapping"
         },
@@ -314,6 +317,11 @@
         "all",
         "success"
       ]
+    },
+    "ResultStatus": {
+      "description": "add result http status if unambiguous (i.e., it always returns the same status) and not equal to 200.",
+      "type": "boolean",
+      "default": "true"
     },
     "SingleMapping": {
       "description": "reactive wrapper of single types.",

@@ -79,6 +79,9 @@ map: # the type mappings
   # result style (optional, default "success")
   result-style: all
 
+  # result status annotation (optional, default true)
+  result-status: true
+
   # reactive single wrapper (optional)
   single: reactor.core.publisher.Mono
 
