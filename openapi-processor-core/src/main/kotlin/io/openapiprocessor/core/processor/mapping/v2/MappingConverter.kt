@@ -34,6 +34,7 @@ class MappingConverter(val mapping: MappingV2) {
     private fun convertGlobalMappings(map: MapV2): Mappings {
         var resultTypeMapping: ResultTypeMapping? = null
         var resultStyle: ResultStyle? = null
+        var resultStatus: Boolean? = null
         var singleTypeMapping: TypeMapping? = null
         var multiTypeMapping: TypeMapping? = null
         val typeMappings = mutableListOf<Mapping>()
@@ -47,6 +48,10 @@ class MappingConverter(val mapping: MappingV2) {
 
         if (map.resultStyle != null) {
             resultStyle = map.resultStyle
+        }
+
+        if (map.resultStatus != null) {
+            resultStatus = map.resultStatus
         }
 
         if(map.single != null) {
@@ -76,6 +81,7 @@ class MappingConverter(val mapping: MappingV2) {
         return Mappings(
             resultTypeMapping,
             resultStyle,
+            resultStatus,
             singleTypeMapping,
             multiTypeMapping,
             null,
@@ -331,6 +337,7 @@ class MappingConverter(val mapping: MappingV2) {
     private fun convertPath(source: Path): Mappings {
         var resultTypeMapping: ResultTypeMapping? = null
         var resultStyle: ResultStyle? = null
+        var resultStatus: Boolean? = null
         var singleTypeMapping: TypeMapping? = null
         var multiTypeMapping: TypeMapping? = null
         var nullTypeMapping: NullTypeMapping? = null
@@ -347,6 +354,10 @@ class MappingConverter(val mapping: MappingV2) {
             resultStyle = source.resultStyle
         }
 
+        if (source.resultStatus != null) {
+            resultStatus = source.resultStatus
+        }
+
         if(source.single != null) {
             singleTypeMapping = convertType("single" , source.single)
         }
@@ -378,6 +389,7 @@ class MappingConverter(val mapping: MappingV2) {
         return Mappings(
             resultTypeMapping,
             resultStyle,
+            resultStatus,
             singleTypeMapping,
             multiTypeMapping,
             nullTypeMapping,
@@ -391,6 +403,7 @@ class MappingConverter(val mapping: MappingV2) {
     private fun convertPathMethod(source: PathMethod): Mappings {
         var resultTypeMapping: ResultTypeMapping? = null
         var resultStyle: ResultStyle? = null
+        var resultStatus: Boolean? = null
         var singleTypeMapping: TypeMapping? = null
         var multiTypeMapping: TypeMapping? = null
         var nullTypeMapping: NullTypeMapping? = null
@@ -407,6 +420,10 @@ class MappingConverter(val mapping: MappingV2) {
             resultStyle = source.resultStyle
          }
 
+        if (source.resultStatus != null) {
+           resultStatus = source.resultStatus
+        }
+
         if(source.single != null) {
             singleTypeMapping = convertType("single" , source.single)
         }
@@ -438,6 +455,7 @@ class MappingConverter(val mapping: MappingV2) {
         return Mappings(
             resultTypeMapping,
             resultStyle,
+            resultStatus,
             singleTypeMapping,
             multiTypeMapping,
             nullTypeMapping,

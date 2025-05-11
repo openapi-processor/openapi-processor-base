@@ -291,6 +291,51 @@ class MappingFinderSpec: StringSpec({
         }
     }
 
+    "find result status option" {
+        val yaml =
+            """
+            |openapi-processor-mapping: v13
+            |
+            |options:
+            |  package-name: io.openapiprocessor.somewhere
+            | 
+            |map:
+            |  result-status: false
+            |  paths:
+            |    /foo:
+            |      result-status: true
+            |      
+            |      get:
+            |        result-status: false
+            |
+            """.trimMargin()
+
+        val reader = MappingReader()
+       val mapping = reader.read (yaml) as Mapping
+       val mappings = MappingConverter(mapping).convert()
+       val finder = MappingFinder(ApiOptions().apply {
+           globalMappings = mappings.globalMappings
+           endpointMappings = mappings.endpointMappings
+           extensionMappings = mappings.extensionMappings
+       })
+
+        // global => false
+        val resultStatus = finder.getResultStatusOption(
+            MappingFinderQuery(path = "/bar", method = HttpMethod.GET)
+        )
+        resultStatus.shouldBe(false)
+
+        val resultStatusPath = finder.getResultStatusOption(
+            MappingFinderQuery(path = "/foo", method = HttpMethod.POST)
+        )
+        resultStatusPath.shouldBe(true)
+
+        val resultStatusGet = finder.getResultStatusOption(
+            MappingFinderQuery(path = "/foo", method = HttpMethod.GET)
+        )
+        resultStatusGet.shouldBe(false)
+    }
+
     "get result type mapping" {
         val yaml = """
            |openapi-processor-mapping: v8

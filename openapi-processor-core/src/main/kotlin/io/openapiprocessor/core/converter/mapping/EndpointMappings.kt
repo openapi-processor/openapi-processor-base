@@ -49,6 +49,23 @@ class EndpointMappings(
         return null
     }
 
+    fun getResultStatus(query: MappingQuery, step: MappingStep): Boolean? {
+        val httpMethodMappings = methodMappings[query.method]
+        if (httpMethodMappings != null) {
+            val methodMapping = httpMethodMappings.getResultStatus(step.add(MethodsStep(query)))
+            if (methodMapping != null) {
+                return methodMapping
+            }
+        }
+
+        val mapping = mappings.getResultStatus(step)
+        if (mapping != null) {
+            return mapping
+        }
+
+        return null
+    }
+
     fun getSingleTypeMapping(query: MappingQuery, step: MappingStep): TypeMapping? {
         val httpMethodMappings = methodMappings[query.method]
         if (httpMethodMappings != null) {

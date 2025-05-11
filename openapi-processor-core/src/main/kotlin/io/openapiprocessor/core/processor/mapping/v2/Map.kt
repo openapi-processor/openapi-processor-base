@@ -23,6 +23,11 @@ data class Map(
     val resultStyle: ResultStyle? = null,
 
     /**
+     * add response status annotation
+     */
+    val resultStatus: Boolean? = null,
+
+    /**
      * single mapping, e.g. Mono<>
      */
     val single: String? = null,

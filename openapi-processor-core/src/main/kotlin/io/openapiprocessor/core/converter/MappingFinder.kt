@@ -66,6 +66,29 @@ class MappingFinder(val options: ApiOptions) {
         return ResultStyle.SUCCESS
     }
 
+    fun getResultStatusOption(query: MappingQuery): Boolean {
+        val step = rootStep("looking for result status mapping of", query)
+        try {
+            return getResultStatusOption(query, step)
+        } finally {
+            step.log()
+        }
+    }
+
+    private fun getResultStatusOption(query: MappingQuery, step: MappingStep): Boolean {
+        val epMapping = repository.getEndpointResultStatusOption(query, step)
+        if (epMapping != null) {
+            return epMapping
+        }
+
+        val gMapping = repository.getGlobalResultStatusOption(step)
+        if(gMapping != null) {
+            return gMapping
+        }
+
+        return true
+    }
+
     // path/method
     fun getSingleTypeMapping(query: MappingQuery): TypeMapping? {
         val step = rootStep("looking for single type style mapping of", query)

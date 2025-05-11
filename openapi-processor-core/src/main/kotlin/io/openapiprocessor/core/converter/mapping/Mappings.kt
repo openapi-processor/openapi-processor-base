@@ -11,6 +11,7 @@ import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
 class Mappings(
     private val resultTypeMapping: ResultTypeMapping? = null,
     private val resultStyle: ResultStyle? = null,
+    private val resultStatus: Boolean? = null,
     private val singleTypeMapping: TypeMapping? = null,
     private val multiTypeMapping: TypeMapping? = null,
     private val nullTypeMapping: NullTypeMapping? = null,
@@ -32,6 +33,13 @@ class Mappings(
             step.add(StringStep("result-style: $resultStyle", true))
         }
         return resultStyle
+    }
+
+    fun getResultStatus(step: MappingStep): Boolean? {
+        if (resultStatus != null) {
+            step.add(StringStep("result-status: $resultStatus", true))
+        }
+        return resultStatus
     }
 
     fun getSingleTypeMapping(step: MappingStep): TypeMapping? {

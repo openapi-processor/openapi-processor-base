@@ -26,6 +26,10 @@ class MappingRepository(
         return globalMappings.getResultStyle(step.add(GlobalsStep()))
     }
 
+    fun getGlobalResultStatusOption(step: MappingStep): Boolean? {
+        return globalMappings.getResultStatus(step.add(GlobalsStep()))
+    }
+
     fun getGlobalSingleTypeMapping(step: MappingStep): TypeMapping? {
         return globalMappings.getSingleTypeMapping(step.add(GlobalsStep()))
     }
@@ -81,6 +85,10 @@ class MappingRepository(
 
     fun getEndpointResultStyleMapping(query: MappingQuery, step: MappingStep): ResultStyle? {
         return endpointMappings[query.path]?.getResultStyle(query, step.add(EndpointsStep(query)))
+    }
+
+    fun getEndpointResultStatusOption(query: MappingQuery, step: MappingStep): Boolean? {
+        return endpointMappings[query.path]?.getResultStatus(query, step.add(EndpointsStep(query)))
     }
 
     fun getEndpointSingleTypeMapping(query: MappingQuery, step: MappingStep): TypeMapping? {
