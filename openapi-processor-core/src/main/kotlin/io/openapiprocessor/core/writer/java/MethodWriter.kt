@@ -11,8 +11,10 @@ import io.openapiprocessor.core.model.Endpoint
 import io.openapiprocessor.core.model.EndpointResponse
 import io.openapiprocessor.core.model.parameters.AdditionalParameter
 import io.openapiprocessor.core.model.parameters.Parameter
+import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
 import io.openapiprocessor.core.support.capitalizeFirstChar
 import io.openapiprocessor.core.writer.Identifier
+import io.openapiprocessor.core.writer.java.StatusAnnotationWriter as CoreStatusAnnotationWriter
 import io.openapiprocessor.core.writer.java.MappingAnnotationWriter as CoreMappingAnnotationWriter
 import io.openapiprocessor.core.writer.java.ParameterAnnotationWriter as CoreParameterAnnotationWriter
 import java.io.StringWriter
@@ -24,8 +26,9 @@ import java.io.Writer
 open class MethodWriter(
     private val apiOptions: ApiOptions,
     private val identifier: Identifier,
+    private val statusAnnotationWriter: CoreStatusAnnotationWriter,
     private val mappingAnnotationWriter: CoreMappingAnnotationWriter,
-    private var parameterAnnotationWriter: CoreParameterAnnotationWriter,
+    private val parameterAnnotationWriter: CoreParameterAnnotationWriter,
     private val beanValidationFactory: BeanValidationFactory,
     private val javadocWriter: JavaDocWriter = JavaDocWriter(identifier)
 ) {
@@ -46,12 +49,32 @@ open class MethodWriter(
                 """.trimMargin())
         }
 
+        if (shouldAddStatus(endpointResponse, endpoint)) {
+            val status = createStatus(endpoint, endpointResponse)
+            target.write (
+                """
+                |    $status
+                |
+                """.trimMargin())
+        }
+
         target.write (
             """
             |    ${createMappingAnnotation(endpoint, endpointResponse)}
             |    ${createResult(endpoint, endpointResponse)} ${createMethodName(endpoint, endpointResponse)}(${createParameters(endpoint)});
             |
             """.trimMargin())
+    }
+
+    private fun shouldAddStatus(endpointResponse: EndpointResponse, endpoint: Endpoint): Boolean {
+        return MappingFinder(apiOptions).getResultStatusOption(MappingFinderQuery(endpoint))
+            && endpointResponse.hasSingleResponse(getResultStyle(endpoint))
+    }
+
+    private fun createStatus(endpoint: Endpoint, endpointResponse: EndpointResponse): String {
+        val annotation = StringWriter()
+        statusAnnotationWriter.write(annotation, endpoint, endpointResponse)
+        return annotation.toString ()
     }
 
     private fun createMappingAnnotation(endpoint: Endpoint, endpointResponse: EndpointResponse): String {
@@ -61,9 +84,11 @@ open class MethodWriter(
     }
 
     private fun createResult(endpoint: Endpoint, endpointResponse: EndpointResponse): String {
-        val mappingFinder = MappingFinder(apiOptions)
-        val resultStyle = mappingFinder.findResultStyleMapping(MappingFinderQuery(endpoint))
-        return endpointResponse.getResponseType(resultStyle)
+        return endpointResponse.getResponseType(getResultStyle(endpoint))
+    }
+
+    private fun getResultStyle(endpoint: Endpoint): ResultStyle {
+        return MappingFinder(apiOptions).findResultStyleMapping(MappingFinderQuery(endpoint))
     }
 
     private fun createMethodName(endpoint: Endpoint, endpointResponse: EndpointResponse): String {

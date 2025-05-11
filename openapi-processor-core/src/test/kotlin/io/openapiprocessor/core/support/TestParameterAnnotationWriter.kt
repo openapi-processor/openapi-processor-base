@@ -14,5 +14,4 @@ class TestParameterAnnotationWriter: ParameterAnnotationWriter {
     override fun write(target: Writer, parameter: Parameter) {
         target.write ("@Parameter")
     }
-
 }

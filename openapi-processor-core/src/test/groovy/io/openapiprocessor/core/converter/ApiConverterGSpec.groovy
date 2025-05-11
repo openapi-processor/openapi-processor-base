@@ -127,6 +127,7 @@ paths:
             new MethodWriter(
                 options,
                 identifier,
+                Stub(StatusAnnotationWriter),
                 Stub (MappingAnnotationWriter),
                 Stub (ParameterAnnotationWriter),
                 Stub (BeanValidationFactory),

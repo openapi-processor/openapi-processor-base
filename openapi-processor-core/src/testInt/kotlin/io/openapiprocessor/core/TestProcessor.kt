@@ -62,6 +62,7 @@ class TestProcessor:
                     MethodWriter(
                         options,
                         identifier,
+                        TestProcessorStatusAnnotationWriter(),
                         TestProcessorMappingAnnotationWriter(),
                         TestProcessorParameterAnnotationWriter(),
                         beanValidation,

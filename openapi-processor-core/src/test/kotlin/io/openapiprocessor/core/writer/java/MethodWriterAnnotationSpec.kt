@@ -14,6 +14,7 @@ import io.openapiprocessor.core.model.datatypes.DataTypeName
 import io.openapiprocessor.core.model.datatypes.MappedDataType
 import io.openapiprocessor.core.model.datatypes.ObjectDataType
 import io.openapiprocessor.core.model.parameters.ParameterBase
+import io.openapiprocessor.core.support.TestStatusAnnotationWriter
 import io.openapiprocessor.core.support.TestMappingAnnotationWriter
 import io.openapiprocessor.core.support.TestParameterAnnotationWriter
 import io.openapiprocessor.core.support.parseOptions
@@ -26,6 +27,7 @@ class MethodWriterAnnotationSpec: StringSpec ({
         return MethodWriter(
             options,
             JavaIdentifier(),
+            TestStatusAnnotationWriter(),
             TestMappingAnnotationWriter(),
             TestParameterAnnotationWriter(),
             BeanValidationFactory(options)

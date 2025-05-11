@@ -14,6 +14,7 @@ import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.model.datatypes.ResultDataType
 import io.openapiprocessor.core.model.datatypes.StringDataType
 import io.openapiprocessor.core.parser.HttpMethod
+import io.openapiprocessor.core.support.TestStatusAnnotationWriter
 import io.openapiprocessor.core.support.TestMappingAnnotationWriter
 import io.openapiprocessor.core.support.TestParameterAnnotationWriter
 import io.openapiprocessor.core.support.parseOptions
@@ -25,6 +26,7 @@ class MethodWriterResponseStyleSpec: FreeSpec() {
         return MethodWriter(
             options,
             JavaIdentifier(),
+            TestStatusAnnotationWriter(),
             TestMappingAnnotationWriter(),
             TestParameterAnnotationWriter(),
             mockk<BeanValidationFactory>(),

@@ -10,8 +10,11 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.builder.api.endpoint
 import io.openapiprocessor.core.converter.ApiOptions
+import io.openapiprocessor.core.converter.mapping.Mappings
 import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.model.parameters.ParameterBase
+import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
+import io.openapiprocessor.core.support.TestStatusAnnotationWriter
 import io.openapiprocessor.core.support.TestMappingAnnotationWriter
 import io.openapiprocessor.core.support.TestParameterAnnotationWriter
 import io.openapiprocessor.core.support.datatypes.CollectionDataType
@@ -26,6 +29,7 @@ class MethodWriterSpec: StringSpec({
     val writer = MethodWriter (
         apiOptions,
         identifier,
+        TestStatusAnnotationWriter(),
         TestMappingAnnotationWriter(),
         TestParameterAnnotationWriter(),
         BeanValidationFactory(apiOptions))
@@ -288,4 +292,120 @@ class MethodWriterSpec: StringSpec({
             |
             """.trimMargin()
     }
+
+    "writes success status annotation" {
+        apiOptions.globalMappings = Mappings(
+            resultStyle = ResultStyle.SUCCESS,
+            resultStatus = true)
+
+        val endpoint = endpoint("/foo") {
+            responses {
+                status("204") {
+                    empty()
+                }
+                status("500") {
+                    response(
+                        "application/json",
+                        StringDataType()
+                    )
+                }
+            }
+        }
+
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+
+        target.toString () shouldBe
+            """
+            |    @Status
+            |    @CoreMapping
+            |    void getFoo();
+            |
+            """.trimMargin()
+    }
+
+    "do not write success status annotation for default 200 status" {
+        apiOptions.globalMappings = Mappings(
+            resultStyle = ResultStyle.SUCCESS,
+            resultStatus = true)
+
+        val endpoint = endpoint("/foo") {
+            responses {
+                status("200") {
+                    response (
+                        "application/json",
+                        StringDataType()
+                    )
+                }
+                status("500") {
+                    response(
+                        "application/json",
+                        StringDataType()
+                    )
+                }
+            }
+        }
+
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+
+        target.toString () shouldBe
+            """
+            |    @CoreMapping
+            |    String getFoo();
+            |
+            """.trimMargin()
+    }
+
+    "does not write success status annotation with result style all" {
+        apiOptions.globalMappings = Mappings(
+            resultStyle = ResultStyle.ALL,
+            resultStatus = true)
+
+        val endpoint = endpoint("/foo") {
+            responses {
+                status("204") {
+                    empty()
+                }
+                status("500") {
+                    response(
+                        "application/json",
+                        StringDataType()
+                    )
+                }
+            }
+        }
+
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+
+        target.toString () shouldBe
+            """
+            |    @CoreMapping
+            |    Object getFoo();
+            |
+            """.trimMargin()
+    }
+
+    "write success status annotation with result style all and no errors" {
+        apiOptions.globalMappings = Mappings(
+            resultStyle = ResultStyle.ALL,
+            resultStatus = true)
+
+        val endpoint = endpoint("/foo") {
+            responses {
+                status("204") {
+                    empty()
+                }
+            }
+        }
+
+        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+
+        target.toString () shouldBe
+            """
+            |    @Status
+            |    @CoreMapping
+            |    void getFoo();
+            |
+            """.trimMargin()
+    }
+
 })

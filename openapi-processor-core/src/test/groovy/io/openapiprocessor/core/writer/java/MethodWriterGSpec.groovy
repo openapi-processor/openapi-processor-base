@@ -13,6 +13,7 @@ import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.model.parameters.Parameter
 import io.openapiprocessor.core.model.parameters.ParameterBase
 import io.openapiprocessor.core.support.TestParameterAnnotationWriter
+import io.openapiprocessor.core.support.TestStatusAnnotationWriter
 import io.openapiprocessor.core.support.datatypes.ObjectDataType
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -26,6 +27,7 @@ class MethodWriterGSpec extends Specification {
     def writer = new MethodWriter (
         apiOptions,
         identifier,
+        new TestStatusAnnotationWriter(),
         new TestMappingAnnotationWriter(),
         new TestParameterAnnotationWriter(),
         Stub (BeanValidationFactory),
@@ -172,8 +174,14 @@ class MethodWriterGSpec extends Specification {
     }
 
     void "writes no parameter annotation if the annotation writer skips it" () {
-        def stubWriter = Stub (ParameterAnnotationWriter) {}
-        writer.parameterAnnotationWriter = stubWriter
+        def writer = new MethodWriter (
+            apiOptions,
+            identifier,
+            new TestStatusAnnotationWriter(),
+            new TestMappingAnnotationWriter(),
+            Stub (ParameterAnnotationWriter) {},
+            Stub (BeanValidationFactory),
+            Stub (JavaDocWriter))
 
         def endpoint = endpoint ("/foo", HttpMethod.GET) {e ->
             e.responses { rs ->
