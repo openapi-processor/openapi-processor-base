@@ -138,7 +138,7 @@ class EndpointResponse(
     /**
      * returns a list with all content types.
      *
-     * todo only called by test code
+     * called by openapi-processor-x
      */
     val contentTypes: Set<String>
         get() {
