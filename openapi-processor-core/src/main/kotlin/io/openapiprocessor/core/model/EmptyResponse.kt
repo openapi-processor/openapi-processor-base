@@ -15,4 +15,7 @@ class EmptyResponse(
     contentType: String = "?",
     responseType: DataType = NoneDataType(),
     description: String? = null
-): Response(contentType, responseType, description)
+): Response(contentType, responseType, description) {
+    override val empty
+        get() = true
+}

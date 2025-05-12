@@ -6,7 +6,6 @@
 package io.openapiprocessor.core.model
 
 import io.openapiprocessor.core.model.datatypes.DataType
-import io.openapiprocessor.core.model.datatypes.NoneDataType
 
 /**
  * Endpoint response properties.
@@ -19,6 +18,6 @@ open class Response(
     val imports
         get() = responseType.getImports()
 
-    val empty
-        get() = responseType is NoneDataType
+    open val empty
+        get() = false
 }
