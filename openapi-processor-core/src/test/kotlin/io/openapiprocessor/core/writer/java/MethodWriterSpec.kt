@@ -57,6 +57,7 @@ class MethodWriterSpec: StringSpec({
         // then:
         target.toString () shouldBe
             """    
+            |    @Status
             |    @CoreMapping
             |    void getFoo(@Parameter @NotNull String foo);
             |
@@ -146,6 +147,7 @@ class MethodWriterSpec: StringSpec({
         // then:
         target.toString () shouldBe
             """    
+            |    @Status
             |    @CoreMapping
             |    void getFoo(@Parameter FooX foo);
             |
@@ -172,6 +174,7 @@ class MethodWriterSpec: StringSpec({
         // then:
         target.toString () shouldBe
             """    
+            |    @Status
             |    @CoreMapping
             |    void getFoo(@Parameter FooX body);
             |
@@ -229,6 +232,7 @@ class MethodWriterSpec: StringSpec({
         // then:
         target.toString () shouldBe
             """    
+            |    @Status
             |    @CoreMapping
             |    void getFoo(@Parameter Map<String, Collection<String>> foo);
             |
@@ -287,6 +291,7 @@ class MethodWriterSpec: StringSpec({
         // then:
         target.toString () shouldBe
             """
+            |    @Status
             |    @CoreMapping
             |    void getFoo(@Parameter Bar<?> foo);
             |
@@ -313,7 +318,7 @@ class MethodWriterSpec: StringSpec({
         }
 
         writer.write (target, endpoint, endpoint.endpointResponses.first ())
-        
+
         target.toString () shouldBe
             """
             |    @Status

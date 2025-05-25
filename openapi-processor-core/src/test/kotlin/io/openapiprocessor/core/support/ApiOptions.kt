@@ -19,7 +19,7 @@ fun parseOptions(
     targetDir: String = "defaultTargetDir",
     version: String =
         """
-        |openapi-processor-mapping: v9
+        |openapi-processor-mapping: v13
         |
         """,
     options: String =

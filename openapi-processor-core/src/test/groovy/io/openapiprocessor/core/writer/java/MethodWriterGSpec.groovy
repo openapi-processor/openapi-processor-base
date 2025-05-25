@@ -46,6 +46,7 @@ class MethodWriterGSpec extends Specification {
 
         then:
         target.toString () == """\
+    @Status
     @CoreMapping
     void getFoo();
 """
@@ -65,6 +66,7 @@ class MethodWriterGSpec extends Specification {
         then:
         target.toString () == """\
     @Deprecated
+    @Status
     @CoreMapping
     void getFoo();
 """
@@ -168,6 +170,7 @@ class MethodWriterGSpec extends Specification {
 
         then:
         target.toString () == """\
+    @Status
     @CoreMapping
     void getFoo(@Parameter String foo);
 """
@@ -200,6 +203,7 @@ class MethodWriterGSpec extends Specification {
 
         then:
         target.toString () == """\
+    @Status
     @CoreMapping
     void getFoo(String foo);
 """
@@ -222,6 +226,7 @@ class MethodWriterGSpec extends Specification {
 
         then:
         target.toString () == """\
+    @Status
     @CoreMapping
     void getFoo(@Parameter @Foo String foo);
 """
@@ -246,6 +251,7 @@ class MethodWriterGSpec extends Specification {
 
         then:
         target.toString () == """\
+    @Status
     @CoreMapping
     void getFoo(@Parameter @Foo("bar") String foo);
 """
@@ -271,6 +277,7 @@ class MethodWriterGSpec extends Specification {
 
         then:
         target.toString () == """\
+    @Status
     @CoreMapping
     void getFoo(@Parameter @Foo(foo = "bar", oof = "rab") String foo);
 """
@@ -288,6 +295,7 @@ class MethodWriterGSpec extends Specification {
 
         then:
         target.toString () == """\
+    @Status
     @CoreMapping
     void getFOOooBARrr();
 """
@@ -306,6 +314,7 @@ class MethodWriterGSpec extends Specification {
 
         then:
         target.toString () == """\
+    @Status
     @CoreMapping
     void getBar();
 """
@@ -329,6 +338,7 @@ class MethodWriterGSpec extends Specification {
 
         then:
         target.toString () == """\
+    @Status
     @CoreMapping
     void getFoo(@Parameter String foO);
 """
@@ -353,6 +363,7 @@ class MethodWriterGSpec extends Specification {
 
         then:
         target.toString () == """\
+    @Status
     @CoreMapping
     ResultWrapper<Void> getFoo();
 """

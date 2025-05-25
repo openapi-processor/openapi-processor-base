@@ -63,6 +63,7 @@ class MethodWriterAnnotationSpec: StringSpec ({
         // then:
         target.toString () shouldBe
             """    
+            |    @Status
             |    @CoreMapping
             |    void getFoo(@Parameter @Bar(bar = rab) Foo foo);
             |
@@ -97,6 +98,7 @@ class MethodWriterAnnotationSpec: StringSpec ({
         // then:
         target.toString () shouldBe
             """    
+            |    @Status
             |    @CoreMapping
             |    void getFoo(@Parameter @Bar(bar = rab) Foo foo);
             |
@@ -129,6 +131,7 @@ class MethodWriterAnnotationSpec: StringSpec ({
         // then:
         target.toString () shouldBe
             """    
+            |    @Status
             |    @CoreMapping
             |    void getFoo(@Parameter @Bar(bar = rab) Foo foo);
             |
@@ -168,6 +171,7 @@ class MethodWriterAnnotationSpec: StringSpec ({
         // then:
         target.toString () shouldBe
             """    
+            |    @Status
             |    @CoreMapping
             |    void getFoo(@Parameter @Bar(bar = rab) MappedFoo foo);
             |
