@@ -16,18 +16,18 @@ import io.openapiprocessor.core.support.Empty
 class ApiOptions: MappingSettings {
 
     /**
-     * the destination folder for generating interfaces & DTOs. This is the parent of the
+     * The destination folder for generating interfaces & DTOs. This is the parent of the
      * {@link #packageName} folder tree.
      */
     var targetDir: String? = null
 
     /**
-     * target-dir related options.
+     * target-dir-related options.
      */
     var targetDirOptions: TargetDirOptions = TargetDirOptions()
 
     /**
-     * the root package of the generated interfaces/model. The package folder tree will be created
+     * The root package of the generated interfaces/model. The package folder tree will be created
      * inside {@link #targetDir}. Interfaces and models will be placed into the "api" and "model"
      * subpackages of packageName:
      * - interfaces => "${packageName}.api"
@@ -47,7 +47,7 @@ class ApiOptions: MappingSettings {
     val packageValidation get() = "${packageName}.${packageNameValidation}"
 
     /**
-     * enable Bean Validation (JSR303) annotations. Default is false (disabled)
+     * Enable Bean Validation (JSR303) annotations. Default is false (disabled)
      */
     var beanValidation = false
 
@@ -57,7 +57,7 @@ class ApiOptions: MappingSettings {
     var beanValidationFormat: String? = null
 
     /**
-     * enable/disable generation of javadoc comments based on the `description` OpenAPI property.
+     * enable/disable generation of Javadoc comments based on the `description` OpenAPI property.
      *
      * *experimental*
      */
@@ -121,12 +121,12 @@ class ApiOptions: MappingSettings {
     var generatedDate = true
 
     /**
-     * add json property annotation: always/auto (optional).
+     * add JSON property annotation: always/auto (optional).
      */
     var jsonPropertyAnnotation = JsonPropertyAnnotationMode.Always
 
     /**
-     * base path related options
+     * base path-related options
      */
     var basePathOptions: BasePathOptions = BasePathOptions()
 
@@ -154,7 +154,7 @@ class ApiOptions: MappingSettings {
     // compatibility options
 
     /**
-     * add @Valid on reactive type and not on the wrapped type
+     * add @Valid on the reactive type and not on the wrapped type
      */
     var beanValidationValidOnReactive = true
 

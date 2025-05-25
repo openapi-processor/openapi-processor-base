@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import io.openapiprocessor.core.processor.mapping.MappingVersion
 
 /**
- * *the* v2 Schema of the mapping yaml
+ * *the* v2 Schema of the mapping YAML
  */
 data class Mapping(
 

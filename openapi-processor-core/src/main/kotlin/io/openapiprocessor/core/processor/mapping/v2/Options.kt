@@ -13,7 +13,7 @@ import io.openapiprocessor.core.support.Empty
 data class Options(
 
     /**
-     * the root package name of the generated interfaces & models (required)
+     * The root package name of the generated interfaces and models (required)
      *
      * Interfaces and models will be generated into the `api` and `model` subpackages of
      * `packageName`.
@@ -33,7 +33,7 @@ data class Options(
     val clearTargetDir: Boolean = true,
 
     /**
-     * target-dir related options.
+     * target-dir-related options.
      */
     val targetDir: TargetDir = TargetDir(),
 
@@ -68,7 +68,7 @@ data class Options(
     val modelNameSuffix: String = String.Empty,
 
     /**
-     * base path related options (optional)
+     * base path-related options (optional)
      */
     val basePath: BasePath = BasePath(),
 
@@ -78,7 +78,7 @@ data class Options(
     val oneOfInterface: Boolean = false,
 
     /**
-     * generate common interface for different responses of same content type (optional)
+     * generate a common interface for different responses of the same content type (optional)
      */
     val responseInterface: Boolean = false,
 

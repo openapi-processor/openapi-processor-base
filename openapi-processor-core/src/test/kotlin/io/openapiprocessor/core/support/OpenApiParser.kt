@@ -13,7 +13,7 @@ import io.openapiprocessor.test.parser.openapi4j.parse as parseWithOpenApi4j
 import io.openapiprocessor.test.parser.swagger.parse as parseWithSwagger
 
 /**
- * OpenAPI parser to read yaml from memory using the given parser.
+ * OpenAPI parser to read YAML from memory using the given parser.
  *
  * extract individual Schemas with the get...Schema() functions on the [ParserOpenApi] result.
  */
