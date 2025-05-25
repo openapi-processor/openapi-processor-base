@@ -86,7 +86,7 @@ class MappingFinder(val options: ApiOptions) {
             return gMapping
         }
 
-        return false
+        return true
     }
 
     // path/method

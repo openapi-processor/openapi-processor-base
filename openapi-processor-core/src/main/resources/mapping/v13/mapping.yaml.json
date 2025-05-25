@@ -321,7 +321,7 @@
     "ResultStatus": {
       "description": "add result http status if unambiguous (i.e., it always returns the same status) and not equal to 200.",
       "type": "boolean",
-      "default": "false"
+      "default": "true"
     },
     "SingleMapping": {
       "description": "reactive wrapper of single types.",
