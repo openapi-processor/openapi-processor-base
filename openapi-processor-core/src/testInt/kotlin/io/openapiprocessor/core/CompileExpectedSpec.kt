@@ -22,7 +22,12 @@ class CompileExpectedSpec: StringSpec({
             val testFiles = TestFilesNative(folder, reader)
 
             TestSetCompiler(testSet, testFiles)
-                .run()
+                .run(setOf(
+                    "src/testInt/resources/compile/Generated.java",
+                    "src/testInt/resources/compile/Mapping.java",
+                    "src/testInt/resources/compile/Parameter.java",
+                    "src/testInt/resources/compile/Status.java"
+                ))
                 .shouldBeTrue()
         }
     }

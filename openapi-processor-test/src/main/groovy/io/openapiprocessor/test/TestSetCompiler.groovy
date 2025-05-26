@@ -23,18 +23,17 @@ class TestSetCompiler {
     /**
      * compiles a test-set
      *
+     * @param additionalFiles additional files to compile
      * @return true on success, false on failure
      */
-    boolean run() {
+    boolean run(Set<String> additionalFiles) {
         def sourcePath = "/tests/${testSet.name}"
 
         def compilePaths = []
 
-        // stuff used by all tests
-        compilePaths.add(Path.of("src/testInt/resources/compile/Generated.java"))
-        compilePaths.add(Path.of("src/testInt/resources/compile/Mapping.java"))
-        compilePaths.add(Path.of("src/testInt/resources/compile/Parameter.java"))
-        compilePaths.add(Path.of("src/testInt/resources/compile/Status.java"))
+        additionalFiles.each {
+            compilePaths.add(Path.of(it))
+        }
 
         def expectedFiles = testFiles.getOutputFiles(testSet).items
         expectedFiles = expectedFiles.findAll { item -> !item.endsWith(".properties") }
