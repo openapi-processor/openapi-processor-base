@@ -71,7 +71,7 @@ compatibility:
 
 map: # the type mappings
 
-  # global mappings, apply to all paths/endpoints
+  # global mappings, applies to all paths/endpoints
 
   # response wrapper (optional)
   result: org.springframework.http.ResponseEntity
