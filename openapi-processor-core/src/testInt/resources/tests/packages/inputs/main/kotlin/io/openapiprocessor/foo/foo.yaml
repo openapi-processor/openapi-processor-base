@@ -1,4 +1,5 @@
 get:
+  tags: [foo]
   responses:
     '200':
       description: the foo result

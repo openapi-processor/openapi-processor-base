@@ -1,3 +1,8 @@
 items:
-  - outputs/io/openapiprocessor/foo/Api.java
+  - outputs/io/openapiprocessor/foo/FooApi.java
   - outputs/io/openapiprocessor/foo/<model>/Foo.java
+  - outputs/io/openapiprocessor/openapi/api/BarApi.java
+  - outputs/io/openapiprocessor/openapi/model/<model>/Bar.java
+  - outputs/io/openapiprocessor/openapi/support/Generated.java
+  - outputs/io/openapiprocessor/openapi/validation/Values.java
+  - outputs/io/openapiprocessor/openapi/validation/ValueValidator.java

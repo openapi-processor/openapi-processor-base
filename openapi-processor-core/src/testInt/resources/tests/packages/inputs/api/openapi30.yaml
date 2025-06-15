@@ -6,4 +6,9 @@ info:
 paths:
 
   /foo:
+    # placed into location package
     $ref: '../main/kotlin/io/openapiprocessor/foo/foo.yaml'
+
+  /bar:
+    # placed into base package
+    $ref: './bar.yaml'

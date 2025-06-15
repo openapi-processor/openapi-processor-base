@@ -1,6 +1,11 @@
 openapi-processor-mapping: v13
 
 options:
-  package-name: io.openapiprocessor
-  package-name-from-path: true
+#  package-name: io.openapiprocessor
+  package-names:
+    base: io.openapiprocessor.openapi
+    location: io.openapiprocessor
+
+  bean-validation: true
+  enum-type: string
   format-code: false
