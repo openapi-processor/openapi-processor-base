@@ -42,7 +42,12 @@ class Mapping {
 
     String getPackageName() {
         def mapping = getMapping()
-        return mapping['options']['package-name'] as String
+        def packageName = mapping['options']['package-name'] as String
+        if (packageName != null) {
+            return packageName
+        }
+
+        return mapping['options']['package-names']['base'] as String
     }
 
     private Map<String, ?> getMapping() {
