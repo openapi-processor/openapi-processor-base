@@ -50,7 +50,7 @@ class ApiWriter(
     }
 
     private fun writeGenerated () {
-        val writer = getWriter("${options.packageName}.support", "Generated")
+        val writer = getWriter("${options.packageOptions.base}.support", "Generated")
         writeGenerated(writer)
         writer.close()
     }
@@ -92,8 +92,8 @@ class ApiWriter(
     }
 
     private fun writeAdditionalFiles() {
-        additionalWriter.forEach {
-            it(options, { format(it) }, writerFactory)
+        additionalWriter.forEach { add ->
+            add(options, { format(it) }, writerFactory)
         }
     }
 

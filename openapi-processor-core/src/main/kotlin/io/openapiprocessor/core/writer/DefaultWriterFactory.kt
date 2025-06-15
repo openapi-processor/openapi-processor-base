@@ -29,9 +29,8 @@ open class DefaultWriterFactory(val options: ApiOptions): WriterFactory, InitWri
     private lateinit var resourcesPath: Path
 
     override fun createWriter(packageName: String, className: String): Writer {
-        if (options.packageNameFromPath && packagePaths[packageName] == null) {
-            val pkg = packageName.substring(options.packageName.length + 1)
-            val (name, path) = initTargetPackage(pkg)
+        if (packagePaths[packageName] == null) {
+            val (name, path) = initTargetPackage(packageName)
             packagePaths[name] = path
         }
 
@@ -52,21 +51,21 @@ open class DefaultWriterFactory(val options: ApiOptions): WriterFactory, InitWri
             clearTargetDir()
         }
 
-        val (apiName, apiPath) = initTargetPackage("api")
+        val (apiName, apiPath) = initTargetPackage(options.packageApi)
         packagePaths[apiName] = apiPath
         log.debug ("initialized target folder: {}", apiPath.toAbsolutePath ().toString ())
 
         // should be dto or resources
-        val (modelName, modelPath) = initTargetPackage("model")
+        val (modelName, modelPath) = initTargetPackage(options.packageModel)
         packagePaths[modelName] = modelPath
         log.debug ("initialized target folder: {}", modelPath.toAbsolutePath ().toString ())
 
-        val (supportName, supportPath) = initTargetPackage("support")
+        val (supportName, supportPath) = initTargetPackage(options.packageSupport)
         packagePaths[supportName] = supportPath
         log.debug ("initialized target folder: {}", supportPath.toAbsolutePath ().toString ())
 
         if (options.beanValidation) {
-            val (validationName, validationPath) = initTargetPackage("validation")
+            val (validationName, validationPath) = initTargetPackage(options.packageValidation)
             packagePaths[validationName] = validationPath
             log.debug("initialized target folder: {}", validationPath.toAbsolutePath().toString())
         }
@@ -100,15 +99,11 @@ open class DefaultWriterFactory(val options: ApiOptions): WriterFactory, InitWri
         return target
     }
 
-    protected fun initTargetPackage(subPackageName: String): Pair<String, Path> {
-        val rootPackageFolder = options.packageName.replace(".", "/")
-        val subPackageFolder = subPackageName.replace(".", "/")
-
-        val targetPackage = options.packageName.plus(".$subPackageName")
-        val packageFolder = listOf(rootPackageFolder, subPackageFolder).joinToString("/")
+    protected fun initTargetPackage(packageName: String): Pair<String, Path> {
+        val packageFolder = packageName.replace(".", "/")
         val packagePath = createTargetPackage(packageFolder)
 
-        return Pair(targetPackage, packagePath)
+        return Pair(packageName, packagePath)
     }
 
     private fun createTargetPackage(apiPkg: String): Path {

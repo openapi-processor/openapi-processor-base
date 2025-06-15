@@ -162,9 +162,9 @@ paths:
           description: no content
 """)
 
-        def options = new ApiOptions(
-            packageName: 'a.package.name'
-        )
+        def options = new ApiOptions()
+        options.packageName = 'a.package.name'
+        options.packageOptions.base = options.packageName
 
         when:
         api = apiConverter (options, Stub(Framework))

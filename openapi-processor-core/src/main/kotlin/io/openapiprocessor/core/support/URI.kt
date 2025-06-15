@@ -33,32 +33,3 @@ fun toURI(source: String): URI {
         .toAbsolutePath()
         .toUri()
 }
-
-/**
- * converts a document URI to a corresponding package name within a given root package. If the document
- * URI does not contain the root package path the result is the root package.
- *
- * example:
- * (resource:/tests/packages/inputs/main/kotlin/io/openapiprocessor/foo/foo.yaml, io.openapiprocessor) =>
- * io.openapiprocessor.foo
- *
- * @param documentUri the URI of the document to be converted
- * @param rootPackage the root package name to serve as the base for the resulting package name
- * @return the package name derived from the document URI, based on the specified root package
- *
- *
- */
-fun toPackageName(documentUri: URI, rootPackage: String): String {
-    val parentPath = documentUri
-        .resolve(".").path
-        .replace("/", ".")
-        .dropLast(1)
-
-    val rootIndex = parentPath.indexOf(rootPackage)
-    if (rootIndex == -1) {
-        return rootPackage
-    }
-
-    val pkgName = parentPath.substring(rootIndex)
-    return pkgName
-}

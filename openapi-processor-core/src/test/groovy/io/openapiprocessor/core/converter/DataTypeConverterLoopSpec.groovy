@@ -48,8 +48,11 @@ components:
           \$ref: '#/components/schemas/Self'
 """)
 
+        def options = new ApiOptions()
+        options.packageOptions.base = options.packageName
+
         when:
-        def api = apiConverter (Stub (Framework))
+        def api = apiConverter (options, Stub (Framework))
             .convert (openApi)
 
         then:

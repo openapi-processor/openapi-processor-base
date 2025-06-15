@@ -14,8 +14,8 @@ import io.openapiprocessor.core.model.DataTypes
 import io.openapiprocessor.core.model.Documentation
 import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.support.capitalizeFirstChar
-import io.openapiprocessor.core.support.toPackageName
 import io.openapiprocessor.core.writer.Identifier
+import io.openapiprocessor.core.writer.java.SchemaPackage
 import java.util.*
 
 /**
@@ -285,11 +285,7 @@ class DataTypeConverter(
     }
 
     private fun getPackageName(schemaInfo: SchemaInfo): String {
-        if (options.packageNameFromPath) {
-            return toPackageName(schemaInfo.getDocumentUri(), options.packageName)
-        } else {
-            return listOf(options.packageName, "model").joinToString(".")
-        }
+        return SchemaPackage(options).getPackageName(schemaInfo)
     }
 
     private fun createSimpleDataType(schemaInfo: SchemaInfo, dataTypes: DataTypes): DataType {

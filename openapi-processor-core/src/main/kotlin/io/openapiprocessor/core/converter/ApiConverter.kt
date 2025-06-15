@@ -5,11 +5,7 @@
 
 package io.openapiprocessor.core.converter
 
-import io.openapiprocessor.core.converter.mapping.AddParameterTypeMapping
-import io.openapiprocessor.core.converter.mapping.DropParameterTypeMapping
-import io.openapiprocessor.core.converter.mapping.TargetType
-import io.openapiprocessor.core.converter.mapping.UnknownDataTypeException
-import io.openapiprocessor.core.converter.mapping.UnknownParameterTypeException
+import io.openapiprocessor.core.converter.mapping.*
 import io.openapiprocessor.core.converter.wrapper.MultiDataTypeWrapper
 import io.openapiprocessor.core.converter.wrapper.ResultDataTypeWrapper
 import io.openapiprocessor.core.converter.wrapper.SingleDataTypeWrapper
@@ -18,18 +14,19 @@ import io.openapiprocessor.core.model.*
 import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.parser.*
 import io.openapiprocessor.core.parser.HttpMethod
+import io.openapiprocessor.core.parser.HttpStatus
 import io.openapiprocessor.core.parser.RequestBody
 import io.openapiprocessor.core.parser.Response
 import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
 import io.openapiprocessor.core.support.capitalizeFirstChar
-import io.openapiprocessor.core.support.toPackageName
 import io.openapiprocessor.core.writer.Identifier
+import io.openapiprocessor.core.writer.java.OperationPackage
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import io.openapiprocessor.core.model.ContentType as ModelContentType
+import io.openapiprocessor.core.model.HttpStatus as ModelHttpStatus
 import io.openapiprocessor.core.model.RequestBody as ModelRequestBody
 import io.openapiprocessor.core.model.Response as ModelResponse
-import io.openapiprocessor.core.model.HttpStatus as ModelHttpStatus
-import io.openapiprocessor.core.model.ContentType as ModelContentType
 import io.openapiprocessor.core.model.parameters.Parameter as ModelParameter
 
 const val MULTIPART = "multipart/"
@@ -131,11 +128,7 @@ class  ApiConverter(
     }
 
     private fun getPackageName(operation: Operation): String {
-        if (options.packageNameFromPath) {
-            return toPackageName(operation.getDocumentUri(), options.packageName)
-        } else {
-            return listOf(options.packageName, "api").joinToString(".")
-        }
+        return OperationPackage(options).getPackageName(operation)
     }
 
     private fun createEndpoint(path: String, operation: Operation, dataTypes: DataTypes, resolver: RefResolver): Endpoint? {

@@ -230,7 +230,9 @@ paths:
                     type: string                
 """)
         when:
-        def options = new ApiOptions(packageName: 'pkg')
+        def options = new ApiOptions()
+        options.packageName = 'pkg'
+        options.packageOptions.base = options.packageName
 
         Api api = apiConverter (options, Stub (Framework))
             .convert (openApi)
@@ -280,7 +282,9 @@ components:
           type: string
 """)
         when:
-        def options = new ApiOptions(packageName: 'pkg')
+        def options = new ApiOptions()
+        options.packageName = 'pkg'
+        options.packageOptions.base = options.packageName
 
         Api api = apiConverter (options, Stub (Framework))
             .convert (openApi)
