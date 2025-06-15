@@ -63,7 +63,12 @@ class TestFilesNative implements TestFiles {
 
     @Override
     Path getSourcePath(TestSet testSet, String path) {
-        return Paths.get(resource.getResourceUrl("/tests/${testSet.name}/${testSet.expected}/$path").toURI())
+        def testFile = "/tests/${testSet.name}/${testSet.expected}/$path"
+        def testFileResource = resource.getResourceUrl(testFile)
+        if (!testFileResource) {
+            println("ERROR: missing file '$testFile'!")
+        }
+        return Paths.get(testFileResource.toURI())
     }
 
     @Override
