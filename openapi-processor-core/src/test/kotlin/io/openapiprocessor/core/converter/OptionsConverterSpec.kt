@@ -28,7 +28,8 @@ class OptionsConverterSpec: StringSpec({
         options.targetDirOptions.layout shouldBe TargetDirLayout.CLASSIC
 
         options.packageName shouldBe "io.openapiprocessor.generated"
-        options.packageNameFromPath shouldBe false
+        options.packageOptions.base shouldBe null
+        options.packageOptions.location shouldBe null
         options.beanValidation shouldBe false
         options.javadoc shouldBe false
         options.modelType shouldBe "default"
@@ -104,12 +105,15 @@ class OptionsConverterSpec: StringSpec({
 
         val options = converter.convertOptions(mapOf(
             "mapping" to """
-                openapi-processor-mapping: v9
+                openapi-processor-mapping: v13
                 options:
                   clear-target-dir: false
                   target-dir:
                     layout: standard
                   package-name: generated
+                  package-names:
+                    location: production
+                  package-name-base: production
                   package-name-from-path: true
                   model-name-suffix: Suffix
                   model-type: record
@@ -132,7 +136,8 @@ class OptionsConverterSpec: StringSpec({
         options.targetDirOptions.clear.shouldBeFalse()
         options.targetDirOptions.layout.isStandard().shouldBeTrue()
         options.packageName shouldBe "generated"
-        options.packageNameFromPath shouldBe true
+        options.packageOptions.base shouldBe "generated"
+        options.packageOptions.location shouldBe "production"
         options.modelNameSuffix shouldBe "Suffix"
         options.modelType shouldBe "record"
         options.modelAccessors shouldBe false

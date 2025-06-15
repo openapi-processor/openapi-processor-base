@@ -22,10 +22,7 @@ data class Options(
      */
     val packageName: String = "io.openapiprocessor.generated",
 
-    /**
-     * enable/disable location based package names (optional)
-     */
-    val packageNameFromPath: Boolean = false,
+    val packageNames: PackageNames = PackageNames(),
 
     /**
      * enable/disable clearing of targetDir (optional).

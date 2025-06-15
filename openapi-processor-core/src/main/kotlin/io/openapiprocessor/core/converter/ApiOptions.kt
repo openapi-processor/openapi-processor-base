@@ -7,6 +7,7 @@ package io.openapiprocessor.core.converter
 
 import io.openapiprocessor.core.converter.mapping.*
 import io.openapiprocessor.core.converter.options.BasePathOptions
+import io.openapiprocessor.core.converter.options.PackageOptions
 import io.openapiprocessor.core.converter.options.TargetDirOptions
 import io.openapiprocessor.core.support.Empty
 
@@ -34,8 +35,15 @@ class ApiOptions: MappingSettings {
      * - models => "${packageName}.model"
      */
     var packageName = "io.openapiprocessor.generated"
-    var packageNameFromPath = false
 
+    /**
+     * package-name related options
+     */
+    var packageOptions: PackageOptions = PackageOptions()
+
+    val packageNameFromLocation get() = packageOptions.fromLocation
+
+    // todo move to packageOptions
     var packageNameApi : String = "api"
     var packageNameModel: String = "model"
     var packageNameSupport: String = "support"

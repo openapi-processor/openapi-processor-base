@@ -241,7 +241,7 @@ class DefaultWriterFactorySpec : StringSpec({
         val writerFactory = object : DefaultWriterFactory(options) {
             override fun initAdditionalPackages(options: ApiOptions): Map<String, Path> {
                 val pkgPaths = HashMap<String, Path>()
-                val (name, path) = initTargetPackage("foo/bar")
+                val (name, path) = initTargetPackage("io.openapiprocessor.foo.bar")
                 pkgPaths[name] = path
                 return pkgPaths
             }
@@ -257,7 +257,6 @@ class DefaultWriterFactorySpec : StringSpec({
     "lazy initialize additional package folders" {
         options.targetDir = listOf(target.toString()).joinToString(File.separator)
         options.targetDirOptions.layout = TargetDirLayout.CLASSIC
-        options.packageNameFromPath = true
 
         val writerFactory = DefaultWriterFactory(options)
         writerFactory.init()

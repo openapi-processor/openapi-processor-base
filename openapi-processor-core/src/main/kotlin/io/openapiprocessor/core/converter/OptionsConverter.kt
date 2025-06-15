@@ -65,7 +65,19 @@ class OptionsConverter(private val checkObsoleteProcessorOptions: Boolean = fals
                     }
 
                     options.packageName = mapping.options.packageName
-                    options.packageNameFromPath = mapping.options.packageNameFromPath
+                    with(mapping.options.packageNames) {
+                        options.packageOptions.base = base
+                        options.packageOptions.location = location
+
+                        // sync base package name
+                        if (options.packageOptions.base != null) {
+                            options.packageName = options.packageOptions.base!!
+                        }
+                        else {
+                            options.packageOptions.base = mapping.options.packageName
+                        }
+                    }
+
                     options.modelType = mapping.options.modelType
                     options.modelAccessors = mapping.options.modelAccessors
                     options.enumType = mapping.options.enumType

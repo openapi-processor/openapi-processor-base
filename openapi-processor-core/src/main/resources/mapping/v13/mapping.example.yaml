@@ -10,8 +10,13 @@ options: # general processor options (required)
   # the target package (required): io.openapiprocessor.generated (default)
   package-name: io.openapiprocessor.generated
 
-  # derive the package name from the document location (optional): true or false (default)
-  package-name-from-path: true
+  # package-name related options
+  package-names:
+    # same as package-name
+    base: io.openapiprocessor.generated
+
+    # base package name of location-based generated files
+    location: io.openapiprocessor
 
   # enable validation annotations (optional): true or false (default), javax, jakarta
   bean-validation: jakarta

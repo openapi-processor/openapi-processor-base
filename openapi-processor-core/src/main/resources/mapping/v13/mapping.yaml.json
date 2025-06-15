@@ -32,14 +32,25 @@
       "type": "object",
       "properties": {
         "package-name": {
-          "description": "java root package name to use in the generated source files.",
+          "description": "java base package name of the generated source files.",
           "type": "string",
           "default": "io.openapiprocessor.generated"
         },
-        "package-name-from-path": {
-          "description": "derive the package name from the document location.",
-          "type": "boolean",
-          "default": false
+        "package-names": {
+          "description": "package name related options",
+          "type": "object",
+          "properties": {
+            "base": {
+              "description": "java base package name of the generated source files. Alternative to 'package-name'.",
+              "type": "string",
+              "default": "io.openapiprocessor.generated"
+            },
+            "location": {
+              "description": "java base package name of location based generated source files.",
+              "type": "string",
+              "default": null
+            }
+          }
         },
         "bean-validation": {
           "description": "enable bean validation annotations for OpenAPI constraints.",
