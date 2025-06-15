@@ -12,7 +12,7 @@ class BasePathOptions {
     var enabled = false
 
     /**
-     * server-url index to use as base path.
+     * server-url index to use as the base path.
      */
     var serverUrl: Int? = null
 

@@ -20,7 +20,7 @@ import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.deleteRecursively
 
 /**
- * Writer factory for local file system. Must be initialized via [InitWriterTarget].
+ * Writer factory for the local file system. Must be initialized via [InitWriterTarget].
  */
 open class DefaultWriterFactory(val options: ApiOptions): WriterFactory, InitWriterTarget {
     private var log: Logger = LoggerFactory.getLogger(this.javaClass.name)

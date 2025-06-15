@@ -19,7 +19,7 @@ import io.openapiprocessor.core.processor.mapping.v2.parser.Mapping as ParserMap
 import java.util.stream.Collectors
 
 /**
- *  Converter for the type mapping from the mapping yaml. It converts the type mapping information
+ *  Converter for the type mapping from the mapping YAML. It converts the type mapping information
  *  into the format used by [io.openapiprocessor.core.converter.DataTypeConverter].
  */
 class MappingConverter(val mapping: MappingV2) {
