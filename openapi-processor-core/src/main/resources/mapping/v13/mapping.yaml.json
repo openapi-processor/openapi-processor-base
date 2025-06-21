@@ -50,7 +50,8 @@
               "type": "string",
               "default": null
             }
-          }
+          },
+          "required": ["base"]
         },
         "bean-validation": {
           "description": "enable bean validation annotations for OpenAPI constraints.",
@@ -158,8 +159,9 @@
         }
       },
       "additionalProperties": false,
-      "required": [
-        "package-name"
+      "oneOf": [
+        { "required": ["package-name"] },
+        { "required": ["package-names"] }
       ]
     },
     "Logging": {
