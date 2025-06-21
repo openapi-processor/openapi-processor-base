@@ -8,7 +8,7 @@ openapi-processor-mapping: v13
 options: # general processor options (required)
 
   # the target package (required): io.openapiprocessor.generated (default)
-  package-name: io.openapiprocessor.generated
+  # package-name: io.openapiprocessor.generated
 
   # package-name related options
   package-names:
