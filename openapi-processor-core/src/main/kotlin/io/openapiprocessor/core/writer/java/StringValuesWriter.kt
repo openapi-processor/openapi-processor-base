@@ -33,7 +33,7 @@ class StringValuesWriter(
         target.write("\n")
 
         target.write("""
-            @Target({ElementType.FIELD, ElementType.PARAMETER})
+            @Target({ElementType.FIELD, ElementType.PARAMETER, ElementType.TYPE_USE})
             @Retention(RetentionPolicy.RUNTIME)
             @Constraint(validatedBy = ValueValidator.class)
             @Documented
