@@ -133,7 +133,7 @@ class InterfaceWriter(
         val resultStyle = mappingFinder.findResultStyleMapping(query)
         val resultStatus = mappingFinder.getResultStatusOption(query)
 
-        val responseImports: MutableSet<String> = response.getResponseImports(resultStyle).toMutableSet()
+        val responseImports = response.getResponseImports(resultStyle)
         if (responseImports.isNotEmpty()) {
             imports.addAll(responseImports)
         }
