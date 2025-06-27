@@ -191,7 +191,7 @@
           "default": true
         },
         "identifier-word-break-from-digit-to-letter": {
-          "description": "identifier word break when switching from digits to letters.",
+          "description": "identifier, break word when switching from digits to letters.",
           "type": "boolean",
           "default": true
         },
