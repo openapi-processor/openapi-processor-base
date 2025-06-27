@@ -113,6 +113,7 @@ class OptionsConverter(private val checkObsoleteProcessorOptions: Boolean = fals
                     with(mapping.compatibility) {
                         options.beanValidationValidOnReactive = beanValidationValidOnReactive
                         options.identifierWordBreakFromDigitToLetter = identifierWordBreakFromDigitToLetter
+                        options.identifierPrefixInvalidEnumStart = identifierPrefixInvalidEnumStart
                     }
 
                     val mappings = MappingConverter().convert(mapping)

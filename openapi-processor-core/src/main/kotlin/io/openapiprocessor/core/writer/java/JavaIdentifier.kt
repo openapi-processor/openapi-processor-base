@@ -14,7 +14,7 @@ import javax.lang.model.SourceVersion
 import kotlin.collections.ArrayList
 
 
-private val INVALID_WORD_PREFIX = "v"
+private const val INVALID_WORD_PREFIX = "v"  // v for "value"
 private val INVALID_WORD_BREAKS = listOf(' ', '-')
 private val VALID_WORD_BREAKS = listOf('_')
 
@@ -51,7 +51,13 @@ class JavaIdentifier(val options: IdentifierOptions = IdentifierOptions()): Iden
     }
 
     override fun toEnum(src: String): String {
-        return joinEnum(splitAtWordBreaks(src))
+        val item = if (options.prefixInvalidEnumStart) {
+            src.prefixInvalidStart()
+        } else {
+            src
+        }
+
+        return joinEnum(splitAtWordBreaks(item))
     }
 
     override fun toMethodTail(src: String): String {
@@ -194,6 +200,13 @@ class JavaIdentifier(val options: IdentifierOptions = IdentifierOptions()): Iden
         }
 
         return false
+    }
+
+    private fun String.prefixInvalidStart(): String {
+        if(!isValidStart(this[0])) {
+            return INVALID_WORD_PREFIX.plus(this)
+        }
+        return this
     }
 
     private fun String.trimInvalidStart(): String {
