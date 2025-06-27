@@ -57,7 +57,8 @@ class StringValuesWriter(
         val imports = mutableSetOf(
             "${options.beanValidationFormat}.validation.ConstraintValidator",
             "${options.beanValidationFormat}.validation.ConstraintValidatorContext",
-            "java.util.Arrays"
+            "java.util.Arrays",
+            "java.util.Set"
         )
         imports.addAll(generatedWriter.getImports())
 
@@ -76,16 +77,16 @@ class StringValuesWriter(
 
         target.write("""
             public class ValueValidator implements ConstraintValidator<Values, String> {
-                private String[] values;
+                private Set<String> values;
 
                 @Override
                 public void initialize (Values constraintAnnotation) {
-                    values = constraintAnnotation.values();
+                    values = Set.copyOf(Arrays.asList(constraintAnnotation.values()));
                 }
 
                 @Override
                 public boolean isValid (String value, ConstraintValidatorContext context) {
-                    return value != null && Arrays.asList(values).contains(value);
+                    return value != null && values.contains(value);
                 }
             }
 
