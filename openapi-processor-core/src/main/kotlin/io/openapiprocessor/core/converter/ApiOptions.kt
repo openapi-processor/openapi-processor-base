@@ -170,4 +170,9 @@ class ApiOptions: MappingSettings {
      * break identifier names from digits to letters.
      */
     var identifierWordBreakFromDigitToLetter = true
+
+    /**
+     * prefix enum identifier if it starts with an invalid character.
+     */
+    var identifierPrefixInvalidEnumStart = true
 }

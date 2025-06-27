@@ -194,6 +194,11 @@
           "description": "identifier word break when switching from digits to letters.",
           "type": "boolean",
           "default": true
+        },
+        "identifier-prefix-invalid-enum-start": {
+          "description": "identifier, prefix enum if it starts with an invalid character.",
+          "type": "boolean",
+          "default": true
         }
       }
     },

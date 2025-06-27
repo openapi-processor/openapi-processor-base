@@ -17,5 +17,10 @@ data class Compatibility(
     /**
      * split identifier when switching from digits to letters.
      */
-    val identifierWordBreakFromDigitToLetter: Boolean = true
+    val identifierWordBreakFromDigitToLetter: Boolean = true,
+
+    /**
+     * prefix enum identifier if it starts with an invalid character.
+     */
+    val identifierPrefixInvalidEnumStart: Boolean = true
 )

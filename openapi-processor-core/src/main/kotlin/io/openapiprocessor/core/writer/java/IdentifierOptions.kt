@@ -9,5 +9,10 @@ data class IdentifierOptions(
     /**
      * recognize switch from digits to letters as word break.
      */
-    val wordBreakFromDigitToLetter: Boolean = true
+    val wordBreakFromDigitToLetter: Boolean = true,
+
+    /**
+     * prefix OpenAPI enum value if it starts with an invalid start character.
+     */
+    val prefixInvalidEnumStart: Boolean = true
 )

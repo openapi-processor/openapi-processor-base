@@ -139,7 +139,7 @@ public enum $type implements Supplier<String> {
         target.toString ().contains ("""\
 public enum Foo {
     FOO("foo"),
-    FOO_2("_foo-2"),
+    V_FOO_2("_foo-2"),
     FOO_FOO("foo-foo");
 
 """)

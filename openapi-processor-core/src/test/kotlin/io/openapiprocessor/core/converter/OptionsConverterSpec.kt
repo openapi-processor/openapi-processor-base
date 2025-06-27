@@ -49,6 +49,7 @@ class OptionsConverterSpec: StringSpec({
 
         options.beanValidationValidOnReactive.shouldBeTrue()
         options.identifierWordBreakFromDigitToLetter.shouldBeTrue()
+        options.identifierPrefixInvalidEnumStart.shouldBeTrue()
     }
 
     "should set target dir" {
@@ -130,6 +131,7 @@ class OptionsConverterSpec: StringSpec({
                 compatibility:
                   bean-validation-valid-on-reactive: false
                   identifier-word-break-from-digit-to-letter: false
+                  identifier-prefix-invalid-enum-start: false
             """.trimIndent()
         ))
 
@@ -153,6 +155,7 @@ class OptionsConverterSpec: StringSpec({
 
         options.beanValidationValidOnReactive.shouldBeFalse()
         options.identifierWordBreakFromDigitToLetter.shouldBeFalse()
+        options.identifierPrefixInvalidEnumStart.shouldBeFalse()
     }
 
     "overrides old target-dir mapping options" {

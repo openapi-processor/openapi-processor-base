@@ -10,8 +10,25 @@ import spock.lang.Unroll
 
 class IdentifierSpec extends Specification {
 
+    void "prefixes invalid start character of enum values"() {
+        def convert = new JavaIdentifier(new IdentifierOptions(wbfdtl, pies))
+
+        convert.toEnum(src) == enumn
+
+        where:
+        src   | enumn   | wbfdtl | pies
+        "1A"  | "V1_A"  | true   | true
+        "1A"  | "A"     | true   | false
+        "1A"  | "V1A"   | false  | true
+        "1A"  | "A"     | false  | false
+        "_1A" | "V_1_A" | true   | true
+        "_1A" | "A"     | true   | false
+        "_1A" | "V_1A"  | false  | true
+        "_1A" | "A"     | false  | false
+    }
+
     void "add prefix to single invalid identifier"() {
-        def convert = new JavaIdentifier(new IdentifierOptions(wbfdtl))
+        def convert = new JavaIdentifier(new IdentifierOptions(wbfdtl, true))
 
         expect:
         convert.toCamelCase(src) == camelCase
@@ -28,7 +45,7 @@ class IdentifierSpec extends Specification {
     }
 
     void "recognize word break if a digit is followed by a letter" () {
-        def convert = new JavaIdentifier(new IdentifierOptions(true))
+        def convert = new JavaIdentifier(new IdentifierOptions(true, true))
 
         expect:
         convert.toCamelCase(src) == camelCase
@@ -42,7 +59,7 @@ class IdentifierSpec extends Specification {
     }
 
     void "ignore word break if a digit is followed by a letter" () {
-        def convert = new JavaIdentifier(new IdentifierOptions(false))
+        def convert = new JavaIdentifier(new IdentifierOptions(false, true))
 
         expect:
         convert.toCamelCase(src) == camelCase
@@ -57,7 +74,7 @@ class IdentifierSpec extends Specification {
 
     @Unroll
     void "convert source string '#src' to valid identifiers: #identifier/#clazz/#enumn" () {
-        def convert = new JavaIdentifier(new IdentifierOptions(true))
+        def convert = new JavaIdentifier(new IdentifierOptions(true, true))
 
         expect:
         convert.toCamelCase (src) == camelCase
@@ -74,8 +91,8 @@ class IdentifierSpec extends Specification {
         "AA"             | "aa"           | "aa"           | "Aa"           | "AA"
 
         // invalid chars are stripped
-        "1a"             | "a"            | "a"            | "A"            | "A"
-        "2345a"          | "a"            | "a"            | "A"            | "A"
+        "1a"             | "a"            | "a"            | "A"            | "V1_A"
+        "2345a"          | "a"            | "a"            | "A"            | "V2345_A"
 
         // word break at invalid character
         "a foo"          | "aFoo"         | "aFoo"         | "AFoo"         | "A_FOO"
@@ -85,10 +102,10 @@ class IdentifierSpec extends Specification {
         "a-foo-bar"      | "aFooBar"      | "aFooBar"      | "AFooBar"      | "A_FOO_BAR"
         "a foo-bar"      | "aFooBar"      | "aFooBar"      | "AFooBar"      | "A_FOO_BAR"
         'api/some/thing' | 'apiSomeThing' | 'apiSomeThing' | "ApiSomeThing" | "API_SOME_THING"
-        "_fo-o"          | 'foO'          | 'foO'          | 'FoO'          | "FO_O"
+        "_fo-o"          | 'foO'          | 'foO'          | 'FoO'          | "V_FO_O"
 
         // word break at underscore, it is valid but unwanted except for enums
-        "_ab"            | "ab"           | "ab"           | "Ab"           | "AB"
+        "_ab"            | "ab"           | "ab"           | "Ab"           | "V_AB"
         "a_b"            | "aB"           | "aB"           | "AB"           | "A_B"
         "a_foo"          | "aFoo"         | "aFoo"         | "AFoo"         | "A_FOO"
         "A_A"            | "aA"           | "aA"           | "AA"           | "A_A"
@@ -116,14 +133,14 @@ class IdentifierSpec extends Specification {
     }
 
     void "adds suffix to class name" () {
-        def convert = new JavaIdentifier(new IdentifierOptions(true))
+        def convert = new JavaIdentifier(new IdentifierOptions(true, true))
 
         expect:
         convert.toClass("foo", "X") == "FooX"
     }
 
     void "ignores suffix if class name already ends with the suffix"() {
-        def convert = new JavaIdentifier(new IdentifierOptions(true))
+        def convert = new JavaIdentifier(new IdentifierOptions(true, true))
 
         expect:
         convert.toClass("FooX", "X") == "FooX"
