@@ -49,7 +49,7 @@ publishing {
     repositories {
         maven {
             val releasesRepoUrl = "https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2"
-            val snapshotsRepoUrl = "https://ossrh-staging-api.central.sonatype.com/content/repositories/snapshots"
+            val snapshotsRepoUrl = "https://central.sonatype.com/repository/maven-snapshots"
             url = uri(if (isReleaseVersion()) releasesRepoUrl else snapshotsRepoUrl)
 
             credentials {
