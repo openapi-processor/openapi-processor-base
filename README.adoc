@@ -47,3 +47,7 @@ openapi4j parser implementation of parser api
 === link:{test}[openapi-processor-test]
 
 re-usable code for running integration tests of an openapi-processor-x.
+
+== snapshot repository
+
+to use snapshot versions add `https://central.sonatype.com/repository/maven-snapshots` as maven repository to your build file.
