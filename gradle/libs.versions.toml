@@ -19,7 +19,7 @@ openapi-parser-parser = { module = "io.openapiprocessor:openapi-parser" }
 #json-schema-validator-validator = { module = "io.openapiprocessor:json-schema-validator" }
 io-jackson = { module = "io.openapiprocessor:io-jackson" }
 
-jackson-bom = "com.fasterxml.jackson:jackson-bom:2.19.1"
+jackson-bom = "com.fasterxml.jackson:jackson-bom:2.19.2"
 #jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind" }
 jackson-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml" }
 #jackson-xml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-xml" }
