@@ -9,7 +9,7 @@ import com.google.googlejavaformat.java.Formatter
 import com.google.googlejavaformat.java.JavaFormatterOptions
 import io.openapiprocessor.core.writer.SourceFormatter
 
-private const val addExportsLink: String = "https://openapiprocessor.io/oap/home/jdk.html"
+private const val addExportsLink: String = "https://openapiprocessor.io/oap/jdk.html"
 
 open class GoogleFormatter: SourceFormatter {
     protected lateinit var formatter: Formatter
