@@ -4,6 +4,7 @@ import org.gradle.accessors.dm.LibrariesForLibs
 
 plugins {
     java
+    kotlin
 }
 
 // see buildSrc/build.gradle.kts

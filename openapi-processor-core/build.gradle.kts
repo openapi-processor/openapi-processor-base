@@ -1,11 +1,11 @@
 plugins {
     antlr
     groovy
-
+    kotlin
     id("openapiprocessor.library")
-    id("openapiprocessor.publish")
     id("openapiprocessor.test")
     id("openapiprocessor.testInt")
+    id("openapiprocessor.publish")
     alias(libs.plugins.versions)
     alias(libs.plugins.sonar)
 }

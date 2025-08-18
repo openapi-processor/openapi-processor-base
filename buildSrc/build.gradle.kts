@@ -8,6 +8,6 @@ dependencies {
 
     implementation(libs.plugin.kotlin)
     implementation(libs.plugin.checker)
-    implementation(libs.plugin.outdated)
+    implementation(libs.plugin.updates)
     implementation(libs.plugin.build)
 }

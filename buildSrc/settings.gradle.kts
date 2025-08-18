@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage", "UNUSED_VARIABLE")
+
 pluginManagement {
     repositories {
         gradlePluginPortal()

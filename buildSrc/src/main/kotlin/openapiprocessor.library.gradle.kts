@@ -6,7 +6,7 @@ import org.gradle.kotlin.dsl.withType
 plugins {
     `java-library`
     jacoco
-    id("org.jetbrains.kotlin.jvm")
+    kotlin
     id("com.github.ben-manes.versions")
 }
 

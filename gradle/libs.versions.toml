@@ -11,6 +11,8 @@ build-plugins = "2025.1-SNAPSHOT"
 
 junit = "5.13.4"
 jacoco = "0.8.11"
+updates = "0.52.0"
+checker = "0.6.16"
 
 [libraries]
 openapi-processor-api = { module = "io.openapiprocessor:openapi-processor-api", version.ref = "api" }
@@ -56,15 +58,15 @@ spock = "org.spockframework:spock-core:2.3-groovy-4.0"
 # for buildSrc convention plugins
 plugin-build = { module = "io.openapiprocessor:build-plugins", version.ref = "build-plugins" }
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
-plugin-checker = "org.checkerframework:checkerframework-gradle-plugin:0.6.16"
-plugin-outdated = "com.github.ben-manes:gradle-versions-plugin:0.52.0"
+plugin-checker = { module = "org.checkerframework:checkerframework-gradle-plugin", version.ref = "checker" }
+plugin-updates = { module = "com.github.ben-manes:gradle-versions-plugin", version.ref = "updates" }
 
 [bundles]
 #jackson = ["jackson-databind", "jackson-yaml", "jackson-kotlin"]
 #openapi-parser = ["openapi-parser-parser", "io-jackson"]
 
 [plugins]
-#kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+updates = { id = "com.github.ben-manes.versions", version = "updates" }
 jacoco = { id = "org.barfuin.gradle.jacocolog", version = "3.1.0" }
 sonar = { id = "org.sonarqube", version =  "6.2.0.5505" }
 central = { id = "io.openapiprocessor.build.plugin.publish-central", version.ref = "build-plugins" }
