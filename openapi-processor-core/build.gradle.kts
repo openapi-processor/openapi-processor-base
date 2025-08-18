@@ -1,58 +1,66 @@
 plugins {
+    antlr
+    groovy
+
     id("openapiprocessor.library")
     id("openapiprocessor.publish")
     id("openapiprocessor.test")
     id("openapiprocessor.testInt")
-    id("openapiprocessor.version")
-
-    id 'antlr'
-    id 'groovy'
+    alias(libs.plugins.versions)
     alias(libs.plugins.sonar)
 }
 
-repositories {
-//    mavenLocal()
+versions {
+    packageName = "io.openapiprocessor.core"
+    entries.putAll(mapOf(
+        "version" to libs.versions.processor.get()
+    ))
 }
 
 sourceSets {
     main {
         java {
-            srcDirs 'build/antlr'
+            srcDir(tasks.named("generateGrammarSource"))
+        }
+    }
+
+    test {
+        java {
+            srcDir(tasks.named("generateTestGrammarSource"))
+        }
+        groovy {
+            srcDir(tasks.named("compileKotlin"))
+            srcDir(tasks.named("compileTestKotlin"))
+        }
+    }
+
+    testInt {
+        java {
+            srcDir(tasks.named("generateTestIntGrammarSource"))
         }
     }
 }
 
-tasks.named('generateGrammarSource') {
-    def antlrPkg = 'io.openapiprocessor.core.processor.mapping.v2.parser.antlr'
-    arguments += ['-package', antlrPkg]
+tasks.compileTestGroovy {
+    classpath += sourceSets.main.get().compileClasspath
+    classpath += files(tasks.compileKotlin.get().destinationDirectory)
+    classpath += files(tasks.compileTestKotlin.get().destinationDirectory)
+}
+
+tasks.named<AntlrTask>("generateGrammarSource") {
+    val antlrPkg = "io.openapiprocessor.core.processor.mapping.v2.parser.antlr"
+    arguments = arguments + listOf("-package", antlrPkg)
     outputDirectory = layout.buildDirectory.dir("antlr/${antlrPkg.replace('.', '/')}").get().asFile
 }
 
-tasks.named('compileTestGroovy') {
-    dependsOn 'compileKotlin'
-    classpath += files(compileKotlin.destinationDirectory)
-    classpath += files(compileTestKotlin.destinationDirectory)
-}
-
-
-tasks.named('compileKotlin') {
-    dependsOn 'generateGrammarSource'
-}
-
-tasks.named('compileTestKotlin') {
-    dependsOn 'generateTestGrammarSource'
-}
-
-tasks.named('compileTestIntKotlin') {
-    dependsOn 'generateTestIntGrammarSource'
-}
-
-tasks.named('sourcesJar') {
-    dependsOn 'generateGrammarSource'
-}
-
-tasks.named('kotlinSourcesJar') {
-    dependsOn 'generateGrammarSource'
+repositories {
+    mavenCentral()
+    maven {
+        url = uri("https://central.sonatype.com/repository/maven-snapshots")
+        mavenContent {
+            snapshotsOnly()
+        }
+    }
 }
 
 dependencies {
@@ -111,30 +119,26 @@ dependencies {
     testIntImplementation (libs.jimfs)
 }
 
-jacocoTestReport {
-    dependsOn(testInt)
-    getExecutionData().setFrom(fileTree(buildDir).include("/jacoco/*.exec"))
+publishing {
+    publications {
+        named<MavenPublication>("openapiprocessor") {
+            pom {
+                description = "OpenAPI Processor Core"
+            }
+        }
+    }
+}
+
+tasks.named<JacocoReport>("jacocoTestReport") {
+    dependsOn(tasks.named("testInt"))
+    executionData.setFrom(fileTree(layout.buildDirectory).include("/jacoco/*.exec"))
 }
 
 sonarqube {
   properties {
-    property "sonar.projectKey", "openapi-processor_openapi-processor-base-core"
-    property "sonar.organization", "openapi-processor"
-    property "sonar.host.url", "https://sonarcloud.io"
-    property "sonar.coverage.jacoco.xmlReportPaths", layout.buildDirectory.dir("reports/jacoco/test/jacocoTestReport.xml").get().toString()
+    property("sonar.projectKey", "openapi-processor_openapi-processor-base-core")
+    property("sonar.organization", "openapi-processor")
+    property("sonar.host.url", "https://sonarcloud.io")
+    property("sonar.coverage.jacoco.xmlReportPaths", layout.buildDirectory.dir("reports/jacoco/test/jacocoTestReport.xml").get().toString())
   }
-}
-
-generateVersion {
-    targetPackage = "io.openapiprocessor.core"
-}
-
-publishing {
-    publications {
-        named/*<MavenPublication>*/("openapiprocessor") {
-            pom {
-                description.set("OpenAPI Processor Core")
-            }
-        }
-    }
 }

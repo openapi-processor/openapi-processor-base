@@ -45,7 +45,7 @@ publishing {
     publications {
         getByName<MavenPublication>("openapiprocessor") {
             pom {
-                description.set("OpenAPI Parser swagger")
+                description = "OpenAPI Parser swagger"
             }
         }
     }

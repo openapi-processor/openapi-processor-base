@@ -5,9 +5,6 @@ plugins {
     `java-test-fixtures`
 }
 
-repositories {
-}
-
 dependencies {
     implementation (project(":openapi-processor-core-parser-api"))
     implementation (libs.openapi4j)
@@ -41,7 +38,7 @@ publishing {
     publications {
         getByName<MavenPublication>("openapiprocessor") {
             pom {
-                description.set("OpenAPI Parser openapi4j")
+                description = "OpenAPI Parser openapi4j"
             }
         }
     }

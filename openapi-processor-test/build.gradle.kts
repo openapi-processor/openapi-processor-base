@@ -4,9 +4,6 @@ plugins {
     groovy
 }
 
-repositories {
-}
-
 dependencies {
     compileOnly(libs.openapi.processor.api)
     compileOnly(project(":openapi-processor-test-api"))
@@ -30,7 +27,7 @@ publishing {
     publications {
         getByName<MavenPublication>("openapiprocessor") {
             pom {
-                description.set("OpenAPI Processor Test")
+                description = "OpenAPI Processor Test"
             }
         }
     }

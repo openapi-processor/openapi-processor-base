@@ -6,7 +6,6 @@ import org.gradle.kotlin.dsl.withType
 plugins {
     `java-library`
     jacoco
-
     id("org.jetbrains.kotlin.jvm")
     id("com.github.ben-manes.versions")
 }
@@ -25,12 +24,16 @@ java {
 
 kotlin {
     jvmToolchain(libs.versions.build.jdk.get().toInt())
+
+    compilerOptions {
+        freeCompilerArgs.add("-Xannotation-default-target=param-property")
+    }
 }
 
 repositories {
     mavenCentral()
     maven {
-        url = uri("https://oss.sonatype.org/content/repositories/snapshots")
+        url = uri("https://central.sonatype.com/repository/maven-snapshots")
         mavenContent {
             snapshotsOnly()
         }

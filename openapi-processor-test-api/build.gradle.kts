@@ -4,14 +4,11 @@ plugins {
     groovy
 }
 
-dependencies {
-}
-
 publishing {
     publications {
         getByName<MavenPublication>("openapiprocessor") {
             pom {
-                description.set("OpenAPI Processor Test Api")
+                description = "OpenAPI Processor Test Api"
             }
         }
     }
