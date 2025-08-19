@@ -1,0 +1,23 @@
+openapi: 3.0.2
+info:
+  title: drop bean validation annotation if mapped to unsupported type
+  version: 1.0.0
+
+paths:
+
+  /foo:
+    get:
+      parameters:
+        # the parameter is mapped from `integer` to `Year`. The bean validation annotations `@DecimalMin(value = "1970")`
+        # and `@DecimalMax(value = "2099")` added by `minimum` and `maximum` are not supported on `Year` and should be
+        # removed.
+        - in: query
+          name: year
+          schema:
+            type: integer
+            format: year
+            minimum: 1970
+            maximum: 2099
+      responses:
+        '204':
+          description: empty
