@@ -76,7 +76,7 @@ tasks.withType<Test>().configureEach {
 
 tasks.withType<DependencyUpdatesTask> {
     rejectVersionIf {
-        println("candidate $candidate")
+        println("candidate: $candidate stable: ${!candidate.version.isNonStable()}")
         candidate.version.isNonStable()
     }
 
@@ -103,7 +103,7 @@ fun String.isNonStable(): Boolean {
 
     for (n in nonStable) {
        if (this.contains("(?i)$n".toRegex())) {
-           println("not stable: $this")
+           //println("not stable: $this")
            return true
        }
     }
