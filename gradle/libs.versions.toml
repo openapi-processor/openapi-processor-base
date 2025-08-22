@@ -66,7 +66,7 @@ plugin-updates = { module = "com.github.ben-manes:gradle-versions-plugin", versi
 #openapi-parser = ["openapi-parser-parser", "io-jackson"]
 
 [plugins]
-updates = { id = "com.github.ben-manes.versions", version = "updates" }
+0.52.0 = { id = "com.github.ben-manes.versions", version = "0.52.0" }
 jacoco = { id = "org.barfuin.gradle.jacocolog", version = "3.1.0" }
 sonar = { id = "org.sonarqube", version =  "6.2.0.5505" }
 central = { id = "io.openapiprocessor.build.plugin.publish-central", version.ref = "build-plugins" }
