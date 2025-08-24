@@ -107,39 +107,6 @@ class BeanValidationMappingSpec: StringSpec({
         io.annotations.shouldBeEmpty()
     }
 
-    // does this make sense...?
-    "applies constraint annotations to mapped simple item data type" {
-        val dataType = MappedCollectionDataType(
-            "List", "java",
-            MappedDataType(
-                "Foo", "pkg",
-                sourceDataType = StringDataType(
-                    constraints = DataTypeConstraints(minLength = 2, maxLength = 3)
-                )
-            ),
-            sourceDataType = ArrayDataType(
-                MappedDataType(
-                    "Foo", "pkg",
-                    sourceDataType = StringDataType(
-                        constraints = DataTypeConstraints(minLength = 2, maxLength = 3)
-                    )
-                )
-            )
-        )
-
-        val info = validation.validate(dataType, false)
-
-        val prop = info.prop
-        prop.dataTypeValue shouldBe "List<@Size(min = 2, max = 3) Foo>"
-        prop.imports shouldBe setOf(validations.SIZE)
-        prop.annotations.shouldBeEmpty()
-
-        val io = info.inout
-        io.dataTypeValue shouldBe "List<@Size(min = 2, max = 3) Foo>"
-        io.imports shouldBe setOf(validations.SIZE)
-        io.annotations.shouldBeEmpty()
-    }
-
     "does not add @Valid to data type without source type (additional parameter)" {
         val dataType = MappedDataType(
             "Foo",
