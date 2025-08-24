@@ -40,7 +40,7 @@ class TargetType(
         if (dot == -1)
             return ""
 
-        return typeName.substring(0, dot)
+        return typeName.take(dot)
     }
 
     override fun toString(): String {
