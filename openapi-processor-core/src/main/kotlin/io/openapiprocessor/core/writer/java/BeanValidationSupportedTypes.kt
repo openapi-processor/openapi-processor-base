@@ -10,7 +10,7 @@ import io.openapiprocessor.core.model.datatypes.GenericDataType
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class BeanValidationTargetTypes {
+class BeanValidationSupportedTypes {
     var log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     fun supports(annotationType: String, targetDataType: DataType): Boolean {

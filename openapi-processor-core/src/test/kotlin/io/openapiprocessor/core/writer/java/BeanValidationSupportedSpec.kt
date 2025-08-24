@@ -23,24 +23,24 @@ class BeanValidationSupportedSpec : FreeSpec({
     val validation = BeanValidationFactory(apiOptions)
     val validations = validation.validations
 
-    data class DecimalMinMax(val targetType: TargetType)
+    data class TestCase(val targetType: TargetType)
 
     withData(
          nameFn = { "target supports @DecimalMin/Max - ${it.targetType.typeName}" },
         listOf(
-            DecimalMinMax(TargetType("java.math.BigDecimal")),
-            DecimalMinMax(TargetType("java.math.BigInteger")),
-            DecimalMinMax(TargetType("java.lang.CharSequence")),
-            DecimalMinMax(TargetType("java.lang.String")),        // implements CharSequence
-            DecimalMinMax(TargetType("java.lang.StringBuilder")), // implements CharSequence
-            DecimalMinMax(TargetType("java.lang.Byte")),
-            DecimalMinMax(TargetType("java.lang.Short")),
-            DecimalMinMax(TargetType("java.lang.Integer")),
-            DecimalMinMax(TargetType("java.lang.Long")),
-            DecimalMinMax(TargetType("byte")),
-            DecimalMinMax(TargetType("short")),
-            DecimalMinMax(TargetType("int")),
-            DecimalMinMax(TargetType("long")),
+            TestCase(TargetType("java.math.BigDecimal")),
+            TestCase(TargetType("java.math.BigInteger")),
+            TestCase(TargetType("java.lang.CharSequence")),
+            TestCase(TargetType("java.lang.String")),        // implements CharSequence
+            TestCase(TargetType("java.lang.StringBuilder")), // implements CharSequence
+            TestCase(TargetType("java.lang.Byte")),
+            TestCase(TargetType("java.lang.Short")),
+            TestCase(TargetType("java.lang.Integer")),
+            TestCase(TargetType("java.lang.Long")),
+            TestCase(TargetType("byte")),
+            TestCase(TargetType("short")),
+            TestCase(TargetType("int")),
+            TestCase(TargetType("long")),
         )
     ) { (targetType) ->
         val dataType = MappedDataType(
@@ -68,8 +68,8 @@ class BeanValidationSupportedSpec : FreeSpec({
     withData(
          nameFn = { "target does not support @DecimalMin/Max - ${it.targetType.typeName}" },
         listOf(
-            DecimalMinMax(TargetType("java.time.Year")),
-            DecimalMinMax(TargetType("java.util.List")),
+            TestCase(TargetType("java.time.Year")),
+            TestCase(TargetType("java.util.List")),
         )
     ) { (targetType) ->
         val dataType = MappedDataType(
@@ -95,23 +95,21 @@ class BeanValidationSupportedSpec : FreeSpec({
     }
 
 
-    data class Size(val targetType: TargetType)
-
     withData(
          nameFn = { "target supports @Size - ${it.targetType.typeName}" },
         listOf(
-            Size(TargetType("java.lang.CharSequence")),
-            Size(TargetType("java.lang.String")),        // implements CharSequence
-            Size(TargetType("java.lang.StringBuilder")), // implements CharSequence
-            Size(TargetType("java.util.Collection")),
-            Size(TargetType("java.util.ArrayList")),     // implements Collection
-            Size(TargetType("java.util.ArrayDeque")),    // implements Collection
-            Size(TargetType("java.util.HashSet")),       // implements Collection
-            Size(TargetType("java.util.Map")),
-            Size(TargetType("java.util.HashMap")),       // implements Map
-            Size(TargetType("java.util.TreeMap")),       // implements Map
-            Size(TargetType("java.lang.Long[]")),
-            Size(TargetType("long[]"))
+            TestCase(TargetType("java.lang.CharSequence")),
+            TestCase(TargetType("java.lang.String")),        // implements CharSequence
+            TestCase(TargetType("java.lang.StringBuilder")), // implements CharSequence
+            TestCase(TargetType("java.util.Collection")),
+            TestCase(TargetType("java.util.ArrayList")),     // implements Collection
+            TestCase(TargetType("java.util.ArrayDeque")),    // implements Collection
+            TestCase(TargetType("java.util.HashSet")),       // implements Collection
+            TestCase(TargetType("java.util.Map")),
+            TestCase(TargetType("java.util.HashMap")),       // implements Map
+            TestCase(TargetType("java.util.TreeMap")),       // implements Map
+            TestCase(TargetType("java.lang.Long[]")),
+            TestCase(TargetType("long[]"))
         )
     ) { (targetType) ->
         val dataType = MappedDataType(
@@ -141,8 +139,8 @@ class BeanValidationSupportedSpec : FreeSpec({
     withData(
          nameFn = { "target does not support @Size - ${it.targetType.typeName}" },
         listOf(
-            DecimalMinMax(TargetType("java.lang.Long")),
-            DecimalMinMax(TargetType("long")),
+            TestCase(TargetType("java.lang.Long")),
+            TestCase(TargetType("long")),
         )
     ) { (targetType) ->
         val dataType = MappedDataType(
@@ -169,6 +167,123 @@ class BeanValidationSupportedSpec : FreeSpec({
         io.annotations.shouldBeEmpty()
     }
 
+    withData(
+         nameFn = { "target supports @Pattern - ${it.targetType.typeName}" },
+        listOf(
+            TestCase(TargetType("java.lang.CharSequence")),
+            TestCase(TargetType("java.lang.String")),        // implements CharSequence
+            TestCase(TargetType("java.lang.StringBuilder")), // implements CharSequence
+        )
+    ) { (targetType) ->
+        val dataType = MappedDataType(
+            targetType.getName(),
+            targetType.getPkg(),
+            emptyList(),
+            null,
+            false,
+            StringDataType(constraints = DataTypeConstraints(pattern = ".*"))
+        )
+
+        val info = validation.validate(dataType, false)
+
+        val prop = info.prop
+        prop.dataTypeValue shouldBe targetType.getName()
+        prop.imports  shouldBe setOf(validations.PATTERN)
+        prop.annotations shouldContainExactly listOf("""@Pattern(regexp = ".*")""")
+
+        val io = info.inout
+        io.dataTypeValue shouldBe """@Pattern(regexp = ".*") ${targetType.getName()}"""
+        io.imports shouldBe setOf(validations.PATTERN)
+        io.annotations.shouldBeEmpty()
+    }
+
+    withData(
+         nameFn = { "target does not support @Pattern - ${it.targetType.typeName}" },
+        listOf(
+            TestCase(TargetType("java.lang.Long")),
+            TestCase(TargetType("long")),
+        )
+    ) { (targetType) ->
+        val dataType = MappedDataType(
+            targetType.getName(),
+            targetType.getPkg(),
+            emptyList(),
+            null,
+            false,
+            StringDataType(constraints = DataTypeConstraints(pattern = ".*"))
+        )
+
+        val info = validation.validate(dataType, false)
+
+        val prop = info.prop
+        prop.dataTypeValue shouldBe targetType.getName()
+        prop.imports.shouldBeEmpty()
+        prop.annotations.shouldBeEmpty()
+
+        val io = info.inout
+        io.dataTypeValue shouldBe targetType.getName()
+        io.imports.shouldBeEmpty()
+        io.annotations.shouldBeEmpty()
+    }
+
+      withData(
+           nameFn = { "target supports @Email - ${it.targetType.typeName}" },
+          listOf(
+              TestCase(TargetType("java.lang.CharSequence")),
+              TestCase(TargetType("java.lang.String")),        // implements CharSequence
+              TestCase(TargetType("java.lang.StringBuilder")), // implements CharSequence
+          )
+      ) { (targetType) ->
+          val dataType = MappedDataType(
+              targetType.getName(),
+              targetType.getPkg(),
+              emptyList(),
+              null,
+              false,
+              StringDataType(constraints = DataTypeConstraints(format = "email"))
+          )
+
+          val info = validation.validate(dataType, false)
+
+          val prop = info.prop
+          prop.dataTypeValue shouldBe targetType.getName()
+          prop.imports  shouldBe setOf(validations.EMAIL)
+          prop.annotations shouldContainExactly listOf("""@Email""")
+
+          val io = info.inout
+          io.dataTypeValue shouldBe """@Email ${targetType.getName()}"""
+          io.imports shouldBe setOf(validations.EMAIL)
+          io.annotations.shouldBeEmpty()
+      }
+
+      withData(
+           nameFn = { "target does not support @Email - ${it.targetType.typeName}" },
+          listOf(
+              TestCase(TargetType("java.lang.Long")),
+              TestCase(TargetType("long")),
+          )
+      ) { (targetType) ->
+          val dataType = MappedDataType(
+              targetType.getName(),
+              targetType.getPkg(),
+              emptyList(),
+              null,
+              false,
+              StringDataType(constraints = DataTypeConstraints(format = "email"))
+          )
+
+          val info = validation.validate(dataType, false)
+
+          val prop = info.prop
+          prop.dataTypeValue shouldBe targetType.getName()
+          prop.imports.shouldBeEmpty()
+          prop.annotations.shouldBeEmpty()
+
+          val io = info.inout
+          io.dataTypeValue shouldBe targetType.getName()
+          io.imports.shouldBeEmpty()
+          io.annotations.shouldBeEmpty()
+      }
 })
 
 

@@ -19,7 +19,7 @@ open class BeanValidationFactory(
     private val options: ApiOptions
 ) {
     val validations: BeanValidations = BeanValidations(getValidationFormat())
-    val targetTypes: BeanValidationTargetTypes = BeanValidationTargetTypes()
+    val targetTypes: BeanValidationSupportedTypes = BeanValidationSupportedTypes()
 
     /**
      * override to add annotations to the model object class.
@@ -75,11 +75,11 @@ open class BeanValidationFactory(
             annotations.add(createDecimalMaxAnnotation (sourceDataType))
         }
 
-        if (sourceDataType.patternConstraint()) {
+        if (hasPatternConstraint(dataType)) {
             annotations.add(createPatternAnnotation(sourceDataType))
         }
 
-        if (sourceDataType.emailConstraint()) {
+        if (hasEmailConstraint(dataType)) {
             annotations.add(createEmailAnnotation())
         }
 
@@ -130,6 +130,26 @@ open class BeanValidationFactory(
         }
 
         return targetTypes.supports(validations.DECIMAL_MAX, dataType)
+    }
+
+    private fun hasPatternConstraint(dataType: DataType): Boolean {
+        val sourceDataType = getSourceDataType(dataType)
+        val constraint = sourceDataType.patternConstraint()
+        if (sourceDataType == dataType || !constraint) {
+            return constraint
+        }
+
+        return targetTypes.supports(validations.PATTERN, dataType)
+    }
+
+    private fun hasEmailConstraint(dataType: DataType): Boolean {
+        val sourceDataType = getSourceDataType(dataType)
+        val constraint = sourceDataType.emailConstraint()
+        if (sourceDataType == dataType || !constraint) {
+            return constraint
+        }
+
+        return targetTypes.supports(validations.EMAIL, dataType)
     }
 
     private fun createDecimalMinAnnotation(dataType: DataType): Annotation {

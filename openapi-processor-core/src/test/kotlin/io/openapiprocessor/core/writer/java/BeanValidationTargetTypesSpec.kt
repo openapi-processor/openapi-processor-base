@@ -13,7 +13,7 @@ import io.openapiprocessor.core.model.datatypes.*
 
 class BeanValidationTargetTypesSpec : FreeSpec({
     val annotations = BeanValidations(BeanValidationFormat.JAKARTA)
-    val types = BeanValidationTargetTypes()
+    val types = BeanValidationSupportedTypes()
 
     data class TestCase(val source: String, val target: DataType, val supported: Boolean = true): WithDataTestName {
         override fun dataTestName(): String {
