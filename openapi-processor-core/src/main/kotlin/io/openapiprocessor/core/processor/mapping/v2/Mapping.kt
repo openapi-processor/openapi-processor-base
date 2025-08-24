@@ -32,6 +32,11 @@ data class Mapping(
     val map: Map = Map(),
 
     /**
+     * bean-validation
+     */
+    val beanValidation: MutableMap<String, Set<String>> = mutableMapOf(),
+
+    /**
      * compatibility options
      */
     val compatibility: Compatibility = Compatibility(),
