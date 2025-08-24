@@ -9,7 +9,7 @@ import io.openapiprocessor.core.model.Annotation
 import io.openapiprocessor.core.model.datatypes.*
 
 data class BeanValidationValue(
-    val dataTypeValue: String,
+    val dataTypeValue: String,  // without package
     val imports: Set<String>,
     val annotations: List<String>) // could be set?
 

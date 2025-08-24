@@ -19,6 +19,7 @@ open class BeanValidationFactory(
     private val options: ApiOptions
 ) {
     val validations: BeanValidations = BeanValidations(getValidationFormat())
+    val targetTypes: BeanValidationTargetTypes = BeanValidationTargetTypes()
 
     /**
      * override to add annotations to the model object class.
@@ -62,15 +63,15 @@ open class BeanValidationFactory(
             annotations.add(Annotation(validations.NOT_NULL))
         }
 
-        if (sourceDataType.hasSizeConstraints()) {
+        if (hasSizeConstraints(dataType)) {
             annotations.add(createSizeAnnotation(sourceDataType))
         }
 
-        if (sourceDataType.hasMinConstraint()) {
+        if (hasMinConstraint(dataType)) {
             annotations.add(createDecimalMinAnnotation (sourceDataType))
         }
 
-        if (sourceDataType.hasMaxConstraint()) {
+        if (hasMaxConstraint(dataType)) {
             annotations.add(createDecimalMaxAnnotation (sourceDataType))
         }
 
@@ -95,6 +96,40 @@ open class BeanValidationFactory(
         }
 
         return dataType
+    }
+
+    private fun hasSizeConstraints(dataType: DataType): Boolean {
+        val sourceDataType = getSourceDataType(dataType)
+        val constraint = sourceDataType.hasSizeConstraints()
+        if (sourceDataType == dataType || !constraint) {
+            return constraint
+        }
+
+        return targetTypes.supports(validations.SIZE, dataType)
+    }
+
+    private fun hasMinConstraint(dataType: DataType): Boolean {
+        val sourceDataType = getSourceDataType(dataType)
+        val constraint = sourceDataType.hasMinConstraint()
+        if (sourceDataType == dataType || !constraint) {
+            return constraint
+        }
+
+        return targetTypes.supports(validations.DECIMAL_MIN, dataType)
+    }
+
+    private fun hasMaxConstraint(dataType: DataType): Boolean {
+        val sourceDataType = getSourceDataType(dataType)
+        val constraint = sourceDataType.hasMaxConstraint()
+        if (sourceDataType == dataType || !constraint) {
+            return constraint
+        }
+
+        if(!sourceDataType.hasMaxConstraint()) {
+            return false
+        }
+
+        return targetTypes.supports(validations.DECIMAL_MAX, dataType)
     }
 
     private fun createDecimalMinAnnotation(dataType: DataType): Annotation {

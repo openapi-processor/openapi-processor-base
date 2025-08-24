@@ -43,4 +43,9 @@ class GenericDataType(
 
         return setOf("${getPackageName()}.${name.type}") + genericImports
     }
+
+    // todo getCanonicalName(), move to DataType?
+    fun getTypeNameNoGenerics(): String {
+        return name.type
+    }
 }
