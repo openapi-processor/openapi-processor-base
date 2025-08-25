@@ -1,0 +1,17 @@
+openapi-processor-mapping: v14
+
+options:
+  package-name: generated
+  bean-validation: jakarta
+  format-code: false
+
+map:
+  types:
+    - type: integer:year => java.time.Year
+    - type: integer:other => other.CustomInteger
+
+bean-validation:
+  jakarta.validation.constraints.DecimalMin:
+    - other.CustomInteger
+  jakarta.validation.constraints.DecimalMax:
+    - other.CustomInteger

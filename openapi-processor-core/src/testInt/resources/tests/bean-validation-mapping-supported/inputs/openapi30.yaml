@@ -1,4 +1,4 @@
-openapi: 3.1.0
+openapi: 3.0.2
 info:
   title: drop bean validation annotation if mapped to unsupported type
   version: 1.0.0
@@ -16,6 +16,15 @@ paths:
           schema:
             type: integer
             format: year
+            minimum: 1970
+            maximum: 2099
+        # the parameter is mapped from `integer` to `other.Integer` and `other.Integer` is added as opt-in for the
+        # annotation to get annotated.
+        - in: query
+          name: other
+          schema:
+            type: integer
+            format: other
             minimum: 1970
             maximum: 2099
       responses:
