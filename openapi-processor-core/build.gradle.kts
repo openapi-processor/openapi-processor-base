@@ -28,10 +28,10 @@ sourceSets {
         java {
             srcDir(tasks.named("generateTestGrammarSource"))
         }
-        groovy {
-            srcDir(tasks.named("compileKotlin"))
-            srcDir(tasks.named("compileTestKotlin"))
-        }
+//        groovy {
+//            srcDir(tasks.named("compileKotlin"))
+//            srcDir(tasks.named("compileTestKotlin"))
+//        }
     }
 
     testInt {
