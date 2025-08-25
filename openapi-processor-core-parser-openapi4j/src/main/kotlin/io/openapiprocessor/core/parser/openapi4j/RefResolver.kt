@@ -6,6 +6,7 @@
 package io.openapiprocessor.core.parser.openapi4j
 
 import io.openapiprocessor.core.parser.NamedSchema
+import io.openapiprocessor.core.parser.getRefName
 import io.openapiprocessor.core.parser.RefResolver as ParserRefResolver
 import io.openapiprocessor.core.parser.Schema as ParserSchema
 import org.openapi4j.parser.model.v3.OpenApi3 as O4jOpenApi
@@ -25,14 +26,4 @@ class RefResolver(private val api: O4jOpenApi): ParserRefResolver {
 
         return NamedSchema (refName, Schema(resolved))
     }
-
-    private fun getRefName(ref: String): String? {
-        val split = ref.split('#')
-        if (split.size > 1) {
-            val hash = split[1]
-            return hash.substring(hash.lastIndexOf('/') + 1)
-        }
-        return null
-    }
-
 }
