@@ -7,7 +7,7 @@ import generated.support.Generated;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import java.time.Year;
-import other.CustomInteger;
+import io.oap.CustomInteger;
 
 @Generated(value = "openapi-processor-core", version = "test")
 public interface Api {
