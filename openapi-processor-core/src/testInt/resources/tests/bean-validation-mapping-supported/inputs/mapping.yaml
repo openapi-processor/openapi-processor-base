@@ -8,10 +8,10 @@ options:
 map:
   types:
     - type: integer:year => java.time.Year
-    - type: integer:other => io.oap.CustomInteger
+    - type: integer:other => io.oap.Integer
 
 bean-validation:
   jakarta.validation.constraints.DecimalMin:
-    - io.oap.CustomInteger
+    - io.oap.Integer
   jakarta.validation.constraints.DecimalMax:
-    - io.oap.CustomInteger
+    - io.oap.Integer

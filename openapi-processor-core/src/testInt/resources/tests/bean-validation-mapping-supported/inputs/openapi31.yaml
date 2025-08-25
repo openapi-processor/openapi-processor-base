@@ -18,7 +18,7 @@ paths:
             format: year
             minimum: 1970
             maximum: 2099
-        # the parameter is mapped from `integer` to `other.Integer` and `other.Integer` is added as opt-in for the
+        # the parameter is mapped from `integer` to `io.oap.Integer` and `io.oap.Integer` is added as opt-in for the
         # annotation to get annotated.
         - in: query
           name: other

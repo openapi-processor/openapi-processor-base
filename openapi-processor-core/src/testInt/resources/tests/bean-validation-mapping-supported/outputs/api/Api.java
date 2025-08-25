@@ -4,7 +4,7 @@ import annotation.Mapping;
 import annotation.Parameter;
 import annotation.Status;
 import generated.support.Generated;
-import io.oap.CustomInteger;
+import io.oap.Integer;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import java.time.Year;
@@ -16,6 +16,6 @@ public interface Api {
     @Mapping("/foo")
     void getFoo(
             @Parameter Year year,
-            @Parameter @DecimalMin(value = "1970") @DecimalMax(value = "2099") CustomInteger other);
+            @Parameter @DecimalMin(value = "1970") @DecimalMax(value = "2099") Integer other);
 
 }

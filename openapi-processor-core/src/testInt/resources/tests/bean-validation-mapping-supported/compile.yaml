@@ -1,4 +1,4 @@
 items:
-  - compile/oap/CustomInteger.java
+  - compile/oap/Integer.java
   - compile/jakarta/DecimalMin.java
   - compile/jakarta/DecimalMax.java
