@@ -181,7 +181,9 @@ val EXCLUDE_OPENAPI4J = setOf(
     // the parser assumes that "type" must be string if a non-standard format is used
     "schema-mapping",
     // can't get uri of a document
-    "packages"
+    "packages",
+    // complains about incompatible formats for integer
+    "bean-validation-mapping-supported"
 )
 
 val EXCLUDE_SWAGGER_30 = setOf(
