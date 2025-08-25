@@ -1,4 +1,5 @@
 plugins {
+    id("openapiprocessor.test")
     id("openapiprocessor.library")
     id("openapiprocessor.publish")
 }
@@ -11,4 +12,11 @@ publishing {
             }
         }
     }
+}
+
+dependencies {
+    testImplementation (platform(libs.kotest.bom))
+    testImplementation (libs.kotest.runner)
+    testImplementation (libs.kotest.datatest)
+    testImplementation (libs.mockk)
 }
