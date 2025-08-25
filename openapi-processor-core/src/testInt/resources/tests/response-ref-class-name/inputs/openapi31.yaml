@@ -13,4 +13,4 @@ paths:
           content:
             application/json:
                 schema:
-                  $ref: 'components/schemas/foo/FooResponse.yaml'
+                  $ref: 'components/schemas/foo/Foo.yaml'
