@@ -8,6 +8,8 @@ package io.openapiprocessor.core.converter
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.maps.shouldBeEmpty
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.mockk.mockk
@@ -46,6 +48,8 @@ class OptionsConverterSpec: StringSpec({
         options.globalMappings.shouldNotBeNull()
         options.endpointMappings.shouldNotBeNull()
         options.extensionMappings.shouldNotBeNull()
+
+        options.beanValidationAditionalSupportedTypes.shouldBeEmpty()
 
         options.beanValidationValidOnReactive.shouldBeTrue()
         options.identifierWordBreakFromDigitToLetter.shouldBeTrue()
@@ -132,6 +136,9 @@ class OptionsConverterSpec: StringSpec({
                   bean-validation-valid-on-reactive: false
                   identifier-word-break-from-digit-to-letter: false
                   identifier-prefix-invalid-enum-start: false
+                bean-validation:
+                  javax.validation.constraints.Size:
+                    - org.openapitools.jackson.nullable.JsonNullable
             """.trimIndent()
         ))
 
@@ -152,6 +159,9 @@ class OptionsConverterSpec: StringSpec({
         options.basePathOptions.propertiesName shouldBe "openapi.properties"
         options.oneOfInterface.shouldBeTrue()
         options.responseInterface.shouldBeTrue()
+
+        options.beanValidationAditionalSupportedTypes["javax.validation.constraints.Size"]
+            .shouldContainExactly("org.openapitools.jackson.nullable.JsonNullable")
 
         options.beanValidationValidOnReactive.shouldBeFalse()
         options.identifierWordBreakFromDigitToLetter.shouldBeFalse()

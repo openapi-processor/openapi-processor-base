@@ -5,6 +5,7 @@
 
 package io.openapiprocessor.core.processor.mapping.v2
 
+import SupportedTypes
 import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonProperty
 import io.openapiprocessor.core.processor.mapping.MappingVersion
@@ -34,7 +35,7 @@ data class Mapping(
     /**
      * bean-validation
      */
-    val beanValidation: MutableMap<String, Set<String>> = mutableMapOf(),
+    val beanValidation: SupportedTypes = mapOf(),
 
     /**
      * compatibility options

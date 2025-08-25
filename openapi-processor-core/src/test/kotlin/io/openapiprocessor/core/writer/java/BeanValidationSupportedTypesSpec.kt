@@ -8,10 +8,11 @@ package io.openapiprocessor.core.writer.java
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.datatest.WithDataTestName
 import io.kotest.datatest.withData
+import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.model.datatypes.*
 
-class BeanValidationTargetTypesSpec : FreeSpec({
+class BeanValidationSupportedTypesSpec : FreeSpec({
     val annotations = BeanValidations(BeanValidationFormat.JAKARTA)
     val types = BeanValidationSupportedTypes()
 
@@ -58,5 +59,16 @@ class BeanValidationTargetTypesSpec : FreeSpec({
 
     ) { (source, target, supported) ->
         types.supports(source, target) shouldBe supported
+    }
+
+    "add additional supported types" {
+        val bvSupportedTypes = BeanValidationSupportedTypes(mapOf(
+            "jakarta.validation.constraints.Size" to setOf("org.openapitools.jackson.nullable.JsonNullable")
+        ))
+
+        bvSupportedTypes.supports(
+            annotations.SIZE,
+            MappedDataType("JsonNullable", "org.openapitools.jackson.nullable"))
+            .shouldBeTrue()
     }
 })

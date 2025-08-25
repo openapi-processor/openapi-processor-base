@@ -31,6 +31,14 @@ interface DataType {
     }
 
     /**
+     * The raw type name. In case of a generic class without the generic parameters.
+     *
+     * @return the raw type name without generic parameters.
+     */
+    val rawTypeName: String
+        get() = getTypeName()
+
+    /**
      * the identifier used to reference this datatype in the mappings. This is usually the name
      * from the openapi description. If it is an inline type it is a generated name.
      */

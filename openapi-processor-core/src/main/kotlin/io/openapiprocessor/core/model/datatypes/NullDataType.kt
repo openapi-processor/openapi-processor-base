@@ -24,6 +24,9 @@ class NullDataType(
         return "$name<${dataType.getTypeName()}>"
     }
 
+    override val rawTypeName: String
+        get() = name
+
     override fun getPackageName(): String {
         return pkg
     }

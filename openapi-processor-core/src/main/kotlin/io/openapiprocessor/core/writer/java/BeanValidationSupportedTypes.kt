@@ -5,23 +5,32 @@
 
 package io.openapiprocessor.core.writer.java
 
+import SupportedTypes
 import io.openapiprocessor.core.model.datatypes.DataType
-import io.openapiprocessor.core.model.datatypes.GenericDataType
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class BeanValidationSupportedTypes {
-    var log: Logger = LoggerFactory.getLogger(this.javaClass.name)
+class BeanValidationSupportedTypes(additionalSupportedTypes: SupportedTypes = mapOf()) {
+    private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
+
+    private val supported: MutableMap<String, MutableSet<SupportedType>> = supportedTargets
+        .mapValues { (_, value) -> value.toMutableSet() }.toMutableMap()
+
+    init {
+        additionalSupportedTypes.forEach { (k, v) ->
+            supported[k]?.addAll(v.map { AdditionalType(it) })
+        }
+    }
 
     fun supports(annotationType: String, targetDataType: DataType): Boolean {
-        val supported = supportedTargets[annotationType]
-        if (supported == null) {
+        val targets = supported[annotationType]
+        if (targets == null) {
             return false
         }
 
         val targetTypeName = getCanonicalName(targetDataType)
-        for (supported in supported) {
-            val matches = supported.matches(targetTypeName)
+        for (target in targets) {
+            val matches = target.matches(targetTypeName)
             if (matches) {
                 return true
             }
@@ -33,11 +42,7 @@ class BeanValidationSupportedTypes {
 
     private fun getCanonicalName(targetDataType: DataType): String {
         val pkg = targetDataType.getPackageName()
-        val name = if (targetDataType is GenericDataType) {
-            targetDataType.getTypeNameNoGenerics()
-        } else {
-            targetDataType.getTypeName()
-        }
+        val name = targetDataType.rawTypeName
 
         if (pkg.isEmpty()) {
             return name
@@ -49,11 +54,11 @@ class BeanValidationSupportedTypes {
 
 
 
-interface SupportedTarget {
+interface SupportedType {
     fun matches(source: String): Boolean
 }
 
-class Type(val type: String): SupportedTarget {
+class Type(val type: String): SupportedType {
     private var typeClass: Class<*>? = getClass(type)
 
     override fun matches(source: String): Boolean {
@@ -77,7 +82,7 @@ class Type(val type: String): SupportedTarget {
     }
 }
 
-class TypeAny(): SupportedTarget {
+class TypeAny(): SupportedType {
     val primitives = listOf("byte", "short", "int", "long", "long", "float", "double", "char")
 
     override fun matches(source: String): Boolean {
@@ -85,7 +90,7 @@ class TypeAny(): SupportedTarget {
     }
 }
 
-class Primitive(val type: String): SupportedTarget {
+class Primitive(val type: String): SupportedType {
     override fun matches(source: String): Boolean {
         return source == type
     }
@@ -95,7 +100,9 @@ class Primitive(val type: String): SupportedTarget {
     }
 }
 
-class Array(): SupportedTarget {
+typealias AdditionalType = Primitive
+
+class Array(): SupportedType {
     override fun matches(source: String): Boolean {
         return source.endsWith("[]")
     }
@@ -107,7 +114,8 @@ class Array(): SupportedTarget {
 
 private val BOOLEAN_TYPES = listOf(
     Type("java.lang.Boolean"),
-    Primitive("boolean")
+    Primitive("boolean"),
+    AdditionalType("org.openapitools.jackson.nullable.JsonNullable")
 )
 
 private val NUMBER_TYPES = listOf(
@@ -124,7 +132,8 @@ private val NUMBER_TYPES = listOf(
     Primitive("int"),
     Primitive("long"),
     Primitive("float"),
-    Primitive("double")
+    Primitive("double"),
+    AdditionalType("org.openapitools.jackson.nullable.JsonNullable")
 )
 
 private val INTEGER_TYPES = listOf(
@@ -138,14 +147,16 @@ private val INTEGER_TYPES = listOf(
     Primitive("byte"),
     Primitive("short"),
     Primitive("int"),
-    Primitive("long")
+    Primitive("long"),
+    AdditionalType("org.openapitools.jackson.nullable.JsonNullable")
 )
 
 private val LENGTH_TYPES = listOf(
     Type("java.lang.CharSequence"),
     Type("java.util.Collection"),
     Type("java.util.Map"),
-    Array()
+    Array(),
+    AdditionalType("org.openapitools.jackson.nullable.JsonNullable")
 )
 
 private val MAX_MIN_TYPES = listOf(
@@ -158,11 +169,13 @@ private val MAX_MIN_TYPES = listOf(
     Primitive("byte"),
     Primitive("short"),
     Primitive("int"),
-    Primitive("long")
+    Primitive("long"),
+    AdditionalType("org.openapitools.jackson.nullable.JsonNullable")
 )
 
 private val EMAIL_TYPES = listOf(
-    Type("java.lang.CharSequence")
+    Type("java.lang.CharSequence"),
+    AdditionalType("org.openapitools.jackson.nullable.JsonNullable")
 )
 
 private val ANY_TYPES = listOf(TypeAny())
@@ -184,47 +197,48 @@ private val PAST_TYPES = listOf(
     Type("java.time.JapaneseDate"),
     Type("java.time.MinguoDate"),
     Type("java.time.ThaiBuddhistDate"),
+    AdditionalType("org.openapitools.jackson.nullable.JsonNullable")
 )
 
 // not all annotation are supported/used by the BeanValidationFactory
-private val supportedTargets = mutableMapOf<String, MutableList<SupportedTarget>>(
+private val supportedTargets = mapOf<String, Set<SupportedType>>(
     /* javax */
-//    "javax.validation.constraints.Null" to ANY_TYPES.toMutableList(),
-    "javax.validation.constraints.NotNull" to ANY_TYPES.toMutableList(),
-//    "javax.validation.constraints.AssertFalse" to BOOLEAN_TYPES.toMutableList(),
-//    "javax.validation.constraints.AssertTrue" to BOOLEAN_TYPES.toMutableList(),
-//    "javax.validation.constraints.Min" to MAX_MIN_TYPES.toMutableList(),
-//    "javax.validation.constraints.Max" to MAX_MIN_TYPES.toMutableList(),
-    "javax.validation.constraints.DecimalMin" to INTEGER_TYPES.toMutableList(),
-    "javax.validation.constraints.DecimalMax" to INTEGER_TYPES.toMutableList(),
-//    "javax.validation.constraints.Digits" to INTEGER_TYPES.toMutableList(),
-//    "javax.validation.constraints.Negative" to NUMBER_TYPES.toMutableList(),
-//    "javax.validation.constraints.NegativeOrZero" to NUMBER_TYPES.toMutableList(),
-//    "javax.validation.constraints.Positive" to NUMBER_TYPES.toMutableList(),
-//    "javax.validation.constraints.PositiveOrZero" to NUMBER_TYPES.toMutableList(),
-    "javax.validation.constraints.Size" to LENGTH_TYPES.toMutableList(),
-    "javax.validation.constraints.Email" to EMAIL_TYPES.toMutableList(),
-    "javax.validation.constraints.Pattern" to EMAIL_TYPES.toMutableList(),
-//    "javax.validation.constraints.Past" to PAST_TYPES.toMutableList(),
-//    "javax.validation.constraints.PastOrPresent" to PAST_TYPES.toMutableList(),
+//    "javax.validation.constraints.Null" to ANY_TYPES.toMutableSet(),
+    "javax.validation.constraints.NotNull" to ANY_TYPES.toMutableSet(),
+//    "javax.validation.constraints.AssertFalse" to BOOLEAN_TYPES.toMutableSet(),
+//    "javax.validation.constraints.AssertTrue" to BOOLEAN_TYPES.toMutableSet(),
+//    "javax.validation.constraints.Min" to MAX_MIN_TYPES.toMutableSet(),
+//    "javax.validation.constraints.Max" to MAX_MIN_TYPES.toMutableSet(),
+    "javax.validation.constraints.DecimalMin" to INTEGER_TYPES.toMutableSet(),
+    "javax.validation.constraints.DecimalMax" to INTEGER_TYPES.toMutableSet(),
+//    "javax.validation.constraints.Digits" to INTEGER_TYPES.toMutableSet(),
+//    "javax.validation.constraints.Negative" to NUMBER_TYPES.toMutableSet(),
+//    "javax.validation.constraints.NegativeOrZero" to NUMBER_TYPES.toMutableSet(),
+//    "javax.validation.constraints.Positive" to NUMBER_TYPES.toMutableSet(),
+//    "javax.validation.constraints.PositiveOrZero" to NUMBER_TYPES.toMutableSet(),
+    "javax.validation.constraints.Size" to LENGTH_TYPES.toMutableSet(),
+    "javax.validation.constraints.Email" to EMAIL_TYPES.toMutableSet(),
+    "javax.validation.constraints.Pattern" to EMAIL_TYPES.toMutableSet(),
+//    "javax.validation.constraints.Past" to PAST_TYPES.toMutableSet(),
+//    "javax.validation.constraints.PastOrPresent" to PAST_TYPES.toMutableSet(),
 
     /* jakarta */
-//    "jakarta.validation.constraints.Null" to ANY_TYPES.toMutableList(),
-    "javax.validation.constraints.NotNull" to ANY_TYPES.toMutableList(),
-//    "jakarta.validation.constraints.AssertFalse" to BOOLEAN_TYPES.toMutableList(),
-//    "jakarta.validation.constraints.AssertTrue" to BOOLEAN_TYPES.toMutableList(),
-//    "jakarta.validation.constraints.Min" to MAX_MIN_TYPES.toMutableList(),
-//    "jakarta.validation.constraints.Max" to MAX_MIN_TYPES.toMutableList(),
-    "jakarta.validation.constraints.DecimalMin" to INTEGER_TYPES.toMutableList(),
-    "jakarta.validation.constraints.DecimalMax" to INTEGER_TYPES.toMutableList(),
-//    "javax.validation.constraints.Digits" to INTEGER_TYPES.toMutableList(),
-//    "jakarta.validation.constraints.Negative" to NUMBER_TYPES.toMutableList(),
-//    "jakarta.validation.constraints.NegativeOrZero" to NUMBER_TYPES.toMutableList(),
-//    "jakarta.validation.constraints.Positive" to NUMBER_TYPES.toMutableList(),
-//    "jakarta.validation.constraints.PositiveOrZero" to NUMBER_TYPES.toMutableList(),
-    "jakarta.validation.constraints.Size" to LENGTH_TYPES.toMutableList(),
-    "jakarta.validation.constraints.Email" to EMAIL_TYPES.toMutableList(),
-    "jakarta.validation.constraints.Pattern" to EMAIL_TYPES.toMutableList(),
-//    "jakarta.validation.constraints.Past" to PAST_TYPES.toMutableList(),
-//    "jakarta.validation.constraints.PastOrPresent" to PAST_TYPES.toMutableList(),
+//    "jakarta.validation.constraints.Null" to ANY_TYPES.toMutableSet(),
+    "javax.validation.constraints.NotNull" to ANY_TYPES.toMutableSet(),
+//    "jakarta.validation.constraints.AssertFalse" to BOOLEAN_TYPES.toMutableSet(),
+//    "jakarta.validation.constraints.AssertTrue" to BOOLEAN_TYPES.toMutableSet(),
+//    "jakarta.validation.constraints.Min" to MAX_MIN_TYPES.toMutableSet(),
+//    "jakarta.validation.constraints.Max" to MAX_MIN_TYPES.toMutableSet(),
+    "jakarta.validation.constraints.DecimalMin" to INTEGER_TYPES.toMutableSet(),
+    "jakarta.validation.constraints.DecimalMax" to INTEGER_TYPES.toMutableSet(),
+//    "javax.validation.constraints.Digits" to INTEGER_TYPES.toMutableSet(),
+//    "jakarta.validation.constraints.Negative" to NUMBER_TYPES.toMutableSet(),
+//    "jakarta.validation.constraints.NegativeOrZero" to NUMBER_TYPES.toMutableSet(),
+//    "jakarta.validation.constraints.Positive" to NUMBER_TYPES.toMutableSet(),
+//    "jakarta.validation.constraints.PositiveOrZero" to NUMBER_TYPES.toMutableSet(),
+    "jakarta.validation.constraints.Size" to LENGTH_TYPES.toMutableSet(),
+    "jakarta.validation.constraints.Email" to EMAIL_TYPES.toMutableSet(),
+    "jakarta.validation.constraints.Pattern" to EMAIL_TYPES.toMutableSet(),
+//    "jakarta.validation.constraints.Past" to PAST_TYPES.toMutableSet(),
+//    "jakarta.validation.constraints.PastOrPresent" to PAST_TYPES.toMutableSet(),
 )

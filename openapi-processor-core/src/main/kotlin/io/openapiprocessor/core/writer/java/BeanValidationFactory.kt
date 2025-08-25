@@ -19,7 +19,8 @@ open class BeanValidationFactory(
     private val options: ApiOptions
 ) {
     val validations: BeanValidations = BeanValidations(getValidationFormat())
-    val targetTypes: BeanValidationSupportedTypes = BeanValidationSupportedTypes()
+    val targetTypes: BeanValidationSupportedTypes = BeanValidationSupportedTypes(
+        options.beanValidationAditionalSupportedTypes)
 
     /**
      * override to add annotations to the model object class.

@@ -14,13 +14,19 @@ class ArrayDataType(
     override val deprecated: Boolean = false
 ): DataType by item, CollectionDataType {
 
+    // overrides delegate
     override fun getName(): String {
         return "${item.getName()}[]"
     }
 
+    // overrides delegate
     override fun getTypeName(): String {
         return "${item.getTypeName()}[]"
     }
+
+    // overrides delegate
+    override val rawTypeName: String
+        get() = getTypeName()
 
     override fun getTypeName(annotations: Set<String>, itemAnnotations: Set<String>): String {
         val sb = StringBuilder()

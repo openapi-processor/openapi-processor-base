@@ -28,6 +28,9 @@ class GenericDataType(
         }
     }
 
+    override val rawTypeName: String
+        get() = name.type
+
     override fun getPackageName(): String {
         return pkg
     }
@@ -42,10 +45,5 @@ class GenericDataType(
             .flatten()
 
         return setOf("${getPackageName()}.${name.type}") + genericImports
-    }
-
-    // todo getCanonicalName(), move to DataType?
-    fun getTypeNameNoGenerics(): String {
-        return name.type
     }
 }

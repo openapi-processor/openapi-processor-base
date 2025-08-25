@@ -5,6 +5,7 @@
 
 package io.openapiprocessor.core.converter
 
+import SupportedTypes
 import io.openapiprocessor.core.converter.mapping.*
 import io.openapiprocessor.core.converter.options.BasePathOptions
 import io.openapiprocessor.core.converter.options.PackageOptions
@@ -158,6 +159,11 @@ class ApiOptions: MappingSettings {
             throw InvalidOptionException("targetDir")
         }
     }
+
+    /**
+     * additional supported bean-validation types
+     */
+    var beanValidationAditionalSupportedTypes: SupportedTypes = mapOf()
 
     // compatibility options
 
