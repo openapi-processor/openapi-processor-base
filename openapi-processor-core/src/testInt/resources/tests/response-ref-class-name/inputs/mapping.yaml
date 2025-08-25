@@ -1,0 +1,6 @@
+openapi-processor-mapping: v13
+
+options:
+  package-name: generated
+  model-type: record
+  javadoc: false

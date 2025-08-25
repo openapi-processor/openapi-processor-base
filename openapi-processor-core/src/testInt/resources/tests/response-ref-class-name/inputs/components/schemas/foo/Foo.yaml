@@ -1,0 +1,5 @@
+title: Foo Schema
+type: object
+properties:
+  bar:
+    type: string
