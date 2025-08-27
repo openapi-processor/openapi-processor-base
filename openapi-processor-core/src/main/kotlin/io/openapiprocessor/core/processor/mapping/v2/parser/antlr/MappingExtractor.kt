@@ -150,4 +150,8 @@ class MappingExtractor: MappingBaseListener(), Mapping {
             }
         }
     }
+
+    override fun enterName(ctx: MappingParser.NameContext) {
+        sourceType = ctx.text
+    }
 }

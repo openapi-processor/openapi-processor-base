@@ -14,24 +14,28 @@ type
     : anyType
     ;
 
+// basic type mapping
 map
     : sourceType Arrow anyType
     ;
 
+// content type mapping
 content
     : contentType Arrow anyType
     ;
 
+// annotation mapping
 annotate
     : sourceType Annotate annotationType
     ;
 
+// add, drop parameter
 name
-    : sourceIdentifier
+    : sourceType
     ;
 
 anyType
-    : plainType | primitiveType | targetType
+    : plainType | primitiveType | targetType | FormatType | Primitive
     ;
 
 plainType
@@ -39,7 +43,7 @@ plainType
     ;
 
 primitiveType
-    : primitiveValue | primitiveValue OpenArray CloseArray
+    : Primitive | Primitive OpenArray CloseArray
     ;
 
 sourceType
@@ -91,15 +95,11 @@ genericParameterAny
     ;
 
 sourceIdentifier
-    :  Identifier | String
+    : Identifier | ApiIdentifier | String | FormatType | Primitive
     ;
 
 formatIdentifier
-    : Identifier | Format | String | primitiveValue
-    ;
-
-primitiveValue
-    : 'byte' | 'short' | 'int' | 'long' | 'float' | 'double' | 'boolean' | 'char'
+    : Identifier | ApiIdentifier | String | FormatType | Primitive
     ;
 
 
@@ -123,8 +123,12 @@ Whitespace
   : [ \t] -> skip
   ;
 
+Primitive
+    : 'byte' | 'short' | 'int' | 'long' | 'float' | 'double' | 'boolean' | 'char'
+    ;
+
 Identifier
-    : JavaLetter JavaLetterOrDigit*
+    : JavaLetter JavaLetterOrDigit* | FormatType | Primitive
     ;
 
 QualifiedTypeClass
@@ -135,9 +139,14 @@ QualifiedType
     : (Identifier | Package) ('.' Identifier)*
     ;
 
-Format
-    : FormatLetter FormatLetterOrDigit*
+// Api types with optional format
+FormatType
+    : 'string' | 'integer' | 'number'
     ;
+
+ApiIdentifier
+  : ApiLetter (ApiLetterOrDigit | [ \t])+ ApiLetterOrDigit+ | FormatType | Primitive
+  ;
 
 String
     : DoubleQuote ( ~["\\] | '\\' [\t\\"] )* DoubleQuote
@@ -168,10 +177,10 @@ fragment JavaLetterOrDigit
     : [a-zA-Z0-9$_]
     ;
 
-fragment FormatLetter
+fragment ApiLetter
     :  [a-zA-Z_-]
     ;
 
-fragment FormatLetterOrDigit
+fragment ApiLetterOrDigit
     : [a-zA-Z0-9_-]
     ;

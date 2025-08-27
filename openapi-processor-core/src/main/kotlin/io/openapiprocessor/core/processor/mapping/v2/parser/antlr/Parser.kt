@@ -19,7 +19,7 @@ fun parseMapping(mapping: String): Mapping {
         val lexer = MappingLexer(CharStreams.fromString(mapping))
         val tokens = CommonTokenStream(lexer)
         val parser = MappingParser(tokens)
-        parser.removeErrorListener(ConsoleErrorListener.INSTANCE);
+        parser.removeErrorListener(ConsoleErrorListener.INSTANCE)
         parser.addErrorListener(MappingErrorListener())
         val ctx = parser.mapping()
         val extractor = MappingExtractor()

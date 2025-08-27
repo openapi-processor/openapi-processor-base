@@ -10,3 +10,5 @@ map:
     /foo:
       parameters:
         - drop: foo
+        - drop: foo-x
+        - drop: foo x

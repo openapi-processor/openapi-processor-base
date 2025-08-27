@@ -113,7 +113,7 @@ class MappingFinderEndpointMethodSpec: StringSpec({
             |   /foo:
             |     get:
             |       parameters:
-            |         - add: fooParam => io.openapiprocessor.Foo
+            |         - add: foo-Param => io.openapiprocessor.Foo
             |         - add: barParam => io.openapiprocessor.Foo
             """)
 
@@ -121,7 +121,7 @@ class MappingFinderEndpointMethodSpec: StringSpec({
         val result = finder.findAddParameterTypeMappings(query(path = "/foo", method = GET))
 
         result.shouldNotBeEmpty()
-        result[0].parameterName.shouldBe("fooParam")
+        result[0].parameterName.shouldBe("foo-Param")
         result[1].parameterName.shouldBe("barParam")
     }
 
@@ -133,7 +133,7 @@ class MappingFinderEndpointMethodSpec: StringSpec({
             |   /foo:
             |     get:
             |       parameters:
-            |         - drop: fooParam
+            |         - drop: "foo-Param"
             |         - drop: barParam
             """)
 
@@ -141,7 +141,7 @@ class MappingFinderEndpointMethodSpec: StringSpec({
         val result = finder.findDropParameterTypeMappings(query(path = "/foo", method = GET))
 
         result.shouldNotBeEmpty()
-        result[0].parameterName.shouldBe("fooParam")
+        result[0].parameterName.shouldBe("foo-Param")
         result[1].parameterName.shouldBe("barParam")
     }
 

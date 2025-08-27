@@ -43,12 +43,13 @@ class AntlrParserSpec: StringSpec({
         mapping.targetGenericTypes.shouldBeEmpty()
     }
 
+    // only for string, number, integer
     "map source type with format to fully qualified java target type" {
-        val source = "SourceType:format => io.oap.TargetType"
+        val source = "string:format => io.oap.TargetType"
 
         val mapping = parseMapping(source)
         mapping.kind shouldBe Mapping.Kind.MAP
-        mapping.sourceType shouldBe "SourceType"
+        mapping.sourceType shouldBe "string"
         mapping.sourceFormat shouldBe "format"
         mapping.targetType shouldBe "io.oap.TargetType"
         mapping.targetGenericTypes.shouldBeEmpty()
@@ -355,6 +356,24 @@ class AntlrParserSpec: StringSpec({
 
     "map simple string" {
         val source = "name"
+
+        val mapping = parseMapping(source)
+        mapping.kind shouldBe Mapping.Kind.TYPE
+        mapping.sourceType shouldBe source
+        mapping.targetType shouldBe null
+    }
+
+    "map simple string with dash" {
+        val source = "name-with-dash"
+
+        val mapping = parseMapping(source)
+        mapping.kind shouldBe Mapping.Kind.TYPE
+        mapping.sourceType shouldBe source
+        mapping.targetType shouldBe null
+    }
+
+    "map simple string with space" {
+        val source = "name with space"
 
         val mapping = parseMapping(source)
         mapping.kind shouldBe Mapping.Kind.TYPE

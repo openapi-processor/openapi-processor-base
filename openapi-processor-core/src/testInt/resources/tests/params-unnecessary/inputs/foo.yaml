@@ -6,6 +6,18 @@ get:
       required: true
       schema:
         type: string
+    - name: foo-x
+      description: query, required
+      in: query
+      required: true
+      schema:
+        type: string
+    - name: foo x
+      description: query, required
+      in: query
+      required: true
+      schema:
+        type: string
   responses:
     '204':
       description: empty
