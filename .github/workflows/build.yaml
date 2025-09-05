@@ -58,7 +58,7 @@ jobs:
         submodules: true
 
     - name: set up jdk
-      uses: actions/setup-java@v4
+      uses: actions/setup-java@v5
       with:
         distribution: 'temurin'
         java-version: |
@@ -91,7 +91,7 @@ jobs:
       uses: actions/checkout@v5
 
     - name: set up jdk
-      uses: actions/setup-java@v4
+      uses: actions/setup-java@v5
       with:
         distribution: 'temurin'
         java-version: |
@@ -133,7 +133,7 @@ jobs:
           sonar-${{ runner.os }}
 
     - name: set up jdk
-      uses: actions/setup-java@v4
+      uses: actions/setup-java@v5
       with:
         distribution: 'temurin'
         java-version: |
