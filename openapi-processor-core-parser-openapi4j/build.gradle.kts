@@ -14,7 +14,6 @@ dependencies {
     testImplementation (project(":openapi-processor-test"))
     testImplementation (platform(libs.kotest.bom))
     testImplementation (libs.kotest.runner)
-    testImplementation (libs.kotest.datatest)
     testImplementation (libs.mockk)
     testImplementation (libs.jimfs)
     testImplementation (libs.logback)

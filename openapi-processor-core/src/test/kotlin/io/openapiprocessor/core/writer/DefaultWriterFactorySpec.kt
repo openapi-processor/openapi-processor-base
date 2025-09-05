@@ -9,10 +9,10 @@ import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
+import io.kotest.provided.tempFolder
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.options.TargetDirLayout
 import io.openapiprocessor.core.support.text
-import io.openapiprocessor.core.tempFolder
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path

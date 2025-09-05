@@ -45,9 +45,9 @@ slf4j = "org.slf4j:slf4j-api:2.0.17"
 logback = "ch.qos.logback:logback-classic:1.5.18"
 
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
-kotest-bom = "io.kotest:kotest-bom:5.9.1"
+kotest-bom = "io.kotest:kotest-bom:6.0.2"
 kotest-runner = { module = "io.kotest:kotest-runner-junit5" }
-kotest-datatest = { module = "io.kotest:kotest-framework-datatest" }
+kotest-table = { module = "io.kotest:kotest-assertions-table" }
 mockk = "io.mockk:mockk:1.14.5"
 
 diff-utils = "io.github.java-diff-utils:java-diff-utils:4.16"

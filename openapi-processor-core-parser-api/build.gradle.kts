@@ -17,6 +17,5 @@ publishing {
 dependencies {
     testImplementation (platform(libs.kotest.bom))
     testImplementation (libs.kotest.runner)
-    testImplementation (libs.kotest.datatest)
     testImplementation (libs.mockk)
 }

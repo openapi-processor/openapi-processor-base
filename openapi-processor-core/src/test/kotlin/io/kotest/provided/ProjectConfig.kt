@@ -3,13 +3,13 @@
  * PDX-License-Identifier: Apache-2.0
  */
 
-package io.openapiprocessor.core
+package io.kotest.provided
 
 import io.kotest.core.Tag
-import io.kotest.core.TagExpression
 import io.kotest.core.TestConfiguration
 import io.kotest.core.config.AbstractProjectConfig
 import io.kotest.core.extensions.TagExtension
+import io.kotest.engine.tags.TagExpression
 import io.openapiprocessor.core.support.deleteRecursively
 import java.nio.file.Files
 import java.nio.file.Path
@@ -20,7 +20,6 @@ object NotWindows: Tag()
 object SystemTagExtension: TagExtension {
 
     override fun tags(): TagExpression {
-
         return if(isWindows()) {
             TagExpression.exclude(NotWindows)
         } else {
@@ -38,8 +37,8 @@ object SystemTagExtension: TagExtension {
 /**
  * kotest config
  */
-object KotestConfig: AbstractProjectConfig() {
-    override fun extensions() = listOf(SystemTagExtension)
+object ProjectConfig: AbstractProjectConfig() {
+    override val extensions = listOf(SystemTagExtension)
 }
 
 

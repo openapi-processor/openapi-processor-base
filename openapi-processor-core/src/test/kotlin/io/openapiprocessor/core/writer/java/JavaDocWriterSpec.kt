@@ -5,7 +5,7 @@
 
 package io.openapiprocessor.core.writer.java
 
-import io.kotest.core.spec.style.StringSpec
+import io.kotest.core.spec.style.FreeSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.shouldBe
@@ -22,7 +22,7 @@ import io.openapiprocessor.core.support.datatypes.propertyDataTypeString
 import io.openapiprocessor.core.support.parseApi
 import io.openapiprocessor.core.support.parseOptions
 
-class JavaDocWriterSpec: StringSpec({
+class JavaDocWriterSpec: FreeSpec({
 
     lateinit var writer: JavaDocWriter
 

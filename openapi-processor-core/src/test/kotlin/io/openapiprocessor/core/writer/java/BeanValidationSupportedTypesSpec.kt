@@ -6,8 +6,8 @@
 package io.openapiprocessor.core.writer.java
 
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.datatest.WithDataTestName
 import io.kotest.datatest.withData
+import io.kotest.engine.names.WithDataTestName
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.model.datatypes.*

@@ -5,12 +5,12 @@
 
 package io.openapiprocessor.core.model.datatypes
 
-import io.kotest.core.spec.style.StringSpec
+import io.kotest.core.spec.style.FreeSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.converter.mapping.TargetType
 
-class MappedDataTypeSpec: StringSpec ({
+class MappedDataTypeSpec: FreeSpec({
     class TypeName (val generics: List<String>, val typeName: String)
 
     withData(

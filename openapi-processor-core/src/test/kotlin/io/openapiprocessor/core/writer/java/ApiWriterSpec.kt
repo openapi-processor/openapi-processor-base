@@ -8,6 +8,7 @@ package io.openapiprocessor.core.writer.java
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.equals.shouldBeEqual
+import io.kotest.provided.tempFolder
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -18,7 +19,6 @@ import io.openapiprocessor.core.model.Api
 import io.openapiprocessor.core.model.DataTypes
 import io.openapiprocessor.core.model.Resource
 import io.openapiprocessor.core.model.datatypes.*
-import io.openapiprocessor.core.tempFolder
 import io.openapiprocessor.core.writer.SourceFormatter
 import io.openapiprocessor.core.writer.WriterFactory
 import java.io.File
