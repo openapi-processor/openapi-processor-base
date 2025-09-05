@@ -8,6 +8,8 @@ plugins {
     id("openapiprocessor.publish")
     alias(libs.plugins.versions)
     alias(libs.plugins.sonar)
+    id("jacoco-report-aggregation")
+    alias(libs.plugins.jacoco)
 }
 
 versions {
@@ -129,9 +131,18 @@ publishing {
     }
 }
 
-tasks.named<JacocoReport>("jacocoTestReport") {
-    dependsOn(tasks.named("testInt"))
-    executionData.setFrom(fileTree(layout.buildDirectory).include("/jacoco/*.exec"))
+tasks.jacocoTestReport {
+    executionData.from(tasks.named<Test>("test").map<File> {
+        it.extensions.getByType(JacocoTaskExtension::class.java).destinationFile as File
+    })
+    executionData.from(tasks.named<Test>("testInt").map<File> {
+        it.extensions.getByType(JacocoTaskExtension::class.java).destinationFile as File
+    })
+
+    reports {
+        xml.required = true
+        html.required = true
+    }
 }
 
 sonarqube {

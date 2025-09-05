@@ -10,7 +10,7 @@ test-jdk = "17"
 build-plugins = "2025.1-SNAPSHOT"
 
 junit = "5.13.4"
-jacoco = "0.8.11"
+jacoco = "0.8.13"
 updates = "0.52.0"
 checker = "0.6.16"
 
@@ -67,7 +67,7 @@ plugin-updates = { module = "com.github.ben-manes:gradle-versions-plugin", versi
 
 [plugins]
 updates = { id = "com.github.ben-manes.versions", version = "updates" }
-jacoco = { id = "org.barfuin.gradle.jacocolog", version = "3.1.0" }
+jacoco = { id = "io.gitlab.mpichler.jacocolog", version = "3.2.0" }
 sonar = { id = "org.sonarqube", version =  "6.3.1.5724" }
 central = { id = "io.openapiprocessor.build.plugin.publish-central", version.ref = "build-plugins" }
 versions = { id = "io.openapiprocessor.build.plugin.create-versions" }
