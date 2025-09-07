@@ -133,7 +133,7 @@ class MappingFinderEndpointMethodSpec: StringSpec({
             |   /foo:
             |     get:
             |       parameters:
-            |         - drop: "foo-Param"
+            |         - drop: foo-Param
             |         - drop: barParam
             """)
 
