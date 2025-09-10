@@ -34,6 +34,9 @@ open class GoogleFormatter: SourceFormatter {
     // put line feed before last closing }
     private fun correctLineFeed(formatted: String): String {
         val index = formatted.lastIndexOf("}")
+        if (index == -1) {
+            return formatted
+        }
 
         return StringBuilder()
             .append(formatted.substring(0, index))
