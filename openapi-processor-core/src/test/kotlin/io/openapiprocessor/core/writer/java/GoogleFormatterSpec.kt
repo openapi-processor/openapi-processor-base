@@ -38,4 +38,22 @@ class GoogleFormatterSpec : StringSpec({
             formatter.format("....")
         }
     }
+
+    "does handle package-info.java, no closing curly brace" {
+        val formatter = GoogleFormatter()
+
+        formatter.format(
+            """
+               | @org.springframework.lang.NonNullApi
+               |@org.springframework.lang.NonNullFields
+               | package  generated.spring;
+               | 
+            """.trimMargin()
+        ) shouldBe """
+               |@org.springframework.lang.NonNullApi
+               |@org.springframework.lang.NonNullFields
+               |package generated.spring;
+               |
+            """.trimMargin()
+    }
 })
