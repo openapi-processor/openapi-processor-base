@@ -1,6 +1,6 @@
 [versions]
 processor = "2025.6-SNAPSHOT"
-parser = "2025.3"
+parser = "2025.4"
 api = "2024.2"
 
 kotlin = "2.2.10"
@@ -22,7 +22,7 @@ openapi-parser-parser = { module = "io.openapiprocessor:openapi-parser" }
 #json-schema-validator-validator = { module = "io.openapiprocessor:json-schema-validator" }
 io-jackson = { module = "io.openapiprocessor:io-jackson" }
 
-jackson-bom = "com.fasterxml.jackson:jackson-bom:2.19.2"
+jackson-bom = "com.fasterxml.jackson:jackson-bom:2.20.0"
 #jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind" }
 jackson-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml" }
 #jackson-xml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-xml" }
@@ -33,7 +33,7 @@ swagger = "io.swagger.parser.v3:swagger-parser:2.1.33"
 
 antlr = "org.antlr:antlr4:4.13.2"
 
-format-java-eclipse = "org.eclipse.jdt:org.eclipse.jdt.core:3.42.0"
+format-java-eclipse = "org.eclipse.jdt:org.eclipse.jdt.core:3.43.0"
 format-java-google = "com.google.googlejavaformat:google-java-format:1.24.0"
 
 commons-text = "org.apache.commons:commons-text:1.14.0"
@@ -45,7 +45,7 @@ slf4j = "org.slf4j:slf4j-api:2.0.17"
 logback = "ch.qos.logback:logback-classic:1.5.18"
 
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
-kotest-bom = "io.kotest:kotest-bom:6.0.2"
+kotest-bom = "io.kotest:kotest-bom:6.0.3"
 kotest-runner = { module = "io.kotest:kotest-runner-junit5" }
 kotest-table = { module = "io.kotest:kotest-assertions-table" }
 mockk = "io.mockk:mockk:1.14.5"
@@ -53,7 +53,7 @@ mockk = "io.mockk:mockk:1.14.5"
 diff-utils = "io.github.java-diff-utils:java-diff-utils:4.16"
 
 groovy-bom = "org.apache.groovy:groovy-bom:4.0.28"
-spock = "org.spockframework:spock-core:2.3-groovy-4.0"
+spock = "org.spockframework:spock-core:2.4-M6-groovy-4.0"
 
 # for buildSrc convention plugins
 plugin-build = { module = "io.openapiprocessor:build-plugins", version.ref = "build-plugins" }
