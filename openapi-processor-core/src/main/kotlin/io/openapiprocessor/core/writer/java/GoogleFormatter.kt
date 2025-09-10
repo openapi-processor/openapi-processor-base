@@ -39,7 +39,7 @@ open class GoogleFormatter: SourceFormatter {
         }
 
         return StringBuilder()
-            .append(formatted.substring(0, index))
+            .append(formatted.take(index))
             .append("\n}\n")
             .toString()
     }
