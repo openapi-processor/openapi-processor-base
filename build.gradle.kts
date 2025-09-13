@@ -1,7 +1,7 @@
 plugins {
     base
     alias(libs.plugins.jacoco)
-    id("io.openapiprocessor.build.plugin.publish-central")
+    id("io.openapiprocessor.build.plugin.publish")
 }
 
 // check
@@ -13,8 +13,9 @@ group = "io.openapiprocessor"
 version = libs.versions.processor.get()
 println("version: $version")
 
-publishProcessor {
+publishingCentral {
     stagingDir = layout.buildDirectory.dir("staging")
     deploymentDir = layout.buildDirectory.dir("deployment")
-    publish = false
+    deploymentName = "base"
+    waitFor = "VALIDATED"
 }
