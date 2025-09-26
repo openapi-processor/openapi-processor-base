@@ -59,6 +59,10 @@ class  ApiConverter(
         val target = Api()
         createInterfaces(api, target)
         createResources(api, target)
+
+        if(options.modelUnreferenced) {
+            createUnreferencedSchemas(api, target)
+        }
         return target
     }
 
@@ -94,6 +98,23 @@ class  ApiConverter(
         }
 
         target.setResources(resources)
+    }
+
+    private fun createUnreferencedSchemas(api: OpenApi, target: Api) {
+        api.getComponentSchemas().forEach { (name: String, schema: Schema) ->
+            val info = SchemaInfo(
+                // todo required but unavailable for unreferenced schemas, create NullEndpoint?
+                SchemaInfo.Endpoint("none", HttpMethod.HEAD),
+                name,
+                "",
+                schema,
+                api.getRefResolver(),
+                "components/schemas",
+                // no marker interfaces,
+            )
+
+            convertDataType(info, target.getDataTypes())
+        }
     }
 
     private fun getServerPath(api: OpenApi): String? {

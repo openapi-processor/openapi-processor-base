@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 https://github.com/openapi-processor/openapi-processor-core
+ * Copyright 2019 https://github.com/openapi-processor/openapi-processor-base
  * PDX-License-Identifier: Apache-2.0
  */
 
@@ -183,5 +183,42 @@ class ApiConverterSpec: StringSpec({
         converter.convert(openApi)
 
         verify { log.warn("endpoint '/foo' has no success 2xx response.") }
+    }
+
+    "generates unreferenced models" {
+        val openApi = parseApi(
+            """
+            |openapi: 3.1.0
+            |info:
+            |  title: API
+            |  version: 1.0.0
+            |
+            |paths: {}
+            |
+            |components:
+            |  schemas:
+            |    Foo:
+            |      description: unreferenced
+            |      type: object
+            |      properties:
+            |        foo:
+            |          type: string
+            |      
+            """.trimMargin())
+
+        val options = parseOptions(
+            """
+            |openapi-processor-mapping: v15
+            |
+            |options:
+            |  package-name: pkg
+            |  model-unreferenced: true  
+            """.trimMargin())
+
+        // act
+        val api = apiConverter(options).convert(openApi)
+
+        // assert
+        api.getDataTypes().getModelDataTypes() shouldHaveSize 1
     }
 })
