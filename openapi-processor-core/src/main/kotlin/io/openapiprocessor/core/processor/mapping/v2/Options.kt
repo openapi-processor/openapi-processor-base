@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 https://github.com/openapi-processor/openapi-processor-core
+ * Copyright 2020 https://github.com/openapi-processor/openapi-processor-base
  * PDX-License-Identifier: Apache-2.0
  */
 
@@ -43,6 +43,11 @@ data class Options(
      * generate javadoc (optional)
      */
     val javadoc: Boolean = false,
+
+    /**
+     * generate enum default|string|framework (optional)
+     */
+    val enumType: String = "default",
 
     /**
      * generate pojo|record model classes (optional)
