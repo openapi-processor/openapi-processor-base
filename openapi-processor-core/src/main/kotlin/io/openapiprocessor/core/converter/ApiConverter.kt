@@ -101,7 +101,7 @@ class  ApiConverter(
     }
 
     private fun createUnreferencedSchemas(api: OpenApi, target: Api) {
-        api.getComponentSchemas().forEach { (name: String, schema: Schema) ->
+        api.getSchemas().forEach { (name: String, schema: Schema) ->
             val info = SchemaInfo(
                 // todo required but unavailable for unreferenced schemas, create NullEndpoint?
                 SchemaInfo.Endpoint("none", HttpMethod.HEAD),

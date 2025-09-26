@@ -42,7 +42,7 @@ class OpenApi(private val result: SwaggerParseResult): ParserOpenApi {
         return paths
     }
 
-    override fun getComponentSchemas(): Map<String, Schema> {
+    override fun getSchemas(): Map<String, Schema> {
         val schemas = linkedMapOf<String, Schema>()
 
         result.openAPI.components?.schemas?.forEach { (name: String, schema: SwaggerSchema<*>) ->

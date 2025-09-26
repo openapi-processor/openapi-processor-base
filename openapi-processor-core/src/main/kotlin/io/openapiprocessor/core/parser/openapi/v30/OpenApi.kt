@@ -51,7 +51,7 @@ open class OpenApi(
         return paths
     }
 
-    override fun getComponentSchemas(): Map<String, Schema> {
+    override fun getSchemas(): Map<String, Schema> {
         val schemas = linkedMapOf<String, Schema>()
 
         api.components?.schemas?.forEach { (name: String, schema: Schema30) ->
