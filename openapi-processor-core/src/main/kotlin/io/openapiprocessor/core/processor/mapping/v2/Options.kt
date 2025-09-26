@@ -55,9 +55,9 @@ data class Options(
     val modelAccessors: Boolean = true,
 
     /**
-     * generate enum default|string|framework (optional)
+     * generate unreferenced models from components/schemas (optional)
      */
-    val enumType: String = "default",
+    val modelUnreferenced: Boolean = false,
 
     /**
      * generate model source files with suffix (optional)

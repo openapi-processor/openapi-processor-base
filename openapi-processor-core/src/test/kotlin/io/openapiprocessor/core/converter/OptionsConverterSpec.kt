@@ -36,6 +36,7 @@ class OptionsConverterSpec: StringSpec({
         options.javadoc shouldBe false
         options.modelType shouldBe "default"
         options.modelAccessors.shouldBeTrue()
+        options.modelUnreferenced.shouldBeFalse()
         options.enumType shouldBe "default"
         options.modelNameSuffix shouldBe String.Empty
         options.formatCode.shouldBeFalse()
@@ -123,6 +124,7 @@ class OptionsConverterSpec: StringSpec({
                   model-name-suffix: Suffix
                   model-type: record
                   model-accessors: false
+                  model-unreferenced: true
                   enum-type: string
                   bean-validation: true
                   javadoc: true
@@ -150,6 +152,7 @@ class OptionsConverterSpec: StringSpec({
         options.modelNameSuffix shouldBe "Suffix"
         options.modelType shouldBe "record"
         options.modelAccessors shouldBe false
+        options.modelUnreferenced shouldBe true
         options.enumType shouldBe "string"
         options.beanValidation shouldBe true
         options.javadoc shouldBe true

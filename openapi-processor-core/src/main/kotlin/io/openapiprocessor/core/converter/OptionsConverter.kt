@@ -78,10 +78,11 @@ class OptionsConverter(private val checkObsoleteProcessorOptions: Boolean = fals
                         }
                     }
 
+                    options.enumType = mapping.options.enumType
                     options.modelType = mapping.options.modelType
                     options.modelAccessors = mapping.options.modelAccessors
-                    options.enumType = mapping.options.enumType
                     options.modelNameSuffix = mapping.options.modelNameSuffix
+                    options.modelUnreferenced = mapping.options.modelUnreferenced
 
                     val (enable, format) = checkBeanValidation(mapping.options)
                     options.beanValidation = enable

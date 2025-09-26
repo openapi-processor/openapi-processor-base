@@ -87,6 +87,11 @@ class ApiOptions: MappingSettings {
     var modelAccessors = true
 
     /**
+     * unreferenced models. enable/disable generation of unreferenced models from components/schemas.
+     */
+    var modelUnreferenced = false
+
+    /**
      * enum type. default|string|supplier.
      */
     var enumType = "default"
