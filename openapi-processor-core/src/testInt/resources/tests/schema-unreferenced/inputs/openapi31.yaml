@@ -1,0 +1,16 @@
+openapi: 3.1.0
+info:
+  title: unreferenced schema
+  version: 1.0.0
+
+paths: {}
+
+components:
+  schemas:
+
+    Foo:
+      description: unreferenced
+      type: object
+      properties:
+        bar:
+          type: string

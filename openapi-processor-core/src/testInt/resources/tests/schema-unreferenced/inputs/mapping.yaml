@@ -1,0 +1,6 @@
+openapi-processor-mapping: v15
+
+options:
+  package-name: generated
+  format-code: false
+  model-unreferenced: true

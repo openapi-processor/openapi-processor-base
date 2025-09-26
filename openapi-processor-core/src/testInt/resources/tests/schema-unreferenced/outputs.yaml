@@ -1,0 +1,3 @@
+prefix: generated
+items:
+  - outputs/model/<model>/Foo.java
