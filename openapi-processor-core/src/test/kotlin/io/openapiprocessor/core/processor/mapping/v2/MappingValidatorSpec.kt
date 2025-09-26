@@ -7,6 +7,7 @@ package io.openapiprocessor.core.processor.mapping.v2
 
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.data.Row1
 import io.kotest.data.blocking.forAll
 import io.kotest.data.row
 import io.kotest.matchers.booleans.shouldBeFalse
@@ -22,28 +23,21 @@ private fun String.fromResource(): String {
         .decodeToString()
 }
 
+const val latestMapping: Int = 15
+
+private fun createMappingRows(): Array<Row1<String>> {
+    return 2.rangeTo(latestMapping).map {
+        row("v$it")
+    }.toTypedArray()
+}
+
 class MappingValidatorSpec: StringSpec({
     isolationMode = IsolationMode.InstancePerTest
 
     val validator = MappingValidator()
 
     "validates mapping.yaml with matching schema version" {
-        forAll(
-            row("v2"),
-            row("v2.1"),
-            row("v3"),
-            row("v4"),
-            row("v5"),
-            row("v6"),
-            row("v7"),
-            row("v8"),
-            row("v9"),
-            row("v10"),
-            row("v11"),
-            row("v12"),
-            row("v13"),
-            row("v14"),
-        ) { v ->
+        forAll(*createMappingRows()) { v ->
             val yaml = """
                 |openapi-processor-mapping: $v
                 |
@@ -110,60 +104,10 @@ class MappingValidatorSpec: StringSpec({
         output.isValid.shouldBeTrue()
     }
 
-    "validates example mapping v2.1" {
-        validator.validate("/mapping/v2.1/mapping.example.yaml".fromResource(), "v2.1").isValid.shouldBeTrue()
-    }
-
-    "validates example mapping v3" {
-        validator.validate("/mapping/v3/mapping.example.yaml".fromResource(), "v3").isValid.shouldBeTrue()
-    }
-
-    "validates example mapping v4" {
-        validator.validate("/mapping/v4/mapping.example.yaml".fromResource(), "v4").isValid.shouldBeTrue()
-    }
-
-    "validates example mapping v5" {
-        validator.validate("/mapping/v5/mapping.example.yaml".fromResource(), "v5").isValid.shouldBeTrue()
-    }
-
-    "validates extensions mapping v6" {
-        validator.validate("/mapping/v6/extensions.mapping.yaml".fromResource(), "v6").isValid.shouldBeTrue()
-    }
-
-    "validates example mapping v6" {
-        validator.validate("/mapping/v6/mapping.example.yaml".fromResource(), "v6").isValid.shouldBeTrue()
-    }
-
-    "validates example mapping v7" {
-        validator.validate("/mapping/v7/mapping.example.yaml".fromResource(), "v7").isValid.shouldBeTrue()
-    }
-
-    "validates example mapping v8" {
-        validator.validate("/mapping/v8/mapping.example.yaml".fromResource(), "v8").isValid.shouldBeTrue()
-    }
-
-    "validates example mapping v9" {
-        validator.validate("/mapping/v9/mapping.example.yaml".fromResource(), "v9").isValid.shouldBeTrue()
-    }
-
-    "validates example mapping v10" {
-        validator.validate("/mapping/v10/mapping.example.yaml".fromResource(), "v10").isValid.shouldBeTrue()
-    }
-
-    "validates example mapping v11" {
-        validator.validate("/mapping/v11/mapping.example.yaml".fromResource(), "v11").isValid.shouldBeTrue()
-    }
-
-    "validates example mapping v12" {
-        validator.validate("/mapping/v12/mapping.example.yaml".fromResource(), "v12").isValid.shouldBeTrue()
-    }
-
-    "validates example mapping v13" {
-        validator.validate("/mapping/v13/mapping.example.yaml".fromResource(), "v13").isValid.shouldBeTrue()
-    }
-
-    "validates example mapping v14" {
-        validator.validate("/mapping/v14/mapping.example.yaml".fromResource(), "v14").isValid.shouldBeTrue()
+    "validates example mapping" {
+        forAll(*createMappingRows()) { v ->
+            validator.validate("/mapping/$v/mapping.example.yaml".fromResource(), v).isValid.shouldBeTrue()
+        }
     }
 
     "validates mapping with result key on multiple levels" {
