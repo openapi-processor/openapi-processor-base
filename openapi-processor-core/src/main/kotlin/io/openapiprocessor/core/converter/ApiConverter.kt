@@ -445,7 +445,7 @@ class  ApiConverter(
     private fun getInterfaceName(op: Operation, excluded: Boolean): String {
         var targetInterfaceName = INTERFACE_DEFAULT_NAME
 
-        if((op.hasTags())) {
+        if(op.hasTags()) {
             targetInterfaceName = identifier.toClass(op.getFirstTag()!!)
         }
 
