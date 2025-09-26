@@ -103,14 +103,13 @@ class  ApiConverter(
     private fun createUnreferencedSchemas(api: OpenApi, target: Api) {
         api.getSchemas().forEach { (name: String, schema: Schema) ->
             val info = SchemaInfo(
-                // todo required but unavailable for unreferenced schemas, create NullEndpoint?
-                SchemaInfo.Endpoint("none", HttpMethod.HEAD),
+                SchemaInfo.NoEndpoint(),
                 name,
                 "",
                 schema,
                 api.getRefResolver(),
                 "components/schemas",
-                // no marker interfaces,
+                // no marker interfaces
             )
 
             convertDataType(info, target.getDataTypes())

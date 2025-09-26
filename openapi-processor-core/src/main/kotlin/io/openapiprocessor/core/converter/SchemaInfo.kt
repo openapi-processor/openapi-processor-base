@@ -60,7 +60,8 @@ open class SchemaInfo(
 
 ): MappingSchema {
 
-    class Endpoint(val path: String, val method: HttpMethod)
+    open class Endpoint(val path: String, val method: HttpMethod)
+    class NoEndpoint(): Endpoint("", HttpMethod.GET)
 
     /**
      * if this is a $ref it indicates that the name of this SchemaInfo should be propagated to its
