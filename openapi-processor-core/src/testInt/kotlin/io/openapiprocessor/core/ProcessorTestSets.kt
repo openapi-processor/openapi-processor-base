@@ -89,6 +89,7 @@ val ALL_30: List<TestParams> = listOf(
     test30_DR("schema-composed-oneof-interface"),
     //test30_DR("schema-duplicate-by-refs"), // not supported
     test30_DR("schema-mapping"),
+    test30_DR("schema-unreferenced"),
     test30_DR("server-url"),
     test30_DR("swagger-parsing-error")
 )
@@ -175,6 +176,7 @@ val ALL_31: List<TestParams> = listOf(
     test31_DR("schema-composed-oneof-interface"),
     //test31_DR("schema-duplicate-by-refs"), // not supported
     test31_DR("schema-mapping"),
+    test31_DR("schema-unreferenced"),
     test31_DR("server-url"),
     test31_DR("swagger-parsing-error")
 )
