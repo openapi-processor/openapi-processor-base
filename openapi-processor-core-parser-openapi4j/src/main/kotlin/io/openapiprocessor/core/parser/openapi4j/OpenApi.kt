@@ -5,15 +5,18 @@
 
 package io.openapiprocessor.core.parser.openapi4j
 
+import io.openapiprocessor.core.parser.Schema
 import io.openapiprocessor.core.parser.Server
 import io.openapiprocessor.core.parser.OpenApi as ParserOpenApi
 import io.openapiprocessor.core.parser.Path as ParserPath
+import io.openapiprocessor.core.parser.Schema as ParserSchema
 import io.openapiprocessor.core.parser.RefResolver as ParserRefResolver
 import org.openapi4j.core.validation.ValidationResults
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.openapi4j.parser.model.v3.OpenApi3 as O4jOpenApi
 import org.openapi4j.parser.model.v3.Path as O4jPath
+import org.openapi4j.parser.model.v3.Schema as O4jSchema
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * openapi4j parser result.
@@ -49,6 +52,16 @@ class OpenApi(
         }
 
         return paths
+    }
+
+    override fun getComponentSchemas(): Map<String, Schema> {
+        val schemas = linkedMapOf<String, ParserSchema>()
+
+        api.components?.schemas?.forEach { (name: String, schema: O4jSchema) ->
+            schemas[name] = Schema(schema)
+        }
+
+        return schemas
     }
 
     override fun getRefResolver(): ParserRefResolver = RefResolver (api)

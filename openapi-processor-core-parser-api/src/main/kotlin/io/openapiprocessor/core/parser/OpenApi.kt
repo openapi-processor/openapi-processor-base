@@ -12,6 +12,7 @@ interface OpenApi {
 
     fun getServers(): List<Server>
     fun getPaths(): Map<String, Path>
+    fun getComponentSchemas(): Map<String, Schema>
 
     fun getRefResolver(): RefResolver
 
