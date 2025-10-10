@@ -2,6 +2,7 @@ prefix: api
 items:
   - inputs/openapi30.yaml
   - inputs/openapi31.yaml
+  - inputs/openapi32.yaml
   - inputs/apis/foo.yaml
   - inputs/examples/foo.example.yaml
   - inputs/models/foo.model.yaml

@@ -1,0 +1,76 @@
+openapi: 3.2.0
+info:
+  title: test multiple success responses
+  version: 1.0.0
+paths:
+  /foo:
+    get:
+      description: endpoint returns Foo
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Foo"
+            text/plain:
+              schema:
+                type: string
+        "202":
+          description: another success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Foo"
+  /fooBarA:
+    get:
+      description: endpoint returns interface A
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Foo"
+            text/plain:
+              schema:
+                type: string
+        "202":
+          description: another success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bar"
+  /fooBarB:
+    get:
+      description: endpoint returns interface B
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Foo"
+            text/plain:
+              schema:
+                type: string
+        "202":
+          description: another success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bar"
+components:
+  schemas:
+    Foo:
+      description: implements interface A & B
+      type: object
+      properties:
+        foo:
+          type: string
+    Bar:
+      description: implements interface A & B
+      type: object
+      properties:
+        bar:
+          type: string

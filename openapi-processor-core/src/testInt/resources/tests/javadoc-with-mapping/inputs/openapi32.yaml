@@ -1,0 +1,24 @@
+openapi: 3.2.0
+info:
+  title: test template
+  version: 1.0.0
+paths:
+  /foo:
+    get:
+      responses:
+        "200":
+          description: the foo result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Foo"
+components:
+  schemas:
+    Foo:
+      type: object
+      description: schema level description.
+      properties:
+        bar:
+          type: string
+          format: bar
+          description: property level description.

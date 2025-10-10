@@ -1,0 +1,15 @@
+openapi: 3.2.0
+info:
+  title: test template
+  version: 1.0.0
+servers:
+  - url: "https://openapprocessor.io/{path}"
+    variables:
+      path:
+        default: api
+paths:
+  /foo:
+    get:
+      responses:
+        "204":
+          description: '...'

@@ -1,0 +1,26 @@
+openapi: 3.2.0
+info:
+  title: components requestBodies
+  version: 1.0
+paths:
+  /foo:
+    post:
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: string
+      requestBody:
+        $ref: "#/components/requestBodies/Foo"
+components:
+  requestBodies:
+    Foo:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              foo:
+                type: string

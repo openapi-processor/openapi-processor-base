@@ -1,0 +1,25 @@
+openapi: 3.2.0
+info:
+  title: drop bean validation annotation if mapped to unsupported type
+  version: 1.0.0
+paths:
+  /foo:
+    get:
+      parameters:
+        - in: query
+          name: year
+          schema:
+            type: integer
+            format: year
+            minimum: 1970
+            maximum: 2099
+        - in: query
+          name: other
+          schema:
+            type: integer
+            format: other
+            minimum: 1970
+            maximum: 2099
+      responses:
+        "204":
+          description: empty

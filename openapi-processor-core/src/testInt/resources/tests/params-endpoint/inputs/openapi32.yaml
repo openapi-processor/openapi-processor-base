@@ -1,0 +1,16 @@
+openapi: 3.2.0
+info:
+  title: parameter at endpoint
+  version: 1.0.0
+paths:
+  /foo:
+    parameters:
+      - schema:
+          type: string
+        name: bar
+        in: query
+        required: true
+    get:
+      responses:
+        "204":
+          description: empty
