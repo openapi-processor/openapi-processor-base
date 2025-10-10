@@ -10,8 +10,6 @@ import com.google.common.jimfs.Jimfs
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.booleans.shouldBeTrue
-import io.openapiprocessor.core.parser.ParserType.INTERNAL
-import io.openapiprocessor.core.parser.ParserType.SWAGGER
 import io.openapiprocessor.test.*
 
 /**

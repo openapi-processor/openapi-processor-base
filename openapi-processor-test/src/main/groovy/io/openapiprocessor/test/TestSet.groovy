@@ -69,7 +69,7 @@ options:
 
     @Override
     String toString () {
-        "${parser.toLowerCase ()} - $name ($openapi, $modelType)"
+        "${parser.toLowerCase ()} - $name (${openapi}, $modelType)"
     }
 
 }
