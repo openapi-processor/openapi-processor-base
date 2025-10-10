@@ -7,6 +7,7 @@ package io.openapiprocessor.core.parser.openapi
 
 import io.openapiparser.OpenApiParser
 import io.openapiparser.OpenApiResult
+import io.openapiparser.OpenApiVersion
 import io.openapiparser.ValidationErrorTextBuilder
 import io.openapiprocessor.core.support.toURI
 import io.openapiprocessor.jackson.JacksonConverter
@@ -17,13 +18,15 @@ import io.openapiprocessor.jsonschema.schema.Output
 import io.openapiprocessor.jsonschema.schema.SchemaStore
 import io.openapiprocessor.jsonschema.validator.Validator
 import io.openapiprocessor.jsonschema.validator.ValidatorSettings
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import io.openapiparser.model.v30.OpenApi as OpenApi30
 import io.openapiparser.model.v31.OpenApi as OpenApi31
+import io.openapiparser.model.v32.OpenApi as OpenApi32
 import io.openapiprocessor.core.parser.OpenApi as ParserOpenApi
 import io.openapiprocessor.core.parser.openapi.v30.OpenApi as ParserOpenApi30
 import io.openapiprocessor.core.parser.openapi.v31.OpenApi as ParserOpenApi31
+import io.openapiprocessor.core.parser.openapi.v32.OpenApi as ParserOpenApi32
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * openapi-parser
@@ -44,20 +47,24 @@ class Parser {
         val result = parser.parse(baseUri)
 
         return when (result.version) {
-            OpenApiResult.Version.V31 -> {
+            OpenApiVersion.V32 -> {
+                validate32(loader, apiPath, result)
+                createApi32(result)
+            }
+            OpenApiVersion.V31 -> {
                 validate31(loader, apiPath, result)
                 createApi31(result)
             }
-            OpenApiResult.Version.V30 -> {
+            OpenApiVersion.V30 -> {
                 validate30(loader, apiPath, result)
                 createApi30(result)
             }
         }
     }
 
-    private fun createApi30(result: OpenApiResult): ParserOpenApi {
-        val model = result.getModel(OpenApi30::class.java)
-        return ParserOpenApi30(model)
+    private fun createApi32(result: OpenApiResult): ParserOpenApi {
+        val model = result.getModel(OpenApi32::class.java)
+        return ParserOpenApi32(model)
     }
 
     private fun createApi31(result: OpenApiResult): ParserOpenApi {
@@ -65,15 +72,26 @@ class Parser {
         return ParserOpenApi31(model)
     }
 
-    private fun validate30(loader: DocumentLoader, apiPath: String, result: OpenApiResult) {
+    private fun createApi30(result: OpenApiResult): ParserOpenApi {
+        val model = result.getModel(OpenApi30::class.java)
+        return ParserOpenApi30(model)
+    }
+
+    private fun validate32(loader: DocumentLoader, apiPath: String, result: OpenApiResult) {
         val store = SchemaStore(loader)
-        store.registerDraft4()
+        store.registerDraft202012()
         validate(apiPath, result, store)
     }
 
     private fun validate31(loader: DocumentLoader, apiPath: String, result: OpenApiResult) {
         val store = SchemaStore(loader)
         store.registerDraft202012()
+        validate(apiPath, result, store)
+    }
+
+    private fun validate30(loader: DocumentLoader, apiPath: String, result: OpenApiResult) {
+        val store = SchemaStore(loader)
+        store.registerDraft4()
         validate(apiPath, result, store)
     }
 
