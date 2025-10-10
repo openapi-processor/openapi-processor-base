@@ -48,7 +48,7 @@ class ProcessorPendingSpec: StringSpec({
 
 private fun sources(): Collection<TestSet> {
     return listOf(
-        testSet("packages", INTERNAL, "api/$API_30", model = "model", outputs = "outputs.yaml", expected = "outputs"),
-        testSet("packages", INTERNAL, "api/$API_30", model = "record", outputs = "outputs.yaml", expected = "outputs"),
+        testSet("packages", "INTERNAL", "api/$API_30", model = "model"),
+        testSet("packages", "INTERNAL", "api/$API_30", model = "record"),
     )
 }

@@ -31,24 +31,5 @@ class ProcessorEndToEndSpec: StringSpec({
 })
 
 private fun sources(): Collection<TestSet> {
-    return ALL_3x
-        .filter {
-            when (it.parser) {
-                "INTERNAL" -> {
-                    true
-                }
-                "SWAGGER" if it.openapi == "openapi30.yaml" -> {
-                    !EXCLUDE_SWAGGER.contains(it.name)
-                }
-                "OPENAPI4J" if it.openapi == "openapi30.yaml" -> {
-                    !EXCLUDE_OPENAPI4J.contains(it.name)
-                }
-                else -> {
-                    false
-                }
-            }
-        }
-        .map {
-            testSet(it.name, it.parser, it.openapi, model = it.modelType, outputs = it.outputs, expected = it.expected)
-        }
+    return buildTestSets()
 }

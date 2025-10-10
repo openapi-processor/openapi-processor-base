@@ -9,7 +9,6 @@ import com.google.common.jimfs.Configuration
 import com.google.common.jimfs.Jimfs
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.booleans.shouldBeTrue
-import io.openapiprocessor.core.parser.ParserType
 import io.openapiprocessor.test.*
 
 /**
@@ -34,22 +33,7 @@ class ProcessorEndToEndJimfsSpec: StringSpec({
 })
 
 private fun sources(): Collection<TestSet> {
-
-    // the swagger parser does not work with a custom FileSystem
-
-    val openapi4j = ALL_30
-        .filter { !EXCLUDE_OPENAPI4J.contains(it.name) }
-        .map {
-            testSet(it.name, ParserType.OPENAPI4J, it.openapi, outputs = it.outputs, expected = it.expected)
-        }
-
-    val openapi30 = ALL_30.map {
-        testSet(it.name, ParserType.INTERNAL, it.openapi, outputs = it.outputs, expected = it.expected)
-    }
-
-    val openapi31 = ALL_31.map {
-        testSet(it.name, ParserType.INTERNAL, it.openapi, outputs = it.outputs, expected = it.expected)
-    }
-
-    return openapi4j + openapi30 + openapi31
+    return buildTestSets()
+        // swagger does not work with a custom FileSystem
+        .filter { it.parser != "SWAGGER" }
 }
