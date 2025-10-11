@@ -39,6 +39,7 @@ data class TestParams(
     val modelTypes: List<ModelTypes> = listOf(ModelTypes.DEFAULT)
 )
 
+// todo rename to TestParams
 data class TestParams2(
     val name: String,
     val openapi: String,
@@ -48,6 +49,28 @@ data class TestParams2(
     val parser: String = I
 )
 
+fun join(vararg collections: Collection<TestParams2>): List<TestParams2> {
+    return collections.flatMap { it }
+}
+
+val TestParamComparator = Comparator<TestParams2> { l, r ->
+    val parser = l.parser.compareTo(r.parser)
+    if (parser != 0) {
+        return@Comparator parser
+    }
+
+    val name = l.name.compareTo(r.name)
+    if (name != 0) {
+        return@Comparator name
+    }
+
+    val openapi = l.openapi.compareTo(r.openapi)
+    if (openapi != 0) {
+        return@Comparator openapi
+    }
+
+    return@Comparator 0
+}
 
 fun tests(
     name: String,
@@ -77,7 +100,7 @@ fun testX(name: String): Collection<TestParams2> {
 
 
 
-
+@Deprecated(message = "replace with test(sX)")
 fun test30_D_(
     name: String,
     openapi: String = API_30,
@@ -88,6 +111,7 @@ fun test30_D_(
     return TestParams(name, openapi, outputs, expected, modelTypes)
 }
 
+@Deprecated(message = "replace with test(sX)")
 fun test30_DR(
     name: String,
     openapi: String = API_30,
@@ -98,6 +122,7 @@ fun test30_DR(
     return TestParams(name, openapi, outputs, expected, modelTypes)
 }
 
+@Deprecated(message = "replace with test(sX)")
 fun test31_D_(
     name: String,
     openapi: String = API_31,
@@ -108,6 +133,7 @@ fun test31_D_(
     return TestParams(name, openapi, outputs, expected, modelTypes)
 }
 
+@Deprecated(message = "replace with test(sX)")
 fun test31_DR(
     name: String,
     openapi: String = API_31,

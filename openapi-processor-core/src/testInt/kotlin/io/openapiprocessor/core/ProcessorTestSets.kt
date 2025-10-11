@@ -8,29 +8,6 @@ package io.openapiprocessor.core
 import io.openapiprocessor.test.*
 
 
-private fun join(vararg collections: Collection<TestParams2>): List<TestParams2> {
-    return collections.flatMap { it }
-}
-
-private val testParamComparator = Comparator<TestParams2> { l, r ->
-    val parser = l.parser.compareTo(r.parser)
-    if (parser != 0) {
-        return@Comparator parser
-    }
-
-    val name = l.name.compareTo(r.name)
-    if (name != 0) {
-        return@Comparator name
-    }
-
-    val openapi = l.openapi.compareTo(r.openapi)
-    if (openapi != 0) {
-        return@Comparator openapi
-    }
-
-    return@Comparator 0
-}
-
 val ALL_3x: List<TestParams2> = join(
     emptyList(),
     tests("annotation-mapping-class"),
@@ -117,7 +94,7 @@ val ALL_3x: List<TestParams2> = join(
     tests("schema-unreferenced"),
     tests("server-url"),
     tests("swagger-parsing-error")
-).sortedWith(testParamComparator)
+).sortedWith(TestParamComparator)
 
 val EXCLUDE_OPENAPI4J = setOf(
     // the parser assumes that "type" must be string if a non-standard format is used
@@ -135,3 +112,47 @@ val EXCLUDE_SWAGGER = setOf(
     // can't get uri of a document
     "packages"
 )
+
+fun testSet(
+    name: String,
+    parser: String = "INTERNAL",
+    openapi: String = "openapi.yaml",
+    model: String = "default",
+    inputs: String = "inputs.yaml",
+    outputs: String = "outputs.yaml",
+    expected: String = "outputs"
+): TestSet {
+    val testSet = TestSet()
+    testSet.name = name
+    testSet.processor = TestProcessor()
+    testSet.parser = parser
+    testSet.modelType = model
+    testSet.openapi = openapi
+    testSet.inputs = inputs
+    testSet.outputs = outputs
+    testSet.expected = expected
+    return testSet
+}
+
+fun buildTestSets(): List<TestSet> {
+    return ALL_3x
+        .filter {
+            when (it.parser) {
+                "INTERNAL" -> {
+                    true
+                }
+                "SWAGGER" if it.openapi == "openapi30.yaml" -> {
+                    !EXCLUDE_SWAGGER.contains(it.name)
+                }
+                "OPENAPI4J" if it.openapi == "openapi30.yaml" -> {
+                    !EXCLUDE_OPENAPI4J.contains(it.name)
+                }
+                else -> {
+                    false
+                }
+            }
+        }
+        .map {
+            testSet(it.name, it.parser, it.openapi, model = it.modelType, outputs = it.outputs, expected = it.expected)
+        }
+}
