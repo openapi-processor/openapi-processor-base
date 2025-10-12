@@ -13,7 +13,13 @@ import io.openapiprocessor.core.parser.MediaType as ParserMediaType
  * openapi-parser MediaType abstraction.
  */
 class MediaType(val mediaType: MediaType32): ParserMediaType {
-    override fun getSchema() = Schema(mediaType.schema!!)
+    override fun getSchema(): Schema {
+        return if (mediaType.schema != null) {
+            Schema(mediaType.schema!!)
+        } else {
+            Schema(mediaType.itemSchema!!)
+        }
+    }
 
     override val encodings: Map<String, Encoding>
         get() {
