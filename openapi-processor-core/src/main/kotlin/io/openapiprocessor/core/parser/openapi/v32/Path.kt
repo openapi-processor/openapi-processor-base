@@ -26,8 +26,13 @@ class Path(
             pathItem = info.refObject
         }
 
-        return pathItem
+        val stdOps = pathItem
             .operations
             .map { Operation(HttpMethod.valueOf(it.key.uppercase()), it.value, pathItem) }
+
+        val addOps = pathItem.additionalOperations
+            .map { Operation(HttpMethod.valueOf(it.key.uppercase()), it.value, pathItem) }
+
+        return stdOps + addOps
     }
 }

@@ -13,5 +13,6 @@ enum class HttpMethod(val method: String) {
     OPTIONS ("options"),
     HEAD ("head"),
     PATCH ("patch"),
-    TRACE ("trace")
+    TRACE ("trace"),
+    QUERY ("query")
 }

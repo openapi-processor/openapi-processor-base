@@ -18,7 +18,7 @@ import io.openapiprocessor.test.*
 class ProcessorPendingSpec: StringSpec({
 
     for (testSet in sources()) {
-        "native - $testSet".config(enabled = false) {
+        "native - $testSet".config(enabled = true) {
             val folder = tempdir()
             val reader = ResourceReader(ProcessorPendingSpec::class.java)
 
@@ -48,7 +48,7 @@ class ProcessorPendingSpec: StringSpec({
 
 private fun sources(): Collection<TestSet> {
     return listOf(
-        testSet("packages", "INTERNAL", "api/$API_30", model = "model"),
-        testSet("packages", "INTERNAL", "api/$API_30", model = "record"),
+        testSet("endpoint-http-mapping", "SWAGGER", API_30, model = "model"),
+//        testSet("endpoint-http-mapping-32", "INTERNAL", API_32, model = "record"),
     )
 }

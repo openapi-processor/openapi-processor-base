@@ -1,0 +1,49 @@
+openapi: 3.2.0
+info:
+  title: test endpoint http method mapping
+  version: 1.0.0
+paths:
+  /endpoint:
+    delete:
+      responses:
+        "204":
+          description: empty
+    get:
+      responses:
+        "204":
+          description: empty
+    head:
+      responses:
+        "204":
+          description: empty
+    options:
+      responses:
+        "204":
+          description: empty
+    patch:
+      responses:
+        "204":
+          description: empty
+    post:
+      responses:
+        "204":
+          description: empty
+    put:
+      responses:
+        "204":
+          description: empty
+    trace:
+      responses:
+        "204":
+          description: empty
+    # new with 3.2
+    query:
+      responses:
+        "204":
+          description: empty
+
+    additionalOperations:
+      foo:
+        responses:
+          "204":
+            description: empty

@@ -23,6 +23,7 @@ val ALL_3x: List<TestParams2> = join(
     tests("deprecated"),
     testX("endpoint-exclude"),
     testX("endpoint-http-mapping"), // framework specific
+    tests("endpoint-http-mapping-32", apis = listOf(API_32), modelTypes = MT_X), // framework specific
     tests("extension-mapping"),
     tests("format-eclipse"),
     tests("generated"),

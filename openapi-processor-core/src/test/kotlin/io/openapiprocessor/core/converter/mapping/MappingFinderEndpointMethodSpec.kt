@@ -11,8 +11,8 @@ import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
-import io.openapiprocessor.core.parser.HttpMethod.GET
-import io.openapiprocessor.core.parser.HttpMethod.PATCH
+import io.openapiprocessor.core.parser.HttpMethod.Companion.GET
+import io.openapiprocessor.core.parser.HttpMethod.Companion.PATCH
 import io.openapiprocessor.core.support.mappingFinder
 import io.openapiprocessor.core.support.parseOptions
 import io.openapiprocessor.core.support.query

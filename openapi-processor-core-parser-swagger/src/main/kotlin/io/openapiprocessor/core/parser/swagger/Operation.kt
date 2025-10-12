@@ -6,7 +6,6 @@
 package io.openapiprocessor.core.parser.swagger
 
 import io.openapiprocessor.core.parser.HttpMethod
-import java.net.URI
 import io.openapiprocessor.core.parser.Operation as ParserOperation
 import io.openapiprocessor.core.parser.Parameter as ParserParameter
 import io.openapiprocessor.core.parser.RequestBody as ParserRequestBody
@@ -15,6 +14,7 @@ import io.swagger.v3.oas.models.Operation as SwaggerOperation
 import io.swagger.v3.oas.models.PathItem as SwaggerPath
 import io.swagger.v3.oas.models.parameters.Parameter as SwaggerParameter
 import io.swagger.v3.oas.models.responses.ApiResponse as SwaggerResponse
+import java.net.URI
 
 /**
  * Swagger Operation abstraction.
@@ -37,11 +37,11 @@ class Operation(
 
         // the swagger parser moves the endpoint parameters to the operation level, sometimes.
         // Sometimes it does not. Check both lists.
-        path.parameters?.map { p: SwaggerParameter ->
+        path.parameters?.forEach { p: SwaggerParameter ->
             parameters.add(Parameter(p))
         }
 
-        operation.parameters?.map { p: SwaggerParameter ->
+        operation.parameters?.forEach { p: SwaggerParameter ->
             parameters.add(Parameter(p))
         }
 

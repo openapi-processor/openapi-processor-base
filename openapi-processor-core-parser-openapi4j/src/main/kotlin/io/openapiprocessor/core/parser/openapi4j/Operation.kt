@@ -6,7 +6,6 @@
 package io.openapiprocessor.core.parser.openapi4j
 
 import io.openapiprocessor.core.parser.HttpMethod
-import java.net.URI
 import io.openapiprocessor.core.parser.Operation as ParserOperation
 import io.openapiprocessor.core.parser.Parameter as ParserParameter
 import io.openapiprocessor.core.parser.RequestBody as ParserRequestBody
@@ -15,6 +14,7 @@ import org.openapi4j.parser.model.v3.Operation as O4jOperation
 import org.openapi4j.parser.model.v3.Parameter as O4jParameter
 import org.openapi4j.parser.model.v3.Path as O4jPath
 import org.openapi4j.parser.model.v3.Response as O4jResponse
+import java.net.URI
 
 /**
  * openapi4j Operation abstraction.

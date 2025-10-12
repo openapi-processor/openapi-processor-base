@@ -9,7 +9,7 @@ import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.model.DataTypes
-import io.openapiprocessor.core.parser.HttpMethod.GET
+import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.support.*
 import io.openapiprocessor.core.writer.java.JavaIdentifier
 
@@ -56,7 +56,7 @@ class DataTypeUsageSpec: StringSpec({
         """.trimIndent())
 
         val schemaInfo = openApi.getSchemaInfo("FooResponse200",
-            "/foo", GET, "200", "application/json")
+            "/foo", HttpMethod.GET, "200", "application/json")
 
         // when:
         val converter = DataTypeConverter(ApiOptions(), identifier)
@@ -105,7 +105,7 @@ class DataTypeUsageSpec: StringSpec({
            """)
 
         val schemaInfo = openApi.getSchemaInfo("FooResponse200",
-            "/foo", GET, "200", "application/json")
+            "/foo", HttpMethod.GET, "200", "application/json")
 
         // when:
         val converter = DataTypeConverter(options, identifier)
@@ -156,7 +156,7 @@ class DataTypeUsageSpec: StringSpec({
         """.trimIndent())
 
         val schemaInfo = openApi.getSchemaInfo("FooResponse200",
-            "/foo", GET, "200", "application/json")
+            "/foo", HttpMethod.GET, "200", "application/json")
 
         // when:
         val converter = DataTypeConverter(ApiOptions(), identifier)
@@ -210,7 +210,7 @@ class DataTypeUsageSpec: StringSpec({
             """)
 
         val schemaInfo = openApi.getSchemaInfo("FooResponse200",
-            "/foo", GET, "200", "application/json")
+            "/foo", HttpMethod.GET, "200", "application/json")
 
         // when:
         val converter = DataTypeConverter(options, identifier)
@@ -265,7 +265,7 @@ class DataTypeUsageSpec: StringSpec({
             """)
 
         val schemaInfo = openApi.getSchemaInfo("FooResponse200",
-            "/foo", GET, "200", "application/json")
+            "/foo", HttpMethod.GET, "200", "application/json")
 
         // when:
         val converter = DataTypeConverter(options, identifier)
