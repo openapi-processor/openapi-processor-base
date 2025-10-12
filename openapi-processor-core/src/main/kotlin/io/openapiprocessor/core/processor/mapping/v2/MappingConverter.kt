@@ -150,8 +150,15 @@ class MappingConverter(val mapping: MappingV2) {
 
     private fun convertResult (result: String): ResultTypeMapping {
         val mapping = parseMapping(result)
+
+        var targetTypeName = mapping.targetType
+        if (targetTypeName == null) {
+            targetTypeName = mapping.sourceType
+        }
+
         return ResultTypeMapping(
-            resolvePackageVariable(mapping.targetType!!),
+            mapping.sourceType,
+            resolvePackageVariable(targetTypeName!!),
             convertInlineGenerics(mapping.targetGenericTypes2))
     }
 

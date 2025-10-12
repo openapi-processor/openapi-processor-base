@@ -1,22 +1,26 @@
 /*
- * Copyright 2020 https://github.com/openapi-processor/openapi-processor-core
+ * Copyright 2020 https://github.com/openapi-processor/openapi-processor-base
  * PDX-License-Identifier: Apache-2.0
  */
 
 package io.openapiprocessor.core.model.datatypes
 
-
 /**
- * Result data type wrapper. Assumes a single generic parameter.
+ * Result data type wrapper or replacement. Assumes a single generic parameter unless `plainReplacement` is set.
  */
 class ResultDataType(
     private val name: String,
     private val pkg: String,
-    private val dataType: DataType,
-    private val genericTypes: List<GenericDataType> = emptyList()
+    private val dataType: DataType, // response data type
+    private val genericTypes: List<GenericDataType> = emptyList(),
+    private val plainReplacement: Boolean = false
 ): DataType {
 
     override fun getName(): String {
+        if (plainReplacement) {
+            return name
+        }
+
         return if (genericTypes.isEmpty()) {
             "$name<${dataType.getName()}>"
         } else {
@@ -25,6 +29,10 @@ class ResultDataType(
     }
 
     override fun getTypeName(): String {
+        if (plainReplacement) {
+            return name
+        }
+
         return if (genericTypes.isEmpty()) {
             "$name<${dataType.getTypeName()}>"
         } else {
@@ -37,7 +45,7 @@ class ResultDataType(
     }
 
     override fun getImports(): Set<String> {
-        return setOf("${getPackageName()}.$name") + dataType.getImports() + genericImports
+        return setOf("${getPackageName()}.$name") + if (plainReplacement) emptyList() else dataType.getImports() + genericImports
     }
 
     private val genericImports: Set<String>
@@ -54,6 +62,10 @@ class ResultDataType(
      * @return type with ? as the generic parameter
      */
     fun getNameMulti(): String {
+        if (plainReplacement) {
+            return name
+        }
+
         return "$name<?>"
     }
 

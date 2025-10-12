@@ -352,7 +352,8 @@ class MethodWriterGSpec extends Specification {
                         'ResultWrapper',
                         'http',
                         new NoneDataType ().wrappedInResult (),
-                        []
+                        [],
+                        false
                     ))
                 }
             }

@@ -41,6 +41,29 @@ class MappingConverterResultSpec: StringSpec({
         resultTypeMapping.genericTypes.shouldBeEmpty()
     }
 
+    "read global result type mapping, plain => class" {
+        val yaml = """
+           |openapi-processor-mapping: $VERSION
+           |
+           |options:
+           |  package-name: io.openapiprocessor.somewhere
+           | 
+           |map:
+           |  result: plain => io.openapiprocessor.Plain
+           """.trimMargin()
+
+        // when:
+        val mapping = reader.read (yaml) as Mapping
+        val mappings = MappingConverter(mapping).convert().globalMappings
+
+        // then:
+        val resultTypeMapping = mappings.getResultTypeMapping(GlobalsStep())!!
+
+        resultTypeMapping.sourceTypeName shouldBe "plain"
+        resultTypeMapping.targetTypeName shouldBe "io.openapiprocessor.Plain"
+        resultTypeMapping.genericTypes.shouldBeEmpty()
+    }
+
     "read global result type mapping, class" {
         val yaml = """
            |openapi-processor-mapping: $VERSION

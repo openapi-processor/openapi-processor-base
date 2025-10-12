@@ -7,7 +7,7 @@ grammar Mapping;
 
 // root:
 mapping
-    : type | map | annotate | content | name
+    : type | map | annotate | content | name | mapPlain
     ;
 
 type
@@ -34,8 +34,13 @@ name
     : sourceType
     ;
 
+// plain or plain => target type
+mapPlain
+    : plainType | plainType Arrow anyType
+    ;
+
 anyType
-    : plainType | primitiveType | targetType | FormatType | Primitive
+    : primitiveType | targetType | FormatType | Primitive | plainType
     ;
 
 plainType

@@ -11,6 +11,11 @@ package io.openapiprocessor.core.converter.mapping
 class ResultTypeMapping(
 
     /**
+     * the source type, in case it was provided as an arrow mapping
+     */
+    val sourceTypeName: String?,
+
+    /**
      * The fully qualified java type name that will be used as the result type.
      */
     val targetTypeName: String,
@@ -28,5 +33,19 @@ class ResultTypeMapping(
      */
     override fun getTargetType(): TargetType {
         return TargetType(targetTypeName, genericTypes)
+    }
+
+    /**
+     * don't wrap: use the plain response schema
+     */
+    fun isPlain(): Boolean {
+        return sourceTypeName == null && targetTypeName == "plain"
+    }
+
+    /**
+     * don't wrap: use the plain given target type
+     */
+    fun isPlainMapping(): Boolean {
+        return sourceTypeName == "plain"
     }
 }

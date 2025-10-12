@@ -43,8 +43,18 @@ class MappingExtractor: MappingBaseListener(), Mapping {
         kind = Mapping.Kind.ANNOTATE
     }
 
+    override fun enterMapPlain(ctx: MappingParser.MapPlainContext) {
+        if (ctx.childCount == 3) {
+            kind = Mapping.Kind.MAP
+        }
+    }
+
     override fun enterPlainType(ctx: MappingParser.PlainTypeContext) {
-        targetType = ctx.text
+        if (kind == Mapping.Kind.MAP && sourceType == null) {
+            sourceType = ctx.text
+        } else {
+            targetType = ctx.text
+        }
     }
 
     override fun enterPrimitiveType(ctx: MappingParser.PrimitiveTypeContext) {

@@ -33,4 +33,24 @@ class ResultDataTypeSpec : StringSpec({
         }
     }
 
+    "creates result wrapper" {
+        val rdt = ResultDataType("Response", "pkg",
+            ObjectDataType(DataTypeName("Foo", "Foo"), "pkg", linkedMapOf())
+        )
+
+        rdt.getName() shouldBe "Response<Foo>"
+        rdt.getTypeName() shouldBe "Response<Foo>"
+    }
+
+    "creates result wrapper with nested generic type" {
+        val rdt = ResultDataType("OuterWrapper", "pkg",
+            ObjectDataType(DataTypeName("Foo", "Foo"), "pkg", linkedMapOf()),
+            listOf(
+                GenericDataType(DataTypeName("Response"), "pkg")
+            )
+        )
+
+        rdt.getName() shouldBe "OuterWrapper<Response<Foo>>"
+        rdt.getTypeName() shouldBe "OuterWrapper<Response<Foo>>"
+    }
 })

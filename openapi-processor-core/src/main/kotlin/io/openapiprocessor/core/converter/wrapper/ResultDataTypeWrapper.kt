@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 https://github.com/openapi-processor/openapi-processor-core
+ * Copyright 2020 https://github.com/openapi-processor/openapi-processor-base
  * PDX-License-Identifier: Apache-2.0
  */
 
@@ -33,23 +33,24 @@ class ResultDataTypeWrapper(
      * @return the resulting java data type
      */
     fun wrap(dataType: DataType, schemaInfo: SchemaInfo): DataType {
-        val targetType = getMappedResultDataType(schemaInfo)
+        val match = finder.getResultTypeMapping(MappingFinderQuery(schemaInfo))
+        val targetType = match?.getTargetType()
         if (targetType == null) {
             return dataType
         }
 
-        return when (targetType.typeName) {
-            "plain" -> {
-                dataType
-            }
-            else -> {
-                ResultDataType (
-                    targetType.getName(),
-                    targetType.getPkg(),
-                    checkNone (dataType),
-                    convertGenerics(targetType)
-                )
-            }
+
+        return if (match.isPlain()) {
+            dataType
+
+        } else {
+            ResultDataType (
+                targetType.getName(),
+                targetType.getPkg(),
+                checkNone (dataType),
+                convertGenerics(targetType),
+                match.isPlainMapping()
+            )
         }
     }
 
@@ -59,15 +60,6 @@ class ResultDataTypeWrapper(
         }
 
         return dataType
-    }
-
-    private fun getMappedResultDataType(info: SchemaInfo): TargetType? {
-        val match = finder.getResultTypeMapping(MappingFinderQuery(info))
-        if (match != null) {
-            return match.getTargetType()
-        }
-
-        return null
     }
 
     private fun convertGenerics(targetType: TargetType): List<GenericDataType> {
