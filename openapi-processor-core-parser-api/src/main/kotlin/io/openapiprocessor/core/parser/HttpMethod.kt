@@ -9,6 +9,11 @@ package io.openapiprocessor.core.parser
  * http methods.
  */
 class HttpMethod private constructor(val method: String) {
+
+    override fun toString(): String {
+        return method
+    }
+
     companion object {
         val DELETE = HttpMethod("delete")
         val GET = HttpMethod("get")
