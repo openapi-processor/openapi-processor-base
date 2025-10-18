@@ -3,13 +3,29 @@ info:
   title: unreferenced schema
   version: 1.0.0
 
-paths: {}
+paths:
+  /bar:
+    get:
+      responses:
+        '200':
+          description: the bar result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bar'
 
 components:
   schemas:
 
     Foo:
       description: unreferenced
+      type: object
+      properties:
+        foo:
+          type: string
+
+    Bar:
+      description: referenced
       type: object
       properties:
         bar:

@@ -4,17 +4,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import generated.support.Generated;
 
 @Generated(value = "openapi-processor-core", version = "test")
-public class Foo {
+public class Bar {
 
-    @JsonProperty("foo")
-    private String foo;
+    @JsonProperty("bar")
+    private String bar;
 
-    public String getFoo() {
-        return foo;
+    public String getBar() {
+        return bar;
     }
 
-    public void setFoo(String foo) {
-        this.foo = foo;
+    public void setBar(String bar) {
+        this.bar = bar;
     }
 
 }
