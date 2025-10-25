@@ -13,6 +13,8 @@ import io.openapiprocessor.core.model.parameters.AdditionalParameter
 import io.openapiprocessor.core.model.parameters.Parameter
 import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
 import io.openapiprocessor.core.support.capitalizeFirstChar
+import io.openapiprocessor.core.support.indentMethod
+import io.openapiprocessor.core.support.LF
 import io.openapiprocessor.core.writer.Identifier
 import io.openapiprocessor.core.writer.java.StatusAnnotationWriter as CoreStatusAnnotationWriter
 import io.openapiprocessor.core.writer.java.MappingAnnotationWriter as CoreMappingAnnotationWriter
@@ -42,11 +44,8 @@ open class MethodWriter(
         }
 
         if (endpoint.deprecated) {
-            target.write (
-                """
-                |    @Deprecated
-                |
-                """.trimMargin())
+            target.write(createDeprecated().indentMethod())
+            target.write(LF)
         }
 
         if (shouldAddStatus(endpointResponse, endpoint)) {
@@ -64,6 +63,10 @@ open class MethodWriter(
             |    ${createResult(endpoint, endpointResponse)} ${createMethodName(endpoint, endpointResponse)}(${createParameters(endpoint)});
             |
             """.trimMargin())
+    }
+
+    private fun createDeprecated(): String {
+        return DEPRECATED.annotationName
     }
 
     private fun shouldAddStatus(endpointResponse: EndpointResponse, endpoint: Endpoint): Boolean {

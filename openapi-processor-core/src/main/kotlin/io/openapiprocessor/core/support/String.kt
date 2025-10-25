@@ -11,3 +11,7 @@ val String.Companion.Empty: String
 fun String.capitalizeFirstChar() = this.replaceFirstChar {
     it.uppercase()
 }
+
+fun String.indentMethod(): String = prependIndent("    ")
+
+const val LF =  "\n"
