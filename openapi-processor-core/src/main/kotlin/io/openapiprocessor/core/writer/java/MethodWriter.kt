@@ -5,20 +5,22 @@
 
 package io.openapiprocessor.core.writer.java
 
-import io.openapiprocessor.core.converter.*
+import io.openapiprocessor.core.converter.ApiOptions
+import io.openapiprocessor.core.converter.MappingFinder
+import io.openapiprocessor.core.converter.MappingFinderQuery
 import io.openapiprocessor.core.model.Annotation
 import io.openapiprocessor.core.model.Endpoint
 import io.openapiprocessor.core.model.EndpointResponse
 import io.openapiprocessor.core.model.parameters.AdditionalParameter
 import io.openapiprocessor.core.model.parameters.Parameter
 import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
+import io.openapiprocessor.core.support.LF
 import io.openapiprocessor.core.support.capitalizeFirstChar
 import io.openapiprocessor.core.support.indent
-import io.openapiprocessor.core.support.LF
 import io.openapiprocessor.core.writer.Identifier
-import io.openapiprocessor.core.writer.java.StatusAnnotationWriter as CoreStatusAnnotationWriter
 import io.openapiprocessor.core.writer.java.MappingAnnotationWriter as CoreMappingAnnotationWriter
 import io.openapiprocessor.core.writer.java.ParameterAnnotationWriter as CoreParameterAnnotationWriter
+import io.openapiprocessor.core.writer.java.StatusAnnotationWriter as CoreStatusAnnotationWriter
 import java.io.StringWriter
 import java.io.Writer
 
@@ -60,11 +62,28 @@ open class MethodWriter(
             target.write(LF)
         }
 
-        target.write (
-            """
-            |    ${createResult(endpoint, endpointResponse)} ${createMethodName(endpoint, endpointResponse)}(${createParameters(endpoint)});
-            |
-            """.trimMargin())
+        target.write(createResult(endpoint, endpointResponse).indent())
+        target.write(" ")
+        target.write(createMethodName(endpoint, endpointResponse))
+        target.write("(")
+        val parameters = createParameters(endpoint)
+        parameters.forEachIndexed { index, it ->
+            if (parameters.lastIndex == 0) {
+                // one parameter on the same line
+                target.write(it)
+
+            } else {
+                // each parameter on a new line
+                target.write(LF)
+                target.write(it.indent(3))
+
+                if(index < parameters.lastIndex) {
+                    target.write(",")
+                }
+            }
+        }
+        target.write(");")
+        target.write(LF)
     }
 
     private fun createDeprecated(): String {
@@ -123,8 +142,10 @@ open class MethodWriter(
         return head + tail
     }
 
-    private fun createParameters(endpoint: Endpoint): String {
-        val ps = endpoint.parameters.map {
+    private fun createParameters(endpoint: Endpoint): List<String> {
+        val parameters = mutableListOf<String>()
+
+        endpoint.parameters.forEach {
 
             val dataTypeValue = if (apiOptions.beanValidation) {
                 val info = beanValidationFactory.validate(it.dataType, it.required)
@@ -133,9 +154,11 @@ open class MethodWriter(
                 it.dataType.getTypeName()
             }
 
-             "${createParameterAnnotation(endpoint, it)} $dataTypeValue ${identifier.toIdentifier (it.name)}"
+            val parameter = "${createParameterAnnotation(endpoint, it)} $dataTypeValue ${identifier.toIdentifier (it.name)}"
                  .trim()
-        }.toMutableList()
+
+            parameters.add(parameter)
+        }
 
         if (endpoint.requestBodies.isNotEmpty()) {
             val body = endpoint.getRequestBody()
@@ -148,14 +171,10 @@ open class MethodWriter(
             }
 
             val param = "${createParameterAnnotation(endpoint, body)} $dataTypeValue ${identifier.toIdentifier(body.name)}"
-            ps.add (param.trim())
+            parameters.add (param.trim())
         }
 
-        return if (ps.size <= 1) {
-            ps.joinToString("")
-        } else {
-            "\n            " + ps.joinToString (",\n            ")
-        }
+        return parameters
     }
 
     private fun createParameterAnnotation(endpoint: Endpoint, parameter: Parameter): String {
