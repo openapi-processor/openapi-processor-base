@@ -50,11 +50,8 @@ open class MethodWriter(
 
         if (shouldAddStatus(endpointResponse, endpoint)) {
             val status = createStatus(endpoint, endpointResponse)
-            target.write (
-                """
-                |    $status
-                |
-                """.trimMargin())
+            target.write(status.indent())
+            target.write(LF)
         }
 
         val annotations = createMappingAnnotations(endpoint, endpointResponse)
