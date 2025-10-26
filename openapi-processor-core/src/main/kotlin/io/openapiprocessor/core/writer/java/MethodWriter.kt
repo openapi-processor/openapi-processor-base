@@ -57,9 +57,14 @@ open class MethodWriter(
                 """.trimMargin())
         }
 
+        val annotations = createMappingAnnotations(endpoint, endpointResponse)
+        annotations.forEach {
+            target.write(it.indent())
+            target.write(LF)
+        }
+
         target.write (
             """
-            |    ${createMappingAnnotation(endpoint, endpointResponse)}
             |    ${createResult(endpoint, endpointResponse)} ${createMethodName(endpoint, endpointResponse)}(${createParameters(endpoint)});
             |
             """.trimMargin())
@@ -80,10 +85,8 @@ open class MethodWriter(
         return annotation.toString ()
     }
 
-    private fun createMappingAnnotation(endpoint: Endpoint, endpointResponse: EndpointResponse): String {
-        val annotation = StringWriter()
-        mappingAnnotationWriter.write(annotation, endpoint, endpointResponse)
-        return annotation.toString ()
+    private fun createMappingAnnotations(endpoint: Endpoint, endpointResponse: EndpointResponse): List<String> {
+        return mappingAnnotationWriter.create(endpoint, endpointResponse)
     }
 
     private fun createResult(endpoint: Endpoint, endpointResponse: EndpointResponse): String {

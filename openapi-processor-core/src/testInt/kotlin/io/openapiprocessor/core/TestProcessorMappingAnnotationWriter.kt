@@ -13,8 +13,15 @@ import java.io.Writer
 /**
  * simple [io.openapiprocessor.core.writer.java.MappingAnnotationWriter] implementation for testing.
  */
+// todo rename to factory
 class TestProcessorMappingAnnotationWriter: MappingAnnotationWriter {
+
+    @Deprecated("remove, use create()")
     override fun write(target: Writer, endpoint: Endpoint, endpointResponse: EndpointResponse) {
         target.write ("""${MAPPING.annotationName}("${endpoint.path}")""")
+    }
+
+    override fun create(endpoint: Endpoint, endpointResponse: EndpointResponse): List<String> {
+        return listOf("""${MAPPING.annotationName}("${endpoint.path}")""")
     }
 }

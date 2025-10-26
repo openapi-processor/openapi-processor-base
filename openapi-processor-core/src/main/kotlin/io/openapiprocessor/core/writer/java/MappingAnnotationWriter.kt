@@ -12,6 +12,10 @@ import java.io.Writer
 /**
  * mapping annotation writer interface.
  */
-fun interface MappingAnnotationWriter {
+// TODO rename to factory
+interface MappingAnnotationWriter {
+    @Deprecated("remove, use create()")
     fun write (target: Writer, endpoint: Endpoint, endpointResponse: EndpointResponse)
+
+    fun create(endpoint: Endpoint, endpointResponse: EndpointResponse): List<String>
 }
