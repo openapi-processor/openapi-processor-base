@@ -12,6 +12,6 @@ fun String.capitalizeFirstChar() = this.replaceFirstChar {
     it.uppercase()
 }
 
-fun String.indentMethod(): String = prependIndent("    ")
+fun String.indent(): String = prependIndent("    ")
 
 const val LF =  "\n"
