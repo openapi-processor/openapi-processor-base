@@ -40,6 +40,7 @@ open class MethodWriter(
 
     fun write(target: Writer, endpoint: Endpoint, endpointResponse: EndpointResponse) {
         if (apiOptions.javadoc) {
+            // TODO get javadoc, indent, write
             target.write(
                 javadocWriter.convert(endpoint, endpointResponse)
             )
@@ -68,22 +69,30 @@ open class MethodWriter(
         target.write("(")
         val parameters = createParameters(endpoint)
         parameters.forEachIndexed { index, it ->
-            if (parameters.lastIndex == 0) {
-                // one parameter on the same line
-                target.write(it)
-
-            } else {
-                // each parameter on a new line
-                target.write(LF)
-                target.write(it.indent(3))
-
-                if(index < parameters.lastIndex) {
-                    target.write(",")
-                }
-            }
+            target.write(formatParameter(index, it, parameters.lastIndex))
         }
         target.write(");")
         target.write(LF)
+    }
+
+    private fun formatParameter(index: Int, parameter: String, lastIndex: Int): String {
+        val formatted = StringBuilder()
+
+        if (lastIndex == 0) {
+            // one parameter on the same line
+            formatted.append(parameter)
+
+        } else {
+            // each parameter on a new line
+            formatted.append(LF)
+            formatted.append(parameter.indent(3))
+
+            if(index < lastIndex) {
+                formatted.append(",")
+            }
+        }
+
+        return formatted.toString()
     }
 
     private fun createDeprecated(): String {
