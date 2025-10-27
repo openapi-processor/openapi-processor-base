@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 https://github.com/openapi-processor/openapi-processor-core
+ * Copyright 2021 https://github.com/openapi-processor/openapi-processor-base
  * PDX-License-Identifier: Apache-2.0
  */
 
@@ -41,6 +41,7 @@ class SkipParentWrapperParagraphsRenderer(context: HtmlNodeRendererContext)
 /**
  * create javadoc from OpenAPI descriptions.
  */
+// TODO JavaDocFactory
 open class JavaDocWriter(val identifier: Identifier) {
 
     val parser: Parser = Parser
@@ -52,7 +53,7 @@ open class JavaDocWriter(val identifier: Identifier) {
         .nodeRendererFactory { context -> SkipParentWrapperParagraphsRenderer(context) }
         .build()
 
-    fun convert(endpoint: Endpoint, endpointResponse: EndpointResponse): String {
+    fun create(endpoint: Endpoint, endpointResponse: EndpointResponse): String {
         var comment = ""
 
         if (endpoint.summary != null) {
@@ -80,10 +81,15 @@ open class JavaDocWriter(val identifier: Identifier) {
             comment += "\n"
         }
 
-        return indent(wrap(comment))
+        return wrap(comment)
     }
 
-    fun convertForPojo(dataType: ModelDataType): String {
+    @Deprecated(message = "use create & indent()")
+    fun convert(endpoint: Endpoint, endpointResponse: EndpointResponse): String {
+        return indent(create(endpoint, endpointResponse))
+    }
+
+    fun createForPojo(dataType: ModelDataType): String {
         var comment = ""
 
         if (dataType.documentation?.description != null) {
@@ -93,7 +99,7 @@ open class JavaDocWriter(val identifier: Identifier) {
         return wrap(comment)
     }
 
-    fun convertForRecord(dataType: ModelDataType): String {
+    fun createForRecord(dataType: ModelDataType): String {
         var comment = ""
 
         if (dataType.documentation?.description != null) {
@@ -107,8 +113,7 @@ open class JavaDocWriter(val identifier: Identifier) {
         return wrap(comment)
     }
 
-    // todo forEnum?
-    fun convertForDataType(dataType: DataType): String {
+    fun createForDataType(dataType: DataType): String {
         var comment = ""
 
         if (dataType.documentation?.description != null) {
@@ -118,15 +123,14 @@ open class JavaDocWriter(val identifier: Identifier) {
         return wrap(comment)
     }
 
-    // todo convertForProperty?
-    fun convert(dataType: DataType): String {
+    fun create(dataType: DataType): String {
         var comment = ""
 
         if (dataType.documentation?.description != null) {
             comment += convert(dataType.documentation!!.description) + "\n"
         }
 
-        return indent(wrap(comment))
+        return wrap(comment)
     }
 
     private fun wrap(comment: String): String {
@@ -144,11 +148,12 @@ open class JavaDocWriter(val identifier: Identifier) {
             .joinToString(
                 "\n",
                 "/**\n",
-                "\n */\n")
+                "\n */")
 
         return javadoc
     }
 
+    // TODO replace with "xxx".prependIndent()
     private fun indent(javadoc: String): String {
         if (javadoc.isEmpty())
             return ""

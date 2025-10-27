@@ -6,9 +6,9 @@
 package io.openapiprocessor.core.writer.java
 
 import io.openapiprocessor.core.converter.ApiOptions
-import io.openapiprocessor.core.model.datatypes.DataType
 import io.openapiprocessor.core.model.datatypes.InterfaceDataType
 import io.openapiprocessor.core.model.datatypes.ModelDataType
+import io.openapiprocessor.core.support.LF
 import io.openapiprocessor.core.writer.Identifier
 import java.io.Writer
 
@@ -64,7 +64,8 @@ class DataTypeWriterRecord(
 
     override fun writeJavaDoc(target: Writer, dataType: ModelDataType) {
         if (apiOptions.javadoc) {
-            target.write(javadocWriter.convertForRecord(dataType))
+            target.write(javadocWriter.createForRecord(dataType))
+            target.write(LF)
         }
     }
 

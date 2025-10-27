@@ -8,6 +8,7 @@ package io.openapiprocessor.core.writer.java
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.model.datatypes.DataType
 import io.openapiprocessor.core.model.datatypes.StringEnumDataType
+import io.openapiprocessor.core.support.LF
 import io.openapiprocessor.core.writer.Identifier
 import java.io.Writer
 
@@ -18,7 +19,7 @@ open class StringEnumWriter(
     private val apiOptions: ApiOptions,
     private val identifier: Identifier,
     private val generatedWriter: GeneratedWriter,
-    private val javadocWriter: JavaDocWriter = JavaDocWriter(identifier)
+    private val javadocFactory: JavaDocWriter = JavaDocWriter(identifier)
 ) {
 
     fun write(target: Writer, dataType: StringEnumDataType) {
@@ -119,7 +120,8 @@ open class StringEnumWriter(
 
     private fun writeJavaDoc(target: Writer, dataType: DataType) {
         if (apiOptions.javadoc) {
-            target.write(javadocWriter.convertForDataType(dataType))
+            target.write(javadocFactory.createForDataType(dataType))
+            target.write(LF)
         }
     }
 }

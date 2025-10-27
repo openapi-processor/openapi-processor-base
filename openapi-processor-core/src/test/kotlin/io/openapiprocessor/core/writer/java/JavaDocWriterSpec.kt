@@ -23,11 +23,10 @@ import io.openapiprocessor.core.support.parseApi
 import io.openapiprocessor.core.support.parseOptions
 
 class JavaDocWriterSpec: FreeSpec({
-
-    lateinit var writer: JavaDocWriter
+    lateinit var factory: JavaDocWriter
 
     beforeTest {
-        writer = JavaDocWriter(JavaIdentifier())
+        factory = JavaDocWriter(JavaIdentifier())
     }
 
     "converts endpoint without documentation to empty string" {
@@ -39,7 +38,7 @@ class JavaDocWriterSpec: FreeSpec({
             }
         }
 
-        val html = writer.convert(endpoint, endpoint.endpointResponses.first())
+        val html = factory.create(endpoint, endpoint.endpointResponses.first())
 
         html.shouldBeEmpty()
     }
@@ -56,13 +55,12 @@ class JavaDocWriterSpec: FreeSpec({
             }
         }
 
-        val html = writer.convert(endpoint, endpoint.endpointResponses.first())
+        val html = factory.create(endpoint, endpoint.endpointResponses.first())
 
         html shouldBe """
-            |    /**
-            |     * plain text summary
-            |     */
-            |
+            |/**
+            | * plain text summary
+            | */
             """.trimMargin()
     }
 
@@ -78,13 +76,12 @@ class JavaDocWriterSpec: FreeSpec({
             }
         }
 
-        val html = writer.convert(endpoint, endpoint.endpointResponses.first())
+        val html = factory.create(endpoint, endpoint.endpointResponses.first())
 
         html shouldBe """
-            |    /**
-            |     * <em>markdown</em> description with <strong>text</strong>
-            |     */
-            |
+            |/**
+            | * <em>markdown</em> description with <strong>text</strong>
+            | */
             """.trimMargin()
     }
 
@@ -102,14 +99,13 @@ class JavaDocWriterSpec: FreeSpec({
             }
         }
 
-        val html = writer.convert(endpoint, endpoint.endpointResponses.first())
+        val html = factory.create(endpoint, endpoint.endpointResponses.first())
 
         html shouldBe """
-            |    /**
-            |     * plain text summary
-            |     * <em>markdown</em> description with <strong>text</strong>
-            |     */
-            |
+            |/**
+            | * plain text summary
+            | * <em>markdown</em> description with <strong>text</strong>
+            | */
             """.trimMargin()
     }
 
@@ -129,15 +125,14 @@ class JavaDocWriterSpec: FreeSpec({
             }
         }
 
-        val html = writer.convert(endpoint, endpoint.endpointResponses.first())
+        val html = factory.create(endpoint, endpoint.endpointResponses.first())
 
         html shouldBe """
-            |    /**
-            |     * any
-            |     *
-            |     * @param foo <em>markdown</em> description with <strong>text</strong>
-            |     */
-            |
+            |/**
+            | * any
+            | *
+            | * @param foo <em>markdown</em> description with <strong>text</strong>
+            | */
             """.trimMargin()
     }
 
@@ -155,15 +150,14 @@ class JavaDocWriterSpec: FreeSpec({
             }
         }
 
-        val html = writer.convert(endpoint, endpoint.endpointResponses.first())
+        val html = factory.create(endpoint, endpoint.endpointResponses.first())
 
         html shouldBe """
-            |    /**
-            |     * any
-            |     *
-            |     * @return <em>markdown</em> description with <strong>text</strong>
-            |     */
-            |
+            |/**
+            | * any
+            | *
+            | * @return <em>markdown</em> description with <strong>text</strong>
+            | */
             """.trimMargin()
     }
 
@@ -189,19 +183,18 @@ class JavaDocWriterSpec: FreeSpec({
             }
         }
 
-        val html = writer.convert(endpoint, endpoint.endpointResponses.first())
+        val html = factory.create(endpoint, endpoint.endpointResponses.first())
 
         html shouldBe """
-            |    /**
-            |     * <em>markdown</em> description with <strong>text</strong>
-            |     * <ul>
-            |     * <li>one list item</li>
-            |     * <li>second list item</li>
-            |     * </ul>
-            |     * <pre><code>code block
-            |     * </code></pre>
-            |     */
-            |
+            |/**
+            | * <em>markdown</em> description with <strong>text</strong>
+            | * <ul>
+            | * <li>one list item</li>
+            | * <li>second list item</li>
+            | * </ul>
+            | * <pre><code>code block
+            | * </code></pre>
+            | */
             """.trimMargin()
     }
 
@@ -209,7 +202,7 @@ class JavaDocWriterSpec: FreeSpec({
         val datatype = mockk<ModelDataType>()
         every { datatype.documentation } returns null
 
-        val html = writer.convertForPojo(datatype)
+        val html = factory.createForPojo(datatype)
 
         html.shouldBeEmpty()
     }
@@ -220,13 +213,12 @@ class JavaDocWriterSpec: FreeSpec({
         val datatype = mockk<ModelDataType>()
         every { datatype.documentation } returns Documentation(description = description)
 
-        val html = writer.convertForPojo(datatype)
+        val html = factory.createForPojo(datatype)
 
         html shouldBe """
             |/**
             | * <em>markdown</em> description with <strong>text</strong>
             | */
-            |
             """.trimMargin()
     }
 
@@ -235,7 +227,7 @@ class JavaDocWriterSpec: FreeSpec({
             Pair("bar", propertyDataTypeString())
         ))
 
-        val html = writer.convertForPojo(datatype)
+        val html = factory.createForPojo(datatype)
 
         html.shouldBeEmpty()
     }
@@ -256,13 +248,12 @@ class JavaDocWriterSpec: FreeSpec({
         Type(OffsetDateTimeDataType(documentation = Documentation(description = description)))
     ) { (type: DataType) ->
 
-        val html = writer.convert(type)
+        val html = factory.create(type)
 
         html shouldBe """
-            |    /**
-            |     * <em>markdown</em> description with <strong>text</strong>
-            |     */
-            |
+            |/**
+            | * <em>markdown</em> description with <strong>text</strong>
+            | */
             """.trimMargin()
     }
 
@@ -312,7 +303,7 @@ class JavaDocWriterSpec: FreeSpec({
         val api = apiConverter(options).convert(openApi)
         val dto = api.getDataTypes().getModelDataTypes().first()
 
-        val doc = writer.convertForRecord(dto)
+        val doc = factory.createForRecord(dto)
 
         val expected =
             """
@@ -322,7 +313,6 @@ class JavaDocWriterSpec: FreeSpec({
              * @param fooA this a parameter fooA
              * @param fooB this a parameter fooB
              */
-
             """.trimIndent()
 
         doc shouldBeEqual expected
@@ -334,13 +324,12 @@ class JavaDocWriterSpec: FreeSpec({
         val datatype = mockk<StringEnumDataType>()
         every { datatype.documentation } returns Documentation(description = description)
 
-        val html = writer.convertForDataType(datatype)
+        val html = factory.createForDataType(datatype)
 
         html shouldBe """
             |/**
             | * <em>markdown</em> description with <strong>text</strong>
             | */
-            |
             """.trimMargin()
     }
 })

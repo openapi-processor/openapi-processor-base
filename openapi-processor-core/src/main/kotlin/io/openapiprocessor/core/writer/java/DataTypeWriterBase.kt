@@ -13,6 +13,8 @@ import io.openapiprocessor.core.model.datatypes.DataType
 import io.openapiprocessor.core.model.datatypes.ModelDataType
 import io.openapiprocessor.core.model.datatypes.ObjectDataType
 import io.openapiprocessor.core.model.datatypes.PropertyDataType
+import io.openapiprocessor.core.support.LF
+import io.openapiprocessor.core.support.indent
 import io.openapiprocessor.core.writer.Identifier
 import java.io.StringWriter
 import java.io.Writer
@@ -92,7 +94,8 @@ abstract class DataTypeWriterBase(
         var result = ""
 
         if (apiOptions.javadoc && !apiOptions.isRecord()) {
-            result += javadocWriter.convert(propDataType)
+            result += javadocWriter.create(propDataType).indent()
+            result += LF
         }
 
         result += ifDeprecated(propDataType)

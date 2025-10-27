@@ -34,16 +34,14 @@ open class MethodWriter(
     private val mappingAnnotationWriter: CoreMappingAnnotationWriter,
     private val parameterAnnotationWriter: CoreParameterAnnotationWriter,
     private val beanValidationFactory: BeanValidationFactory,
-    private val javadocWriter: JavaDocWriter = JavaDocWriter(identifier)
+    private val javadocFactory: JavaDocWriter = JavaDocWriter(identifier)
 ) {
     private val annotationWriter = AnnotationWriter()
 
     fun write(target: Writer, endpoint: Endpoint, endpointResponse: EndpointResponse) {
         if (apiOptions.javadoc) {
-            // TODO get javadoc, indent, write
-            target.write(
-                javadocWriter.convert(endpoint, endpointResponse)
-            )
+            target.write(createJavadoc(endpoint, endpointResponse).indent())
+            target.write(LF)
         }
 
         if (endpoint.deprecated) {
@@ -73,6 +71,10 @@ open class MethodWriter(
         }
         target.write(");")
         target.write(LF)
+    }
+
+    private fun createJavadoc(endpoint: Endpoint, endpointResponse: EndpointResponse): String {
+        return javadocFactory.create(endpoint, endpointResponse)
     }
 
     private fun formatParameter(index: Int, parameter: String, lastIndex: Int): String {

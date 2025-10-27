@@ -25,7 +25,7 @@ class InterfaceDataTypeWriter(
         target.write("\n")
 
         if (apiOptions.javadoc) {
-            target.write(javadocWriter.convert(dataType))
+            target.write(javadocWriter.create(dataType))
         }
 
         generatedWriter.writeUse(target)
