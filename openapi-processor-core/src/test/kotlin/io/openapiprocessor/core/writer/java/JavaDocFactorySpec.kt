@@ -269,7 +269,7 @@ class JavaDocFactorySpec: FreeSpec({
             """.trimMargin())
 
         val openApi = parseApi(
-            """
+            $$"""
             |openapi: 3.1.0
             |info:
             |  title: API
@@ -284,7 +284,7 @@ class JavaDocFactorySpec: FreeSpec({
             |          content:
             |            application/json:
             |              schema:
-            |                ${'$'}ref: '#/components/schemas/Foo'
+            |                $ref: '#/components/schemas/Foo'
             |
             |components:
             |  schemas:
