@@ -19,7 +19,7 @@ open class StringEnumWriter(
     private val apiOptions: ApiOptions,
     private val identifier: Identifier,
     private val generatedWriter: GeneratedWriter,
-    private val javadocFactory: JavaDocWriter = JavaDocWriter(identifier)
+    private val javadocFactory: JavaDocFactory = JavaDocFactory(identifier)
 ) {
 
     fun write(target: Writer, dataType: StringEnumDataType) {

@@ -20,8 +20,8 @@ class DataTypeWriterRecord(
     identifier: Identifier,
     generatedWriter: GeneratedWriter,
     validationAnnotations: BeanValidationFactory = BeanValidationFactory(apiOptions),
-    javadocWriter: JavaDocWriter = JavaDocWriter(identifier)
-) : DataTypeWriterBase(apiOptions, identifier, generatedWriter, validationAnnotations, javadocWriter) {
+    javadocFactory: JavaDocFactory = JavaDocFactory(identifier)
+) : DataTypeWriterBase(apiOptions, identifier, generatedWriter, validationAnnotations, javadocFactory) {
 
     override fun write(target: Writer, dataType: ModelDataType) {
         val propsData = collectPropertiesData(dataType)
@@ -64,7 +64,7 @@ class DataTypeWriterRecord(
 
     override fun writeJavaDoc(target: Writer, dataType: ModelDataType) {
         if (apiOptions.javadoc) {
-            target.write(javadocWriter.createForRecord(dataType))
+            target.write(javadocFactory.createForRecord(dataType))
             target.write(LF)
         }
     }

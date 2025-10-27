@@ -31,7 +31,7 @@ class MethodWriterGSpec extends Specification {
         new TestMappingAnnotationWriter(),
         new TestParameterAnnotationWriter(),
         Stub (BeanValidationFactory),
-        Stub (JavaDocWriter))
+        Stub (JavaDocFactory))
     def target = new StringWriter ()
 
     void "writes mapping annotation" () {
@@ -184,7 +184,7 @@ class MethodWriterGSpec extends Specification {
             new TestMappingAnnotationWriter(),
             Stub (ParameterAnnotationWriter) {},
             Stub (BeanValidationFactory),
-            Stub (JavaDocWriter))
+            Stub (JavaDocFactory))
 
         def endpoint = endpoint ("/foo", HttpMethod.GET) {e ->
             e.responses { rs ->

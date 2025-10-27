@@ -30,7 +30,7 @@ class MethodWriterResponseStyleSpec: FreeSpec() {
             TestMappingAnnotationWriter(),
             TestParameterAnnotationWriter(),
             mockk<BeanValidationFactory>(),
-            mockk<JavaDocWriter>()
+            mockk<JavaDocFactory>()
         )
     }
 

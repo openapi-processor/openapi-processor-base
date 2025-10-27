@@ -131,7 +131,7 @@ paths:
                 Stub (MappingAnnotationWriter),
                 Stub (ParameterAnnotationWriter),
                 Stub (BeanValidationFactory),
-                Stub (JavaDocWriter)),
+                Stub (JavaDocFactory)),
             new TestFrameworkAnnotations(),
             new BeanValidationFactory(options),
             new DefaultImportFilter())

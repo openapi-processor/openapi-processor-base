@@ -44,7 +44,7 @@ abstract class DataTypeWriterBase(
     protected val identifier: Identifier,
     protected val generatedWriter: GeneratedWriter,
     protected val validationAnnotations: BeanValidationFactory = BeanValidationFactory(apiOptions),
-    protected val javadocWriter: JavaDocWriter
+    protected val javadocFactory: JavaDocFactory
 ): DataTypeWriter {
     protected val annotationWriter = AnnotationWriter()
 
@@ -94,7 +94,7 @@ abstract class DataTypeWriterBase(
         var result = ""
 
         if (apiOptions.javadoc && !apiOptions.isRecord()) {
-            result += javadocWriter.create(propDataType).indent()
+            result += javadocFactory.create(propDataType).indent()
             result += LF
         }
 

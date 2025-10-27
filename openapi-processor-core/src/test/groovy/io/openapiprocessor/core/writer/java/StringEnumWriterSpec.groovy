@@ -15,7 +15,7 @@ class StringEnumWriterSpec extends Specification {
     def options = new ApiOptions()
     def identifier = new JavaIdentifier()
     def generatedWriter = new SimpleGeneratedWriter(options)
-    def javadocWriter = new JavaDocWriter(identifier)
+    def javadocWriter = new JavaDocFactory(identifier)
     def writer = new StringEnumWriter(options, identifier, generatedWriter, javadocWriter)
     def target = new StringWriter ()
 

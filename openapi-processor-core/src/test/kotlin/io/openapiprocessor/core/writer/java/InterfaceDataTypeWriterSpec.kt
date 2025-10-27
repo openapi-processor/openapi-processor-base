@@ -21,9 +21,9 @@ class InterfaceDataTypeWriterSpec: StringSpec({
     val options = ApiOptions()
     options.oneOfInterface = true
     val generatedWriter = SimpleGeneratedWriter(options)
-    val javadocWriter = JavaDocWriter(JavaIdentifier())
+    val javadocFactory = JavaDocFactory(JavaIdentifier())
 
-    val writer = InterfaceDataTypeWriter(options, generatedWriter, javadocWriter)
+    val writer = InterfaceDataTypeWriter(options, generatedWriter, javadocFactory)
     val target = StringWriter()
 
     "writes 'package'" {

@@ -22,11 +22,11 @@ import io.openapiprocessor.core.support.datatypes.propertyDataTypeString
 import io.openapiprocessor.core.support.parseApi
 import io.openapiprocessor.core.support.parseOptions
 
-class JavaDocWriterSpec: FreeSpec({
-    lateinit var factory: JavaDocWriter
+class JavaDocFactorySpec: FreeSpec({
+    lateinit var factory: JavaDocFactory
 
     beforeTest {
-        factory = JavaDocWriter(JavaIdentifier())
+        factory = JavaDocFactory(JavaIdentifier())
     }
 
     "converts endpoint without documentation to empty string" {

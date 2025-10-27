@@ -27,7 +27,7 @@ class DataTypeWriterSpec extends Specification {
         identifier,
         generatedWriter,
         new BeanValidationFactory(options),
-        new JavaDocWriter(identifier))
+        new JavaDocFactory(identifier))
     def target = new StringWriter ()
 
     void "writes 'package'" () {

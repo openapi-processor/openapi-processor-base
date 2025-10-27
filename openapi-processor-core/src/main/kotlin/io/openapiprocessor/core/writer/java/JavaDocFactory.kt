@@ -41,8 +41,7 @@ class SkipParentWrapperParagraphsRenderer(context: HtmlNodeRendererContext)
 /**
  * create javadoc from OpenAPI descriptions.
  */
-// TODO JavaDocFactory
-open class JavaDocWriter(val identifier: Identifier) {
+open class JavaDocFactory(val identifier: Identifier) {
 
     val parser: Parser = Parser
         .builder()
@@ -82,11 +81,6 @@ open class JavaDocWriter(val identifier: Identifier) {
         }
 
         return wrap(comment)
-    }
-
-    @Deprecated(message = "use create & indent()")
-    fun convert(endpoint: Endpoint, endpointResponse: EndpointResponse): String {
-        return indent(create(endpoint, endpointResponse))
     }
 
     fun createForPojo(dataType: ModelDataType): String {
@@ -141,34 +135,15 @@ open class JavaDocWriter(val identifier: Identifier) {
             return ""
 
         val javadoc = temp
-            .lineSequence()
-            .map {
-                " * $it".trimEnd()
-            }
-            .joinToString(
+            .lineSequence().joinToString(
                 "\n",
                 "/**\n",
-                "\n */")
+                "\n */"
+            ) {
+                " * $it".trimEnd()
+            }
 
         return javadoc
-    }
-
-    // TODO replace with "xxx".prependIndent()
-    private fun indent(javadoc: String): String {
-        if (javadoc.isEmpty())
-            return ""
-
-        val indented = javadoc
-            .lineSequence()
-            .map {
-                return@map if (it.isEmpty())
-                    it
-                else
-                    "    $it"
-            }
-            .joinToString("\n")
-
-        return indented
     }
 
     private fun convert(description: String?, intro: String? = null): String {
@@ -187,5 +162,4 @@ open class JavaDocWriter(val identifier: Identifier) {
 
         return result
     }
-
 }

@@ -34,7 +34,7 @@ open class MethodWriter(
     private val mappingAnnotationWriter: CoreMappingAnnotationWriter,
     private val parameterAnnotationWriter: CoreParameterAnnotationWriter,
     private val beanValidationFactory: BeanValidationFactory,
-    private val javadocFactory: JavaDocWriter = JavaDocWriter(identifier)
+    private val javadocFactory: JavaDocFactory = JavaDocFactory(identifier)
 ) {
     private val annotationWriter = AnnotationWriter()
 

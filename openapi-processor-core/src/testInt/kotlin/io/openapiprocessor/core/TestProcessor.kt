@@ -51,7 +51,7 @@ class TestProcessor:
             val generatedWriter = GeneratedWriterImpl(generatedInfo, options)
             val validationWriter = ValidationWriter(options, generatedWriter)
             val beanValidation = BeanValidationFactory(options)
-            val javaDocWriter = JavaDocWriter(identifier)
+            val javaDocFactory = JavaDocFactory(identifier)
             val formatter = getFormatter()
 
             val writer = ApiWriter(
@@ -68,7 +68,7 @@ class TestProcessor:
                         TestProcessorMappingAnnotationWriter(),
                         TestProcessorParameterAnnotationWriter(),
                         beanValidation,
-                        javaDocWriter
+                        javaDocFactory
                     ),
                     TestFrameworkAnnotations(),
                     beanValidation,
@@ -80,21 +80,21 @@ class TestProcessor:
                         identifier,
                         generatedWriter,
                         beanValidation,
-                        javaDocWriter
+                        javaDocFactory
                     )
                     else -> DataTypeWriterPojo(
                         options,
                         identifier,
                         generatedWriter,
                         beanValidation,
-                        javaDocWriter
+                        javaDocFactory
                     )
                 },
                 StringEnumWriter(options, identifier, generatedWriter),
                 InterfaceDataTypeWriter(
                     options,
                     generatedWriter,
-                    javaDocWriter
+                    javaDocFactory
                 ),
                 listOf(),
                 formatter
