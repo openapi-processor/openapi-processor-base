@@ -5,15 +5,19 @@
 
 package io.openapiprocessor.core.converter
 
+import java.util.EnumSet
+
 enum class AnnotationTargetType {
     Type, Field, Method, Parameter
 }
 
 class AnnotationTargets {
-    private val targets = mutableMapOf<String, List<AnnotationTargetType>>()
+    private val targets = mutableMapOf<String, EnumSet<AnnotationTargetType>>()
 
     fun add(annotationName: String, vararg types: AnnotationTargetType) {
-        targets[annotationName] = types.asList()
+        val values = EnumSet.noneOf(AnnotationTargetType::class.java)
+        values.addAll(types.asList())
+        targets[annotationName] = values
     }
 
     fun isAllowedOnType(annotationName: String): Boolean {
