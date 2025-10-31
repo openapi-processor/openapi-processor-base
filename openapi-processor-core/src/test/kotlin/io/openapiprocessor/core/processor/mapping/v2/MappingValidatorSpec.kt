@@ -106,7 +106,18 @@ class MappingValidatorSpec: StringSpec({
 
     "validates example mapping" {
         forAll(*createMappingRows()) { v ->
-            validator.validate("/mapping/$v/mapping.example.yaml".fromResource(), v).isValid.shouldBeTrue()
+            val output = validator.validate("/mapping/$v/mapping.example.yaml".fromResource(), v)
+
+            val error = output.error
+            if(error != null) {
+                println(error)
+            }
+
+            output.errors?.forEach { ou ->
+                println("'${ou.error}': at instance ${ou.instanceLocation} (schema ${ou.absoluteKeywordLocation.substringAfter("#")})")
+            }
+
+            output.isValid.shouldBeTrue()
         }
     }
 
