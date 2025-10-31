@@ -117,7 +117,7 @@ class OptionsConverter(private val checkObsoleteProcessorOptions: Boolean = fals
                         options.identifierPrefixInvalidEnumStart = identifierPrefixInvalidEnumStart
                     }
 
-                    options.beanValidationAditionalSupportedTypes = mapping.beanValidation
+                    options.beanValidationAdditionalSupportedTypes = mapping.beanValidation
 
                     val mappings = MappingConverter().convert(mapping)
                     options.globalMappings = mappings.globalMappings

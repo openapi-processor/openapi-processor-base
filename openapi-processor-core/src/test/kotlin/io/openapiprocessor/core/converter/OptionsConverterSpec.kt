@@ -50,7 +50,7 @@ class OptionsConverterSpec: StringSpec({
         options.endpointMappings.shouldNotBeNull()
         options.extensionMappings.shouldNotBeNull()
 
-        options.beanValidationAditionalSupportedTypes.shouldBeEmpty()
+        options.beanValidationAdditionalSupportedTypes.shouldBeEmpty()
 
         options.beanValidationValidOnReactive.shouldBeTrue()
         options.identifierWordBreakFromDigitToLetter.shouldBeTrue()
@@ -163,7 +163,7 @@ class OptionsConverterSpec: StringSpec({
         options.oneOfInterface.shouldBeTrue()
         options.responseInterface.shouldBeTrue()
 
-        options.beanValidationAditionalSupportedTypes["javax.validation.constraints.Size"]
+        options.beanValidationAdditionalSupportedTypes["javax.validation.constraints.Size"]
             .shouldContainExactly("org.openapitools.jackson.nullable.JsonNullable")
 
         options.beanValidationValidOnReactive.shouldBeFalse()

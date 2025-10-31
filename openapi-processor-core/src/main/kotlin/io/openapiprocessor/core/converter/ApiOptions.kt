@@ -168,7 +168,7 @@ class ApiOptions: MappingSettings {
     /**
      * additional supported bean-validation types
      */
-    var beanValidationAditionalSupportedTypes: SupportedTypes = mapOf()
+    var beanValidationAdditionalSupportedTypes: SupportedTypes = mapOf()
 
     // compatibility options
 

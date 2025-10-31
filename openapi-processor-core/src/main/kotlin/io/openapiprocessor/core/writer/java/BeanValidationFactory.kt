@@ -20,7 +20,7 @@ open class BeanValidationFactory(
 ) {
     val validations: BeanValidations = BeanValidations(getValidationFormat())
     val targetTypes: BeanValidationSupportedTypes = BeanValidationSupportedTypes(
-        options.beanValidationAditionalSupportedTypes)
+        options.beanValidationAdditionalSupportedTypes)
 
     /**
      * override to add annotations to the model object class.
