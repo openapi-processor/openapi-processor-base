@@ -61,7 +61,7 @@ class InterfaceWriter(
             imports.addAll(annotation.referencedImports)
 
             if (ep.deprecated) {
-                imports.add (java.lang.Deprecated::class.java.canonicalName)
+                imports.addAll(DEPRECATED.imports)
             }
 
             ep.parameters.forEach { p ->
