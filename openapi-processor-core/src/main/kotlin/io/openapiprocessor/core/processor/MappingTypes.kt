@@ -6,3 +6,4 @@
 package io.openapiprocessor.core.processor
 
 typealias SupportedTypes = Map<String, Set<String>>
+typealias TargetTypes = Map<String, Set<String>>
