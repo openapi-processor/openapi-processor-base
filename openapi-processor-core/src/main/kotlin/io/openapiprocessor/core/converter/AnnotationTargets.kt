@@ -5,6 +5,8 @@
 
 package io.openapiprocessor.core.converter
 
+import io.openapiprocessor.core.converter.AnnotationTargetType.METHOD
+import io.openapiprocessor.core.converter.AnnotationTargetType.TYPE
 import java.util.EnumSet
 
 enum class AnnotationTargetType {
@@ -14,6 +16,10 @@ enum class AnnotationTargetType {
 class AnnotationTargets {
     private val targets = mutableMapOf<String, EnumSet<AnnotationTargetType>>()
 
+    fun prefillCommon() {
+        add("lombok.Builder", TYPE, METHOD)
+    }
+
     fun add(annotationName: String, vararg types: AnnotationTargetType) {
         val values = EnumSet.noneOf(AnnotationTargetType::class.java)
         values.addAll(types.asList())
@@ -21,7 +27,7 @@ class AnnotationTargets {
     }
 
     fun isAllowedOnType(annotationName: String): Boolean {
-        return isAllowedOn(annotationName, AnnotationTargetType.TYPE)
+        return isAllowedOn(annotationName, TYPE)
     }
 
     fun isAllowedOnField(annotationName: String): Boolean {
@@ -29,7 +35,7 @@ class AnnotationTargets {
     }
 
     fun isAllowedOnMethod(annotationName: String): Boolean {
-        return isAllowedOn(annotationName, AnnotationTargetType.METHOD)
+        return isAllowedOn(annotationName, METHOD)
     }
 
     fun isAllowedOnParameter(annotationName: String): Boolean {
