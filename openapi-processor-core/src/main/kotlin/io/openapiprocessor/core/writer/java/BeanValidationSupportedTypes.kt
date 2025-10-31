@@ -5,7 +5,7 @@
 
 package io.openapiprocessor.core.writer.java
 
-import SupportedTypes
+import io.openapiprocessor.core.processor.SupportedTypes
 import io.openapiprocessor.core.model.datatypes.DataType
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

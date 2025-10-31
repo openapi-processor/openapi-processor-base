@@ -5,7 +5,7 @@
 
 package io.openapiprocessor.core.converter
 
-import SupportedTypes
+import io.openapiprocessor.core.processor.SupportedTypes
 import io.openapiprocessor.core.converter.mapping.*
 import io.openapiprocessor.core.converter.options.BasePathOptions
 import io.openapiprocessor.core.converter.options.PackageOptions

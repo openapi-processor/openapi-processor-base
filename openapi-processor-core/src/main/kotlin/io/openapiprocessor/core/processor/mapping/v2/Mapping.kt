@@ -5,7 +5,7 @@
 
 package io.openapiprocessor.core.processor.mapping.v2
 
-import SupportedTypes
+import io.openapiprocessor.core.processor.SupportedTypes
 import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonProperty
 import io.openapiprocessor.core.processor.mapping.MappingVersion
