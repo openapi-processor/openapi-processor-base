@@ -23,7 +23,7 @@ private fun String.fromResource(): String {
         .decodeToString()
 }
 
-const val latestMapping: Int = 15
+const val latestMapping: Int = 16
 
 private fun createMappingRows(): Array<Row1<String>> {
     return 2.rangeTo(latestMapping).map {
