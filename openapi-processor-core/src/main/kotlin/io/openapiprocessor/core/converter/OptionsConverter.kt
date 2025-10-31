@@ -118,6 +118,10 @@ class OptionsConverter(private val checkObsoleteProcessorOptions: Boolean = fals
                     }
 
                     options.beanValidationAdditionalSupportedTypes = mapping.beanValidation
+                    mapping.annotationTargets.forEach { (ann, targets) ->
+                        val targetTypes = targets.map { AnnotationTargetType.valueOf(it.uppercase()) }
+                        options.annotationTargets.add(ann, *targetTypes.toTypedArray())
+                    }
 
                     val mappings = MappingConverter().convert(mapping)
                     options.globalMappings = mappings.globalMappings

@@ -152,6 +152,11 @@ class ApiOptions: MappingSettings {
     override var extensionMappings: Map<String /* x- */, ExtensionMappings> = emptyMap()
 
     /**
+     * allowed annotation targets
+     */
+    var annotationTargets = AnnotationTargets()
+
+    /**
      * logging related options
      */
     var loggingOptions = LoggingOptions()

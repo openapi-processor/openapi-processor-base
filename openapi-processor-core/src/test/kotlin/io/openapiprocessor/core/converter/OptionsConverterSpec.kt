@@ -51,6 +51,7 @@ class OptionsConverterSpec: StringSpec({
         options.extensionMappings.shouldNotBeNull()
 
         options.beanValidationAdditionalSupportedTypes.shouldBeEmpty()
+        options.annotationTargets.shouldNotBeNull()
 
         options.beanValidationValidOnReactive.shouldBeTrue()
         options.identifierWordBreakFromDigitToLetter.shouldBeTrue()
@@ -141,6 +142,8 @@ class OptionsConverterSpec: StringSpec({
                 bean-validation:
                   javax.validation.constraints.Size:
                     - org.openapitools.jackson.nullable.JsonNullable
+                annotation-targets:
+                  some.Annotation: ["type", "method"]
             """.trimIndent()
         ))
 
@@ -165,6 +168,11 @@ class OptionsConverterSpec: StringSpec({
 
         options.beanValidationAdditionalSupportedTypes["javax.validation.constraints.Size"]
             .shouldContainExactly("org.openapitools.jackson.nullable.JsonNullable")
+
+        options.annotationTargets.isAllowedOnType("some.Annotation").shouldBeTrue()
+        options.annotationTargets.isAllowedOnMethod("some.Annotation").shouldBeTrue()
+        options.annotationTargets.isAllowedOnField("some.Annotation").shouldBeFalse()
+        options.annotationTargets.isAllowedOnParameter("some.Annotation").shouldBeFalse()
 
         options.beanValidationValidOnReactive.shouldBeFalse()
         options.identifierWordBreakFromDigitToLetter.shouldBeFalse()
