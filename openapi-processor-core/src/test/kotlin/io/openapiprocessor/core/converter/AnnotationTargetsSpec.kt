@@ -18,52 +18,52 @@ class AnnotationTargetsSpec : FreeSpec({
 
     "annotation is allowed on type" {
         val targets = AnnotationTargets()
-        targets.add("an.Annotation", AnnotationTargetType.Type)
+        targets.add("an.Annotation", AnnotationTargetType.TYPE)
         targets.isAllowedOnType("an.Annotation").shouldBeTrue()
     }
 
     "annotation is NOT allowed on type" {
         val targets = AnnotationTargets()
-        val types = AnnotationTargetType.entries - setOf(AnnotationTargetType.Type)
+        val types = AnnotationTargetType.entries - setOf(AnnotationTargetType.TYPE)
         targets.add("an.Annotation", *types.toTypedArray())
         targets.isAllowedOnType("an.Annotation").shouldBeFalse()
     }
 
     "annotation is allowed on field" {
         val targets = AnnotationTargets()
-        targets.add("an.Annotation", AnnotationTargetType.Field)
+        targets.add("an.Annotation", AnnotationTargetType.FIELD)
         targets.isAllowedOnField("an.Annotation").shouldBeTrue()
     }
 
     "annotation is NOT allowed on field" {
         val targets = AnnotationTargets()
-        val types = AnnotationTargetType.entries - setOf(AnnotationTargetType.Field)
+        val types = AnnotationTargetType.entries - setOf(AnnotationTargetType.FIELD)
         targets.add("an.Annotation", *types.toTypedArray())
         targets.isAllowedOnField("an.Annotation").shouldBeFalse()
     }
 
     "annotation is allowed on method" {
         val targets = AnnotationTargets()
-        targets.add("an.Annotation", AnnotationTargetType.Method)
+        targets.add("an.Annotation", AnnotationTargetType.METHOD)
         targets.isAllowedOnMethod("an.Annotation").shouldBeTrue()
     }
 
     "annotation is NOT allowed on method" {
         val targets = AnnotationTargets()
-        val types = AnnotationTargetType.entries - setOf(AnnotationTargetType.Method)
+        val types = AnnotationTargetType.entries - setOf(AnnotationTargetType.METHOD)
         targets.add("some.Annotation", *types.toTypedArray())
         targets.isAllowedOnMethod("some.Annotation").shouldBeFalse()
     }
 
     "annotation is allowed on parameter" {
         val targets = AnnotationTargets()
-        targets.add("an.Annotation", AnnotationTargetType.Parameter)
+        targets.add("an.Annotation", AnnotationTargetType.PARAMETER)
         targets.isAllowedOnParameter("an.Annotation").shouldBeTrue()
     }
 
     "annotation is NOT allowed on parameter" {
         val targets = AnnotationTargets()
-        val types = AnnotationTargetType.entries - setOf(AnnotationTargetType.Parameter)
+        val types = AnnotationTargetType.entries - setOf(AnnotationTargetType.PARAMETER)
         targets.add("an.Annotation", *types.toTypedArray())
         targets.isAllowedOnParameter("an.Annotation").shouldBeFalse()
     }

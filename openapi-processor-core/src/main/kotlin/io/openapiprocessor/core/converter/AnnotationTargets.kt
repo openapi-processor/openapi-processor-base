@@ -8,7 +8,7 @@ package io.openapiprocessor.core.converter
 import java.util.EnumSet
 
 enum class AnnotationTargetType {
-    Type, Field, Method, Parameter
+    TYPE, FIELD, METHOD, PARAMETER
 }
 
 class AnnotationTargets {
@@ -21,19 +21,19 @@ class AnnotationTargets {
     }
 
     fun isAllowedOnType(annotationName: String): Boolean {
-        return isAllowedOn(annotationName, AnnotationTargetType.Type)
+        return isAllowedOn(annotationName, AnnotationTargetType.TYPE)
     }
 
     fun isAllowedOnField(annotationName: String): Boolean {
-        return isAllowedOn(annotationName, AnnotationTargetType.Field)
+        return isAllowedOn(annotationName, AnnotationTargetType.FIELD)
     }
 
     fun isAllowedOnMethod(annotationName: String): Boolean {
-        return isAllowedOn(annotationName, AnnotationTargetType.Method)
+        return isAllowedOn(annotationName, AnnotationTargetType.METHOD)
     }
 
     fun isAllowedOnParameter(annotationName: String): Boolean {
-        return isAllowedOn(annotationName, AnnotationTargetType.Parameter)
+        return isAllowedOn(annotationName, AnnotationTargetType.PARAMETER)
     }
 
     private fun isAllowedOn(annotationName: String, targetType: AnnotationTargetType): Boolean {
