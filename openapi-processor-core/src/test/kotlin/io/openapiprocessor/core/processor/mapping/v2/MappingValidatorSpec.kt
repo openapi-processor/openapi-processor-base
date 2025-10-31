@@ -89,21 +89,6 @@ class MappingValidatorSpec: StringSpec({
         error.error shouldBe "the value does not validate against the 'false' schema"
     }
 
-    "validates example mapping v2" {
-        val output = validator.validate("/mapping/v2/mapping.example.yaml".fromResource(), "v2")
-
-        val error = output.error
-        if(error != null) {
-            println(error)
-        }
-
-        output.errors?.forEach {
-            println("'${it.error}': at instance ${it.instanceLocation} (schema ${it.absoluteKeywordLocation.substringAfter("#")})")
-        }
-
-        output.isValid.shouldBeTrue()
-    }
-
     "validates example mapping" {
         forAll(*createMappingRows()) { v ->
             val output = validator.validate("/mapping/$v/mapping.example.yaml".fromResource(), v)
