@@ -173,5 +173,4 @@ map: # the type mappings
       - bar @ some.custom.BarAnnotation
 
 annotation-targets:
-  targets:
-    - lombok.Builder: ['type', 'method']
+  lombok.Builder: ['type', 'method']
