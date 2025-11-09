@@ -263,13 +263,17 @@ abstract class DataTypeWriterBase(
     }
 
     private fun writeAnnotationsGenerated(target: Writer) {
-        generatedWriter.writeUse(target)
+        if (apiOptions.generatedAnnotation) {
+            generatedWriter.writeUse(target)
+        }
     }
 
     private fun collectImports(packageName: String, dataType: ModelDataType, propsData: List<PropertyData>): List<String> {
         val imports = mutableSetOf<String>()
 
-        imports.addAll(generatedWriter.getImports())
+        if (apiOptions.generatedAnnotation) {
+            imports.addAll(generatedWriter.getImports())
+            }
         imports.addAll(collectDataTypeImports(dataType))
         imports.addAll(collectPropertyImports(propsData))
 
