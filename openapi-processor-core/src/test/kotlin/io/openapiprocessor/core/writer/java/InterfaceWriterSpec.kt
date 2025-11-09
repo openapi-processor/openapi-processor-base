@@ -260,6 +260,43 @@ class InterfaceWriterSpec: StringSpec({
         imports shouldContain "import io.openapiprocessor.Name;"
     }
 
+    "skips additional annotation mapping import on a parameter if annotation is not allowed on parameter" {
+        val currentOptions = parseOptions(
+            """
+            |openapi-processor-mapping: v15
+            |options:
+            |  package-name: pkg
+            |map:
+            |  types:
+            |    - type: Foo @ io.openapiprocessor.Type
+            |  parameters:
+            |    - name: foo @ io.openapiprocessor.Name
+            |    
+            |annotation-targets:
+            |  io.openapiprocessor.Type: []
+            |  io.openapiprocessor.Name: []
+            """.trimMargin())
+
+        val itf = itf {
+            endpoint("/foo") {
+                parameters {
+                    query("foo", ObjectDataType(
+                        "Foo", "model", linkedMapOf("foo" to propertyDataTypeString()
+                    )))
+                }
+                responses { status("200") }
+            }
+        }
+
+        // when:
+        writer(currentOptions).write(target, itf)
+
+        // then:
+        val imports = extractImports(target)
+        imports shouldNotContain "import io.openapiprocessor.Type;"
+        imports shouldNotContain "import io.openapiprocessor.Name;"
+    }
+
     "writes additional parameter annotation import" {
         every { annotations.getAnnotation(any<Parameter>()) } returns Annotation("annotation.Parameter")
 

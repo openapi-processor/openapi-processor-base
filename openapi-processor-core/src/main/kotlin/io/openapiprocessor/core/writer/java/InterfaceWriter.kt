@@ -96,11 +96,11 @@ class InterfaceWriter(
             imports.addAll(parameter.annotationDataType.getImports())
         }
 
-        imports.addAll(getMappingAnnotationsImports(endpoint, parameter))
+        imports.addAll(getParameterAnnotationsMappingImports(endpoint, parameter))
         imports.addAll(parameter.dataTypeImports)
     }
 
-    private fun getMappingAnnotationsImports(endpoint: Endpoint, parameter: Parameter): Set<String> {
+    private fun getParameterAnnotationsMappingImports(endpoint: Endpoint, parameter: Parameter): Set<String> {
         val mappingFinder = MappingFinder(apiOptions)
         val query = MappingFinderQuery(endpoint, parameter)
 
@@ -125,6 +125,8 @@ class InterfaceWriter(
                 .map { it.annotation.type })
 
         return mappingAnnotations
+            .filter { apiOptions.annotationTargets.isAllowedOnParameter(it) }
+            .toSet()
     }
 
     private fun addImports(endpoint: Endpoint, response: EndpointResponse, imports: MutableSet<String>) {
