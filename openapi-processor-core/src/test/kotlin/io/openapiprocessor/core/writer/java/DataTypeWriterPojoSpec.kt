@@ -8,9 +8,11 @@ package io.openapiprocessor.core.writer.java
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContain
+import io.kotest.matchers.collections.shouldNotContain
 import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
+import io.kotest.matchers.string.shouldNotContain
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.JsonPropertyAnnotationMode
 import io.openapiprocessor.core.converter.mapping.*
@@ -37,6 +39,10 @@ class DataTypeWriterPojoSpec: StringSpec({
     val target = StringWriter()
 
     fun createWriter(validations: BeanValidationFactory = BeanValidationFactory(options)): DataTypeWriterPojo {
+        return DataTypeWriterPojo(options, identifier, generatedWriter, validations)
+    }
+
+    fun createWriter(options: ApiOptions, validations: BeanValidationFactory = BeanValidationFactory(options)): DataTypeWriterPojo {
         return DataTypeWriterPojo(options, identifier, generatedWriter, validations)
     }
 
@@ -767,5 +773,39 @@ class DataTypeWriterPojoSpec: StringSpec({
             |}
             |
             """.trimMargin()
+    }
+
+    "skips additional annotation mapping & import on a pojo if annotation is not allowed on type" {
+        val options = parseOptions(
+            """
+            |openapi-processor-mapping: v15
+            |options:
+            |  package-name: pkg
+            |  generated-annotation: false
+            |
+            |map:
+            |  types:
+            |    - type: Foo @ some.Annotation
+            |    
+            |annotation-targets:
+            |  some.Annotation: []
+            """.trimMargin())
+
+        val dataType = ObjectDataType("Foo", "pkg", linkedMapOf(
+            Pair("foo", propertyDataTypeString())
+        ))
+
+        // when:
+        createWriter(options).write(target, dataType)
+
+        target.toString() shouldNotContain
+            """ 
+            |@Annotation
+            |public class Foo {
+            |
+            """.trimMargin()
+
+        val imports = extractImports(target)
+        imports shouldNotContain "import some.Annotation;"
     }
 })

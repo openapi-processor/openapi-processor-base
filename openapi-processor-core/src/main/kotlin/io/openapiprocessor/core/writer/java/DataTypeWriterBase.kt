@@ -251,10 +251,14 @@ abstract class DataTypeWriterBase(
         val annotationTypeMappings = MappingFinder(apiOptions)
             .findAnnotationTypeMappings(dataType.getName(), true)
 
-        annotationTypeMappings.forEach {
-            annotationWriter.write(target, Annotation(it.annotation.type, it.annotation.parameters))
-            target.write("\n")
-        }
+        annotationTypeMappings
+            .filter {
+                apiOptions.annotationTargets.isAllowedOnType(it.annotation.type)
+            }
+            .forEach {
+                annotationWriter.write(target, Annotation(it.annotation.type, it.annotation.parameters))
+                target.write("\n")
+            }
     }
 
     private fun writeAnnotationsGenerated(target: Writer) {
@@ -287,15 +291,19 @@ abstract class DataTypeWriterBase(
         val annotationTypeMappings = MappingFinder(apiOptions)
             .findAnnotationTypeMappings(dataType.getName(), true)
 
-        annotationTypeMappings.forEach {
-            imports.add(it.annotation.type)
+        annotationTypeMappings
+            .filter {
+                apiOptions.annotationTargets.isAllowedOnType(it.annotation.type)
+            }
+            .forEach {
+                imports.add(it.annotation.type)
 
-            val parameterImports = it.annotation.parameters.values
-                .filter { v -> v.import != null }
-                .map { v -> v.import!! }
+                val parameterImports = it.annotation.parameters.values
+                    .filter { v -> v.import != null }
+                    .map { v -> v.import!! }
 
-            imports.addAll(parameterImports)
-        }
+                imports.addAll(parameterImports)
+            }
 
         if (apiOptions.beanValidation) {
             val info = validationAnnotations.validate(dataType)

@@ -8,9 +8,11 @@ package io.openapiprocessor.core.writer.java
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContain
+import io.kotest.matchers.collections.shouldNotContain
 import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
+import io.kotest.matchers.string.shouldNotContain
 import io.kotest.matchers.string.shouldStartWith
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.JsonPropertyAnnotationMode
@@ -20,6 +22,7 @@ import io.openapiprocessor.core.converter.mapping.ExtensionMappings
 import io.openapiprocessor.core.extractImports
 import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.support.datatypes.ListDataType
+import io.openapiprocessor.core.support.datatypes.ObjectDataType
 import io.openapiprocessor.core.support.datatypes.propertyDataType
 import io.openapiprocessor.core.support.datatypes.propertyDataTypeString
 import io.openapiprocessor.core.support.parseOptions
@@ -529,6 +532,41 @@ class DataTypeWriterRecordSpec: StringSpec({
             |) {}
             |
             """.trimMargin()
+    }
+
+    "skips additional annotation mapping & import on a pojo if annotation is not allowed on type" {
+        val options = parseOptions(
+            """
+            |openapi-processor-mapping: v15
+            |options:
+            |  package-name: pkg
+            |  generated-annotation: false
+            |
+            |map:
+            |  types:
+            |    - type: Foo @ some.Annotation
+            |    
+            |annotation-targets:
+            |  some.Annotation: []
+            """.trimMargin())
+
+        val dataType = ObjectDataType("Foo", "pkg", linkedMapOf(
+            Pair("foo", propertyDataTypeString())
+        ))
+
+        writer(options).write(target, dataType)
+
+        target.toString() shouldNotContain
+            """
+            |@Annotation
+            |public record Foo(
+            |    String foo
+            |) {}
+            |
+            """.trimMargin()
+
+        val imports = extractImports(target)
+        imports shouldNotContain "import some.Annotation;"
     }
 })
 
