@@ -238,9 +238,13 @@ open class MethodWriter(
                 .findAnnotationParameterNameTypeMapping(MappingFinderQuery(endpoint, parameter))
                 .map { it.annotation })
 
-        mappingAnnotations.forEach {
-            target.write(" ")
-            annotationWriter.write(target, Annotation(it.type, it.parameters))
-        }
+        mappingAnnotations
+            .filter {
+                apiOptions.annotationTargets.isAllowedOnParameter(it.type)
+            }
+            .forEach {
+                target.write(" ")
+                annotationWriter.write(target, Annotation(it.type, it.parameters))
+            }
     }
 }

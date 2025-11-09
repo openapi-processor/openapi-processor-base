@@ -177,4 +177,43 @@ class MethodWriterAnnotationSpec: StringSpec ({
             |
             """.trimMargin()
     }
+
+    "skips additional parameter annotation if annotation is not allowed on parameter" {
+        val options = parseOptions(
+            """
+            |openapi-processor-mapping: v15
+            |options:
+            |  package-name: pkg
+            |
+            |
+            |map:
+            |  types:
+            |    - type: Foo @ lombok.Builder
+            |    
+            |annotation-targets:
+            | lombok.Builder: ['type', 'method']
+            """.trimMargin())
+
+        val endpoint = endpoint("/foo") {
+            parameters {
+                any(object : ParameterBase("foo", ObjectDataType(
+                    DataTypeName("Foo"), "pkg"), true) {})
+            }
+            responses {
+                status("204") {
+                    response()
+                }
+            }
+        }
+
+        writer(options).write (target, endpoint, endpoint.endpointResponses.first ())
+
+        target.toString () shouldBe
+            """    
+            |    @Status
+            |    @CoreMapping
+            |    void getFoo(@Parameter Foo foo);
+            |
+            """.trimMargin()
+    }
 })
