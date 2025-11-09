@@ -140,6 +140,7 @@ abstract class DataTypeWriterBase(
     private fun collectTypeAnnotations(sourceName: String): Collection<Annotation> {
         return MappingFinder(apiOptions)
             .findAnnotationTypeMappings(sourceName)
+            .filter { apiOptions.annotationTargets.isAllowedOnField(it.annotation.type) }
             .map { Annotation(it.annotation.type, it.annotation.parameters) }
     }
 

@@ -8,11 +8,9 @@ package io.openapiprocessor.core.writer.java
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContain
-import io.kotest.matchers.collections.shouldNotContain
 import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
-import io.kotest.matchers.string.shouldNotContain
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.JsonPropertyAnnotationMode
 import io.openapiprocessor.core.converter.mapping.*
@@ -795,17 +793,73 @@ class DataTypeWriterPojoSpec: StringSpec({
             Pair("foo", propertyDataTypeString())
         ))
 
-        // when:
         createWriter(options).write(target, dataType)
 
-        target.toString() shouldNotContain
-            """ 
-            |@Annotation
+        target.toString() shouldContain
+            """package pkg;
+            |
+            |import com.fasterxml.jackson.annotation.JsonProperty;
+            |
             |public class Foo {
             |
+            |    @JsonProperty("foo")
+            |    private String foo;
+            |
+            |    public String getFoo() {
+            |        return foo;
+            |    }
+            |
+            |    public void setFoo(String foo) {
+            |        this.foo = foo;
+            |    }
+            |
+            |}
+            |
             """.trimMargin()
+    }
 
-        val imports = extractImports(target)
-        imports shouldNotContain "import some.Annotation;"
+    "skips additional annotation mapping if annotation is not allowed on field" {
+        val options = parseOptions(
+            """
+            |openapi-processor-mapping: v15
+            |options:
+            |  package-name: pkg
+            |  generated-annotation: false
+            |
+            |map:
+            |  types:
+            |    - type: string @ some.Annotation
+            |    
+            |annotation-targets:
+            |  some.Annotation: []
+            """.trimMargin())
+
+        val dataType = ObjectDataType("Foo", "pkg", linkedMapOf(
+            Pair("foo", propertyDataTypeString())
+        ))
+
+        createWriter(options).write(target, dataType)
+
+        target.toString() shouldContain
+            """package pkg;
+            |
+            |import com.fasterxml.jackson.annotation.JsonProperty;
+            |
+            |public class Foo {
+            |
+            |    @JsonProperty("foo")
+            |    private String foo;
+            |
+            |    public String getFoo() {
+            |        return foo;
+            |    }
+            |
+            |    public void setFoo(String foo) {
+            |        this.foo = foo;
+            |    }
+            |
+            |}
+            |
+            """.trimMargin()
     }
 })
