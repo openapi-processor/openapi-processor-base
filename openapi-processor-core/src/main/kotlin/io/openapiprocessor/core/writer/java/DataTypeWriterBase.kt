@@ -283,9 +283,7 @@ abstract class DataTypeWriterBase(
     }
 
     private fun collectPropertyImports(propsData: List<PropertyData>): List<String> {
-        return propsData
-            .map { it.imports }
-            .flatten()
+        return propsData.flatMap { it.imports }
     }
 
     private fun collectDataTypeImports(dataType: ModelDataType): Set<String> {
