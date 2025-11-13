@@ -49,4 +49,25 @@ class InterfaceDataType(
     override fun getImports(): Set<String> {
         return setOf("${getPackageName()}.${getTypeName()}")
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other)
+            return true
+
+        if (javaClass != other?.javaClass)
+            return false
+
+        other as InterfaceDataType
+
+        if (name != other.name) return false
+        if (pkg != other.pkg) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = name.hashCode()
+        result = 31 * result + pkg.hashCode()
+        return result
+    }
 }

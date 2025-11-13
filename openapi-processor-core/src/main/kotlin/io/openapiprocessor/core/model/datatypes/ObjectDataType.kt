@@ -19,9 +19,9 @@ open class ObjectDataType(
     override val deprecated: Boolean = false,
     override val documentation: Documentation? = null
 ): ModelDataType {
-    private val _implementsDataTypes: MutableCollection<InterfaceDataType> = mutableListOf()
-    override val implementsDataTypes: Collection<InterfaceDataType>
-        get() = _implementsDataTypes.toList()
+    private val _implementsDataTypes: MutableSet<InterfaceDataType> = mutableSetOf()
+    override val implementsDataTypes: Set<InterfaceDataType>
+        get() = _implementsDataTypes
 
     override fun getName(): String {
         return name.id
@@ -79,8 +79,7 @@ open class ObjectDataType(
     private val implementsImports: Set<String>
         get() {
             return implementsDataTypes
-                .map { it.getImports() }
-                .flatten()
+                .flatMap { it.getImports() }
                 .toSet()
         }
 }

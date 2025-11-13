@@ -14,9 +14,9 @@ class AllOfObjectDataType(
     private val items: List<DataType> = emptyList(),
     override val deprecated: Boolean = false
 ): ModelDataType {
-    private val _implementsDataTypes: MutableCollection<InterfaceDataType> = mutableListOf()
-    override val implementsDataTypes: Collection<InterfaceDataType>
-        get() = _implementsDataTypes.toList()
+    private val _implementsDataTypes: MutableSet<InterfaceDataType> = mutableSetOf()
+    override val implementsDataTypes: Set<InterfaceDataType>
+        get() = _implementsDataTypes
 
     override fun getName(): String {
         return name.id

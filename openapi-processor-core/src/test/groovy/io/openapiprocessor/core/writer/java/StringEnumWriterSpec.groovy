@@ -7,8 +7,8 @@ package io.openapiprocessor.core.writer.java
 
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.model.Documentation
+import io.openapiprocessor.core.model.datatypes.DataTypeName
 import io.openapiprocessor.core.model.datatypes.StringEnumDataType
-import io.openapiprocessor.core.support.datatypes.DataTypeName
 import spock.lang.Specification
 
 class StringEnumWriterSpec extends Specification {
@@ -19,10 +19,18 @@ class StringEnumWriterSpec extends Specification {
     def writer = new StringEnumWriter(options, identifier, generatedWriter, javadocWriter)
     def target = new StringWriter ()
 
+    private DataTypeName dataTypeName(String id) {
+        return new DataTypeName(id, id)
+    }
+
+    private DataTypeName dataTypeName(String id, String type) {
+        return new DataTypeName(id, type)
+    }
+
     void "writes 'package'" () {
         def pkg = 'com.github.hauner.openapi'
         def dataType = new StringEnumDataType(
-            new DataTypeName('Foo'), pkg, [], null, false, null)
+            dataTypeName('Foo'), pkg, [], null, false, null)
 
         when:
         writer.write (target, dataType)
@@ -36,7 +44,7 @@ package $pkg;
 
     void "writes javadoc comment" () {
         def dataType = new StringEnumDataType(
-            new DataTypeName('Foo'), 'pkg', [], null, false,
+            dataTypeName('Foo'), 'pkg', [], null, false,
                 new Documentation(null, "description"))
 
         when:
@@ -53,7 +61,7 @@ package $pkg;
 
     void "writes @Generated import" () {
         def dataType = new StringEnumDataType(
-            new DataTypeName('Foo'), 'pkg', [], null, false, null)
+            dataTypeName('Foo'), 'pkg', [], null, false, null)
 
         when:
         writer.write (target, dataType)
@@ -67,7 +75,7 @@ import io.openapiprocessor.generated.support.Generated;
     void "writes enum class"() {
         def pkg = 'com.github.hauner.openapi'
         def dataType = new StringEnumDataType(
-            new DataTypeName(id, type), pkg, [], null, false, null)
+            dataTypeName(id, type), pkg, [], null, false, null)
 
         when:
         writer.write (target, dataType)
@@ -91,7 +99,7 @@ public enum $type {
         options.enumType = "framework"
 
         def dataType = new StringEnumDataType(
-            new DataTypeName('Foo'), 'pkg', [], null, false, null)
+            dataTypeName('Foo'), 'pkg', [], null, false, null)
 
         when:
         writer.write (target, dataType)
@@ -107,7 +115,7 @@ import java.util.function.Supplier;
 
         def pkg = 'com.github.hauner.openapi'
         def dataType = new StringEnumDataType(
-            new DataTypeName(id, type), pkg, [], null, false, null)
+            dataTypeName(id, type), pkg, [], null, false, null)
 
         when:
         writer.write (target, dataType)
@@ -130,7 +138,7 @@ public enum $type implements Supplier<String> {
     void "writes enum values"() {
         def pkg = 'com.github.hauner.openapi'
         def dataType = new StringEnumDataType(
-            new DataTypeName('Foo'), pkg, ['foo', '_foo-2', 'foo-foo'], null, false, null)
+            dataTypeName('Foo'), pkg, ['foo', '_foo-2', 'foo-foo'], null, false, null)
 
         when:
         writer.write (target, dataType)
@@ -148,7 +156,7 @@ public enum Foo {
     void "writes value member"() {
         def pkg = 'com.github.hauner.openapi'
         def dataType = new StringEnumDataType(
-            new DataTypeName('Foo'), pkg, ['foo', '_foo-2', 'foo-foo'], null, false, null)
+            dataTypeName('Foo'), pkg, ['foo', '_foo-2', 'foo-foo'], null, false, null)
 
         when:
         writer.write (target, dataType)
@@ -163,7 +171,7 @@ public enum Foo {
     void "writes enum constructor"() {
         def pkg = 'com.github.hauner.openapi'
         def dataType = new StringEnumDataType (
-            new DataTypeName(id, type), pkg, ['foo', '_foo-2', 'foo-foo'], null, false, null)
+            dataTypeName(id, type), pkg, ['foo', '_foo-2', 'foo-foo'], null, false, null)
 
         when:
         writer.write (target, dataType)
@@ -186,7 +194,7 @@ public enum Foo {
     void "writes @JsonValue method for serialization"() {
         def pkg = 'com.github.hauner.openapi'
         def dataType = new StringEnumDataType (
-            new DataTypeName('Foo'), pkg, ['foo', '_foo-2', 'foo-foo'], null, false, null)
+            dataTypeName('Foo'), pkg, ['foo', '_foo-2', 'foo-foo'], null, false, null)
 
         when:
         writer.write (target, dataType)
@@ -207,7 +215,7 @@ public enum Foo {
 
         def pkg = 'com.github.hauner.openapi'
         def dataType = new StringEnumDataType (
-            new DataTypeName('Foo'), pkg, ['foo', '_foo-2', 'foo-foo'], null, false, null)
+            dataTypeName('Foo'), pkg, ['foo', '_foo-2', 'foo-foo'], null, false, null)
 
         when:
         writer.write (target, dataType)
@@ -226,7 +234,7 @@ public enum Foo {
     void "writes @JsonCreator method for de-serialization"() {
         def pkg = 'com.github.hauner.openapi'
         def dataType = new StringEnumDataType (
-            new DataTypeName(id, type), pkg, ['foo', '_foo-2', 'foo-foo'], null, false, null)
+            dataTypeName(id, type), pkg, ['foo', '_foo-2', 'foo-foo'], null, false, null)
 
         when:
         writer.write (target, dataType)
@@ -254,7 +262,7 @@ public enum Foo {
     void "writes jackson imports" () {
         def pkg = 'com.github.hauner.openapi'
         def dataType = new StringEnumDataType(
-            new DataTypeName('Foo'), pkg, [], null, false, null)
+            dataTypeName('Foo'), pkg, [], null, false, null)
 
         when:
         writer.write (target, dataType)
@@ -265,8 +273,4 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 """)
     }
-
 }
-
-
-

@@ -12,6 +12,15 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Foo"
+  /bar:
+    get:
+      responses:
+        '200':
+          description: the bar result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Foo'
 components:
   schemas:
     Foo:

@@ -10,4 +10,7 @@ public interface Api {
     @Mapping("/foo")
     Foo getFoo();
 
+    @Mapping("/bar")
+    Foo getBar();
+
 }

@@ -9,7 +9,7 @@ interface ModelDataType: DataType {
     /**
      * implements interfaces.
      */
-    val implementsDataTypes: Collection<InterfaceDataType>
+    val implementsDataTypes: Set<InterfaceDataType>
 
     /**
      * loop object properties.
