@@ -9,7 +9,6 @@ build-jdk = "11"
 test-jdk = "17"
 build-plugins = "2025.9"
 
-junit = "5.13.4"
 jacoco = "0.8.13"
 updates = "0.52.0"
 checker = "0.6.16"

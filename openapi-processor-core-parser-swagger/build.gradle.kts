@@ -32,10 +32,8 @@ dependencies {
     constraints {
         implementation(libs.jackson.bom) { because("use same jackson") }
 
-        testImplementation(libs.junit.bom) { because("use same junit") }
         testImplementation(libs.jackson.bom) { because("use same jackson") }
 
-        testFixturesImplementation(libs.junit.bom) { because("use same junit") }
         testFixturesImplementation(libs.jackson.bom) { because("use same jackson") }
     }
 }
