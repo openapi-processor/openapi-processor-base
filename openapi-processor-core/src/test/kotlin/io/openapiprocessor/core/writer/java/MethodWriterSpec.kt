@@ -15,7 +15,7 @@ import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.model.parameters.ParameterBase
 import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
 import io.openapiprocessor.core.support.TestStatusAnnotationWriter
-import io.openapiprocessor.core.support.TestMappingAnnotationWriter
+import io.openapiprocessor.core.support.TestMappingAnnotationFactory
 import io.openapiprocessor.core.support.TestParameterAnnotationWriter
 import io.openapiprocessor.core.support.datatypes.CollectionDataType
 import java.io.StringWriter
@@ -30,7 +30,7 @@ class MethodWriterSpec: StringSpec({
         apiOptions,
         identifier,
         TestStatusAnnotationWriter(),
-        TestMappingAnnotationWriter(),
+        TestMappingAnnotationFactory(),
         TestParameterAnnotationWriter(),
         BeanValidationFactory(apiOptions))
 

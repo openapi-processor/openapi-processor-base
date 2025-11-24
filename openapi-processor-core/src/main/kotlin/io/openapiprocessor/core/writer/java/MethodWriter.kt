@@ -18,7 +18,7 @@ import io.openapiprocessor.core.support.LF
 import io.openapiprocessor.core.support.capitalizeFirstChar
 import io.openapiprocessor.core.support.indent
 import io.openapiprocessor.core.writer.Identifier
-import io.openapiprocessor.core.writer.java.MappingAnnotationWriter as CoreMappingAnnotationWriter
+import io.openapiprocessor.core.writer.java.MappingAnnotationFactory as CoreMappingAnnotationFactory
 import io.openapiprocessor.core.writer.java.ParameterAnnotationWriter as CoreParameterAnnotationWriter
 import io.openapiprocessor.core.writer.java.StatusAnnotationWriter as CoreStatusAnnotationWriter
 import java.io.StringWriter
@@ -31,7 +31,7 @@ open class MethodWriter(
     private val apiOptions: ApiOptions,
     private val identifier: Identifier,
     private val statusAnnotationWriter: CoreStatusAnnotationWriter,
-    private val mappingAnnotationWriter: CoreMappingAnnotationWriter,
+    private val mappingAnnotationFactory: CoreMappingAnnotationFactory,
     private val parameterAnnotationWriter: CoreParameterAnnotationWriter,
     private val beanValidationFactory: BeanValidationFactory,
     private val javadocFactory: JavaDocFactory = JavaDocFactory(identifier)
@@ -113,7 +113,7 @@ open class MethodWriter(
     }
 
     private fun createMappingAnnotations(endpoint: Endpoint, endpointResponse: EndpointResponse): List<String> {
-        return mappingAnnotationWriter.create(endpoint, endpointResponse)
+        return mappingAnnotationFactory.create(endpoint, endpointResponse)
     }
 
     private fun createResult(endpoint: Endpoint, endpointResponse: EndpointResponse): String {

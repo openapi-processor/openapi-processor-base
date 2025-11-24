@@ -7,15 +7,10 @@ package io.openapiprocessor.core.writer.java
 
 import io.openapiprocessor.core.model.Endpoint
 import io.openapiprocessor.core.model.EndpointResponse
-import java.io.Writer
 
 /**
- * mapping annotation writer interface.
+ * mapping annotation factory.
  */
-// TODO rename to factory
-interface MappingAnnotationWriter {
-    @Deprecated("remove, use create()")
-    fun write (target: Writer, endpoint: Endpoint, endpointResponse: EndpointResponse)
-
+interface MappingAnnotationFactory {
     fun create(endpoint: Endpoint, endpointResponse: EndpointResponse): List<String>
 }

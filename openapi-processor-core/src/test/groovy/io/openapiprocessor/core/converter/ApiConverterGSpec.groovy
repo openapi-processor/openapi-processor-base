@@ -128,7 +128,7 @@ paths:
                 options,
                 identifier,
                 Stub(StatusAnnotationWriter),
-                Stub (MappingAnnotationWriter),
+                Stub (MappingAnnotationFactory),
                 Stub (ParameterAnnotationWriter),
                 Stub (BeanValidationFactory),
                 Stub (JavaDocFactory)),

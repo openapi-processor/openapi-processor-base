@@ -5,7 +5,7 @@
 
 package io.openapiprocessor.core.writer.java
 
-import io.openapiprocessor.core.support.TestMappingAnnotationWriter
+import io.openapiprocessor.core.support.TestMappingAnnotationFactory
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.mapping.SimpleParameterValue
 import io.openapiprocessor.core.parser.HttpMethod
@@ -28,7 +28,7 @@ class MethodWriterGSpec extends Specification {
         apiOptions,
         identifier,
         new TestStatusAnnotationWriter(),
-        new TestMappingAnnotationWriter(),
+        new TestMappingAnnotationFactory(),
         new TestParameterAnnotationWriter(),
         Stub (BeanValidationFactory),
         Stub (JavaDocFactory))
@@ -181,7 +181,7 @@ class MethodWriterGSpec extends Specification {
             apiOptions,
             identifier,
             new TestStatusAnnotationWriter(),
-            new TestMappingAnnotationWriter(),
+            new TestMappingAnnotationFactory(),
             Stub (ParameterAnnotationWriter) {},
             Stub (BeanValidationFactory),
             Stub (JavaDocFactory))

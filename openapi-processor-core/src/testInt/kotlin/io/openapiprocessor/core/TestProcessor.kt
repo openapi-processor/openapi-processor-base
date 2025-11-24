@@ -65,7 +65,7 @@ class TestProcessor:
                         options,
                         identifier,
                         TestProcessorStatusAnnotationWriter(),
-                        TestProcessorMappingAnnotationWriter(),
+                        TestProcessorMappingAnnotationFactory(),
                         TestProcessorParameterAnnotationWriter(),
                         beanValidation,
                         javaDocFactory

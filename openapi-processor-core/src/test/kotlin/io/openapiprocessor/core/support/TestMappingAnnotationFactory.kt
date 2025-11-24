@@ -7,16 +7,9 @@ package io.openapiprocessor.core.support
 
 import io.openapiprocessor.core.model.Endpoint
 import io.openapiprocessor.core.model.EndpointResponse
-import io.openapiprocessor.core.writer.java.MappingAnnotationWriter
-import java.io.Writer
+import io.openapiprocessor.core.writer.java.MappingAnnotationFactory
 
-// todo rename to Factory
-class TestMappingAnnotationWriter: MappingAnnotationWriter {
-
-    @Deprecated("remove, use create()")
-    override fun write(target: Writer, endpoint: Endpoint, endpointResponse: EndpointResponse) {
-        target.write ("@CoreMapping")
-    }
+class TestMappingAnnotationFactory: MappingAnnotationFactory {
 
     override fun create(endpoint: Endpoint, endpointResponse: EndpointResponse): List<String> {
         return listOf("@CoreMapping")
