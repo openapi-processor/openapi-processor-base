@@ -36,7 +36,7 @@ jobs:
 
       - name: extract version
         run: |
-          version=`dasel -r toml -f gradle/libs.versions.toml versions.processor`
+          version=`cat gradle/libs.versions.toml | dasel -i toml 'versions.processor'`
           echo BUILD_VERSION="${version#projectVersion=}" >> $GITHUB_ENV
           cat $GITHUB_ENV
 
