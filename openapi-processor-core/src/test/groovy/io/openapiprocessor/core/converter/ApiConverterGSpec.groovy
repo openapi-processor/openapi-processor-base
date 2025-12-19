@@ -13,18 +13,13 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import static io.openapiprocessor.core.support.FactoryHelper.apiConverter
-import static io.openapiprocessor.core.support.OpenApiParser.parse
+import static io.openapiprocessor.core.support.OpenApiParserKt.parseApiBody
 
 class ApiConverterGSpec extends Specification implements ModelAsserts {
 
     void "groups endpoints into interfaces by first operation tag" () {
-        def openApi = parse (
+        def openApi = parseApiBody (
 """\
-openapi: 3.0.2
-info:
-  title: API
-  version: 1.0.0
-
 paths:
   /a:
     get:
@@ -61,13 +56,8 @@ paths:
     }
 
     void "groups endpoints into interfaces by valid tag identifier" () {
-        def openApi = parse (
+        def openApi = parseApiBody (
 """\
-openapi: 3.0.2
-info:
-  title: API
-  version: 1.0.0
-
 paths:
   /a:
     get:
@@ -98,13 +88,8 @@ paths:
 
     @Unroll
     void "groups endpoints with method #method into interfaces" () {
-        def openApi = parse (
+        def openApi = parseApiBody (
 """\
-openapi: 3.0.2
-info:
-  title: API
-  version: 1.0.0
-
 paths:
   /a:
     ${method}:
@@ -147,13 +132,8 @@ paths:
     }
 
     void "sets interface package from processor options with 'api' sub package" () {
-        def openApi = parse (
+        def openApi = parseApiBody (
 """\
-openapi: 3.0.2
-info:
-  title: API
-  version: 1.0.0
-
 paths:
   /foo:
     get:
@@ -175,13 +155,8 @@ paths:
     }
 
     void "sets empty interface name when no interface name tag was provided" () {
-        def openApi = parse (
+        def openApi = parseApiBody (
 """\
-openapi: 3.0.2
-info:
-  title: API
-  version: 1.0.0
-
 paths:
   /foo:
     get:

@@ -11,17 +11,12 @@ import io.openapiprocessor.core.parser.HttpMethod
 import spock.lang.Specification
 
 import static io.openapiprocessor.core.support.FactoryHelper.apiConverter
-import static io.openapiprocessor.core.support.OpenApiParser.parse
+import static io.openapiprocessor.core.support.OpenApiParserKt.parseApiBody
 
 class ApiConverterEndpointSpec extends Specification implements ModelAsserts {
 
     void "creates model for an endpoint with a component schema object with simple properties" () {
-        def openApi = parse ("""\
-openapi: 3.0.2
-info:
-  title: component schema object
-  version: 1.0.0
-
+        def openApi = parseApiBody ("""\
 paths:
   /book:
     get:
@@ -60,12 +55,7 @@ components:
     }
 
     void "creates model for an endpoint without parameters and a single response content type" () {
-        def openApi = parse ("""\
-openapi: 3.0.2
-info:
-  title: Ping API
-  version: 1.0.0
-
+        def openApi = parseApiBody ("""\
 paths:
   /ping:
     get:
@@ -99,12 +89,7 @@ paths:
     }
 
     void "creates model for an endpoint without parameters and without response content type" () {
-        def openApi = parse ("""\
-openapi: 3.0.2
-info:
-  title: Ping API
-  version: 1.0.0
-
+        def openApi = parseApiBody ("""\
 paths:
   /ping:
     get:
@@ -133,13 +118,8 @@ paths:
     }
 
     void "uses default interface name when no interface-name-tag is given" () {
-        def openApi = parse (
+        def openApi = parseApiBody (
 """\
-openapi: 3.0.2
-info:
-  title: API
-  version: 1.0.0
-
 paths:
   /endpoint:
     get:
@@ -157,13 +137,8 @@ paths:
     }
 
     void "keeps order of endpoints"() {
-        def openApi = parse (
+        def openApi = parseApiBody (
 """\
-openapi: 3.0.2
-info:
-  title: API
-  version: 1.0.0
-
 paths:
   /endpoint:
     get:
