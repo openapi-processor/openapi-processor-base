@@ -9,14 +9,14 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.data.forAll
 import io.kotest.data.row
 import io.kotest.matchers.collections.shouldNotBeEmpty
-import io.openapiprocessor.core.support.parseApiFull
+import io.openapiprocessor.core.support.parseApi
 
 class PathSpec : StringSpec({
 
     "operation contains endpoint level query parameters" {
         forAll(row(ParserType.SWAGGER), row(ParserType.INTERNAL)) { parser ->
 
-            val openApi = parseApiFull ("""
+            val openApi = parseApi ("""
                openapi: 3.0.2
                info:
                  title: parameter at endpoint
@@ -48,7 +48,7 @@ class PathSpec : StringSpec({
     "operation contains endpoint level path parameters" {
         forAll(row(ParserType.SWAGGER), row(ParserType.INTERNAL)) { parser ->
 
-            val openApi = parseApiFull ("""
+            val openApi = parseApi ("""
                openapi: 3.0.2
                info:
                  title: parameter at endpoint

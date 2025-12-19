@@ -41,19 +41,7 @@ fun parseApi(
         header.trimMargin()
       + body.trimIndent()
     )
-    return parseApiFull(merged, parserType)
-}
-
-@Deprecated(message = "use parseApi(apiYaml, parser)")
-fun parseApiFull(
-    apiYaml: String,
-    parserType: ParserType = ParserType.INTERNAL
-): ParserOpenApi {
-    return when (parserType) {
-        ParserType.SWAGGER -> parseWithSwagger(apiYaml)
-        ParserType.OPENAPI4J -> parseWithOpenApi4j(apiYaml)
-        ParserType.INTERNAL -> parseWithInternal(apiYaml)
-    }
+    return parseApi(merged, parserType)
 }
 
 fun parseApiBody(
@@ -67,17 +55,6 @@ fun parseApiBody(
 
 fun parseApiBody(body: String): ParserOpenApi {
     return parseApi(body = body)
-}
-
-
-
-@Deprecated(message = "use parseApi(header, body, parser)")
-fun parse(apiYaml: String, parserType: ParserType = ParserType.SWAGGER): ParserOpenApi {
-    return when (parserType) {
-        ParserType.SWAGGER -> parseWithSwagger(apiYaml)
-        ParserType.OPENAPI4J -> parseWithOpenApi4j(apiYaml)
-        ParserType.INTERNAL -> parseWithInternal(apiYaml)
-    }
 }
 
 fun parseWithInternal(yaml: String): ParserOpenApi {

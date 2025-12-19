@@ -11,8 +11,8 @@ import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.support.getSchemaInfo
+import io.openapiprocessor.core.support.parseApi
 import io.openapiprocessor.core.support.parseApiBody
-import io.openapiprocessor.core.support.parseApiFull
 
 class AdditionalPropertiesSpec: StringSpec({
     isolationMode = IsolationMode.InstancePerTest
@@ -41,7 +41,7 @@ class AdditionalPropertiesSpec: StringSpec({
     }
 
     "additionalProperties of boolean object is null  (OpenAPI 3.0)" {
-        val openApi = parseApiFull( """
+        val openApi = parseApi( """
            openapi: 3.0.2
            info:
              title: API

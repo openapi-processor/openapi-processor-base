@@ -10,7 +10,7 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.framework.FrameworkBase
 import io.openapiprocessor.core.model.Api
-import io.openapiprocessor.core.support.parseApiFull
+import io.openapiprocessor.core.support.parseApi
 import io.openapiprocessor.core.support.parseOptionsMapping
 import io.openapiprocessor.core.writer.java.JavaIdentifier
 
@@ -25,7 +25,7 @@ class ApiConverterResponseStreamSpec: StringSpec({
             |      result: plain => io.stream.Response
             """)
 
-        val openApi = parseApiFull ("""
+        val openApi = parseApi ("""
             openapi: 3.2.0
             info:
               title: item schema
