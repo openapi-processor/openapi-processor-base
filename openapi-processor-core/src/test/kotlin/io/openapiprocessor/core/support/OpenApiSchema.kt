@@ -31,7 +31,7 @@ fun OpenApi.getParameterSchema(path: String, method: HttpMethod, name: String): 
 }
 
 /**
- * extracts a specific response Schema from an [OpenApi] object created by [parse()][parse].
+ * extracts a specific response Schema from an [OpenApi] object created by [parseApi(...)][parseApi].
  *
  * @param path the endpoint path
  * @param method the http method
@@ -64,7 +64,7 @@ fun OpenApi.getSchema(path: String, method: HttpMethod, status: String, mediaTyp
 }
 
 /**
- * extracts a specific request body Schema from an [OpenApi] object created by [parse()][parse].
+ * extracts a specific request body Schema from an [OpenApi] object created by [parseApi(...)][parseApi].
  *
  * @param path the endpoint path
  * @param method the http method
@@ -100,7 +100,7 @@ fun OpenApi.getParameterSchemaInfo(path: String, method: HttpMethod, name: Strin
 }
 
 /**
- * extracts a specific response Schema from an [OpenApi] object created by [parse()][parse] and
+ * extracts a specific response Schema from an [OpenApi] object created by [parseApi(...)][parseApi] and
  * creates a [SchemaInfo] for the schema.
  *
  * @param name name of schema info, i.e. the datatype name
@@ -132,7 +132,7 @@ fun OpenApi.getSchemaInfo(
 }
 
 /**
- * extracts a specific body Schema from an [OpenApi] object created by [parse()][parse] and
+ * extracts a specific body Schema from an [OpenApi] object created by [parseApi(...)][parseApi] and
  * creates a [SchemaInfo] for the schema.
  *
  * @param name name of schema info, i.e. the datatype name

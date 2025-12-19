@@ -26,19 +26,19 @@ class DataTypeConverterPrimitiveTypeMappingSpec extends Specification {
             """)
 
         def openApi = parseApiBody ("""
-            |paths:
-            |  /page:
-            |    get:
-            |      parameters:
-            |        - in: query
-            |          name: date
-            |          required: false
-            |          schema:
-            |            type: string
-            |            format: date-time
-            |      responses:
-            |        '204':
-            |          description: none
+            paths:
+              /page:
+                get:
+                  parameters:
+                    - in: query
+                      name: date
+                      required: false
+                      schema:
+                        type: string
+                        format: date-time
+                  responses:
+                    '204':
+                      description: none
             """)
 
         when:
@@ -60,24 +60,24 @@ class DataTypeConverterPrimitiveTypeMappingSpec extends Specification {
             """)
 
         def openApi = parseApiBody ("""
-            |paths:
-            |  /foo:
-            |    get:
-            |      parameters:
-            |        - in: query
-            |          name: foo
-            |          schema:
-            |            type: array
-            |            items:
-            |              type: string
-            |      responses:
-            |        200:
-            |          description: response
-            |          content:
-            |            application/*:
-            |              schema:
-            |                type: string
-            |                format: binary
+            paths:
+              /foo:
+                get:
+                  parameters:
+                    - in: query
+                      name: foo
+                      schema:
+                        type: array
+                        items:
+                          type: string
+                  responses:
+                    200:
+                      description: response
+                      content:
+                        application/*:
+                          schema:
+                            type: string
+                            format: binary
             """)
 
         when:
@@ -99,22 +99,22 @@ class DataTypeConverterPrimitiveTypeMappingSpec extends Specification {
             """)
 
         def openApi = parseApiBody ("""
-            |paths:
-            |  /uuid:
-            |    get:
-            |      parameters:
-            |        - in: query
-            |          name:  uuid
-            |          schema:
-            |            \$ref: '#/components/schemas/UUID'
-            |      responses:
-            |        '204':
-            |          description: none
-            |
-            |components:
-            |  schemas:          
-            |    UUID:
-            |      type: string
+            paths:
+              /uuid:
+                get:
+                  parameters:
+                    - in: query
+                      name:  uuid
+                      schema:
+                        \$ref: '#/components/schemas/UUID'
+                  responses:
+                    '204':
+                      description: none
+            
+            components:
+              schemas:          
+                UUID:
+                  type: string
             """)
 
         when:
@@ -140,20 +140,20 @@ class DataTypeConverterPrimitiveTypeMappingSpec extends Specification {
             """)
 
         def openApi = parseApiBody ("""
-            |paths:
-            |  /page:
-            |    get:
-            |      parameters:
-            |        - in: query
-            |          name: date
-            |          required: false
-            |          schema:
-            |            type: string
-            |            format: date-time
-            |      responses:
-            |        '204':
-            |          description: none
-        """)
+            paths:
+              /page:
+                get:
+                  parameters:
+                    - in: query
+                      name: date
+                      required: false
+                      schema:
+                        type: string
+                        format: date-time
+                  responses:
+                    '204':
+                      description: none
+            """)
 
         when:
         apiConverter (options, Stub (Framework)).convert (openApi)
@@ -168,19 +168,19 @@ class DataTypeConverterPrimitiveTypeMappingSpec extends Specification {
         def options = parseOptionsMapping(mappings)
 
         def openApi = parseApiBody ("""
-            |paths:
-            |  /foo:
-            |    get:
-            |      parameters:
-            |        - in: query
-            |          name: bar
-            |          required: false
-            |          schema:
-            |            type: string
-            |            format: date-time
-            |      responses:
-            |        '204':
-            |          description: none
+            paths:
+              /foo:
+                get:
+                  parameters:
+                    - in: query
+                      name: bar
+                      required: false
+                      schema:
+                        type: string
+                        format: date-time
+                  responses:
+                    '204':
+                      description: none
             """)
 
         when:

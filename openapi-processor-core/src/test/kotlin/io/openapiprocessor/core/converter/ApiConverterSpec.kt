@@ -27,33 +27,33 @@ class ApiConverterSpec: StringSpec({
             |    - type: WrappedFoo => io.openapiprocessor.test.Wrapped<io.openapiprocessor.generated.model.Foo>
             """)
 
-        val openApi = parseApiBody ("""
-            |paths:
-            |  /foo:
-            |    get:
-            |      responses:
-            |        '200':
-            |          description: ...
-            |          content:
-            |            application/json:
-            |              schema:
-            |                ${'$'}ref: '#/components/schemas/WrappedFoo'
-            |
-            |components:
-            |  schemas:
-            |            
-            |    WrappedFoo:
-            |      description: ...
-            |      type: array
-            |      items: 
-            |        ${'$'}ref: '#/components/schemas/Foo'
-            |
-            |    Foo:
-            |      description: a Foo
-            |      type: object
-            |      properties:
-            |        foo:
-            |          type: string
+        val openApi = parseApiBody ($$"""
+            paths:
+              /foo:
+                get:
+                  responses:
+                    '200':
+                      description: ...
+                      content:
+                        application/json:
+                          schema:
+                            $ref: '#/components/schemas/WrappedFoo'
+            
+            components:
+              schemas:
+                        
+                WrappedFoo:
+                  description: ...
+                  type: array
+                  items: 
+                    $ref: '#/components/schemas/Foo'
+            
+                Foo:
+                  description: a Foo
+                  type: object
+                  properties:
+                    foo:
+                      type: string
             """)
 
         val api: Api = ApiConverter (options, JavaIdentifier(), FrameworkBase())
@@ -69,33 +69,32 @@ class ApiConverterSpec: StringSpec({
             |    - type: ComposedFoo => io.openapiprocessor.test.Wrapped<io.openapiprocessor.generated.model.Foo>
             """)
 
-         val openApi = parseApiBody("""
-            |paths:
-            |  /foo:
-            |    get:
-            |      responses:
-            |        '200':
-            |          description: ...
-            |          content:
-            |            application/json:
-            |              schema:
-            |                ${'$'}ref: '#/components/schemas/ComposedFoo'
-            |
-            |components:
-            |  schemas:
-            |            
-            |    ComposedFoo:
-            |      description: ...
-            |      allOf:
-            |        - ${'$'}ref: '#/components/schemas/Foo'
-            |
-            |    Foo:
-            |      description: a Foo
-            |      type: object
-            |      properties:
-            |        foo:
-            |          type: string
-            |      
+        val openApi = parseApiBody($$"""
+            paths:
+              /foo:
+                get:
+                  responses:
+                    '200':
+                      description: ...
+                      content:
+                        application/json:
+                          schema:
+                            $ref: '#/components/schemas/ComposedFoo'
+            
+            components:
+              schemas:
+                        
+                ComposedFoo:
+                  description: ...
+                  allOf:
+                    - $ref: '#/components/schemas/Foo'
+            
+                Foo:
+                  description: a Foo
+                  type: object
+                  properties:
+                    foo:
+                      type: string
             """)
 
         val api: Api = ApiConverter (options, JavaIdentifier(), FrameworkBase())
@@ -105,27 +104,6 @@ class ApiConverterSpec: StringSpec({
      }
 
     "creates 'Excluded' interface when an endpoint should be skipped" {
-        val openApi = parseApi(
-            """
-            |openapi: 3.1.0
-            |info:
-            |  title: API
-            |  version: 1.0.0
-            |
-            |paths:
-            |  /foo:
-            |    get:
-            |      responses:
-            |        '204':
-            |          description: no content
-            |
-            |  /bar:
-            |    get:
-            |      responses:
-            |        '204':
-            |          description: no content
-            """.trimMargin())
-
         val options = parseOptions(
             """
             |openapi-processor-mapping: v8
@@ -139,6 +117,21 @@ class ApiConverterSpec: StringSpec({
             |      exclude: true
             """.trimMargin())
 
+        val openApi = parseApiBody("""
+           paths:
+             /foo:
+               get:
+                 responses:
+                   '204':
+                     description: no content
+           
+             /bar:
+               get:
+                 responses:
+                   '204':
+                     description: no content
+           """)
+
         // act
         val api = apiConverter(options).convert(openApi)
 
@@ -151,30 +144,24 @@ class ApiConverterSpec: StringSpec({
 
     "warns if endpoint path has no success response" {
         val options = parseOptions()
-        val openApi = parseApi(
-            """
-            |openapi: 3.1.0
-            |info:
-            |  title: API
-            |  version: 1.0.0
-            |
-            |paths:
-            |  /foo:
-            |    get:
-            |      responses:
-            |        '400':
-            |          description: error 400
-            |          content:
-            |            plain/text:
-            |              schema:
-            |                type: string
-            |        '401':
-            |          description: error 401
-            |          content:
-            |            plain/text:
-            |              schema:
-            |                type: string
-            """.trimMargin())
+        val openApi = parseApiBody("""
+           paths:
+             /foo:
+               get:
+                 responses:
+                   '400':
+                     description: error 400
+                     content:
+                       plain/text:
+                         schema:
+                           type: string
+                   '401':
+                     description: error 401
+                     content:
+                       plain/text:
+                         schema:
+                           type: string
+            """)
 
         val converter = apiConverter(options)
         val log: Logger = mockk(relaxed = true)
@@ -186,25 +173,18 @@ class ApiConverterSpec: StringSpec({
     }
 
     "generates unreferenced models" {
-        val openApi = parseApi(
-            """
-            |openapi: 3.1.0
-            |info:
-            |  title: API
-            |  version: 1.0.0
-            |
-            |paths: {}
-            |
-            |components:
-            |  schemas:
-            |    Foo:
-            |      description: unreferenced
-            |      type: object
-            |      properties:
-            |        foo:
-            |          type: string
-            |      
-            """.trimMargin())
+        val openApi = parseApiBody("""
+            paths: {}
+            
+            components:
+              schemas:
+                Foo:
+                  description: unreferenced
+                  type: object
+                  properties:
+                    foo:
+                      type: string
+            """)
 
         val options = parseOptions(
             """

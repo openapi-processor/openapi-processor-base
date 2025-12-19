@@ -5,7 +5,6 @@
 
 package io.openapiprocessor.core.converter
 
-import io.openapiprocessor.core.writer.java.TestSchema
 import io.openapiprocessor.core.converter.mapping.UnknownDataTypeException
 import io.openapiprocessor.core.converter.wrapper.NullDataTypeWrapper
 import io.openapiprocessor.core.framework.Framework
@@ -17,12 +16,13 @@ import io.openapiprocessor.core.parser.NamedSchema
 import io.openapiprocessor.core.parser.RefResolver
 import io.openapiprocessor.core.parser.Schema
 import io.openapiprocessor.core.writer.java.JavaIdentifier
+import io.openapiprocessor.core.writer.java.TestSchema
 import org.jetbrains.annotations.NotNull
 import spock.lang.Specification
 import spock.lang.Unroll
 
 import static io.openapiprocessor.core.support.FactoryHelper.apiConverter
-import static io.openapiprocessor.core.support.OpenApiParser.parse
+import static io.openapiprocessor.core.support.OpenApiParserKt.parseApiBody
 
 class DataTypeConverterSpec extends Specification {
     def options = new ApiOptions()
@@ -174,25 +174,21 @@ class DataTypeConverterSpec extends Specification {
     }
 
     void "converts simple array schema to Array[]" () {
-        def openApi = parse ("""\
-openapi: 3.0.2
-info:
-  title: API
-  version: 1.0.0
+        def openApi = parseApiBody ("""
+            paths:
+              /array-string:
+                get:
+                  responses:
+                    '200':
+                      content:
+                        application/vnd.array:
+                          schema:
+                            type: array
+                            items:
+                              type: string
+                      description: none              
+            """)
 
-paths:
-  /array-string:
-    get:
-      responses:
-        '200':
-          content:
-            application/vnd.array:
-              schema:
-                type: array
-                items:
-                  type: string
-          description: none              
-""")
         when:
         def options = new ApiOptions(packageName: 'pkg')
 
@@ -207,28 +203,24 @@ paths:
     }
 
     void "creates model for inline response object with name {path}{method}Response{response code}"() {
-        def openApi = parse ("""\
-openapi: 3.0.2
-info:
-  title: API
-  version: 1.0.0
+        def openApi = parseApiBody ("""
+            paths:
+              /inline:
+                get:
+                  responses:
+                    '200':
+                      description: none
+                      content:
+                        application/json:
+                          schema:
+                            type: object
+                            properties:
+                              isbn:
+                                type: string
+                              title:
+                                type: string                
+            """)
 
-paths:
-  /inline:
-    get:
-      responses:
-        '200':
-          description: none
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  isbn:
-                    type: string
-                  title:
-                    type: string                
-""")
         when:
         def options = new ApiOptions()
         options.packageName = 'pkg'
@@ -254,33 +246,29 @@ paths:
     }
 
     void "creates model for component schema object" () {
-        def openApi = parse ("""\
-openapi: 3.0.2
-info:
-  title: component schema object
-  version: 1.0.0
+        def openApi = parseApiBody ("""
+            paths:
+              /book:
+                get:
+                  responses:
+                    '200':
+                      description: none
+                      content:
+                        application/json:
+                            schema:
+                              \$ref: '#/components/schemas/Book'
+            
+            components:
+              schemas:
+                Book:
+                  type: object
+                  properties:
+                    isbn:
+                      type: string
+                    title:
+                      type: string
+            """)
 
-paths:
-  /book:
-    get:
-      responses:
-        '200':
-          description: none
-          content:
-            application/json:
-                schema:
-                  \$ref: '#/components/schemas/Book'
-
-components:
-  schemas:
-    Book:
-      type: object
-      properties:
-        isbn:
-          type: string
-        title:
-          type: string
-""")
         when:
         def options = new ApiOptions()
         options.packageName = 'pkg'
@@ -305,40 +293,36 @@ components:
     }
 
     void "skips named simple data types from #/components/schemas" () {
-        def openApi = parse ("""\
-openapi: 3.0.2
-info:
-  title: component simple schemas 
-  version: 1.0.0
+        def openApi = parseApiBody ("""
+            paths:
+              /book:
+                get:
+                  responses:
+                    '200':
+                      description: none
+                      content:
+                        application/json:
+                            schema:
+                              \$ref: '#/components/schemas/Book'
+            
+            components:
+              schemas:
+                Isbn:
+                  type: string
+                 
+                Title:
+                  type: string
+            
+                Book:
+                  type: object
+                  properties:
+                    isbn:
+                      \$ref: '#/components/schemas/Isbn'
+                    title:
+                      \$ref: '#/components/schemas/Title'
+                      
+            """)
 
-paths:
-  /book:
-    get:
-      responses:
-        '200':
-          description: none
-          content:
-            application/json:
-                schema:
-                  \$ref: '#/components/schemas/Book'
-
-components:
-  schemas:
-    Isbn:
-      type: string
-     
-    Title:
-      type: string
-
-    Book:
-      type: object
-      properties:
-        isbn:
-          \$ref: '#/components/schemas/Isbn'
-        title:
-          \$ref: '#/components/schemas/Title'
-          
-""")
         when:
         def options = new ApiOptions(packageName: 'pkg')
 
@@ -354,43 +338,38 @@ components:
     }
 
     void "skips named array data types from #/components/schemas" () {
-        def openApi = parse ("""\
-openapi: 3.0.2
-info:
-  title: component array schemas 
-  version: 1.0.0
-
-paths:
-  /book:
-    get:
-      responses:
-        '200':
-          description: none
-          content:
-            application/json:
-                schema:
-                  \$ref: '#/components/schemas/Book'
-
-components:
-
-  schemas:
-    Authors:
-      type: array
-      items:
-        \$ref: '#/components/schemas/Author'
-        
-    Author:      
-      type: object
-      properties:
-        name:
-          type: string
-     
-    Book:
-      type: object
-      properties:
-        authors:
-          \$ref: '#/components/schemas/Authors'
-""")
+        def openApi = parseApiBody ("""
+            paths:
+              /book:
+                get:
+                  responses:
+                    '200':
+                      description: none
+                      content:
+                        application/json:
+                            schema:
+                              \$ref: '#/components/schemas/Book'
+            
+            components:
+            
+              schemas:
+                Authors:
+                  type: array
+                  items:
+                    \$ref: '#/components/schemas/Author'
+                    
+                Author:      
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                 
+                Book:
+                  type: object
+                  properties:
+                    authors:
+                      \$ref: '#/components/schemas/Authors'
+            """)
 
         when:
         def options = new ApiOptions(packageName: 'pkg')
@@ -411,30 +390,25 @@ components:
 
 
     void "preserves order of object properties" () {
-        def openApi = parse ("""\
-openapi: 3.0.2
-info:
-  title: API
-  version: 1.0.0
-
-paths:
-  /endpoint:
-    get:
-      responses:
-        '200':
-          description: empty
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  b:
-                    type: string
-                  a:
-                    type: string
-                  c:
-                    type: string
-""")
+        def openApi = parseApiBody ("""
+            paths:
+              /endpoint:
+                get:
+                  responses:
+                    '200':
+                      description: empty
+                      content:
+                        application/json:
+                          schema:
+                            type: object
+                            properties:
+                              b:
+                                type: string
+                              a:
+                                type: string
+                              c:
+                                type: string
+            """)
 
         when:
         def options = new ApiOptions(packageName: 'pkg')
@@ -453,5 +427,4 @@ paths:
         keys[1] == 'a'
         keys[2] == 'c'
     }
-
 }

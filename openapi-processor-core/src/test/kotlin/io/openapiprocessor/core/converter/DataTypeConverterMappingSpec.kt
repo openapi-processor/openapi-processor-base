@@ -34,22 +34,21 @@ class DataTypeConverterMappingSpec: StringSpec({
             |    - type: Foo => package.Bar
             """)
 
-        val openApi = parseApi(body =
-            """
-            |paths:
-            |  /foo:
-            |    get:
-            |      responses:
-            |        '200':
-            |           description: empty
-            |           content:
-            |             application/json:
-            |               schema:
-            |                 description: a Foo
-            |                 type: object
-            |                 properties:
-            |                   foo:
-            |                     type: string
+        val openApi = parseApiBody("""
+            paths:
+              /foo:
+                get:
+                  responses:
+                    '200':
+                       description: empty
+                       content:
+                         application/json:
+                           schema:
+                             description: a Foo
+                             type: object
+                             properties:
+                               foo:
+                                 type: string
             """)
 
         val schemaInfo = openApi.getSchemaInfo(
@@ -72,30 +71,29 @@ class DataTypeConverterMappingSpec: StringSpec({
             |    - type: Foo => package.Bar
             """)
 
-        val openApi = parseApi(body =
-            """
-            |paths:
-            |  /composed:
-            |    get:
-            |      responses:
-            |        '200':
-            |          description: create result from allOff object
-            |          content:
-            |            application/json:
-            |              schema:
-            |                allOf:
-            |                  - type: object
-            |                    properties:
-            |                      prop1:
-            |                        type: string
-            |                  - type: object
-            |                    properties:
-            |                      prop2:
-            |                        type: string
-            |                  - type: object
-            |                    properties:
-            |                      prop2:
-            |                        type: string            
+        val openApi = parseApiBody("""
+            paths:
+              /composed:
+                get:
+                  responses:
+                    '200':
+                      description: create result from allOff object
+                      content:
+                        application/json:
+                          schema:
+                            allOf:
+                              - type: object
+                                properties:
+                                  prop1:
+                                    type: string
+                              - type: object
+                                properties:
+                                  prop2:
+                                    type: string
+                              - type: object
+                                properties:
+                                  prop2:
+                                    type: string            
             """)
 
         val schemaInfo = openApi.getSchemaInfo("Foo",
@@ -119,23 +117,23 @@ class DataTypeConverterMappingSpec: StringSpec({
             |    - type: FooArrayItem => package.Bar
             """)
 
-        val openApi = parseApi(body =
+        val openApi = parseApiBody(
             """
-            |paths:
-            |  /array:
-            |    get:
-            |      responses:
-            |        '200':
-            |          description: the foo result
-            |          content:
-            |            application/json:
-            |              schema:
-            |                type: array
-            |                items:
-            |                  type: object
-            |                  properties:
-            |                    bar:
-            |                      type: string
+            paths:
+              /array:
+                get:
+                  responses:
+                    '200':
+                      description: the foo result
+                      content:
+                        application/json:
+                          schema:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                bar:
+                                  type: string
             """)
 
         val schemaInfo = openApi.getSchemaInfo("Foo",
@@ -164,22 +162,21 @@ class DataTypeConverterMappingSpec: StringSpec({
             |    - type: ArrayFoo => package.Bar
             """)
 
-        val openApi = parseApi(body =
-            """
-            |paths:
-            |  /foo:
-            |    get:
-            |      responses:
-            |        '200':
-            |          description: OK
-            |          content:
-            |            '*/*':
-            |              schema:
-            |                type: object
-            |                additionalProperties:
-            |                  type: array
-            |                  items:
-            |                    type: string
+        val openApi = parseApiBody("""
+            paths:
+              /foo:
+                get:
+                  responses:
+                    '200':
+                      description: OK
+                      content:
+                        '*/*':
+                          schema:
+                            type: object
+                            additionalProperties:
+                              type: array
+                              items:
+                                type: string
             """)
 
         val schemaInfo = openApi.getSchemaInfo("Dictionary",
@@ -222,19 +219,18 @@ class DataTypeConverterMappingSpec: StringSpec({
             |    - type: string => bar.Bar<?>
             """)
 
-        val openApi = parseApi(body =
-            """
-            |paths:
-            |  /foo:
-            |    get:
-            |      parameters:
-            |        - in: query
-            |          name: foo
-            |          schema:
-            |            type: string
-            |      responses:
-            |        '204':
-            |          description: none
+        val openApi = parseApiBody("""
+            paths:
+              /foo:
+                get:
+                  parameters:
+                    - in: query
+                      name: foo
+                      schema:
+                        type: string
+                  responses:
+                    '204':
+                      description: none
             """)
 
         val schemaInfo = openApi.getParameterSchemaInfo("/foo", HttpMethod.GET, "foo")

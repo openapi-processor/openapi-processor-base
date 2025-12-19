@@ -17,7 +17,6 @@ import spock.lang.Unroll
 
 import static io.openapiprocessor.core.support.ApiOptionsKt.parseOptionsMapping
 import static io.openapiprocessor.core.support.FactoryHelper.apiConverter
-import static io.openapiprocessor.core.support.OpenApiParser.parse
 import static io.openapiprocessor.core.support.OpenApiParserKt.parseApiBody
 
 class DataTypeConverterDeprecatedSpec extends Specification {
@@ -85,36 +84,30 @@ class DataTypeConverterDeprecatedSpec extends Specification {
 
 
     void "converts deprecated schema object"() {
-        def openApi = parse (
-"""\
-openapi: 3.0.2
-info:
-  title: deprecated schema
-  version: 1.0.0
-
-paths:
-
-  /foo:
-    get:
-      responses:
-        '200':
-          description: deprecated
-          content:
-            application/json:
-                schema:
-                  \$ref: '#/components/schemas/Bar'
-
-components:
-  schemas:
-
-    Bar:      
-      type: object
-      deprecated: true
-      properties:
-        foo:
-          type: string
-  
-""")
+        def openApi = parseApiBody ("""
+            paths:
+            
+              /foo:
+                get:
+                  responses:
+                    '200':
+                      description: deprecated
+                      content:
+                        application/json:
+                            schema:
+                              \$ref: '#/components/schemas/Bar'
+            
+            components:
+              schemas:
+            
+                Bar:      
+                  type: object
+                  deprecated: true
+                  properties:
+                    foo:
+                      type: string
+              
+            """)
 
         when:
         def api = apiConverter (Stub (Framework))
@@ -129,36 +122,30 @@ components:
     }
 
     void "converts deprecated schema object property"() {
-        def openApi = parse (
-"""\
-openapi: 3.0.2
-info:
-  title: deprecated schema property
-  version: 1.0.0
-
-paths:
-
-  /foo:
-    get:
-      responses:
-        '200':
-          description: deprecated
-          content:
-            application/json:
-                schema:
-                  \$ref: '#/components/schemas/Bar'
-
-components:
-  schemas:
-
-    Bar:      
-      type: object
-      properties:
-        foo:
-          type: string
-          deprecated: true
-  
-""")
+        def openApi = parseApiBody ("""
+            paths:
+            
+              /foo:
+                get:
+                  responses:
+                    '200':
+                      description: deprecated
+                      content:
+                        application/json:
+                            schema:
+                              \$ref: '#/components/schemas/Bar'
+            
+            components:
+              schemas:
+            
+                Bar:      
+                  type: object
+                  properties:
+                    foo:
+                      type: string
+                      deprecated: true
+              
+            """)
 
         when:
         def api = apiConverter (Stub (Framework))
@@ -174,31 +161,25 @@ components:
 
 
     void "converts deprecated enum schema"() {
-        def openApi = parse (
-"""\
-openapi: 3.0.2
-info:
-  title: deprecated enum
-  version: 1.0.0
-
-paths:
-
-  /endpoint:
-    get:
-      parameters:
-        - name: foo
-          description: deprecated enum
-          in: query
-          schema:
-            type: string
-            deprecated: true
-            enum:
-              - foo
-              - bar
-      responses:
-        '204':
-          description: empty
-""")
+        def openApi = parseApiBody ("""
+            paths:
+            
+              /endpoint:
+                get:
+                  parameters:
+                    - name: foo
+                      description: deprecated enum
+                      in: query
+                      schema:
+                        type: string
+                        deprecated: true
+                        enum:
+                          - foo
+                          - bar
+                  responses:
+                    '204':
+                      description: empty
+            """)
 
         when:
         def api = apiConverter().convert (openApi)
@@ -214,20 +195,20 @@ paths:
         def options = parseOptionsMapping("")
 
         def openApi = parseApiBody ("""
-            |paths:
-            |  /foo:
-            |    get:
-            |      parameters:
-            |        - in: query
-            |          name: foo
-            |          schema:
-            |            type: array
-            |            deprecated: true
-            |            items: 
-            |              type: string
-            |      responses:
-            |        '204':
-            |          description: none    
+            paths:
+              /foo:
+                get:
+                  parameters:
+                    - in: query
+                      name: foo
+                      schema:
+                        type: array
+                        deprecated: true
+                        items: 
+                          type: string
+                  responses:
+                    '204':
+                      description: none    
             """)
 
         when:
@@ -248,20 +229,20 @@ paths:
             """)
 
         def openApi = parseApiBody ("""
-            |paths:
-            |  /foo:
-            |    get:
-            |      parameters:
-            |        - in: query
-            |          name: foo
-            |          schema:
-            |            type: array
-            |            deprecated: true
-            |            items: 
-            |              type: string
-            |      responses:
-            |        '204':
-            |          description: none
+            paths:
+              /foo:
+                get:
+                  parameters:
+                    - in: query
+                      name: foo
+                      schema:
+                        type: array
+                        deprecated: true
+                        items: 
+                          type: string
+                  responses:
+                    '204':
+                      description: none
             """)
 
         when:

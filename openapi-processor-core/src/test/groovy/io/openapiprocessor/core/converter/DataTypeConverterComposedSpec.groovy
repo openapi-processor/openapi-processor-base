@@ -5,24 +5,18 @@
 
 package io.openapiprocessor.core.converter
 
-
 import io.openapiprocessor.core.framework.Framework
 import io.openapiprocessor.core.model.datatypes.ObjectDataType
 import spock.lang.Specification
 
 import static io.openapiprocessor.core.support.FactoryHelper.apiConverter
-import static io.openapiprocessor.core.support.OpenApiParser.parse
+import static io.openapiprocessor.core.support.OpenApiParserKt.parseApiBody
 
 class DataTypeConverterComposedSpec extends Specification {
 
     void "converts allOf composed schema object"() {
-        def openApi = parse (
+        def openApi = parseApiBody (
 """\
-openapi: 3.0.2
-info:
-  title: composed schema
-  version: 1.0.0
-
 paths:
 
   /endpoint:

@@ -18,7 +18,11 @@ import io.openapiprocessor.test.parser.swagger.parse as parseWithSwagger
  * extract individual Schemas with the get...Schema() functions on the [ParserOpenApi] result.
  */
 fun parseApi(apiYaml: String, parserType: ParserType = ParserType.INTERNAL): ParserOpenApi {
-    return parse(apiYaml, parserType)
+    return when (parserType) {
+        ParserType.SWAGGER -> parseWithSwagger(apiYaml)
+        ParserType.OPENAPI4J -> parseWithOpenApi4j(apiYaml)
+        ParserType.INTERNAL -> parseWithInternal(apiYaml)
+    }
 }
 
 fun parseApi(
@@ -35,9 +39,28 @@ fun parseApi(
 ): ParserOpenApi {
     val merged = (
         header.trimMargin()
-      + body.trimMargin()
+      + body.trimIndent()
     )
-    return parse(merged, parserType)
+    return parseApiFull(merged, parserType)
+}
+
+@Deprecated(message = "use parseApi(apiYaml, parser)")
+fun parseApiFull(
+    apiYaml: String,
+    parserType: ParserType = ParserType.INTERNAL
+): ParserOpenApi {
+    return when (parserType) {
+        ParserType.SWAGGER -> parseWithSwagger(apiYaml)
+        ParserType.OPENAPI4J -> parseWithOpenApi4j(apiYaml)
+        ParserType.INTERNAL -> parseWithInternal(apiYaml)
+    }
+}
+
+fun parseApiBody(
+    body: String,
+    parserType: ParserType = ParserType.INTERNAL
+): ParserOpenApi {
+    return parseApi(body, parserType)
 }
 
 /** groovy support */

@@ -27,59 +27,59 @@ class DataTypeConverterObjectTypeMappingSpec extends Specification {
             """)
 
         def openApi = parseApiBody ("""
-            |paths:
-            |  /page:
-            |    get:
-            |      parameters:
-            |        - in: query
-            |          name: pageable
-            |          required: false
-            |          schema:
-            |            \$ref: '#/components/schemas/Pageable'
-            |      responses:
-            |        '200':
-            |          description: none
-            |          content:
-            |            application/json:
-            |              schema:
-            |                \$ref: '#/components/schemas/StringPage'
-            |
-            |components:
-            |  schemas:
-            |
-            |    Pageable:
-            |      description: minimal Pageable query parameters
-            |      type: object
-            |      properties:
-            |        page:
-            |          type: integer
-            |        size:
-            |          type: integer
-            |
-            |    Page:
-            |      description: minimal Page response without content property
-            |      type: object
-            |      properties:
-            |        number:
-            |          type: integer
-            |        size:
-            |          type: integer
-            |
-            |    StringContent:
-            |      description: specific content List of the Page response
-            |      type: object
-            |      properties:
-            |        content:
-            |          type: array
-            |          items:
-            |            type: string
-            |
-            |    StringPage:
-            |      description: typed Page
-            |      type: object
-            |      allOf:
-            |        - \$ref: '#/components/schemas/Page'
-            |        - \$ref: '#/components/schemas/StringContent'
+            paths:
+              /page:
+                get:
+                  parameters:
+                    - in: query
+                      name: pageable
+                      required: false
+                      schema:
+                        \$ref: '#/components/schemas/Pageable'
+                  responses:
+                    '200':
+                      description: none
+                      content:
+                        application/json:
+                          schema:
+                            \$ref: '#/components/schemas/StringPage'
+            
+            components:
+              schemas:
+            
+                Pageable:
+                  description: minimal Pageable query parameters
+                  type: object
+                  properties:
+                    page:
+                      type: integer
+                    size:
+                      type: integer
+            
+                Page:
+                  description: minimal Page response without content property
+                  type: object
+                  properties:
+                    number:
+                      type: integer
+                    size:
+                      type: integer
+            
+                StringContent:
+                  description: specific content List of the Page response
+                  type: object
+                  properties:
+                    content:
+                      type: array
+                      items:
+                        type: string
+            
+                StringPage:
+                  description: typed Page
+                  type: object
+                  allOf:
+                    - \$ref: '#/components/schemas/Page'
+                    - \$ref: '#/components/schemas/StringContent'
             """)
 
 
@@ -106,30 +106,30 @@ class DataTypeConverterObjectTypeMappingSpec extends Specification {
             """)
 
         def openApi = parseApiBody ("""
-            |paths:
-            |  /page:
-            |    get:
-            |      parameters:
-            |        - in: query
-            |          name: pageable
-            |          required: false
-            |          schema:
-            |            \$ref: '#/components/schemas/Pageable'
-            |      responses:
-            |        '204':
-            |          description: none
-            |
-            |components:
-            |  schemas:
-            |
-            |    Pageable:
-            |      description: minimal Pageable query parameters
-            |      type: object
-            |      properties:
-            |        page:
-            |          type: integer
-            |        size:
-            |          type: integer
+            paths:
+              /page:
+                get:
+                  parameters:
+                    - in: query
+                      name: pageable
+                      required: false
+                      schema:
+                        \$ref: '#/components/schemas/Pageable'
+                  responses:
+                    '204':
+                      description: none
+            
+            components:
+              schemas:
+            
+                Pageable:
+                  description: minimal Pageable query parameters
+                  type: object
+                  properties:
+                    page:
+                      type: integer
+                    size:
+                      type: integer
             """)
 
         when:
@@ -151,39 +151,39 @@ class DataTypeConverterObjectTypeMappingSpec extends Specification {
             """)
 
         def openApi = parseApiBody ("""
-            |paths:
-            |  /foobar:
-            |    get:
-            |      parameters:
-            |        - in: query
-            |          name: foo
-            |          required: false
-            |          schema:
-            |            \$ref: '#/components/schemas/Foo'
-            |      responses:
-            |        '200':
-            |          description: none
-            |          content:
-            |            application/json:
-            |              schema:
-            |                \$ref: '#/components/schemas/Bar'
-            |
-            |components:
-            |  schemas:
-            |
-            |    Foo:
-            |      description: minimal query parameter object
-            |      type: object
-            |      properties:
-            |        foo:
-            |          type: string
-            |
-            |    Bar:
-            |      description: minimal response object
-            |      type: object
-            |      properties:
-            |        bar:
-            |          type: string
+            paths:
+              /foobar:
+                get:
+                  parameters:
+                    - in: query
+                      name: foo
+                      required: false
+                      schema:
+                        \$ref: '#/components/schemas/Foo'
+                  responses:
+                    '200':
+                      description: none
+                      content:
+                        application/json:
+                          schema:
+                            \$ref: '#/components/schemas/Bar'
+            
+            components:
+              schemas:
+            
+                Foo:
+                  description: minimal query parameter object
+                  type: object
+                  properties:
+                    foo:
+                      type: string
+            
+                Bar:
+                  description: minimal response object
+                  type: object
+                  properties:
+                    bar:
+                      type: string
             """)
 
         when:
@@ -205,23 +205,23 @@ class DataTypeConverterObjectTypeMappingSpec extends Specification {
         def options = parseOptionsMapping(mappings)
 
         def openApi = parseApiBody ("""
-            |paths:
-            |  /foobar:
-            |    get:
-            |      parameters:
-            |        - in: query
-            |          name: foobar
-            |          required: false
-            |          schema:
-            |            type: object
-            |            properties:
-            |              foo:
-            |                type: integer
-            |              bar:
-            |                type: integer
-            |      responses:
-            |        '204':
-            |          description: empty
+            paths:
+              /foobar:
+                get:
+                  parameters:
+                    - in: query
+                      name: foobar
+                      required: false
+                      schema:
+                        type: object
+                        properties:
+                          foo:
+                            type: integer
+                          bar:
+                            type: integer
+                  responses:
+                    '204':
+                      description: empty
             """)
 
         when:
@@ -259,19 +259,19 @@ class DataTypeConverterObjectTypeMappingSpec extends Specification {
         def options = parseOptionsMapping(mappings)
 
         def openApi = parseApiBody ("""
-            |paths:
-            |  /object:
-            |    get:
-            |      responses:
-            |        '200':
-            |          content:
-            |            application/vnd.any:
-            |              schema:
-            |                type: object
-            |                properties:
-            |                  prop:
-            |                    type: string
-            |          description: none              
+            paths:
+              /object:
+                get:
+                  responses:
+                    '200':
+                      content:
+                        application/vnd.any:
+                          schema:
+                            type: object
+                            properties:
+                              prop:
+                                type: string
+                      description: none              
             """)
 
         when:
@@ -334,31 +334,31 @@ class DataTypeConverterObjectTypeMappingSpec extends Specification {
             """)
 
         def openApi = parseApiBody ("""
-            |paths:
-            |  /endpoint-map:
-            |    get:
-            |      parameters:
-            |        - name: props
-            |          description: query, map from single property
-            |          in: query
-            |          required: false
-            |          schema:
-            |            \$ref: '#/components/schemas/Props'
-            |      responses:
-            |        '204':
-            |          description: empty
-            |          
-            |components:
-            |
-            |  schemas:
-            |
-            |    Props:
-            |      type: object
-            |      properties:
-            |        prop1:
-            |          type: string
-            |        prop2:
-            |          type: string
+            paths:
+              /endpoint-map:
+                get:
+                  parameters:
+                    - name: props
+                      description: query, map from single property
+                      in: query
+                      required: false
+                      schema:
+                        \$ref: '#/components/schemas/Props'
+                  responses:
+                    '204':
+                      description: empty
+                      
+            components:
+            
+              schemas:
+            
+                Props:
+                  type: object
+                  properties:
+                    prop1:
+                      type: string
+                    prop2:
+                      type: string
             """)
 
         when:
@@ -381,31 +381,31 @@ class DataTypeConverterObjectTypeMappingSpec extends Specification {
             """)
 
         def openApi = parseApiBody ("""
-           |paths:
-           |  /endpoint-map:
-           |    get:
-           |      parameters:
-           |        - name: props
-           |          description: query, map from single property
-           |          in: query
-           |          required: false
-           |          schema:
-           |            \$ref: '#/components/schemas/Props'
-           |      responses:
-           |        '204':
-           |          description: empty
-           |          
-           |components:
-           |
-           |  schemas:
-           |
-           |    Props:
-           |      type: object
-           |      properties:
-           |        prop1:
-           |          type: string
-           |        prop2:
-           |          type: string
+           paths:
+             /endpoint-map:
+               get:
+                 parameters:
+                   - name: props
+                     description: query, map from single property
+                     in: query
+                     required: false
+                     schema:
+                       \$ref: '#/components/schemas/Props'
+                 responses:
+                   '204':
+                     description: empty
+                     
+           components:
+           
+             schemas:
+           
+               Props:
+                 type: object
+                 properties:
+                   prop1:
+                     type: string
+                   prop2:
+                     type: string
             """)
 
         when:

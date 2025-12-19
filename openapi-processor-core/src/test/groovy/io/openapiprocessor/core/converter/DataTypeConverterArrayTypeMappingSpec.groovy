@@ -27,18 +27,18 @@ class DataTypeConverterArrayTypeMappingSpec extends Specification {
             """)
 
         def openApi = parseApiBody ("""
-            |paths:
-            |  /array-string:
-            |    get:
-            |      responses:
-            |        '200':
-            |          content:
-            |            application/vnd.any:
-            |              schema:
-            |                type: array
-            |                items:
-            |                  type: string
-            |          description: none              
+            paths:
+              /array-string:
+                get:
+                  responses:
+                    '200':
+                      content:
+                        application/vnd.any:
+                          schema:
+                            type: array
+                            items:
+                              type: string
+                      description: none              
             """)
 
         when:
@@ -66,20 +66,20 @@ class DataTypeConverterArrayTypeMappingSpec extends Specification {
             """)
 
         def openApi = parseApiBody ("""
-            |paths:
-            |  /page:
-            |    get:
-            |      parameters:
-            |        - in: query
-            |          name: date
-            |          required: false
-            |          schema:
-            |            type: array
-            |            items: 
-            |              type: string
-            |      responses:
-            |        '204':
-            |          description: none
+            paths:
+              /page:
+                get:
+                  parameters:
+                    - in: query
+                      name: date
+                      required: false
+                      schema:
+                        type: array
+                        items: 
+                          type: string
+                  responses:
+                    '204':
+                      description: none
             """)
 
         when:
@@ -95,20 +95,20 @@ class DataTypeConverterArrayTypeMappingSpec extends Specification {
         def options = parseOptionsMapping(mappings)
 
         def openApi = parseApiBody ("""
-            |paths:
-            |  /foo:
-            |    get:
-            |      parameters:
-            |        - in: query
-            |          name: date
-            |          required: false
-            |          schema:
-            |            type: array
-            |            items: 
-            |              type: string
-            |      responses:
-            |        '204':
-            |          description: none
+            paths:
+              /foo:
+                get:
+                  parameters:
+                    - in: query
+                      name: date
+                      required: false
+                      schema:
+                        type: array
+                        items: 
+                          type: string
+                  responses:
+                    '204':
+                      description: none
             """)
 
         when:
@@ -158,18 +158,18 @@ class DataTypeConverterArrayTypeMappingSpec extends Specification {
             """)
 
         def openApi = parseApiBody ("""
-            |paths:
-            |  /foo:
-            |    get:
-            |      responses:
-            |        '200':
-            |          content:
-            |            application/vnd.any:
-            |              schema:
-            |                type: array
-            |                items:
-            |                  type: string
-            |          description: none
+            paths:
+              /foo:
+                get:
+                  responses:
+                    '200':
+                      content:
+                        application/vnd.any:
+                          schema:
+                            type: array
+                            items:
+                              type: string
+                      description: none
             """)
 
         when:
@@ -194,20 +194,20 @@ class DataTypeConverterArrayTypeMappingSpec extends Specification {
         def options = parseOptionsMapping(mappings)
 
         def openApi = parseApiBody ("""
-            |paths:
-            |  /foobar:
-            |    get:
-            |      parameters:
-            |        - in: query
-            |          name: foobar
-            |          required: false
-            |          schema:
-            |            type: array
-            |            items:
-            |              type: string
-            |      responses:
-            |        '204':
-            |          description: empty
+            paths:
+              /foobar:
+                get:
+                  parameters:
+                    - in: query
+                      name: foobar
+                      required: false
+                      schema:
+                        type: array
+                        items:
+                          type: string
+                  responses:
+                    '204':
+                      description: empty
             """)
 
         when:
@@ -247,18 +247,18 @@ class DataTypeConverterArrayTypeMappingSpec extends Specification {
         def options = parseOptionsMapping(mappings)
 
         def openApi = parseApiBody ("""
-            |paths:
-            |  /array-string:
-            |    get:
-            |      responses:
-            |        '200':
-            |          content:
-            |            application/vnd.any:
-            |              schema:
-            |                type: array
-            |                items:
-            |                  type: string
-            |          description: none              
+            paths:
+              /array-string:
+                get:
+                  responses:
+                    '200':
+                      content:
+                        application/vnd.any:
+                          schema:
+                            type: array
+                            items:
+                              type: string
+                      description: none              
             """)
 
         when:

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 https://github.com/openapi-processor/openapi-processor-core
+ * Copyright 2021 https://github.com/openapi-processor/openapi-processor-base
  * PDX-License-Identifier: Apache-2.0
  */
 
@@ -9,34 +9,34 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.data.forAll
 import io.kotest.data.row
 import io.kotest.matchers.collections.shouldNotBeEmpty
-import io.openapiprocessor.core.support.parse
+import io.openapiprocessor.core.support.parseApiFull
 
 class PathSpec : StringSpec({
 
     "operation contains endpoint level query parameters" {
-        forAll(row(ParserType.SWAGGER), row(ParserType.OPENAPI4J)) { parser ->
+        forAll(row(ParserType.SWAGGER), row(ParserType.INTERNAL)) { parser ->
 
-            val openApi = parse ("""
-                openapi: 3.0.2
-                info:
-                  title: parameter at endpoint
-                  version: 1.0.0
+            val openApi = parseApiFull ("""
+               openapi: 3.0.2
+               info:
+                 title: parameter at endpoint
+                 version: 1.0.0
+                  
+               paths:
+               
+                 /foo:
+                   parameters:
+                     - schema:
+                         type: string
+                       name: bar
+                       in: query
+                       required: true
                 
-                paths:
-                
-                  /foo:
-                    parameters:
-                      - schema:
-                          type: string
-                        name: bar
-                        in: query
-                        required: true
-                
-                    get:
-                      responses:
-                        '204':
-                          description: empty
-            """.trimIndent(), parser)
+                   get:
+                     responses:
+                       '204':
+                         description: empty
+            """, parser)
 
             val path = openApi.getPaths()["/foo"]
             val op = path!!.getOperations().first()
@@ -46,29 +46,29 @@ class PathSpec : StringSpec({
     }
 
     "operation contains endpoint level path parameters" {
-        forAll(row(ParserType.SWAGGER), row(ParserType.OPENAPI4J)) { parser ->
+        forAll(row(ParserType.SWAGGER), row(ParserType.INTERNAL)) { parser ->
 
-            val openApi = parse ("""
-                openapi: 3.0.2
-                info:
-                  title: parameter at endpoint
-                  version: 1.0.0
-                
-                paths:
-                
-                  /foo/{bar}:
-                    parameters:
-                      - schema:
-                          type: string
-                        name: bar
-                        in: path
-                        required: true
-                
-                    get:
-                      responses:
-                        '204':
-                          description: empty
-            """.trimIndent(), parser)
+            val openApi = parseApiFull ("""
+               openapi: 3.0.2
+               info:
+                 title: parameter at endpoint
+                 version: 1.0.0
+                  
+               paths:
+             
+                 /foo/{bar}:
+                   parameters:
+                     - schema:
+                         type: string
+                       name: bar
+                       in: path
+                       required: true
+            
+                   get:
+                     responses:
+                       '204':
+                         description: empty
+            """, parser)
 
             val path = openApi.getPaths()["/foo/{bar}"]
             val op = path!!.getOperations().first()
@@ -76,5 +76,4 @@ class PathSpec : StringSpec({
             op.getParameters().shouldNotBeEmpty()
         }
     }
-
 })

@@ -22,6 +22,7 @@ import io.openapiprocessor.core.parser.RefResolver
 import io.openapiprocessor.core.parser.Schema
 import io.openapiprocessor.core.support.getParameterSchemaInfo
 import io.openapiprocessor.core.support.parseApi
+import io.openapiprocessor.core.support.parseApiBody
 import io.openapiprocessor.core.support.parseOptions
 import io.openapiprocessor.core.writer.java.JavaIdentifier
 
@@ -64,20 +65,19 @@ class DataTypeConverterPrimitiveSpec: StringSpec({
             |    - type: string:byte => byte
             """)
 
-        val openApi = parseApi(body =
-            """
-            |paths:
-            |  /foo:
-            |    get:
-            |      parameters:
-            |        - in: query
-            |          name: foo
-            |          schema:
-            |            type: string
-            |            format: byte
-            |      responses:
-            |        '204':
-            |          description: none
+        val openApi = parseApiBody("""
+            paths:
+              /foo:
+                get:
+                  parameters:
+                    - in: query
+                      name: foo
+                      schema:
+                        type: string
+                        format: byte
+                  responses:
+                    '204':
+                      description: none
             """)
 
         val schemaInfo = openApi.getParameterSchemaInfo("/foo", HttpMethod.GET, "foo")
@@ -101,20 +101,19 @@ class DataTypeConverterPrimitiveSpec: StringSpec({
             |    - type: string:bytes => byte[]
             """)
 
-        val openApi = parseApi(body =
-            """
-            |paths:
-            |  /foo:
-            |    get:
-            |      parameters:
-            |        - in: query
-            |          name: foo
-            |          schema:
-            |            type: string
-            |            format: bytes
-            |      responses:
-            |        '204':
-            |          description: none
+        val openApi = parseApiBody("""
+            paths:
+              /foo:
+                get:
+                  parameters:
+                    - in: query
+                      name: foo
+                      schema:
+                        type: string
+                        format: bytes
+                  responses:
+                    '204':
+                      description: none
             """)
 
         val schemaInfo = openApi.getParameterSchemaInfo("/foo", HttpMethod.GET, "foo")

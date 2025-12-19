@@ -10,20 +10,15 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.openapiprocessor.core.parser.HttpMethod
-import io.openapiprocessor.core.parser.ParserType
 import io.openapiprocessor.core.support.getSchemaInfo
-import io.openapiprocessor.core.support.parse
+import io.openapiprocessor.core.support.parseApiBody
+import io.openapiprocessor.core.support.parseApiFull
 
 class AdditionalPropertiesSpec: StringSpec({
     isolationMode = IsolationMode.InstancePerTest
 
     "additionalProperties of empty object is empty object" {
-        val openApi = parse("""
-           openapi: 3.0.2
-           info:
-             title: API
-             version: 1.0.0
-           
+        val openApi = parseApiBody("""
            paths:
             /values:
               get:
@@ -36,10 +31,7 @@ class AdditionalPropertiesSpec: StringSpec({
                         schema:
                           type: object
                           additionalProperties: {}
-
-        """.trimIndent(), ParserType.SWAGGER
-        )
-
+        """)
 
         val schemaInfo = openApi.getSchemaInfo("Values",
             "/values", HttpMethod.GET, "200", "application/json")
@@ -48,28 +40,26 @@ class AdditionalPropertiesSpec: StringSpec({
         additional.shouldNotBeNull()
     }
 
-    "additionalProperties of boolean object is null" {
-        val openApi = parse("""
+    "additionalProperties of boolean object is null  (OpenAPI 3.0)" {
+        val openApi = parseApiFull( """
            openapi: 3.0.2
            info:
              title: API
              version: 1.0.0
-           
+            
            paths:
-            /values:
-              get:
-                description: query object dictionary
-                responses:
-                  '200':
-                    description: dictionary response
-                    content:
-                      application/json:
-                        schema:
-                          type: object
-                          additionalProperties: true
-
-        """.trimIndent(), ParserType.SWAGGER
-        )
+             /values:
+               get:
+                 description: query object dictionary
+                 responses:
+                   '200':
+                     description: dictionary response
+                     content:
+                       application/json:
+                         schema:
+                           type: object
+                           additionalProperties: true
+            """)
 
         val schemaInfo = openApi.getSchemaInfo("Values",
             "/values", HttpMethod.GET, "200", "application/json")

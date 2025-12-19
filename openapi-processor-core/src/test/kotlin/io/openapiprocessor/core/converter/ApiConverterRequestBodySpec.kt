@@ -17,30 +17,29 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import io.mockk.mockk
 import io.openapiprocessor.core.support.apiConverter
-import io.openapiprocessor.core.support.parseApi
+import io.openapiprocessor.core.support.parseApiBody
 import io.openapiprocessor.core.support.parseOptions
 
 class ApiConverterRequestBodySpec: StringSpec({
 
     "converts request body parameter" {
-        val openApi = parseApi(body =
-            """
-            |paths:
-            |  /endpoint:
-            |    get:
-            |      tags:
-            |        - endpoint
-            |      requestBody:
-            |        content:
-            |          application/json:
-            |            schema:
-            |              type: object
-            |              properties:
-            |                foo:
-            |                  type: string
-            |      responses:
-            |        '204':
-            |          description: empty
+        val openApi = parseApiBody("""
+            paths:
+              /endpoint:
+                get:
+                  tags:
+                    - endpoint
+                  requestBody:
+                    content:
+                      application/json:
+                        schema:
+                          type: object
+                          properties:
+                            foo:
+                              type: string
+                  responses:
+                    '204':
+                      description: empty
             """)
 
         val api = apiConverter().convert(openApi)
@@ -64,26 +63,25 @@ class ApiConverterRequestBodySpec: StringSpec({
             |        - type: string:binary => multipart.Multipart
             """)
 
-        val openApi = parseApi(body =
-            """
-            |paths:
-            |  /multipart/single-file:
-            |    post:
-            |      requestBody:
-            |        required: true
-            |        content:
-            |          multipart/form-data:
-            |            schema:
-            |              type: object
-            |              properties:
-            |                file:
-            |                  type: string
-            |                  format: binary
-            |                other:
-            |                  type: string
-            |      responses:
-            |        '204':
-            |          description: empty
+        val openApi = parseApiBody("""
+            paths:
+              /multipart/single-file:
+                post:
+                  requestBody:
+                    required: true
+                    content:
+                      multipart/form-data:
+                        schema:
+                          type: object
+                          properties:
+                            file:
+                              type: string
+                              format: binary
+                            other:
+                              type: string
+                  responses:
+                    '204':
+                      description: empty
             """)
 
         val api = apiConverter(options).convert(openApi)
@@ -104,20 +102,19 @@ class ApiConverterRequestBodySpec: StringSpec({
     }
 
     "throws when request body multipart/form-data schema is not an object schema" {
-        val openApi = parseApi(body =
-            """
-            |paths:
-            |  /multipart/broken:
-            |    post:
-            |      requestBody:
-            |        required: true
-            |        content:
-            |          multipart/form-data:
-            |            schema:
-            |              type: string
-            |      responses:
-            |        '204':
-            |          description: empty
+        val openApi = parseApiBody("""
+            paths:
+              /multipart/broken:
+                post:
+                  requestBody:
+                    required: true
+                    content:
+                      multipart/form-data:
+                        schema:
+                          type: string
+                  responses:
+                    '204':
+                      description: empty
             """)
 
         val e = shouldThrow<MultipartResponseBodyException> {
@@ -128,26 +125,25 @@ class ApiConverterRequestBodySpec: StringSpec({
     }
 
     "does not register the object data type of a request body multipart/form-data schema to avoid model creation" {
-        val openApi = parseApi(body =
-            """
-            |paths:
-            |  /multipart/single-file:
-            |    post:
-            |      requestBody:
-            |        required: true
-            |        content:
-            |          multipart/form-data:
-            |            schema:
-            |              type: object
-            |              properties:
-            |                file:
-            |                  type: string
-            |                  format: binary
-            |                other:
-            |                  type: string
-            |      responses:
-            |        '204':
-            |          description: empty
+        val openApi = parseApiBody("""
+            paths:
+              /multipart/single-file:
+                post:
+                  requestBody:
+                    required: true
+                    content:
+                      multipart/form-data:
+                        schema:
+                          type: object
+                          properties:
+                            file:
+                              type: string
+                              format: binary
+                            other:
+                              type: string
+                  responses:
+                    '204':
+                      description: empty
             """)
 
         val api = apiConverter(framework = mockk(relaxed = true)).convert(openApi)
@@ -165,36 +161,35 @@ class ApiConverterRequestBodySpec: StringSpec({
             |         - type: string:binary => multipart.Multipart
             """)
 
-        val openApi = parseApi(body =
-            """
-            |paths:
-            |  /multipart:
-            |    post:
-            |      requestBody:
-            |        required: true
-            |        content:
-            |          multipart/form-data:
-            |            schema:
-            |              type: object
-            |              properties:
-            |                file:
-            |                  type: string
-            |                  format: binary
-            |                json:
-            |                  type: object
-            |                  properties:
-            |                    foo:
-            |                      type: string
-            |                    bar:
-            |                      type: string
-            |            encoding:
-            |              file:
-            |                contentType: application/octet-stream
-            |              json:
-            |                contentType: application/json
-            |      responses:
-            |        '204':
-            |          description: empty
+        val openApi = parseApiBody("""
+            paths:
+              /multipart:
+                post:
+                  requestBody:
+                    required: true
+                    content:
+                      multipart/form-data:
+                        schema:
+                          type: object
+                          properties:
+                            file:
+                              type: string
+                              format: binary
+                            json:
+                              type: object
+                              properties:
+                                foo:
+                                  type: string
+                                bar:
+                                  type: string
+                        encoding:
+                          file:
+                            contentType: application/octet-stream
+                          json:
+                            contentType: application/json
+                  responses:
+                    '204':
+                      description: empty
             """)
 
         val api = apiConverter(options).convert(openApi)
@@ -225,44 +220,43 @@ class ApiConverterRequestBodySpec: StringSpec({
             |         - type: string:binary => multipart.Multipart
             """)
 
-        val openApi = parseApi(body =
-            """
-            |paths:
-            |  /multipart:
-            |    post:
-            |      requestBody:
-            |        required: true
-            |        content:
-            |          multipart/form-data:
-            |            schema:
-            |              type: object
-            |              properties:
-            |                file:
-            |                  type: string
-            |                  format: binary
-            |                json:
-            |                  type: object
-            |                  properties:
-            |                    foo:
-            |                      ${'$'}ref: '#/components/schemas/Foo'
-            |                    bar:
-            |                      type: string
-            |            encoding:
-            |              file:
-            |                contentType: application/octet-stream
-            |              json:
-            |                contentType: application/json
-            |      responses:
-            |        '204':
-            |          description: empty
-            |
-            |components:
-            |  schemas:
-            |    Foo:
-            |      type: object
-            |      properties:
-            |        foo:
-            |          type: string
+        val openApi = parseApiBody("""
+            paths:
+              /multipart:
+                post:
+                  requestBody:
+                    required: true
+                    content:
+                      multipart/form-data:
+                        schema:
+                          type: object
+                          properties:
+                            file:
+                              type: string
+                              format: binary
+                            json:
+                              type: object
+                              properties:
+                                foo:
+                                  ${'$'}ref: '#/components/schemas/Foo'
+                                bar:
+                                  type: string
+                        encoding:
+                          file:
+                            contentType: application/octet-stream
+                          json:
+                            contentType: application/json
+                  responses:
+                    '204':
+                      description: empty
+            
+            components:
+              schemas:
+                Foo:
+                  type: object
+                  properties:
+                    foo:
+                      type: string
             """)
 
         val api = apiConverter(options).convert(openApi)

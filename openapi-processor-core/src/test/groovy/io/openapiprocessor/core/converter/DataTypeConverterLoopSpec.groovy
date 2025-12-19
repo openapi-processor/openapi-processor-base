@@ -5,7 +5,6 @@
 
 package io.openapiprocessor.core.converter
 
-
 import io.openapiprocessor.core.framework.Framework
 import io.openapiprocessor.core.model.datatypes.LazyDataType
 import io.openapiprocessor.core.model.datatypes.ObjectDataType
@@ -13,40 +12,33 @@ import io.openapiprocessor.core.model.datatypes.PropertyDataType
 import spock.lang.Specification
 
 import static io.openapiprocessor.core.support.FactoryHelper.apiConverter
-import static io.openapiprocessor.core.support.OpenApiParser.parse
-
+import static io.openapiprocessor.core.support.OpenApiParserKt.parseApiBody
 
 class DataTypeConverterLoopSpec extends Specification {
 
     void "handles \$ref loops"() {
-        def openApi = parse (
-"""\
-openapi: 3.0.2
-info:
-  title: test \$ref loop
-  version: 1.0.0
-
-paths:
-
-  /self-reference:
-    get:
-      responses:
-        '200':
-          description: none
-          content:
-            application/json:
-                schema:
-                  \$ref: '#/components/schemas/Self'
-
-components:
-  schemas:
-
-    Self:
-      type: object
-      properties:
-        self:
-          \$ref: '#/components/schemas/Self'
-""")
+        def openApi = parseApiBody ("""
+            paths:
+            
+              /self-reference:
+                get:
+                  responses:
+                    '200':
+                      description: none
+                      content:
+                        application/json:
+                            schema:
+                              \$ref: '#/components/schemas/Self'
+            
+            components:
+              schemas:
+            
+                Self:
+                  type: object
+                  properties:
+                    self:
+                      \$ref: '#/components/schemas/Self'
+            """)
 
         def options = new ApiOptions()
         options.packageOptions.base = options.packageName
@@ -70,5 +62,4 @@ components:
         sf.imports == ['io.openapiprocessor.generated.model.Self'] as Set
         sf.referencedImports == ['io.openapiprocessor.generated.model.Self'] as Set
     }
-
 }

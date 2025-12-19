@@ -9,10 +9,10 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.model.DataTypes
-import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.model.datatypes.ModelDataType
+import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.support.getBodySchemaInfo
-import io.openapiprocessor.core.support.parse
+import io.openapiprocessor.core.support.parseApiBody
 import io.openapiprocessor.core.writer.java.JavaIdentifier
 
 class DataTypeConverterOneOfSpec: StringSpec({
@@ -23,12 +23,7 @@ class DataTypeConverterOneOfSpec: StringSpec({
         val options = ApiOptions()
         options.oneOfInterface = true
 
-        val openApi = parse("""
-           openapi: 3.0.2
-           info:
-             title: API
-             version: 1.0.0
-           
+        val openApi = parseApiBody("""
            paths:
              /foo:
                post:

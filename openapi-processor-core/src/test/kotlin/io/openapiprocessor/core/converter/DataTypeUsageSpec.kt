@@ -20,12 +20,7 @@ class DataTypeUsageSpec: StringSpec({
     val identifier = JavaIdentifier()
 
     "collect usage of normal array item schema" {
-        val openApi = parse("""
-           openapi: 3.0.2
-           info:
-             title: API
-             version: 1.0.0
-           
+        val openApi = parseApiBody($$"""
            paths:
              /foo:
                get:
@@ -35,7 +30,7 @@ class DataTypeUsageSpec: StringSpec({
                      content:
                        application/json:
                          schema:
-                           ${'$'}ref: '#/components/schemas/FooArray'
+                           $ref: '#/components/schemas/FooArray'
            
            components:
              schemas:
@@ -44,7 +39,7 @@ class DataTypeUsageSpec: StringSpec({
                  description: a Foo array
                  type: array
                  items: 
-                   ${'$'}ref: '#/components/schemas/Foo'
+                   $ref: '#/components/schemas/Foo'
            
                Foo:
                  description: a Foo
@@ -52,8 +47,7 @@ class DataTypeUsageSpec: StringSpec({
                  properties:
                    foo:
                      type: string
-                 
-        """.trimIndent())
+        """)
 
         val schemaInfo = openApi.getSchemaInfo("FooResponse200",
             "/foo", HttpMethod.GET, "200", "application/json")
@@ -74,34 +68,33 @@ class DataTypeUsageSpec: StringSpec({
             |    - type: FooArray => io.openapiprocessor.test.Mapped<io.openapiprocessor.generated.model.Foo>
             """)
 
-        val openApi = parseApiBody("""
-           |paths:
-           |  /foo:
-           |    get:
-           |      responses:
-           |        '200':
-           |          description: ...
-           |          content:
-           |            application/json:
-           |              schema:
-           |                ${'$'}ref: '#/components/schemas/FooArray'
-           |
-           |components:
-           |  schemas:
-           |
-           |    FooArray:
-           |      description: a Foo array
-           |      type: array
-           |      items: 
-           |        ${'$'}ref: '#/components/schemas/Foo'
-           |
-           |    Foo:
-           |      description: a Foo
-           |      type: object
-           |      properties:
-           |        foo:
-           |          type: string
-           |
+        val openApi = parseApiBody($$"""
+           paths:
+             /foo:
+               get:
+                 responses:
+                   '200':
+                     description: ...
+                     content:
+                       application/json:
+                         schema:
+                           $ref: '#/components/schemas/FooArray'
+           
+           components:
+             schemas:
+           
+               FooArray:
+                 description: a Foo array
+                 type: array
+                 items: 
+                   $ref: '#/components/schemas/Foo'
+           
+               Foo:
+                 description: a Foo
+                 type: object
+                 properties:
+                   foo:
+                     type: string
            """)
 
         val schemaInfo = openApi.getSchemaInfo("FooResponse200",
@@ -117,12 +110,7 @@ class DataTypeUsageSpec: StringSpec({
     }
 
     "collect usage of object schema & properties" {
-        val openApi = parse ("""
-           openapi: 3.0.2
-           info:
-             title: API
-             version: 1.0.0
-
+        val openApi = parseApiBody ($$"""
            paths:
              /foo:
                get:
@@ -132,7 +120,7 @@ class DataTypeUsageSpec: StringSpec({
                      content:
                        application/json:
                          schema:
-                           ${'$'}ref: '#/components/schemas/Foo'
+                           $ref: '#/components/schemas/Foo'
 
            components:
              schemas:
@@ -144,7 +132,7 @@ class DataTypeUsageSpec: StringSpec({
                    foo:
                      type: string
                    bar:
-                     ${'$'}ref: '#/components/schemas/Bar'
+                     $ref: '#/components/schemas/Bar'
 
                Bar:
                  description: a Bar
@@ -152,8 +140,7 @@ class DataTypeUsageSpec: StringSpec({
                  properties:
                    bar:
                      type: string
-
-        """.trimIndent())
+        """)
 
         val schemaInfo = openApi.getSchemaInfo("FooResponse200",
             "/foo", HttpMethod.GET, "200", "application/json")
@@ -176,37 +163,36 @@ class DataTypeUsageSpec: StringSpec({
             |    - type: Foo => io.openapiprocessor.test.Mapped
             """)
 
-        val openApi = parseApi(body =
-            """
-            |paths:
-            |  /foo:
-            |    get:
-            |      responses:
-            |        '200':
-            |          description: ...
-            |          content:
-            |            application/json:
-            |              schema:
-            |                ${'$'}ref: '#/components/schemas/Foo'
-            |
-            |components:
-            |  schemas:
-            |
-            |    Foo:
-            |      description: a Foo
-            |      type: object
-            |      properties:
-            |        foo:
-            |          type: string
-            |        bar:
-            |          ${'$'}ref: '#/components/schemas/Bar'
-            |
-            |    Bar:
-            |      description: a Bar
-            |      type: object
-            |      properties:
-            |        bar:
-            |          type: string
+        val openApi = parseApiBody($$"""
+            paths:
+              /foo:
+                get:
+                  responses:
+                    '200':
+                      description: ...
+                      content:
+                        application/json:
+                          schema:
+                            $ref: '#/components/schemas/Foo'
+            
+            components:
+              schemas:
+            
+                Foo:
+                  description: a Foo
+                  type: object
+                  properties:
+                    foo:
+                      type: string
+                    bar:
+                      $ref: '#/components/schemas/Bar'
+            
+                Bar:
+                  description: a Bar
+                  type: object
+                  properties:
+                    bar:
+                      type: string
             """)
 
         val schemaInfo = openApi.getSchemaInfo("FooResponse200",
@@ -230,38 +216,37 @@ class DataTypeUsageSpec: StringSpec({
             |    - type: Foo => io.openapiprocessor.test.Mapped<pkg.Bar>
             """)
 
-        val openApi = parseApi (body  =
-            """
-            |paths:
-            |  /foo:
-            |    get:
-            |      responses:
-            |        '200':
-            |          description: ...
-            |          content:
-            |            application/json:
-            |              schema:
-            |                ${'$'}ref: '#/components/schemas/Foo'
-            |
-            |components:
-            |  schemas:
-            |
-            |    Foo:
-            |      description: a Foo
-            |      type: object
-            |      properties:
-            |        foo:
-            |          type: string
-            |        bar:
-            |          ${'$'}ref: '#/components/schemas/Bar'
-            |
-            |    Bar:
-            |      description: a Bar
-            |      type: object
-            |      properties:
-            |        bar:
-            |          type: string
-            |          
+        val openApi = parseApiBody ($$"""
+            paths:
+              /foo:
+                get:
+                  responses:
+                    '200':
+                      description: ...
+                      content:
+                        application/json:
+                          schema:
+                            $ref: '#/components/schemas/Foo'
+            
+            components:
+              schemas:
+            
+                Foo:
+                  description: a Foo
+                  type: object
+                  properties:
+                    foo:
+                      type: string
+                    bar:
+                      $ref: '#/components/schemas/Bar'
+            
+                Bar:
+                  description: a Bar
+                  type: object
+                  properties:
+                    bar:
+                      type: string
+                      
             """)
 
         val schemaInfo = openApi.getSchemaInfo("FooResponse200",

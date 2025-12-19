@@ -5,24 +5,18 @@
 
 package io.openapiprocessor.core.converter
 
-
 import io.openapiprocessor.core.converter.mapping.UnknownParameterTypeException
 import spock.lang.Ignore
 import spock.lang.Specification
 
 import static io.openapiprocessor.core.support.FactoryHelper.apiConverter
-import static io.openapiprocessor.core.support.OpenApiParser.parse
+import static io.openapiprocessor.core.support.OpenApiParserKt.parseApiBody
 
 class ApiConverterParameterGSpec extends Specification {
 
     void "converts simple query parameter"() {
-        def openApi = parse (
+        def openApi = parseApiBody (
 """\
-openapi: 3.0.2
-info:
-  title: test simple query parameter
-  version: 1.0.0
-
 paths:
   /endpoint:
 
@@ -55,13 +49,8 @@ paths:
     }
 
     void "converts simple path parameter"() {
-        def openApi = parse (
+        def openApi = parseApiBody (
 """\
-openapi: 3.0.2
-info:
-  title: test simple path parameter
-  version: 1.0.0
-
 paths:
   /endpoint/{foo}:
 
@@ -94,13 +83,8 @@ paths:
     }
 
     void "converts simple header parameter"() {
-        def openApi = parse (
+        def openApi = parseApiBody (
 """\
-openapi: 3.0.2
-info:
-  title: test simple header parameter
-  version: 1.0.0
-
 paths:
   /endpoint:
 
@@ -133,30 +117,24 @@ paths:
     }
 
     void "converts simple cookie parameter"() {
-        def openApi = parse (
-"""\
-openapi: 3.0.2
-info:
-  title: test simple cookie parameter
-  version: 1.0.0
-
-paths:
-  /endpoint:
-
-    get:
-      tags:
-        - endpoint
-      parameters:
-        - name: foo
-          description: cookie, required, string
-          in: cookie
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: empty
-""")
+        def openApi = parseApiBody ("""
+            paths:
+              /endpoint:
+            
+                get:
+                  tags:
+                    - endpoint
+                  parameters:
+                    - name: foo
+                      description: cookie, required, string
+                      in: cookie
+                      required: true
+                      schema:
+                        type: string
+                  responses:
+                    '204':
+                      description: empty
+            """)
 
         when:
         def api = apiConverter ()
@@ -173,29 +151,23 @@ paths:
 
     @Ignore("the openapi parser ignores parameters with unknown types")
     void "throws on unknown parameter"() {
-        def openApi = parse (
-"""\
-openapi: 3.0.2
-info:
-  title: test unknown parameter type
-  version: 1.0.0
-
-paths:
-  /endpoint:
-
-    get:
-      tags:
-        - endpoint
-      parameters:
-        - name: foo
-          description: unknown, required, string
-          in: unknown
-          schema:
-            type: string
-      responses:
-        '204':
-          description: empty
-""")
+        def openApi = parseApiBody ("""
+            paths:
+              /endpoint:
+            
+                get:
+                  tags:
+                    - endpoint
+                  parameters:
+                    - name: foo
+                      description: unknown, required, string
+                      in: unknown
+                      schema:
+                        type: string
+                  responses:
+                    '204':
+                      description: empty
+            """)
 
         when:
         apiConverter ()
@@ -208,28 +180,22 @@ paths:
     }
 
     void "converts deprecated parameter"() {
-        def openApi = parse (
-"""\
-openapi: 3.0.2
-info:
-  title: test deprecated parameter
-  version: 1.0.0
-
-paths:
-  /endpoint:
-
-    get:
-      parameters:
-        - name: foo
-          description: deprecated parameter
-          in: query
-          deprecated: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: empty
-""")
+        def openApi = parseApiBody ("""
+            paths:
+              /endpoint:
+            
+                get:
+                  parameters:
+                    - name: foo
+                      description: deprecated parameter
+                      in: query
+                      deprecated: true
+                      schema:
+                        type: string
+                  responses:
+                    '204':
+                      description: empty
+            """)
 
         when:
         def api = apiConverter ()

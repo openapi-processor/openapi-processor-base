@@ -12,7 +12,7 @@ import io.openapiprocessor.core.model.DataTypes
 import io.openapiprocessor.core.model.datatypes.ObjectDataType
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.support.getBodySchemaInfo
-import io.openapiprocessor.core.support.parseApi
+import io.openapiprocessor.core.support.parseApiBody
 import io.openapiprocessor.core.support.parseOptions
 import io.openapiprocessor.core.writer.java.JavaIdentifier
 
@@ -30,30 +30,30 @@ class DataTypeConverterNullSpec: StringSpec({
             |      null: org.openapitools.jackson.nullable.JsonNullable
             """)
 
-        val openApi = parseApi(body =
+        val openApi = parseApiBody($$"""
+            paths:
+              /foo:
+                patch:
+                  requestBody:
+                    content:
+                      application/json:
+                        schema:
+                          $ref: '#/components/schemas/Foo'
+                  responses:
+                    '204':
+                      description: empty
+            
+            components:
+              schemas:
+            
+                Foo:
+                  description: a Foo
+                  type: object
+                  properties:
+                    foo:
+                      type: [string, null]
             """
-            |paths:
-            |  /foo:
-            |    patch:
-            |      requestBody:
-            |        content:
-            |          application/json:
-            |            schema:
-            |              ${'$'}ref: '#/components/schemas/Foo'
-            |      responses:
-            |        '204':
-            |          description: empty
-            |
-            |components:
-            |  schemas:
-            |
-            |    Foo:
-            |      description: a Foo
-            |      type: object
-            |      properties:
-            |        foo:
-            |          type: [string, null]
-            """)
+        )
 
         val schemaInfo = openApi.getBodySchemaInfo("Foo",
             "/foo", HttpMethod.PATCH, "application/json")

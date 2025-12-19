@@ -24,34 +24,32 @@ class ApiConverterServerUriSpec: StringSpec({
             |    server-url: 0
             """)
 
-         val openApi = parseApiBody(
-             """
-             |servers:
-             |  - url: "{schema}://{host}:{port}/{path1}/{path2}/v{version}"
-             |    variables:
-             |      schema:
-             |        default: https
-             |        enum:
-             |          - https
-             |          - http
-             |      host:
-             |        default: openapiprocessor.io
-             |      port:
-             |        default: "443"
-             |      path1:
-             |        default: foo
-             |      path2:
-             |        default: bar
-             |      version:
-             |        default: "1"
-             |
-             |paths:
-             |  /foo:
-             |    get:
-             |      responses:
-             |        '204':
-             |          description: ...
-             |
+         val openApi = parseApiBody("""
+             servers:
+               - url: "{schema}://{host}:{port}/{path1}/{path2}/v{version}"
+                 variables:
+                   schema:
+                     default: https
+                     enum:
+                       - https
+                       - http
+                   host:
+                     default: openapiprocessor.io
+                   port:
+                     default: "443"
+                   path1:
+                     default: foo
+                   path2:
+                     default: bar
+                   version:
+                     default: "1"
+             
+             paths:
+               /foo:
+                 get:
+                   responses:
+                     '204':
+                       description: ...
              """)
 
         val api: Api = ApiConverter (options, JavaIdentifier(), FrameworkBase())

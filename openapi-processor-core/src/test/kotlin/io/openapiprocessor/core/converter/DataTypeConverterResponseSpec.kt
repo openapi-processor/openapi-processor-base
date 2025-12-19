@@ -14,9 +14,9 @@ import io.openapiprocessor.core.model.DataTypes
 import io.openapiprocessor.core.model.datatypes.ObjectDataType
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.support.getSchemaInfo
-import io.openapiprocessor.core.support.ref
-import io.openapiprocessor.core.support.parseApi
+import io.openapiprocessor.core.support.parseApiBody
 import io.openapiprocessor.core.support.parseOptions
+import io.openapiprocessor.core.support.ref
 import io.openapiprocessor.core.writer.java.JavaIdentifier
 
 class DataTypeConverterResponseSpec: StringSpec({
@@ -31,34 +31,33 @@ class DataTypeConverterResponseSpec: StringSpec({
             |map: {}
             """)
 
-        val openApi = parseApi(body =
-            """
-            |paths:
-            |  /foo:
-            |    get:
-            |      responses:
-            |        '200':
-            |           description: success
-            |           content:
-            |             application/json:
-            |                 schema:
-            |                   $ref: '#/components/schemas/Foo'
-            |        '202':
-            |           description: another success
-            |           content:
-            |             application/json:
-            |                 schema:
-            |                   $ref: '#/components/schemas/Foo'
-            |
-            |components:
-            |  schemas:
-            |
-            |    Foo:
-            |      description: a Foo
-            |      type: object
-            |      properties:
-            |        foo:
-            |          type: string
+        val openApi = parseApiBody("""
+            paths:
+              /foo:
+                get:
+                  responses:
+                    '200':
+                       description: success
+                       content:
+                         application/json:
+                             schema:
+                               $ref: '#/components/schemas/Foo'
+                    '202':
+                       description: another success
+                       content:
+                         application/json:
+                             schema:
+                               $ref: '#/components/schemas/Foo'
+            
+            components:
+              schemas:
+            
+                Foo:
+                  description: a Foo
+                  type: object
+                  properties:
+                    foo:
+                      type: string
             """)
 
         val converter = DataTypeConverter(options, identifier)
@@ -93,41 +92,40 @@ class DataTypeConverterResponseSpec: StringSpec({
             |map: {}
             """)
 
-        val openApi = parseApi(body =
-            """
-            |paths:
-            |  /foo:
-            |    get:
-            |      responses:
-            |        '200':
-            |           description: success
-            |           content:
-            |             application/json:
-            |                 schema:
-            |                   $ref: '#/components/schemas/Foo'
-            |        '202':
-            |           description: another success
-            |           content:
-            |             application/json:
-            |                 schema:
-            |                   $ref: '#/components/schemas/Bar'
-            |
-            |components:
-            |  schemas:
-            |
-            |    Foo:
-            |      description: a Foo
-            |      type: object
-            |      properties:
-            |        foo:
-            |          type: string
-            |          
-            |    Bar:
-            |      description: a Bar
-            |      type: object
-            |      properties:
-            |        foo:
-            |          type: string
+        val openApi = parseApiBody("""
+            paths:
+              /foo:
+                get:
+                  responses:
+                    '200':
+                       description: success
+                       content:
+                         application/json:
+                             schema:
+                               $ref: '#/components/schemas/Foo'
+                    '202':
+                       description: another success
+                       content:
+                         application/json:
+                             schema:
+                               $ref: '#/components/schemas/Bar'
+            
+            components:
+              schemas:
+            
+                Foo:
+                  description: a Foo
+                  type: object
+                  properties:
+                    foo:
+                      type: string
+                      
+                Bar:
+                  description: a Bar
+                  type: object
+                  properties:
+                    foo:
+                      type: string
             """)
 
         val converter = DataTypeConverter(options, identifier)
@@ -165,57 +163,56 @@ class DataTypeConverterResponseSpec: StringSpec({
              |map: {}
              """)
 
-         val openApi = parseApi(body =
-             """
-             |paths:
-             |  /foo:
-             |    get:
-             |      responses:
-             |        '200':
-             |           description: success
-             |           content:
-             |             application/json:
-             |                 schema:
-             |                   $ref: '#/components/schemas/Foo'
-             |        '202':
-             |           description: another success
-             |           content:
-             |             application/json:
-             |                 schema:
-             |                   $ref: '#/components/schemas/Bar'
-             |
-             |  /bar:
-             |    get:
-             |      responses:
-             |        '200':
-             |           description: success
-             |           content:
-             |             application/json:
-             |                 schema:
-             |                   $ref: '#/components/schemas/Foo'
-             |        '202':
-             |           description: another success
-             |           content:
-             |             application/json:
-             |                 schema:
-             |                   $ref: '#/components/schemas/Bar'
-             |
-             |components:
-             |  schemas:
-             |
-             |    Foo:
-             |      description: a Foo
-             |      type: object
-             |      properties:
-             |        foo:
-             |          type: string
-             |          
-             |    Bar:
-             |      description: a Bar
-             |      type: object
-             |      properties:
-             |        foo:
-             |          type: string
+         val openApi = parseApiBody("""
+             paths:
+               /foo:
+                 get:
+                   responses:
+                     '200':
+                        description: success
+                        content:
+                          application/json:
+                              schema:
+                                $ref: '#/components/schemas/Foo'
+                     '202':
+                        description: another success
+                        content:
+                          application/json:
+                              schema:
+                                $ref: '#/components/schemas/Bar'
+             
+               /bar:
+                 get:
+                   responses:
+                     '200':
+                        description: success
+                        content:
+                          application/json:
+                              schema:
+                                $ref: '#/components/schemas/Foo'
+                     '202':
+                        description: another success
+                        content:
+                          application/json:
+                              schema:
+                                $ref: '#/components/schemas/Bar'
+             
+             components:
+               schemas:
+             
+                 Foo:
+                   description: a Foo
+                   type: object
+                   properties:
+                     foo:
+                       type: string
+                       
+                 Bar:
+                   description: a Bar
+                   type: object
+                   properties:
+                     foo:
+                       type: string
              """)
 
         val converter = DataTypeConverter(options, identifier)

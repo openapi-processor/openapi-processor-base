@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 https://github.com/openapi-processor/openapi-processor-core
+ * Copyright 2021 https://github.com/openapi-processor/openapi-processor-base
  * PDX-License-Identifier: Apache-2.0
  */
 
@@ -12,11 +12,11 @@ import io.kotest.matchers.types.shouldBeSameInstanceAs
 import io.openapiprocessor.core.converter.mapping.TargetType
 import io.openapiprocessor.core.converter.mapping.TypeMapping
 import io.openapiprocessor.core.model.DataTypes
-import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.model.datatypes.*
+import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.support.getBodySchemaInfo
 import io.openapiprocessor.core.support.getSchemaInfo
-import io.openapiprocessor.core.support.parse
+import io.openapiprocessor.core.support.parseApiBody
 import io.openapiprocessor.core.writer.java.JavaIdentifier
 
 class DataTypeConverterSuffixSpec: StringSpec({
@@ -27,12 +27,7 @@ class DataTypeConverterSuffixSpec: StringSpec({
         val options = ApiOptions()
         options.modelNameSuffix = "Suffix"
 
-        val openApi = parse("""
-           openapi: 3.0.2
-           info:
-             title: API
-             version: 1.0.0
-           
+        val openApi = parseApiBody($$"""
            paths:
              /foo:
                post:
@@ -40,7 +35,7 @@ class DataTypeConverterSuffixSpec: StringSpec({
                    content:
                      application/json:
                        schema:
-                         ${'$'}ref: '#/components/schemas/Foo'
+                         $ref: '#/components/schemas/Foo'
                  responses:
                    '204':
                      description: empty
@@ -77,12 +72,7 @@ class DataTypeConverterSuffixSpec: StringSpec({
         val options = ApiOptions()
         options.modelNameSuffix = "Suffix"
 
-        val openApi = parse("""
-           openapi: 3.0.2
-           info:
-             title: API
-             version: 1.0.0
-           
+        val openApi = parseApiBody($$"""
            paths:
              /foo:
                post:
@@ -90,7 +80,7 @@ class DataTypeConverterSuffixSpec: StringSpec({
                    content:
                      application/json:
                        schema:
-                         ${'$'}ref: '#/components/schemas/Bar'
+                         $ref: '#/components/schemas/Bar'
                  responses:
                    '204':
                      description: empty
@@ -126,31 +116,26 @@ class DataTypeConverterSuffixSpec: StringSpec({
         val options = ApiOptions()
         options.modelNameSuffix = "Suffix"
 
-        val openApi = parse("""
-openapi: 3.0.2
-info:
-  title: merge allOf into same object
-  version: 1.0.0
-
-paths:
-  /foo:
-    get:
-      responses:
-        '200':
-          description: allOf object
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - type: object
-                    properties:
-                      prop1:
-                        type: string
-                  - type: object
-                    properties:
-                      prop2:
-                        type: string
-                 
+        val openApi = parseApiBody("""
+            paths:
+              /foo:
+                get:
+                  responses:
+                    '200':
+                      description: allOf object
+                      content:
+                        application/json:
+                          schema:
+                            allOf:
+                              - type: object
+                                properties:
+                                  prop1:
+                                    type: string
+                              - type: object
+                                properties:
+                                  prop2:
+                                    type: string
+                             
         """.trimIndent())
 
         val schemaInfo = openApi.getSchemaInfo("Foo",
@@ -173,35 +158,30 @@ paths:
         val options = ApiOptions()
         options.modelNameSuffix = "Suffix"
 
-        val openApi = parse("""
-openapi: 3.0.2
-info:
-  title: array
-  version: 1.0.0
-
-paths:
-  /foo:
-    get:
-      responses:
-        '200':
-          description: array
-          content:
-            application/json:
-              schema:
-                type: array
-                items: 
-                  ${'$'}ref: '#/components/schemas/Foo'
-
-components:
- schemas:
-
-    Foo:
-      type: object
-      properties:
-        bar:
-          type: string          
-
-        """.trimIndent())
+        val openApi = parseApiBody($$"""
+            paths:
+              /foo:
+                get:
+                  responses:
+                    '200':
+                      description: array
+                      content:
+                        application/json:
+                          schema:
+                            type: array
+                            items: 
+                              $ref: '#/components/schemas/Foo'
+            
+            components:
+             schemas:
+            
+                Foo:
+                  type: object
+                  properties:
+                    bar:
+                      type: string          
+            
+                    """.trimIndent())
 
         val schemaInfo = openApi.getSchemaInfo("FooResponse200",
             "/foo", HttpMethod.GET, "200", "application/json")
