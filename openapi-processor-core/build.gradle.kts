@@ -20,30 +20,6 @@ versions {
     ))
 }
 
-sourceSets {
-    main {
-        java {
-            srcDir(tasks.named("generateGrammarSource"))
-        }
-    }
-
-    test {
-        java {
-            srcDir(tasks.named("generateTestGrammarSource"))
-        }
-//        groovy {
-//            srcDir(tasks.named("compileKotlin"))
-//            srcDir(tasks.named("compileTestKotlin"))
-//        }
-    }
-
-    testInt {
-        java {
-            srcDir(tasks.named("generateTestIntGrammarSource"))
-        }
-    }
-}
-
 tasks.compileTestGroovy {
     classpath += sourceSets.main.get().compileClasspath
     classpath += files(tasks.compileKotlin.get().destinationDirectory)
@@ -51,9 +27,7 @@ tasks.compileTestGroovy {
 }
 
 tasks.named<AntlrTask>("generateGrammarSource") {
-    val antlrPkg = "io.openapiprocessor.core.processor.mapping.v2.parser.antlr"
-    arguments = arguments + listOf("-package", antlrPkg)
-    outputDirectory = layout.buildDirectory.dir("antlr/${antlrPkg.replace('.', '/')}").get().asFile
+    packageName = "io.openapiprocessor.core.processor.mapping.v2.parser.antlr"
 }
 
 repositories {
