@@ -3,7 +3,7 @@ processor = "2025.7-SNAPSHOT"
 parser = "2025.6-SNAPSHOT"
 api = "2024.2"
 
-kotlin = "2.2.21"
+kotlin = "2.3.0"
 build-jdk = "11"
 #target-jdk = "11"
 test-jdk = "17"
