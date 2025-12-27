@@ -115,12 +115,16 @@ class DataTypeConverter(
                     return filtered.first()
                 }
 
-                AllOfObjectDataType(
+                val allOf = AllOfObjectDataType(
                     DataTypeName(schemaInfo.getName(), getTypeNameWithSuffix(schemaInfo.getName())),
                     listOf(options.packageName, "model").joinToString("."),
                     items,
                     schemaInfo.getDeprecated()
                 )
+
+                addInterfaces(schemaInfo, allOf)
+
+                allOf
             }
             shouldGenerateOneOfInterface(items) && schemaInfo.isComposedOneOf() -> {
                 val constraints = DataTypeConstraints(
@@ -274,7 +278,7 @@ class DataTypeConverter(
             required = schemaInfo.getRequired()
         )
 
-        return ObjectDataType(
+        val obj = ObjectDataType(
             DataTypeName(schemaInfo.getName(), getTypeNameWithSuffix(schemaInfo.getName())),
             getPackageName(schemaInfo),
             properties = properties,
@@ -282,6 +286,18 @@ class DataTypeConverter(
             deprecated = schemaInfo.getDeprecated(),
             documentation = Documentation(description = schemaInfo.description)
         )
+
+        addInterfaces(schemaInfo, obj)
+
+        return obj
+    }
+
+    private fun addInterfaces(schemaInfo: SchemaInfo, obj: ModelDataType) {
+        finder.findInterfaceTypeMappings(MappingFinderQuery(schemaInfo)).forEach { mapping ->
+            val targetType = mapping.getTargetType()
+            val theInterface = InterfaceDataTypeExisting(DataTypeName(targetType.getName()), targetType.getPkg())
+            obj.addInterface(theInterface)
+        }
     }
 
     private fun getPackageName(schemaInfo: SchemaInfo): String {
