@@ -276,6 +276,29 @@ class MappingFinder(val options: ApiOptions) {
         return repository.findGlobalAnnotationSchemaTypeMapping(query, step)
     }
 
+    fun findInterfaceTypeMappings(query: MappingQuery): List<InterfaceTypeMapping> {
+        val step = rootStep("looking for interface type mappings of", query)
+        try {
+            return findInterfaceTypeMapping(query, step)
+        } finally {
+            step.log()
+        }
+    }
+
+    private fun findInterfaceTypeMapping(query: MappingQuery, step: MappingStep): List<InterfaceTypeMapping> {
+        val epMapping = repository.findEndpointInterfaceTypeMapping(query, step)
+        if (epMapping.isNotEmpty()) {
+            return epMapping
+        }
+
+        val gMapping = repository.findGlobalInterfaceTypeMappings(query, step)
+        if(gMapping.isNotEmpty()) {
+            return gMapping
+        }
+
+        return emptyList()
+    }
+
     fun findParameterTypeMapping(query: MappingQuery): TypeMapping? {
         val step = rootStep("looking for parameter type mapping of", query)
         try {

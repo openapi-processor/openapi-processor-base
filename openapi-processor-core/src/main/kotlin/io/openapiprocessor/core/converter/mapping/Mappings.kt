@@ -85,6 +85,15 @@ class Mappings(
         return mappings.map { it as AnnotationTypeMapping }
     }
 
+    fun findInterfaceTypeMappings(filter: MappingMatcher, step: MappingStep): List<InterfaceTypeMapping> {
+        val mappings = typeMappings.filter(filter, step.add(TypesStep()))
+        if (mappings.isEmpty()) {
+            return emptyList()
+        }
+
+        return mappings.map { it as InterfaceTypeMapping }
+    }
+
     fun findSchemaTypeMapping(filter: MappingMatcher, step: MappingStep): TypeMapping? {
         val mappings = schemaMappings.filter(filter, step.add(SchemasStep()))
         if (mappings.isEmpty()) {

@@ -11,7 +11,7 @@ package io.openapiprocessor.core.converter.mapping
  * To override the type mapping of the OpenAPI `array` from a simple java array to another
  * collection type the [sourceTypeName] should be set to `array`.
  */
-class  TypeMapping @JvmOverloads constructor(
+class TypeMapping @JvmOverloads constructor(
 
     /**
      * The OpenAPI schema type that should be mapped to the {@link #targetTypeName} java type.
@@ -35,12 +35,12 @@ class  TypeMapping @JvmOverloads constructor(
     val genericTypes: List<TargetType> = emptyList(),
 
     /**
-     * is a primitive target type, i.e. byte, short int etc. ?
+     * is a primitive target type, i.e., byte, short int, etc.?
      */
     val primitive: Boolean = false,
 
     /**
-     * is an array, i.e. type []?
+     * is an array, i.e., type []?
      */
     val primitiveArray: Boolean = false
 
