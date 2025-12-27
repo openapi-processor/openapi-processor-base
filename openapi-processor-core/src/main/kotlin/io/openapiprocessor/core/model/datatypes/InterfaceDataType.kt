@@ -13,13 +13,14 @@ import io.openapiprocessor.core.model.Documentation
  * only used with onOf elements which are all objects. It will represent the common interface that
  * all items implement.
  */
-class InterfaceDataType(
+open class InterfaceDataType(
     private val name: DataTypeName,
     private val pkg: String,
     items: List<DataType> = emptyList(),
     override val constraints: DataTypeConstraints? = null,
     override val deprecated: Boolean = false,
-    override val documentation: Documentation? = null
+    override val documentation: Documentation? = null,
+    val generated: Boolean = true,
 ): DataType {
     private val _items: MutableCollection<DataType> = mutableListOf()
 

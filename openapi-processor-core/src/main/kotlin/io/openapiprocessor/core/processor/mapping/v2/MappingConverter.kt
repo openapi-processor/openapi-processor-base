@@ -7,16 +7,16 @@ package io.openapiprocessor.core.processor.mapping.v2
 
 import io.openapiprocessor.core.converter.mapping.*
 import io.openapiprocessor.core.converter.mapping.Annotation
-import io.openapiprocessor.core.converter.mapping.Mapping
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.processor.BadMappingException
 import io.openapiprocessor.core.processor.mapping.v2.parser.Mapping.Kind.ANNOTATE
+import io.openapiprocessor.core.processor.mapping.v2.parser.Mapping.Kind.IMPLEMENT
 import io.openapiprocessor.core.processor.mapping.v2.parser.MappingType
 import io.openapiprocessor.core.processor.mapping.v2.parser.antlr.parseMapping
+import java.util.stream.Collectors
 import io.openapiprocessor.core.processor.mapping.v2.Map as MapV2
 import io.openapiprocessor.core.processor.mapping.v2.Mapping as MappingV2
 import io.openapiprocessor.core.processor.mapping.v2.parser.Mapping as ParserMapping
-import java.util.stream.Collectors
 
 /**
  *  Converter for the type mapping from the mapping YAML. It converts the type mapping information
@@ -189,21 +189,28 @@ class MappingConverter(val mapping: MappingV2) {
     private fun convertType(source: Type): Mapping {
         val (mapping, genericTypes) = parseMapping(source.type, source.generics)
 
-        return if (mapping.kind == ANNOTATE) {
-            AnnotationTypeMappingDefault(
-                mapping.sourceType!!,
-                mapping.sourceFormat,
-                Annotation(mapping.annotationType!!, mapping.annotationParameters)
-            )
-        } else {
-            TypeMapping(
-                mapping.sourceType,
-                mapping.sourceFormat,
-                resolvePackageVariable(mapping.targetType!!),
-                genericTypes,
-                mapping.targetTypePrimitive,
-                mapping.targetTypePrimitiveArray
-            )
+        return when (mapping.kind) {
+            ANNOTATE -> {
+                AnnotationTypeMappingDefault(
+                    mapping.sourceType!!,
+                    mapping.sourceFormat,
+                    Annotation(mapping.annotationType!!, mapping.annotationParameters))
+            }
+            IMPLEMENT -> {
+                InterfaceTypeMapping(
+                    mapping.sourceType!!,
+                    mapping.targetType!!,
+                    genericTypes)
+            }
+            else -> {
+                TypeMapping(
+                    mapping.sourceType,
+                    mapping.sourceFormat,
+                    resolvePackageVariable(mapping.targetType!!),
+                    genericTypes,
+                    mapping.targetTypePrimitive,
+                    mapping.targetTypePrimitiveArray)
+            }
         }
     }
 
@@ -470,8 +477,7 @@ class MappingConverter(val mapping: MappingV2) {
             TypeMappings(schemaTypeMappings),
             TypeMappings(parameterTypeMappings),
             TypeMappings(responseTypeMappings),
-            source.exclude
-        )
+            source.exclude)
     }
 
     private fun createExtensionMapping(source: Type): AnnotationNameMapping {
