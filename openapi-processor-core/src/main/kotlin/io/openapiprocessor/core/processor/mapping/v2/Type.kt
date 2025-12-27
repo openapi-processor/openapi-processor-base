@@ -15,8 +15,9 @@ data class Type @JsonCreator @JvmOverloads constructor(
     /**
      * the mapping from source to target, ie a mapping string like:
      *
-     * array => java.util.Collection
-     * array @ java.util.Collection
+     * source type => target type
+     * source type @ target type
+     * source type =+ target type
      */
     val type: String,
 
