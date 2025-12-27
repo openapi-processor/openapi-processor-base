@@ -1,0 +1,18 @@
+openapi-processor-mapping: v16
+
+options:
+  package-name: generated
+  format-code: false
+
+map:
+  types:
+    - type: object =+ java.io.Serializable
+
+  parameters:
+    - type: Bar =+ io.openapiprocessor.InterfaceA
+
+  paths:
+    /bar:
+      types:
+        - type: Bar =+ io.openapiprocessor.InterfaceA
+        - type: Bar =+ io.openapiprocessor.InterfaceB
