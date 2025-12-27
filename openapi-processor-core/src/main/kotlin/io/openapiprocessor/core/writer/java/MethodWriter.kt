@@ -25,7 +25,7 @@ import java.io.StringWriter
 import java.io.Writer
 
 /**
- * Writer for Java interface methods, i.e. endpoints.
+ * Writer for Java interface methods, i.e., endpoints.
  */
 open class MethodWriter(
     private val apiOptions: ApiOptions,

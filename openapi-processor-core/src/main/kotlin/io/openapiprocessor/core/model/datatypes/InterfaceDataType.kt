@@ -8,7 +8,7 @@ package io.openapiprocessor.core.model.datatypes
 import io.openapiprocessor.core.model.Documentation
 
 /**
- * represents an OpenAPI object that is generated as interface.
+ * represents an OpenAPI object generated as an interface.
  *
  * only used with onOf elements which are all objects. It will represent the common interface that
  * all items implement.

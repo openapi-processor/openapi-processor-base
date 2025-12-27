@@ -8,7 +8,7 @@ package io.openapiprocessor.core.processor.mapping.v2
 import com.fasterxml.jackson.annotation.JsonFormat
 
 /**
- * the "map:" entry in the mapping yaml
+ * the "map:" entry in the mapping YAML
  */
 data class Map(
 
