@@ -11,9 +11,11 @@ import io.openapiprocessor.core.converter.mapping.SimpleParameterValue
 import io.openapiprocessor.core.converter.mapping.TypeParameterValue
 import io.openapiprocessor.core.processor.mapping.v2.parser.Mapping
 import io.openapiprocessor.core.processor.mapping.v2.parser.MappingType
+import org.antlr.v4.runtime.CommonTokenStream
+import org.antlr.v4.runtime.misc.Interval
 
 
-class MappingExtractor: MappingBaseListener(), Mapping {
+class MappingExtractor(private val tokens: CommonTokenStream): MappingBaseListener(), Mapping {
     override var kind: Mapping.Kind? = Mapping.Kind.TYPE
     override var sourceType: String? = null
     override var sourceFormat: String? = null
@@ -43,6 +45,10 @@ class MappingExtractor: MappingBaseListener(), Mapping {
         kind = Mapping.Kind.ANNOTATE
     }
 
+    override fun enterImplement(ctx: MappingParser.ImplementContext?) {
+        kind = Mapping.Kind.IMPLEMENT
+    }
+
     override fun enterMapPlain(ctx: MappingParser.MapPlainContext) {
         if (ctx.childCount == 3) {
             kind = Mapping.Kind.MAP
@@ -70,7 +76,9 @@ class MappingExtractor: MappingBaseListener(), Mapping {
     }
 
     override fun enterSourceIdentifier(ctx: MappingParser.SourceIdentifierContext) {
-        sourceType = ctx.text
+        val startIndex = ctx.start.tokenIndex
+        val stopIndex = ctx.stop.tokenIndex
+        sourceType = tokens.getText(Interval(startIndex, stopIndex))
     }
 
     override fun enterFormatIdentifier(ctx: MappingParser.FormatIdentifierContext) {

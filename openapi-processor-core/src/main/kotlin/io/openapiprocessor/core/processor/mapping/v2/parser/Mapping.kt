@@ -10,7 +10,7 @@ class MappingType (val targetType: String, val targetGenericTypes: List<MappingT
 
 interface Mapping {
     enum class Kind {
-        TYPE, MAP, ANNOTATE
+        TYPE, MAP, ANNOTATE, IMPLEMENT
     }
 
     val kind: Kind?

@@ -7,7 +7,7 @@ grammar Mapping;
 
 // root:
 mapping
-    : type | map | annotate | content | name | mapPlain
+    : type | map | annotate | content | name | mapPlain | implement
     ;
 
 type
@@ -27,6 +27,11 @@ content
 // annotation mapping
 annotate
     : sourceType Annotate annotationType
+    ;
+
+// implement mapping
+implement
+    : sourceType Implement targetType
     ;
 
 // add, drop parameter
@@ -100,20 +105,20 @@ genericParameterAny
     ;
 
 sourceIdentifier
-    : Identifier | ApiIdentifier | String | FormatType | Primitive
+    : ApiIdentifier | Identifier+ | String | FormatType | Primitive
     ;
 
 formatIdentifier
-    : Identifier | ApiIdentifier | String | FormatType | Primitive
+    : ApiIdentifier | Identifier+ | String | FormatType | Primitive
     ;
-
 
 /*
  * Lexer Rules
  */
 
-Arrow: '=>';
-Annotate: '@';
+Arrow: '=>' | 'map';
+Annotate: '@' | 'annotate';
+Implement: '=+' | 'implement';
 
 Plain: 'plain';
 Boolean: 'true' | 'false';
@@ -125,7 +130,7 @@ OpenArray: '[';
 CloseArray: ']';
 
 Whitespace
-  : [ \t] -> skip
+  : [ \t] -> channel(HIDDEN)
   ;
 
 Primitive
@@ -150,7 +155,7 @@ FormatType
     ;
 
 ApiIdentifier
-  : ApiLetter (ApiLetterOrDigit | [ \t])+ ApiLetterOrDigit+ | FormatType | Primitive
+  : ApiLetter ApiLetterOrDigit* | FormatType | Primitive
   ;
 
 String

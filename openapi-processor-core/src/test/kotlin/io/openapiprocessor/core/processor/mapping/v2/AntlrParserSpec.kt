@@ -225,7 +225,7 @@ class AntlrParserSpec: StringSpec({
         mapping.annotationParameters["value"]!!.import shouldBe "io.oap.Foo"
     }
 
-    // because of the simple "name" rule, it won't error on this.
+    // because of the simple "name" rule, it will not error on this.
     "reports parsing error".config(false) {
         val source = """SourceType =X io.oap.TargetType"""
 
@@ -352,6 +352,26 @@ class AntlrParserSpec: StringSpec({
         shape.value shouldBe "JsonFormat.Shape.NUMBER"
         shape.import shouldBe "com.fasterxml.jackson.annotation.JsonFormat"
         mapping.annotationParameters["pattern"]!!.value shouldBe """"yyyy""""
+    }
+
+    "map implements source type to fully qualified java target type" {
+        val source = "SourceType =+ io.oap.TargetType"
+
+        val mapping = parseMapping(source)
+        mapping.kind shouldBe Mapping.Kind.IMPLEMENT
+        mapping.sourceType shouldBe "SourceType"
+        mapping.targetType shouldBe "io.oap.TargetType"
+        mapping.targetGenericTypes.shouldBeEmpty()
+    }
+
+    "map implements source type to fully qualified java target type, long" {
+        val source = "SourceType implement io.oap.TargetType"
+
+        val mapping = parseMapping(source)
+        mapping.kind shouldBe Mapping.Kind.IMPLEMENT
+        mapping.sourceType shouldBe "SourceType"
+        mapping.targetType shouldBe "io.oap.TargetType"
+        mapping.targetGenericTypes.shouldBeEmpty()
     }
 
     "map simple string" {

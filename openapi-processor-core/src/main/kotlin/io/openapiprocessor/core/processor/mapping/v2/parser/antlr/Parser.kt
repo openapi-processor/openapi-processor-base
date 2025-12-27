@@ -22,7 +22,7 @@ fun parseMapping(mapping: String): Mapping {
         parser.removeErrorListener(ConsoleErrorListener.INSTANCE)
         parser.addErrorListener(MappingErrorListener())
         val ctx = parser.mapping()
-        val extractor = MappingExtractor()
+        val extractor = MappingExtractor(tokens)
         ParseTreeWalker().walk(extractor, ctx)
         return extractor
     } catch (e: MappingParserException) {
