@@ -91,6 +91,7 @@ val ALL_3x: List<TestParams2> = join(
     tests("schema-composed-nested"),
     tests("schema-composed-oneof-interface"),
     //tests("schema-duplicate-by-refs"), // not supported
+    tests("schema-interfaces"),
     tests("schema-mapping"),
     tests("schema-unreferenced"),
     tests("server-url"),
