@@ -107,7 +107,7 @@ map: # the type mappings
       generics:
         - java.lang.String
         - java.lang.Double
-
+    - type: Schema =+ java.io.Serializable
     - type: Schema @ io.openapiprocessor.Annotation()
 
   schemas: # global schema mappings (optional)
@@ -117,6 +117,7 @@ map: # the type mappings
     - name: foo => java.util.List
     - name: bar => com.github.hauner.openapi.Bar
     - name: param @ io.openapiprocessor.Annotation()
+    - type: Schema =+ java.io.Serializable
     - type: Schema @ io.openapiprocessor.Annotation()
 
   responses:  # global response mappings (optional)
@@ -142,6 +143,7 @@ map: # the type mappings
 
       types:
         - type: Schema => java.util.Collection
+        - type: Schema =+ java.io.Serializable
 
       schemas:
         - type: Schema @ io.openapiprocessor.Annotation()
@@ -149,6 +151,7 @@ map: # the type mappings
       parameters:
         - name: foo => java.util.List
         - add: bar => java.util.Set
+        - type: Schema =+ java.io.Serializable
         - type: Schema @ io.openapiprocessor.Annotation()
 
       responses:

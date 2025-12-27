@@ -23,9 +23,6 @@
     },
     "bean-validation": {
       "$ref": "#/definitions/BeanValidation"
-    },
-    "annotation-targets": {
-      "$ref": "#/definitions/AnnotationTargets"
     }
   },
   "required": [
@@ -408,6 +405,8 @@
                 "$ref": "#/definitions/TypeMappingFormat"
               }, {
                 "$ref": "#/definitions/AnnotationMappingFormat"
+              }, {
+                "$ref": "#/definitions/InterfaceMappingFormat"
               }]
           },
           "generics": {
@@ -430,6 +429,8 @@
               "$ref": "#/definitions/TypeMappingFormat"
             }, {
               "$ref": "#/definitions/AnnotationMappingFormat"
+            }, {
+              "$ref": "#/definitions/InterfaceMappingFormat"
             }]
           },
           "add": {
@@ -443,6 +444,8 @@
               "$ref": "#/definitions/TypeMappingFormat"
             }, {
               "$ref": "#/definitions/AnnotationMappingFormat"
+            }, {
+              "$ref": "#/definitions/InterfaceMappingFormat"
             }]
           },
           "generics": {
@@ -493,21 +496,33 @@
     "TypeMappingFormat": {
       "description": "schema => fully qualified Java type.",
       "type": "string",
-      "pattern": "^.+\\s+=>\\s+.+$",
+      "pattern": "^.+\\s+(=>|map)\\s+.+$",
       "examples": [
         "array => java.util.Collection",
-        "FooSchema => io.openapiprocessor.Foo"
+        "FooSchema => io.openapiprocessor.Foo",
+        "FooSchema map io.openapiprocessor.Foo"
       ]
     },
     "AnnotationMappingFormat": {
       "description": "target @ fully qualified Java type with optional parameters.",
       "type": "string",
-      "pattern": "^.+\\s+@\\s+.+$",
+      "pattern": "^.+\\s+(@|annotate)\\s+.+$",
       "examples": [
         "FooSchema @ some.Annotation",
         "FooSchema @ some.Annotation(\"bar\")",
         "FooSchema @ some.Annotation(value = \"bar\", bar = 5)",
-        "property name @ some.Annotation"
+        "property name @ some.Annotation",
+        "FooSchema annotate some.Annotation"
+      ]
+    },
+    "InterfaceMappingFormat": {
+      "description": "target | fully qualified interface type.",
+      "type": "string",
+      "pattern": "^.+\\s+(=+|implement)\\s+.+$",
+      "examples": [
+        "FooSchema =+ java.io.Serializable",
+        "object =+ java.io.Serializable",
+        "FooSchema implement java.io.Serializable"
       ]
     },
     "TypeMappingGenerics": {
