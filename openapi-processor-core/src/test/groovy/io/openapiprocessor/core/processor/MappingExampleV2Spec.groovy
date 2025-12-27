@@ -47,6 +47,8 @@ map:
   types:
     - type: array => java.util.Collection
     - type: Foo @ fully.qualified.Annotation
+    - type: Foo =+ java.io.Serializable
+    - type: object =+ java.io.Serializable
 
     - type: Schema => java.util.Map
       generics:
@@ -59,6 +61,7 @@ map:
 
   parameters:
     - type: Foo @ fully.qualified.Annotation 
+    - type: Foo =+ java.io.Serializable
     - name: foo => java.util.List
     - name: bar => com.github.hauner.openapi.Bar
 
