@@ -516,7 +516,7 @@
       ]
     },
     "InterfaceMappingFormat": {
-      "description": "target | fully qualified interface type.",
+      "description": "target =+ fully qualified interface type.",
       "type": "string",
       "pattern": "^.+\\s+(=+|implement)\\s+.+$",
       "examples": [
