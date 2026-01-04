@@ -58,6 +58,10 @@ class MappingRepository(
         return globalMappings.findParameterTypeMapping(TypeMatcher(query), step.add(GlobalsStep()))
     }
 
+    fun findGlobalInterfaceParameterTypeMappings(query: MappingQuery, step: MappingStep): List<InterfaceTypeMapping> {
+        return globalMappings.findInterfaceParameterTypeMappings(InterfaceTypeMatcher(query), step.add(GlobalsStep()))
+    }
+
     fun findGlobalAnnotationParameterTypeMappings(query: MappingQuery, step: MappingStep): List<AnnotationTypeMapping> {
         return globalMappings.findAnnotationParameterTypeMapping(AnnotationTypeMatcher(query), step.add(GlobalsStep()))
     }
@@ -111,9 +115,14 @@ class MappingRepository(
         return endpointMappings[query.path]?.findTypeMapping(query, step.add(EndpointsStep(query)))
     }
 
-    fun findEndpointInterfaceTypeMapping(query: MappingQuery, step: MappingStep): List<InterfaceTypeMapping> {
+    fun findEndpointInterfaceTypeMappings(query: MappingQuery, step: MappingStep): List<InterfaceTypeMapping> {
         val mappings = endpointMappings[query.path] ?: return emptyList()
         return mappings.findInterfaceTypeMappings(query, step.add(EndpointsStep(query)))
+    }
+
+    fun findEndpointInterfaceParameterTypeMappings(query: MappingQuery, step: MappingStep): List<InterfaceTypeMapping> {
+        val mappings = endpointMappings[query.path] ?: return emptyList()
+        return mappings.findInterfaceParameterTypeMapping(query, step.add(EndpointsStep(query)))
     }
 
     fun findEndpointAnnotationTypeMapping(query: MappingQuery, step: MappingStep): List<AnnotationTypeMapping> {

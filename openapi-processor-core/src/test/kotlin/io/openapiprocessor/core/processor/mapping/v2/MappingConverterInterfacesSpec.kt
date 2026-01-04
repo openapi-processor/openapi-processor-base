@@ -64,7 +64,7 @@ class MappingConverterInterfacesSpec: StringSpec({
         val mappings = MappingConverter(mapping).convert().globalMappings
 
         val query = MappingFinderQuery(path = "/foo", name = "Foo")
-        val typeMappings = mappings.findInterfaceParameterTypeMapping(
+        val typeMappings = mappings.findInterfaceParameterTypeMappings(
             InterfaceTypeMatcher(query), ParametersStep("type"))
 
         typeMappings shouldHaveSize 2

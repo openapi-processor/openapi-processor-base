@@ -202,6 +202,47 @@ class MappingFinder(val options: ApiOptions) {
         return null
     }
 
+    /**
+     * find any interface mapping. The mappings are checked in the following order and the first match wins:
+     *
+     * - endpoint parameter type
+     * - endpoint type
+     * - global parameter type
+     * - global type
+     */
+    fun findAnyInterfaceTypeMapping(query: MappingQuery): List<InterfaceTypeMapping> {
+        val step = rootStep("looking for interface type mappings of", query)
+        try {
+            return findAnyInterfaceTypeMapping(query, step)
+        } finally {
+            step.log()
+        }
+    }
+
+    fun findAnyInterfaceTypeMapping(query: MappingQuery, step: MappingStep): List<InterfaceTypeMapping> {
+        val eppMapping = repository.findEndpointInterfaceParameterTypeMappings(query, step)
+        if (eppMapping.isNotEmpty()) {
+            return eppMapping
+        }
+
+        val eptMapping = repository.findEndpointInterfaceTypeMappings(query, step)
+        if (eptMapping.isNotEmpty()) {
+            return eptMapping
+        }
+
+        val gpMapping = repository.findGlobalInterfaceParameterTypeMappings(query, step)
+        if (gpMapping.isNotEmpty()) {
+            return gpMapping
+        }
+
+        val gtMapping = repository.findGlobalInterfaceTypeMappings(query, step)
+        if (gtMapping.isNotEmpty()) {
+            return gtMapping
+        }
+
+        return emptyList()
+    }
+
     // path/method/name/format/type
     fun findTypeMapping(query: MappingQuery): TypeMapping? {
         val step = rootStep("looking for type mapping of", query)
@@ -286,7 +327,7 @@ class MappingFinder(val options: ApiOptions) {
     }
 
     private fun findInterfaceTypeMapping(query: MappingQuery, step: MappingStep): List<InterfaceTypeMapping> {
-        val epMapping = repository.findEndpointInterfaceTypeMapping(query, step)
+        val epMapping = repository.findEndpointInterfaceTypeMappings(query, step)
         if (epMapping.isNotEmpty()) {
             return epMapping
         }

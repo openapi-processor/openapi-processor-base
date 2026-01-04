@@ -129,7 +129,7 @@ class Mappings(
         return mappings.first() as TypeMapping
     }
 
-    fun findInterfaceParameterTypeMapping(filter: MappingMatcher, step: MappingStep): List<InterfaceTypeMapping> {
+    fun findInterfaceParameterTypeMappings(filter: MappingMatcher, step: MappingStep): List<InterfaceTypeMapping> {
         val mappings = parameterTypeMappings.filter(filter, step.add(ParametersStep("type")))
         if (mappings.isEmpty()) {
             return emptyList()

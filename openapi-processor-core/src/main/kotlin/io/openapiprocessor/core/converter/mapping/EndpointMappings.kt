@@ -300,7 +300,7 @@ class EndpointMappings(
     fun findInterfaceParameterTypeMapping(query: MappingQuery, step: MappingStep): List<InterfaceTypeMapping> {
         val httpMethodMappings = methodMappings[query.method]
         if (httpMethodMappings != null) {
-            val methodMapping = httpMethodMappings.findInterfaceParameterTypeMapping(
+            val methodMapping = httpMethodMappings.findInterfaceParameterTypeMappings(
                 InterfaceTypeMatcher(query),
                 step.add(MethodsStep(query)))
 
@@ -309,7 +309,7 @@ class EndpointMappings(
             }
         }
 
-        val mapping = mappings.findInterfaceParameterTypeMapping(InterfaceTypeMatcher(query), step)
+        val mapping = mappings.findInterfaceParameterTypeMappings(InterfaceTypeMatcher(query), step)
         if (mapping.isNotEmpty()) {
             return mapping
         }

@@ -293,7 +293,7 @@ class DataTypeConverter(
     }
 
     private fun addInterfaces(schemaInfo: SchemaInfo, obj: ModelDataType) {
-        finder.findInterfaceTypeMappings(MappingFinderQuery(schemaInfo)).forEach { mapping ->
+        finder.findAnyInterfaceTypeMapping(MappingFinderQuery(schemaInfo)).forEach { mapping ->
             val targetType = mapping.getTargetType()
             val theInterface = InterfaceDataTypeExisting(DataTypeName(targetType.getName()), targetType.getPkg())
             obj.addInterface(theInterface)
