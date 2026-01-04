@@ -10,6 +10,7 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.converter.MappingFinderQuery
 import io.openapiprocessor.core.converter.mapping.matcher.InterfaceTypeMatcher
+import io.openapiprocessor.core.converter.mapping.steps.ParametersStep
 import io.openapiprocessor.core.converter.mapping.steps.TypesStep
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.processor.MappingReader
@@ -46,6 +47,34 @@ class MappingConverterInterfacesSpec: StringSpec({
         typeMappings[1].genericTypes[0].typeName shouldBe "java.lang.String"
     }
 
+    "read global interface parameter type mapping" {
+        val yaml = """
+            |openapi-processor-mapping: $VERSION
+            |
+            |options:
+            |  package-name: io.openapiprocessor.somewhere
+            | 
+            |map:
+            |  parameters:
+            |    - type: Foo =+ java.io.Serializable
+            |    - type: Foo =+ some.other.Interface<java.lang.String>
+            """.trimMargin()
+
+        val mapping = reader.read(yaml) as Mapping
+        val mappings = MappingConverter(mapping).convert().globalMappings
+
+        val query = MappingFinderQuery(path = "/foo", name = "Foo")
+        val typeMappings = mappings.findInterfaceParameterTypeMapping(
+            InterfaceTypeMatcher(query), ParametersStep("type"))
+
+        typeMappings shouldHaveSize 2
+        typeMappings[0].sourceTypeName shouldBe "Foo"
+        typeMappings[0].targetTypeName shouldBe "java.io.Serializable"
+        typeMappings[1].sourceTypeName shouldBe "Foo"
+        typeMappings[1].targetTypeName shouldBe "some.other.Interface"
+        typeMappings[1].genericTypes[0].typeName shouldBe "java.lang.String"
+     }
+
     "read endpoint interface mappings" {
         val yaml = """
            |openapi-processor-mapping: $VERSION
@@ -66,6 +95,35 @@ class MappingConverterInterfacesSpec: StringSpec({
 
         val query = MappingFinderQuery(path = "/foo", name = "Foo")
         val typeMappings = mappings["/foo"]!!.findInterfaceTypeMappings(query, TypesStep())
+
+        typeMappings shouldHaveSize 2
+        typeMappings[0].sourceTypeName shouldBe "Foo"
+        typeMappings[0].targetTypeName shouldBe "java.io.Serializable"
+        typeMappings[1].sourceTypeName shouldBe "Foo"
+        typeMappings[1].targetTypeName shouldBe "some.other.Interface"
+        typeMappings[1].genericTypes[0].typeName shouldBe "java.lang.String"
+    }
+
+    "read endpoint parameter interface mappings" {
+        val yaml = """
+           |openapi-processor-mapping: $VERSION
+           |
+           |options:
+           |  package-name: io.openapiprocessor.somewhere
+           | 
+           |map:
+           |  paths:
+           |    /foo:
+           |      parameters:
+           |        - type: Foo =+ java.io.Serializable
+           |        - type: Foo =+ some.other.Interface<java.lang.String>
+           """.trimMargin()
+
+        val mapping = reader.read (yaml) as Mapping
+        val mappings = MappingConverter(mapping).convert().endpointMappings
+
+        val query = MappingFinderQuery(path = "/foo", name = "Foo")
+        val typeMappings = mappings["/foo"]!!.findInterfaceParameterTypeMapping(query, TypesStep())
 
         typeMappings shouldHaveSize 2
         typeMappings[0].sourceTypeName shouldBe "Foo"

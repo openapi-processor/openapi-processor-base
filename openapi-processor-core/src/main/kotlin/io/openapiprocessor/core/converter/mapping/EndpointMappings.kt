@@ -297,6 +297,26 @@ class EndpointMappings(
         return emptyList()
     }
 
+    fun findInterfaceParameterTypeMapping(query: MappingQuery, step: MappingStep): List<InterfaceTypeMapping> {
+        val httpMethodMappings = methodMappings[query.method]
+        if (httpMethodMappings != null) {
+            val methodMapping = httpMethodMappings.findInterfaceParameterTypeMapping(
+                InterfaceTypeMatcher(query),
+                step.add(MethodsStep(query)))
+
+            if (methodMapping.isNotEmpty()) {
+                return methodMapping
+            }
+        }
+
+        val mapping = mappings.findInterfaceParameterTypeMapping(InterfaceTypeMatcher(query), step)
+        if (mapping.isNotEmpty()) {
+            return mapping
+        }
+
+        return emptyList()
+    }
+
     fun isExcluded(query: MappingQuery, step: MappingStep): Boolean {
         val httpMethodMappings = methodMappings[query.method]
         if (httpMethodMappings != null) {
