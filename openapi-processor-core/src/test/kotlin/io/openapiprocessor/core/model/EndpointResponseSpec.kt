@@ -6,8 +6,11 @@
 package io.openapiprocessor.core.model
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
+import io.openapiprocessor.core.builder.api.endpoint
 import io.openapiprocessor.core.model.datatypes.*
+import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
 
 class EndpointResponseSpec: StringSpec({
@@ -147,5 +150,35 @@ class EndpointResponseSpec: StringSpec({
         )
 
         er.hasSingleResponse(ResultStyle.ALL) shouldBe false
+    }
+
+    "accepts 1xx as success" {
+        val ep = endpoint("/foo", HttpMethod.GET) {
+            responses {
+                status("100") {
+                    empty()
+                }
+            }
+        }
+
+        val result = ep.endpointResponses
+
+        result shouldHaveSize 1
+        result.first().getResponseType(ResultStyle.SUCCESS) shouldBe "void"
+    }
+
+    "accepts 3xx as success" {
+        val ep = endpoint("/foo", HttpMethod.GET) {
+            responses {
+                status("302") {
+                    empty()
+                }
+            }
+        }
+
+        val result = ep.endpointResponses
+
+        result shouldHaveSize 1
+        result.first().getResponseType(ResultStyle.SUCCESS) shouldBe "void"
     }
 })
