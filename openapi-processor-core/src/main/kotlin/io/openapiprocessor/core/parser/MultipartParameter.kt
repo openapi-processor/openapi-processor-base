@@ -6,7 +6,7 @@
 package io.openapiprocessor.core.parser
 
 /**
- * "fake" parameter for framework specific annotation selection
+ * "fake" parameter for framework-specific annotation selection
  */
 class MultipartParameter(val parameter: String, val contentType: String? = null): Parameter {
 
