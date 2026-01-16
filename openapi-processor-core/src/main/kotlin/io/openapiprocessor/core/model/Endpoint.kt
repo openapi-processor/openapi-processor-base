@@ -192,7 +192,11 @@ class Endpoint(
             .toSet()
     }
 
-    private fun isSuccessCode(code: String) = code.startsWith("2")
+    private fun isSuccessCode(code: String): Boolean {
+        return code.startsWith("1")
+            || code.startsWith("2")
+            || code.startsWith("3")
+    }
 
     private fun hasContentType(response: Response) = response.contentType != "?"
 }

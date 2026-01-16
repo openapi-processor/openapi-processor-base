@@ -1,0 +1,24 @@
+openapi: 3.0.2
+info:
+  title: response success
+  version: 1.0.0
+
+paths:
+
+  /informational-is-success:
+    get:
+      responses:
+        '102':
+          headers:
+            Location:
+              schema:
+                type: string
+
+  /redirection-is-success:
+    get:
+      responses:
+        '302':
+          headers:
+            Location:
+              schema:
+                type: string
