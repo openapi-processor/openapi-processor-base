@@ -8,7 +8,7 @@ paths:
   /informational-is-success:
     get:
       responses:
-        '102':
+        '100':
           headers:
             Location:
               schema:

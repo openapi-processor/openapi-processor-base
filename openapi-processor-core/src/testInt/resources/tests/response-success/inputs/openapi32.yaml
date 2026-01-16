@@ -8,11 +8,7 @@ paths:
   /informational-is-success:
     get:
       responses:
-        '102':
-          headers:
-            Location:
-              schema:
-                type: string
+        '100': {}
 
   /redirection-is-success:
     get:

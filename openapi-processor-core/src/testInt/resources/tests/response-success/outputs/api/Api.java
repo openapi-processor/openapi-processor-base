@@ -7,7 +7,7 @@ import generated.support.Generated;
 @Generated(value = "openapi-processor-core", version = "test")
 public interface Api {
 
-    @Status("102")
+    @Status("100")
     @Mapping("/informational-is-success")
     void getInformationalIsSuccess();
 
