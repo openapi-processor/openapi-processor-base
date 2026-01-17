@@ -93,7 +93,7 @@ qualifiedType
     ;
 
 genericParameters
-    : (genericParameter | genericParameterAny) (',' genericParameter)*
+    : (genericParameter | genericParameterAny) (',' (genericParameter | genericParameterAny))*
     ;
 
 genericParameter

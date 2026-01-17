@@ -400,4 +400,28 @@ class AntlrParserSpec: StringSpec({
         mapping.sourceType shouldBe source
         mapping.targetType shouldBe null
     }
+
+    "map source type to fully qualified java target type with single wildcard generic parameters" {
+        val source = "SourceType => io.oap.TargetType <?>"
+
+        val mapping = parseMapping(source)
+        mapping.kind shouldBe Mapping.Kind.MAP
+        mapping.sourceType shouldBe "SourceType"
+        mapping.targetType shouldBe "io.oap.TargetType"
+        mapping.targetGenericTypes shouldBe listOf("?")
+        mapping.annotationType.shouldBeNull()
+        mapping.annotationParameters.shouldBeEmpty()
+    }
+
+    "map source type to fully qualified java target type with wildcard generic parameters" {
+        val source = "SourceType => io.oap.TargetType <java.lang.String, ?>"
+
+        val mapping = parseMapping(source)
+        mapping.kind shouldBe Mapping.Kind.MAP
+        mapping.sourceType shouldBe "SourceType"
+        mapping.targetType shouldBe "io.oap.TargetType"
+        mapping.targetGenericTypes shouldBe listOf("java.lang.String", "?")
+        mapping.annotationType.shouldBeNull()
+        mapping.annotationParameters.shouldBeEmpty()
+    }
 })
