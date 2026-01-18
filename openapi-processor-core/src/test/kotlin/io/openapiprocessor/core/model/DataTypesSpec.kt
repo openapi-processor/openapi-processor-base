@@ -55,4 +55,32 @@ class DataTypesSpec : StringSpec({
         dataTypes.getEnumDataTypes().size shouldBe 1
     }
 
+    "reduces ref count" {
+        dataTypes.add(ObjectDataType("Foo", "any", linkedMapOf(
+            Pair("foo", PropertyDataType(
+                readOnly = false,
+                writeOnly = false,
+                dataType = StringDataType(),
+                documentation = Documentation()))
+        )))
+        dataTypes.addRef("Foo")
+
+        dataTypes.relRef("Foo")
+
+        dataTypes.getRefCnt("Foo") shouldBe 0
+    }
+
+    "reducing ref count des not get negative" {
+        dataTypes.add(ObjectDataType("Foo", "any", linkedMapOf(
+            Pair("foo", PropertyDataType(
+                readOnly = false,
+                writeOnly = false,
+                dataType = StringDataType(),
+                documentation = Documentation()))
+        )))
+
+        dataTypes.relRef("Foo")
+
+        dataTypes.getRefCnt("Foo") shouldBe 0
+    }
 })

@@ -262,9 +262,9 @@ class ApiConverterRequestBodySpec: StringSpec({
         val api = apiConverter(options).convert(openApi)
 
         val dts = api.getDataTypes()
-        dts.find("Foo").shouldNotBeNull()
-        dts.find("MultipartPostRequestBodyJson").shouldNotBeNull()
-        dts.find("MultipartPostRequestBody").shouldBeNull()
+        dts.getRefCnt("Foo") shouldBe 1
+        dts.getRefCnt("MultipartPostRequestBodyJson") shouldBe 1
+        dts.getRefCnt("MultipartPostRequestBody") shouldBe 0
     }
 
     "converts request body application/x-www-form-urlencoded object schema properties to request parameters" {

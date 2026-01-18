@@ -19,6 +19,10 @@ class DataTypes {
         fun addRef() {
             refCount++
         }
+
+        fun relRef() {
+            refCount = (refCount -1).coerceAtLeast(0)
+        }
     }
 
     private val dataTypeInfos: MutableMap<String, DataTypeInfo> = mutableMapOf()
@@ -101,7 +105,7 @@ class DataTypes {
     }
 
     /**
-     * create "lazy" data type by name.
+     * create a "lazy" data type by name.
      *
      * @param name the data type name
      * @return the lazy data type
@@ -111,7 +115,7 @@ class DataTypes {
     }
 
     /**
-     * increment usage count of data type.
+     * increment usage count of a data type.
      *
      * @param name the data type name
      */
@@ -123,6 +127,22 @@ class DataTypes {
         }
 
         info.addRef()
+        log.debug("ref {} {}", name, info.refCount)
+    }
+
+    /**
+     * decrement usage count of a data type
+     *
+     * @param name the data type name
+     */
+    fun relRef(name: String) {
+        val info: DataTypeInfo? = dataTypeInfos[name]
+        if (info == null) {
+            log.error("unknown data type $name")
+            return
+        }
+
+        info.relRef()
         log.debug("ref {} {}", name, info.refCount)
     }
 

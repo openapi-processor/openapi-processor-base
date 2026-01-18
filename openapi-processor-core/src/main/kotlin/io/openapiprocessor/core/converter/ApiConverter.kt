@@ -395,7 +395,7 @@ class  ApiConverter(
             throw NoRequestBodySchemaException(info.getPath(), info.getContentType())
         }
 
-        dataTypes.del(dataType)
+        dataTypes.relRef(dataType.getName())
         val parameters = mutableListOf<ModelParameter>()
         dataType.forEach { property, propertyDataType ->
             val mpp = MultipartParameter(property, encodings[property]?.contentType)
@@ -410,7 +410,7 @@ class  ApiConverter(
             throw NoRequestBodySchemaException(info.getPath(), info.getContentType())
         }
 
-        dataTypes.del(dataType)
+        dataTypes.relRef(dataType.getName())
         val parameters = mutableListOf<ModelParameter>()
         dataType.forEach { property, propertyDataType ->
             parameters.add(framework.createQueryParameter(UrlencodedParameter(property), propertyDataType))
