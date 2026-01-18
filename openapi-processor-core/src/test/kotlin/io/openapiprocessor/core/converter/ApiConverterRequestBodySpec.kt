@@ -117,7 +117,7 @@ class ApiConverterRequestBodySpec: StringSpec({
                       description: empty
             """)
 
-        val e = shouldThrow<MultipartResponseBodyException> {
+        val e = shouldThrow<NoRequestBodySchemaException> {
             apiConverter(framework = mockk()).convert(openApi)
         }
 

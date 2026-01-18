@@ -9,9 +9,9 @@ package io.openapiprocessor.core.converter
  * thrown when the ApiConverter hits a multipart/form-data or application/x-www-form-urlencoded
  * response body where the schema is not an object.
  */
-class NoRequestBodySchemaException(private val path: String): RuntimeException() {
+class NoRequestBodySchemaException(private val path: String, val contentType: String): RuntimeException() {
 
     override val message: String
-        get() = "the schema of the request body of $path should be an object!"
+        get() = "the request body schema of $path ($contentType) should be an object!"
 
 }

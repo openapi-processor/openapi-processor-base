@@ -233,7 +233,7 @@ class  ApiConverter(
             val info = SchemaInfo(
                 SchemaInfo.Endpoint(ctx.path, ctx.method),
                 getInlineRequestBodyName (ctx.path, ctx.method),
-                "",
+                contentType,
                 mediaType.getSchema(),
                 ctx.resolver)
 
@@ -392,7 +392,7 @@ class  ApiConverter(
         dataTypes: DataTypes): Collection<ModelParameter> {
         val dataType = convertDataType(info, dataTypes)
         if (dataType !is ObjectDataType) {
-            throw MultipartResponseBodyException(info.getPath())
+            throw NoRequestBodySchemaException(info.getPath(), info.getContentType())
         }
 
         dataTypes.del(dataType)
@@ -407,7 +407,7 @@ class  ApiConverter(
     private fun createFormParameter(info: SchemaInfo, dataTypes: DataTypes): Collection<ModelParameter> {
         val dataType = convertDataType(info, dataTypes)
         if (dataType !is ObjectDataType) {
-            throw NoRequestBodySchemaException(info.getPath())
+            throw NoRequestBodySchemaException(info.getPath(), info.getContentType())
         }
 
         dataTypes.del(dataType)
