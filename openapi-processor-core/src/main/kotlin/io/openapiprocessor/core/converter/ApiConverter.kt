@@ -30,6 +30,7 @@ import io.openapiprocessor.core.model.Response as ModelResponse
 import io.openapiprocessor.core.model.parameters.Parameter as ModelParameter
 
 const val MULTIPART = "multipart/"
+const val URLENCODED = "application/x-www-form-urlencoded"
 const val INTERFACE_DEFAULT_NAME = ""
 
 /**
@@ -236,8 +237,12 @@ class  ApiConverter(
                 mediaType.getSchema(),
                 ctx.resolver)
 
-            if (contentType.startsWith(MULTIPART)) {
+            if (isMultipart(contentType)) {
                 params.addAll(createMultipartParameter(info, mediaType.encodings, ctx.dataTypes))
+
+            } else if (isUrlencoded(contentType)) {
+                params.addAll(createFormParameter(info, ctx.dataTypes))
+
             } else {
                 bodies.add (createRequestBody (contentType, info, requestBody, ctx.dataTypes))
             }
@@ -245,6 +250,10 @@ class  ApiConverter(
 
         return RequestBodies(bodies, params)
     }
+
+    private fun isMultipart(contentType: String): Boolean = contentType.startsWith(MULTIPART)
+
+    private fun isUrlencoded(contentType: String): Boolean = contentType.startsWith(URLENCODED)
 
     private fun collectResponses(responses: Map<HttpStatus, Response>, ctx: ApiConverterContext): Map<ModelHttpStatus, List<ModelResponse>> {
         val resultResponses: MutableMap<HttpStatus, List<ModelResponse>>  = mutableMapOf()
@@ -274,7 +283,7 @@ class  ApiConverter(
         // to check if a response marker interface is wanted it is necessary to know if the responses have the same
         // result data type. In case they have the same data type we do not need the marker interface.
         //
-        // Unfortunately we have to calculate the result data types to achieve this because it is currently not possible
+        // Unfortunately, we have to calculate the result data types to achieve this because it is currently not possible
         // to detect this from the parsed OpenAPI.
 
         val checkResponses: MutableMap<ModelHttpStatus, List<ModelResponse>> = mutableMapOf()
@@ -390,8 +399,21 @@ class  ApiConverter(
         val parameters = mutableListOf<ModelParameter>()
         dataType.forEach { property, propertyDataType ->
             val mpp = MultipartParameter(property, encodings[property]?.contentType)
-            val parameter = framework.createMultipartParameter(mpp, propertyDataType)
-            parameters.add(parameter)
+            parameters.add(framework.createMultipartParameter(mpp, propertyDataType))
+        }
+        return parameters
+    }
+
+    private fun createFormParameter(info: SchemaInfo, dataTypes: DataTypes): Collection<ModelParameter> {
+        val dataType = convertDataType(info, dataTypes)
+        if (dataType !is ObjectDataType) {
+            throw NoRequestBodySchemaException(info.getPath())
+        }
+
+        dataTypes.del(dataType)
+        val parameters = mutableListOf<ModelParameter>()
+        dataType.forEach { property, propertyDataType ->
+            parameters.add(framework.createQueryParameter(UrlencodedParameter(property), propertyDataType))
         }
         return parameters
     }

@@ -52,6 +52,7 @@ val ALL_3x: List<TestParams2> = join(
     testX("params-path-simple-data-types"), // framework specific
     tests("params-request-body"), // framework specific
     testX("params-request-body-multipart-form-data"), // framework specific
+    testX("params-request-body-form-urlencoded"), // framework specific
     testX("params-simple-data-types"), // framework specific
     testX("params-unnecessary"),
     tests("ref-array-items-nested"),

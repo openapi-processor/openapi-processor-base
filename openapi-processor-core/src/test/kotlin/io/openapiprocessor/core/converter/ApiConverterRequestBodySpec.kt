@@ -266,4 +266,64 @@ class ApiConverterRequestBodySpec: StringSpec({
         dts.find("MultipartPostRequestBodyJson").shouldNotBeNull()
         dts.find("MultipartPostRequestBody").shouldBeNull()
     }
+
+    "converts request body application/x-www-form-urlencoded object schema properties to request parameters" {
+        val openApi = parseApiBody("""
+            paths:
+              /foo:
+                post:
+                  requestBody:
+                    required: true
+                    content:
+                      application/x-www-form-urlencoded:
+                        schema:
+                          type: object
+                          properties:
+                            foo:
+                              type: string
+                            bar:
+                              type: boolean
+                  responses:
+                    '204':
+                      description: empty
+            """)
+
+        val api = apiConverter().convert(openApi)
+
+        val itf = api.getInterfaces().first()
+        val ep = itf.endpoints.first()
+        val foo = ep.parameters[0]
+        val bar = ep.parameters[1]
+
+        foo.dataType.getName() shouldBe "string"
+        foo.dataType.getTypeName() shouldBe "String"
+        foo.name shouldBe "foo"
+
+        bar.dataType.getName() shouldBe "boolean"
+        bar.dataType.getTypeName() shouldBe "Boolean"
+        bar.name shouldBe "bar"
+    }
+
+    "throws when request body application/x-www-form-urlencoded is not an object schema" {
+        val openApi = parseApiBody("""
+            paths:
+              /multipart/broken:
+                post:
+                  requestBody:
+                    required: true
+                    content:
+                      application/x-www-form-urlencoded:
+                        schema:
+                          type: string
+                  responses:
+                    '204':
+                      description: empty
+            """)
+
+        val e = shouldThrow<NoRequestBodySchemaException> {
+            apiConverter(framework = mockk()).convert(openApi)
+        }
+
+        e.message shouldContain "/multipart/broken"
+    }
 })
