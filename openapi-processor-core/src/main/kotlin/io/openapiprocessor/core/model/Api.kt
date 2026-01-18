@@ -22,7 +22,7 @@ class Api(
     private var resources: List<Resource> = emptyList(),
 
     /**
-     * named data types (i.e. $ref) used in the OpenAPI description.
+     * named data types (i.e., $ref) used in the OpenAPI description.
      */
     private val dataTypes: DataTypes = DataTypes()
 ) {
