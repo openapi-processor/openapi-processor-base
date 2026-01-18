@@ -19,7 +19,7 @@ class MultipartParameter(val parameter: String, val contentType: String? = null)
     }
 
     override fun getSchema(): Schema {
-        throw NotImplementedError() // never called on MultipartParameter
+        throw NotImplementedError() // never called
     }
 
     override fun isRequired(): Boolean {
