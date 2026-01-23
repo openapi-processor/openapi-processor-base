@@ -50,7 +50,7 @@ mockk = "io.mockk:mockk:1.14.7"
 
 diff-utils = "io.github.java-diff-utils:java-diff-utils:4.16"
 
-groovy-bom = "org.apache.groovy:groovy-bom:5.0.3"
+groovy-bom = "org.apache.groovy:groovy-bom:5.0.4"
 spock = "org.spockframework:spock-core:2.4-groovy-5.0"
 
 # for buildSrc convention plugins
