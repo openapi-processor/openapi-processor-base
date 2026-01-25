@@ -7,6 +7,7 @@ package io.openapiprocessor.core.converter.mapping
 
 import io.openapiprocessor.core.converter.mapping.matcher.*
 import io.openapiprocessor.core.converter.mapping.steps.*
+import io.openapiprocessor.core.processor.mapping.v2.BodyStyle
 import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -17,6 +18,10 @@ class MappingRepository(
     private val extensionMappings: Map<String /* x- */, ExtensionMappings> = emptyMap()
 ) {
     val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
+
+    fun getGlobalBodyStyleMapping(step: MappingStep): BodyStyle? {
+        return globalMappings.getBodyStyle(step.add(GlobalsStep()))
+    }
 
     fun getGlobalResultTypeMapping(step: MappingStep): ResultTypeMapping? {
         return globalMappings.getResultTypeMapping(step.add(GlobalsStep()))
@@ -85,6 +90,10 @@ class MappingRepository(
 
     fun findGlobalContentTypeMapping(query: MappingQuery, step: MappingStep): ContentTypeMapping? {
         return globalMappings.findContentTypeMapping(ContentTypeMatcher(query), step.add(GlobalsStep()))
+    }
+
+    fun getEndpointBodyStyleMapping(query: MappingQuery, step: MappingStep): BodyStyle? {
+        return endpointMappings[query.path]?.getBodyStyle(query, step.add(EndpointsStep(query)))
     }
 
     fun getEndpointResultTypeMapping(query: MappingQuery, step: MappingStep): ResultTypeMapping? {

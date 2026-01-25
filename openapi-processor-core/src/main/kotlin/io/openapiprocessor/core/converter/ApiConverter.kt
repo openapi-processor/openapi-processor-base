@@ -17,6 +17,7 @@ import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.parser.HttpStatus
 import io.openapiprocessor.core.parser.RequestBody
 import io.openapiprocessor.core.parser.Response
+import io.openapiprocessor.core.processor.mapping.v2.BodyStyle
 import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
 import io.openapiprocessor.core.support.capitalizeFirstChar
 import io.openapiprocessor.core.writer.Identifier
@@ -241,7 +242,7 @@ class  ApiConverter(
                 params.addAll(createMultipartParameter(info, mediaType.encodings, ctx.dataTypes))
 
             } else if (isUrlencoded(contentType)) {
-                params.addAll(createFormParameter(info, ctx.dataTypes))
+                params.addAll(createUrlencodedParameter(info, requestBody, ctx.dataTypes))
 
             } else {
                 bodies.add (createRequestBody (contentType, info, requestBody, ctx.dataTypes))
@@ -379,13 +380,13 @@ class  ApiConverter(
     private fun createRequestBody(contentType: String, info: SchemaInfo, requestBody: RequestBody, dataTypes: DataTypes): ModelRequestBody {
         val dataType = convertDataType(info, dataTypes)
 
-        val changedType = if (dataType.isCollection()) {
+        val wrappedType = if (dataType.isCollection()) {
             multiDataTypeWrapper.wrap(dataType, info)
         } else {
             singleDataTypeWrapper.wrap(dataType, info)
         }
 
-        return framework.createRequestBody(contentType, requestBody, changedType)
+        return framework.createRequestBody(contentType, requestBody, wrappedType)
     }
 
     private fun createMultipartParameter(info: SchemaInfo, encodings: Map<String, Encoding>,
@@ -404,16 +405,21 @@ class  ApiConverter(
         return parameters
     }
 
-    private fun createFormParameter(info: SchemaInfo, dataTypes: DataTypes): Collection<ModelParameter> {
+    private fun createUrlencodedParameter(info: SchemaInfo, requestBody: RequestBody, dataTypes: DataTypes): Collection<ModelParameter> {
         val dataType = convertDataType(info, dataTypes)
         if (dataType !is ObjectDataType) {
             throw NoRequestBodySchemaException(info.getPath(), info.getContentType())
         }
 
-        dataTypes.relRef(dataType.getName())
         val parameters = mutableListOf<ModelParameter>()
-        dataType.forEach { property, propertyDataType ->
-            parameters.add(framework.createQueryParameter(UrlencodedParameter(property), propertyDataType))
+        val bodyStyle = getBodyStyle(info.getPath(), info.getMethod())
+        if (bodyStyle == BodyStyle.OBJECT) {
+            parameters.add(framework.createQueryParameter(UrlencodedRequestBody(requestBody), dataType))
+        } else {
+            dataTypes.relRef(dataType.getName())
+            dataType.forEach { property, propertyDataType ->
+                parameters.add(framework.createQueryParameter(UrlencodedParameter(property), propertyDataType))
+            }
         }
         return parameters
     }
@@ -478,6 +484,10 @@ class  ApiConverter(
 
     private fun isExcluded(path: String, method: HttpMethod): Boolean {
         return mappingFinder.isEndpointExcluded(MappingFinderQuery(path, method))
+    }
+
+    private fun getBodyStyle(path: String, method: HttpMethod): BodyStyle {
+        return mappingFinder.findBodyStyleMapping(MappingFinderQuery(path, method))
     }
 
     private fun getResultStyle(path: String, method: HttpMethod): ResultStyle {

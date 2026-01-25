@@ -11,8 +11,6 @@ import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
-import io.kotest.matchers.nulls.shouldBeNull
-import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import io.mockk.mockk
@@ -302,6 +300,45 @@ class ApiConverterRequestBodySpec: StringSpec({
         bar.dataType.getName() shouldBe "boolean"
         bar.dataType.getTypeName() shouldBe "Boolean"
         bar.name shouldBe "bar"
+    }
+
+    "converts request body application/x-www-form-urlencoded object to request parameter" {
+        val options = parseOptions(mapping =
+            """
+            |map:
+            |  paths:
+            |    /foo:
+            |      body-style: object
+            """)
+
+        val openApi = parseApiBody("""
+            paths:
+              /foo:
+                post:
+                  requestBody:
+                    required: true
+                    content:
+                      application/x-www-form-urlencoded:
+                        schema:
+                          type: object
+                          properties:
+                            foo:
+                              type: string
+                            bar:
+                              type: boolean
+                  responses:
+                    '204':
+                      description: empty
+            """)
+
+        val api = apiConverter(options).convert(openApi)
+
+        val itf = api.getInterfaces().first()
+        val ep = itf.endpoints.first()
+        val body = ep.parameters[0]
+
+        body.dataType.getTypeName() shouldBe "FooPostRequestBody"
+        body.name shouldBe "body"
     }
 
     "throws when request body application/x-www-form-urlencoded is not an object schema" {

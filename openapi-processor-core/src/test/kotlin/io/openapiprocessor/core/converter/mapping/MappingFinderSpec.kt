@@ -17,6 +17,7 @@ import io.openapiprocessor.core.converter.MappingFinder
 import io.openapiprocessor.core.converter.MappingFinderQuery
 import io.openapiprocessor.core.parser.HttpMethod
 import io.openapiprocessor.core.processor.MappingReader
+import io.openapiprocessor.core.processor.mapping.v2.BodyStyle
 import io.openapiprocessor.core.processor.mapping.v2.Mapping
 import io.openapiprocessor.core.processor.mapping.v2.MappingConverter
 import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
@@ -265,6 +266,22 @@ class MappingFinderSpec: StringSpec({
         result.shouldNotBeNull()
         result.sourceTypeName.shouldBe("null")
         result.targetTypeName.shouldBe("org.openapitools.jackson.nullable.JsonNullable")
+    }
+
+    "find body style option mapping" {
+        BodyStyle.entries.toTypedArray().forAll { style ->
+            val options = parseOptions(mapping =
+                """
+                |map:
+                |  body-style: ${style.toString().lowercase()}
+                """)
+
+            val finder = mappingFinder(options)
+
+            val result = finder.findBodyStyleMapping(query())
+
+            result.shouldBe(style)
+        }
     }
 
     "find unset result style option mapping" {

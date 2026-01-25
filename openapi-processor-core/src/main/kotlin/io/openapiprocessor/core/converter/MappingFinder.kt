@@ -9,6 +9,7 @@ import io.openapiprocessor.core.converter.mapping.*
 import io.openapiprocessor.core.converter.mapping.steps.MappingStep
 import io.openapiprocessor.core.converter.mapping.steps.RootStep
 import io.openapiprocessor.core.converter.mapping.steps.RootStepX
+import io.openapiprocessor.core.processor.mapping.v2.BodyStyle
 import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
 
 class MappingFinder(val options: ApiOptions) {
@@ -18,6 +19,29 @@ class MappingFinder(val options: ApiOptions) {
         options.endpointMappings,
         options.extensionMappings
     )
+
+    fun findBodyStyleMapping(query: MappingQuery): BodyStyle {
+        val step = rootStep("looking for body style mapping of", query)
+        try {
+            return findBodyStyleMapping(query, step)
+        } finally {
+            step.log()
+        }
+    }
+
+    private fun findBodyStyleMapping(query: MappingQuery, step: MappingStep): BodyStyle {
+        val epMapping = repository.getEndpointBodyStyleMapping(query, step)
+        if (epMapping != null) {
+            return epMapping
+        }
+
+        val gMapping = repository.getGlobalBodyStyleMapping(step)
+        if(gMapping != null) {
+            return gMapping
+        }
+
+        return BodyStyle.DESTRUCTURE
+    }
 
     // path/method
     fun getResultTypeMapping(query: MappingQuery): ResultTypeMapping? {
