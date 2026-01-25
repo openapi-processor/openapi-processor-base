@@ -85,6 +85,7 @@ map: # the type mappings
 
   # global mappings, applies to all paths/endpoints
 
+  # x-www-form-urlencoded as object ord destructured parameters
   body-style: destructure
 
   # response wrapper (optional)

@@ -48,7 +48,7 @@ class ProcessorPendingSpec: StringSpec({
 
 private fun sources(): Collection<TestSet> {
     return listOf(
-        testSet("endpoint-http-mapping", "SWAGGER", API_30, model = "model"),
+        testSet("params-request-body-form-urlencoded", "INTERNAL", API_30, model = "model"),
 //        testSet("endpoint-http-mapping-32", "INTERNAL", API_32, model = "record"),
     )
 }
