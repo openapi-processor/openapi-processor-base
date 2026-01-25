@@ -13,6 +13,11 @@ import com.fasterxml.jackson.annotation.JsonFormat
 data class Map(
 
     /**
+     * controller method body parameter(s), e.g. object or destructured
+     */
+    val bodyStyle: BodyStyle? = null,
+
+    /**
      * global result mapping
      */
     val result: String? = null,

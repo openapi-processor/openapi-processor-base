@@ -15,12 +15,17 @@ data class Path(
     val exclude: Boolean = false,
 
     /**
+     * controller method body parameter(s), e.g., object or destructured
+     */
+    val bodyStyle: BodyStyle? = null,
+
+    /**
      * path limited result mapping
      */
     val result: String?,
 
     /**
-     * controller method return type, e.g. **success** response or **all** responses
+     * controller method return type, e.g., **success** response or **all** responses
      */
     val resultStyle: ResultStyle? = null,
 

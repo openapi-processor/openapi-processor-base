@@ -6,9 +6,11 @@
 package io.openapiprocessor.core.converter.mapping
 
 import io.openapiprocessor.core.converter.mapping.steps.*
+import io.openapiprocessor.core.processor.mapping.v2.BodyStyle
 import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
 
 class Mappings(
+    private val bodyStyle: BodyStyle? = null,
     private val resultTypeMapping: ResultTypeMapping? = null,
     private val resultStyle: ResultStyle? = null,
     private val resultStatus: Boolean? = null,
@@ -21,6 +23,13 @@ class Mappings(
     private val responseTypeMappings: TypeMappings = TypeMappings(),
     private val exclude: Boolean = false
 ) {
+    fun getBodyStyle(step: MappingStep): BodyStyle? {
+        if (bodyStyle != null) {
+            step.add(StringStep("body-style: $bodyStyle", true))
+        }
+        return bodyStyle
+    }
+
     fun getResultTypeMapping(step: MappingStep): ResultTypeMapping? {
         if (resultTypeMapping != null) {
             step.add(StringStep("result-type: ${resultTypeMapping.targetTypeName}", true))

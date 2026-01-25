@@ -9,12 +9,30 @@ import io.openapiprocessor.core.converter.mapping.matcher.*
 import io.openapiprocessor.core.converter.mapping.steps.MappingStep
 import io.openapiprocessor.core.converter.mapping.steps.MethodsStep
 import io.openapiprocessor.core.parser.HttpMethod
+import io.openapiprocessor.core.processor.mapping.v2.BodyStyle
 import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
 
 class EndpointMappings(
     private val mappings: Mappings,
     private val methodMappings: Map<HttpMethod, Mappings>
 ) {
+    fun getBodyStyle(query: MappingQuery, step: MappingStep): BodyStyle? {
+        val httpMethodMappings = methodMappings[query.method]
+        if (httpMethodMappings != null) {
+            val methodMapping = httpMethodMappings.getBodyStyle(step.add(MethodsStep(query)))
+            if (methodMapping != null) {
+                return methodMapping
+            }
+        }
+
+        val mapping = mappings.getBodyStyle(step)
+        if (mapping != null) {
+            return mapping
+        }
+
+        return null
+    }
+
     fun getResultTypeMapping(query: MappingQuery, step: MappingStep): ResultTypeMapping? {
         val httpMethodMappings = methodMappings[query.method]
         if (httpMethodMappings != null) {

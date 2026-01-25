@@ -32,6 +32,7 @@ class MappingConverter(val mapping: MappingV2) {
     }
 
     private fun convertGlobalMappings(map: MapV2): Mappings {
+        var bodyStyle: BodyStyle? = null
         var resultTypeMapping: ResultTypeMapping? = null
         var resultStyle: ResultStyle? = null
         var resultStatus: Boolean? = null
@@ -41,6 +42,10 @@ class MappingConverter(val mapping: MappingV2) {
         val schemaTypeMappings = mutableListOf<Mapping>()
         val parameterTypeMappings = mutableListOf<Mapping>()
         val responseTypeMappings = mutableListOf<Mapping>()
+
+        if (map.bodyStyle != null) {
+            bodyStyle = map.bodyStyle
+        }
 
         if (map.result != null) {
             resultTypeMapping = convertResult(map.result)
@@ -79,6 +84,7 @@ class MappingConverter(val mapping: MappingV2) {
         }
 
         return Mappings(
+            bodyStyle,
             resultTypeMapping,
             resultStyle,
             resultStatus,
@@ -349,6 +355,7 @@ class MappingConverter(val mapping: MappingV2) {
     }
 
     private fun convertPath(source: Path): Mappings {
+        var bodyStyle: BodyStyle? = null
         var resultTypeMapping: ResultTypeMapping? = null
         var resultStyle: ResultStyle? = null
         var resultStatus: Boolean? = null
@@ -359,6 +366,10 @@ class MappingConverter(val mapping: MappingV2) {
         val schemaTypeMappings = mutableListOf<Mapping>()
         val parameterTypeMappings = mutableListOf<Mapping>()
         val responseTypeMappings = mutableListOf<Mapping>()
+
+        if (source.bodyStyle != null) {
+            bodyStyle = source.bodyStyle
+        }
 
         if (source.result != null) {
             resultTypeMapping = convertResult(source.result)
@@ -401,6 +412,7 @@ class MappingConverter(val mapping: MappingV2) {
         }
 
         return Mappings(
+            bodyStyle,
             resultTypeMapping,
             resultStyle,
             resultStatus,
@@ -415,6 +427,7 @@ class MappingConverter(val mapping: MappingV2) {
     }
 
     private fun convertPathMethod(source: PathMethod): Mappings {
+        var bodyStyle: BodyStyle? = null
         var resultTypeMapping: ResultTypeMapping? = null
         var resultStyle: ResultStyle? = null
         var resultStatus: Boolean? = null
@@ -425,6 +438,10 @@ class MappingConverter(val mapping: MappingV2) {
         val schemaTypeMappings = mutableListOf<Mapping>()
         val parameterTypeMappings = mutableListOf<Mapping>()
         val responseTypeMappings = mutableListOf<Mapping>()
+
+        if (source.bodyStyle != null) {
+            bodyStyle = source.bodyStyle
+        }
 
         if (source.result != null) {
             resultTypeMapping = convertResult(source.result)
@@ -467,6 +484,7 @@ class MappingConverter(val mapping: MappingV2) {
         }
 
         return Mappings(
+            bodyStyle,
             resultTypeMapping,
             resultStyle,
             resultStatus,
