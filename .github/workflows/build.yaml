@@ -70,7 +70,7 @@ jobs:
 
     - name: run tests
       run: |
-        ./gradlew javaToolchains check --warning-mode all --stacktrace -Dorg.gradle.configuration-cache.read-only=true
+        ./gradlew javaToolchains check --stacktrace -Dorg.gradle.configuration-cache.read-only=true
 
     - name: archive test results
       uses: actions/upload-artifact@v6
