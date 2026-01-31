@@ -1,13 +1,8 @@
 plugins {
     base
-    alias(libs.plugins.jacoco)
+    id("jacoco-report-aggregation")
     id("io.openapiprocessor.build.plugin.publish")
 }
-
-// check
-//tasks.named("build") {
-//    dependsOn ("jacocoLogAggregatedCoverage")
-//}
 
 group = "io.openapiprocessor"
 version = libs.versions.processor.get()
