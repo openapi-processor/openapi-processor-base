@@ -10,6 +10,7 @@ dependencies {
     implementation(libs.plugin.checker)
     implementation(libs.plugin.updates)
     implementation(libs.plugin.build)
+    implementation(libs.plugin.jacocolog)
 
     implementation(platform(libs.jackson.bom))
     implementation(libs.jackson.kotlin)

@@ -1,5 +1,6 @@
 plugins {
     id("openapiprocessor.test")
+    id("openapiprocessor.coverage")
     id("openapiprocessor.library")
     id("openapiprocessor.publish")
 }

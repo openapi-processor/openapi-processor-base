@@ -4,8 +4,10 @@ import org.gradle.accessors.dm.LibrariesForLibs
 
 plugins {
     java
+//    jacoco
     groovy
     kotlin
+//    id("org.barfuin.gradle.jacocolog")
 }
 
 // see buildSrc/build.gradle.kts

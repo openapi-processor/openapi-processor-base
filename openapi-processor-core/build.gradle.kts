@@ -5,12 +5,11 @@ plugins {
     id("openapiprocessor.library")
     id("openapiprocessor.test")
     id("openapiprocessor.testInt")
+    id("openapiprocessor.coverage")
     id("openapiprocessor.publish")
     id("openapiprocessor.newapi")
     alias(libs.plugins.versions)
     alias(libs.plugins.sonar)
-    id("jacoco-report-aggregation")
-    alias(libs.plugins.jacoco)
 }
 
 versions {

@@ -5,7 +5,6 @@ import org.gradle.kotlin.dsl.withType
 
 plugins {
     `java-library`
-    jacoco
     kotlin
     id("com.github.ben-manes.versions")
 }
@@ -44,19 +43,6 @@ dependencies {
 //    checkerFramework(libs.checker)
 }
 
-jacoco {
-    toolVersion = libs.versions.jacoco.get()
-}
-
-tasks.named<JacocoReport>("jacocoTestReport") {
-    reports {
-        xml.required.set(true)
-        csv.required.set(false)
-        html.required.set(false)
-        //html.outputLocation.set(layout.buildDirectory.dir("jacocoHtml"))
-    }
-}
-
 tasks.withType<Test>().configureEach {
     jvmArgs(listOf(
         "--add-exports", "jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED",
@@ -70,8 +56,6 @@ tasks.withType<Test>().configureEach {
     javaLauncher.set(javaToolchains.launcherFor {
         languageVersion.set(JavaLanguageVersion.of(libs.versions.test.jdk.get()))
     })
-
-    finalizedBy(tasks.named("jacocoTestReport"))
 }
 
 tasks.withType<DependencyUpdatesTask> {
