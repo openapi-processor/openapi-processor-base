@@ -193,7 +193,7 @@ class MappingConverterParameterSpec: StringSpec({
         add.mapping.sourceTypeFormat.shouldBeNull()
         add.mapping.targetTypeName shouldBe "mapping.Foo"
         add.annotation!!.type shouldBe "annotation.Bar"
-        add.annotation!!.parameters.shouldBeEmpty()
+        add.annotation.parameters.shouldBeEmpty()
     }
 
     "read multiple global additional parameter type mappings" {

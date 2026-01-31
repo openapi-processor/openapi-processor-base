@@ -107,8 +107,8 @@ class ApiConverterParameterSpec: StringSpec({
         p.dataType.getName() shouldBe "String"
         p.dataType.getPackageName() shouldBe "java.lang"
         p.annotationDataType!!.getName() shouldBe "Bar"
-        p.annotationDataType!!.getPackageName() shouldBe "bar"
-        p.annotationDataType!!.getParameters()?.shouldHaveSize(1)
-        p.annotationDataType!!.getParameters()?.get("one")?.value shouldBe """"value""""
+        p.annotationDataType.getPackageName() shouldBe "bar"
+        p.annotationDataType.getParameters()?.shouldHaveSize(1)
+        p.annotationDataType.getParameters()?.get("one")?.value shouldBe """"value""""
     }
 })
