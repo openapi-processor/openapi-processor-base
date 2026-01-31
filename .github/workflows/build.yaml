@@ -109,7 +109,8 @@ jobs:
         PUBLISH_USER: ${{ secrets.PUBLISH_USER }}
         PUBLISH_KEY: ${{ secrets.PUBLISH_KEY }}
       run: |
-        ./gradlew publishToMavenCentral --stacktrace -Dorg.gradle.configuration-cache.read-only=true
+        ./gradlew publishToMavenCentral --stacktrace
+#        -Dorg.gradle.configuration-cache.read-only=true
 
   sonar:
     needs: [publish]
