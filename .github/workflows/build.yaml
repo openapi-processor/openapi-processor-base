@@ -70,7 +70,7 @@ jobs:
 
     - name: run tests
       run: |
-        ./gradlew javaToolchains check --warning-mode all --stacktrace
+        ./gradlew javaToolchains check --warning-mode all --stacktrace -Dorg.gradle.configuration-cache.read-only=true
 
     - name: archive test results
       uses: actions/upload-artifact@v6
@@ -109,7 +109,7 @@ jobs:
         PUBLISH_USER: ${{ secrets.PUBLISH_USER }}
         PUBLISH_KEY: ${{ secrets.PUBLISH_KEY }}
       run: |
-        ./gradlew publishToMavenCentral --stacktrace
+        ./gradlew publishToMavenCentral --stacktrace -Dorg.gradle.configuration-cache.read-only=true
 
   sonar:
     needs: [publish]
@@ -148,4 +148,4 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: |
-        ./gradlew check sonar --stacktrace
+        ./gradlew check sonar --stacktrace -Dorg.gradle.configuration-cache.read-only=true
