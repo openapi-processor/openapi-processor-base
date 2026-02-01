@@ -9,7 +9,7 @@ build-jdk = "11"
 test-jdk = "17"
 build-plugins = "2026.1"
 
-jacoco = "0.8.13"
+jacoco = "0.8.14"
 jacocolog = "4.0.1"
 updates = "0.53.0"
 
