@@ -46,7 +46,7 @@ logback = "ch.qos.logback:logback-classic:1.5.26"
 kotest-bom = "io.kotest:kotest-bom:6.1.1"
 kotest-runner = { module = "io.kotest:kotest-runner-junit5" }
 kotest-table = { module = "io.kotest:kotest-assertions-table" }
-mockk = "io.mockk:mockk:1.14.7"
+mockk = "io.mockk:mockk:1.14.9"
 
 diff-utils = "io.github.java-diff-utils:java-diff-utils:4.16"
 
