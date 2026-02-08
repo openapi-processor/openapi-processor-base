@@ -169,7 +169,7 @@ class ApiConverterSpec: StringSpec({
 
         converter.convert(openApi)
 
-        verify { log.warn("endpoint '/foo' has no success 2xx response.") }
+        verify { log.warn("endpoint '/foo' has no success 1xx/2xx/3xx response.") }
     }
 
     "generates unreferenced models" {
