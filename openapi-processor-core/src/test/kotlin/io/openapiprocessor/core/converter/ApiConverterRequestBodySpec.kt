@@ -335,7 +335,8 @@ class ApiConverterRequestBodySpec: StringSpec({
 
         val itf = api.getInterfaces().first()
         val ep = itf.endpoints.first()
-        val body = ep.parameters[0]
+        ep.parameters.isEmpty()
+        val body = ep.requestBodies.first()
 
         body.dataType.getTypeName() shouldBe "FooPostRequestBody"
         body.name shouldBe "body"

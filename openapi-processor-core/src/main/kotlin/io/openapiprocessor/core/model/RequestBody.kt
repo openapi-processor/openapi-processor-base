@@ -11,7 +11,7 @@ import io.openapiprocessor.core.model.parameters.ParameterBase
 /**
  * Endpoint request body properties.
  */
-class RequestBody(
+open class RequestBody(
     name: String,
     val contentType: String,
     dataType: DataType,

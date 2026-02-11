@@ -31,7 +31,6 @@ import io.openapiprocessor.core.model.Response as ModelResponse
 import io.openapiprocessor.core.model.parameters.Parameter as ModelParameter
 
 const val MULTIPART = "multipart/"
-const val URLENCODED = "application/x-www-form-urlencoded"
 const val INTERFACE_DEFAULT_NAME = ""
 
 /**
@@ -242,19 +241,26 @@ class  ApiConverter(
                 params.addAll(createMultipartParameter(info, mediaType.encodings, ctx.dataTypes))
 
             } else if (isUrlencoded(contentType)) {
-                params.addAll(createUrlencodedParameter(info, requestBody, ctx.dataTypes))
-
+                if (isBodyStyleObject(info)) {
+                    bodies.add(createRequestBody(contentType, info, requestBody, ctx.dataTypes))
+                } else {
+                    params.addAll(createUrlencodedParameter(info, requestBody, ctx.dataTypes))
+                }
             } else {
-                bodies.add (createRequestBody (contentType, info, requestBody, ctx.dataTypes))
+                bodies.add(createRequestBody(contentType, info, requestBody, ctx.dataTypes))
             }
         }
 
         return RequestBodies(bodies, params)
     }
 
+    private fun isBodyStyleObject(info: SchemaInfo): Boolean {
+        return getBodyStyle(info.getPath(), info.getMethod()) == BodyStyle.OBJECT
+    }
+
     private fun isMultipart(contentType: String): Boolean = contentType.startsWith(MULTIPART)
 
-    private fun isUrlencoded(contentType: String): Boolean = contentType.startsWith(URLENCODED)
+    private fun isUrlencoded(contentType: String): Boolean = contentType.startsWith(APPLICATION_FORM_URLENCODED)
 
     private fun collectResponses(responses: Map<HttpStatus, Response>, ctx: ApiConverterContext): Map<ModelHttpStatus, List<ModelResponse>> {
         val resultResponses: MutableMap<HttpStatus, List<ModelResponse>>  = mutableMapOf()
@@ -412,14 +418,9 @@ class  ApiConverter(
         }
 
         val parameters = mutableListOf<ModelParameter>()
-        val bodyStyle = getBodyStyle(info.getPath(), info.getMethod())
-        if (bodyStyle == BodyStyle.OBJECT) {
-            parameters.add(framework.createQueryParameter(UrlencodedRequestBody(requestBody), dataType))
-        } else {
-            dataTypes.relRef(dataType.getName())
-            dataType.forEach { property, propertyDataType ->
-                parameters.add(framework.createQueryParameter(UrlencodedParameter(property), propertyDataType))
-            }
+        dataTypes.relRef(dataType.getName())
+        dataType.forEach { property, propertyDataType ->
+            parameters.add(framework.createQueryParameter(UrlencodedParameter(property), propertyDataType))
         }
         return parameters
     }
