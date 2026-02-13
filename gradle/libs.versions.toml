@@ -1,5 +1,5 @@
 [versions]
-processor = "2026.2-SNAPSHOT"
+processor = "2026.2"
 parser = "2026.1"
 #parser = "2026.2-SNAPSHOT"
 api = "2024.2"
