@@ -105,19 +105,8 @@ publishing {
     }
 }
 
-tasks.jacocoTestReport {
-    executionData.from(tasks.named<Test>("test").map<File> {
-        it.extensions.getByType(JacocoTaskExtension::class.java).destinationFile as File
-    })
-    executionData.from(tasks.named<Test>("testInt").map<File> {
-        it.extensions.getByType(JacocoTaskExtension::class.java).destinationFile as File
-    })
-
-    reports {
-        xml.required = true
-        html.required = true
-    }
-}
+tasks.named("test") { finalizedBy("jacocoTestReport") }
+tasks.named("testInt") { finalizedBy("jacocoTestReport") }
 
 sonarqube {
   properties {

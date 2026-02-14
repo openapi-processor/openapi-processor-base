@@ -12,11 +12,20 @@ jacoco {
     toolVersion = libs.versions.jacoco.get()
 }
 
-tasks.named<JacocoReport>("jacocoTestReport") {
+tasks.withType<JacocoReport>().configureEach {
     reports {
         xml.required.set(true)
         csv.required.set(false)
         html.required.set(false)
         //html.outputLocation.set(layout.buildDirectory.dir("jacocoHtml"))
     }
+
+    val execFiles = files(tasks.withType<Test>().map { testTask ->
+        testTask.extensions.getByType<JacocoTaskExtension>().destinationFile
+    })
+
+    executionData(execFiles)
+
+    val mainSourceSet = project.extensions.getByType<SourceSetContainer>().getByName("main")
+    sourceSets(mainSourceSet)
 }
