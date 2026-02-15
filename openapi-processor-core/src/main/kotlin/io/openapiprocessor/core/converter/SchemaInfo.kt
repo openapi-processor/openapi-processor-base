@@ -14,7 +14,7 @@ import java.net.URI
 import io.openapiprocessor.core.parser.RefResolver as ParserRefResolver
 
 /**
- * Helper for [DataTypeConverter]. Holds an OpenAPI schema with context information, e.g. name and
+ * Helper for [DataTypeConverter]. Holds an OpenAPI schema with context information, e.g., name and
  * if this is an inline type with a generated name.
  */
 open class SchemaInfo(
@@ -39,12 +39,12 @@ open class SchemaInfo(
     private val schema: Schema,
 
     /**
-     * resolver of $ref'erences
+     * resolver of $references.
      */
     private val resolver: ParserRefResolver,
 
     /**
-     * json path like location
+     * JSON path like location.
      */
     private val location: String = "",
 
@@ -61,13 +61,13 @@ open class SchemaInfo(
 ): MappingSchema {
 
     open class Endpoint(val path: String, val method: HttpMethod)
-    class NoEndpoint(): Endpoint("", HttpMethod.GET)
+    class NoEndpoint: Endpoint("", HttpMethod.GET)
 
     /**
-     * if this is a $ref it indicates that the name of this SchemaInfo should be propagated to its
+     * If this is a $ref, it indicates that the name of this SchemaInfo should be propagated to its
      * resolved $ref.
      *
-     * if the schema is the start of a $ref-chain, its original name should be used for the resolved
+     * If the schema is the start of a $ref-chain, its original name should be used for the resolved
      * schema.
      *
      * The swagger parser (resolve option) creates schemas for intermediate $refs where the name is
@@ -97,7 +97,7 @@ open class SchemaInfo(
     }
 
     /**
-     * get type of OpenAPI schema.
+     * get the type of the OpenAPI schema.
      *
      * @return schema type
      */
@@ -299,7 +299,7 @@ open class SchemaInfo(
     }
 
     /**
-     * Factory method to create a {@link SchemaInfo} of the $ref'erenced schema.
+     * Factory method to create a {@link SchemaInfo} of the $referenced schema.
      *
      * @return a new {@link SchemaInfo}
      */
@@ -309,11 +309,11 @@ open class SchemaInfo(
             name // propagate "parent" name
         } else {
             resolved.name
-        }!!
+        }
 
         val info = SchemaInfo(
             endpoint = endpoint,
-            name = resolvedName,
+            name = resolvedName!!,
             schema = resolved.schema,
             resolver = resolver,
             location = location,
