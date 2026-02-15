@@ -198,7 +198,7 @@ class  ApiConverter(
         val dropMappings = getDropParameterMappings(ctx.path, ctx.method)
 
         parameters
-            .filter { p -> dropMappings.find { it.parameterName == p.getName() } == null }
+            .filter { p -> dropMappings.none { it.parameterName == p.getName() } }
             .forEach {
                 resultParameters.add(createParameter(it, ctx))
             }
