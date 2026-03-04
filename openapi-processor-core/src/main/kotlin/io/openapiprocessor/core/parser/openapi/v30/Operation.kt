@@ -43,7 +43,7 @@ class Operation(
             parameters.add(Parameter(param))
         }
 
-        operation.parameters.map { p: Parameter30 ->
+        operation.parameters.forEach { p: Parameter30 ->
             var param = p
             if(p.isRef) {
                 param = p.refObject
