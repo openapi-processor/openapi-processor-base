@@ -5,12 +5,12 @@
 
 package io.openapiprocessor.core.parser.openapi.v30
 
-import io.openapiprocessor.core.parser.HttpMethod
 import java.net.URI
 import io.openapiparser.model.v30.Operation as Operation30
 import io.openapiparser.model.v30.Parameter as Parameter30
 import io.openapiparser.model.v30.PathItem as Path30
 import io.openapiparser.model.v30.Response as Response30
+import io.openapiprocessor.core.parser.HttpMethod as ParserHttpMethod
 import io.openapiprocessor.core.parser.Operation as ParserOperation
 import io.openapiprocessor.core.parser.Parameter as ParserParameter
 import io.openapiprocessor.core.parser.RequestBody as ParserRequestBody
@@ -20,12 +20,12 @@ import io.openapiprocessor.core.parser.Response as ParserResponse
  * openapi-parser Operation abstraction.
  */
 class Operation(
-    private val method: HttpMethod,
+    private val method: ParserHttpMethod,
     private val operation: Operation30,
     private val path: Path30,
 ): ParserOperation {
 
-    override fun getMethod(): HttpMethod = method
+    override fun getMethod(): ParserHttpMethod = method
 
     override fun getOperationId(): String? {
         return operation.operationId
