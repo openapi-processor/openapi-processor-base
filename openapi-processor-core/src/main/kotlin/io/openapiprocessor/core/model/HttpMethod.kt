@@ -5,14 +5,30 @@
 
 package io.openapiprocessor.core.model
 
-enum class HttpMethod(val method: String) {
-    GET ("get"),
-    PUT ("put"),
-    POST ("post"),
-    DELETE ("delete"),
-    OPTIONS ("options"),
-    HEAD ("head"),
-    PATCH ("patch"),
-    TRACE ("trace"),
-    QUERY ("query")
+class HttpMethod private constructor(val method: String) {
+
+    companion object {
+        val DELETE = HttpMethod("delete")
+        val GET = HttpMethod("get")
+        val HEAD = HttpMethod("head")
+        val OPTIONS = HttpMethod("options")
+        val PATCH = HttpMethod("patch")
+        val POST = HttpMethod("post")
+        val PUT = HttpMethod("put")
+        val TRACE = HttpMethod("trace")
+
+        fun valueOf(method: String): HttpMethod {
+            return when (method.lowercase()) {
+                "delete" -> DELETE
+                "get" -> GET
+                "head" -> HEAD
+                "options" -> OPTIONS
+                "patch" -> PATCH
+                "post" -> POST
+                "put" -> PUT
+                "trace" -> TRACE
+                else -> HttpMethod(method)
+            }
+        }
+    }
 }
