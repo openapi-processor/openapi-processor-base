@@ -14,6 +14,8 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldNotContain
 import io.kotest.matchers.string.shouldStartWith
+import io.mockk.mockk
+import io.mockk.verify
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.JsonPropertyAnnotationMode
 import io.openapiprocessor.core.converter.mapping.Annotation
@@ -567,6 +569,25 @@ class DataTypeWriterRecordSpec: StringSpec({
 
         val imports = extractImports(target)
         imports shouldNotContain "import some.Annotation;"
+    }
+
+    "looks up jackson annotations" {
+        val jackson = mockk<JacksonAnnotations>(relaxed = true)
+
+        val writer = DataTypeWriterRecord(
+            options,
+            identifier,
+            generatedWriter,
+            BeanValidationFactory(options),
+            jacksonAnnotations = jackson)
+
+        val dataType = ObjectDataType("Foo", "pkg", linkedMapOf(
+            Pair("foo", propertyDataTypeString())
+        ), DataTypeConstraints(required = listOf("foo")), false)
+
+        writer.write(target, dataType)
+
+        verify { jackson.getJsonProperty() }
     }
 })
 

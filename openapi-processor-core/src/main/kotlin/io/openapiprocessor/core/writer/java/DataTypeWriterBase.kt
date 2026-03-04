@@ -43,7 +43,8 @@ abstract class DataTypeWriterBase(
     protected val apiOptions: ApiOptions,
     protected val identifier: Identifier,
     protected val generatedWriter: GeneratedWriter,
-    protected val validationAnnotations: BeanValidationFactory = BeanValidationFactory(apiOptions),
+    protected val validationAnnotations: BeanValidationFactory,
+    protected val jacksonAnnotations: JacksonAnnotations,
     protected val javadocFactory: JavaDocFactory
 ): DataTypeWriter {
     protected val annotationWriter = AnnotationWriter()
@@ -323,7 +324,7 @@ abstract class DataTypeWriterBase(
         val target = getTarget(propData.propDataType)
 
         if (requiresJsonPropertyAnnotation(propData)) {
-            imports.add("com.fasterxml.jackson.annotation.JsonProperty")
+            imports.addAll(jacksonAnnotations.getJsonProperty().imports)
         }
 
         if (apiOptions.beanValidation) {

@@ -52,6 +52,7 @@ class TestProcessor:
             val validationWriter = ValidationWriter(options, generatedWriter)
             val beanValidation = BeanValidationFactory(options)
             val javaDocFactory = JavaDocFactory(identifier)
+            val jacksonAnnotations = JacksonAnnotations(options)
             val formatter = getFormatter()
 
             val writer = ApiWriter(
@@ -80,6 +81,7 @@ class TestProcessor:
                         identifier,
                         generatedWriter,
                         beanValidation,
+                        jacksonAnnotations,
                         javaDocFactory
                     )
                     else -> DataTypeWriterPojo(
@@ -87,6 +89,7 @@ class TestProcessor:
                         identifier,
                         generatedWriter,
                         beanValidation,
+                        jacksonAnnotations,
                         javaDocFactory
                     )
                 },

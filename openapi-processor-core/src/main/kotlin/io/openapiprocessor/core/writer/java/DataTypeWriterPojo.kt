@@ -23,9 +23,16 @@ class DataTypeWriterPojo(
     identifier: Identifier,
     generatedWriter: GeneratedWriter,
     validationAnnotations: BeanValidationFactory = BeanValidationFactory(apiOptions),
+    jacksonAnnotations: JacksonAnnotations = JacksonAnnotations(apiOptions),
     javadocFactory: JavaDocFactory = JavaDocFactory(identifier)
-) : DataTypeWriterBase(apiOptions, identifier, generatedWriter, validationAnnotations, javadocFactory) {
-
+) : DataTypeWriterBase(
+    apiOptions,
+    identifier,
+    generatedWriter,
+    validationAnnotations,
+    jacksonAnnotations,
+    javadocFactory
+) {
     override fun write(target: Writer, dataType: ModelDataType) {
         val propsData = collectPropertiesData(dataType)
         writeFileHeader(target, dataType, propsData)
