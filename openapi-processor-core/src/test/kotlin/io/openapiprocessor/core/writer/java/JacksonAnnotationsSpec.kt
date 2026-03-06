@@ -13,7 +13,7 @@ class JacksonAnnotationsSpec: StringSpec({
 
     "provides jackson 2 annotations" {
         val options = ApiOptions()
-        options.jacksonFormat = "2"
+        options.jackson = "v2"
 
         val jackson = JacksonAnnotations(options)
 
@@ -24,7 +24,7 @@ class JacksonAnnotationsSpec: StringSpec({
 
     "provides jackson 3 annotations" {
         val options = ApiOptions()
-        options.jacksonFormat = "3"
+        options.jackson = "v3"
 
         val jackson = JacksonAnnotations(options)
 

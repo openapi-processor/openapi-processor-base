@@ -33,9 +33,9 @@ class JacksonAnnotations(apiOptions: ApiOptions) {
     fun getJsonValue(): Annotation = jsonValue
 
     private fun getJacksonFormat(options: ApiOptions): JacksonFormat {
-        return when (options.jacksonFormat) {
-            "2" -> JacksonFormat.V2
-            "3" -> JacksonFormat.V3
+        return when (options.jackson) {
+            "v2" -> JacksonFormat.V2
+            "v3" -> JacksonFormat.V3
             else -> JacksonFormat.V2
         }
     }

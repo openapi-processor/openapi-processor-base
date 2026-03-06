@@ -30,13 +30,14 @@ class MappingExampleV2Spec extends Specification {
 
 
     String yaml = """
-openapi-processor-mapping: v11
+openapi-processor-mapping: v18
 
 options:
     package-name: com.github.hauner.openapi
     model-name-suffix: Resource
     bean-validation: true
     format-code: false
+    jackson: v3
     javadoc: true
 
 map:

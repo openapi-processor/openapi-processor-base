@@ -33,6 +33,7 @@ class OptionsConverterSpec: StringSpec({
         options.packageOptions.base shouldBe null
         options.packageOptions.location shouldBe null
         options.beanValidation shouldBe false
+        options.jackson shouldBe "v2"
         options.javadoc shouldBe false
         options.modelType shouldBe "default"
         options.modelAccessors.shouldBeTrue()
@@ -292,6 +293,28 @@ class OptionsConverterSpec: StringSpec({
 
             options.formatCode shouldBe fd.enabled
             options.formatCodeFormatter shouldBe fd.formatter
+        }
+    }
+
+    data class JacksonData(val source: String, val jackson: String?)
+
+    for (jd in listOf(
+        JacksonData("v2", "v2"),
+        JacksonData("v3", "v3"),
+    )) {
+        "should read jackson version: ${jd.source}" {
+            val converter = OptionsConverter()
+            converter.log = mockk<Logger>(relaxed = true)
+
+            val options = converter.convertOptions(mapOf(
+                "mapping" to """
+                    openapi-processor-mapping: v18
+                    options:
+                      jackson: ${jd.source}
+                """.trimIndent()
+            ))
+
+            options.jackson shouldBe jd.jackson
         }
     }
 })

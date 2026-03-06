@@ -98,6 +98,7 @@ class OptionsConverter(private val checkObsoleteProcessorOptions: Boolean = fals
                         options.targetDirOptions.layout = TargetDirLayout.STANDARD
                     }
 
+                    options.jackson = mapping.options.jackson
                     options.javadoc = mapping.options.javadoc
                     options.oneOfInterface = mapping.options.oneOfInterface
                     options.responseInterface = mapping.options.responseInterface

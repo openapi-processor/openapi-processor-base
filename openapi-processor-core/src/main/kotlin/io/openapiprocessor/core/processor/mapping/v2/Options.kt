@@ -40,7 +40,12 @@ data class Options(
     val beanValidation: String = "false",
 
     /**
-     * generate javadoc (optional)
+     * jackson (optional)
+     */
+    val jackson: String = "v2",
+
+    /**
+     * generate Javadoc (optional)
      */
     val javadoc: Boolean = false,
 

@@ -11,7 +11,7 @@ import io.openapiprocessor.core.processor.mapping.v2.Mapping as MappingV2
 import io.openapiprocessor.core.processor.mapping.v2.MappingConverter as MappingConverterV2
 
 /**
- *  Converter for the type mapping from the mapping yaml. It converts the type mapping information
+ *  Converter for the type mapping from the mapping YAML. It converts the type mapping information
  *  into the format used by [io.openapiprocessor.core.converter.DataTypeConverter].
  */
 class MappingConverter {

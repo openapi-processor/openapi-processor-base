@@ -266,4 +266,20 @@ class MappingReaderSpec: StringSpec ({
             mapping.options.basePath.propertiesName shouldBe "base-path.properties"
         }
     }
+
+    "reads jackson version" {
+        val yaml = """
+            |openapi-processor-mapping: v18
+            |options:
+            |  jackson: v3
+        """.trimMargin()
+
+        val reader = MappingReader()
+
+        // when:
+        val mapping = reader.read (yaml) as Mapping
+
+        // then:
+        mapping.options.jackson shouldBe "v3"
+    }
 })

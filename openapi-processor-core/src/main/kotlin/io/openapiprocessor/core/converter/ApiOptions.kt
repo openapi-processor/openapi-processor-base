@@ -66,9 +66,9 @@ class ApiOptions: MappingSettings {
     var beanValidationFormat: String? = null
 
     /**
-     * Bean Validation format: com.fasterxml.jackson (v2) or tools.jackson (v3)
+     * jackson version: com.fasterxml.jackson (v2) or tools.jackson (v3)
      */
-    var jacksonFormat: String = "2"
+    var jackson: String = "v2"
 
     /**
      * enable/disable generation of Javadoc comments based on the `description` OpenAPI property.
