@@ -19,6 +19,7 @@ open class StringEnumWriter(
     private val apiOptions: ApiOptions,
     private val identifier: Identifier,
     private val generatedWriter: GeneratedWriter,
+    private val jacksonAnnotations: JacksonAnnotations = JacksonAnnotations(apiOptions),
     private val javadocFactory: JavaDocFactory = JavaDocFactory(identifier)
 ) {
 
@@ -101,8 +102,8 @@ open class StringEnumWriter(
 
     private fun collectImports(packageName: String, dataType: DataType): List<String> {
         val imports = mutableSetOf<String>()
-        imports.add("com.fasterxml.jackson.annotation.JsonCreator")
-        imports.add("com.fasterxml.jackson.annotation.JsonValue")
+        imports.addAll(jacksonAnnotations.getJsonCreator().imports)
+        imports.addAll(jacksonAnnotations.getJsonValue().imports)
         imports.addAll(generatedWriter.getImports())
         imports.addAll(dataType.referencedImports)
         if (isSupplier()) {

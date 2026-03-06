@@ -11,19 +11,20 @@ import io.openapiprocessor.core.model.datatypes.DataTypeName
 import io.openapiprocessor.core.model.datatypes.StringEnumDataType
 import spock.lang.Specification
 
-class StringEnumWriterSpec extends Specification {
+class StringEnumWriterGSpec extends Specification {
     def options = new ApiOptions()
     def identifier = new JavaIdentifier()
     def generatedWriter = new SimpleGeneratedWriter(options)
+    def jacksonAnnotation = new JacksonAnnotations(options)
     def javadocWriter = new JavaDocFactory(identifier)
-    def writer = new StringEnumWriter(options, identifier, generatedWriter, javadocWriter)
+    def writer = new StringEnumWriter(options, identifier, generatedWriter, jacksonAnnotation, javadocWriter)
     def target = new StringWriter ()
 
-    private DataTypeName dataTypeName(String id) {
+    private static DataTypeName dataTypeName(String id) {
         return new DataTypeName(id, id)
     }
 
-    private DataTypeName dataTypeName(String id, String type) {
+    private static DataTypeName dataTypeName(String id, String type) {
         return new DataTypeName(id, type)
     }
 
