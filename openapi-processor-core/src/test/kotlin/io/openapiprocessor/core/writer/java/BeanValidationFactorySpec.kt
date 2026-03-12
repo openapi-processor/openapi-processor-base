@@ -10,6 +10,7 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.converter.ApiOptions
+import io.openapiprocessor.core.converter.mapping.TypeMapping
 import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.support.datatypes.ListDataType
 import io.openapiprocessor.core.support.datatypes.ObjectDataType
@@ -234,6 +235,39 @@ class BeanValidationFactorySpec : StringSpec({
         val io = info.inout
         io.dataTypeValue shouldBe "@Valid @NotNull Multi<Foo>"
         io.imports shouldBe setOf(validations.NOT_NULL, validations.VALID)
+        io.annotations.shouldBeEmpty()
+    }
+
+    "does apply validation annotations to mapped primitive collection" {
+        val sourceDataType = StringDataType(
+            constraints = DataTypeConstraints(format = "byte", minLength = 1, maxLength = 10), typeFormat = "string:byte")
+
+        val typeMapping = TypeMapping (
+            "byte",
+            null,
+            "byte",
+            emptyList(),
+            primitive = true,
+            primitiveArray = true)
+
+        val targetType = typeMapping.getTargetType()
+
+        val mappedDataType = MappedCollectionDataTypePrimitive(
+            targetType.getName(),
+            null,
+            false,
+            sourceDataType)
+
+        val info = validation.validate(mappedDataType, false)
+
+        val prop = info.prop
+        prop.dataTypeValue shouldBe "byte[]"
+        prop.imports shouldBe setOf(validations.SIZE)
+        prop.annotations shouldBe setOf("@Size(min = 1, max = 10)")
+
+        val io = info.inout
+        io.dataTypeValue shouldBe "@Size(min = 1, max = 10) byte[]"
+        io.imports shouldBe setOf(validations.SIZE)
         io.annotations.shouldBeEmpty()
     }
 })
