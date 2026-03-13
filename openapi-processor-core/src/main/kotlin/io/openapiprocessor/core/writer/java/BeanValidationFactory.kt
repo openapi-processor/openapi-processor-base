@@ -242,8 +242,7 @@ private fun DataType.shouldHaveValid(options: ApiOptions): Boolean {
         is ModelDataType -> true
         is ArrayDataType -> item is ModelDataType
         is InterfaceDataType -> true
-        is MappedCollectionDataType if options.beanValidationValidOnReactive -> multi
-        is MappedCollectionDataType -> false
+        is MappedCollectionDataType -> options.beanValidationValidOnReactive && multi
         is SourceDataType -> sourceDataType?.shouldHaveValid(options) ?: false
         else -> false
     }
