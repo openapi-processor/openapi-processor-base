@@ -309,11 +309,11 @@ open class SchemaInfo(
             name // propagate "parent" name
         } else {
             resolved.name
-        }
+        }!!
 
         val info = SchemaInfo(
             endpoint = endpoint,
-            name = resolvedName!!,
+            name = resolvedName,
             schema = resolved.schema,
             resolver = resolver,
             location = location,
