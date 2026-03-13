@@ -124,7 +124,7 @@ class ContentTypeInterfaceCollectorSpec: StringSpec({
         cti["application/json"].shouldNotBeNull()
     }
 
-    "returns interface result with different response data types, with primitve" {
+    "returns interface result with different response data types, with primitive" {
         val collector = ContentTypeInterfaceCollector("/foo", HttpMethod.GET)
 
         val ctr = mutableMapOf<ContentType, Map<HttpStatus, Response>>()
