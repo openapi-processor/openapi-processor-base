@@ -303,6 +303,7 @@ open class SchemaInfo(
      *
      * @return a new {@link SchemaInfo}
      */
+    @Suppress("kotlin:S6619")
     fun buildForRef(): SchemaInfo {
         val resolved = resolver.resolve(schema)
         val resolvedName = if (refName || resolved.hasNoName) {
