@@ -112,10 +112,13 @@ class Array(): SupportedType {
     }
 }
 
+
+private const val JSON_NULLABLE = "org.openapitools.jackson.nullable.JsonNullable"
+
 private val BOOLEAN_TYPES = listOf(
     Type("java.lang.Boolean"),
     Primitive("boolean"),
-    AdditionalType("org.openapitools.jackson.nullable.JsonNullable")
+    AdditionalType(JSON_NULLABLE)
 )
 
 private val NUMBER_TYPES = listOf(
@@ -133,7 +136,7 @@ private val NUMBER_TYPES = listOf(
     Primitive("long"),
     Primitive("float"),
     Primitive("double"),
-    AdditionalType("org.openapitools.jackson.nullable.JsonNullable")
+    AdditionalType(JSON_NULLABLE)
 )
 
 private val INTEGER_TYPES = listOf(
@@ -148,7 +151,7 @@ private val INTEGER_TYPES = listOf(
     Primitive("short"),
     Primitive("int"),
     Primitive("long"),
-    AdditionalType("org.openapitools.jackson.nullable.JsonNullable")
+    AdditionalType(JSON_NULLABLE)
 )
 
 private val LENGTH_TYPES = listOf(
@@ -156,7 +159,7 @@ private val LENGTH_TYPES = listOf(
     Type("java.util.Collection"),
     Type("java.util.Map"),
     Array(),
-    AdditionalType("org.openapitools.jackson.nullable.JsonNullable")
+    AdditionalType(JSON_NULLABLE)
 )
 
 private val MAX_MIN_TYPES = listOf(
@@ -170,12 +173,12 @@ private val MAX_MIN_TYPES = listOf(
     Primitive("short"),
     Primitive("int"),
     Primitive("long"),
-    AdditionalType("org.openapitools.jackson.nullable.JsonNullable")
+    AdditionalType(JSON_NULLABLE)
 )
 
 private val EMAIL_TYPES = listOf(
     Type("java.lang.CharSequence"),
-    AdditionalType("org.openapitools.jackson.nullable.JsonNullable")
+    AdditionalType(JSON_NULLABLE)
 )
 
 private val ANY_TYPES = listOf(TypeAny())
@@ -197,7 +200,7 @@ private val PAST_TYPES = listOf(
     Type("java.time.JapaneseDate"),
     Type("java.time.MinguoDate"),
     Type("java.time.ThaiBuddhistDate"),
-    AdditionalType("org.openapitools.jackson.nullable.JsonNullable")
+    AdditionalType(JSON_NULLABLE)
 )
 
 // not all annotation are supported/used by the BeanValidationFactory
