@@ -16,7 +16,7 @@ class MappingFinderQuery(
     override val path: String? = null,
     override val method: HttpMethod? = null,
     /**
-     *  name, depends on context.
+     *  name depends on context.
      *
      *  - parameter: name
      *  - request body: inline name
