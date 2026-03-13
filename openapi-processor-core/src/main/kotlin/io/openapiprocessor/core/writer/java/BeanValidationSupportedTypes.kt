@@ -114,48 +114,65 @@ class Array(): SupportedType {
 
 
 private const val JSON_NULLABLE = "org.openapitools.jackson.nullable.JsonNullable"
+private const val CHAR_SEQUENCE = "java.lang.CharSequence"
+private const val BIG_DECIMAL = "java.math.BigDecimal"
+private const val BIG_INTEGER = "java.math.BigInteger"
+private const val BYTE = "java.lang.Byte"
+private const val BYTE_PRIMITIVE = "byte"
+private const val SHORT = "java.lang.Short"
+private const val SHORT_PRIMITIVE = "short"
+private const val INTEGER = "java.lang.Integer"
+private const val INTEGER_PRIMITIVE = "int"
+private const val LONG = "java.lang.Long"
+private const val LONG_PRIMITIVE = "long"
+private const val BOOLEAN = "java.lang.Boolean"
+private const val BOOLEAN_PRIMITIVE = "boolean"
+private const val FLOAT = "java.lang.Float"
+private const val FLOAT_PRIMITIVE = "float"
+private const val DOUBLE = "java.lang.Double"
+private const val DOUBLE_PRIMITIVE = "double"
 
 private val BOOLEAN_TYPES = listOf(
-    Type("java.lang.Boolean"),
-    Primitive("boolean"),
+    Type(BOOLEAN),
+    Primitive(BOOLEAN_PRIMITIVE),
     AdditionalType(JSON_NULLABLE)
 )
 
 private val NUMBER_TYPES = listOf(
-    Type("java.math.BigDecimal"),
-    Type("java.math.BigInteger"),
-    Type("java.lang.Byte"),
-    Type("java.lang.Short"),
-    Type("java.lang.Integer"),
-    Type("java.lang.Long"),
-    Type("java.lang.Float"),
-    Type("java.lang.Double"),
-    Primitive("byte"),
-    Primitive("short"),
-    Primitive("int"),
-    Primitive("long"),
-    Primitive("float"),
-    Primitive("double"),
+    Type(BIG_DECIMAL),
+    Type(BIG_INTEGER),
+    Type(BYTE),
+    Type(SHORT),
+    Type(INTEGER),
+    Type(LONG),
+    Type(FLOAT),
+    Type(DOUBLE),
+    Primitive(BYTE_PRIMITIVE),
+    Primitive(SHORT_PRIMITIVE),
+    Primitive(INTEGER_PRIMITIVE),
+    Primitive(LONG_PRIMITIVE),
+    Primitive(FLOAT_PRIMITIVE),
+    Primitive(DOUBLE_PRIMITIVE),
     AdditionalType(JSON_NULLABLE)
 )
 
 private val INTEGER_TYPES = listOf(
-    Type("java.math.BigDecimal"),
-    Type("java.math.BigInteger"),
-    Type("java.lang.CharSequence"),
-    Type("java.lang.Byte"),
-    Type("java.lang.Short"),
-    Type("java.lang.Integer"),
-    Type("java.lang.Long"),
-    Primitive("byte"),
-    Primitive("short"),
-    Primitive("int"),
-    Primitive("long"),
+    Type(BIG_DECIMAL),
+    Type(BIG_INTEGER),
+    Type(CHAR_SEQUENCE),
+    Type(BYTE),
+    Type(SHORT),
+    Type(INTEGER),
+    Type(LONG),
+    Primitive(BYTE_PRIMITIVE),
+    Primitive(SHORT_PRIMITIVE),
+    Primitive(INTEGER_PRIMITIVE),
+    Primitive(LONG_PRIMITIVE),
     AdditionalType(JSON_NULLABLE)
 )
 
 private val LENGTH_TYPES = listOf(
-    Type("java.lang.CharSequence"),
+    Type(CHAR_SEQUENCE),
     Type("java.util.Collection"),
     Type("java.util.Map"),
     Array(),
@@ -163,21 +180,21 @@ private val LENGTH_TYPES = listOf(
 )
 
 private val MAX_MIN_TYPES = listOf(
-    Type("java.math.BigDecimal"),
-    Type("java.math.BigInteger"),
-    Type("java.lang.Byte"),
-    Type("java.lang.Short"),
-    Type("java.lang.Integer"),
-    Type("java.lang.Long"),
-    Primitive("byte"),
-    Primitive("short"),
-    Primitive("int"),
-    Primitive("long"),
+    Type(BIG_DECIMAL),
+    Type(BIG_INTEGER),
+    Type(BYTE),
+    Type(SHORT),
+    Type(INTEGER),
+    Type(LONG),
+    Primitive(BYTE_PRIMITIVE),
+    Primitive(SHORT_PRIMITIVE),
+    Primitive(INTEGER_PRIMITIVE),
+    Primitive(LONG_PRIMITIVE),
     AdditionalType(JSON_NULLABLE)
 )
 
 private val EMAIL_TYPES = listOf(
-    Type("java.lang.CharSequence"),
+    Type(CHAR_SEQUENCE),
     AdditionalType(JSON_NULLABLE)
 )
 
@@ -203,7 +220,7 @@ private val PAST_TYPES = listOf(
     AdditionalType(JSON_NULLABLE)
 )
 
-// not all annotation are supported/used by the BeanValidationFactory
+// not all annotations are supported/used by the BeanValidationFactory
 private val supportedTargets = mapOf<String, Set<SupportedType>>(
     /* javax */
 //    "javax.validation.constraints.Null" to ANY_TYPES.toMutableSet(),
