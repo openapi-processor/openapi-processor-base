@@ -32,19 +32,22 @@ class ContentTypeInterfaceCollector(
             var dataType: DataType? = null
             statusResponse.forEach { (status, _) ->
                 val match = statusResultResponses[status]?.find { r -> r.contentType == contentType }
-                if (match != null) {
-                    if (dataType == null) {
-                        dataType = match.responseType
-                    } else {
-                        if (match.responseType !== dataType && match.responseType !is SimpleDataType) {
-                            contentTypeInterfaces[contentType] = ContentTypeInterface(path, method)
-                            return@forEach
-                        }
-                    }
+                if (match == null) {
+                    return@forEach
+                }
+
+                if (dataType == null) {
+                    dataType = match.responseType
+
+                } else if (isAdditionalContentType(match, dataType)) {
+                    contentTypeInterfaces[contentType] = ContentTypeInterface(path, method)
                 }
             }
         }
 
         return contentTypeInterfaces
     }
+
+    private fun isAdditionalContentType(match: ModelResponse, dataType: DataType): Boolean
+        = match.responseType !== dataType && match.responseType !is SimpleDataType
 }
