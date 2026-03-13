@@ -587,7 +587,7 @@ class DataTypeWriterRecordSpec: StringSpec({
 
         writer.write(target, dataType)
 
-        verify { jackson.getJsonProperty() }
+        verify { jackson.jsonProperty }
     }
 })
 

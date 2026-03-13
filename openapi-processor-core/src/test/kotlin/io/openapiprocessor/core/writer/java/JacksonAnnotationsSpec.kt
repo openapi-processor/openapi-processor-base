@@ -17,9 +17,9 @@ class JacksonAnnotationsSpec: StringSpec({
 
         val jackson = JacksonAnnotations(options)
 
-        jackson.getJsonProperty().imports shouldContainExactly setOf("com.fasterxml.jackson.annotation.JsonProperty")
-        jackson.getJsonCreator().imports shouldContainExactly setOf("com.fasterxml.jackson.annotation.JsonCreator")
-        jackson.getJsonValue().imports shouldContainExactly setOf("com.fasterxml.jackson.annotation.JsonValue")
+        jackson.jsonProperty.imports shouldContainExactly setOf("com.fasterxml.jackson.annotation.JsonProperty")
+        jackson.jsonCreator.imports shouldContainExactly setOf("com.fasterxml.jackson.annotation.JsonCreator")
+        jackson.jsonValue.imports shouldContainExactly setOf("com.fasterxml.jackson.annotation.JsonValue")
     }
 
     "provides jackson 3 annotations" {
@@ -28,8 +28,8 @@ class JacksonAnnotationsSpec: StringSpec({
 
         val jackson = JacksonAnnotations(options)
 
-        jackson.getJsonProperty().imports shouldContainExactly setOf("tools.jackson.annotation.JsonProperty")
-        jackson.getJsonCreator().imports shouldContainExactly setOf("tools.jackson.annotation.JsonCreator")
-        jackson.getJsonValue().imports shouldContainExactly setOf("tools.jackson.annotation.JsonValue")
+        jackson.jsonProperty.imports shouldContainExactly setOf("tools.jackson.annotation.JsonProperty")
+        jackson.jsonCreator.imports shouldContainExactly setOf("tools.jackson.annotation.JsonCreator")
+        jackson.jsonValue.imports shouldContainExactly setOf("tools.jackson.annotation.JsonValue")
     }
 })

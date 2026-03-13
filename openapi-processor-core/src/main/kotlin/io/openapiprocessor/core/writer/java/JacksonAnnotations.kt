@@ -9,9 +9,9 @@ import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.model.Annotation
 
 class JacksonAnnotations(apiOptions: ApiOptions) {
-    private val jsonProperty: Annotation
-    private val jsonCreator: Annotation
-    private val jsonValue: Annotation
+    val jsonProperty: Annotation
+    val jsonCreator: Annotation
+    val jsonValue: Annotation
 
     init {
         when (getJacksonFormat(apiOptions)) {
@@ -27,10 +27,6 @@ class JacksonAnnotations(apiOptions: ApiOptions) {
             }
         }
     }
-
-    fun getJsonProperty(): Annotation = jsonProperty
-    fun getJsonCreator(): Annotation = jsonCreator
-    fun getJsonValue(): Annotation = jsonValue
 
     private fun getJacksonFormat(options: ApiOptions): JacksonFormat {
         return when (options.jackson) {

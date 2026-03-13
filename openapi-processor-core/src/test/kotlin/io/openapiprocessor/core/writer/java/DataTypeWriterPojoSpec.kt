@@ -881,7 +881,7 @@ class DataTypeWriterPojoSpec: StringSpec({
 
         writer.write(target, dataType)
 
-        verify { jackson.getJsonProperty() }
+        verify { jackson.jsonProperty }
     }
 
 })

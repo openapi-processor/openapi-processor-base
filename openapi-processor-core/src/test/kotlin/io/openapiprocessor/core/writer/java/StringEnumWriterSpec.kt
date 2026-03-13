@@ -37,7 +37,7 @@ class StringEnumWriterSpec : StringSpec({
 
         writer.write(target, dataType)
 
-        verify { jackson.getJsonCreator() }
-        verify { jackson.getJsonValue() }
+        verify { jackson.jsonCreator }
+        verify { jackson.jsonValue }
     }
 })

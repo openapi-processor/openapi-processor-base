@@ -102,8 +102,8 @@ open class StringEnumWriter(
 
     private fun collectImports(packageName: String, dataType: DataType): List<String> {
         val imports = mutableSetOf<String>()
-        imports.addAll(jacksonAnnotations.getJsonCreator().imports)
-        imports.addAll(jacksonAnnotations.getJsonValue().imports)
+        imports.addAll(jacksonAnnotations.jsonCreator.imports)
+        imports.addAll(jacksonAnnotations.jsonValue.imports)
         imports.addAll(generatedWriter.getImports())
         imports.addAll(dataType.referencedImports)
         if (isSupplier()) {

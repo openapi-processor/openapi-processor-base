@@ -324,7 +324,7 @@ abstract class DataTypeWriterBase(
         val target = getTarget(propData.propDataType)
 
         if (requiresJsonPropertyAnnotation(propData)) {
-            imports.addAll(jacksonAnnotations.getJsonProperty().imports)
+            imports.addAll(jacksonAnnotations.jsonProperty.imports)
         }
 
         if (apiOptions.beanValidation) {
