@@ -30,23 +30,24 @@ open class BeanValidationFactory(
     }
 
     fun validate(dataType: DataType, required: Boolean = false, parentHasValid: Boolean = false): BeanValidationInfo {
-        return when (dataType) {
-            is MappedCollectionDataTypePrimitive -> {
-                // should not be handled as collection, we can't annotate the primitive type only the primitve array
-                BeanValidationInfoSimple(dataType, collectAnnotations(dataType, required, parentHasValid))
-            }
-            is CollectionDataType -> {
-                val (annotations, valid) = collectAnnotationsWithValid(dataType, required, parentHasValid)
+        if (dataType is CollectionDataType && shouldAnnotateCollectionItem(dataType)) {
+            val (annotations, valid) = collectAnnotationsWithValid(dataType, required, parentHasValid)
 
-                BeanValidationInfoCollection(
-                    dataType,
-                    annotations,
-                    validate(dataType.item, parentHasValid = valid))
-            }
-            else -> {
-                BeanValidationInfoSimple(dataType, collectAnnotations(dataType, required, parentHasValid))
-            }
+            return BeanValidationInfoCollection(
+                dataType,
+                annotations,
+                validate(dataType.item, parentHasValid = valid))
         }
+
+        return BeanValidationInfoSimple(
+            dataType,
+            collectAnnotations(dataType, required, parentHasValid))
+    }
+
+    private fun shouldAnnotateCollectionItem(dataType: DataType): Boolean {
+        // a primitive array should not be handled as collection because we need to annotate the primitive array and
+        // not the primitive
+        return dataType !is MappedCollectionDataTypePrimitive
     }
 
     private fun collectAnnotations(dataType: DataType, required: Boolean = false, parentHasValid: Boolean): List<Annotation> {
