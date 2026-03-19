@@ -5,6 +5,7 @@
 
 package io.openapiprocessor.core.model
 
+@Deprecated(message = "do not use", replaceWith = ReplaceWith("io.openapiprocessor.core.openapi.HttpMethod"))
 class HttpMethod private constructor(val method: String) {
 
     companion object {
