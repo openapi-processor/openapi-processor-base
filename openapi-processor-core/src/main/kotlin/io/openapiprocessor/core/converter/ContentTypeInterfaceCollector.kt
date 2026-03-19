@@ -7,10 +7,10 @@ package io.openapiprocessor.core.converter
 
 import io.openapiprocessor.core.model.datatypes.DataType
 import io.openapiprocessor.core.model.datatypes.SimpleDataType
-import io.openapiprocessor.core.parser.ContentType
-import io.openapiprocessor.core.parser.HttpMethod
-import io.openapiprocessor.core.parser.HttpStatus
-import io.openapiprocessor.core.parser.Response
+import io.openapiprocessor.core.openapi.ContentType
+import io.openapiprocessor.core.openapi.HttpMethod
+import io.openapiprocessor.core.openapi.HttpStatus
+import io.openapiprocessor.core.openapi.Response
 import io.openapiprocessor.core.model.Response as ModelResponse
 
 class ContentTypeInterfaceCollector(

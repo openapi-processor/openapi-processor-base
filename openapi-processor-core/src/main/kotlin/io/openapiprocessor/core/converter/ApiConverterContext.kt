@@ -6,8 +6,8 @@
 package io.openapiprocessor.core.converter
 
 import io.openapiprocessor.core.model.DataTypes
-import io.openapiprocessor.core.parser.HttpMethod
-import io.openapiprocessor.core.parser.RefResolver
+import io.openapiprocessor.core.openapi.HttpMethod
+import io.openapiprocessor.core.openapi.RefResolver
 
 /**
  * helper to pass down parameters

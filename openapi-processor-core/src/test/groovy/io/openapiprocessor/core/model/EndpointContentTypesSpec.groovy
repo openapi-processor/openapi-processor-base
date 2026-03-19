@@ -5,7 +5,7 @@
 
 package io.openapiprocessor.core.model
 
-import io.openapiprocessor.core.parser.HttpMethod
+import io.openapiprocessor.core.openapi.HttpMethod
 import io.openapiprocessor.core.model.datatypes.StringDataType
 import io.openapiprocessor.core.support.datatypes.ObjectDataType
 import spock.lang.Specification

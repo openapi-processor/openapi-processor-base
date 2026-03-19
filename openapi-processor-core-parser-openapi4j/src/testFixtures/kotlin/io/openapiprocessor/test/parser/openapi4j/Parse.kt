@@ -5,7 +5,7 @@
 
 package io.openapiprocessor.test.parser.openapi4j
 
-import io.openapiprocessor.core.parser.OpenApi
+import io.openapiprocessor.core.openapi.OpenApi
 import io.openapiprocessor.core.parser.openapi4j.OpenApi as OpenApi4j
 import io.openapiprocessor.test.stream.Memory
 import org.openapi4j.parser.OpenApi3Parser

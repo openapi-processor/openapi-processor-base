@@ -8,7 +8,7 @@ package io.openapiprocessor.core.support
 import io.openapiprocessor.core.parser.ParserType
 import io.openapiprocessor.core.parser.openapi.Parser
 import io.openapiprocessor.test.stream.Memory
-import io.openapiprocessor.core.parser.OpenApi as ParserOpenApi
+import io.openapiprocessor.core.openapi.OpenApi as ParserOpenApi
 import io.openapiprocessor.test.parser.openapi4j.parse as parseWithOpenApi4j
 import io.openapiprocessor.test.parser.swagger.parse as parseWithSwagger
 

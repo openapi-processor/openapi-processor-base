@@ -7,8 +7,8 @@ package io.openapiprocessor.core.parser.openapi.v32
 
 import io.openapiparser.model.v32.MediaType as MediaType32
 import io.openapiparser.model.v32.RequestBody as RequestBody32
-import io.openapiprocessor.core.parser.MediaType as ParserMediaType
-import io.openapiprocessor.core.parser.RequestBody as ParserRequestBody
+import io.openapiprocessor.core.openapi.MediaType as ParserMediaType
+import io.openapiprocessor.core.openapi.RequestBody as ParserRequestBody
 
 /**
  * openapi-parser RequestBody abstraction.

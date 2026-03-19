@@ -5,8 +5,8 @@
 
 package io.openapiprocessor.core.parser.swagger
 
-import io.openapiprocessor.core.parser.Encoding
-import io.openapiprocessor.core.parser.MediaType as ParserMediaType
+import io.openapiprocessor.core.openapi.Encoding
+import io.openapiprocessor.core.openapi.MediaType as ParserMediaType
 import io.swagger.v3.oas.models.media.MediaType as SwaggerMediaType
 
 /**

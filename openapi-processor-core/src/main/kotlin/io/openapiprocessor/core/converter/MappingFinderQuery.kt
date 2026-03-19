@@ -10,7 +10,7 @@ import io.openapiprocessor.core.converter.mapping.MappingSchema
 import io.openapiprocessor.core.converter.mapping.splitTypeName
 import io.openapiprocessor.core.model.Endpoint
 import io.openapiprocessor.core.model.parameters.Parameter
-import io.openapiprocessor.core.parser.HttpMethod
+import io.openapiprocessor.core.openapi.HttpMethod
 
 class MappingFinderQuery(
     override val path: String? = null,

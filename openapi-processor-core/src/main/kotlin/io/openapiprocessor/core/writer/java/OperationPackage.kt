@@ -6,7 +6,7 @@
 package io.openapiprocessor.core.writer.java
 
 import io.openapiprocessor.core.converter.ApiOptions
-import io.openapiprocessor.core.parser.Operation
+import io.openapiprocessor.core.openapi.Operation
 
 private const val SUB_PACKAGE = "api"
 

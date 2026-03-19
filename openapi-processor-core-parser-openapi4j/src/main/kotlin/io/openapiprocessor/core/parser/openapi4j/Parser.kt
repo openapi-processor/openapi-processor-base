@@ -7,7 +7,7 @@ package io.openapiprocessor.core.parser.openapi4j
 
 import io.openapiprocessor.core.parser.ParserException
 import io.openapiprocessor.core.parser.Parser as ApiParser
-import io.openapiprocessor.core.parser.OpenApi as ApiOpenApi
+import io.openapiprocessor.core.openapi.OpenApi as ApiOpenApi
 import org.openapi4j.core.exception.ResolutionException
 import org.openapi4j.core.validation.ValidationException
 import org.openapi4j.parser.OpenApi3Parser

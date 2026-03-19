@@ -8,7 +8,7 @@ package io.openapiprocessor.core.model
 
 import io.openapiprocessor.core.model.parameters.MultipartParameter
 import io.openapiprocessor.core.model.parameters.Parameter
-import io.openapiprocessor.core.parser.HttpMethod
+import io.openapiprocessor.core.openapi.HttpMethod
 import kotlin.collections.plusAssign
 
 /**

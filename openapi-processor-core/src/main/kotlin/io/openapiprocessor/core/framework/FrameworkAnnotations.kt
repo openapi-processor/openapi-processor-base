@@ -8,7 +8,7 @@ package io.openapiprocessor.core.framework
 import io.openapiprocessor.core.model.Annotation
 import io.openapiprocessor.core.model.EndpointResponseStatus
 import io.openapiprocessor.core.model.parameters.Parameter
-import io.openapiprocessor.core.parser.HttpMethod
+import io.openapiprocessor.core.openapi.HttpMethod
 
 /**
  * provides annotation details of the framework.

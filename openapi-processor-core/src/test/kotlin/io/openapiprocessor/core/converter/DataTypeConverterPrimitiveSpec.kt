@@ -17,11 +17,10 @@ import io.mockk.mockk
 import io.openapiprocessor.core.model.DataTypes
 import io.openapiprocessor.core.model.datatypes.MappedCollectionDataTypePrimitive
 import io.openapiprocessor.core.model.datatypes.MappedDataTypePrimitive
-import io.openapiprocessor.core.parser.HttpMethod
-import io.openapiprocessor.core.parser.RefResolver
-import io.openapiprocessor.core.parser.Schema
+import io.openapiprocessor.core.openapi.HttpMethod
+import io.openapiprocessor.core.openapi.RefResolver
+import io.openapiprocessor.core.openapi.Schema
 import io.openapiprocessor.core.support.getParameterSchemaInfo
-import io.openapiprocessor.core.support.parseApi
 import io.openapiprocessor.core.support.parseApiBody
 import io.openapiprocessor.core.support.parseOptions
 import io.openapiprocessor.core.writer.java.JavaIdentifier

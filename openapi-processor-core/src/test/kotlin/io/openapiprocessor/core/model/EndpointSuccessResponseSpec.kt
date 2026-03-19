@@ -13,7 +13,7 @@ import io.openapiprocessor.core.model.datatypes.DataTypeName
 import io.openapiprocessor.core.model.datatypes.ObjectDataType
 import io.openapiprocessor.core.model.datatypes.PropertyDataType
 import io.openapiprocessor.core.model.datatypes.StringDataType
-import io.openapiprocessor.core.parser.HttpMethod
+import io.openapiprocessor.core.openapi.HttpMethod
 import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
 
 class EndpointSuccessResponseSpec: StringSpec({

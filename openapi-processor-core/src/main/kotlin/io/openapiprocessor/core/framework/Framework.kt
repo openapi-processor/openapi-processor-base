@@ -9,8 +9,8 @@ import io.openapiprocessor.core.model.RequestBody
 import io.openapiprocessor.core.model.datatypes.AnnotationDataType
 import io.openapiprocessor.core.model.parameters.Parameter
 import io.openapiprocessor.core.model.datatypes.DataType
-import io.openapiprocessor.core.parser.Parameter as ParserParameter
-import io.openapiprocessor.core.parser.RequestBody as ParserRequestBody
+import io.openapiprocessor.core.openapi.Parameter as ParserParameter
+import io.openapiprocessor.core.openapi.RequestBody as ParserRequestBody
 
 /**
  * factory for framework model objects.

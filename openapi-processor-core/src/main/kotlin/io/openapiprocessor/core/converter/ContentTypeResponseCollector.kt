@@ -5,9 +5,9 @@
 
 package io.openapiprocessor.core.converter
 
-import io.openapiprocessor.core.parser.ContentType
-import io.openapiprocessor.core.parser.HttpStatus
-import io.openapiprocessor.core.parser.Response
+import io.openapiprocessor.core.openapi.ContentType
+import io.openapiprocessor.core.openapi.HttpStatus
+import io.openapiprocessor.core.openapi.Response
 import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
 
 

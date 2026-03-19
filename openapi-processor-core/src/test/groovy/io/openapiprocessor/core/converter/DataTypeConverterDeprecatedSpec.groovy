@@ -8,8 +8,8 @@ package io.openapiprocessor.core.converter
 import io.openapiprocessor.core.converter.wrapper.NullDataTypeWrapper
 import io.openapiprocessor.core.framework.Framework
 import io.openapiprocessor.core.model.DataTypes
-import io.openapiprocessor.core.parser.HttpMethod
-import io.openapiprocessor.core.parser.RefResolver
+import io.openapiprocessor.core.openapi.HttpMethod
+import io.openapiprocessor.core.openapi.RefResolver
 import io.openapiprocessor.core.writer.java.JavaIdentifier
 import io.openapiprocessor.core.writer.java.TestSchema
 import spock.lang.Specification

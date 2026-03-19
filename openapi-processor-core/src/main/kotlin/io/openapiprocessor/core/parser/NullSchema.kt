@@ -5,6 +5,7 @@
 
 package io.openapiprocessor.core.parser
 
+import io.openapiprocessor.core.openapi.Schema
 import java.net.URI
 
 object NullSchema: Schema {

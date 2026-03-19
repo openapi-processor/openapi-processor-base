@@ -5,6 +5,9 @@
 
 package io.openapiprocessor.core.parser
 
+import io.openapiprocessor.core.openapi.Parameter
+import io.openapiprocessor.core.openapi.Schema
+
 /**
  * "fake" parameter for framework-specific annotation selection
  */

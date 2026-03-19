@@ -8,7 +8,7 @@ package io.openapiprocessor.core.parser.openapi.v30
 import io.github.stduritemplate.StdUriTemplate
 import java.net.URI
 import io.openapiparser.model.v30.Server as Server30
-import io.openapiprocessor.core.parser.Server as ParserServer
+import io.openapiprocessor.core.openapi.Server as ParserServer
 
 class Server(private val server: Server30): ParserServer {
 

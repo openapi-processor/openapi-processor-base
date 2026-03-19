@@ -11,9 +11,9 @@ import io.mockk.mockk
 import io.openapiprocessor.core.converter.MappingFinder
 import io.openapiprocessor.core.converter.SchemaInfo
 import io.openapiprocessor.core.model.datatypes.StringDataType
-import io.openapiprocessor.core.parser.HttpMethod
+import io.openapiprocessor.core.openapi.HttpMethod
 import io.openapiprocessor.core.parser.NullSchema
-import io.openapiprocessor.core.parser.RefResolver
+import io.openapiprocessor.core.openapi.RefResolver
 import io.openapiprocessor.core.support.parseOptions
 import io.openapiprocessor.core.writer.java.JavaIdentifier
 

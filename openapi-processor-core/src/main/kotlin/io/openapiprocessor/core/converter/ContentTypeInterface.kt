@@ -5,6 +5,6 @@
 
 package io.openapiprocessor.core.converter
 
-import io.openapiprocessor.core.parser.HttpMethod
+import io.openapiprocessor.core.openapi.HttpMethod
 
 class ContentTypeInterface(val path: String, val method: HttpMethod)

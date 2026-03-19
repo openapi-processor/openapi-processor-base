@@ -5,7 +5,7 @@
 
 package io.openapiprocessor.core.writer.java
 
-import io.openapiprocessor.core.parser.Schema
+import io.openapiprocessor.core.openapi.Schema
 
 /**
  * simple Schema implementation for testing

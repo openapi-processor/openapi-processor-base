@@ -11,10 +11,10 @@ import io.openapiprocessor.core.framework.Framework
 import io.openapiprocessor.core.model.Api
 import io.openapiprocessor.core.model.DataTypes
 import io.openapiprocessor.core.model.datatypes.ObjectDataType
-import io.openapiprocessor.core.parser.HttpMethod
-import io.openapiprocessor.core.parser.NamedSchema
-import io.openapiprocessor.core.parser.RefResolver
-import io.openapiprocessor.core.parser.Schema
+import io.openapiprocessor.core.openapi.HttpMethod
+import io.openapiprocessor.core.openapi.NamedSchema
+import io.openapiprocessor.core.openapi.RefResolver
+import io.openapiprocessor.core.openapi.Schema
 import io.openapiprocessor.core.writer.java.JavaIdentifier
 import io.openapiprocessor.core.writer.java.TestSchema
 import org.jetbrains.annotations.NotNull

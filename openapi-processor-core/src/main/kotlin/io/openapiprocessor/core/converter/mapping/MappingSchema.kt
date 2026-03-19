@@ -5,7 +5,7 @@
 
 package io.openapiprocessor.core.converter.mapping
 
-import io.openapiprocessor.core.parser.HttpMethod
+import io.openapiprocessor.core.openapi.HttpMethod
 
 /**
  * Provides the properties required to check if a [Mapping] applies to a

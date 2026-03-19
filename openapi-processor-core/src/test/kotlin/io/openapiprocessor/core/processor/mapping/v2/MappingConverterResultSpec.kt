@@ -13,7 +13,7 @@ import io.openapiprocessor.core.support.MappingConstants.VERSION
 import io.openapiprocessor.core.converter.MappingFinderQuery
 import io.openapiprocessor.core.converter.mapping.steps.EndpointsStep
 import io.openapiprocessor.core.converter.mapping.steps.GlobalsStep
-import io.openapiprocessor.core.parser.HttpMethod
+import io.openapiprocessor.core.openapi.HttpMethod
 import io.openapiprocessor.core.processor.MappingReader
 
 class MappingConverterResultSpec: StringSpec({

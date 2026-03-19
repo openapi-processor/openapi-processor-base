@@ -8,8 +8,8 @@ package io.openapiprocessor.core.converter
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.mockk.mockk
-import io.openapiprocessor.core.parser.HttpMethod
-import io.openapiprocessor.core.parser.RefResolver
+import io.openapiprocessor.core.openapi.HttpMethod
+import io.openapiprocessor.core.openapi.RefResolver
 import io.openapiprocessor.core.support.Schema
 
 class SchemaInfoSpec : StringSpec({

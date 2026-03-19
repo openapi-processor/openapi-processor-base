@@ -10,7 +10,7 @@ import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.model.DataTypes
 import io.openapiprocessor.core.model.datatypes.ModelDataType
-import io.openapiprocessor.core.parser.HttpMethod
+import io.openapiprocessor.core.openapi.HttpMethod
 import io.openapiprocessor.core.support.getBodySchemaInfo
 import io.openapiprocessor.core.support.parseApiBody
 import io.openapiprocessor.core.writer.java.JavaIdentifier

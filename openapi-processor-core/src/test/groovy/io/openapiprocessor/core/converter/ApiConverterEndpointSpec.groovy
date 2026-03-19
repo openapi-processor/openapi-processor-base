@@ -7,7 +7,7 @@ package io.openapiprocessor.core.converter
 
 import io.openapiprocessor.core.support.ModelAsserts
 import io.openapiprocessor.core.framework.Framework
-import io.openapiprocessor.core.parser.HttpMethod
+import io.openapiprocessor.core.openapi.HttpMethod
 import spock.lang.Specification
 
 import static io.openapiprocessor.core.support.FactoryHelper.apiConverter

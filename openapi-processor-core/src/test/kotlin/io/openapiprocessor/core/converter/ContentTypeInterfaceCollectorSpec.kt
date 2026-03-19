@@ -15,10 +15,10 @@ import io.openapiprocessor.core.model.datatypes.DataTypeName
 import io.openapiprocessor.core.model.datatypes.ObjectDataType
 import io.openapiprocessor.core.model.datatypes.PropertyDataType
 import io.openapiprocessor.core.model.datatypes.StringDataType
-import io.openapiprocessor.core.parser.ContentType
-import io.openapiprocessor.core.parser.HttpMethod
-import io.openapiprocessor.core.parser.HttpStatus
-import io.openapiprocessor.core.parser.Response
+import io.openapiprocessor.core.openapi.ContentType
+import io.openapiprocessor.core.openapi.HttpMethod
+import io.openapiprocessor.core.openapi.HttpStatus
+import io.openapiprocessor.core.openapi.Response
 import io.openapiprocessor.core.model.Response as ModelResponse
 
 

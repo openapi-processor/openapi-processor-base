@@ -15,8 +15,8 @@ import io.openapiprocessor.core.model.parameters.Parameter
 import io.openapiprocessor.core.model.parameters.PathParameter
 import io.openapiprocessor.core.model.parameters.QueryParameter
 import io.openapiprocessor.core.model.datatypes.DataType
-import io.openapiprocessor.core.parser.Parameter as ParserParameter
-import io.openapiprocessor.core.parser.RequestBody as ParserRequestBody
+import io.openapiprocessor.core.openapi.Parameter as ParserParameter
+import io.openapiprocessor.core.openapi.RequestBody as ParserRequestBody
 
 /**
  * default implementation of [io.openapiprocessor.core.framework.Framework].

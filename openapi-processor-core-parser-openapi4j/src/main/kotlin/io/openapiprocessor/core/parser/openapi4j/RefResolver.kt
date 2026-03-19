@@ -5,10 +5,10 @@
 
 package io.openapiprocessor.core.parser.openapi4j
 
-import io.openapiprocessor.core.parser.NamedSchema
-import io.openapiprocessor.core.parser.getRefName
-import io.openapiprocessor.core.parser.RefResolver as ParserRefResolver
-import io.openapiprocessor.core.parser.Schema as ParserSchema
+import io.openapiprocessor.core.openapi.NamedSchema
+import io.openapiprocessor.core.openapi.getRefName
+import io.openapiprocessor.core.openapi.RefResolver as ParserRefResolver
+import io.openapiprocessor.core.openapi.Schema as ParserSchema
 import org.openapi4j.parser.model.v3.OpenApi3 as O4jOpenApi
 import org.openapi4j.parser.model.v3.Schema as O4jSchema
 

@@ -5,9 +5,9 @@
 
 package io.openapiprocessor.core.parser.openapi.v32
 
-import io.openapiprocessor.core.parser.Encoding
+import io.openapiprocessor.core.openapi.Encoding
 import io.openapiparser.model.v32.MediaType as MediaType32
-import io.openapiprocessor.core.parser.MediaType as ParserMediaType
+import io.openapiprocessor.core.openapi.MediaType as ParserMediaType
 
 /**
  * openapi-parser MediaType abstraction.

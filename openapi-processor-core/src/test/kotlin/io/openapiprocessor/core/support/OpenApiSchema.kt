@@ -6,9 +6,9 @@
 package io.openapiprocessor.core.support
 
 import io.openapiprocessor.core.converter.SchemaInfo
-import io.openapiprocessor.core.parser.HttpMethod
-import io.openapiprocessor.core.parser.OpenApi
-import io.openapiprocessor.core.parser.Schema
+import io.openapiprocessor.core.openapi.HttpMethod
+import io.openapiprocessor.core.openapi.OpenApi
+import io.openapiprocessor.core.openapi.Schema
 
 
 fun OpenApi.getParameterSchema(path: String, method: HttpMethod, name: String): Schema {

@@ -8,11 +8,11 @@ package io.openapiprocessor.core.parser.openapi.v31
 import io.openapiparser.model.v31.OpenApi as OpenApi31
 import io.openapiparser.model.v31.PathItem as PathItem31
 import io.openapiparser.model.v31.Schema as Schema31
-import io.openapiprocessor.core.parser.Schema
-import io.openapiprocessor.core.parser.Server
-import io.openapiprocessor.core.parser.Path
-import io.openapiprocessor.core.parser.OpenApi as ParserOpenApi
-import io.openapiprocessor.core.parser.RefResolver as ParserRefResolver
+import io.openapiprocessor.core.openapi.Schema
+import io.openapiprocessor.core.openapi.Server
+import io.openapiprocessor.core.openapi.Path
+import io.openapiprocessor.core.openapi.OpenApi as ParserOpenApi
+import io.openapiprocessor.core.openapi.RefResolver as ParserRefResolver
 import io.openapiprocessor.core.parser.openapi.v31.Path as ParserPath31
 import io.openapiprocessor.core.parser.openapi.v31.Schema as ParserSchema31
 import org.slf4j.Logger

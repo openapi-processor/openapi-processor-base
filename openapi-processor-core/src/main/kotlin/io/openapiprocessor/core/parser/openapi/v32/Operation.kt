@@ -5,16 +5,16 @@
 
 package io.openapiprocessor.core.parser.openapi.v32
 
-import io.openapiprocessor.core.parser.HttpMethod
+import io.openapiprocessor.core.openapi.HttpMethod
 import java.net.URI
 import io.openapiparser.model.v32.Operation as Operation32
 import io.openapiparser.model.v32.Parameter as Parameter32
 import io.openapiparser.model.v32.PathItem as Path32
 import io.openapiparser.model.v32.Response as Response32
-import io.openapiprocessor.core.parser.Operation as ParserOperation
-import io.openapiprocessor.core.parser.Parameter as ParserParameter
-import io.openapiprocessor.core.parser.RequestBody as ParserRequestBody
-import io.openapiprocessor.core.parser.Response as ParserResponse
+import io.openapiprocessor.core.openapi.Operation as ParserOperation
+import io.openapiprocessor.core.openapi.Parameter as ParserParameter
+import io.openapiprocessor.core.openapi.RequestBody as ParserRequestBody
+import io.openapiprocessor.core.openapi.Response as ParserResponse
 
 /**
  * openapi-parser Operation abstraction.

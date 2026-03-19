@@ -7,11 +7,11 @@ package io.openapiprocessor.core.converter
 
 import io.openapiprocessor.core.converter.mapping.MappingSchema
 import io.openapiprocessor.core.model.datatypes.DataTypeConstraints
-import io.openapiprocessor.core.parser.HttpMethod
-import io.openapiprocessor.core.parser.Schema
+import io.openapiprocessor.core.openapi.HttpMethod
+import io.openapiprocessor.core.openapi.Schema
 import io.openapiprocessor.core.support.capitalizeFirstChar
 import java.net.URI
-import io.openapiprocessor.core.parser.RefResolver as ParserRefResolver
+import io.openapiprocessor.core.openapi.RefResolver as ParserRefResolver
 
 /**
  * Helper for [DataTypeConverter]. Holds an OpenAPI schema with context information, e.g., name and

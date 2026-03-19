@@ -14,7 +14,7 @@ import io.openapiprocessor.core.converter.mapping.*
 import io.openapiprocessor.core.converter.mapping.matcher.AnnotationTypeMatcher
 import io.openapiprocessor.core.converter.mapping.steps.RootStep
 import io.openapiprocessor.core.converter.mapping.steps.TypesStep
-import io.openapiprocessor.core.parser.HttpMethod
+import io.openapiprocessor.core.openapi.HttpMethod
 import io.openapiprocessor.core.processor.MappingReader
 import io.openapiprocessor.core.support.query
 import io.openapiprocessor.core.support.typeMatcher

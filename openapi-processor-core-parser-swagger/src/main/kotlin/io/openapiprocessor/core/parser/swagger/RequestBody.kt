@@ -16,8 +16,8 @@
 
 package io.openapiprocessor.core.parser.swagger
 
-import io.openapiprocessor.core.parser.MediaType as ParserMediaType
-import io.openapiprocessor.core.parser.RequestBody as ParserRequestBody
+import io.openapiprocessor.core.openapi.MediaType as ParserMediaType
+import io.openapiprocessor.core.openapi.RequestBody as ParserRequestBody
 import io.swagger.v3.oas.models.media.MediaType as SwaggerMediaType
 import io.swagger.v3.oas.models.parameters.RequestBody as SwaggerRequestBody
 

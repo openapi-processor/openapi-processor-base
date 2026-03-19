@@ -6,7 +6,7 @@
 package io.openapiprocessor.core.parser.openapi4j
 
 import java.net.URI
-import io.openapiprocessor.core.parser.Schema as ParserSchema
+import io.openapiprocessor.core.openapi.Schema as ParserSchema
 import org.openapi4j.parser.model.v3.Schema as O4jSchema
 
 /**

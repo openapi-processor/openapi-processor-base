@@ -8,7 +8,7 @@ package io.openapiprocessor.core.converter.mapping
 import io.openapiprocessor.core.converter.mapping.matcher.*
 import io.openapiprocessor.core.converter.mapping.steps.MappingStep
 import io.openapiprocessor.core.converter.mapping.steps.MethodsStep
-import io.openapiprocessor.core.parser.HttpMethod
+import io.openapiprocessor.core.openapi.HttpMethod
 import io.openapiprocessor.core.processor.mapping.v2.BodyStyle
 import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
 

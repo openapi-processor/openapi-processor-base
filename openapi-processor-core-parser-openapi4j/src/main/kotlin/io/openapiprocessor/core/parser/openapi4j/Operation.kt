@@ -5,11 +5,11 @@
 
 package io.openapiprocessor.core.parser.openapi4j
 
-import io.openapiprocessor.core.parser.HttpMethod
-import io.openapiprocessor.core.parser.Operation as ParserOperation
-import io.openapiprocessor.core.parser.Parameter as ParserParameter
-import io.openapiprocessor.core.parser.RequestBody as ParserRequestBody
-import io.openapiprocessor.core.parser.Response as ParserResponse
+import io.openapiprocessor.core.openapi.HttpMethod
+import io.openapiprocessor.core.openapi.Operation as ParserOperation
+import io.openapiprocessor.core.openapi.Parameter as ParserParameter
+import io.openapiprocessor.core.openapi.RequestBody as ParserRequestBody
+import io.openapiprocessor.core.openapi.Response as ParserResponse
 import org.openapi4j.parser.model.v3.Operation as O4jOperation
 import org.openapi4j.parser.model.v3.Parameter as O4jParameter
 import org.openapi4j.parser.model.v3.Path as O4jPath

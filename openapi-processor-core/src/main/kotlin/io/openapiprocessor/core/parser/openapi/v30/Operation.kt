@@ -10,11 +10,11 @@ import io.openapiparser.model.v30.Operation as Operation30
 import io.openapiparser.model.v30.Parameter as Parameter30
 import io.openapiparser.model.v30.PathItem as Path30
 import io.openapiparser.model.v30.Response as Response30
-import io.openapiprocessor.core.parser.HttpMethod as ParserHttpMethod
-import io.openapiprocessor.core.parser.Operation as ParserOperation
-import io.openapiprocessor.core.parser.Parameter as ParserParameter
-import io.openapiprocessor.core.parser.RequestBody as ParserRequestBody
-import io.openapiprocessor.core.parser.Response as ParserResponse
+import io.openapiprocessor.core.openapi.HttpMethod as ParserHttpMethod
+import io.openapiprocessor.core.openapi.Operation as ParserOperation
+import io.openapiprocessor.core.openapi.Parameter as ParserParameter
+import io.openapiprocessor.core.openapi.RequestBody as ParserRequestBody
+import io.openapiprocessor.core.openapi.Response as ParserResponse
 
 /**
  * openapi-parser Operation abstraction.

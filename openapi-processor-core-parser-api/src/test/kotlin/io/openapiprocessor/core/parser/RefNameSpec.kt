@@ -8,6 +8,7 @@ package io.openapiprocessor.core.parser
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
+import io.openapiprocessor.core.openapi.getRefName
 
 class RefNameSpec : FreeSpec({
 

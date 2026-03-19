@@ -5,6 +5,7 @@
 
 package io.openapiprocessor.core.parser
 
+import io.openapiprocessor.core.openapi.OpenApi
 import io.openapiprocessor.core.parser.openapi.Parser as OpenApiParser
 import java.util.*
 import org.slf4j.Logger

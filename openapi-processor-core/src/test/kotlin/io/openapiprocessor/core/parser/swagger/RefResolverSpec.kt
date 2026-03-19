@@ -10,7 +10,7 @@ import io.kotest.matchers.nulls.shouldNotBeNull
 import io.mockk.every
 import io.mockk.mockk
 import io.openapiprocessor.core.parser.ParserType
-import io.openapiprocessor.core.parser.Schema
+import io.openapiprocessor.core.openapi.Schema
 import io.openapiprocessor.core.support.parseApi
 
 class RefResolverSpec: StringSpec({

@@ -12,9 +12,9 @@ import io.kotest.matchers.shouldBe
 import io.mockk.mockk
 import io.openapiprocessor.core.converter.SchemaInfo
 import io.openapiprocessor.core.model.DataTypes
-import io.openapiprocessor.core.parser.HttpMethod
+import io.openapiprocessor.core.openapi.HttpMethod
 import io.openapiprocessor.core.parser.NullSchema
-import io.openapiprocessor.core.parser.RefResolver
+import io.openapiprocessor.core.openapi.RefResolver
 
 class LazyDataTypeSpec : StringSpec({
     val resolver = mockk<RefResolver>()

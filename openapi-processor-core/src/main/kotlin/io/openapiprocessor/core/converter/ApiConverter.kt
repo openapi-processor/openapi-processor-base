@@ -12,11 +12,14 @@ import io.openapiprocessor.core.converter.wrapper.SingleDataTypeWrapper
 import io.openapiprocessor.core.framework.Framework
 import io.openapiprocessor.core.model.*
 import io.openapiprocessor.core.model.datatypes.*
-import io.openapiprocessor.core.parser.*
-import io.openapiprocessor.core.parser.HttpMethod
-import io.openapiprocessor.core.parser.HttpStatus
-import io.openapiprocessor.core.parser.RequestBody
-import io.openapiprocessor.core.parser.Response
+import io.openapiprocessor.core.openapi.*
+import io.openapiprocessor.core.openapi.HttpMethod
+import io.openapiprocessor.core.openapi.HttpStatus
+import io.openapiprocessor.core.openapi.RequestBody
+import io.openapiprocessor.core.openapi.Response
+import io.openapiprocessor.core.parser.MultipartParameter
+import io.openapiprocessor.core.parser.NullSchema
+import io.openapiprocessor.core.parser.UrlencodedParameter
 import io.openapiprocessor.core.processor.mapping.v2.BodyStyle
 import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
 import io.openapiprocessor.core.support.capitalizeFirstChar
@@ -396,7 +399,7 @@ class  ApiConverter(
     }
 
     private fun createMultipartParameter(info: SchemaInfo, encodings: Map<String, Encoding>,
-        dataTypes: DataTypes): Collection<ModelParameter> {
+                                         dataTypes: DataTypes): Collection<ModelParameter> {
         val dataType = convertDataType(info, dataTypes)
         if (dataType !is ObjectDataType) {
             throw NoRequestBodySchemaException(info.getPath(), info.getContentType())

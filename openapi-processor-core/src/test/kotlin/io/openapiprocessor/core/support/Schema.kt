@@ -5,9 +5,9 @@
 
 package io.openapiprocessor.core.support
 
-import io.openapiprocessor.core.parser.Schema
+import io.openapiprocessor.core.openapi.Schema
 import java.net.URI
-import io.openapiprocessor.core.parser.Schema as ParserSchema
+import io.openapiprocessor.core.openapi.Schema as ParserSchema
 
 /**
  * simple Schema implementation for testing

@@ -20,7 +20,7 @@ import io.openapiprocessor.core.converter.mapping.steps.EndpointsStep
 import io.openapiprocessor.core.converter.mapping.steps.GlobalsStep
 import io.openapiprocessor.core.converter.mapping.steps.ParametersStep
 import io.openapiprocessor.core.converter.mapping.steps.TypesStep
-import io.openapiprocessor.core.parser.HttpMethod
+import io.openapiprocessor.core.openapi.HttpMethod
 import io.openapiprocessor.core.processor.MappingReader
 import io.openapiprocessor.core.support.annotationTypeMatcher
 import io.openapiprocessor.core.support.typeMatcher

@@ -12,7 +12,7 @@ import io.openapiprocessor.core.converter.MappingFinderQuery
 import io.openapiprocessor.core.converter.mapping.matcher.InterfaceTypeMatcher
 import io.openapiprocessor.core.converter.mapping.steps.ParametersStep
 import io.openapiprocessor.core.converter.mapping.steps.TypesStep
-import io.openapiprocessor.core.parser.HttpMethod
+import io.openapiprocessor.core.openapi.HttpMethod
 import io.openapiprocessor.core.processor.MappingReader
 import io.openapiprocessor.core.support.MappingConstants.VERSION
 

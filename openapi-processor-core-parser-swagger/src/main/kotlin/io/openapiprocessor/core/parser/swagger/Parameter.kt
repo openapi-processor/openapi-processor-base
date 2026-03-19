@@ -5,8 +5,8 @@
 
 package io.openapiprocessor.core.parser.swagger
 
-import io.openapiprocessor.core.parser.Parameter as ParserParameter
-import io.openapiprocessor.core.parser.Schema as ParserSchema
+import io.openapiprocessor.core.openapi.Parameter as ParserParameter
+import io.openapiprocessor.core.openapi.Schema as ParserSchema
 import io.swagger.v3.oas.models.parameters.Parameter as SwaggerParameter
 
 /**

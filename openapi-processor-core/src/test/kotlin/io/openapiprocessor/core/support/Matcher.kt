@@ -7,7 +7,7 @@ package io.openapiprocessor.core.support
 
 import io.openapiprocessor.core.converter.MappingFinderQuery
 import io.openapiprocessor.core.converter.mapping.matcher.*
-import io.openapiprocessor.core.parser.HttpMethod
+import io.openapiprocessor.core.openapi.HttpMethod
 
 fun typeMatcher(
     path: String? = null,

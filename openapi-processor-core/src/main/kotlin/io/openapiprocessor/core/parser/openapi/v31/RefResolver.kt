@@ -5,10 +5,10 @@
 
 package io.openapiprocessor.core.parser.openapi.v31
 
-import io.openapiprocessor.core.parser.NamedSchema
-import io.openapiprocessor.core.parser.getRefName
-import io.openapiprocessor.core.parser.RefResolver as ParserRefResolver
-import io.openapiprocessor.core.parser.Schema as ParserSchema
+import io.openapiprocessor.core.openapi.NamedSchema
+import io.openapiprocessor.core.openapi.getRefName
+import io.openapiprocessor.core.openapi.RefResolver as ParserRefResolver
+import io.openapiprocessor.core.openapi.Schema as ParserSchema
 import io.openapiparser.model.v31.OpenApi as OpenApi31
 import io.openapiparser.model.v31.Schema as Schema31
 

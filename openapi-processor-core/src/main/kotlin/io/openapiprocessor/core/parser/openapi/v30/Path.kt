@@ -6,9 +6,9 @@
 package io.openapiprocessor.core.parser.openapi.v30
 
 import io.openapiparser.model.v30.PathItem
-import io.openapiprocessor.core.parser.HttpMethod
-import io.openapiprocessor.core.parser.Operation as ParserOperation
-import io.openapiprocessor.core.parser.Path as ParserPath
+import io.openapiprocessor.core.openapi.HttpMethod
+import io.openapiprocessor.core.openapi.Operation as ParserOperation
+import io.openapiprocessor.core.openapi.Path as ParserPath
 
 /**
  * openapi.parser Path abstraction.

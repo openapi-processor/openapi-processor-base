@@ -13,7 +13,7 @@ import io.openapiprocessor.core.converter.mapping.TargetType
 import io.openapiprocessor.core.converter.mapping.TypeMapping
 import io.openapiprocessor.core.model.DataTypes
 import io.openapiprocessor.core.model.datatypes.*
-import io.openapiprocessor.core.parser.HttpMethod
+import io.openapiprocessor.core.openapi.HttpMethod
 import io.openapiprocessor.core.support.getBodySchemaInfo
 import io.openapiprocessor.core.support.getSchemaInfo
 import io.openapiprocessor.core.support.parseApiBody

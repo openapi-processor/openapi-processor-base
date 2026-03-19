@@ -5,8 +5,8 @@
 
 package io.openapiprocessor.core.parser.openapi4j
 
-import io.openapiprocessor.core.parser.Parameter as ParserParameter
-import io.openapiprocessor.core.parser.Schema as ParserSchema
+import io.openapiprocessor.core.openapi.Parameter as ParserParameter
+import io.openapiprocessor.core.openapi.Schema as ParserSchema
 import org.openapi4j.parser.model.v3.Parameter as O4jParameter
 
 /**

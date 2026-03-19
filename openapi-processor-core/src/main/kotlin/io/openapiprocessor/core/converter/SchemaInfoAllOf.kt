@@ -5,8 +5,8 @@
 
 package io.openapiprocessor.core.converter
 
-import io.openapiprocessor.core.parser.RefResolver
-import io.openapiprocessor.core.parser.Schema
+import io.openapiprocessor.core.openapi.RefResolver
+import io.openapiprocessor.core.openapi.Schema
 
 class SchemaInfoAllOf(
     endpoint: Endpoint,

@@ -7,7 +7,7 @@ package io.openapiprocessor.core.parser.swagger
 
 import io.swagger.v3.oas.models.SpecVersion
 import java.net.URI
-import io.openapiprocessor.core.parser.Schema as ParserSchema
+import io.openapiprocessor.core.openapi.Schema as ParserSchema
 import io.swagger.v3.oas.models.media.ComposedSchema as SwaggerComposedSchema
 import io.swagger.v3.oas.models.media.Schema as SwaggerSchema
 

@@ -9,7 +9,7 @@ import com.google.common.jimfs.Configuration
 import com.google.common.jimfs.Jimfs.newFileSystem
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
-import io.openapiprocessor.core.parser.HttpMethod
+import io.openapiprocessor.core.openapi.HttpMethod
 import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.io.path.writeText

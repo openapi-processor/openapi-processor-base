@@ -11,7 +11,7 @@ import io.swagger.v3.parser.OpenAPIV3Parser
 import io.swagger.v3.parser.core.models.ParseOptions
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import io.openapiprocessor.core.parser.OpenApi as ParserOpenApi
+import io.openapiprocessor.core.openapi.OpenApi as ParserOpenApi
 
 const val SCHEME_RESOURCE = "resource:"
 

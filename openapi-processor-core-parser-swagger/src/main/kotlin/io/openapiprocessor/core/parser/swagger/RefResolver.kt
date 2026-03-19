@@ -5,10 +5,10 @@
 
 package io.openapiprocessor.core.parser.swagger
 
-import io.openapiprocessor.core.parser.getRefName
-import io.openapiprocessor.core.parser.NamedSchema as ParserNamedSchema
-import io.openapiprocessor.core.parser.RefResolver as ParserRefResolver
-import io.openapiprocessor.core.parser.Schema as ParserSchema
+import io.openapiprocessor.core.openapi.getRefName
+import io.openapiprocessor.core.openapi.NamedSchema as ParserNamedSchema
+import io.openapiprocessor.core.openapi.RefResolver as ParserRefResolver
+import io.openapiprocessor.core.openapi.Schema as ParserSchema
 import io.swagger.v3.oas.models.media.Schema as SwaggerSchema
 import io.swagger.v3.oas.models.OpenAPI
 

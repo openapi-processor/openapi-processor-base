@@ -7,7 +7,7 @@ package io.openapiprocessor.core.parser.openapi4j
 
 import io.github.stduritemplate.StdUriTemplate
 import java.net.URI
-import io.openapiprocessor.core.parser.Server as ParserServer
+import io.openapiprocessor.core.openapi.Server as ParserServer
 import org.openapi4j.parser.model.v3.Server as O4jServer
 
 class Server(private val server: O4jServer): ParserServer {

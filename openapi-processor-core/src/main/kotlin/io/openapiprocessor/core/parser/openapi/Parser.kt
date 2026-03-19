@@ -21,7 +21,7 @@ import io.openapiprocessor.jsonschema.validator.ValidatorSettings
 import io.openapiparser.model.v30.OpenApi as OpenApi30
 import io.openapiparser.model.v31.OpenApi as OpenApi31
 import io.openapiparser.model.v32.OpenApi as OpenApi32
-import io.openapiprocessor.core.parser.OpenApi as ParserOpenApi
+import io.openapiprocessor.core.openapi.OpenApi as ParserOpenApi
 import io.openapiprocessor.core.parser.openapi.v30.OpenApi as ParserOpenApi30
 import io.openapiprocessor.core.parser.openapi.v31.OpenApi as ParserOpenApi31
 import io.openapiprocessor.core.parser.openapi.v32.OpenApi as ParserOpenApi32

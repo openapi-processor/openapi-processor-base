@@ -6,8 +6,8 @@
 package io.openapiprocessor.core.parser.openapi.v30
 
 import io.openapiparser.model.v30.Parameter as Parameter30
-import io.openapiprocessor.core.parser.Parameter as ParserParameter
-import io.openapiprocessor.core.parser.Schema as ParserSchema
+import io.openapiprocessor.core.openapi.Parameter as ParserParameter
+import io.openapiprocessor.core.openapi.Schema as ParserSchema
 
 /**
  * openapi-parser Parameter abstraction.

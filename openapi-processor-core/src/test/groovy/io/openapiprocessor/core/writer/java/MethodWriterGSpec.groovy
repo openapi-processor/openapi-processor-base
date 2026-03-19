@@ -8,7 +8,7 @@ package io.openapiprocessor.core.writer.java
 import io.openapiprocessor.core.support.TestMappingAnnotationFactory
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.mapping.SimpleParameterValue
-import io.openapiprocessor.core.parser.HttpMethod
+import io.openapiprocessor.core.openapi.HttpMethod
 import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.model.parameters.Parameter
 import io.openapiprocessor.core.model.parameters.ParameterBase

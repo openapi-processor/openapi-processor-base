@@ -5,11 +5,11 @@
 
 package io.openapiprocessor.core.parser.swagger
 
-import io.openapiprocessor.core.parser.HttpMethod
-import io.openapiprocessor.core.parser.Operation as ParserOperation
-import io.openapiprocessor.core.parser.Parameter as ParserParameter
-import io.openapiprocessor.core.parser.RequestBody as ParserRequestBody
-import io.openapiprocessor.core.parser.Response as ParserResponse
+import io.openapiprocessor.core.openapi.HttpMethod
+import io.openapiprocessor.core.openapi.Operation as ParserOperation
+import io.openapiprocessor.core.openapi.Parameter as ParserParameter
+import io.openapiprocessor.core.openapi.RequestBody as ParserRequestBody
+import io.openapiprocessor.core.openapi.Response as ParserResponse
 import io.swagger.v3.oas.models.Operation as SwaggerOperation
 import io.swagger.v3.oas.models.PathItem as SwaggerPath
 import io.swagger.v3.oas.models.parameters.Parameter as SwaggerParameter

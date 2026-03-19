@@ -5,6 +5,8 @@
 
 package io.openapiprocessor.core.parser
 
+import io.openapiprocessor.core.openapi.OpenApi
+
 interface Parser {
     fun parse(apiPath: String): OpenApi
 }

@@ -16,7 +16,7 @@ import io.kotest.matchers.types.shouldBeInstanceOf
 import io.openapiprocessor.core.converter.mapping.steps.GlobalsStep
 import io.openapiprocessor.core.model.DataTypes
 import io.openapiprocessor.core.model.datatypes.*
-import io.openapiprocessor.core.parser.HttpMethod
+import io.openapiprocessor.core.openapi.HttpMethod
 import io.openapiprocessor.core.support.*
 import io.openapiprocessor.core.writer.java.JavaIdentifier
 

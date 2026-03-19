@@ -7,8 +7,8 @@ package io.openapiprocessor.core.parser.openapi.v30
 
 import io.openapiparser.model.v30.MediaType as MediaType30
 import io.openapiparser.model.v30.Response as Response30
-import io.openapiprocessor.core.parser.MediaType as ParserMediaType
-import io.openapiprocessor.core.parser.Response as ParserResponse
+import io.openapiprocessor.core.openapi.MediaType as ParserMediaType
+import io.openapiprocessor.core.openapi.Response as ParserResponse
 
 /**
  * openapi-parser Response abstraction.

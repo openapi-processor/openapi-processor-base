@@ -5,8 +5,8 @@
 
 package io.openapiprocessor.core.parser.openapi4j
 
-import io.openapiprocessor.core.parser.MediaType as ParserMediaType
-import io.openapiprocessor.core.parser.Response as ParserResponse
+import io.openapiprocessor.core.openapi.MediaType as ParserMediaType
+import io.openapiprocessor.core.openapi.Response as ParserResponse
 import org.openapi4j.parser.model.v3.MediaType as O4jMediaType
 import org.openapi4j.parser.model.v3.Response as O4jResponse
 

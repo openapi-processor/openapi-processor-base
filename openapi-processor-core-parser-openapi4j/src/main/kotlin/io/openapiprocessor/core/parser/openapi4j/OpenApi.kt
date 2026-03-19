@@ -5,12 +5,12 @@
 
 package io.openapiprocessor.core.parser.openapi4j
 
-import io.openapiprocessor.core.parser.Schema
-import io.openapiprocessor.core.parser.Server
-import io.openapiprocessor.core.parser.OpenApi as ParserOpenApi
-import io.openapiprocessor.core.parser.Path as ParserPath
-import io.openapiprocessor.core.parser.Schema as ParserSchema
-import io.openapiprocessor.core.parser.RefResolver as ParserRefResolver
+import io.openapiprocessor.core.openapi.Schema
+import io.openapiprocessor.core.openapi.Server
+import io.openapiprocessor.core.openapi.OpenApi as ParserOpenApi
+import io.openapiprocessor.core.openapi.Path as ParserPath
+import io.openapiprocessor.core.openapi.Schema as ParserSchema
+import io.openapiprocessor.core.openapi.RefResolver as ParserRefResolver
 import org.openapi4j.core.validation.ValidationResults
 import org.openapi4j.parser.model.v3.OpenApi3 as O4jOpenApi
 import org.openapi4j.parser.model.v3.Path as O4jPath

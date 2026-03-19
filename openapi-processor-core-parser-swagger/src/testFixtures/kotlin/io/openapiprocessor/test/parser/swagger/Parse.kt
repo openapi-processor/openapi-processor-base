@@ -5,7 +5,7 @@
 
 package io.openapiprocessor.test.parser.swagger
 
-import io.openapiprocessor.core.parser.OpenApi
+import io.openapiprocessor.core.openapi.OpenApi
 import io.openapiprocessor.core.parser.swagger.OpenApi as OpenApiSwagger
 import io.swagger.v3.parser.OpenAPIV3Parser
 

@@ -7,7 +7,7 @@ package io.openapiprocessor.core.parser.openapi.v32
 
 import java.net.URI
 import io.openapiparser.model.v32.Schema as Schema32
-import io.openapiprocessor.core.parser.Schema as ParserSchema
+import io.openapiprocessor.core.openapi.Schema as ParserSchema
 
 /**
  * openapi-parser Schema abstraction.
