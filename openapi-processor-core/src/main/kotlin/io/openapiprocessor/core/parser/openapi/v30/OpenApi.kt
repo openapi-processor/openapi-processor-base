@@ -5,18 +5,18 @@
 
 package io.openapiprocessor.core.parser.openapi.v30
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import io.openapiparser.model.v30.OpenApi as OpenApi30
 import io.openapiparser.model.v30.PathItem as PathItem30
 import io.openapiparser.model.v30.Schema as Schema30
-import io.openapiprocessor.core.openapi.Path
-import io.openapiprocessor.core.openapi.Schema
-import io.openapiprocessor.core.openapi.Server
-import io.openapiprocessor.core.openapi.OpenApi as ParserOpenApi
-import io.openapiprocessor.core.openapi.RefResolver as ParserRefResolver
+import io.openapiprocessor.core.openapi.OpenApi as OpenApiOpenApi
+import io.openapiprocessor.core.openapi.Path as OpenApiPath
+import io.openapiprocessor.core.openapi.RefResolver as OpenApiRefResolver
+import io.openapiprocessor.core.openapi.Schema as OpenApiSchema
+import io.openapiprocessor.core.openapi.Server as OpenApiServer
 import io.openapiprocessor.core.parser.openapi.v30.Path as ParserPath30
 import io.openapiprocessor.core.parser.openapi.v30.Schema as ParserSchema30
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 
 /**
@@ -24,11 +24,11 @@ import org.slf4j.LoggerFactory
  */
 open class OpenApi(
     private val api: OpenApi30
-): ParserOpenApi {
+): OpenApiOpenApi {
     private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
-    override fun getServers(): List<Server> {
-        val servers = mutableListOf<Server>()
+    override fun getServers(): List<OpenApiServer> {
+        val servers = mutableListOf<OpenApiServer>()
 
         api.servers.forEach { server ->
             servers.add(Server(server))
@@ -37,8 +37,8 @@ open class OpenApi(
         return servers
     }
 
-    override fun getPaths(): Map<String, Path> {
-        val paths = linkedMapOf<String, Path>()
+    override fun getPaths(): Map<String, OpenApiPath> {
+        val paths = linkedMapOf<String, OpenApiPath>()
 
         api.paths.pathItems.forEach { (name: String, value: PathItem30) ->
             var path = value
@@ -51,8 +51,8 @@ open class OpenApi(
         return paths
     }
 
-    override fun getSchemas(): Map<String, Schema> {
-        val schemas = linkedMapOf<String, Schema>()
+    override fun getSchemas(): Map<String, OpenApiSchema> {
+        val schemas = linkedMapOf<String, OpenApiSchema>()
 
         api.components?.schemas?.forEach { (name: String, schema: Schema30) ->
             schemas[name] = ParserSchema30(schema)
@@ -61,7 +61,7 @@ open class OpenApi(
         return schemas
     }
 
-    override fun getRefResolver(): ParserRefResolver = RefResolver(api)
+    override fun getRefResolver(): OpenApiRefResolver = RefResolver(api)
 
     override fun printWarnings() {
         // unused

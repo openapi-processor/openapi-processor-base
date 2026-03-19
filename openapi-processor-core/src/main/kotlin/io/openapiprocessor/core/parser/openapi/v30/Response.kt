@@ -7,22 +7,22 @@ package io.openapiprocessor.core.parser.openapi.v30
 
 import io.openapiparser.model.v30.MediaType as MediaType30
 import io.openapiparser.model.v30.Response as Response30
-import io.openapiprocessor.core.openapi.MediaType as ParserMediaType
-import io.openapiprocessor.core.openapi.Response as ParserResponse
+import io.openapiprocessor.core.openapi.MediaType as OpenApiMediaType
+import io.openapiprocessor.core.openapi.Response as OpenApiResponse
 
 /**
  * openapi-parser Response abstraction.
  */
-class Response(private val response: Response30): ParserResponse {
+class Response(private val response: Response30): OpenApiResponse {
 
-    override fun getContent(): Map<String, ParserMediaType> {
+    override fun getContent(): Map<String, OpenApiMediaType> {
         val responseContent = if(response.isRef) {
             response.refObject.content
         } else {
             response.content
         }
 
-        val content = linkedMapOf<String, ParserMediaType>()
+        val content = linkedMapOf<String, OpenApiMediaType>()
         responseContent.forEach { (key: String, entry: MediaType30) ->
             content[key] = MediaType(entry)
         }

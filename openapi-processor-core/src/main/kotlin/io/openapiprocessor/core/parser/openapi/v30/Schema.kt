@@ -7,12 +7,12 @@ package io.openapiprocessor.core.parser.openapi.v30
 
 import java.net.URI
 import io.openapiparser.model.v30.Schema as Schema30
-import io.openapiprocessor.core.openapi.Schema as ParserSchema
+import io.openapiprocessor.core.openapi.Schema as OpenApiSchema
 
 /**
  * openapi-parser Schema abstraction.
  */
-class Schema(val schema: Schema30) : ParserSchema {
+class Schema(val schema: Schema30) : OpenApiSchema {
 
     override fun getType(): String? {
         if (itemsOf () != null) {  // check ??
@@ -61,10 +61,10 @@ class Schema(val schema: Schema30) : ParserSchema {
         return values!!.toList()
     }
 
-    override fun getItem(): ParserSchema = Schema(schema.items!!)
+    override fun getItem(): OpenApiSchema = Schema(schema.items!!)
 
-    override fun getProperties(): Map<String, ParserSchema> {
-        val props = LinkedHashMap<String, ParserSchema> ()
+    override fun getProperties(): Map<String, OpenApiSchema> {
+        val props = LinkedHashMap<String, OpenApiSchema> ()
 
         schema.properties.forEach { (key: String, entry: Schema30) ->
             props[key] = Schema (entry)
@@ -84,8 +84,8 @@ class Schema(val schema: Schema30) : ParserSchema {
         return null;
     }
 
-    override fun getItems(): List<ParserSchema> {
-        val result: MutableList<ParserSchema> = mutableListOf()
+    override fun getItems(): List<OpenApiSchema> {
+        val result: MutableList<OpenApiSchema> = mutableListOf()
 
         schema.allOf.forEach {
             result.add(Schema(it))

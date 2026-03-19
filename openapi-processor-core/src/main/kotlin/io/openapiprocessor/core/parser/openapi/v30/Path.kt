@@ -6,9 +6,9 @@
 package io.openapiprocessor.core.parser.openapi.v30
 
 import io.openapiparser.model.v30.PathItem
-import io.openapiprocessor.core.openapi.HttpMethod
-import io.openapiprocessor.core.openapi.Operation as ParserOperation
-import io.openapiprocessor.core.openapi.Path as ParserPath
+import io.openapiprocessor.core.openapi.HttpMethod as OpenApiHttpMethod
+import io.openapiprocessor.core.openapi.Operation as OpenApiOperation
+import io.openapiprocessor.core.openapi.Path as OpenApiPath
 
 /**
  * openapi.parser Path abstraction.
@@ -16,11 +16,11 @@ import io.openapiprocessor.core.openapi.Path as ParserPath
 class Path(
     private val path: String,
     private val info: PathItem
-) : ParserPath {
+) : OpenApiPath {
 
     override fun getPath(): String = path
 
-    override fun getOperations(): List<ParserOperation> {
+    override fun getOperations(): List<OpenApiOperation> {
         var pathItem = info
         if (info.isRef) {
             pathItem = info.refObject
@@ -28,6 +28,6 @@ class Path(
 
         return pathItem
             .operations
-            .map { Operation(HttpMethod.valueOf(it.key.uppercase()), it.value, pathItem) }
+            .map { Operation(OpenApiHttpMethod.valueOf(it.key.uppercase()), it.value, pathItem) }
     }
 }
