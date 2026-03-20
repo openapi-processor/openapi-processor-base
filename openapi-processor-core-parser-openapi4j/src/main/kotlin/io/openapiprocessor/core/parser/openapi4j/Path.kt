@@ -5,9 +5,9 @@
 
 package io.openapiprocessor.core.parser.openapi4j
 
-import io.openapiprocessor.core.openapi.Path as ParserPath
-import io.openapiprocessor.core.openapi.HttpMethod
-import io.openapiprocessor.core.openapi.Operation as ParserOperation
+import io.openapiprocessor.core.openapi.Path as OpenApiPath
+import io.openapiprocessor.core.openapi.HttpMethod as OpenApiHttpMethod
+import io.openapiprocessor.core.openapi.Operation as OpenApiOperation
 import org.openapi4j.parser.model.v3.Path as Oa4jPath
 
 /**
@@ -17,13 +17,13 @@ class Path(
     private val path: String,
     private val info: Oa4jPath,
     private val refResolver: RefResolverNative
-): ParserPath {
+): OpenApiPath {
 
     override fun getPath(): String = path
 
-    override fun getOperations(): List<ParserOperation> {
+    override fun getOperations(): List<OpenApiOperation> {
         return info
             .operations
-            .map { Operation(HttpMethod.valueOf(it.key.uppercase()), it.value, info, refResolver) }
+            .map { Operation(OpenApiHttpMethod.valueOf(it.key.uppercase()), it.value, info, refResolver) }
     }
 }

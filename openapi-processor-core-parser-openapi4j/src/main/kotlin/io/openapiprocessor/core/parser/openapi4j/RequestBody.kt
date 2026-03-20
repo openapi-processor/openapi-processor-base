@@ -16,8 +16,8 @@
 
 package io.openapiprocessor.core.parser.openapi4j
 
-import io.openapiprocessor.core.openapi.MediaType as ParserMediaType
-import io.openapiprocessor.core.openapi.RequestBody as ParserRequestBody
+import io.openapiprocessor.core.openapi.MediaType as OpenApiMediaType
+import io.openapiprocessor.core.openapi.RequestBody as OpenApiRequestBody
 import org.openapi4j.parser.model.v3.MediaType as O4jMediaType
 import org.openapi4j.parser.model.v3.RequestBody as O4jRequestBody
 
@@ -26,14 +26,14 @@ import org.openapi4j.parser.model.v3.RequestBody as O4jRequestBody
  *
  * @author Martin Hauner
  */
-class RequestBody(private val requestBody: O4jRequestBody): ParserRequestBody {
+class RequestBody(private val requestBody: O4jRequestBody): OpenApiRequestBody {
 
     override fun getRequired(): Boolean {
         return requestBody.required ?: false
     }
 
-    override fun getContent(): Map<String, ParserMediaType> {
-        val content = linkedMapOf<String, ParserMediaType>()
+    override fun getContent(): Map<String, OpenApiMediaType> {
+        val content = linkedMapOf<String, OpenApiMediaType>()
         requestBody.contentMediaTypes.forEach { (key: String, entry: O4jMediaType) ->
             content[key] = MediaType(entry)
         }

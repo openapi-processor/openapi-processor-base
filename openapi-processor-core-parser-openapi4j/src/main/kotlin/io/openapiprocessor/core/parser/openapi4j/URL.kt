@@ -11,7 +11,7 @@ import java.nio.file.Paths
 /**
  * convert a source string to a valid URL.
  *
- * if the source is an url string it converts it to a URL
+ * if the source is an url string, it converts it to a URL
  *
  * @param source source path or url
  * @return a URL to the given source

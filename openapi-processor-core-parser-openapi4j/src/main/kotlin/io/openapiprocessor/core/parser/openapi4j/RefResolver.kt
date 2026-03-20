@@ -7,17 +7,17 @@ package io.openapiprocessor.core.parser.openapi4j
 
 import io.openapiprocessor.core.openapi.NamedSchema
 import io.openapiprocessor.core.openapi.getRefName
-import io.openapiprocessor.core.openapi.RefResolver as ParserRefResolver
-import io.openapiprocessor.core.openapi.Schema as ParserSchema
+import io.openapiprocessor.core.openapi.RefResolver as OpenApiRefResolver
+import io.openapiprocessor.core.openapi.Schema as OpenApiSchema
 import org.openapi4j.parser.model.v3.OpenApi3 as O4jOpenApi
 import org.openapi4j.parser.model.v3.Schema as O4jSchema
 
 /**
  * openapi4j $ref resolver.
  */
-class RefResolver(private val api: O4jOpenApi): ParserRefResolver {
+class RefResolver(private val api: O4jOpenApi): OpenApiRefResolver {
 
-    override fun resolve(ref: ParserSchema): NamedSchema {
+    override fun resolve(ref: OpenApiSchema): NamedSchema {
         val resolved: O4jSchema
 
         val refName = getRefName(ref.getRef()!!)

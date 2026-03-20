@@ -5,11 +5,11 @@
 
 package io.openapiprocessor.core.parser.openapi4j
 
-import io.openapiprocessor.core.openapi.HttpMethod
-import io.openapiprocessor.core.openapi.Operation as ParserOperation
-import io.openapiprocessor.core.openapi.Parameter as ParserParameter
-import io.openapiprocessor.core.openapi.RequestBody as ParserRequestBody
-import io.openapiprocessor.core.openapi.Response as ParserResponse
+import io.openapiprocessor.core.openapi.HttpMethod as OpenApiHttpMethod
+import io.openapiprocessor.core.openapi.Operation as OpenApiOperation
+import io.openapiprocessor.core.openapi.Parameter as OpenApiParameter
+import io.openapiprocessor.core.openapi.RequestBody as OpenApiRequestBody
+import io.openapiprocessor.core.openapi.Response as OpenApiResponse
 import org.openapi4j.parser.model.v3.Operation as O4jOperation
 import org.openapi4j.parser.model.v3.Parameter as O4jParameter
 import org.openapi4j.parser.model.v3.Path as O4jPath
@@ -20,20 +20,20 @@ import java.net.URI
  * openapi4j Operation abstraction.
  */
 class Operation(
-    private val method: HttpMethod,
+    private val method: OpenApiHttpMethod,
     private val operation: O4jOperation,
     private val path: O4jPath,
     private val refResolver: RefResolverNative
-): ParserOperation {
+): OpenApiOperation {
 
-    override fun getMethod(): HttpMethod = method
+    override fun getMethod(): OpenApiHttpMethod = method
 
     override fun getOperationId(): String? {
         return operation.operationId
     }
 
-    override fun getParameters(): List<ParserParameter> {
-        val parameters = mutableListOf<ParserParameter>()
+    override fun getParameters(): List<OpenApiParameter> {
+        val parameters = mutableListOf<OpenApiParameter>()
 
         path.parameters?.map { p: O4jParameter ->
             var param = p
@@ -56,7 +56,7 @@ class Operation(
         return parameters
     }
 
-    override fun getRequestBody(): ParserRequestBody? {
+    override fun getRequestBody(): OpenApiRequestBody? {
         var requestBody = operation.requestBody
         if (requestBody == null) {
             return null
@@ -68,8 +68,8 @@ class Operation(
         return RequestBody (requestBody)
     }
 
-    override fun getResponses(): Map<String, ParserResponse> {
-        val content = linkedMapOf<String, ParserResponse>()
+    override fun getResponses(): Map<String, OpenApiResponse> {
+        val content = linkedMapOf<String, OpenApiResponse>()
 
         operation.responses.forEach { (key: String, value: O4jResponse) ->
             content[key] = Response(value, refResolver)

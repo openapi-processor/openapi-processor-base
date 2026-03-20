@@ -6,13 +6,13 @@
 package io.openapiprocessor.core.parser.openapi4j
 
 import java.net.URI
-import io.openapiprocessor.core.openapi.Schema as ParserSchema
+import io.openapiprocessor.core.openapi.Schema as OpenApiSchema
 import org.openapi4j.parser.model.v3.Schema as O4jSchema
 
 /**
  * openapi4j Schema abstraction.
  */
-class Schema(val schema: O4jSchema) : ParserSchema {
+class Schema(val schema: O4jSchema) : OpenApiSchema {
 
     override fun getType(): String? {
         if (itemsOf () != null) {
@@ -32,10 +32,10 @@ class Schema(val schema: O4jSchema) : ParserSchema {
         return schema.enums
     }
 
-    override fun getItem(): ParserSchema = Schema(schema.itemsSchema)
+    override fun getItem(): OpenApiSchema = Schema(schema.itemsSchema)
 
-    override fun getProperties(): Map<String, ParserSchema> {
-        val props = LinkedHashMap<String, ParserSchema> ()
+    override fun getProperties(): Map<String, OpenApiSchema> {
+        val props = LinkedHashMap<String, OpenApiSchema> ()
 
         schema.properties?.forEach { (key: String, entry: O4jSchema) ->
             props[key] = Schema (entry)
@@ -55,8 +55,8 @@ class Schema(val schema: O4jSchema) : ParserSchema {
         return null;
     }
 
-    override fun getItems(): List<ParserSchema> {
-        val result: MutableList<ParserSchema> = mutableListOf()
+    override fun getItems(): List<OpenApiSchema> {
+        val result: MutableList<OpenApiSchema> = mutableListOf()
 
         schema.allOfSchemas?.forEach {
             result.add(Schema(it))
