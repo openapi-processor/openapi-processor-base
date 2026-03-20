@@ -7,12 +7,12 @@ package io.openapiprocessor.core.parser.openapi.v32
 
 import io.openapiprocessor.core.openapi.Encoding
 import io.openapiparser.model.v32.MediaType as MediaType32
-import io.openapiprocessor.core.openapi.MediaType as ParserMediaType
+import io.openapiprocessor.core.openapi.MediaType as OpenApiMediaType
 
 /**
  * openapi-parser MediaType abstraction.
  */
-class MediaType(val mediaType: MediaType32): ParserMediaType {
+class MediaType(val mediaType: MediaType32): OpenApiMediaType {
     override fun getSchema(): Schema {
         return if (mediaType.schema != null) {
             Schema(mediaType.schema!!)
