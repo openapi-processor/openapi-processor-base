@@ -61,11 +61,6 @@
           "default": false,
           "enum": [false, true, "javax", "jakarta"]
         },
-        "jackson": {
-          "description": "jackson annotations version.",
-          "default": "v2",
-          "enum": ["v2", "v3"]
-        },
         "javadoc": {
           "description": "generate javadoc from OpenAPI 'description' properties.",
           "type": "boolean",

@@ -8,6 +8,19 @@ package io.openapiprocessor.core.writer.java
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.model.Annotation
 
+/**
+ * TODO remove v3
+ *
+ * Jackson 3 still uses the annotations from the `com.fasterxml.jackson.annotation` package.
+ *
+ * mapping jon schema definition to configure the jackson version.
+ *
+ *         "jackson": {
+ *           "description": "jackson annotations version.",
+ *           "default": "v2",
+ *           "enum": ["v2", "v3"]
+ *         },
+ */
 class JacksonAnnotations(apiOptions: ApiOptions) {
     val jsonProperty: Annotation
     val jsonCreator: Annotation

@@ -21,9 +21,6 @@ options: # general processor options (required)
   # enable validation annotations (optional): true or false (default), javax, jakarta
   bean-validation: jakarta
 
-  # jackson version (optional): 2 (default), 3
-  jackson: v2
-
   # generate Javadoc from OpenAPI 'description' properties.
   javadoc: true
 
