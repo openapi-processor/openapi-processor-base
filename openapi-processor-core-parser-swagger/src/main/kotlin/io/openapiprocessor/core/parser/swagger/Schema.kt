@@ -7,14 +7,14 @@ package io.openapiprocessor.core.parser.swagger
 
 import io.swagger.v3.oas.models.SpecVersion
 import java.net.URI
-import io.openapiprocessor.core.openapi.Schema as ParserSchema
+import io.openapiprocessor.core.openapi.Schema as OpenApiSchema
 import io.swagger.v3.oas.models.media.ComposedSchema as SwaggerComposedSchema
 import io.swagger.v3.oas.models.media.Schema as SwaggerSchema
 
 /**
  * Swagger Schema abstraction.
  */
-class Schema(private val schema: SwaggerSchema<*>): ParserSchema {
+class Schema(private val schema: SwaggerSchema<*>): OpenApiSchema {
 
     override fun getType(): String? {
         if (itemsOf () != null) {
@@ -42,12 +42,12 @@ class Schema(private val schema: SwaggerSchema<*>): ParserSchema {
         return schema.enum
     }
 
-    override fun getItem(): ParserSchema {
+    override fun getItem(): OpenApiSchema {
         return Schema(schema.items)
     }
 
-    override fun getProperties(): Map<String, ParserSchema> {
-        val props = LinkedHashMap<String, ParserSchema> ()
+    override fun getProperties(): Map<String, OpenApiSchema> {
+        val props = LinkedHashMap<String, OpenApiSchema> ()
 
         schema.properties?.forEach { (key: String, value: SwaggerSchema<Any>) ->
             props[key] = Schema (value)
@@ -56,7 +56,7 @@ class Schema(private val schema: SwaggerSchema<*>): ParserSchema {
         return props
     }
 
-    override fun getAdditionalProperties(): ParserSchema? {
+    override fun getAdditionalProperties(): OpenApiSchema? {
         val additional = schema.additionalProperties
 
         // null, boolean, schema
@@ -67,8 +67,8 @@ class Schema(private val schema: SwaggerSchema<*>): ParserSchema {
         return null
     }
 
-    override fun getItems(): List<ParserSchema> {
-        val result: MutableList<ParserSchema> = mutableListOf()
+    override fun getItems(): List<OpenApiSchema> {
+        val result: MutableList<OpenApiSchema> = mutableListOf()
 
         if(schema !is SwaggerComposedSchema) {
             return result

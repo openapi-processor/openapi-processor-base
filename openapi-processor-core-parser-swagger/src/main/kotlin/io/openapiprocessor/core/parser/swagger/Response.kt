@@ -5,18 +5,18 @@
 
 package io.openapiprocessor.core.parser.swagger
 
-import io.openapiprocessor.core.openapi.MediaType as ParserMediaType
-import io.openapiprocessor.core.openapi.Response as ParserResponse
+import io.openapiprocessor.core.openapi.MediaType as OpenApiMediaType
+import io.openapiprocessor.core.openapi.Response as OpenApiResponse
 import io.swagger.v3.oas.models.media.MediaType as SwaggerMediaType
 import io.swagger.v3.oas.models.responses.ApiResponse as SwaggerResponse
 
 /**
  * Swagger Response abstraction.
  */
-class Response(private val response: SwaggerResponse): ParserResponse {
+class Response(private val response: SwaggerResponse): OpenApiResponse {
 
-    override fun getContent(): Map<String, ParserMediaType> {
-        val content = linkedMapOf<String, ParserMediaType>()
+    override fun getContent(): Map<String, OpenApiMediaType> {
+        val content = linkedMapOf<String, OpenApiMediaType>()
         response.content?.forEach { (key: String, value: SwaggerMediaType) ->
             content[key] = MediaType(value)
         }

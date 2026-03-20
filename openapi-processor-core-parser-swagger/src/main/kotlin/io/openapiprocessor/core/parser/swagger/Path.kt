@@ -5,11 +5,11 @@
 
 package io.openapiprocessor.core.parser.swagger
 
-import io.openapiprocessor.core.openapi.Path as ParserPath
-import io.openapiprocessor.core.openapi.HttpMethod
-import io.openapiprocessor.core.openapi.Operation as ParserOperation
-import io.swagger.v3.oas.models.PathItem as SwaggerPath
+import io.openapiprocessor.core.openapi.HttpMethod as OpenApiHttpMethod
+import io.openapiprocessor.core.openapi.Operation as OpenApiOperation
+import io.openapiprocessor.core.openapi.Path as OpenApiPath
 import io.swagger.v3.oas.models.Operation as SwaggerOperation
+import io.swagger.v3.oas.models.PathItem as SwaggerPath
 
 /**
  * Swagger Path abstraction.
@@ -18,14 +18,14 @@ class Path(
     private val path: String,
     private val info: SwaggerPath,
     private val refResolver: RefResolverNative
-): ParserPath {
+): OpenApiPath {
 
     override fun getPath(): String = path
 
-    override fun getOperations(): List<ParserOperation> {
-        val ops: MutableList<ParserOperation> = mutableListOf()
+    override fun getOperations(): List<OpenApiOperation> {
+        val ops: MutableList<OpenApiOperation> = mutableListOf()
 
-        HttpMethod.values.forEach {
+        OpenApiHttpMethod.values.forEach {
             val op = info.getOperation(it.method)
             if (op != null) {
                 ops.add (Operation(it, op, info, refResolver))
@@ -39,14 +39,14 @@ class Path(
 
 fun SwaggerPath.getOperation(method: String): SwaggerOperation? {
     return when(method) {
-        HttpMethod.DELETE.method -> this.delete
-        HttpMethod.GET.method -> this.get
-        HttpMethod.HEAD.method -> this.head
-        HttpMethod.OPTIONS.method -> this.options
-        HttpMethod.PATCH.method -> this.patch
-        HttpMethod.POST.method -> this.post
-        HttpMethod.PUT.method -> this.put
-        HttpMethod.TRACE.method -> this.trace
+        OpenApiHttpMethod.DELETE.method -> this.delete
+        OpenApiHttpMethod.GET.method -> this.get
+        OpenApiHttpMethod.HEAD.method -> this.head
+        OpenApiHttpMethod.OPTIONS.method -> this.options
+        OpenApiHttpMethod.PATCH.method -> this.patch
+        OpenApiHttpMethod.POST.method -> this.post
+        OpenApiHttpMethod.PUT.method -> this.put
+        OpenApiHttpMethod.TRACE.method -> this.trace
         else -> null
     }
 }

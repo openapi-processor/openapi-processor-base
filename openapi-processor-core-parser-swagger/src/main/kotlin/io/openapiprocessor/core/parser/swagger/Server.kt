@@ -7,10 +7,10 @@ package io.openapiprocessor.core.parser.swagger
 
 import io.github.stduritemplate.StdUriTemplate
 import java.net.URI
-import io.openapiprocessor.core.openapi.Server as ParserServer
+import io.openapiprocessor.core.openapi.Server as OpenApiServer
 import io.swagger.v3.oas.models.servers.Server as SwaggerServer
 
-class Server(private val server: SwaggerServer): ParserServer {
+class Server(private val server: SwaggerServer): OpenApiServer {
 
     override fun getUri(): URI {
         val variables = mutableMapOf<String, Any>()

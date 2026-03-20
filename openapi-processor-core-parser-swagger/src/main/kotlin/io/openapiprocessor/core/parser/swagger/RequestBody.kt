@@ -16,8 +16,8 @@
 
 package io.openapiprocessor.core.parser.swagger
 
-import io.openapiprocessor.core.openapi.MediaType as ParserMediaType
-import io.openapiprocessor.core.openapi.RequestBody as ParserRequestBody
+import io.openapiprocessor.core.openapi.MediaType as OpenApiMediaType
+import io.openapiprocessor.core.openapi.RequestBody as OpenApiRequestBody
 import io.swagger.v3.oas.models.media.MediaType as SwaggerMediaType
 import io.swagger.v3.oas.models.parameters.RequestBody as SwaggerRequestBody
 
@@ -27,14 +27,14 @@ import io.swagger.v3.oas.models.parameters.RequestBody as SwaggerRequestBody
  * @author Martin Hauner
  */
 
-class RequestBody(private val requestBody: SwaggerRequestBody): ParserRequestBody {
+class RequestBody(private val requestBody: SwaggerRequestBody): OpenApiRequestBody {
 
     override fun getRequired(): Boolean {
         return requestBody.required ?: false
     }
 
-    override fun getContent(): Map<String, ParserMediaType> {
-        val content = linkedMapOf<String, ParserMediaType>()
+    override fun getContent(): Map<String, OpenApiMediaType> {
+        val content = linkedMapOf<String, OpenApiMediaType>()
         requestBody.content.forEach { (key: String, value: SwaggerMediaType) ->
             content[key] = MediaType(value)
         }

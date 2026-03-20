@@ -7,9 +7,9 @@ package io.openapiprocessor.core.parser.swagger
 
 import io.openapiprocessor.core.openapi.Schema
 import io.openapiprocessor.core.openapi.Server
-import io.openapiprocessor.core.openapi.OpenApi as ParserOpenApi
-import io.openapiprocessor.core.openapi.Path as ParserPath
-import io.openapiprocessor.core.openapi.RefResolver as ParserRefResolver
+import io.openapiprocessor.core.openapi.OpenApi as OpenApiOpenApi
+import io.openapiprocessor.core.openapi.Path as OpenApiPath
+import io.openapiprocessor.core.openapi.RefResolver as OpenApiRefResolver
 import io.swagger.v3.oas.models.PathItem as SwaggerPath
 import io.swagger.v3.oas.models.media.Schema as SwaggerSchema
 import io.swagger.v3.parser.core.models.SwaggerParseResult
@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory
 /**
  * Swagger parser result.
  */
-class OpenApi(private val result: SwaggerParseResult): ParserOpenApi {
+class OpenApi(private val result: SwaggerParseResult): OpenApiOpenApi {
     private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     override fun getServers(): List<Server> {
@@ -32,8 +32,8 @@ class OpenApi(private val result: SwaggerParseResult): ParserOpenApi {
         return servers
     }
 
-    override fun getPaths(): Map<String, ParserPath> {
-        val paths = linkedMapOf<String, ParserPath>()
+    override fun getPaths(): Map<String, OpenApiPath> {
+        val paths = linkedMapOf<String, OpenApiPath>()
 
         result.openAPI.paths.forEach { (name: String, value: SwaggerPath) ->
             paths[name] = Path(name, value, RefResolverNative(result.openAPI))
@@ -52,7 +52,7 @@ class OpenApi(private val result: SwaggerParseResult): ParserOpenApi {
         return schemas
     }
 
-    override fun getRefResolver(): ParserRefResolver = RefResolver (result.openAPI)
+    override fun getRefResolver(): OpenApiRefResolver = RefResolver (result.openAPI)
 
     override fun printWarnings() {
         result.messages?.forEach {

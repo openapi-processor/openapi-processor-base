@@ -6,12 +6,12 @@
 package io.openapiprocessor.core.parser.swagger
 
 import io.openapiprocessor.core.parser.ParserException
-import io.openapiprocessor.core.parser.Parser as ApiParser
 import io.swagger.v3.parser.OpenAPIV3Parser
 import io.swagger.v3.parser.core.models.ParseOptions
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import io.openapiprocessor.core.openapi.OpenApi as ParserOpenApi
+import io.openapiprocessor.core.openapi.OpenApi as OpenApiOpenApi
+import io.openapiprocessor.core.parser.Parser as ApiParser
 
 const val SCHEME_RESOURCE = "resource:"
 
@@ -23,7 +23,7 @@ open class Parser: ApiParser {
 
     private enum class Source {URL, STRING}
 
-    override fun parse(apiPath: String): ParserOpenApi {
+    override fun parse(apiPath: String): OpenApiOpenApi {
         try {
             return run(apiPath, Source.URL)
         } catch (ex: Exception) {
@@ -33,7 +33,7 @@ open class Parser: ApiParser {
     }
 
     /** test only */
-    fun parseString(api: String): ParserOpenApi {
+    fun parseString(api: String): OpenApiOpenApi {
         try {
             return run(api, Source.STRING)
         } catch (ex: Exception) {
@@ -41,7 +41,7 @@ open class Parser: ApiParser {
         }
     }
 
-    private fun run(api: String, source: Source): ParserOpenApi {
+    private fun run(api: String, source: Source): OpenApiOpenApi {
         val opts = ParseOptions()
         // loads $refs to other files into #/components/schema and replaces the $refs to the
         // external files with $refs to #/components/schema.

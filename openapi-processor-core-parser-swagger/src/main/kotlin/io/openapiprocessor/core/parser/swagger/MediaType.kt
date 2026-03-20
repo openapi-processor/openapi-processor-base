@@ -6,13 +6,13 @@
 package io.openapiprocessor.core.parser.swagger
 
 import io.openapiprocessor.core.openapi.Encoding
-import io.openapiprocessor.core.openapi.MediaType as ParserMediaType
+import io.openapiprocessor.core.openapi.MediaType as OpenApiMediaType
 import io.swagger.v3.oas.models.media.MediaType as SwaggerMediaType
 
 /**
  * Swagger MediaType abstraction.
  */
-class MediaType(val mediaType: SwaggerMediaType): ParserMediaType {
+class MediaType(val mediaType: SwaggerMediaType): OpenApiMediaType {
     override fun getSchema() = Schema(mediaType.schema)
 
     override val encodings: Map<String, Encoding>

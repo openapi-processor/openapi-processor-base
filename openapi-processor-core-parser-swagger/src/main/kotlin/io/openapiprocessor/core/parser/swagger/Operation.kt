@@ -5,35 +5,35 @@
 
 package io.openapiprocessor.core.parser.swagger
 
-import io.openapiprocessor.core.openapi.HttpMethod
-import io.openapiprocessor.core.openapi.Operation as ParserOperation
-import io.openapiprocessor.core.openapi.Parameter as ParserParameter
-import io.openapiprocessor.core.openapi.RequestBody as ParserRequestBody
-import io.openapiprocessor.core.openapi.Response as ParserResponse
+import java.net.URI
+import io.openapiprocessor.core.openapi.HttpMethod as OpenApiHttpMethod
+import io.openapiprocessor.core.openapi.Operation as OpenApiOperation
+import io.openapiprocessor.core.openapi.Parameter as OpenApiParameter
+import io.openapiprocessor.core.openapi.RequestBody as OpenApiRequestBody
+import io.openapiprocessor.core.openapi.Response as OpenApiResponse
 import io.swagger.v3.oas.models.Operation as SwaggerOperation
 import io.swagger.v3.oas.models.PathItem as SwaggerPath
 import io.swagger.v3.oas.models.parameters.Parameter as SwaggerParameter
 import io.swagger.v3.oas.models.responses.ApiResponse as SwaggerResponse
-import java.net.URI
 
 /**
  * Swagger Operation abstraction.
  */
 class Operation(
-    private val method: HttpMethod,
+    private val method: OpenApiHttpMethod,
     private val operation: SwaggerOperation,
     private val path: SwaggerPath,
     private val refResolver: RefResolverNative
-): ParserOperation {
+): OpenApiOperation {
 
-    override fun getMethod(): HttpMethod = method
+    override fun getMethod(): OpenApiHttpMethod = method
 
     override fun getOperationId(): String? {
         return operation.operationId
     }
 
-    override fun getParameters(): List<ParserParameter> {
-        val parameters = mutableListOf<ParserParameter>()
+    override fun getParameters(): List<OpenApiParameter> {
+        val parameters = mutableListOf<OpenApiParameter>()
 
         // the swagger parser moves the endpoint parameters to the operation level, sometimes.
         // Sometimes it does not. Check both lists.
@@ -48,7 +48,7 @@ class Operation(
         return parameters
     }
 
-    override fun getRequestBody(): ParserRequestBody? {
+    override fun getRequestBody(): OpenApiRequestBody? {
         var requestBody = operation.requestBody
         if (requestBody == null) {
             return null
@@ -60,8 +60,8 @@ class Operation(
         return RequestBody (requestBody)
     }
 
-    override fun getResponses(): Map<String, ParserResponse> {
-        val content = linkedMapOf<String, ParserResponse>()
+    override fun getResponses(): Map<String, OpenApiResponse> {
+        val content = linkedMapOf<String, OpenApiResponse>()
 
         operation.responses.forEach { (key: String, value: SwaggerResponse) ->
             content[key] = Response(value)
