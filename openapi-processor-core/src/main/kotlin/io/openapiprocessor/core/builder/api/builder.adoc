@@ -1,0 +1,5 @@
+= test support
+
+Make the builder available to `openapi-processor-spring`.
+
+I don't want to create another jar for this (yet).

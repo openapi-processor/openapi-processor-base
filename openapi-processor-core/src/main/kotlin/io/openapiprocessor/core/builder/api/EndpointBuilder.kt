@@ -5,12 +5,12 @@
 
 package io.openapiprocessor.core.builder.api
 
+import io.openapiprocessor.core.model.Documentation
 import io.openapiprocessor.core.model.Endpoint
-import io.openapiprocessor.core.openapi.HttpMethod
 import io.openapiprocessor.core.model.RequestBody
 import io.openapiprocessor.core.model.Response
 import io.openapiprocessor.core.model.parameters.Parameter
-import io.openapiprocessor.core.model.Documentation
+import io.openapiprocessor.core.openapi.HttpMethod
 
 /**
  * entry point of model [Endpoint] builder dsl
