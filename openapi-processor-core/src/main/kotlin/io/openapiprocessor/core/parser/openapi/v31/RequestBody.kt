@@ -7,20 +7,20 @@ package io.openapiprocessor.core.parser.openapi.v31
 
 import io.openapiparser.model.v31.MediaType as MediaType31
 import io.openapiparser.model.v31.RequestBody as RequestBody31
-import io.openapiprocessor.core.openapi.MediaType as ParserMediaType
-import io.openapiprocessor.core.openapi.RequestBody as ParserRequestBody
+import io.openapiprocessor.core.openapi.MediaType as OpenApiMediaType
+import io.openapiprocessor.core.openapi.RequestBody as OpenApiRequestBody
 
 /**
  * openapi-parser RequestBody abstraction.
  */
-class RequestBody(private val requestBody: RequestBody31): ParserRequestBody {
+class RequestBody(private val requestBody: RequestBody31): OpenApiRequestBody {
 
     override fun getRequired(): Boolean {
         return requestBody.required
     }
 
-    override fun getContent(): Map<String, ParserMediaType> {
-        val content = linkedMapOf<String, ParserMediaType>()
+    override fun getContent(): Map<String, OpenApiMediaType> {
+        val content = linkedMapOf<String, OpenApiMediaType>()
         requestBody.content.forEach { (key: String, entry: MediaType31) ->
             content[key] = MediaType(entry)
         }

@@ -6,19 +6,19 @@
 package io.openapiprocessor.core.parser.openapi.v31
 
 import io.openapiparser.model.v31.Parameter as Parameter31
-import io.openapiprocessor.core.openapi.Parameter as ParserParameter
-import io.openapiprocessor.core.openapi.Schema as ParserSchema
+import io.openapiprocessor.core.openapi.Parameter as OpenApiParameter
+import io.openapiprocessor.core.openapi.Schema as OpenApiSchema
 
 /**
  * openapi-parser Parameter abstraction.
  */
-class Parameter(private val parameter: Parameter31): ParserParameter {
+class Parameter(private val parameter: Parameter31): OpenApiParameter {
 
     override fun getIn(): String = parameter.`in`
 
     override fun getName(): String = parameter.name
 
-    override fun getSchema(): ParserSchema = Schema (parameter.schema!!)
+    override fun getSchema(): OpenApiSchema = Schema (parameter.schema!!)
 
     override fun isRequired(): Boolean = parameter.required
 

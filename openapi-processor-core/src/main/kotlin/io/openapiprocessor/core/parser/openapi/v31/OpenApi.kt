@@ -5,22 +5,22 @@
 
 package io.openapiprocessor.core.parser.openapi.v31
 
+import io.openapiprocessor.core.openapi.Path
+import io.openapiprocessor.core.openapi.Schema
+import io.openapiprocessor.core.openapi.Server
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import io.openapiparser.model.v31.OpenApi as OpenApi31
 import io.openapiparser.model.v31.PathItem as PathItem31
 import io.openapiparser.model.v31.Schema as Schema31
-import io.openapiprocessor.core.openapi.Schema
-import io.openapiprocessor.core.openapi.Server
-import io.openapiprocessor.core.openapi.Path
-import io.openapiprocessor.core.openapi.OpenApi as ParserOpenApi
-import io.openapiprocessor.core.openapi.RefResolver as ParserRefResolver
+import io.openapiprocessor.core.openapi.OpenApi as OpenApiOpenApi
+import io.openapiprocessor.core.openapi.RefResolver as OpenApiRefResolver
 import io.openapiprocessor.core.parser.openapi.v31.Path as ParserPath31
 import io.openapiprocessor.core.parser.openapi.v31.Schema as ParserSchema31
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 class OpenApi(
     private val api: OpenApi31
-) : ParserOpenApi {
+) : OpenApiOpenApi {
     private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     override fun getServers(): List<Server> {
@@ -57,7 +57,7 @@ class OpenApi(
         return schemas
     }
 
-    override fun getRefResolver(): ParserRefResolver = RefResolver(api)
+    override fun getRefResolver(): OpenApiRefResolver = RefResolver(api)
 
     override fun printWarnings() {
         // unused

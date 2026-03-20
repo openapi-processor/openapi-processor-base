@@ -8,9 +8,9 @@ package io.openapiprocessor.core.parser.openapi.v31
 import io.github.stduritemplate.StdUriTemplate
 import java.net.URI
 import io.openapiparser.model.v31.Server as Server31
-import io.openapiprocessor.core.openapi.Server as ParserServer
+import io.openapiprocessor.core.openapi.Server as OpenApiServer
 
-class Server(private val server: Server31): ParserServer {
+class Server(private val server: Server31): OpenApiServer {
 
     override fun getUri(): URI {
         val variables = mutableMapOf<String, Any>()
