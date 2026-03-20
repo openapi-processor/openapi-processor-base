@@ -18,15 +18,15 @@ import io.openapiprocessor.jsonschema.schema.Output
 import io.openapiprocessor.jsonschema.schema.SchemaStore
 import io.openapiprocessor.jsonschema.validator.Validator
 import io.openapiprocessor.jsonschema.validator.ValidatorSettings
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import io.openapiparser.model.v30.OpenApi as OpenApi30
 import io.openapiparser.model.v31.OpenApi as OpenApi31
 import io.openapiparser.model.v32.OpenApi as OpenApi32
-import io.openapiprocessor.core.openapi.OpenApi as ParserOpenApi
+import io.openapiprocessor.core.openapi.OpenApi as OpenApiOpenApi
 import io.openapiprocessor.core.parser.openapi.v30.OpenApi as ParserOpenApi30
 import io.openapiprocessor.core.parser.openapi.v31.OpenApi as ParserOpenApi31
 import io.openapiprocessor.core.parser.openapi.v32.OpenApi as ParserOpenApi32
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 /**
  * openapi-parser
@@ -35,7 +35,7 @@ class Parser {
     private val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
 
-    fun parse(apiPath: String): ParserOpenApi {
+    fun parse(apiPath: String): OpenApiOpenApi {
         val reader = UriReader ()
         val converter = JacksonConverter ()
         val loader = DocumentLoader (reader, converter)
@@ -62,17 +62,17 @@ class Parser {
         }
     }
 
-    private fun createApi32(result: OpenApiResult): ParserOpenApi {
+    private fun createApi32(result: OpenApiResult): OpenApiOpenApi {
         val model = result.getModel(OpenApi32::class.java)
         return ParserOpenApi32(model)
     }
 
-    private fun createApi31(result: OpenApiResult): ParserOpenApi {
+    private fun createApi31(result: OpenApiResult): OpenApiOpenApi {
         val model = result.getModel(OpenApi31::class.java)
         return ParserOpenApi31(model)
     }
 
-    private fun createApi30(result: OpenApiResult): ParserOpenApi {
+    private fun createApi30(result: OpenApiResult): OpenApiOpenApi {
         val model = result.getModel(OpenApi30::class.java)
         return ParserOpenApi30(model)
     }

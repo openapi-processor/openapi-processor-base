@@ -7,16 +7,10 @@ package io.openapiprocessor.core.framework
 
 import io.openapiprocessor.core.model.RequestBody
 import io.openapiprocessor.core.model.datatypes.AnnotationDataType
-import io.openapiprocessor.core.model.parameters.AdditionalParameter
-import io.openapiprocessor.core.model.parameters.CookieParameter
-import io.openapiprocessor.core.model.parameters.HeaderParameter
-import io.openapiprocessor.core.model.parameters.MultipartParameter
-import io.openapiprocessor.core.model.parameters.Parameter
-import io.openapiprocessor.core.model.parameters.PathParameter
-import io.openapiprocessor.core.model.parameters.QueryParameter
 import io.openapiprocessor.core.model.datatypes.DataType
-import io.openapiprocessor.core.openapi.Parameter as ParserParameter
-import io.openapiprocessor.core.openapi.RequestBody as ParserRequestBody
+import io.openapiprocessor.core.model.parameters.*
+import io.openapiprocessor.core.openapi.Parameter as OpenApiParameter
+import io.openapiprocessor.core.openapi.RequestBody as OpenApiRequestBody
 
 /**
  * default implementation of [io.openapiprocessor.core.framework.Framework].
@@ -25,7 +19,7 @@ import io.openapiprocessor.core.openapi.RequestBody as ParserRequestBody
  */
 open class FrameworkBase: Framework {
 
-    override fun createQueryParameter(parameter: ParserParameter, dataType: DataType): Parameter {
+    override fun createQueryParameter(parameter: OpenApiParameter, dataType: DataType): Parameter {
         return QueryParameter(
             parameter.getName(),
             dataType,
@@ -35,7 +29,7 @@ open class FrameworkBase: Framework {
         )
     }
 
-    override fun createHeaderParameter(parameter: ParserParameter, dataType: DataType): Parameter {
+    override fun createHeaderParameter(parameter: OpenApiParameter, dataType: DataType): Parameter {
         return HeaderParameter(
             parameter.getName(),
             dataType,
@@ -44,7 +38,7 @@ open class FrameworkBase: Framework {
             parameter.description)
     }
 
-    override fun createCookieParameter(parameter: ParserParameter, dataType: DataType): Parameter {
+    override fun createCookieParameter(parameter: OpenApiParameter, dataType: DataType): Parameter {
         return CookieParameter(
             parameter.getName(),
             dataType,
@@ -53,7 +47,7 @@ open class FrameworkBase: Framework {
             parameter.description)
     }
 
-    override fun createPathParameter(parameter: ParserParameter, dataType: DataType): Parameter {
+    override fun createPathParameter(parameter: OpenApiParameter, dataType: DataType): Parameter {
         return PathParameter(
             parameter.getName(),
             dataType,
@@ -62,7 +56,7 @@ open class FrameworkBase: Framework {
             parameter.description)
     }
 
-    override fun createMultipartParameter(parameter: ParserParameter, dataType: DataType): Parameter {
+    override fun createMultipartParameter(parameter: OpenApiParameter, dataType: DataType): Parameter {
         return MultipartParameter(
             parameter.getName(),
             dataType,
@@ -71,7 +65,7 @@ open class FrameworkBase: Framework {
             parameter.description)
     }
 
-    override fun createAdditionalParameter(parameter: ParserParameter, dataType: DataType,
+    override fun createAdditionalParameter(parameter: OpenApiParameter, dataType: DataType,
        annotationDataType: AnnotationDataType?): Parameter {
 
         return AdditionalParameter(
@@ -83,7 +77,7 @@ open class FrameworkBase: Framework {
             parameter.description)
     }
 
-    override fun createRequestBody(contentType: String, requestBody: ParserRequestBody, dataType: DataType): RequestBody {
+    override fun createRequestBody(contentType: String, requestBody: OpenApiRequestBody, dataType: DataType): RequestBody {
         return RequestBody(
             "body",
             contentType,

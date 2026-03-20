@@ -8,16 +8,16 @@ package io.openapiprocessor.core.support
 import io.openapiprocessor.core.parser.ParserType
 import io.openapiprocessor.core.parser.openapi.Parser
 import io.openapiprocessor.test.stream.Memory
-import io.openapiprocessor.core.openapi.OpenApi as ParserOpenApi
+import io.openapiprocessor.core.openapi.OpenApi as OpenApiOpenApi
 import io.openapiprocessor.test.parser.openapi4j.parse as parseWithOpenApi4j
 import io.openapiprocessor.test.parser.swagger.parse as parseWithSwagger
 
 /**
  * OpenAPI parser to read YAML from memory using the given parser.
  *
- * extract individual Schemas with the get...Schema() functions on the [ParserOpenApi] result.
+ * extract individual Schemas with the get...Schema() functions on the [OpenApiOpenApi] result.
  */
-fun parseApi(apiYaml: String, parserType: ParserType = ParserType.INTERNAL): ParserOpenApi {
+fun parseApi(apiYaml: String, parserType: ParserType = ParserType.INTERNAL): OpenApiOpenApi {
     return when (parserType) {
         ParserType.SWAGGER -> parseWithSwagger(apiYaml)
         ParserType.OPENAPI4J -> parseWithOpenApi4j(apiYaml)
@@ -36,7 +36,7 @@ fun parseApi(
         """,
     body: String,
     parserType: ParserType = ParserType.INTERNAL
-): ParserOpenApi {
+): OpenApiOpenApi {
     val merged = (
         header.trimMargin()
       + body.trimIndent()
@@ -47,17 +47,17 @@ fun parseApi(
 fun parseApiBody(
     body: String,
     parserType: ParserType = ParserType.INTERNAL
-): ParserOpenApi {
+): OpenApiOpenApi {
     return parseApi(body, parserType)
 }
 
 /** groovy support */
 
-fun parseApiBody(body: String): ParserOpenApi {
+fun parseApiBody(body: String): OpenApiOpenApi {
     return parseApi(body = body)
 }
 
-fun parseWithInternal(yaml: String): ParserOpenApi {
+fun parseWithInternal(yaml: String): OpenApiOpenApi {
     Memory.add("openapi.yaml", yaml)
     return Parser().parse("memory:openapi.yaml")
 }

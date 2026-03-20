@@ -11,7 +11,7 @@ import io.openapiprocessor.core.openapi.HttpMethod
 import io.openapiprocessor.core.openapi.Schema
 import io.openapiprocessor.core.support.capitalizeFirstChar
 import java.net.URI
-import io.openapiprocessor.core.openapi.RefResolver as ParserRefResolver
+import io.openapiprocessor.core.openapi.RefResolver as OpenApiRefResolver
 
 /**
  * Helper for [DataTypeConverter]. Holds an OpenAPI schema with context information, e.g., name and
@@ -41,7 +41,7 @@ open class SchemaInfo(
     /**
      * resolver of $references.
      */
-    private val resolver: ParserRefResolver,
+    private val resolver: OpenApiRefResolver,
 
     /**
      * JSON path like location.

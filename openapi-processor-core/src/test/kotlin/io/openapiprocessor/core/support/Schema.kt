@@ -7,7 +7,7 @@ package io.openapiprocessor.core.support
 
 import io.openapiprocessor.core.openapi.Schema
 import java.net.URI
-import io.openapiprocessor.core.openapi.Schema as ParserSchema
+import io.openapiprocessor.core.openapi.Schema as OpenApiSchema
 
 /**
  * simple Schema implementation for testing
@@ -16,8 +16,7 @@ import io.openapiprocessor.core.openapi.Schema as ParserSchema
 class Schema(
     private val schemaType: String? = null,
     private val schemaProperties: Map<String, Schema> = mapOf()
-
-) : ParserSchema {
+) : OpenApiSchema {
 
     override fun getType(): String? {
         return schemaType
