@@ -40,7 +40,8 @@ class AdditionalPropertiesSpec: StringSpec({
         additional.shouldNotBeNull()
     }
 
-    "additionalProperties of boolean object is null  (OpenAPI 3.0)" {
+    // creates empty object
+    "additionalProperties of boolean object is null (OpenAPI 3.0)" {
         val openApi = parseApi( """
            openapi: 3.0.2
            info:

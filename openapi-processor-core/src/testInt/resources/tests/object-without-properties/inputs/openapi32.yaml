@@ -7,13 +7,42 @@ paths:
     get:
       responses:
         "200":
-          description: the foo result
+          description: the foo object result
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Foo"
+
+  /foo-true:
+    get:
+      responses:
+        '200':
+          description: the foo true result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FooTrue'
+
+  /foo-false:
+    get:
+      responses:
+        '200':
+          description: the foo false result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FooFalse'
+
 components:
   schemas:
     Foo:
       type: object
       additionalProperties: {}
+
+    FooTrue:
+      type: object
+      additionalProperties: true
+
+    FooFalse:
+      type: object
+      additionalProperties: false

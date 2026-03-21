@@ -76,12 +76,13 @@ class Schema(val schema: Schema30) : OpenApiSchema {
     override fun getAdditionalProperties(): Schema? {
         val additional = schema.additionalProperties
 
-        // null, boolean, schema
+        // schema
         if(additional is Schema30) {
             return Schema(additional)
         }
 
-        return null;
+        // null, boolean
+        return null
     }
 
     override fun getItems(): List<OpenApiSchema> {

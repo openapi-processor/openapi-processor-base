@@ -2,3 +2,5 @@ prefix: generated
 items:
   - outputs/api/Api.java
   - outputs/model/<model>/Foo.java
+  - outputs/model/<model>/FooFalse.java
+  - outputs/model/<model>/FooTrue.java
