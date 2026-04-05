@@ -14,6 +14,7 @@ import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.mockk.mockk
 import io.openapiprocessor.core.converter.options.TargetDirLayout
+import io.openapiprocessor.core.processor.MappingReader
 import io.openapiprocessor.core.support.Empty
 import org.slf4j.Logger
 
@@ -71,7 +72,7 @@ class OptionsConverterSpec: StringSpec({
     }
 
     "should accept deprecated packageName map option" {
-        val converter = OptionsConverter(true)
+        val converter = OptionsConverter(MappingReader(), true)
         converter.log = mockk<Logger>(relaxed = true)
 
         val options = converter.convertOptions(mapOf(
@@ -82,7 +83,7 @@ class OptionsConverterSpec: StringSpec({
     }
 
     "should accept deprecated beanValidation map option" {
-        val converter = OptionsConverter(true)
+        val converter = OptionsConverter(MappingReader(),true)
         converter.log = mockk<Logger>(relaxed = true)
 
         val options = converter.convertOptions(mapOf(
@@ -93,7 +94,7 @@ class OptionsConverterSpec: StringSpec({
     }
 
     "should accept deprecated typeMappings map option" {
-        val converter = OptionsConverter(true)
+        val converter = OptionsConverter(MappingReader(),true)
         converter.log = mockk<Logger>(relaxed = true)
 
         val options = converter.convertOptions(mapOf(

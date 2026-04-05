@@ -10,18 +10,22 @@ import io.openapiprocessor.jsonschema.ouput.OutputConverter
 import io.openapiprocessor.jsonschema.ouput.OutputUnit
 import io.openapiprocessor.jsonschema.ouput.OutputUnitFlag
 import io.openapiprocessor.jsonschema.reader.UriReader
-import io.openapiprocessor.jsonschema.schema.*
+import io.openapiprocessor.jsonschema.schema.DocumentLoader
+import io.openapiprocessor.jsonschema.schema.JsonInstance
+import io.openapiprocessor.jsonschema.schema.Output
+import io.openapiprocessor.jsonschema.schema.SchemaStore
 import io.openapiprocessor.jsonschema.validator.Validator
 import io.openapiprocessor.jsonschema.validator.ValidatorSettings
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.net.URI
-
 
 /**
- * validate the given mapping.yaml with the mapping.yaml json schema.
+ * validate the given mapping.yaml with the mapping.yaml JSON schema.
  */
-open class MappingValidator {
+open class MappingValidator(
+    val schema: JsonSchema = JsonSchemaCore,
+    val dependencies: List<JsonSchema> = listOf()
+) {
     val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     fun validate(mapping: String, version: String): OutputUnit {
@@ -32,9 +36,12 @@ open class MappingValidator {
 
             val store = SchemaStore(loader)
             store.registerDraft7()
-            store.register(getSchemaUri(version), getSchema(version))
+            dependencies.forEach {
+                store.register(it.getUri(version), it.getSchema(version))
+            }
+            store.register(schema.getUri(version), schema.getSchema(version))
 
-            val schema = store.getSchema(getSchemaUri(version))
+            val schema = store.getSchema(schema.getUri(version))
             val instance = JsonInstance(converter.convert(mapping))
 
             val settings = ValidatorSettings().setOutput(Output.BASIC)
@@ -49,13 +56,5 @@ open class MappingValidator {
             log.error("failed to validate mapping!", ex)
             OutputUnitFlag(false)
         }
-    }
-
-    private fun getSchemaUri(version: String): URI {
-        return URI("https://openapiprocessor.io/schemas/mapping/mapping-${version}.json")
-    }
-
-    private fun getSchema(version: String): String {
-        return "/mapping/$version/mapping.yaml.json"
     }
 }

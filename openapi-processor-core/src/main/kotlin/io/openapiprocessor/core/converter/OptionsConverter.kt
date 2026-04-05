@@ -20,7 +20,10 @@ import io.openapiprocessor.core.processor.mapping.v2.Mapping as MappingV2
 /**
  * creates [ApiOptions] from processor options and mapping.yaml.
  */
-class OptionsConverter(private val checkObsoleteProcessorOptions: Boolean = false) {
+class OptionsConverter(
+    private val mappingReader: MappingReader = MappingReader(),
+    private val checkObsoleteProcessorOptions: Boolean = false
+) {
     var log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
     fun convertOptions(processorOptions: Map<String, Any>): ApiOptions {
@@ -45,7 +48,7 @@ class OptionsConverter(private val checkObsoleteProcessorOptions: Boolean = fals
 
     private fun readMapping(mappingSource: String, options: ApiOptions) {
         try {
-            val mapping: MappingVersion? = MappingReader().read(mappingSource)
+            val mapping: MappingVersion? = mappingReader.read(mappingSource)
             if (mapping == null) {
                 log.warn("missing 'mapping.yaml' configuration!")
                 return
