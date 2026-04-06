@@ -8,6 +8,7 @@ package io.openapiprocessor.core.processor.mapping
 /**
  * check for mapping format
  */
+@Deprecated("obsolete")
 interface MappingVersion {
     val v2: Boolean
 }

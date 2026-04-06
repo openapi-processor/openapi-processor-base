@@ -102,17 +102,4 @@ map:
         then:
         mapping
     }
-
-    void "warns use of old mapping format" () {
-        def yaml = """\
-openapi-processor-mapping: v1
-"""
-
-        when:
-        reader.read (yaml)
-
-        then:
-        thrown(MappingFormatException)
-        2 * reader.log.error (*_)
-    }
 }

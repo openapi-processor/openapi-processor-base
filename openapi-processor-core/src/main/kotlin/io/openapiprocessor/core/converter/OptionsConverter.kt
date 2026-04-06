@@ -10,12 +10,10 @@ import io.openapiprocessor.core.converter.mapping.steps.Target
 import io.openapiprocessor.core.converter.options.TargetDirLayout
 import io.openapiprocessor.core.processor.MappingConverter
 import io.openapiprocessor.core.processor.MappingReader
-import io.openapiprocessor.core.processor.mapping.MappingVersion
+import io.openapiprocessor.core.processor.mapping.v2.Mapping
 import io.openapiprocessor.core.processor.mapping.v2.Options
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import io.openapiprocessor.core.processor.mapping.v1.Mapping as MappingV1
-import io.openapiprocessor.core.processor.mapping.v2.Mapping as MappingV2
 
 /**
  * creates [ApiOptions] from processor options and mapping.yaml.
@@ -26,9 +24,14 @@ class OptionsConverter(
 ) {
     var log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
+    @Deprecated("prefer fillOptions(...)")
     fun convertOptions(processorOptions: Map<String, Any>): ApiOptions {
         val options = ApiOptions()
+        fillOptions(processorOptions, options)
+        return options
+    }
 
+    fun fillOptions(processorOptions: Map<String, Any>, options: ApiOptions) {
         checkDeprecatedMapOptions(processorOptions, options)
 
         if (processorOptions.containsKey("targetDir")) {
@@ -42,110 +45,98 @@ class OptionsConverter(
         } else {
             log.warn("required option 'mapping' is missing!")
         }
-
-        return options
     }
 
     private fun readMapping(mappingSource: String, options: ApiOptions) {
         try {
-            val mapping: MappingVersion? = mappingReader.read(mappingSource)
+            val mapping: Mapping? = mappingReader.read(mappingSource)
             if (mapping == null) {
                 log.warn("missing 'mapping.yaml' configuration!")
                 return
             }
 
-            when (mapping) {
-                is MappingV1 -> {
-                    log.error("please update the mapping.yaml")
-                    log.error("this project is using an old mapping format that is no longer supported.")
-                    log.error(" - 2024.4 is the last version that supports this mapping format.")
+            with(mapping.options) {
+                options.targetDirOptions.clear = targetDir.clear ?: clearTargetDir
+                options.targetDirOptions.layout = TargetDirLayout.from(targetDir.layout)
+            }
+
+            options.packageName = mapping.options.packageName
+            with(mapping.options.packageNames) {
+                options.packageOptions.base = base
+                options.packageOptions.location = location
+
+                // sync base package name
+                if (options.packageOptions.base != null) {
+                    options.packageName = options.packageOptions.base!!
+                } else {
+                    options.packageOptions.base = mapping.options.packageName
                 }
+            }
 
-                is MappingV2 -> {
-                    with(mapping.options) {
-                        options.targetDirOptions.clear = targetDir.clear ?: clearTargetDir
-                        options.targetDirOptions.layout = TargetDirLayout.from(targetDir.layout)
-                    }
+            options.enumType = mapping.options.enumType
+            options.modelType = mapping.options.modelType
+            options.modelAccessors = mapping.options.modelAccessors
+            options.modelNameSuffix = mapping.options.modelNameSuffix
+            options.modelUnreferenced = mapping.options.modelUnreferenced
 
-                    options.packageName = mapping.options.packageName
-                    with(mapping.options.packageNames) {
-                        options.packageOptions.base = base
-                        options.packageOptions.location = location
+            val (enable, format) = checkBeanValidation(mapping.options)
+            options.beanValidation = enable
+            options.beanValidationFormat = format
 
-                        // sync base package name
-                        if (options.packageOptions.base != null) {
-                            options.packageName = options.packageOptions.base!!
-                        }
-                        else {
-                            options.packageOptions.base = mapping.options.packageName
-                        }
-                    }
+            val (enablePathPrefix, pathPrefixServerIndex) = checkServerUrl(mapping.options)
+            options.basePathOptions.enabled = enablePathPrefix
+            options.basePathOptions.serverUrl = pathPrefixServerIndex
+            options.basePathOptions.propertiesName = mapping.options.basePath.propertiesName
+            // to write the base path resource, we need standard layout
+            if (options.basePathOptions.enabled && !options.targetDirOptions.standardLayout) {
+                log.warn("base-path is enabled, forcing target-dir.layout = standard")
+                options.targetDirOptions.layout = TargetDirLayout.STANDARD
+            }
 
-                    options.enumType = mapping.options.enumType
-                    options.modelType = mapping.options.modelType
-                    options.modelAccessors = mapping.options.modelAccessors
-                    options.modelNameSuffix = mapping.options.modelNameSuffix
-                    options.modelUnreferenced = mapping.options.modelUnreferenced
+            options.jackson = mapping.options.jackson
+            options.javadoc = mapping.options.javadoc
+            options.oneOfInterface = mapping.options.oneOfInterface
+            options.responseInterface = mapping.options.responseInterface
 
-                    val (enable, format) = checkBeanValidation(mapping.options)
-                    options.beanValidation = enable
-                    options.beanValidationFormat = format
+            val (enableFormatCode, formatCodeFormatter) = checkFormatter(mapping.options)
+            options.formatCode = enableFormatCode
+            options.formatCodeFormatter = formatCodeFormatter
 
-                    val (enablePathPrefix, pathPrefixServerIndex) = checkServerUrl(mapping.options)
-                    options.basePathOptions.enabled = enablePathPrefix
-                    options.basePathOptions.serverUrl = pathPrefixServerIndex
-                    options.basePathOptions.propertiesName = mapping.options.basePath.propertiesName
-                    // to write the base path resource, we need standard layout
-                    if (options.basePathOptions.enabled && !options.targetDirOptions.standardLayout) {
-                        log.warn("base-path is enabled, forcing target-dir.layout = standard")
-                        options.targetDirOptions.layout = TargetDirLayout.STANDARD
-                    }
+            options.generatedAnnotation = mapping.options.generatedAnnotation
+            options.generatedDate = mapping.options.generatedDate
+            options.jsonPropertyAnnotation = JsonPropertyAnnotationMode.findBy(
+                mapping.options.jsonPropertyAnnotation
+            )
 
-                    options.jackson = mapping.options.jackson
-                    options.javadoc = mapping.options.javadoc
-                    options.oneOfInterface = mapping.options.oneOfInterface
-                    options.responseInterface = mapping.options.responseInterface
+            with(mapping.compatibility) {
+                options.beanValidationValidOnReactive = beanValidationValidOnReactive
+                options.identifierWordBreakFromDigitToLetter = identifierWordBreakFromDigitToLetter
+                options.identifierPrefixInvalidEnumStart = identifierPrefixInvalidEnumStart
+            }
 
-                    val (enableFormatCode, formatCodeFormatter) = checkFormatter(mapping.options)
-                    options.formatCode = enableFormatCode
-                    options.formatCodeFormatter = formatCodeFormatter
+            options.beanValidationAdditionalSupportedTypes = mapping.beanValidation
 
-                    options.generatedAnnotation = mapping.options.generatedAnnotation
-                    options.generatedDate = mapping.options.generatedDate
-                    options.jsonPropertyAnnotation = JsonPropertyAnnotationMode.findBy(
-                        mapping.options.jsonPropertyAnnotation)
+            options.annotationTargets.prefillCommon()
+            mapping.annotationTargets.forEach { (ann, targets) ->
+                val targetTypes = targets.map { AnnotationTargetType.valueOf(it.uppercase()) }
+                options.annotationTargets.add(ann, *targetTypes.toTypedArray())
+            }
 
-                    with(mapping.compatibility) {
-                        options.beanValidationValidOnReactive = beanValidationValidOnReactive
-                        options.identifierWordBreakFromDigitToLetter = identifierWordBreakFromDigitToLetter
-                        options.identifierPrefixInvalidEnumStart = identifierPrefixInvalidEnumStart
-                    }
+            val mappings = MappingConverter().convert(mapping)
+            options.globalMappings = mappings.globalMappings
+            options.endpointMappings = mappings.endpointMappings
+            options.extensionMappings = mappings.extensionMappings
 
-                    options.beanValidationAdditionalSupportedTypes = mapping.beanValidation
+            if (options.packageName == "io.openapiprocessor.generated") {
+                log.warn("is 'options.package-name' set in mapping? found default: '{}'.", options.packageName)
+            }
 
-                    options.annotationTargets.prefillCommon()
-                    mapping.annotationTargets.forEach { (ann, targets) ->
-                        val targetTypes = targets.map { AnnotationTargetType.valueOf(it.uppercase()) }
-                        options.annotationTargets.add(ann, *targetTypes.toTypedArray())
-                    }
-
-                    val mappings = MappingConverter().convert(mapping)
-                    options.globalMappings = mappings.globalMappings
-                    options.endpointMappings = mappings.endpointMappings
-                    options.extensionMappings = mappings.extensionMappings
-
-                    if (options.packageName == "io.openapiprocessor.generated") {
-                        log.warn("is 'options.package-name' set in mapping? found default: '{}'.", options.packageName)
-                    }
-
-                    with(mapping) {
-                        options.loggingOptions.mapping = logging.mapping
-                        if (logging.mappingTarget == "stdout") {
-                            options.loggingOptions.mappingTarget = Target.STDOUT
-                        }
-                        MappingStepBase.options.set(options.loggingOptions)
-                    }
+            with(mapping) {
+                options.loggingOptions.mapping = logging.mapping
+                if (logging.mappingTarget == "stdout") {
+                    options.loggingOptions.mappingTarget = Target.STDOUT
                 }
+                MappingStepBase.options.set(options.loggingOptions)
             }
         } catch (t: Throwable) {
             throw InvalidMappingException("failed to parse 'mapping.yaml' configuration!", t)

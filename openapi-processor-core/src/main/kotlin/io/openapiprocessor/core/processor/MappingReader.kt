@@ -14,7 +14,6 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 import com.fasterxml.jackson.module.kotlin.KotlinFeature
 import com.fasterxml.jackson.module.kotlin.KotlinModule
-import io.openapiprocessor.core.processor.mapping.MappingVersion
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -23,15 +22,15 @@ import java.net.URL
 import io.openapiprocessor.core.processor.mapping.v2.Mapping as MappingV2
 import io.openapiprocessor.core.processor.mapping.v2.Parameter as ParameterV2
 import io.openapiprocessor.core.processor.mapping.v2.ParameterDeserializer as ParameterDeserializerV2
-import io.openapiprocessor.core.processor.mapping.version.Mapping as VersionMapping
+import io.openapiprocessor.core.processor.mapping.version.Mapping as Version
 
 /**
- *  Reader for mapping yaml.
+ *  Reader for mapping YAML.
  */
 class MappingReader(private val validator: MappingValidator = MappingValidator()) {
     var log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
-    fun read(typeMappings: String?): MappingVersion? {
+    fun read(typeMappings: String?): MappingV2? {
         if (typeMappings.isNullOrEmpty()) {
             return null
         }
@@ -49,22 +48,16 @@ class MappingReader(private val validator: MappingValidator = MappingValidator()
         }
 
         val versionMapper = createVersionParser ()
-        val version = versionMapper.readValue (mapping, VersionMapping::class.java)
-
-        if (version.isDeprecatedVersionKey ()) {
-            log.warn ("the mapping version key \"openapi-processor-spring\" is deprecated, please use \"openapi-processor-mapping\"")
-        }
-
-        return if (version.isV2()) {
-            validate(mapping, version.getSafeVersion())
-
-            val mapper = createV2Parser()
-            mapper.readValue (mapping, MappingV2::class.java)
-        } else {
-            log.error("please update the mapping to the latest format")
+        val version = versionMapper.readValue (mapping, Version::class.java)
+        if (version.version == null) {
+            log.error("the mapping is missing the openapi-processor-* version identifier")
             log.error("see https://openapiprocessor.io/spring/mapping/structure.html")
-            throw MappingFormatException()
         }
+
+        validate(mapping, version.getSafeVersion())
+
+        val mapper = createV2Parser()
+        return mapper.readValue (mapping, MappingV2::class.java)
     }
 
     private fun validate(mapping: String, version: String) {

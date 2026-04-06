@@ -6,9 +6,8 @@
 package io.openapiprocessor.core.processor
 
 import io.openapiprocessor.core.converter.mapping.MappingData
-import io.openapiprocessor.core.processor.mapping.MappingVersion
-import io.openapiprocessor.core.processor.mapping.v2.Mapping as MappingV2
-import io.openapiprocessor.core.processor.mapping.v2.MappingConverter as MappingConverterV2
+import io.openapiprocessor.core.processor.mapping.v2.Mapping
+import io.openapiprocessor.core.processor.mapping.v2.MappingConverter
 
 /**
  *  Converter for the type mapping from the mapping YAML. It converts the type mapping information
@@ -16,11 +15,11 @@ import io.openapiprocessor.core.processor.mapping.v2.MappingConverter as Mapping
  */
 class MappingConverter {
 
-    fun convert(source: MappingVersion?): MappingData {
-        if (source != null && source.v2) {
-            return MappingConverterV2(source as MappingV2).convert()
+    fun convert(source: Mapping?): MappingData {
+        if (source == null) {
+            return MappingData()
         }
 
-        return MappingData()
+        return MappingConverter(source).convert()
     }
 }

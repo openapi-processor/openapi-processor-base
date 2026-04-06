@@ -10,6 +10,7 @@ import io.openapiprocessor.core.processor.mapping.MappingVersion
 /**
  * the *old* Schema of the mapping yaml, replaced by mapping.v2
  */
+@Deprecated("obsolete")
 class Mapping: MappingVersion {
     override val v2: Boolean
         get() = false

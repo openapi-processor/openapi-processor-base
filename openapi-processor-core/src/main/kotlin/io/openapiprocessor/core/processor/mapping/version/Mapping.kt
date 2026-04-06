@@ -5,32 +5,18 @@
 
 package io.openapiprocessor.core.processor.mapping.version
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 
+// todo rename to MappingVersion
+@JsonDeserialize(using = VersionDeserializer::class)
 data class Mapping(
-        @JsonProperty("openapi-processor-mapping")
-        val version: String? = null,
-
-        @JsonProperty("openapi-processor-spring")
-        val versionObsolete: String? = null
+    val name: String? = null,
+    val version: String? = null
 ) {
-
-    fun isV2(): Boolean {
-        return getSafeVersion().substring(1).toDouble() > 1.0
-    }
-
-    fun isDeprecatedVersionKey (): Boolean {
-        return versionObsolete != null
-    }
-
     fun getSafeVersion(): String {
         if (version != null)
             return version
 
-        if (versionObsolete != null)
-            return versionObsolete
-
         return "v1"
     }
-
 }

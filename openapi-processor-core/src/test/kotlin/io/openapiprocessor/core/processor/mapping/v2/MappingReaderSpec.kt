@@ -23,26 +23,6 @@ import org.slf4j.Logger
 class MappingReaderSpec: StringSpec ({
     isolationMode = IsolationMode.InstancePerTest
 
-    "warns use of old mapping version key" {
-        val yaml = """
-            |openapi-processor-spring: v2
-        """.trimMargin()
-
-        val validator = mockk<MappingValidator>()
-        every { validator.validate(any(), any()) } returns OutputUnitFlag(true)
-
-        val log = mockk<Logger>(relaxed = true)
-
-        val reader = MappingReader(validator)
-        reader.log = log
-
-        // when:
-        reader.read(yaml)
-
-        // then:
-        verify(exactly = 1) { log.warn(any()) }
-    }
-
     "validates mapping.yaml" {
         val yaml = """
             |openapi-processor-mapping: v2
