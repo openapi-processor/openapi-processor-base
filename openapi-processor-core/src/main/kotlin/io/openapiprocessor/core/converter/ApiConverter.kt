@@ -20,8 +20,8 @@ import io.openapiprocessor.core.openapi.Response
 import io.openapiprocessor.core.parser.MultipartParameter
 import io.openapiprocessor.core.parser.NullSchema
 import io.openapiprocessor.core.parser.UrlencodedParameter
-import io.openapiprocessor.core.processor.mapping.v2.BodyStyle
-import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
+import io.openapiprocessor.core.processor.mapping.BodyStyle
+import io.openapiprocessor.core.processor.mapping.ResultStyle
 import io.openapiprocessor.core.support.capitalizeFirstChar
 import io.openapiprocessor.core.writer.Identifier
 import io.openapiprocessor.core.writer.java.OperationPackage

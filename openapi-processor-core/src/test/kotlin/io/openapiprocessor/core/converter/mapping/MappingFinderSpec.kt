@@ -17,10 +17,10 @@ import io.openapiprocessor.core.converter.MappingFinder
 import io.openapiprocessor.core.converter.MappingFinderQuery
 import io.openapiprocessor.core.openapi.HttpMethod
 import io.openapiprocessor.core.processor.MappingReader
-import io.openapiprocessor.core.processor.mapping.v2.BodyStyle
-import io.openapiprocessor.core.processor.mapping.v2.Mapping
-import io.openapiprocessor.core.processor.mapping.v2.MappingConverter
-import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
+import io.openapiprocessor.core.processor.mapping.BodyStyle
+import io.openapiprocessor.core.processor.mapping.Mapping
+import io.openapiprocessor.core.processor.mapping.MappingConverter
+import io.openapiprocessor.core.processor.mapping.ResultStyle
 import io.openapiprocessor.core.support.mappingFinder
 import io.openapiprocessor.core.support.parseOptions
 import io.openapiprocessor.core.support.query

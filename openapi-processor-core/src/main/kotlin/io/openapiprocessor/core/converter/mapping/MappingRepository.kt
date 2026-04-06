@@ -7,8 +7,8 @@ package io.openapiprocessor.core.converter.mapping
 
 import io.openapiprocessor.core.converter.mapping.matcher.*
 import io.openapiprocessor.core.converter.mapping.steps.*
-import io.openapiprocessor.core.processor.mapping.v2.BodyStyle
-import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
+import io.openapiprocessor.core.processor.mapping.BodyStyle
+import io.openapiprocessor.core.processor.mapping.ResultStyle
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 

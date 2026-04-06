@@ -5,7 +5,7 @@
 
 package io.openapiprocessor.core.converter.mapping
 
-import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
+import io.openapiprocessor.core.processor.mapping.ResultStyle
 
 class ResultStyleOptionMapping(resultStyle: ResultStyle):
     OptionMapping<ResultStyle>("resultStyle", resultStyle)

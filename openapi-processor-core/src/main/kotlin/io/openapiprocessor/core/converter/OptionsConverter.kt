@@ -10,8 +10,8 @@ import io.openapiprocessor.core.converter.mapping.steps.Target
 import io.openapiprocessor.core.converter.options.TargetDirLayout
 import io.openapiprocessor.core.processor.MappingConverter
 import io.openapiprocessor.core.processor.MappingReader
-import io.openapiprocessor.core.processor.mapping.v2.Mapping
-import io.openapiprocessor.core.processor.mapping.v2.Options
+import io.openapiprocessor.core.processor.mapping.Mapping
+import io.openapiprocessor.core.processor.mapping.Options
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 

@@ -13,7 +13,7 @@ import io.openapiprocessor.core.model.Endpoint
 import io.openapiprocessor.core.model.EndpointResponse
 import io.openapiprocessor.core.model.parameters.AdditionalParameter
 import io.openapiprocessor.core.model.parameters.Parameter
-import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
+import io.openapiprocessor.core.processor.mapping.ResultStyle
 import io.openapiprocessor.core.support.LF
 import io.openapiprocessor.core.support.capitalizeFirstChar
 import io.openapiprocessor.core.support.indent

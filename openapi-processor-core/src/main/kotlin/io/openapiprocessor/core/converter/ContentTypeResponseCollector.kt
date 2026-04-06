@@ -8,7 +8,7 @@ package io.openapiprocessor.core.converter
 import io.openapiprocessor.core.openapi.ContentType
 import io.openapiprocessor.core.openapi.HttpStatus
 import io.openapiprocessor.core.openapi.Response
-import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
+import io.openapiprocessor.core.processor.mapping.ResultStyle
 
 
 private const val EMPTY: String = ""

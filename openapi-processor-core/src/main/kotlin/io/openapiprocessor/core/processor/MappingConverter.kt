@@ -6,8 +6,8 @@
 package io.openapiprocessor.core.processor
 
 import io.openapiprocessor.core.converter.mapping.MappingData
-import io.openapiprocessor.core.processor.mapping.v2.Mapping
-import io.openapiprocessor.core.processor.mapping.v2.MappingConverter
+import io.openapiprocessor.core.processor.mapping.Mapping
+import io.openapiprocessor.core.processor.mapping.MappingConverter
 
 /**
  *  Converter for the type mapping from the mapping YAML. It converts the type mapping information

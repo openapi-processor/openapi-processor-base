@@ -9,8 +9,8 @@ import io.openapiprocessor.core.converter.mapping.*
 import io.openapiprocessor.core.converter.mapping.steps.MappingStep
 import io.openapiprocessor.core.converter.mapping.steps.RootStep
 import io.openapiprocessor.core.converter.mapping.steps.RootStepX
-import io.openapiprocessor.core.processor.mapping.v2.BodyStyle
-import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
+import io.openapiprocessor.core.processor.mapping.BodyStyle
+import io.openapiprocessor.core.processor.mapping.ResultStyle
 
 class MappingFinder(val options: ApiOptions) {
 

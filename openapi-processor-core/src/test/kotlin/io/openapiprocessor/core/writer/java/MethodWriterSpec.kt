@@ -13,7 +13,7 @@ import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.mapping.Mappings
 import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.model.parameters.ParameterBase
-import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
+import io.openapiprocessor.core.processor.mapping.ResultStyle
 import io.openapiprocessor.core.support.TestStatusAnnotationWriter
 import io.openapiprocessor.core.support.TestMappingAnnotationFactory
 import io.openapiprocessor.core.support.TestParameterAnnotationWriter

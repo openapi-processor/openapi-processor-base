@@ -8,7 +8,7 @@ package io.openapiprocessor.core.converter
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
-import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
+import io.openapiprocessor.core.processor.mapping.ResultStyle
 import io.openapiprocessor.core.support.parseApi
 
 class ContentTypeResponseCollectorSpec: StringSpec({

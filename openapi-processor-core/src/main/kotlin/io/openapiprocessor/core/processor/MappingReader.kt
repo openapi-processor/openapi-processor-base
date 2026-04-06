@@ -19,9 +19,9 @@ import org.slf4j.LoggerFactory
 import java.io.File
 import java.net.MalformedURLException
 import java.net.URL
-import io.openapiprocessor.core.processor.mapping.v2.Mapping as MappingV2
-import io.openapiprocessor.core.processor.mapping.v2.Parameter as ParameterV2
-import io.openapiprocessor.core.processor.mapping.v2.ParameterDeserializer as ParameterDeserializerV2
+import io.openapiprocessor.core.processor.mapping.Mapping as MappingV2
+import io.openapiprocessor.core.processor.mapping.Parameter as ParameterV2
+import io.openapiprocessor.core.processor.mapping.ParameterDeserializer as ParameterDeserializerV2
 import io.openapiprocessor.core.processor.mapping.version.Mapping as Version
 
 /**

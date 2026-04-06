@@ -7,7 +7,7 @@ package io.openapiprocessor.core.model
 
 import io.openapiprocessor.core.model.datatypes.AnyOneOfObjectDataType
 import io.openapiprocessor.core.model.datatypes.ResultDataType
-import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
+import io.openapiprocessor.core.processor.mapping.ResultStyle
 
 /**
  * The responses that can be returned by an endpoint method for one (successful) response.

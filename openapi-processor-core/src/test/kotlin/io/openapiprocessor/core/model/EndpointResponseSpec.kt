@@ -11,7 +11,7 @@ import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.builder.api.endpoint
 import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.openapi.HttpMethod
-import io.openapiprocessor.core.processor.mapping.v2.ResultStyle
+import io.openapiprocessor.core.processor.mapping.ResultStyle
 
 class EndpointResponseSpec: StringSpec({
 
