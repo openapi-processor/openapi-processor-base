@@ -5,6 +5,6 @@
 
 package io.openapiprocessor.core.processor
 
-val JsonSchemaCore = JsonSchema(
+val JSON_SCHEMA_CORE = JsonSchema(
     $$"https://openapiprocessor.io/schemas/mapping/mapping-$version.json",
     $$"/mapping/$version/mapping.yaml.json")
