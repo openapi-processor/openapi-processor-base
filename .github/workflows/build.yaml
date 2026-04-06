@@ -61,9 +61,7 @@ jobs:
       uses: actions/setup-java@v5
       with:
         distribution: 'temurin'
-        java-version: |
-          11
-          17
+        java-version: 17
 
     - name: set up gradle
       uses: gradle/actions/setup-gradle@v6
@@ -106,9 +104,7 @@ jobs:
       uses: actions/setup-java@v5
       with:
         distribution: 'temurin'
-        java-version: |
-          11
-          17
+        java-version: 17
 
     - name: set up gradle
       uses: gradle/actions/setup-gradle@v6
@@ -149,9 +145,7 @@ jobs:
       uses: actions/setup-java@v5
       with:
         distribution: 'temurin'
-        java-version: |
-          11
-          17
+        java-version: 17
 
     - name: set up gradle
       uses: gradle/actions/setup-gradle@v6
