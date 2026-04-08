@@ -25,39 +25,23 @@ class MappingReaderSpec: StringSpec ({
 
     "validates mapping.yaml" {
         val yaml = """
-            |openapi-processor-mapping: v2
+            |openapi-processor-mapping: current
             |
             |options:
             |  package-name: io.openapiprocessor.somewhere
         """.trimMargin()
 
         val validator = mockk<MappingValidator>()
-        every { validator.validate(any(), any()) } returns OutputUnitFlag(true)
+        every { validator.validate(any()) } returns OutputUnitFlag(true)
 
         MappingReader(validator).read(yaml)
 
-        verify { validator.validate(yaml, "v2") }
+        verify { validator.validate(yaml) }
     }
-
-//    "validates mapping.yaml with version" {
-//        val yaml = """
-//            |openapi-processor-mapping: v2.1
-//            |
-//            |options:
-//            |  package-name: io.openapiprocessor.somewhere
-//        """.trimMargin()
-//
-//        val validator = mockk<MappingValidator>()
-//        every { validator.validate(any()) } returns emptySet()
-//
-//        MappingReader(validator).read(yaml)
-//
-//        verify { validator.validate(yaml) }
-//    }
 
     "logs mapping.yaml validation errors" {
         val yaml = """
-            |openapi-processor-mapping: v2
+            |openapi-processor-mapping: current
         """.trimMargin()
 
         val log = mockk<Logger>(relaxed = true)
@@ -77,7 +61,7 @@ class MappingReaderSpec: StringSpec ({
 
     "reads model-name-suffix" {
         val yaml = """
-            |openapi-processor-mapping: v2
+            |openapi-processor-mapping: current
             |options:
             |  model-name-suffix: Suffix
         """.trimMargin()
@@ -93,7 +77,7 @@ class MappingReaderSpec: StringSpec ({
 
     "reads format-code" {
         val yaml = """
-            |openapi-processor-mapping: v2
+            |openapi-processor-mapping: current
             |options:
             |  format-code: false
         """.trimMargin()
@@ -109,7 +93,7 @@ class MappingReaderSpec: StringSpec ({
 
     "reads generated-annotation" {
         val yaml = """
-            |openapi-processor-mapping: v8
+            |openapi-processor-mapping: current
             |options:
             |  package-name: no.warning
             |  generated-annotation: false
@@ -126,7 +110,7 @@ class MappingReaderSpec: StringSpec ({
 
     "reads generated-date" {
         val yaml = """
-            |openapi-processor-mapping: v8
+            |openapi-processor-mapping: current
             |options:
             |  package-name: no.warning
             |  generated-date: false
@@ -143,7 +127,7 @@ class MappingReaderSpec: StringSpec ({
 
     "reads enum-type" {
         val yaml = """
-            |openapi-processor-mapping: v5
+            |openapi-processor-mapping: current
             |options:
             |  package-name: no.warning
             |  enum-type: string
@@ -160,7 +144,7 @@ class MappingReaderSpec: StringSpec ({
 
     "reads extensions mappings" {
         val yaml = """
-            |openapi-processor-mapping: v6
+            |openapi-processor-mapping: current
             |options:
             |  package-name: no.warning
             |map:
@@ -188,7 +172,7 @@ class MappingReaderSpec: StringSpec ({
 
     "reads json property annotation" {
         val yaml = """
-            |openapi-processor-mapping: v8
+            |openapi-processor-mapping: current
             |options:
             |  package-name: no.warning
             |  json-property-annotation: auto
@@ -205,7 +189,7 @@ class MappingReaderSpec: StringSpec ({
 
     "reads target-dir options" {
         val yaml = """
-            |openapi-processor-mapping: v9
+            |openapi-processor-mapping: current
             |options:
             |  package-name: no.warning
             |  target-dir:
@@ -232,7 +216,7 @@ class MappingReaderSpec: StringSpec ({
         ) { server ->
             val yaml =
                 """
-                |openapi-processor-mapping: v9
+                |openapi-processor-mapping: current
                 |options:
                 |  package-name: no.warning
                 |  base-path:
@@ -249,7 +233,7 @@ class MappingReaderSpec: StringSpec ({
 
     "reads jackson version" {
         val yaml = """
-            |openapi-processor-mapping: v18
+            |openapi-processor-mapping: current
             |options:
             |  jackson: v3
         """.trimMargin()

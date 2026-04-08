@@ -51,7 +51,7 @@ class MappingReaderSpec extends Specification {
 
     void "reads mapping from url" () {
         def yaml = """\
-openapi-processor-mapping: v2
+openapi-processor-mapping: current
 
 map:
   types:
@@ -70,7 +70,7 @@ map:
 
     void "reads mapping from local file if the scheme is missing" () {
         def yaml = """\
-openapi-processor-mapping: v2
+openapi-processor-mapping: current
 
 map:
   types:
@@ -89,7 +89,7 @@ map:
 
     void "reads mapping from string" () {
         def yaml = """\
-openapi-processor-mapping: v2
+openapi-processor-mapping: current
 
 map:
   types:

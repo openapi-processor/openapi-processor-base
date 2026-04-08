@@ -5,6 +5,10 @@
 
 package io.openapiprocessor.core.processor
 
+import java.net.URI
+
+const val MAPPING_SCHEMA_VERSION = "v18"
+
 val JSON_SCHEMA_CORE = JsonSchema(
-    $$"https://openapiprocessor.io/schemas/mapping/mapping-$version.json",
-    $$"/mapping/$version/mapping.yaml.json")
+    URI("https://openapiprocessor.io/schemas/mapping/mapping-${MAPPING_SCHEMA_VERSION}.json"),
+    "/mapping/${MAPPING_SCHEMA_VERSION}/mapping.yaml.json")

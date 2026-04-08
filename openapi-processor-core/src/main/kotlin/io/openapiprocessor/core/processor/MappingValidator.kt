@@ -22,10 +22,13 @@ import org.slf4j.LoggerFactory
 /**
  * validate the given mapping.yaml with the mapping.yaml JSON schema.
  */
-open class MappingValidator(val schema: JsonSchema = JSON_SCHEMA_CORE, val dependencies: List<JsonSchema> = listOf()) {
+open class MappingValidator(
+    val mappingSchema: JsonSchema = JSON_SCHEMA_CORE,
+    val dependencies: List<JsonSchema> = listOf()
+) {
     val log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
-    fun validate(mapping: String, version: String): OutputUnit {
+    fun validate(mapping: String): OutputUnit {
         return try {
             val reader = UriReader()
             val converter = JacksonConverter()
@@ -34,11 +37,11 @@ open class MappingValidator(val schema: JsonSchema = JSON_SCHEMA_CORE, val depen
             val store = SchemaStore(loader)
             store.registerDraft7()
             dependencies.forEach {
-                store.register(it.getUri(version), it.getSchema(version))
+                store.register(it.uri, it.schema)
             }
-            store.register(schema.getUri(version), schema.getSchema(version))
+            store.register(mappingSchema.uri, mappingSchema.schema)
 
-            val schema = store.getSchema(schema.getUri(version))
+            val schema = store.getSchema(mappingSchema.uri)
             val instance = JsonInstance(converter.convert(mapping))
 
             val settings = ValidatorSettings().setOutput(Output.BASIC)
