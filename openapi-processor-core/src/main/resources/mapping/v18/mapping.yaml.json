@@ -5,9 +5,11 @@
   "description": "openapi-processor configuration and type mappings",
   "type": "object",
   "properties": {
-    "openapi-processor-mapping": {
-      "description": "version of the mapping format.",
-      "enum": ["v18"]
+    "patternProperties": {
+      "^openapi-processor-.+": {
+        "description": "version of the mapping format.",
+        "type": "string"
+      }
     },
     "options": {
       "$ref": "#/definitions/Options"
@@ -25,8 +27,8 @@
       "$ref": "#/definitions/BeanValidation"
     }
   },
+  "additionalProperties": true,
   "required": [
-    "openapi-processor-mapping",
     "options"
   ],
   "definitions": {
@@ -166,7 +168,7 @@
           }
         }
       },
-      "additionalProperties": false,
+      "additionalProperties": true,
       "oneOf": [
         { "required": ["package-name"] },
         { "required": ["package-names"] }
