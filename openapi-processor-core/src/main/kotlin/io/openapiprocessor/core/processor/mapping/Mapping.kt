@@ -9,17 +9,9 @@ import io.openapiprocessor.core.processor.SupportedTypes
 import io.openapiprocessor.core.processor.TargetTypes
 
 /**
- * *the* v2 Schema of the mapping YAML
+ * The mapping YAML schema.
  */
 data class Mapping(
-
-    /**
-     * mapping format version, todo do we need that at all??
-     */
-//    @JsonProperty("openapi-processor-mapping")
-//    @JsonAlias("openapi-processor-spring") // deprecated
-//    val version: String,
-
     /**
      * general options
      */
