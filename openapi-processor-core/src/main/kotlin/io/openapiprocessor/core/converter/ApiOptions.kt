@@ -15,7 +15,7 @@ import io.openapiprocessor.core.support.Empty
 /**
  * Options of the processor.
  */
-class ApiOptions: MappingSettings {
+open class ApiOptions: MappingSettings {
 
     /**
      * The destination folder for generating interfaces & DTOs. This is the parent of the
