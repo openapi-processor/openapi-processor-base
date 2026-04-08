@@ -17,8 +17,8 @@ updates = "0.53.0"
 openapi-processor-api = { module = "io.openapiprocessor:openapi-processor-api", version.ref = "api" }
 openapi-parser-bom = { module = "io.openapiprocessor:openapi-parser-bom", version.ref = "parser" }
 openapi-parser-parser = { module = "io.openapiprocessor:openapi-parser" }
-#json-schema-validator-bom = { module = "io.openapiprocessor:json-schema-validator-bom", version.ref = "parser" }
-#json-schema-validator-validator = { module = "io.openapiprocessor:json-schema-validator" }
+json-schema-validator-bom = { module = "io.openapiprocessor:json-schema-validator-bom", version.ref = "parser" }
+json-schema-validator-validator = { module = "io.openapiprocessor:json-schema-validator" }
 io-jackson = { module = "io.openapiprocessor:io-jackson" }
 
 jackson-bom = "com.fasterxml.jackson:jackson-bom:2.21.2"

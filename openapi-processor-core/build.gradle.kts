@@ -45,15 +45,17 @@ dependencies {
     compileOnly (libs.openapi.processor.api)
     compileOnly (libs.logback)
 
+    api (platform(libs.json.schema.validator.bom))
+    api (libs.json.schema.validator.validator)
+    api (platform(libs.jackson.bom))
+    api (libs.jackson.kotlin)
+    api (libs.jackson.yaml)
+
     implementation (project(":openapi-processor-test-api"))
     implementation (project(":openapi-processor-core-parser-api"))
     implementation (platform(libs.openapi.parser.bom))
     implementation (libs.openapi.parser.parser)
     implementation (libs.io.jackson)
-
-    implementation (platform(libs.jackson.bom))
-    implementation (libs.jackson.kotlin)
-    implementation (libs.jackson.yaml)
     implementation (libs.uritemplate)
     implementation (libs.commons.text)
     implementation (libs.commonmark)
