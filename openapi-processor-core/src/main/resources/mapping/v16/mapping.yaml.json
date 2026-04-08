@@ -23,6 +23,9 @@
     },
     "bean-validation": {
       "$ref": "#/definitions/BeanValidation"
+    },
+    "annotation-targets": {
+      "$ref": "#/definitions/AnnotationTargets"
     }
   },
   "required": [

@@ -25,6 +25,9 @@
     },
     "bean-validation": {
       "$ref": "#/definitions/BeanValidation"
+    },
+    "annotation-targets": {
+      "$ref": "#/definitions/AnnotationTargets"
     }
   },
   "additionalProperties": true,
