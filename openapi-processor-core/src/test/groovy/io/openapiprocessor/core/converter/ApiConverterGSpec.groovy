@@ -5,8 +5,8 @@
 
 package io.openapiprocessor.core.converter
 
-import io.openapiprocessor.core.support.ModelAsserts
 import io.openapiprocessor.core.framework.Framework
+import io.openapiprocessor.core.support.ModelAsserts
 import io.openapiprocessor.core.support.TestFrameworkAnnotations
 import io.openapiprocessor.core.writer.java.*
 import spock.lang.Specification
