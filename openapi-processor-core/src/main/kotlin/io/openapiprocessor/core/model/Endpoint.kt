@@ -138,7 +138,7 @@ class Endpoint(
         }
     }
 
-    private fun getSuccessResponses(): Map<ContentType, MutableList<ResponseWithStatus>> {
+    private fun getSuccessResponses(): Map<ContentType, List<ResponseWithStatus>> {
         val result = mutableMapOf<ContentType, MutableList<ResponseWithStatus>>()
 
         responses
