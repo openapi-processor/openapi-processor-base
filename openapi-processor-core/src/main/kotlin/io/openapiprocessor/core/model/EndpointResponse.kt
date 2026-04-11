@@ -172,9 +172,7 @@ class EndpointResponse(
         val types = getDistinctResponseTypes()
             .map { r -> r.response.responseType.getTypeName() }
 
-        if(types.size != 1) {
-            throw IllegalStateException("ambiguous response types: $types")
-        }
+        check(types.size == 1) { "ambiguous response types: $types" }
 
         return types.first()
     }
