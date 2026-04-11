@@ -15,6 +15,27 @@ on:
 
 jobs:
 
+  version-test:
+    name: testing versino action
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+
+      - name: get version
+        id: get-version
+        uses: ./.github/actions/check-version
+        with:
+          version-file: 'gradle/libs.versions.toml'
+          version-path: 'versions.processor'
+
+      - name: echo
+        shell: bash
+        run: echo BUILD_VERSION_X "$BUILD_VERSION_X"
+        env:
+          BUILD_VERSION_X: ${{ steps.get-version.outputs.build-version }}
+
+
   version:
     name: check version
     runs-on: ubuntu-latest
