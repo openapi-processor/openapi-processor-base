@@ -23,7 +23,7 @@ class VersionDeserializer : JsonDeserializer<Mapping>() {
             ?: throw IOException("Missing 'openapi-processor-*' key!")
 
         val name = versionKey.removePrefix("openapi-processor-")
-        val version = node.get(versionKey)?.asText()
+        val version = node[versionKey]?.asText()
 
         return Mapping(name = name, version = version)
     }
