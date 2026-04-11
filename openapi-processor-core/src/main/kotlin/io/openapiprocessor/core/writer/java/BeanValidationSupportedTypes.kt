@@ -23,7 +23,7 @@ class BeanValidationSupportedTypes(additionalSupportedTypes: SupportedTypes = ma
     }
 
     fun supports(annotationType: String, targetDataType: DataType): Boolean {
-        val targets = supported[annotationType]
+        val targets: Set<SupportedType>? = supported[annotationType]
         if (targets == null) {
             return false
         }
