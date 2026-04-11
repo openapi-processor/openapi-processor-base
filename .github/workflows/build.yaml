@@ -16,7 +16,7 @@ on:
 jobs:
 
   version-test:
-    name: testing versino action
+    name: testing version action
     runs-on: ubuntu-latest
     steps:
       - name: checkout
@@ -29,7 +29,7 @@ jobs:
           version-file: 'gradle/libs.versions.toml'
           version-path: 'versions.processor'
 
-      - name: echo
+      - name: echo version
         shell: bash
         run: echo BUILD_VERSION_X "$BUILD_VERSION_X"
         env:
