@@ -1,0 +1,42 @@
+name: check-version
+description: check release/snapshot version
+inputs:
+  version-file:
+    description: 'the version file'
+    required: true
+    default: 'gradle/libs.versions.toml'
+  version-path:
+    description: 'the version path'
+    required: true
+    default: 'versions.processor'
+outputs:
+  build-version:
+    description: "the build version"
+    value: ${{ steps.extract-version.outputs.build-version }}
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Homebrew
+      id: set-up-homebrew
+      uses: Homebrew/actions/setup-homebrew@main
+
+    - name: checkout
+      uses: actions/checkout@v6
+
+    - name: install dasel
+      shell: bash
+      run: |
+        brew install dasel
+        cat $GITHUB_ENV
+
+    - name: extract version
+      id: extract-version
+      shell: bash
+      run: |
+        version=`cat ${{inputs.version-file}} | dasel -i toml '${{inputs.version-path}}'`
+        echo BUILD_VERSION="${version#projectVersion=}" >> $GITHUB_ENV
+        cat $GITHUB_ENV
+
+    - name: actor
+      shell: bash
+      run: echo ${{ github.actor }}
