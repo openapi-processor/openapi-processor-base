@@ -34,7 +34,7 @@ runs:
       shell: bash
       run: |
         version=`cat ${{inputs.version-file}} | dasel -i toml '${{inputs.version-path}}'`
-        echo BUILD_VERSION="${version#projectVersion=}" >> $GITHUB_ENV
+        echo BUILD_VERSION="${version#projectVersion=}" >> $GITHUB_OUTPUT
         cat $GITHUB_ENV
 
     - name: actor
