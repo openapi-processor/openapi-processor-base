@@ -22,8 +22,8 @@ jobs:
       BUILD_VERSION: ${{ env.BUILD_VERSION }}
 
     steps:
-#      - name: checkout
-#        uses: actions/checkout@v6
+      - name: checkout
+        uses: actions/checkout@v6
 
       - name: get version
         id: get-version
