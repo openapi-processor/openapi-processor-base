@@ -1,5 +1,5 @@
-name: check-version
-description: check release/snapshot version
+name: version
+description: extract the version
 inputs:
   version-file:
     description: 'the version file'
