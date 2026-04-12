@@ -1,5 +1,5 @@
 name: version
-description: extract the version
+description: extract the version info
 inputs:
   version-file:
     description: 'the version file'
@@ -36,7 +36,7 @@ runs:
         brew install dasel
         cat $GITHUB_ENV
 
-    - name: extract version
+    - name: extract version info
       id: extract-version
       shell: bash
       run: |
@@ -50,10 +50,10 @@ runs:
 
         user="${{ github.actor == 'hauner' && github.actor != 'dependabot[bot]' }}"
         
-        if [ "$user" = true -a "$snapshot" = true ]; then
-          publish=true
+        if [[ "$user" == true && "$snapshot" == true ]]; then
+          publish="true"
         else
-          publish=false
+          publish="false"
         fi
         
         echo "version=$version" >> "$GITHUB_OUTPUT"
