@@ -36,7 +36,3 @@ runs:
         version=`cat ${{inputs.version-file}} | dasel -i toml '${{inputs.version-path}}'`
         echo "build-version=${version}" >> $GITHUB_OUTPUT
         cat $GITHUB_OUTPUT
-
-    - name: actor
-      shell: bash
-      run: echo ${{ github.actor }}

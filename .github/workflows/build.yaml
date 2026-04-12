@@ -18,9 +18,12 @@ jobs:
   version-test:
     name: testing version action
     runs-on: ubuntu-latest
+    outputs:
+      BUILD_VERSION: ${{ env.BUILD_VERSION }}
+
     steps:
-      - name: checkout
-        uses: actions/checkout@v6
+#      - name: checkout
+#        uses: actions/checkout@v6
 
       - name: get version
         id: get-version
@@ -31,10 +34,9 @@ jobs:
 
       - name: echo version
         shell: bash
-        run: echo BUILD_VERSION_X "$BUILD_VERSION_X"
-        env:
-          BUILD_VERSION_X: ${{ steps.get-version.outputs.build-version }}
-
+        run: |
+          echo BUILD_VERSION="${{steps.get-version.outputs.build-version}}" >> $GITHUB_ENV
+          cat $GITHUB_ENV
 
   version:
     name: check version
@@ -100,7 +102,7 @@ jobs:
         path: '*/build/reports'
 
   check-publish:
-    needs: [version, test]
+    needs: [version, test, version-test]
     name: check publish
 
     runs-on: ubuntu-latest
@@ -109,7 +111,10 @@ jobs:
       github.actor == 'hauner' && contains(needs.version.outputs.BUILD_VERSION, 'SNAPSHOT')
 
     steps:
-      - run: echo "should publish ..."
+      - run: |
+          echo "should publish ..."
+          echo version BUILD_VERSION ${{needs.version.outputs.BUILD_VERSION}}
+          echo version-test BUILD_VERSION ${{needs.version-test.outputs.BUILD_VERSION}}
 
   publish:
     needs: [check-publish]
