@@ -12,7 +12,7 @@ inputs:
 outputs:
   version:
     description: "the build version"
-    value: ${{ steps.extract-version.outputs.build-version }}
+    value: ${{ steps.extract-version.outputs.version }}
   snapshot:
     description: "if it is a snapshot version"
     value: ${{ steps.extract-version.outputs.snapshot }}
@@ -45,7 +45,7 @@ runs:
           snapshot="false"
         fi             
              
-        echo "version=${version}" >> "$GITHUB_OUTPUT"
-        echo "snapshot=${snapshot}" >> "$GITHUB_OUTPUT"
+        echo "version=$version" >> "$GITHUB_OUTPUT"
+        echo "snapshot=$snapshot" >> "$GITHUB_OUTPUT"
 
         cat "$GITHUB_OUTPUT"
