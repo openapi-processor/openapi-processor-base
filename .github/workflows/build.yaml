@@ -22,9 +22,6 @@ jobs:
       BUILD_VERSION: ${{ env.BUILD_VERSION }}
 
     steps:
-#      - name: checkout
-#        uses: actions/checkout@v6
-
       - name: get version
         id: get-version
         uses: openapi-processor/openapi-processor-base/.github/actions/version@main
@@ -32,41 +29,11 @@ jobs:
           version-file: 'gradle/libs.versions.toml'
           version-path: 'versions.processor'
 
-      - name: echo version
+      - name: set output version
         shell: bash
         run: |
           echo BUILD_VERSION="${{steps.get-version.outputs.build-version}}" >> $GITHUB_ENV
           cat $GITHUB_ENV
-
-# SomeUser/SomeRepo/.github/actions/build@main
-
-#  version:
-#    name: check version
-#    runs-on: ubuntu-latest
-#    outputs:
-#      BUILD_VERSION: ${{ env.BUILD_VERSION }}
-#
-#    steps:
-#      - name: Set up Homebrew
-#        id: set-up-homebrew
-#        uses: Homebrew/actions/setup-homebrew@main
-#
-#      - name: checkout
-#        uses: actions/checkout@v6
-#
-#      - name: install dasel
-#        run: |
-#          brew install dasel
-#          cat $GITHUB_ENV
-#
-#      - name: extract version
-#        run: |
-#          version=`cat gradle/libs.versions.toml | dasel -i toml 'versions.processor'`
-#          echo BUILD_VERSION="${version#projectVersion=}" >> $GITHUB_ENV
-#          cat $GITHUB_ENV
-#
-#      - name: actor
-#        run: echo ${{ github.actor }} ${{ github.actor == 'hauner' }}
 
   test:
     name: test
@@ -104,7 +71,7 @@ jobs:
         path: '*/build/reports'
 
   check-publish:
-    needs: [version, test ]
+    needs: [version, test]
     name: check publish
 
     runs-on: ubuntu-latest
