@@ -10,9 +10,13 @@ inputs:
     required: true
     default: 'versions.processor'
 outputs:
-  build-version:
+  version:
     description: "the build version"
     value: ${{ steps.extract-version.outputs.build-version }}
+  snapshot:
+    description: "if it is a snapshot version"
+    value: ${{ steps.extract-version.outputs.snapshot }}
+
 runs:
   using: 'composite'
   steps:
@@ -34,5 +38,6 @@ runs:
       shell: bash
       run: |
         version=`cat ${{inputs.version-file}} | dasel -i toml '${{inputs.version-path}}'`
-        echo "build-version=${version}" >> $GITHUB_OUTPUT
+        echo "version=${version}" >> $GITHUB_OUTPUT
+        echo "snapshot=${{contains(version, 'SNAPSHOT')}} >> $GITHUB_OUTPUT
         cat $GITHUB_OUTPUT
