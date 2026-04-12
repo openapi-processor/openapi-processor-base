@@ -56,16 +56,8 @@ runs:
           publish="false"
         fi
 
-        echo "1"
-        
         echo "version=$version" >> "$GITHUB_OUTPUT"
-
-        echo "2"
-
         echo "snapshot=$snapshot" >> "$GITHUB_OUTPUT"
-
-        echo "3"
-
-        echo "publish=$publish" >> "$GITHUB_OUPUT"
+        echo "publish=$publish" >> "$GITHUB_OUTPUT"
 
         cat "$GITHUB_OUTPUT"
