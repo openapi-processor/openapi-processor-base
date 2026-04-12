@@ -44,7 +44,9 @@ jobs:
     runs-on: ubuntu-latest
     if: >-
       github.actor != 'dependabot[bot]' &&
-      github.actor == 'hauner' && contains(needs.version.outputs.BUILD_VERSION, 'SNAPSHOT')
+      github.actor == 'hauner' && 
+      needs.version.outputs.BUILD_SNAPSHOT == 'true'
+#      contains(needs.version.outputs.BUILD_VERSION, 'SNAPSHOT')
 
     steps:
       - run: |
