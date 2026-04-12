@@ -60,4 +60,4 @@ runs:
         echo "snapshot=$snapshot" >> "$GITHUB_OUTPUT"
         echo "publish=$publish" >> "$GITHUB_OUPUT"
 
-        cat "$GITHUB_OUTPUT"
+        cat $GITHUB_OUTPUT
