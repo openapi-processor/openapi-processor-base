@@ -50,6 +50,8 @@ runs:
 
         user="${{ github.actor == 'hauner' && github.actor != 'dependabot[bot]' }}"
         
+        echo "1"
+        
         if [[ "$user" == true && "$snapshot" == true ]]; then
           publish="true"
         else
@@ -60,4 +62,4 @@ runs:
         echo "snapshot=$snapshot" >> "$GITHUB_OUTPUT"
         echo "publish=$publish" >> "$GITHUB_OUPUT"
 
-        cat $GITHUB_OUTPUT
+        cat "$GITHUB_OUTPUT"
