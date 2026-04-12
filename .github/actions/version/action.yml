@@ -16,6 +16,9 @@ outputs:
   snapshot:
     description: "if it is a snapshot version"
     value: ${{ steps.extract-version.outputs.snapshot }}
+  publish:
+    description: "if it should publish"
+    value: ${{ steps.extract-version.outputs.snapshot }}
 
 runs:
   using: 'composite'
@@ -43,9 +46,18 @@ runs:
           snapshot="true"
         else
           snapshot="false"
-        fi             
-             
+        fi
+
+        user="${{ github.actor == 'hauner' && github.actor != 'dependabot[bot]' }}"
+        
+        if [ "$user" = true -a "$snapshot" = true ]; then
+          publish=true
+        else
+          publish=false
+        fi
+        
         echo "version=$version" >> "$GITHUB_OUTPUT"
         echo "snapshot=$snapshot" >> "$GITHUB_OUTPUT"
+        echo "publish=$publish" >> "$GITHUB_OUPUT"
 
         cat "$GITHUB_OUTPUT"
