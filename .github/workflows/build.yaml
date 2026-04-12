@@ -16,7 +16,7 @@ on:
 jobs:
 
   check-publish:
-    name: check version
+    name: check publish
     runs-on: ubuntu-latest
     outputs:
       BUILD_VERSION: ${{ env.BUILD_VERSION }}
