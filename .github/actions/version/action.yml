@@ -38,6 +38,14 @@ runs:
       shell: bash
       run: |
         version=`cat ${{inputs.version-file}} | dasel -i toml '${{inputs.version-path}}'`
-        echo "version=${version}" >> $GITHUB_OUTPUT
-        echo "snapshot=${{contains(version, 'SNAPSHOT')}} >> $GITHUB_OUTPUT
-        cat $GITHUB_OUTPUT
+             
+        if [[ "$version" == *"SNAPSHOT"* ]]; then
+          snapshot="true"
+        else
+          snapshot="false"
+        fi             
+             
+        echo "version=${version}" >> "$GITHUB_OUTPUT"
+        echo "snapshot=${snapshot}" >> "$GITHUB_OUTPUT"
+
+        cat "$GITHUB_OUTPUT"
