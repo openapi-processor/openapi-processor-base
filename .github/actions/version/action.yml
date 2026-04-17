@@ -49,6 +49,8 @@ runs:
         fi
 
         user="${{ github.actor == 'hauner' && github.actor != 'dependabot[bot]' }}"
+        echo "actor=${{ github.actor }}"
+        echo "user=$user"
         
         if [[ "$user" == true && "$snapshot" == true ]]; then
           publish="true"
