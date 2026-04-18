@@ -18,7 +18,7 @@ outputs:
     value: ${{ steps.extract-version.outputs.snapshot }}
   publish:
     description: "if it should publish"
-    value: ${{ steps.extract-version.outputs.snapshot }}
+    value: ${{ steps.extract-version.outputs.publish }}
 
 runs:
   using: 'composite'
