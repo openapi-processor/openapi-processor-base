@@ -117,7 +117,7 @@ class DataTypeConverter(
 
                 val allOf = AllOfObjectDataType(
                     DataTypeName(schemaInfo.getName(), getTypeNameWithSuffix(schemaInfo.getName())),
-                    listOf(options.packageName, "model").joinToString("."),
+                    "${options.packageName}.model",
                     items,
                     schemaInfo.getDeprecated()
                 )
@@ -134,7 +134,7 @@ class DataTypeConverter(
 
                 val objectType = InterfaceDataType(
                     DataTypeName(schemaInfo.getName(), getTypeNameWithSuffix(schemaInfo.getName())),
-                    listOf(options.packageName, "model").joinToString("."),
+                    "${options.packageName}.model",
                     items,
                     constraints,
                     schemaInfo.getDeprecated(),
@@ -150,7 +150,7 @@ class DataTypeConverter(
             else -> {
                 AnyOneOfObjectDataType(
                     schemaInfo.getName(),
-                    listOf(options.packageName, "model").joinToString("."),
+                    "${options.packageName}.model",
                     schemaInfo.itemOf()!!,
                     items,
                     null,
@@ -249,7 +249,7 @@ class DataTypeConverter(
         val interfaceName = schemaInfo.interfaceName!!
         val interfaceType = InterfaceDataType(
             DataTypeName(interfaceName, getTypeNameWithSuffix2(interfaceName)),
-            listOf(options.packageName, "model").joinToString("."),
+            "${options.packageName}.model",
             emptyList(),
             constraints,
             schemaInfo.getDeprecated(),
@@ -257,10 +257,11 @@ class DataTypeConverter(
         )
 
         val found = dataTypes.find(interfaceType.getName())
-        if (found != null && found is InterfaceDataType) {
-            found.addItem(objectType)
-            objectType.addInterface(found)
-            return found
+        if (found is InterfaceDataType) {
+            return found.apply {
+                addItem(objectType)
+                objectType.addInterface(this)
+            }
         }
 
         interfaceType.addItem(objectType)
@@ -389,7 +390,7 @@ class DataTypeConverter(
 
         val dataType = NoDataType(
             DataTypeName(schemaInfo.getName(), getTypeNameWithSuffix(schemaInfo.getName())),
-            listOf(options.packageName, "model").joinToString("."),
+            "${options.packageName}.model",
             constraints = constraints,
             deprecated = schemaInfo.getDeprecated()
         )
@@ -460,7 +461,7 @@ class DataTypeConverter(
         @Suppress("UNCHECKED_CAST")
         val enumType = StringEnumDataType(
             DataTypeName(enumName, getTypeNameWithSuffix(enumName)),
-            listOf(options.packageName, "model").joinToString("."),
+            "${options.packageName}.model",
             schemaInfo.getEnumValues() as List<String>,
             constraints,
             schemaInfo.getDeprecated(),
