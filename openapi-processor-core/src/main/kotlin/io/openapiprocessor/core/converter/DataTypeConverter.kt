@@ -574,13 +574,10 @@ class DataTypeConverter(
      * @param info the schema info that is currently processed
      * @return true if loop else false
      */
-    private fun isLoop(info: SchemaInfo): Boolean {
-        val found = current.find {
-            // $ref and non-ref SchemaInfo have the same name.
-            // We are only interested if we have seen a non-ref!
-            it.getName() == info.getName() && !it.isRefObject()
-        }
-        return found != null
+    private fun isLoop(info: SchemaInfo): Boolean = current.any {
+        // $ref and non-ref SchemaInfo have the same name.
+        // We are only interested if we have seen a non-ref!
+        it.getName() == info.getName() && !it.isRefObject()
     }
 
     private fun getTypeNameWithSuffix(name: String): String {
