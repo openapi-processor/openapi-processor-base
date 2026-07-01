@@ -302,6 +302,52 @@ class ApiConverterRequestBodySpec: StringSpec({
         bar.name shouldBe "bar"
     }
 
+    "converts request body application/x-www-form-urlencoded object schema properties to rrequired/not required request parameters" {
+        val options = parseOptions(options = """
+            |options:
+            |  bean-validations: true
+        """)
+
+        val openApi = parseApiBody("""
+            paths:
+              /foo:
+                post:
+                  requestBody:
+                    required: true
+                    content:
+                      application/x-www-form-urlencoded:
+                        schema:
+                          type: object
+                          required:
+                            - foo
+                          properties:
+                            foo:
+                              type: string
+                            bar:
+                              type: boolean
+                  responses:
+                    '204':
+                      description: empty
+            """)
+
+        val api = apiConverter(options).convert(openApi)
+
+        val itf = api.getInterfaces().first()
+        val ep = itf.endpoints.first()
+        val foo = ep.parameters[0]
+        val bar = ep.parameters[1]
+
+        foo.dataType.getName() shouldBe "string"
+        foo.dataType.getTypeName() shouldBe "String"
+        foo.required.shouldBeTrue()
+        foo.name shouldBe "foo"
+
+        bar.dataType.getName() shouldBe "boolean"
+        bar.dataType.getTypeName() shouldBe "Boolean"
+        bar.required.shouldBeFalse()
+        bar.name shouldBe "bar"
+    }
+
     "converts request body application/x-www-form-urlencoded object to request parameter" {
         val options = parseOptions(mapping =
             """
