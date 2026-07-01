@@ -11,7 +11,7 @@ import io.openapiprocessor.core.openapi.Schema
 /**
  * "fake" parameter for framework-specific annotation selection
  */
-class UrlencodedParameter(val parameter: String, private val required: Boolean = false): Parameter {
+class UrlencodedParameter(val parameter: String): Parameter {
 
     override fun getIn(): String {
         return "urlencoded"
@@ -26,7 +26,7 @@ class UrlencodedParameter(val parameter: String, private val required: Boolean =
     }
 
     override fun isRequired(): Boolean {
-        return required
+        return true
     }
 
     override fun isDeprecated(): Boolean {

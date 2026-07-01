@@ -423,8 +423,7 @@ class  ApiConverter(
         val parameters = mutableListOf<ModelParameter>()
         dataTypes.relRef(dataType.getName())
         dataType.forEach { property, propertyDataType ->
-            parameters.add(framework.createQueryParameter(UrlencodedParameter(
-                property, dataType.constraints?.isRequired(property) == true), propertyDataType))
+            parameters.add(framework.createQueryParameter(UrlencodedParameter(property), propertyDataType))
         }
         return parameters
     }
