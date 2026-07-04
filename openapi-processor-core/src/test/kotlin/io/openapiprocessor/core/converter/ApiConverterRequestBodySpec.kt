@@ -10,6 +10,7 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.collections.shouldContainAnyOf
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
@@ -293,6 +294,8 @@ class ApiConverterRequestBodySpec: StringSpec({
         val foo = ep.parameters[0]
         val bar = ep.parameters[1]
 
+        ep.getConsumesContentTypes() shouldContainAnyOf listOf("application/x-www-form-urlencoded")
+
         foo.dataType.getName() shouldBe "string"
         foo.dataType.getTypeName() shouldBe "String"
         foo.name shouldBe "foo"
@@ -383,6 +386,8 @@ class ApiConverterRequestBodySpec: StringSpec({
         val ep = itf.endpoints.first()
         ep.parameters.isEmpty()
         val body = ep.requestBodies.first()
+
+        ep.getConsumesContentTypes() shouldContainAnyOf listOf("application/x-www-form-urlencoded")
 
         body.dataType.getTypeName() shouldBe "FooPostRequestBody"
         body.name shouldBe "body"

@@ -179,7 +179,8 @@ class  ApiConverter(
                 Documentation(
                     summary = operation.summary,
                     description = operation.description
-                ))
+                ),
+                requestBodies.consumesContentTypes)
 
             checkSuccessResponse(ep)
             ep
@@ -222,7 +223,11 @@ class  ApiConverter(
         return mappingFinder.findDropParameterTypeMappings(MappingFinderQuery(path, method))
     }
 
-    data class RequestBodies(val bodies: List<ModelRequestBody>, val parameters: List<ModelParameter>)
+    data class RequestBodies(
+        val bodies: List<ModelRequestBody>,
+        val parameters: List<ModelParameter>,
+        /* additional content types that are lost otherwise */
+        val consumesContentTypes: Set<String> = emptySet())
 
     private fun collectRequestBodies(requestBody: RequestBody?, ctx: ApiConverterContext): RequestBodies {
         if (requestBody == null) {
@@ -231,6 +236,7 @@ class  ApiConverter(
 
         val bodies: MutableList<ModelRequestBody> = mutableListOf()
         val params: MutableList<ModelParameter> = mutableListOf()
+        val consumesContentTypes = mutableSetOf<String>()
 
         requestBody.getContent().forEach { (contentType, mediaType) ->
             val info = SchemaInfo(
@@ -247,6 +253,7 @@ class  ApiConverter(
                 if (isBodyStyleObject(info)) {
                     bodies.add(createRequestBody(contentType, info, requestBody, ctx.dataTypes))
                 } else {
+                    consumesContentTypes.add(contentType)
                     params.addAll(createUrlencodedParameter(info, requestBody, ctx.dataTypes))
                 }
             } else {
@@ -254,7 +261,7 @@ class  ApiConverter(
             }
         }
 
-        return RequestBodies(bodies, params)
+        return RequestBodies(bodies, params, consumesContentTypes)
     }
 
     private fun isBodyStyleObject(info: SchemaInfo): Boolean {
