@@ -9,7 +9,6 @@ package io.openapiprocessor.core.model
 import io.openapiprocessor.core.model.parameters.MultipartParameter
 import io.openapiprocessor.core.model.parameters.Parameter
 import io.openapiprocessor.core.openapi.HttpMethod
-import kotlin.collections.plusAssign
 
 /**
  * Endpoint properties.
@@ -22,7 +21,9 @@ class Endpoint(
     val responses: Map<HttpStatus, List<Response>>,
     val operationId: String? = null,
     val deprecated: Boolean = false,
-    private val documentation: Documentation? = null
+    private val documentation: Documentation? = null,
+    /** additional content types that can't be autodetected here */
+    private val consumesContentTypes: Set<String> = emptySet()
 ) {
     // grouped responses
     val endpointResponses: List<EndpointResponse> = createEndpointResponses()
@@ -70,6 +71,8 @@ class Endpoint(
         if (multipart != null) {
             contentTypes.add ("multipart/form-data")
         }
+
+        contentTypes.addAll (consumesContentTypes)
 
         return contentTypes
     }
