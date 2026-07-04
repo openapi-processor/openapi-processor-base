@@ -302,7 +302,7 @@ class ApiConverterRequestBodySpec: StringSpec({
         bar.name shouldBe "bar"
     }
 
-    "converts request body application/x-www-form-urlencoded object schema properties to rrequired/not required request parameters" {
+    "converts request body application/x-www-form-urlencoded object schema properties to required/not required request parameters" {
         val options = parseOptions(options = """
             |options:
             |  bean-validations: true
