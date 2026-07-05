@@ -21,6 +21,10 @@ java {
     withSourcesJar ()
 }
 
+tasks.javadoc {
+    exclude("**/io/openapiprocessor/core/processor/mapping/v2/parser/antlr/**")
+}
+
 kotlin {
     jvmToolchain(libs.versions.build.jdk.get().toInt())
 
