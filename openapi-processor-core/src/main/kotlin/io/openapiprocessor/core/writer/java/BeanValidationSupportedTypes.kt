@@ -42,7 +42,7 @@ class BeanValidationSupportedTypes(additionalSupportedTypes: SupportedTypes = ma
 
     private fun getCanonicalName(targetDataType: DataType): String {
         val pkg = targetDataType.getPackageName()
-        val name = targetDataType.rawTypeName
+        val name = targetDataType.rawTypeName.stripGenerics()
 
         if (pkg.isEmpty()) {
             return name
@@ -50,6 +50,8 @@ class BeanValidationSupportedTypes(additionalSupportedTypes: SupportedTypes = ma
 
         return "$pkg.$name"
     }
+
+    private fun String.stripGenerics(): String = substringBefore("<")
 }
 
 

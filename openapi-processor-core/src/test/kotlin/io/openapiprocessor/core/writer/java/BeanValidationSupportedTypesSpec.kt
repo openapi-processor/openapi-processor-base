@@ -71,4 +71,11 @@ class BeanValidationSupportedTypesSpec : FreeSpec({
             MappedDataType("JsonNullable", "org.openapitools.jackson.nullable"))
             .shouldBeTrue()
     }
+
+    "supported types recognizes java.util.List<String> as java.util.Collection" {
+        types.supports(
+            annotations.SIZE,
+            MappedCollectionDataType("List", "java.util", StringDataType()))
+            .shouldBeTrue()
+    }
 })
