@@ -27,10 +27,6 @@ tasks.javadoc {
 
 kotlin {
     jvmToolchain(libs.versions.build.jdk.get().toInt())
-
-    compilerOptions {
-        freeCompilerArgs.add("-Xannotation-default-target=param-property")
-    }
 }
 
 repositories {
