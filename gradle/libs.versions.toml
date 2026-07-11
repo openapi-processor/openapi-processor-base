@@ -7,7 +7,7 @@ api = "2024.2"
 kotlin = "2.4.0"
 build-jdk = "17"
 test-jdk = "17"
-build-plugins = "2026.4"
+build-plugins = "2026.6"
 
 jacoco = "0.8.14"
 jacocolog = "4.0.1"
