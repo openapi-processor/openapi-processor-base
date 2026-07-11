@@ -44,7 +44,7 @@ abstract class DataTypeWriterBase(
     protected val identifier: Identifier,
     protected val generatedWriter: GeneratedWriter,
     protected val validationAnnotations: BeanValidationFactory,
-    protected val jacksonAnnotations: JacksonAnnotations,
+    protected val jsonAnnotations: JsonAnnotationFactory,
     protected val javadocFactory: JavaDocFactory
 ): DataTypeWriter {
     protected val annotationWriter = AnnotationWriter()
@@ -126,7 +126,9 @@ abstract class DataTypeWriterBase(
         result += extBuilder.toString()
 
         if (requiresJsonPropertyAnnotation(propData)) {
-            result += "    ${getPropertyAnnotation(propData.srcPropName, propDataType)}"
+            jsonAnnotations.createPropertyAnnotations(propData.srcPropName, propDataType).forEach {
+                result += "    $it\n"
+            }
         }
 
         result += if (access == Access.PRIVATE) {
@@ -183,28 +185,6 @@ abstract class DataTypeWriterBase(
             val annotation = StringWriter()
             annotationWriter.write(annotation, Annotation(it.typeName, it.parameters))
             target.append("    $annotation\n")
-        }
-    }
-
-    private fun getPropertyAnnotation(propertyName: String, propDataType: PropertyDataType): String {
-        val access = getAccess(propDataType)
-
-        var result = "@JsonProperty("
-        result += if (access != null) {
-            "value = \"$propertyName\", access = JsonProperty.Access.${access.value}"
-        } else {
-            "\"$propertyName\""
-        }
-
-        result += ")\n"
-        return result
-    }
-
-    private fun getAccess(propDataType: PropertyDataType): PropertyAccess? {
-        return when {
-            propDataType.readOnly -> PropertyAccess("READ_ONLY")
-            propDataType.writeOnly -> PropertyAccess("WRITE_ONLY")
-            else -> null
         }
     }
 
@@ -324,7 +304,7 @@ abstract class DataTypeWriterBase(
         val target = getTarget(propData.propDataType)
 
         if (requiresJsonPropertyAnnotation(propData)) {
-            imports.addAll(jacksonAnnotations.jsonProperty.imports)
+            imports.addAll(jsonAnnotations.createPropertyImports(propData.propDataType))
         }
 
         if (apiOptions.beanValidation) {
@@ -391,4 +371,3 @@ abstract class DataTypeWriterBase(
     }
 }
 
-class PropertyAccess(val value: String)

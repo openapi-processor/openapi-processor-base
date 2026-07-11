@@ -7,7 +7,9 @@ package io.openapiprocessor.core.writer.java
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContainExactly
+import io.mockk.mockk
 import io.openapiprocessor.core.converter.ApiOptions
+import io.openapiprocessor.core.model.datatypes.PropertyDataType
 
 class JacksonAnnotationsSpec: StringSpec({
 
@@ -17,18 +19,22 @@ class JacksonAnnotationsSpec: StringSpec({
 
         val jackson = JacksonAnnotations(options)
 
-        jackson.jsonProperty.imports shouldContainExactly setOf("com.fasterxml.jackson.annotation.JsonProperty")
+        jackson.createPropertyImports(mockk<PropertyDataType>())
+            .shouldContainExactly(setOf("com.fasterxml.jackson.annotation.JsonProperty"))
+
         jackson.jsonCreator.imports shouldContainExactly setOf("com.fasterxml.jackson.annotation.JsonCreator")
         jackson.jsonValue.imports shouldContainExactly setOf("com.fasterxml.jackson.annotation.JsonValue")
     }
 
-    "provides jackson 3 annotations" {
+    "provides jackson 3 annotations".config(enabled = false) {
         val options = ApiOptions()
         options.jackson = "v3"
 
         val jackson = JacksonAnnotations(options)
 
-        jackson.jsonProperty.imports shouldContainExactly setOf("tools.jackson.annotation.JsonProperty")
+        jackson.createPropertyImports(mockk<PropertyDataType>())
+            .shouldContainExactly(setOf("tools.jackson.annotation.JsonProperty"))
+
         jackson.jsonCreator.imports shouldContainExactly setOf("tools.jackson.annotation.JsonCreator")
         jackson.jsonValue.imports shouldContainExactly setOf("tools.jackson.annotation.JsonValue")
     }

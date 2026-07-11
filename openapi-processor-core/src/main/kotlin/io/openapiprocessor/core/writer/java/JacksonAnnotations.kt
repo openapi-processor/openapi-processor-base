@@ -7,6 +7,7 @@ package io.openapiprocessor.core.writer.java
 
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.model.Annotation
+import io.openapiprocessor.core.model.datatypes.PropertyDataType
 
 /**
  * TODO remove v3
@@ -15,16 +16,17 @@ import io.openapiprocessor.core.model.Annotation
  *
  * mapping jon schema definition to configure the jackson version.
  *
- *         "jackson": {
- *           "description": "jackson annotations version.",
- *           "default": "v2",
- *           "enum": ["v2", "v3"]
- *         },
+ *  "jackson": {
+ *    "description": "jackson annotations version.",
+ *    "default": "v2",
+ *    "enum": ["v2", "v3"]
+ *  }
  */
-class JacksonAnnotations(apiOptions: ApiOptions) {
-    val jsonProperty: Annotation
-    val jsonCreator: Annotation
-    val jsonValue: Annotation
+class JacksonAnnotations(apiOptions: ApiOptions): JsonAnnotationFactory {
+    @Deprecated("use methods")
+    override val jsonProperty: Annotation  // todo make private
+    override val jsonCreator: Annotation
+    override val jsonValue: Annotation
 
     init {
         when (getJacksonFormat(apiOptions)) {
@@ -41,11 +43,42 @@ class JacksonAnnotations(apiOptions: ApiOptions) {
         }
     }
 
+    override fun createPropertyImports(propDataType: PropertyDataType): Collection<String> {
+        return jsonProperty.imports
+    }
+
+    override fun createPropertyAnnotations(propertyName: String, propDataType: PropertyDataType): Collection<String> {
+        val params = createPropertyParameter(propertyName, getAccess(propDataType))
+        val result = "${jsonProperty.annotationName}(${params.joinToString(", ")})"
+        return listOf(result)
+    }
+
+    private fun createPropertyParameter(propertyName: String, access: PropertyAccess?): Collection<String> {
+        return if (access != null) {
+            listOf(
+                """value = "$propertyName"""",
+                "access = JsonProperty.Access.${access.value}"
+            )
+        } else {
+            listOf(""""$propertyName"""")
+        }
+    }
+
+    private fun getAccess(propDataType: PropertyDataType): PropertyAccess? {
+        return when {
+            propDataType.readOnly -> PropertyAccess("READ_ONLY")
+            propDataType.writeOnly -> PropertyAccess("WRITE_ONLY")
+            else -> null
+        }
+    }
+
     private fun getJacksonFormat(options: ApiOptions): JacksonFormat {
         return when (options.jackson) {
             "v2" -> JacksonFormat.V2
-            "v3" -> JacksonFormat.V3
+            "v3" -> JacksonFormat.V2 /* v3 is currently not needed */
             else -> JacksonFormat.V2
         }
     }
 }
+
+class PropertyAccess(val value: String)

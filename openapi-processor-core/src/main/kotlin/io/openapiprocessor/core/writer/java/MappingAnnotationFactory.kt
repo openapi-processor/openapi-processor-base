@@ -12,5 +12,6 @@ import io.openapiprocessor.core.model.EndpointResponse
  * mapping annotation factory.
  */
 interface MappingAnnotationFactory {
+    //fun imports(endpoint: Endpoint, endpointResponse: EndpointResponse): List<String> { return emptyList() }
     fun create(endpoint: Endpoint, endpointResponse: EndpointResponse): List<String>
 }
