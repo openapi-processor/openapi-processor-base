@@ -9,6 +9,9 @@ import generated.support.Generated;
 @Generated(value = "openapi-processor-core", version = "test")
 public class Foo {
 
+    @JsonProperty("no-description")
+    private String noDescription;
+
     /**
      * <em>property</em> description
      */
@@ -20,6 +23,14 @@ public class Foo {
      */
     @JsonProperty("enum")
     private FooEnum aEnum;
+
+    public String getNoDescription() {
+        return noDescription;
+    }
+
+    public void setNoDescription(String noDescription) {
+        this.noDescription = noDescription;
+    }
 
     public String getFooBar() {
         return fooBar;

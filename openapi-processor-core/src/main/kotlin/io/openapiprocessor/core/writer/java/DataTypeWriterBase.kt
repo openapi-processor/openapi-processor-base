@@ -95,8 +95,11 @@ abstract class DataTypeWriterBase(
         var result = ""
 
         if (apiOptions.javadoc && !apiOptions.isRecord()) {
-            result += javadocFactory.create(propDataType).indent()
-            result += LF
+            val javadoc = javadocFactory.create(propDataType)
+            if (javadoc.isNotEmpty()) {
+                result += javadoc.indent()
+                result += LF
+            }
         }
 
         result += ifDeprecated(propDataType)

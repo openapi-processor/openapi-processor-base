@@ -56,6 +56,8 @@ components:
         this is the *Foo* schema description
       type: object
       properties:
+        no-description:
+          type: string
         foo-bar:
           description: >
             *property* description
