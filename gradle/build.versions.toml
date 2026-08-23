@@ -3,7 +3,7 @@
 [versions]
 build-plugins = "2026.7"
 
-build-jdk = "21"
+build-jdk = "17"
 test-jdk = "21"
 
 kotlin = "2.4.10"
@@ -30,4 +30,5 @@ jacocolog = { id = "org.barfuin.gradle.jacocolog" }
 updates = { id = "io.github.ben-manes.versions", version.ref = "updates" }
 checker = { id = "org.checkerframework", version.ref = "checker" }
 versions = { id = "io.openapiprocessor.build.plugin.create-versions" }
-sonar = { id = "org.sonarqube", version = "7.4.0.8496" }
+sonar = { id = "org.sonarqube", version = "7.3.1.8318" }
+#sonar = { id = "org.sonarqube", version = "7.4.0.8496" } requires java 21
