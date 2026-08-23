@@ -1,3 +1,4 @@
+import org.gradle.accessors.dm.LibrariesForBuild
 import org.gradle.accessors.dm.LibrariesForLibs
 
 plugins {
@@ -7,6 +8,7 @@ plugins {
 
 // see buildSrc/build.gradle.kts
 val libs = the<LibrariesForLibs>()
+val build = the<LibrariesForBuild>()
 
 group = "io.openapiprocessor"
 version = libs.versions.processor.get()
@@ -22,7 +24,7 @@ tasks.javadoc {
 }
 
 kotlin {
-    jvmToolchain(libs.versions.build.jdk.get().toInt())
+    jvmToolchain(build.versions.build.jdk.get().toInt())
 }
 
 repositories {
@@ -50,7 +52,7 @@ tasks.withType<Test>().configureEach {
     ))
 
     javaLauncher.set(javaToolchains.launcherFor {
-        languageVersion.set(JavaLanguageVersion.of(libs.versions.test.jdk.get()))
+        languageVersion.set(JavaLanguageVersion.of(build.versions.test.jdk.get()))
     })
 }
 

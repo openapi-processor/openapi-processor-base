@@ -8,8 +8,8 @@ plugins {
     id("openapiprocessor.coverage")
     id("openapiprocessor.publish")
     id("openapiprocessor.newapi")
-    alias(libs.plugins.versions)
-    alias(libs.plugins.sonar)
+    alias(build.plugins.versions)
+    alias(build.plugins.sonar)
 }
 
 versions {

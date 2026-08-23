@@ -10,6 +10,14 @@ dependencyResolutionManagement {
     }
 }
 
+dependencyResolutionManagement {
+    versionCatalogs {
+        create("build") {
+            from(files("./gradle/build.versions.toml"))
+        }
+    }
+}
+
 plugins {
     id("io.github.ben-manes.versions.settings") version("0.61.0")
     id("com.gradle.develocity").version("4.5.0")

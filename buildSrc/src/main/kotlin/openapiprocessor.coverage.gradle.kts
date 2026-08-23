@@ -1,3 +1,4 @@
+import org.gradle.accessors.dm.LibrariesForBuild
 import org.gradle.accessors.dm.LibrariesForLibs
 
 plugins {
@@ -7,9 +8,10 @@ plugins {
 
 // see buildSrc/build.gradle.kts
 val libs = the<LibrariesForLibs>()
+val build = the<LibrariesForBuild>()
 
 jacoco {
-    toolVersion = libs.versions.jacoco.get()
+    toolVersion = build.versions.jacoco.get()
 }
 
 tasks.withType<JacocoReport>().configureEach {
