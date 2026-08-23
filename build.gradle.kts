@@ -1,8 +1,8 @@
 plugins {
     base
+    alias(build.plugins.openapiprocessor.publish)
     id("openapiprocessor.versions")
     id("jacoco-report-aggregation")
-    id("io.openapiprocessor.build.plugin.publish")
 }
 
 group = "io.openapiprocessor"

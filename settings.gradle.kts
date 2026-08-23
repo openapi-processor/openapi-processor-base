@@ -1,3 +1,11 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+    }
+    includeBuild("build-logic")
+}
+
 dependencyResolutionManagement {
     repositories {
         mavenCentral()
@@ -8,15 +16,14 @@ dependencyResolutionManagement {
             }
         }
     }
-}
 
-dependencyResolutionManagement {
     versionCatalogs {
         create("build") {
             from(files("./gradle/build.versions.toml"))
         }
     }
 }
+
 
 plugins {
     id("io.github.ben-manes.versions.settings") version("0.61.0")

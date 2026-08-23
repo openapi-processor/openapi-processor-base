@@ -1,7 +1,7 @@
 plugins {
     antlr
     groovy
-    kotlin
+    kotlin("jvm")
     id("openapiprocessor.library")
     id("openapiprocessor.test")
     id("openapiprocessor.testInt")
