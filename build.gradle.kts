@@ -1,5 +1,6 @@
 plugins {
     base
+    id("openapiprocessor.versions")
     id("jacoco-report-aggregation")
     id("io.openapiprocessor.build.plugin.publish")
 }

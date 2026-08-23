@@ -1,7 +1,3 @@
-plugins {
-    id("com.gradle.develocity").version("4.5.0")
-}
-
 dependencyResolutionManagement {
     repositories {
         mavenCentral()
@@ -12,6 +8,11 @@ dependencyResolutionManagement {
             }
         }
     }
+}
+
+plugins {
+    id("io.github.ben-manes.versions.settings") version("0.61.0")
+    id("com.gradle.develocity").version("4.5.0")
 }
 
 develocity {
