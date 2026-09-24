@@ -5,6 +5,8 @@
 
 package io.openapiprocessor.core.writer.java
 
+import io.openapiprocessor.core.converter.ApiOptions
+
 enum class BeanValidationFormat(val pkg: String) {
     JAVAX("javax"),
     JAKARTA("jakarta")
@@ -12,6 +14,20 @@ enum class BeanValidationFormat(val pkg: String) {
 
 @Suppress("PropertyName")
 class BeanValidations(val format: BeanValidationFormat = BeanValidationFormat.JAVAX) {
+
+    companion object {
+        fun create(options: ApiOptions): BeanValidations {
+            return BeanValidations(getValidationFormat(options.beanValidationFormat))
+        }
+
+        fun getValidationFormat(beanValidationFormat: String?): BeanValidationFormat {
+            return if (beanValidationFormat != null)
+                BeanValidationFormat.valueOf(beanValidationFormat.uppercase())
+            else
+                BeanValidationFormat.JAVAX
+        }
+    }
+
     val DECIMAL_MAX = "${format.pkg}.validation.constraints.DecimalMax"
     val DECIMAL_MIN = "${format.pkg}.validation.constraints.DecimalMin"
     val EMAIL = "${format.pkg}.validation.constraints.Email"

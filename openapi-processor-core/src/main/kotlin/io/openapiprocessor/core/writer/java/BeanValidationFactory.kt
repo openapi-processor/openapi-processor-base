@@ -16,9 +16,9 @@ import org.apache.commons.text.StringEscapeUtils.escapeJava
  * creates bean validation imports and annotations.
  */
 open class BeanValidationFactory(
-    private val options: ApiOptions
+    private val options: ApiOptions,
+    private val validations: BeanValidations = BeanValidations.create(options)
 ) {
-    val validations: BeanValidations = BeanValidations(getValidationFormat())
     val targetTypes: BeanValidationSupportedTypes = BeanValidationSupportedTypes(
         options.beanValidationAdditionalSupportedTypes)
 
@@ -225,14 +225,6 @@ open class BeanValidationFactory(
 
         parameters["values"] = SimpleParameterValue(params.toString())
         return Annotation("${options.packageName}.${validations.VALUES}", parameters)
-    }
-
-    private fun getValidationFormat(): BeanValidationFormat {
-        val format = options.beanValidationFormat
-        return if (format != null)
-            BeanValidationFormat.valueOf(format.uppercase())
-        else
-            BeanValidationFormat.JAVAX
     }
 }
 
