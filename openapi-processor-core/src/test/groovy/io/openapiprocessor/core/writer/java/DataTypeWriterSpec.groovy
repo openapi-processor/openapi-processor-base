@@ -26,7 +26,9 @@ class DataTypeWriterSpec extends Specification {
         options,
         identifier,
         generatedWriter,
-        new BeanValidationFactory(options),
+        new BeanValidationFactory(
+            options,
+            BeanValidations.create(options.beanValidationFormat)),
         new JacksonAnnotations(options),
         new JavaDocFactory(identifier))
     def target = new StringWriter ()

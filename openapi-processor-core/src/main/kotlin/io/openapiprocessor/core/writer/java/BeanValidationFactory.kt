@@ -17,7 +17,7 @@ import org.apache.commons.text.StringEscapeUtils.escapeJava
  */
 open class BeanValidationFactory(
     private val options: ApiOptions,
-    private val validations: BeanValidations = BeanValidations.create(options)
+    private val validations: BeanValidations = BeanValidations.create(options.beanValidationFormat)
 ) {
     val targetTypes: BeanValidationSupportedTypes = BeanValidationSupportedTypes(
         options.beanValidationAdditionalSupportedTypes)

@@ -20,8 +20,8 @@ import io.openapiprocessor.core.model.datatypes.StringDataType
 
 class BeanValidationSupportedSpec : FreeSpec({
     val apiOptions = ApiOptions()
-    val validation = BeanValidationFactory(apiOptions)
-    val validations = validation.validations
+    val validations = BeanValidations.create(apiOptions.beanValidationFormat)
+    val validation = BeanValidationFactory(apiOptions, validations)
 
     data class TestCase(val targetType: TargetType)
 

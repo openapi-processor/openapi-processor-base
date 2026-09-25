@@ -25,8 +25,8 @@ import static io.openapiprocessor.core.writer.java.AnnotationWriterKt.buildAnnot
 
 class BeanValidationFactoryGSpec extends Specification {
     static def options = new ApiOptions()
-    static def validation = new BeanValidationFactory (options)
-    static def validations = validation.validations
+    static def validations = BeanValidations.create(options.beanValidationFormat)
+    static def validation = new BeanValidationFactory (options, validations)
 
     void "applies @Valid to Object" () {
         def dataType = new ObjectDataType(

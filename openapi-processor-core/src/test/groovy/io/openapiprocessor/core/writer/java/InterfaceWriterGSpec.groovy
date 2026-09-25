@@ -22,7 +22,9 @@ class InterfaceWriterGSpec extends Specification {
         generatedWriter,
         methodWriter,
         annotations,
-        new BeanValidationFactory(apiOptions),
+        new BeanValidationFactory(
+            apiOptions,
+            BeanValidations.create(apiOptions.beanValidationFormat)),
         new DefaultImportFilter())
     def target = new StringWriter ()
 

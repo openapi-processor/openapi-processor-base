@@ -16,8 +16,9 @@ enum class BeanValidationFormat(val pkg: String) {
 class BeanValidations(val format: BeanValidationFormat = BeanValidationFormat.JAVAX) {
 
     companion object {
-        fun create(options: ApiOptions): BeanValidations {
-            return BeanValidations(getValidationFormat(options.beanValidationFormat))
+        @JvmStatic
+        fun create(beanValidationFormat: String?): BeanValidations {
+            return BeanValidations(getValidationFormat(beanValidationFormat))
         }
 
         fun getValidationFormat(beanValidationFormat: String?): BeanValidationFormat {

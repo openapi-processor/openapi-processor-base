@@ -15,8 +15,8 @@ import io.openapiprocessor.core.support.datatypes.propertyDataTypeString
 
 class BeanValidationMappingSpec: StringSpec({
     val apiOptions = ApiOptions()
-    val validation = BeanValidationFactory(apiOptions)
-    val validations = validation.validations
+    val validations = BeanValidations.create(apiOptions.beanValidationFormat)
+    val validation = BeanValidationFactory(apiOptions, validations)
 
     "applies @Valid to mapped object items" {
         val dataType = MappedDataType(
