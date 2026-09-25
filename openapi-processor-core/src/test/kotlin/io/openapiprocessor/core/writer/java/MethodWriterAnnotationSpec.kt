@@ -36,6 +36,27 @@ class MethodWriterAnnotationSpec: StringSpec ({
 
     val target = StringWriter()
 
+    "writes mapping annotation" {
+        val options = ApiOptions()
+
+        val endpoint = endpoint("/foo") {
+            responses {
+                status("204") {
+                    response()
+                }
+            }
+        }
+
+        writer(options).write (target, endpoint, endpoint.endpointResponses.first ())
+
+        target.toString () shouldBe
+            """
+            |    @Status
+            |    @CoreMapping
+            |    void getFoo();
+            |
+            """.trimMargin()
+    }
 
     "writes additional parameter annotation from annotation mapping" {
         val options = parseOptions(mapping =
