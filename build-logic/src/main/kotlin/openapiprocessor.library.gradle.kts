@@ -43,6 +43,8 @@ dependencies {
 
 tasks.withType<Test>().configureEach {
     jvmArgs(listOf(
+        "-Xshare:off",
+        "-XX:+EnableDynamicAgentLoading",
         "--add-exports", "jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED",
         "--add-exports", "jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED",
         "--add-exports", "jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED",
