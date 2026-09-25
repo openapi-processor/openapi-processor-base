@@ -18,7 +18,6 @@ val STATUS = Annotation("annotation.Status")
 /**
  * simple [io.openapiprocessor.core.framework.FrameworkAnnotations] implementation for testing.
  */
-@Deprecated("prefer kotlin implementation")
 class TestFrameworkAnnotations: FrameworkAnnotations {
 
     override fun getAnnotation(httpMethod: HttpMethod): Annotation {
