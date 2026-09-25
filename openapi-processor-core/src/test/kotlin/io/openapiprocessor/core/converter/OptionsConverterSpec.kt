@@ -24,7 +24,8 @@ class OptionsConverterSpec: StringSpec({
         val converter = OptionsConverter()
         converter.log = mockk<Logger>(relaxed = true)
 
-        val options = converter.convertOptions(emptyMap())
+        val options = ApiOptions()
+        converter.fillOptions(emptyMap(), options)
 
         options.targetDir shouldBe null
         options.targetDirOptions.clear.shouldBeTrue()
