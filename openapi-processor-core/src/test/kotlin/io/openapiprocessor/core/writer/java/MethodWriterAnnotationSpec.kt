@@ -58,6 +58,30 @@ class MethodWriterAnnotationSpec: StringSpec ({
             """.trimMargin()
     }
 
+    "writes @Deprecated annotation" {
+        val options = ApiOptions()
+
+        val endpoint = endpoint ("/foo") {
+            deprecated()
+            responses {
+                status("204") {
+                    response()
+                }
+            }
+        }
+
+        writer(options).write (target, endpoint, endpoint.endpointResponses.first ())
+
+        target.toString () shouldBe
+            """
+            |    @Deprecated
+            |    @Status
+            |    @CoreMapping
+            |    void getFoo();
+            |
+            """.trimMargin()
+    }
+
     "writes additional parameter annotation from annotation mapping" {
         val options = parseOptions(mapping =
             """

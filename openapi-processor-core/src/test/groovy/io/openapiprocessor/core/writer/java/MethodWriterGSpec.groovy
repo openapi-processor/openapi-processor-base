@@ -34,26 +34,6 @@ class MethodWriterGSpec extends Specification {
         Stub (JavaDocFactory))
     def target = new StringWriter ()
 
-    void "writes @Deprecated annotation" () {
-        def endpoint = endpoint ('/foo', HttpMethod.GET) {e ->
-            e.deprecated ()
-            e.responses {r ->
-                r.status ('204') {it.empty () }
-            }
-        }
-
-        when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
-
-        then:
-        target.toString () == """\
-    @Deprecated
-    @Status
-    @CoreMapping
-    void getFoo();
-"""
-    }
-
     @Unroll
     void "writes simple data type response (#type)" () {
         def endpoint = endpoint ("/$type", HttpMethod.GET) {e ->
