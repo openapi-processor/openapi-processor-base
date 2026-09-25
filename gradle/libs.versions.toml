@@ -12,7 +12,7 @@ json-schema-validator-bom = { module = "io.openapiprocessor:json-schema-validato
 json-schema-validator-validator = { module = "io.openapiprocessor:json-schema-validator" }
 io-jackson = { module = "io.openapiprocessor:io-jackson" }
 
-jackson-bom = "com.fasterxml.jackson:jackson-bom:2.22.2"
+jackson-bom = "com.fasterxml.jackson:jackson-bom:2.22.3"
 jackson-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml" }
 jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
 
