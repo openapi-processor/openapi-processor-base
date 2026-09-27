@@ -17,44 +17,6 @@ import static io.openapiprocessor.core.support.OpenApiParserKt.parseApiBody
 
 class ApiConverterGSpec extends Specification implements ModelAsserts {
 
-    void "groups endpoints into interfaces by first operation tag" () {
-        def openApi = parseApiBody (
-"""\
-paths:
-  /a:
-    get:
-      tags:
-        - ping
-      responses:
-        '204':
-          description: none
-  /b:
-    get:
-      tags:
-        - pong
-      responses:
-        '204':
-          description: none
-  /c:
-    get:
-      tags:
-        - ping
-        - pong
-      responses:
-        '204':
-          description: none
-""")
-
-        when:
-        api = apiConverter (Stub (Framework))
-            .convert (openApi)
-
-        then:
-        assertInterfaces ('Ping', 'Pong')
-        assertPingEndpoints ('/a', '/c')
-        assertPongEndpoints ('/b')
-    }
-
     void "groups endpoints into interfaces by valid tag identifier" () {
         def openApi = parseApiBody (
 """\

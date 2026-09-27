@@ -7,18 +7,60 @@ package io.openapiprocessor.core.converter
 
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import io.mockk.mockk
 import io.mockk.verify
 import io.openapiprocessor.core.framework.FrameworkBase
 import io.openapiprocessor.core.model.Api
-import io.openapiprocessor.core.support.*
+import io.openapiprocessor.core.support.apiConverter
+import io.openapiprocessor.core.support.parseApiBody
+import io.openapiprocessor.core.support.parseOptions
+import io.openapiprocessor.core.support.parseOptionsMapping
 import io.openapiprocessor.core.writer.java.JavaIdentifier
 import org.slf4j.Logger
 
 class ApiConverterSpec: StringSpec({
     isolationMode = IsolationMode.InstancePerTest
+
+    "groups endpoints into interfaces by first operation tag" {
+        val openApi = parseApiBody("""
+            paths:
+              /a:
+                get:
+                  tags:
+                    - ping
+                  responses:
+                    '204':
+                      description: none
+              /b:
+                get:
+                  tags:
+                    - pong
+                  responses:
+                    '204':
+                      description: none
+              /c:
+                get:
+                  tags:
+                    - ping
+                    - pong
+                  responses:
+                    '204':
+                      description: none
+            """)
+
+        val api: Api = ApiConverter (ApiOptions(), JavaIdentifier(), FrameworkBase())
+            .convert(openApi)
+
+        val interfaces = api.getInterfaces()
+        interfaces shouldHaveSize 2
+        interfaces.map { it.name } shouldContainExactly listOf("Ping", "Pong")
+
+        api.getInterface("Ping").endpoints.map { it.path } shouldContainExactly listOf("/a", "/c")
+        api.getInterface("Pong").endpoints.map { it.path } shouldContainExactly listOf("/b")
+    }
 
     "generates model if it is only referenced in the mapping" {
         val options = parseOptionsMapping("""
