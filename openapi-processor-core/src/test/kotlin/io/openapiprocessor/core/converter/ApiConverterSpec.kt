@@ -142,6 +142,22 @@ class ApiConverterSpec: StringSpec({
         api.getInterfaces().first().getPackageName() shouldBe listOf(options.packageName, "api").joinToString ( ".")
     }
 
+    "sets empty interface name when no interface name tag was provided" {
+        val openApi = parseApiBody("""
+            paths:
+              /foo:
+                get:
+                  responses:
+                    '204':
+                      description: no content
+            """)
+
+        val api: Api = ApiConverter (ApiOptions(), JavaIdentifier(), FrameworkBase())
+            .convert(openApi)
+
+        api.getInterfaces().first ().getInterfaceName() shouldBe "Api"
+    }
+
     "generates model if it is only referenced in the mapping" {
         val options = parseOptionsMapping("""
             |mapping:
