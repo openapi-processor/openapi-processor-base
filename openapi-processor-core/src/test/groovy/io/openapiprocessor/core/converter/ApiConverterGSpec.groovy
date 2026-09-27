@@ -7,62 +7,12 @@ package io.openapiprocessor.core.converter
 
 import io.openapiprocessor.core.framework.Framework
 import io.openapiprocessor.core.support.ModelAsserts
-import io.openapiprocessor.core.support.TestFrameworkAnnotations
-import io.openapiprocessor.core.writer.java.*
 import spock.lang.Specification
-import spock.lang.Unroll
 
 import static io.openapiprocessor.core.support.FactoryHelper.apiConverter
 import static io.openapiprocessor.core.support.OpenApiParserKt.parseApiBody
 
 class ApiConverterGSpec extends Specification implements ModelAsserts {
-
-    @Unroll
-    void "groups endpoints with method #method into interfaces" () {
-        def openApi = parseApiBody (
-"""\
-paths:
-  /a:
-    ${method}:
-      tags:
-        - ${method}
-      responses:
-        '204':
-          description: no content
-""")
-
-        when:
-        def options = new ApiOptions()
-        def identifier = new JavaIdentifier()
-        api = apiConverter (options, Stub (Framework))
-            .convert (openApi)
-
-        def w = new InterfaceWriter (
-            options,
-            Stub (GeneratedWriter),
-            new MethodWriter(
-                options,
-                identifier,
-                Stub(StatusAnnotationWriter),
-                Stub (MappingAnnotationFactory),
-                Stub (ParameterAnnotationWriter),
-                Stub (BeanValidationFactory),
-                Stub (JavaDocFactory)),
-            new TestFrameworkAnnotations(),
-            new BeanValidationFactory(
-                options,
-                BeanValidations.create(options.beanValidationFormat)),
-            new DefaultImportFilter())
-        def writer = new StringWriter()
-        w.write (writer, api.interfaces.get (0))
-
-        then:
-        assertInterfaces (method.capitalize ())
-        assertEndpoints (method,'/a')
-
-        where:
-        method << ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace']
-    }
 
     void "sets interface package from processor options with 'api' sub package" () {
         def openApi = parseApiBody (

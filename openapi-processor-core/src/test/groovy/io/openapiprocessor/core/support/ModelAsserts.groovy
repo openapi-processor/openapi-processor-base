@@ -10,12 +10,6 @@ import io.openapiprocessor.core.model.Api
 trait ModelAsserts {
     Api api
 
-    void assertInterfaces(String... expected) {
-        def actual = api.interfaces
-        assert actual.size () == expected.size ()
-        assert actual.collect { it.name } == expected.collect ()
-    }
-
     void assertEndpoints(String interfaceName, String... endpoints) {
         def itf = api.getInterface (interfaceName)
         endpoints.each { ep ->

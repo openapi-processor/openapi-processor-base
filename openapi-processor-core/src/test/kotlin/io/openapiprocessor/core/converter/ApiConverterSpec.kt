@@ -7,6 +7,8 @@ package io.openapiprocessor.core.converter
 
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.data.forAll
+import io.kotest.data.row
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
@@ -14,10 +16,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import io.openapiprocessor.core.framework.FrameworkBase
 import io.openapiprocessor.core.model.Api
-import io.openapiprocessor.core.support.apiConverter
-import io.openapiprocessor.core.support.parseApiBody
-import io.openapiprocessor.core.support.parseOptions
-import io.openapiprocessor.core.support.parseOptionsMapping
+import io.openapiprocessor.core.support.*
 import io.openapiprocessor.core.writer.java.JavaIdentifier
 import org.slf4j.Logger
 
@@ -87,6 +86,41 @@ class ApiConverterSpec: StringSpec({
         val actual = api.getInterfaces()
         actual shouldHaveSize 1
         actual.first().name shouldBe "TestApi"
+    }
+
+    "groups endpoints with method #method into interfaces" {
+        forAll(
+            row("get"),
+            row("put"),
+            row("post"),
+            row("delete"),
+            row("options"),
+            row("head"),
+            row("patch"),
+            row("trace")
+        ) { method ->
+            val openApi = parseApiBody("""
+                paths:
+                  /a:
+                    $method:
+                      tags:
+                        - $method
+                      responses:
+                        '204':
+                          description: no content
+                """)
+
+            val api: Api = ApiConverter (ApiOptions(), JavaIdentifier(), FrameworkBase())
+                .convert(openApi)
+
+
+            val actual = api.getInterfaces()
+            actual shouldHaveSize 1
+            actual.map { it.name } shouldBe listOf(method.capitalizeFirstChar())
+
+            val itf = actual[0]
+            itf.endpoints.map { it.path } shouldContainExactly listOf("/a")
+        }
     }
 
     "generates model if it is only referenced in the mapping" {
