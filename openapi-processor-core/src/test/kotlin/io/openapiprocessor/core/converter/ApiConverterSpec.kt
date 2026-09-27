@@ -113,7 +113,6 @@ class ApiConverterSpec: StringSpec({
             val api: Api = ApiConverter (ApiOptions(), JavaIdentifier(), FrameworkBase())
                 .convert(openApi)
 
-
             val actual = api.getInterfaces()
             actual shouldHaveSize 1
             actual.map { it.name } shouldBe listOf(method.capitalizeFirstChar())
@@ -121,6 +120,26 @@ class ApiConverterSpec: StringSpec({
             val itf = actual[0]
             itf.endpoints.map { it.path } shouldContainExactly listOf("/a")
         }
+    }
+
+    "sets interface package from processor options with 'api' sub package" {
+        val openApi = parseApiBody("""
+            paths:
+              /foo:
+                get:
+                  responses:
+                    '204':
+                      description: no content
+            """)
+
+        val options = ApiOptions()
+        options.packageName = "a.package.name"
+        options.packageOptions.base = options.packageName
+
+        val api: Api = ApiConverter (options, JavaIdentifier(), FrameworkBase())
+            .convert(openApi)
+
+        api.getInterfaces().first().getPackageName() shouldBe listOf(options.packageName, "api").joinToString ( ".")
     }
 
     "generates model if it is only referenced in the mapping" {

@@ -14,29 +14,6 @@ import static io.openapiprocessor.core.support.OpenApiParserKt.parseApiBody
 
 class ApiConverterGSpec extends Specification implements ModelAsserts {
 
-    void "sets interface package from processor options with 'api' sub package" () {
-        def openApi = parseApiBody (
-"""\
-paths:
-  /foo:
-    get:
-      responses:
-        '204':
-          description: no content
-""")
-
-        def options = new ApiOptions()
-        options.packageName = 'a.package.name'
-        options.packageOptions.base = options.packageName
-
-        when:
-        api = apiConverter (options, Stub(Framework))
-            .convert (openApi)
-
-        then:
-        api.interfaces.first ().packageName == [options.packageName, 'api'].join ('.')
-    }
-
     void "sets empty interface name when no interface name tag was provided" () {
         def openApi = parseApiBody (
 """\
