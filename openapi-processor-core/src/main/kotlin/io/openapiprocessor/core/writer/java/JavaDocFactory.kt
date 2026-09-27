@@ -39,7 +39,7 @@ class SkipParentWrapperParagraphsRenderer(context: HtmlNodeRendererContext)
 }
 
 /**
- * create javadoc from OpenAPI descriptions.
+ * create Javadoc from OpenAPI descriptions.
  */
 open class JavaDocFactory(val identifier: Identifier) {
 
