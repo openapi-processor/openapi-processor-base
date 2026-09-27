@@ -62,6 +62,33 @@ class ApiConverterSpec: StringSpec({
         api.getInterface("Pong").endpoints.map { it.path } shouldContainExactly listOf("/b")
     }
 
+    "groups endpoints into interfaces by valid tag identifier" {
+        val openApi = parseApiBody ("""
+            paths:
+              /a:
+                get:
+                  tags:
+                    - test_api
+                  responses:
+                    '204':
+                      description: none
+              /b:
+                get:
+                  tags:
+                    - test-api
+                  responses:
+                    '204':
+                      description: none
+              """)
+
+        val api: Api = ApiConverter (ApiOptions(), JavaIdentifier(), FrameworkBase())
+            .convert(openApi)
+
+        val actual = api.getInterfaces()
+        actual shouldHaveSize 1
+        actual.first().name shouldBe "TestApi"
+    }
+
     "generates model if it is only referenced in the mapping" {
         val options = parseOptionsMapping("""
             |mapping:
