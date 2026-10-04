@@ -22,10 +22,8 @@ class GeneratedWriterSpec: StringSpec({
 
         val generated = GeneratedWriterImpl(info, options)
 
-        val imports = generated.getImports()
-
         val usage = StringWriter()
-        generated.writeUse(usage)
+        val imports = generated.writeAnnotation(usage)
 
         val source = StringWriter()
         generated.writeSource(source)
@@ -42,10 +40,8 @@ class GeneratedWriterSpec: StringSpec({
 
         val generated = GeneratedWriterImpl(info, options)
 
-        val imports = generated.getImports()
-
         val usage = StringWriter()
-        generated.writeUse(usage)
+        val imports = generated.writeAnnotation(usage)
 
         val source = StringWriter()
         generated.writeSource(source)

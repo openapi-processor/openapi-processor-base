@@ -12,6 +12,7 @@ import java.io.Writer
 class GeneratedWriterImpl(private val info: GeneratedInfo, private val options: ApiOptions)
     : GeneratedWriter {
 
+    @Deprecated("use writeAnnotation instead.")
     override fun getImports(): Set<String> {
         if (!options.generatedAnnotation) {
             return emptySet()
@@ -20,6 +21,7 @@ class GeneratedWriterImpl(private val info: GeneratedInfo, private val options: 
         return setOf("${options.packageName}.support.Generated")
     }
 
+    @Deprecated("use writeAnnotation instead.")
     override fun writeUse(target: Writer) {
         if (!options.generatedAnnotation) {
             return
@@ -27,6 +29,17 @@ class GeneratedWriterImpl(private val info: GeneratedInfo, private val options: 
 
         target.write(create())
         target.write("\n")
+    }
+
+    override fun writeAnnotation(target: Writer): Set<String> {
+        if (!options.generatedAnnotation) {
+            return emptySet()
+        }
+
+        target.write(create())
+        target.write("\n")
+
+        return setOf("${options.packageName}.support.Generated")
     }
 
     override fun writeSource(target: Writer) {

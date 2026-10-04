@@ -8,7 +8,10 @@ package io.openapiprocessor.core.writer.java
 import java.io.Writer
 
 interface GeneratedWriter {
+    @Deprecated("use writeAnnotation instead.")
     fun getImports(): Set<String>
+    @Deprecated("use writeAnnotation instead.")
     fun writeUse(target: Writer)
+    fun writeAnnotation(target: Writer): Set<String>
     fun writeSource(target: Writer)
 }

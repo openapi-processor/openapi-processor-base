@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 https://github.com/openapi-processor/openapi-processor-core
+ * Copyright 2022 https://github.com/openapi-processor/openapi-processor-base
  * PDX-License-Identifier: Apache-2.0
  */
 
@@ -10,12 +10,19 @@ import java.io.Writer
 
 class SimpleGeneratedWriter(private val options: ApiOptions) : GeneratedWriter {
 
+    @Deprecated("use writeAnnotation instead.")
     override fun getImports(): Set<String> {
         return setOf("${options.packageName}.support.Generated")
     }
 
+    @Deprecated("use writeAnnotation instead.")
     override fun writeUse(target: Writer) {
         target.write("@Generated\n")
+    }
+
+    override fun writeAnnotation(target: Writer): Set<String> {
+        target.write("@Generated\n")
+        return setOf("${options.packageName}.support.Generated")
     }
 
     override fun writeSource(target: Writer) {
