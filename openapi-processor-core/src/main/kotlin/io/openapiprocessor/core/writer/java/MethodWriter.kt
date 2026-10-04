@@ -39,6 +39,8 @@ open class MethodWriter(
     private val annotationWriter = AnnotationWriter()
 
     fun write(target: Writer, endpoint: Endpoint, endpointResponse: EndpointResponse) {
+        val collectedImports = mutableSetOf<String>()
+
         if (apiOptions.javadoc) {
             target.write(createJavadoc(endpoint, endpointResponse).indent())
             target.write(LF)
@@ -55,9 +57,9 @@ open class MethodWriter(
             target.write(LF)
         }
 
-        val annotations = createMappingAnnotations(endpoint, endpointResponse)
-        annotations.forEach {
-            target.write(it.indent())
+        createMappingAnnotations(endpoint, endpointResponse).forEach { (annotation, imports) ->
+            collectedImports.addAll(imports)
+            target.write(annotation.indent())
             target.write(LF)
         }
 
@@ -112,7 +114,7 @@ open class MethodWriter(
         return annotation.toString ()
     }
 
-    private fun createMappingAnnotations(endpoint: Endpoint, endpointResponse: EndpointResponse): List<String> {
+    private fun createMappingAnnotations(endpoint: Endpoint, endpointResponse: EndpointResponse): List<AnnotationData> {
         return mappingAnnotationFactory.create(endpoint, endpointResponse)
     }
 

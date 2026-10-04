@@ -7,6 +7,7 @@ package io.openapiprocessor.core
 
 import io.openapiprocessor.core.model.Endpoint
 import io.openapiprocessor.core.model.EndpointResponse
+import io.openapiprocessor.core.writer.java.AnnotationData
 import io.openapiprocessor.core.writer.java.MappingAnnotationFactory
 
 /**
@@ -14,7 +15,9 @@ import io.openapiprocessor.core.writer.java.MappingAnnotationFactory
  */
 class TestProcessorMappingAnnotationFactory: MappingAnnotationFactory {
 
-    override fun create(endpoint: Endpoint, endpointResponse: EndpointResponse): List<String> {
-        return listOf("""${MAPPING.annotationName}("${endpoint.path}")""")
+    override fun create(endpoint: Endpoint, endpointResponse: EndpointResponse): List<AnnotationData> {
+        return listOf(AnnotationData(
+            """${MAPPING.annotationName}("${endpoint.path}")""",
+            MAPPING.imports + MAPPING.annotationName))
     }
 }
