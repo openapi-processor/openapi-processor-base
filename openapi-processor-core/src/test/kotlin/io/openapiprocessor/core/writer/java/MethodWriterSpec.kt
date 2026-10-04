@@ -58,7 +58,7 @@ class MethodWriterSpec: StringSpec({
         target.toString () shouldBe
             """    
             |    @Status
-            |    @CoreMapping
+            |    @Mapping
             |    void getFoo(@Parameter @NotNull String foo);
             |
             """.trimMargin()
@@ -87,9 +87,9 @@ class MethodWriterSpec: StringSpec({
         // then:
         target.toString () shouldBe
             """    
-            |    @CoreMapping
+            |    @Mapping
             |    Collection<String> getFooApplicationJson();
-            |    @CoreMapping
+            |    @Mapping
             |    Collection<String> getFooApplicationXml();
             |
             """.trimMargin()
@@ -119,9 +119,9 @@ class MethodWriterSpec: StringSpec({
         // then:
         target.toString () shouldBe
             """    
-            |    @CoreMapping
+            |    @Mapping
             |    Collection<String> getFooOperationIdApplicationJson();
-            |    @CoreMapping
+            |    @Mapping
             |    Collection<String> getFooOperationIdApplicationXml();
             |
             """.trimMargin()
@@ -148,7 +148,7 @@ class MethodWriterSpec: StringSpec({
         target.toString () shouldBe
             """    
             |    @Status
-            |    @CoreMapping
+            |    @Mapping
             |    void getFoo(@Parameter FooX foo);
             |
             """.trimMargin()
@@ -175,7 +175,7 @@ class MethodWriterSpec: StringSpec({
         target.toString () shouldBe
             """    
             |    @Status
-            |    @CoreMapping
+            |    @Mapping
             |    void getFoo(@Parameter FooX body);
             |
             """.trimMargin()
@@ -199,7 +199,7 @@ class MethodWriterSpec: StringSpec({
         // then:
         target.toString () shouldBe
             """    
-            |    @CoreMapping
+            |    @Mapping
             |    FooX getFoo();
             |
             """.trimMargin()
@@ -233,7 +233,7 @@ class MethodWriterSpec: StringSpec({
         target.toString () shouldBe
             """    
             |    @Status
-            |    @CoreMapping
+            |    @Mapping
             |    void getFoo(@Parameter Map<String, Collection<String>> foo);
             |
             """.trimMargin()
@@ -265,7 +265,7 @@ class MethodWriterSpec: StringSpec({
         // then:
         target.toString () shouldBe
             """    
-            |    @CoreMapping
+            |    @Mapping
             |    Map<String, Collection<String>> getFoo();
             |
             """.trimMargin()
@@ -292,7 +292,7 @@ class MethodWriterSpec: StringSpec({
         target.toString () shouldBe
             """
             |    @Status
-            |    @CoreMapping
+            |    @Mapping
             |    void getFoo(@Parameter Bar<?> foo);
             |
             """.trimMargin()
@@ -322,7 +322,7 @@ class MethodWriterSpec: StringSpec({
         target.toString () shouldBe
             """
             |    @Status
-            |    @CoreMapping
+            |    @Mapping
             |    void getFoo();
             |
             """.trimMargin()
@@ -354,7 +354,7 @@ class MethodWriterSpec: StringSpec({
 
         target.toString () shouldBe
             """
-            |    @CoreMapping
+            |    @Mapping
             |    String getFoo();
             |
             """.trimMargin()
@@ -383,7 +383,7 @@ class MethodWriterSpec: StringSpec({
 
         target.toString () shouldBe
             """
-            |    @CoreMapping
+            |    @Mapping
             |    Object getFoo();
             |
             """.trimMargin()
@@ -407,7 +407,7 @@ class MethodWriterSpec: StringSpec({
         target.toString () shouldBe
             """
             |    @Status
-            |    @CoreMapping
+            |    @Mapping
             |    void getFoo();
             |
             """.trimMargin()

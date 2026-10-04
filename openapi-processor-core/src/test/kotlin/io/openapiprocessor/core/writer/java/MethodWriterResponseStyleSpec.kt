@@ -65,7 +65,7 @@ class MethodWriterResponseStyleSpec: FreeSpec() {
                 // then:
                 target.toString() shouldBe
                     """    
-                    |    @CoreMapping
+                    |    @Mapping
                     |    Object getFoo();
                     |
                     """.trimMargin()
@@ -98,7 +98,7 @@ class MethodWriterResponseStyleSpec: FreeSpec() {
                 // then:
                 target.toString() shouldBe
                     """    
-                    |    @CoreMapping
+                    |    @Mapping
                     |    String getFoo();
                     |
                     """.trimMargin()
@@ -138,7 +138,7 @@ class MethodWriterResponseStyleSpec: FreeSpec() {
                 // then:
                 target.toString() shouldBe
                     """    
-                    |    @CoreMapping
+                    |    @Mapping
                     |    ResultWrapper<?> getFoo();
                     |
                     """.trimMargin()
@@ -166,7 +166,7 @@ class MethodWriterResponseStyleSpec: FreeSpec() {
                 // then:
                 target.toString() shouldBe
                     """    
-                    |    @CoreMapping
+                    |    @Mapping
                     |    String getFoo();
                     |
                     """.trimMargin()
@@ -200,7 +200,7 @@ class MethodWriterResponseStyleSpec: FreeSpec() {
                 // then:
                 target.toString() shouldBe
                     """    
-                    |    @CoreMapping
+                    |    @Mapping
                     |    ResultWrapper<String> getFoo();
                     |
                     """.trimMargin()

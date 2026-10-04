@@ -13,6 +13,6 @@ import io.openapiprocessor.core.writer.java.MappingAnnotationFactory
 class TestMappingAnnotationFactory: MappingAnnotationFactory {
 
     override fun create(endpoint: Endpoint, endpointResponse: EndpointResponse): List<AnnotationData> {
-        return listOf(AnnotationData("@CoreMapping", setOf("annotation.CoreMapping")))
+        return listOf(AnnotationData(MAPPING.annotationName, MAPPING.imports))
     }
 }

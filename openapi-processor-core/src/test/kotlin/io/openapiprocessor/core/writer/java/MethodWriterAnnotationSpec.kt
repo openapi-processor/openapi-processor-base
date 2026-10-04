@@ -52,7 +52,7 @@ class MethodWriterAnnotationSpec: StringSpec ({
         target.toString () shouldBe
             """
             |    @Status
-            |    @CoreMapping
+            |    @Mapping
             |    void getFoo();
             |
             """.trimMargin()
@@ -76,7 +76,7 @@ class MethodWriterAnnotationSpec: StringSpec ({
             """
             |    @Deprecated
             |    @Status
-            |    @CoreMapping
+            |    @Mapping
             |    void getFoo();
             |
             """.trimMargin()
@@ -109,7 +109,7 @@ class MethodWriterAnnotationSpec: StringSpec ({
         target.toString () shouldBe
             """    
             |    @Status
-            |    @CoreMapping
+            |    @Mapping
             |    void getFoo(@Parameter @Bar(bar = rab) Foo foo);
             |
             """.trimMargin()
@@ -144,7 +144,7 @@ class MethodWriterAnnotationSpec: StringSpec ({
         target.toString () shouldBe
             """    
             |    @Status
-            |    @CoreMapping
+            |    @Mapping
             |    void getFoo(@Parameter @Bar(bar = rab) Foo foo);
             |
             """.trimMargin()
@@ -177,7 +177,7 @@ class MethodWriterAnnotationSpec: StringSpec ({
         target.toString () shouldBe
             """    
             |    @Status
-            |    @CoreMapping
+            |    @Mapping
             |    void getFoo(@Parameter @Bar(bar = rab) Foo foo);
             |
             """.trimMargin()
@@ -217,7 +217,7 @@ class MethodWriterAnnotationSpec: StringSpec ({
         target.toString () shouldBe
             """    
             |    @Status
-            |    @CoreMapping
+            |    @Mapping
             |    void getFoo(@Parameter @Bar(bar = rab) MappedFoo foo);
             |
             """.trimMargin()
@@ -256,7 +256,7 @@ class MethodWriterAnnotationSpec: StringSpec ({
         target.toString () shouldBe
             """    
             |    @Status
-            |    @CoreMapping
+            |    @Mapping
             |    void getFoo(@Parameter Foo foo);
             |
             """.trimMargin()

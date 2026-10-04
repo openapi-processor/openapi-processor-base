@@ -49,7 +49,7 @@ class MethodWriterGSpec extends Specification {
 
         then:
         target.toString () == """\
-    @CoreMapping
+    @Mapping
     ${type.capitalize ()} get${type.capitalize ()}();
 """
 
@@ -83,7 +83,7 @@ class MethodWriterGSpec extends Specification {
 
         then:
         target.toString () == """\
-    @CoreMapping
+    @Mapping
     InlineObjectResponse getFoo();
 """
     }
@@ -102,7 +102,7 @@ class MethodWriterGSpec extends Specification {
 
         then:
         target.toString () == """\
-    @CoreMapping
+    @Mapping
     ${response} getFoo();
 """
 
@@ -133,7 +133,7 @@ class MethodWriterGSpec extends Specification {
         then:
         target.toString () == """\
     @Status
-    @CoreMapping
+    @Mapping
     void getFoo(@Parameter String foo);
 """
     }
@@ -166,7 +166,7 @@ class MethodWriterGSpec extends Specification {
         then:
         target.toString () == """\
     @Status
-    @CoreMapping
+    @Mapping
     void getFoo(String foo);
 """
     }
@@ -189,7 +189,7 @@ class MethodWriterGSpec extends Specification {
         then:
         target.toString () == """\
     @Status
-    @CoreMapping
+    @Mapping
     void getFoo(@Parameter @Foo String foo);
 """
     }
@@ -214,7 +214,7 @@ class MethodWriterGSpec extends Specification {
         then:
         target.toString () == """\
     @Status
-    @CoreMapping
+    @Mapping
     void getFoo(@Parameter @Foo("bar") String foo);
 """
     }
@@ -240,7 +240,7 @@ class MethodWriterGSpec extends Specification {
         then:
         target.toString () == """\
     @Status
-    @CoreMapping
+    @Mapping
     void getFoo(@Parameter @Foo(foo = "bar", oof = "rab") String foo);
 """
     }
@@ -258,7 +258,7 @@ class MethodWriterGSpec extends Specification {
         then:
         target.toString () == """\
     @Status
-    @CoreMapping
+    @Mapping
     void getFOOooBARrr();
 """
     }
@@ -277,7 +277,7 @@ class MethodWriterGSpec extends Specification {
         then:
         target.toString () == """\
     @Status
-    @CoreMapping
+    @Mapping
     void getBar();
 """
     }
@@ -301,7 +301,7 @@ class MethodWriterGSpec extends Specification {
         then:
         target.toString () == """\
     @Status
-    @CoreMapping
+    @Mapping
     void getFoo(@Parameter String foO);
 """
     }
@@ -327,7 +327,7 @@ class MethodWriterGSpec extends Specification {
         then:
         target.toString () == """\
     @Status
-    @CoreMapping
+    @Mapping
     ResultWrapper<Void> getFoo();
 """
     }
