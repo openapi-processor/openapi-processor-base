@@ -47,6 +47,16 @@ class ImportFilterSpec: StringSpec({
         result.first() shouldBe "other.Foo"
     }
 
+    "does not drops java.lang.<some pkg>.<some class> imports" {
+        val filter = DefaultImportFilter()
+        val result = filter.filter("any", setOf(
+            "java.lang.annotation.Target"
+        ))
+
+        result.size shouldBe 1
+        result.first() shouldBe "java.lang.annotation.Target"
+    }
+
     "provides empty list when no imports are left" {
         val filter = DefaultImportFilter()
         val result = filter.filter("any", setOf(

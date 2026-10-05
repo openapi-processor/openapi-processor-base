@@ -20,7 +20,7 @@ class DefaultImportFilter: ImportFilter {
      */
     override fun filter(currentPackageName: String, imports: Set<String>): Set<String> {
         return imports.filterNot {
-               it.startsWith("java.lang.")
+              (it.startsWith("java.lang.") && it.count() { c -> c == '.' } == 2)
             || it.substringBeforeLast(".", it) == currentPackageName
         }.toSet()
     }
