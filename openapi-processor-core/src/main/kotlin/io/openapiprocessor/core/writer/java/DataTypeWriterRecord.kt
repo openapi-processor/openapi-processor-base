@@ -10,6 +10,7 @@ import io.openapiprocessor.core.model.datatypes.InterfaceDataType
 import io.openapiprocessor.core.model.datatypes.ModelDataType
 import io.openapiprocessor.core.support.LF
 import io.openapiprocessor.core.writer.Identifier
+import java.io.StringWriter
 import java.io.Writer
 
 /**
@@ -31,10 +32,20 @@ class DataTypeWriterRecord(
     javadocFactory
 ) {
     override fun write(target: Writer, dataType: ModelDataType) {
+        val collectedImports = mutableSetOf<String>()
+
         val propsData = collectPropertiesData(dataType)
-        writeFileHeader(target, dataType, propsData)
-        writePreClass(target, dataType, propsData)
-        writeRecord(target, dataType, propsData)
+
+        val content = StringWriter()
+        writeFileHeader(content, dataType, propsData)
+        collectedImports.addAll(writePreClass(content, dataType, propsData))
+        writeRecord(content, dataType, propsData)
+
+        val (cleanContent, oldImports) = extractImports(content)
+        collectedImports.addAll(oldImports)
+
+        val imports = writeImports(dataType, collectedImports)
+        target.write(replaceImportsPlaceholder(cleanContent, imports))
     }
 
     private fun writeRecord(target: Writer, dataType: ModelDataType, propsData: List<PropertyData>) {
@@ -94,5 +105,9 @@ class DataTypeWriterRecord(
         dataType: ModelDataType
     ) {
         target.write("public record ${dataType.getTypeName()}")
+    }
+
+    private fun writeImports(dataType: ModelDataType, collectedImports: MutableSet<String>): String {
+        return ImportFactory().create(dataType.getPackageName(), collectedImports)
     }
 }

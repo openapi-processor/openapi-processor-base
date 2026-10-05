@@ -13,6 +13,7 @@ import io.openapiprocessor.core.model.datatypes.NullDataType
 import io.openapiprocessor.core.support.LF
 import io.openapiprocessor.core.support.capitalizeFirstChar
 import io.openapiprocessor.core.writer.Identifier
+import java.io.StringWriter
 import java.io.Writer
 
 /**
@@ -34,10 +35,20 @@ class DataTypeWriterPojo(
     javadocFactory
 ) {
     override fun write(target: Writer, dataType: ModelDataType) {
+        val collectedImports = mutableSetOf<String>()
+
         val propsData = collectPropertiesData(dataType)
-        writeFileHeader(target, dataType, propsData)
-        writePreClass(target, dataType, propsData)
-        writeClass(target, dataType, propsData)
+
+        val content = StringWriter()
+        writeFileHeader(content, dataType, propsData)
+        collectedImports.addAll(writePreClass(content, dataType, propsData))
+        writeClass(content, dataType, propsData)
+
+        val (cleanContent, oldImports) = extractImports(content)
+        collectedImports.addAll(oldImports)
+
+        val imports = writeImports(dataType, collectedImports)
+        target.write(replaceImportsPlaceholder(cleanContent, imports))
     }
 
     private fun writeClass(target: Writer, dataType: ModelDataType, propsData: List<PropertyData>) {
@@ -149,5 +160,9 @@ class DataTypeWriterPojo(
         """.trimMargin()
 
         return result
+    }
+
+    private fun writeImports(dataType: ModelDataType, collectedImports: MutableSet<String>): String {
+        return ImportFactory().create(dataType.getPackageName(), collectedImports)
     }
 }

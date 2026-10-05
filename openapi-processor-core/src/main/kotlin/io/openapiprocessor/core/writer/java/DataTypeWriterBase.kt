@@ -80,14 +80,19 @@ abstract class DataTypeWriterBase(
     protected fun writeFileHeader(target: Writer, dataType: ModelDataType, propsData: List<PropertyData>) {
         writePackage(target, dataType)
         writeImports(target, dataType, propsData)
+        writeImportsPlaceholder(target)
     }
 
-    protected fun writePreClass(target: Writer, dataType: ModelDataType, propsData: List<PropertyData>) {
+    protected fun writePreClass(target: Writer, dataType: ModelDataType, propsData: List<PropertyData>): Set<String> {
+        val collectedImports = mutableSetOf<String>()
+
         writeJavaDoc(target, dataType)
         writeDeprecated(target, dataType)
         writeAnnotationsBeanValidation(target, dataType)
         writeAnnotationsMappings(target, dataType)
-        writeAnnotationsGenerated(target)
+        collectedImports.addAll(writeAnnotationsGenerated(target))
+
+        return collectedImports
     }
 
     protected fun getProp(propData: PropertyData, access: Access): String {
@@ -203,6 +208,10 @@ abstract class DataTypeWriterBase(
         target.write("package ${dataType.getPackageName()};\n\n")
     }
 
+    private fun writeImportsPlaceholder(target: Writer) {
+        target.write("<IMPORTS>\n\n")
+    }
+
     private fun writeImports(target: Writer, dataType: ModelDataType, propsData: List<PropertyData>) {
         val imports: List<String> = collectImports(dataType.getPackageName(), dataType, propsData)
 
@@ -246,18 +255,17 @@ abstract class DataTypeWriterBase(
             }
     }
 
-    private fun writeAnnotationsGenerated(target: Writer) {
+    private fun writeAnnotationsGenerated(target: Writer): Set<String> {
         if (apiOptions.generatedAnnotation) {
-            generatedWriter.writeUse(target)
+            return generatedWriter.writeAnnotation(target)
         }
+
+        return emptySet()
     }
 
     private fun collectImports(packageName: String, dataType: ModelDataType, propsData: List<PropertyData>): List<String> {
         val imports = mutableSetOf<String>()
 
-        if (apiOptions.generatedAnnotation) {
-            imports.addAll(generatedWriter.getImports())
-            }
         imports.addAll(collectDataTypeImports(dataType))
         imports.addAll(collectPropertyImports(propsData))
 
