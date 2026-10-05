@@ -6,6 +6,7 @@
 package io.openapiprocessor.core.writer.java
 
 import io.openapiprocessor.core.converter.ApiOptions
+import java.io.StringWriter
 import java.io.Writer
 
 class StringValuesWriter(
@@ -14,25 +15,34 @@ class StringValuesWriter(
 ) {
 
     fun writeValues(target: Writer) {
+        val collectedImports = mutableSetOf<String>()
+
         val imports = mutableSetOf(
             "${options.beanValidationFormat}.validation.Constraint",
             "${options.beanValidationFormat}.validation.Payload",
-            "java.lang.annotation.*"
-        )
-        imports.addAll(generatedWriter.getImports())
+            "java.lang.annotation.Documented",
+            "java.lang.annotation.ElementType",
+            "java.lang.annotation.Retention",
+            "java.lang.annotation.RetentionPolicy",
+            "java.lang.annotation.Target")
 
-        target.write("""
-            package ${options.packageName}.validation;
+        val pkg = "${options.packageName}.validation"
+
+        val content = StringWriter()
+        content.write("""
+            package $pkg;
             
+            <IMPORTS>
+
         """.trimIndent())
 
-        target.write("\n")
+        content.write("\n")
         imports.sorted().forEach {
-            target.write("import ${it};\n")
+            content.write("import ${it};\n")
         }
-        target.write("\n")
+        content.write("\n")
 
-        target.write("""
+        content.write("""
             @Target({ElementType.FIELD, ElementType.PARAMETER, ElementType.TYPE_USE})
             @Retention(RetentionPolicy.RUNTIME)
             @Constraint(validatedBy = ValueValidator.class)
@@ -40,9 +50,9 @@ class StringValuesWriter(
             
         """.trimIndent())
 
-        generatedWriter.writeUse(target)
+        collectedImports.addAll(generatedWriter.writeAnnotation(content))
 
-        target.write("""
+        content.write("""
             public @interface Values {
                 String message() default "Invalid value. Should be one of values.";
                 Class<?>[] groups() default {};
@@ -51,6 +61,12 @@ class StringValuesWriter(
             }
             
             """.trimIndent())
+
+        val (cleanContent, oldImports) = extractImports(content)
+        collectedImports.addAll(oldImports)
+
+        val importsX = createImports(pkg, collectedImports)
+        target.write(replaceImportsPlaceholder(cleanContent, importsX))
     }
 
     fun writeValueValidator(target: Writer) {
@@ -91,5 +107,9 @@ class StringValuesWriter(
             }
 
             """.trimIndent())
+    }
+
+    private fun createImports(pkg: String, collectedImports: MutableSet<String>): String {
+        return ImportFactory().create(pkg, collectedImports)
     }
 }
