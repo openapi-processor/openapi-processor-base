@@ -7,6 +7,7 @@ package io.openapiprocessor.core.writer.java
 
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.model.datatypes.InterfaceDataType
+import java.io.StringWriter
 import java.io.Writer
 
 class InterfaceDataTypeWriter(
@@ -16,26 +17,24 @@ class InterfaceDataTypeWriter(
 ) {
 
     fun write(target: Writer, dataType: InterfaceDataType) {
-        target.write("package ${dataType.getPackageName()};\n\n")
+        val collectedImports = mutableSetOf<String>()
 
-        val imports = collectImports()
-        imports.forEach {
-            target.write("import ${it};\n")
-        }
-        target.write("\n")
+        val content = StringWriter()
+        content.write("package ${dataType.getPackageName()};\n\n")
+        content.write("<IMPORTS>\n\n")
 
         if (apiOptions.javadoc) {
-            target.write(javadocFactory.create(dataType))
+            content.write(javadocFactory.create(dataType))
         }
 
-        generatedWriter.writeUse(target)
-        target.write("public interface ${dataType.getTypeName()} {\n")
-        target.write ("}\n")
+        collectedImports.addAll(generatedWriter.writeAnnotation(content))
+        content.write("public interface ${dataType.getTypeName()} {\n")
+        content.write ("}\n")
+
+        val imports = createImports(dataType, collectedImports)
+        target.write(replaceImportsPlaceholder(content.toString(), imports))
     }
 
-    private fun collectImports(): Set<String> {
-        val imports = mutableSetOf<String>()
-        imports.addAll(generatedWriter.getImports())
-        return imports
-    }
+    private fun createImports(dataType: InterfaceDataType, collectedImports: MutableSet<String>): String =
+        ImportFactory().create(dataType.getPackageName(), collectedImports)
 }
