@@ -10,8 +10,6 @@ import io.openapiprocessor.core.model.Annotation
 import io.openapiprocessor.core.model.datatypes.PropertyDataType
 
 /**
- * TODO remove v3
- *
  * Jackson 3 still uses the annotations from the `com.fasterxml.jackson.annotation` package.
  *
  * mapping jon schema definition to configure the jackson version.
@@ -23,9 +21,10 @@ import io.openapiprocessor.core.model.datatypes.PropertyDataType
  *  }
  */
 class JacksonAnnotations(apiOptions: ApiOptions): JsonAnnotationFactory {
+    private val jsonProperty: Annotation
     @Deprecated("use methods")
-    override val jsonProperty: Annotation  // todo make private
     override val jsonCreator: Annotation
+    @Deprecated("use methods")
     override val jsonValue: Annotation
 
     init {
@@ -47,10 +46,18 @@ class JacksonAnnotations(apiOptions: ApiOptions): JsonAnnotationFactory {
         return jsonProperty.imports
     }
 
+    @Deprecated(
+        "use createPropertyAnnotation(...)",
+        replaceWith = ReplaceWith("createPropertyAnnotation(propertyName, propDataType).text")
+    )
     override fun createPropertyAnnotations(propertyName: String, propDataType: PropertyDataType): Collection<String> {
+        return listOf(createPropertyAnnotation(propertyName, propDataType).text)
+    }
+
+    override fun createPropertyAnnotation(propertyName: String, propDataType: PropertyDataType): AnnotationData {
         val params = createPropertyParameter(propertyName, getAccess(propDataType))
         val result = "${jsonProperty.annotationName}(${params.joinToString(", ")})"
-        return listOf(result)
+        return AnnotationData(result, jsonProperty.imports)
     }
 
     private fun createPropertyParameter(propertyName: String, access: PropertyAccess?): Collection<String> {
