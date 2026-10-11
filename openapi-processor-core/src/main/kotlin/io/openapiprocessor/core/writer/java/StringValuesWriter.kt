@@ -57,28 +57,27 @@ class StringValuesWriter(
     }
 
     fun writeValueValidator(target: Writer) {
-        val imports = mutableSetOf(
+        val collectedImports = mutableSetOf(
             "${options.beanValidationFormat}.validation.ConstraintValidator",
             "${options.beanValidationFormat}.validation.ConstraintValidatorContext",
             "java.util.Arrays",
             "java.util.Set"
         )
-        imports.addAll(generatedWriter.getImports())
 
-        target.write("""
-            package ${options.packageName}.validation;
+        val pkg = "${options.packageName}.validation"
+
+        val content = StringWriter()
+        content.write("""
+            package $pkg;
             
+            <IMPORTS>
+
+
         """.trimIndent())
 
-        target.write("\n")
-        imports.sorted().forEach {
-            target.write("import ${it};\n")
-        }
-        target.write("\n")
+        collectedImports.addAll(generatedWriter.writeAnnotation(content))
 
-        generatedWriter.writeUse(target)
-
-        target.write("""
+        content.write("""
             public class ValueValidator implements ConstraintValidator<Values, String> {
                 private Set<String> values;
 
@@ -94,6 +93,9 @@ class StringValuesWriter(
             }
 
             """.trimIndent())
+
+        val imports = createImports(pkg, collectedImports)
+        target.write(replaceImportsPlaceholder(content.toString(), imports))
     }
 
     private fun createImports(pkg: String, collectedImports: MutableSet<String>): String {
