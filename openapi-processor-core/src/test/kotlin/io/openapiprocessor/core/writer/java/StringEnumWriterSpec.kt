@@ -39,7 +39,7 @@ class StringEnumWriterSpec : StringSpec({
         writer.write(target, dataType)
 
         verify { jackson.createCreatorAnnotation() }
-        verify { jackson.jsonValue }
+        verify { jackson.createValueAnnotation() }
     }
 
     "writes enum" {

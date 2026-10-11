@@ -23,8 +23,6 @@ class JacksonAnnotationsSpec: StringSpec({
 
         jackson.createPropertyImports(mockk<PropertyDataType>())
             .shouldContainExactly(setOf("com.fasterxml.jackson.annotation.JsonProperty"))
-
-        jackson.jsonValue.imports shouldContainExactly setOf("com.fasterxml.jackson.annotation.JsonValue")
     }
 
     "creates jackson creator annotation data" {
@@ -35,6 +33,16 @@ class JacksonAnnotationsSpec: StringSpec({
 
         annotation.text shouldBe "@JsonCreator"
         annotation.imports shouldContainExactly setOf("com.fasterxml.jackson.annotation.JsonCreator")
+    }
+
+    "creates jackson value annotation data" {
+        val options = ApiOptions()
+        val jackson = JacksonAnnotations(options)
+
+        val annotation = jackson.createValueAnnotation()
+
+        annotation.text shouldBe "@JsonValue"
+        annotation.imports shouldContainExactly setOf("com.fasterxml.jackson.annotation.JsonValue")
     }
 
     "creates jackson property annotation data" {
@@ -80,6 +88,6 @@ class JacksonAnnotationsSpec: StringSpec({
             .shouldContainExactly(setOf("tools.jackson.annotation.JsonProperty"))
 
         jackson.createCreatorAnnotation().imports shouldContainExactly setOf("tools.jackson.annotation.JsonCreator")
-        jackson.jsonValue.imports shouldContainExactly setOf("tools.jackson.annotation.JsonValue")
+        jackson.createValueAnnotation().imports shouldContainExactly setOf("tools.jackson.annotation.JsonValue")
     }
 })

@@ -58,11 +58,12 @@ open class StringEnumWriter(
             |
             """.trimMargin())
 
+        val jsonValue = jacksonAnnotations.createValueAnnotation()
         if(isSupplier()) {
-            collectedImports.addAll(jacksonAnnotations.jsonValue.imports)
+            collectedImports.addAll(jsonValue.imports)
             content.write(
                 """
-                |    @JsonValue
+                |    ${jsonValue.text}
                 |    public String get() {
                 |        return this.value;
                 |    }
@@ -72,10 +73,10 @@ open class StringEnumWriter(
 
         } else {
             // default
-            collectedImports.addAll(jacksonAnnotations.jsonValue.imports)
+            collectedImports.addAll(jsonValue.imports)
             content.write(
                 """
-                |    @JsonValue
+                |    ${jsonValue.text}
                 |    public String getValue() {
                 |        return this.value;
                 |    }
