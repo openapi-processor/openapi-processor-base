@@ -15,16 +15,15 @@ class StringValuesWriter(
 ) {
 
     fun writeValues(target: Writer) {
-        val collectedImports = mutableSetOf<String>()
-
-        val imports = mutableSetOf(
+        val collectedImports = mutableSetOf(
             "${options.beanValidationFormat}.validation.Constraint",
             "${options.beanValidationFormat}.validation.Payload",
             "java.lang.annotation.Documented",
             "java.lang.annotation.ElementType",
             "java.lang.annotation.Retention",
             "java.lang.annotation.RetentionPolicy",
-            "java.lang.annotation.Target")
+            "java.lang.annotation.Target"
+        )
 
         val pkg = "${options.packageName}.validation"
 
@@ -34,15 +33,6 @@ class StringValuesWriter(
             
             <IMPORTS>
 
-        """.trimIndent())
-
-        content.write("\n")
-        imports.sorted().forEach {
-            content.write("import ${it};\n")
-        }
-        content.write("\n")
-
-        content.write("""
             @Target({ElementType.FIELD, ElementType.PARAMETER, ElementType.TYPE_USE})
             @Retention(RetentionPolicy.RUNTIME)
             @Constraint(validatedBy = ValueValidator.class)
@@ -62,11 +52,8 @@ class StringValuesWriter(
             
             """.trimIndent())
 
-        val (cleanContent, oldImports) = extractImports(content)
-        collectedImports.addAll(oldImports)
-
-        val importsX = createImports(pkg, collectedImports)
-        target.write(replaceImportsPlaceholder(cleanContent, importsX))
+        val imports = createImports(pkg, collectedImports)
+        target.write(replaceImportsPlaceholder(content.toString(), imports))
     }
 
     fun writeValueValidator(target: Writer) {
