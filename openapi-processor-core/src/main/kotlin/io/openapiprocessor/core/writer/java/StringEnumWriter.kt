@@ -84,10 +84,11 @@ open class StringEnumWriter(
                 """.trimMargin())
         }
 
-        collectedImports.addAll(jacksonAnnotations.jsonCreator.imports)
+        val jsonCreator = jacksonAnnotations.createCreatorAnnotation()
+        collectedImports.addAll(jsonCreator.imports)
         content.write(
             """
-            |    @JsonCreator
+            |    ${jsonCreator.text}
             |    public static ${dataType.getTypeName()} fromValue(String value) {
             |        for (${dataType.getTypeName()} val : ${dataType.getTypeName()}.values()) {
             |            if (val.value.equals(value)) {

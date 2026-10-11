@@ -10,8 +10,6 @@ import io.openapiprocessor.core.model.datatypes.PropertyDataType
 
 interface JsonAnnotationFactory {
     @Deprecated(message = "use methods")
-    val jsonCreator: Annotation
-    @Deprecated(message = "use methods")
     val jsonValue: Annotation
 
     /** get property annotations imports */
@@ -24,4 +22,6 @@ interface JsonAnnotationFactory {
     fun createPropertyAnnotations(propertyName: String, propDataType: PropertyDataType): Collection<String>
     /** get property annotation */
     fun createPropertyAnnotation(propertyName: String, propDataType: PropertyDataType): AnnotationData
+    /** get creator annotation */
+    fun createCreatorAnnotation(): AnnotationData
 }

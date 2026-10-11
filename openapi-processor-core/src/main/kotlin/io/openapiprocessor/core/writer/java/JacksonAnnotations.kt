@@ -22,8 +22,7 @@ import io.openapiprocessor.core.model.datatypes.PropertyDataType
  */
 class JacksonAnnotations(apiOptions: ApiOptions): JsonAnnotationFactory {
     private val jsonProperty: Annotation
-    @Deprecated("use methods")
-    override val jsonCreator: Annotation
+    private val jsonCreator: Annotation
     @Deprecated("use methods")
     override val jsonValue: Annotation
 
@@ -58,6 +57,10 @@ class JacksonAnnotations(apiOptions: ApiOptions): JsonAnnotationFactory {
         val params = createPropertyParameter(propertyName, getAccess(propDataType))
         val result = "${jsonProperty.annotationName}(${params.joinToString(", ")})"
         return AnnotationData(result, jsonProperty.imports)
+    }
+
+    override fun createCreatorAnnotation(): AnnotationData {
+        return AnnotationData(jsonCreator.annotationName, jsonCreator.imports)
     }
 
     private fun createPropertyParameter(propertyName: String, access: PropertyAccess?): Collection<String> {
