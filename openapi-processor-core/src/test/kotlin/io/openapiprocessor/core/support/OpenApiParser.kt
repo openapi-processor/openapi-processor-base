@@ -44,11 +44,37 @@ fun parseApi(
     return parseApi(merged, parserType)
 }
 
+fun parseApiMargin(
+    header: String =
+        """
+        |openapi: 3.1.0
+        |info:
+        |  title: test API
+        |  version: 1.0.0
+        |
+        """,
+    body: String,
+    parserType: ParserType = ParserType.INTERNAL
+): OpenApiOpenApi {
+    val merged = (
+        header.trimMargin()
+      + body.trimMargin()
+    )
+    return parseApi(merged, parserType)
+}
+
 fun parseApiBody(
     body: String,
     parserType: ParserType = ParserType.INTERNAL
 ): OpenApiOpenApi {
     return parseApi(body, parserType)
+}
+
+fun parseApiBodyMargin(
+    body: String,
+    parserType: ParserType = ParserType.INTERNAL
+): OpenApiOpenApi {
+    return parseApiMargin(body = body, parserType = parserType)
 }
 
 /** groovy support */

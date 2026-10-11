@@ -5,17 +5,184 @@
 
 package io.openapiprocessor.core.converter
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.booleans.shouldBeFalse
+import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.maps.shouldHaveSize
 import io.kotest.matchers.shouldBe
+import io.openapiprocessor.core.converter.mapping.UnknownParameterTypeException
 import io.openapiprocessor.core.model.parameters.AdditionalParameter
-import io.openapiprocessor.core.support.apiConverter
-import io.openapiprocessor.core.support.getEndpoint
-import io.openapiprocessor.core.support.parseApi
-import io.openapiprocessor.core.support.parseOptions
+import io.openapiprocessor.core.support.*
 
 class ApiConverterParameterSpec: StringSpec({
+
+    "converts simple query parameter" {
+        val openApi = parseApiBodyMargin("""
+            |paths:
+            |  /endpoint:
+            |    get:
+            |      tags:
+            |        - endpoint
+            |      parameters:
+            |        - name: foo
+            |          description: query, required, string
+            |          in: query
+            |          required: true
+            |          schema:
+            |            type: string
+            |      responses:
+            |        '204':
+            |          description: empty
+            """)
+
+        val api = apiConverter().convert(openApi)
+
+        val itf = api.getInterfaces().first()
+        val ep = itf.endpoints.first()
+        val param = ep.parameters.first()
+        param.name shouldBe "foo"
+        param.required.shouldBeTrue()
+        param.dataType.getTypeName() shouldBe "String"
+    }
+
+    "converts simple path parameter" {
+        val openApi = parseApiBodyMargin("""
+            |paths:
+            |  /endpoint/{foo}:
+            |    get:
+            |      tags:
+            |        - endpoint
+            |      parameters:
+            |        - name: foo
+            |          description: path, required, string
+            |          in: path
+            |          required: true
+            |          schema:
+            |            type: string
+            |      responses:
+            |        '204':
+            |          description: empty
+            """)
+
+        val api = apiConverter().convert(openApi)
+
+        val itf = api.getInterfaces().first()
+        val ep = itf.endpoints.first()
+        val param = ep.parameters.first()
+        param.name shouldBe "foo"
+        param.required.shouldBeTrue()
+        param.dataType.getTypeName() shouldBe "String"
+    }
+
+    "converts simple header parameter" {
+        val openApi = parseApiBodyMargin("""
+            |paths:
+            |  /endpoint:
+            |    get:
+            |      tags:
+            |        - endpoint
+            |      parameters:
+            |        - name: x-foo
+            |          description: header, required, string
+            |          in: header
+            |          required: true
+            |          schema:
+            |            type: string
+            |      responses:
+            |        '204':
+            |          description: empty
+            """)
+
+        val api = apiConverter().convert(openApi)
+
+        val itf = api.getInterfaces().first()
+        val ep = itf.endpoints.first()
+        val param = ep.parameters.first()
+        param.name shouldBe "x-foo"
+        param.required.shouldBeTrue()
+        param.dataType.getTypeName() shouldBe "String"
+    }
+
+    "converts simple cookie parameter" {
+        val openApi = parseApiBodyMargin("""
+            |paths:
+            |  /endpoint:
+            |    get:
+            |      tags:
+            |        - endpoint
+            |      parameters:
+            |        - name: foo
+            |          description: cookie, required, string
+            |          in: cookie
+            |          required: true
+            |          schema:
+            |            type: string
+            |      responses:
+            |        '204':
+            |          description: empty
+            """)
+
+        val api = apiConverter().convert(openApi)
+
+        val itf = api.getInterfaces().first()
+        val ep = itf.endpoints.first()
+        val param = ep.parameters.first()
+        param.name shouldBe "foo"
+        param.required.shouldBeTrue()
+        param.dataType.getTypeName() shouldBe "String"
+    }
+
+    // the openapi parser ignores parameters with unknown types
+    "throws on unknown parameter".config(enabled = false) {
+        val openApi = parseApiBodyMargin("""
+            |paths:
+            |  /endpoint:
+            |    get:
+            |      tags:
+            |        - endpoint
+            |      parameters:
+            |        - name: foo
+            |          description: unknown, required, string
+            |          in: unknown
+            |          schema:
+            |            type: string
+            |      responses:
+            |        '204':
+            |          description: empty
+            """)
+
+        val e = shouldThrow<UnknownParameterTypeException> {
+            apiConverter().convert(openApi)
+        }
+        e.name shouldBe "foo"
+        e.type shouldBe "unknown"
+    }
+
+    "converts deprecated parameter" {
+        val openApi = parseApiBodyMargin("""
+            |paths:
+            |  /endpoint:
+            |    get:
+            |      parameters:
+            |        - name: foo
+            |          description: deprecated parameter
+            |          in: query
+            |          deprecated: true
+            |          schema:
+            |            type: string
+            |      responses:
+            |        '204':
+            |          description: empty
+            """)
+
+        val api = apiConverter().convert(openApi)
+
+        val itf = api.getInterfaces().first()
+        val ep = itf.endpoints.first()
+        val param = ep.parameters.first()
+        param.deprecated.shouldBeTrue()
+    }
 
     "adds additional request parameter from endpoint mapping" {
         val openApi = parseApi(
