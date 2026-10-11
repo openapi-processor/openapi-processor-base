@@ -53,7 +53,7 @@ class StringValuesWriter(
             """.trimIndent())
 
         val imports = createImports(pkg, collectedImports)
-        target.write(replaceImportsPlaceholder(content.toString(), imports))
+        target.write(replaceImportsPlaceholder(content, imports))
     }
 
     fun writeValueValidator(target: Writer) {
@@ -67,13 +67,8 @@ class StringValuesWriter(
         val pkg = "${options.packageName}.validation"
 
         val content = StringWriter()
-        content.write("""
-            package $pkg;
-            
-            <IMPORTS>
-
-
-        """.trimIndent())
+        content.write("package $pkg;\n\n")
+        content.write("<IMPORTS>\n\n")
 
         collectedImports.addAll(generatedWriter.writeAnnotation(content))
 
@@ -95,7 +90,7 @@ class StringValuesWriter(
             """.trimIndent())
 
         val imports = createImports(pkg, collectedImports)
-        target.write(replaceImportsPlaceholder(content.toString(), imports))
+        target.write(replaceImportsPlaceholder(content, imports))
     }
 
     private fun createImports(pkg: String, collectedImports: MutableSet<String>): String {

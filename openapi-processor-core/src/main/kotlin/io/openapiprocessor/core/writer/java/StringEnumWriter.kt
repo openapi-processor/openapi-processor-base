@@ -102,7 +102,7 @@ open class StringEnumWriter(
         content.write ("}\n")
 
         val imports = createImports(dataType, collectedImports)
-        target.write(replaceImportsPlaceholder(content.toString(), imports))
+        target.write(replaceImportsPlaceholder(content, imports))
     }
 
     private fun createImports(dataType: StringEnumDataType, collectedImports: MutableSet<String>): String =
