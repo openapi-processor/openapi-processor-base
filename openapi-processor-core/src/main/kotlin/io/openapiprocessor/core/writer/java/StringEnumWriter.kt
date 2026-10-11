@@ -10,6 +10,7 @@ import io.openapiprocessor.core.model.datatypes.DataType
 import io.openapiprocessor.core.model.datatypes.StringEnumDataType
 import io.openapiprocessor.core.support.LF
 import io.openapiprocessor.core.writer.Identifier
+import java.io.StringWriter
 import java.io.Writer
 
 /**
@@ -24,33 +25,31 @@ open class StringEnumWriter(
 ) {
 
     fun write(target: Writer, dataType: StringEnumDataType) {
-        target.write("package ${dataType.getPackageName()};\n\n")
+        val collectedImports = mutableSetOf<String>()
+        collectedImports.addAll(dataType.referencedImports)
 
-        val imports = collectImports (dataType.getPackageName(), dataType)
-        imports.forEach {
-            target.write("import ${it};\n")
-        }
-        if(imports.isNotEmpty()) {
-            target.write("\n")
-        }
+        val content = StringWriter()
+        content.write("package ${dataType.getPackageName()};\n\n")
+        content.write("<IMPORTS>\n\n")
 
-        writeJavaDoc(target, dataType)
+        writeJavaDoc(content, dataType)
 
-        generatedWriter.writeUse(target)
-        target.write("public enum ${dataType.getTypeName()}")
+        collectedImports.addAll(generatedWriter.writeAnnotation(content))
+        content.write("public enum ${dataType.getTypeName()}")
         if (isSupplier()) {
-            target.write(" implements Supplier<String>")
+            collectedImports.add("java.util.function.Supplier")
+            content.write(" implements Supplier<String>")
         }
-        target.write(" {\n")
+        content.write(" {\n")
 
         val values = mutableListOf<String>()
         dataType.values.forEach {
             values.add ("    ${identifier.toEnum (it)}(\"${it}\")")
         }
-        target.write (values.joinToString (",\n") + ";\n\n")
-        target.write("    private final String value;\n\n")
+        content.write (values.joinToString (",\n") + ";\n\n")
+        content.write("    private final String value;\n\n")
 
-        target.write (
+        content.write (
             """
             |    ${dataType.getTypeName()}(String value) {
             |        this.value = value;
@@ -60,7 +59,8 @@ open class StringEnumWriter(
             """.trimMargin())
 
         if(isSupplier()) {
-            target.write(
+            collectedImports.addAll(jacksonAnnotations.jsonValue.imports)
+            content.write(
                 """
                 |    @JsonValue
                 |    public String get() {
@@ -72,7 +72,8 @@ open class StringEnumWriter(
 
         } else {
             // default
-            target.write(
+            collectedImports.addAll(jacksonAnnotations.jsonValue.imports)
+            content.write(
                 """
                 |    @JsonValue
                 |    public String getValue() {
@@ -83,7 +84,8 @@ open class StringEnumWriter(
                 """.trimMargin())
         }
 
-        target.write(
+        collectedImports.addAll(jacksonAnnotations.jsonCreator.imports)
+        content.write(
             """
             |    @JsonCreator
             |    public static ${dataType.getTypeName()} fromValue(String value) {
@@ -97,23 +99,14 @@ open class StringEnumWriter(
             |
             """.trimMargin())
 
-        target.write ("}\n")
+        content.write ("}\n")
+
+        val imports = createImports(dataType, collectedImports)
+        target.write(replaceImportsPlaceholder(content.toString(), imports))
     }
 
-    private fun collectImports(packageName: String, dataType: DataType): List<String> {
-        val imports = mutableSetOf<String>()
-        imports.addAll(jacksonAnnotations.jsonCreator.imports)
-        imports.addAll(jacksonAnnotations.jsonValue.imports)
-        imports.addAll(generatedWriter.getImports())
-        imports.addAll(dataType.referencedImports)
-        if (isSupplier()) {
-            imports.add ("java.util.function.Supplier")
-        }
-
-        return DefaultImportFilter ()
-            .filter(packageName, imports)
-            .sorted()
-    }
+    private fun createImports(dataType: StringEnumDataType, collectedImports: MutableSet<String>): String =
+        ImportFactory().create(dataType.getPackageName(), collectedImports)
 
     private fun isSupplier(): Boolean {
         return apiOptions.enumType == "framework"
