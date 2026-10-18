@@ -18,7 +18,8 @@ class TestProcessorStatusAnnotationWriter: StatusAnnotationWriter {
         target: Writer,
         endpoint: Endpoint,
         endpointResponse: EndpointResponse
-    ) {
+    ): Set<String> {
         target.write ("""${STATUS.annotationName}("${endpointResponse.statusCode}")""")
+        return STATUS.imports
     }
 }

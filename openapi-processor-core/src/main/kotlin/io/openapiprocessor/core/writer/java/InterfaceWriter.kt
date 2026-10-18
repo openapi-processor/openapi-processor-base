@@ -51,7 +51,8 @@ class InterfaceWriter(
             collectedImports.addAll(annotation.referencedImports)
 
             ep.endpointResponses.forEach { er ->
-                methodWriter.write(content, ep, er)
+                val methodImports = methodWriter.write(content, ep, er)
+                collectedImports.addAll(methodImports)
                 content.write("\n")
             }
         }

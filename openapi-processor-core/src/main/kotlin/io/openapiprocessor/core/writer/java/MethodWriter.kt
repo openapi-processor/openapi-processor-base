@@ -54,7 +54,8 @@ open class MethodWriter(
 
         if (shouldAddStatus(endpointResponse, endpoint)) {
             val status = createStatus(endpoint, endpointResponse)
-            target.write(status.indent())
+            collectedImports.addAll(status.imports)
+            target.write(status.text.indent())
             target.write(LF)
         }
 
@@ -107,10 +108,10 @@ open class MethodWriter(
             && endpointResponse.hasSingleResponse(getResultStyle(endpoint))
     }
 
-    private fun createStatus(endpoint: Endpoint, endpointResponse: EndpointResponse): String {
+    private fun createStatus(endpoint: Endpoint, endpointResponse: EndpointResponse): AnnotationData {
         val annotation = StringWriter()
-        statusAnnotationWriter.write(annotation, endpoint, endpointResponse)
-        return annotation.toString ()
+        val imports = statusAnnotationWriter.write(annotation, endpoint, endpointResponse)
+        return AnnotationData(annotation.toString(), imports)
     }
 
     private fun createMappingAnnotations(endpoint: Endpoint, endpointResponse: EndpointResponse): List<AnnotationData> {

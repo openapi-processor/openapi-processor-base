@@ -10,7 +10,8 @@ class TestStatusAnnotationWriter : StatusAnnotationWriter {
         target: Writer,
         endpoint: Endpoint,
         endpointResponse: EndpointResponse
-    ) {
-        target.write ("""@Status""")
+    ): Set<String> {
+        target.write (STATUS.annotationName)
+        return STATUS.imports
     }
 }

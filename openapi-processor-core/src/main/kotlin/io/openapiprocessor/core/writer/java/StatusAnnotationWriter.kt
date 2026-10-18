@@ -13,5 +13,5 @@ import java.io.Writer
  * status annotation writer interface.
  */
 fun interface StatusAnnotationWriter {
-    fun write (target: Writer, endpoint: Endpoint, endpointResponse: EndpointResponse)
+    fun write (target: Writer, endpoint: Endpoint, endpointResponse: EndpointResponse): Set<String>
 }
