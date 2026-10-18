@@ -20,7 +20,7 @@ import io.openapiprocessor.core.support.indent
 import io.openapiprocessor.core.writer.Identifier
 import io.openapiprocessor.core.writer.java.MappingAnnotationFactory as CoreMappingAnnotationFactory
 import io.openapiprocessor.core.writer.java.ParameterAnnotationWriter as CoreParameterAnnotationWriter
-import io.openapiprocessor.core.writer.java.StatusAnnotationWriter as CoreStatusAnnotationWriter
+import io.openapiprocessor.core.writer.java.StatusAnnotationFactory as CoreStatusAnnotationFactory
 import java.io.StringWriter
 import java.io.Writer
 
@@ -30,7 +30,7 @@ import java.io.Writer
 open class MethodWriter(
     private val apiOptions: ApiOptions,
     private val identifier: Identifier,
-    private val statusAnnotationWriter: CoreStatusAnnotationWriter,
+    private val statusAnnotationFactory: CoreStatusAnnotationFactory,
     private val mappingAnnotationFactory: CoreMappingAnnotationFactory,
     private val parameterAnnotationWriter: CoreParameterAnnotationWriter,
     private val beanValidationFactory: BeanValidationFactory,
@@ -53,10 +53,11 @@ open class MethodWriter(
         }
 
         if (shouldAddStatus(endpointResponse, endpoint)) {
-            val status = createStatus(endpoint, endpointResponse)
-            collectedImports.addAll(status.imports)
-            target.write(status.text.indent())
-            target.write(LF)
+            createStatusAnnotations(endpoint, endpointResponse).forEach { (annotation, imports) ->
+                collectedImports.addAll(imports)
+                target.write(annotation.indent())
+                target.write(LF)
+            }
         }
 
         createMappingAnnotations(endpoint, endpointResponse).forEach { (annotation, imports) ->
@@ -108,10 +109,8 @@ open class MethodWriter(
             && endpointResponse.hasSingleResponse(getResultStyle(endpoint))
     }
 
-    private fun createStatus(endpoint: Endpoint, endpointResponse: EndpointResponse): AnnotationData {
-        val annotation = StringWriter()
-        val imports = statusAnnotationWriter.write(annotation, endpoint, endpointResponse)
-        return AnnotationData(annotation.toString(), imports)
+    private fun createStatusAnnotations(endpoint: Endpoint, endpointResponse: EndpointResponse): List<AnnotationData> {
+        return statusAnnotationFactory.create(endpoint, endpointResponse)
     }
 
     private fun createMappingAnnotations(endpoint: Endpoint, endpointResponse: EndpointResponse): List<AnnotationData> {

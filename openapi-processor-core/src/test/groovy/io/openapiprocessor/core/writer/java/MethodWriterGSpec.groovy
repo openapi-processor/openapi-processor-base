@@ -13,7 +13,7 @@ import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.model.parameters.Parameter
 import io.openapiprocessor.core.model.parameters.ParameterBase
 import io.openapiprocessor.core.support.TestParameterAnnotationWriter
-import io.openapiprocessor.core.support.TestStatusAnnotationWriter
+import io.openapiprocessor.core.support.TestStatusAnnotationFactory
 import io.openapiprocessor.core.support.datatypes.ObjectDataType
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -27,7 +27,7 @@ class MethodWriterGSpec extends Specification {
     def writer = new MethodWriter (
         apiOptions,
         identifier,
-        new TestStatusAnnotationWriter(),
+        new TestStatusAnnotationFactory(),
         new TestMappingAnnotationFactory(),
         new TestParameterAnnotationWriter(),
         Stub (BeanValidationFactory),
@@ -142,7 +142,7 @@ class MethodWriterGSpec extends Specification {
         def writer = new MethodWriter (
             apiOptions,
             identifier,
-            new TestStatusAnnotationWriter(),
+            new TestStatusAnnotationFactory(),
             new TestMappingAnnotationFactory(),
             Stub (ParameterAnnotationWriter) {},
             Stub (BeanValidationFactory),

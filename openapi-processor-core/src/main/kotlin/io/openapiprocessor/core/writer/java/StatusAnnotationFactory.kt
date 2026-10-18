@@ -7,11 +7,10 @@ package io.openapiprocessor.core.writer.java
 
 import io.openapiprocessor.core.model.Endpoint
 import io.openapiprocessor.core.model.EndpointResponse
-import java.io.Writer
 
 /**
  * status annotation writer interface.
  */
-fun interface StatusAnnotationWriter {
-    fun write (target: Writer, endpoint: Endpoint, endpointResponse: EndpointResponse): Set<String>
+fun interface StatusAnnotationFactory {
+    fun create (endpoint: Endpoint, endpointResponse: EndpointResponse): List<AnnotationData>
 }
