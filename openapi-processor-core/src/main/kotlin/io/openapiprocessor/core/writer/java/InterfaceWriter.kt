@@ -46,6 +46,10 @@ class InterfaceWriter(
         content.write("public interface ${itf.getInterfaceName()} {\n\n")
 
         itf.endpoints.forEach { ep ->
+            val annotation = annotations.getAnnotation (ep.method)
+            collectedImports.addAll(annotation.imports)
+            collectedImports.addAll(annotation.referencedImports)
+
             ep.endpointResponses.forEach { er ->
                 methodWriter.write(content, ep, er)
                 content.write("\n")
@@ -68,9 +72,6 @@ class InterfaceWriter(
         val imports: MutableSet<String> = mutableSetOf()
 
         endpoints.forEach { ep ->
-            val annotation = annotations.getAnnotation (ep.method)
-            imports.addAll(annotation.imports)
-            imports.addAll(annotation.referencedImports)
 
             ep.parameters.forEach { p ->
                 addImports(ep, p, imports)
