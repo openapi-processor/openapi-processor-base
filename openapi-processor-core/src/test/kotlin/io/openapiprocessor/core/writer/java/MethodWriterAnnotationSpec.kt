@@ -7,6 +7,7 @@ package io.openapiprocessor.core.writer.java
 
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.builder.api.endpoint
 import io.openapiprocessor.core.converter.ApiOptions
@@ -58,7 +59,7 @@ class MethodWriterAnnotationSpec: StringSpec ({
             """.trimMargin()
     }
 
-    "writes @Deprecated annotation" {
+    "writes @Deprecated annotation & provides imports" {
         val options = ApiOptions()
 
         val endpoint = endpoint ("/foo") {
@@ -70,7 +71,7 @@ class MethodWriterAnnotationSpec: StringSpec ({
             }
         }
 
-        writer(options).write (target, endpoint, endpoint.endpointResponses.first ())
+        val imports = writer(options).write (target, endpoint, endpoint.endpointResponses.first ())
 
         target.toString () shouldBe
             """
@@ -80,6 +81,8 @@ class MethodWriterAnnotationSpec: StringSpec ({
             |    void getFoo();
             |
             """.trimMargin()
+
+        imports  shouldContainAll DEPRECATED.imports
     }
 
     "writes additional parameter annotation from annotation mapping" {

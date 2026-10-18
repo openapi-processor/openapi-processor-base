@@ -402,7 +402,8 @@ class InterfaceWriterSpec: StringSpec({
         imports shouldContain "import bar.Bar;"
     }
 
-    "writes @Deprecated import" {
+    // todo added import check to method writer annotation spec
+    "writes @Deprecated import".config(enabled = false) {
         writer = InterfaceWriter(options, generatedWriter, methodWriter, annotations,
             importFilter = NullImportFilter())
 
@@ -479,6 +480,7 @@ class InterfaceWriterSpec: StringSpec({
     "writes methods" {
         every { methodWriter.write(any(), any(), any()) } answers {
             arg<Writer>(0).write("${arg<Endpoint>(1).path}\n")
+            emptySet()
         }
 
         val itf = `interface` {

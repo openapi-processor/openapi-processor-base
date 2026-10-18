@@ -14,6 +14,7 @@ import io.openapiprocessor.core.model.EndpointResponse
 import io.openapiprocessor.core.model.Interface
 import io.openapiprocessor.core.model.parameters.AdditionalParameter
 import io.openapiprocessor.core.model.parameters.Parameter
+import java.io.StringWriter
 import java.io.Writer
 
 /**
@@ -28,41 +29,48 @@ class InterfaceWriter(
     private val importFilter: ImportFilter = DefaultImportFilter(),
 ) {
     fun write(target: Writer, itf: Interface) {
-        target.write ("package ${itf.getPackageName()};\n\n")
+        val collectedImports = mutableSetOf<String>()
 
-        val imports: List<String> = collectImports (itf.getPackageName(), itf.endpoints)
-        imports.forEach {
-            target.write("import ${it};\n")
+        val content = StringWriter()
+        content.write ("package ${itf.getPackageName()};\n\n")
+        content.write("<IMPORTS>\n\n")
+
+        collectedImports.addAll(collectImports (itf.getPackageName(), itf.endpoints))
+        collectedImports.forEach {
+            content.write("import ${it};\n")
         }
-        target.write("\n")
+        content.write("\n")
 
-        generatedWriter.writeUse(target)
+        collectedImports.addAll(generatedWriter.writeAnnotation(content))
 
-        target.write("public interface ${itf.getInterfaceName()} {\n\n")
+        content.write("public interface ${itf.getInterfaceName()} {\n\n")
 
         itf.endpoints.forEach { ep ->
             ep.endpointResponses.forEach { er ->
-                methodWriter.write(target, ep, er)
-                target.write("\n")
+                methodWriter.write(content, ep, er)
+                content.write("\n")
             }
         }
 
-        target.write ("}\n")
+        content.write ("}\n")
+
+        val (cleanContent, oldImports) = extractImports(content)
+        collectedImports.addAll(oldImports)
+
+        val imports = createImports(itf, collectedImports)
+        target.write(replaceImportsPlaceholder(cleanContent, imports))
     }
+
+    private fun createImports(itf: Interface, collectedImports: MutableSet<String>): String =
+        ImportFactory().create(itf.getPackageName(), collectedImports)
 
     private fun collectImports(packageName: String, endpoints: List<Endpoint>): List<String> {
         val imports: MutableSet<String> = mutableSetOf()
-
-        imports.addAll(generatedWriter.getImports())
 
         endpoints.forEach { ep ->
             val annotation = annotations.getAnnotation (ep.method)
             imports.addAll(annotation.imports)
             imports.addAll(annotation.referencedImports)
-
-            if (ep.deprecated) {
-                imports.addAll(DEPRECATED.imports)
-            }
 
             ep.parameters.forEach { p ->
                 addImports(ep, p, imports)

@@ -38,7 +38,7 @@ open class MethodWriter(
 ) {
     private val annotationWriter = AnnotationWriter()
 
-    fun write(target: Writer, endpoint: Endpoint, endpointResponse: EndpointResponse) {
+    fun write(target: Writer, endpoint: Endpoint, endpointResponse: EndpointResponse): Set<String> {
         val collectedImports = mutableSetOf<String>()
 
         if (apiOptions.javadoc) {
@@ -47,7 +47,8 @@ open class MethodWriter(
         }
 
         if (endpoint.deprecated) {
-            target.write(createDeprecated().indent())
+            collectedImports.addAll(DEPRECATED.imports)
+            target.write(DEPRECATED.annotationName.indent())
             target.write(LF)
         }
 
@@ -73,6 +74,8 @@ open class MethodWriter(
         }
         target.write(");")
         target.write(LF)
+
+        return collectedImports
     }
 
     private fun createJavadoc(endpoint: Endpoint, endpointResponse: EndpointResponse): String {
@@ -97,10 +100,6 @@ open class MethodWriter(
         }
 
         return formatted.toString()
-    }
-
-    private fun createDeprecated(): String {
-        return DEPRECATED.annotationName
     }
 
     private fun shouldAddStatus(endpointResponse: EndpointResponse, endpoint: Endpoint): Boolean {

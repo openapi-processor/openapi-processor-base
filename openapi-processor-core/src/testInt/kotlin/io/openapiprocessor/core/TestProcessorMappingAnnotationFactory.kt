@@ -16,8 +16,6 @@ import io.openapiprocessor.core.writer.java.MappingAnnotationFactory
 class TestProcessorMappingAnnotationFactory: MappingAnnotationFactory {
 
     override fun create(endpoint: Endpoint, endpointResponse: EndpointResponse): List<AnnotationData> {
-        return listOf(AnnotationData(
-            """${MAPPING.annotationName}("${endpoint.path}")""",
-            MAPPING.imports + MAPPING.annotationName))
+        return listOf(AnnotationData("""${MAPPING.annotationName}("${endpoint.path}")""", MAPPING.imports))
     }
 }
