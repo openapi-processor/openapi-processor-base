@@ -51,7 +51,7 @@ class Mapping {
     }
 
     private Map<String, ?> getMapping() {
-        mapper.readValue(mappingYaml, Map<String,?>)
+        mapper.readValue(mappingYaml, Map)
     }
 
     private static ObjectMapper createMapper() {
