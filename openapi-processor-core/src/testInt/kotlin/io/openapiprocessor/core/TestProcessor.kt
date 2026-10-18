@@ -10,6 +10,8 @@ import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.OptionsConverter
 import io.openapiprocessor.core.framework.FrameworkBase
 import io.openapiprocessor.core.parser.OpenApiParser
+import io.openapiprocessor.core.support.TestMappingAnnotationFactory
+import io.openapiprocessor.core.support.TestStatusAnnotationFactory
 import io.openapiprocessor.core.writer.SourceFormatter
 import io.openapiprocessor.core.writer.java.*
 import org.slf4j.Logger
@@ -65,8 +67,8 @@ class TestProcessor:
                     MethodWriter(
                         options,
                         identifier,
-                        TestProcessorStatusAnnotationWriter(),
-                        TestProcessorMappingAnnotationFactory(),
+                        TestStatusAnnotationFactory(true),
+                        TestMappingAnnotationFactory(true),
                         TestProcessorParameterAnnotationWriter(),
                         beanValidation,
                         javaDocFactory

@@ -10,9 +10,13 @@ import io.openapiprocessor.core.model.EndpointResponse
 import io.openapiprocessor.core.writer.java.AnnotationData
 import io.openapiprocessor.core.writer.java.MappingAnnotationFactory
 
-class TestMappingAnnotationFactory: MappingAnnotationFactory {
+class TestMappingAnnotationFactory(val withPath: Boolean = false): MappingAnnotationFactory {
 
     override fun create(endpoint: Endpoint, endpointResponse: EndpointResponse): List<AnnotationData> {
-        return listOf(AnnotationData(MAPPING.annotationName, MAPPING.imports))
+        return if (withPath) {
+            listOf(AnnotationData("""${MAPPING.annotationName}("${endpoint.path}")""", MAPPING.imports))
+        } else {
+            listOf(AnnotationData(MAPPING.annotationName, MAPPING.imports))
+        }
     }
 }

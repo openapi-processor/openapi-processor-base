@@ -22,6 +22,9 @@ testing {
             }
 
             sources {
+                compileClasspath += sourceSets.named("test").get().output
+                runtimeClasspath += sourceSets.named("test").get().output
+
                 java {
                     srcDirs("src/testInt/kotlin")
                 }
