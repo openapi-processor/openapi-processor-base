@@ -37,7 +37,7 @@ kotest-runner = { module = "io.kotest:kotest-runner-junit5" }
 kotest-table = { module = "io.kotest:kotest-assertions-table" }
 mockk = "io.mockk:mockk:1.14.11"
 
-diff-utils = "io.github.java-diff-utils:java-diff-utils:4.17"
+diff-utils = "io.github.java-diff-utils:java-diff-utils:4.18"
 
 groovy-bom = "org.apache.groovy:groovy-bom:6.0.0"
 spock = "org.spockframework:spock-core:2.5-groovy-6.0"
