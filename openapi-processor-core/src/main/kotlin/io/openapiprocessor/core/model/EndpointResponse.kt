@@ -8,6 +8,7 @@ package io.openapiprocessor.core.model
 import io.openapiprocessor.core.model.datatypes.AnyOneOfObjectDataType
 import io.openapiprocessor.core.model.datatypes.ResultDataType
 import io.openapiprocessor.core.processor.mapping.ResultStyle
+import io.openapiprocessor.core.writer.java.AnnotationData
 
 /**
  * The responses that can be returned by an endpoint method for one (successful) response.
@@ -67,17 +68,21 @@ class EndpointResponse(
      * @return the response data type in the requested style
      */
     fun getResponseType(style: ResultStyle): String {
+        return getResponseTypeX(style).text
+    }
+
+    fun getResponseTypeX(style: ResultStyle): AnnotationData {
         if (isAnyOneOfResponse())
-            return getMultiResponseTypeName()
+            return getMultiResponse()
 
         if (style == ResultStyle.ALL && errors.isNotEmpty())
-            return getMultiResponseTypeName()
+            return getMultiResponse()
 
         val distinct = getDistinctResponseTypes()
         if (distinct.size > 1)
-            return getMultiResponseTypeName()
+            return getMultiResponse()
 
-        return getSingleResponseTypeName()
+        return getSingleResponse()
     }
 
     /**
@@ -122,17 +127,7 @@ class EndpointResponse(
      */
 
     fun getResponseImports(style: ResultStyle): Set<String> {
-        if (isAnyOneOfResponse())
-            return getImportsMulti()
-
-        if (style == ResultStyle.ALL && errors.isNotEmpty())
-            return getImportsMulti()
-
-        val distinct = getDistinctResponseTypes()
-        if (distinct.size > 1)
-            return getImportsMulti()
-
-        return getImportsSingle()
+        return getResponseTypeX(style).imports
     }
 
     /**
@@ -160,34 +155,21 @@ class EndpointResponse(
     /**
      * Object or ResultDataType<?> if wrapped
      */
-    private fun getMultiResponseTypeName(): String {
+    private fun getMultiResponse(): AnnotationData {
         val rt = success.responseType
         if (rt is ResultDataType) {
-            return rt.getNameMulti()
+            return AnnotationData(rt.getNameMulti(), rt.getImportsMulti())
         }
-        return "Object"
+        return AnnotationData("Object", emptySet())
     }
 
-    private fun getSingleResponseTypeName(): String {
+    private fun getSingleResponse(): AnnotationData {
         val types = getDistinctResponseTypes()
             .map { r -> r.response.responseType.getTypeName() }
 
         check(types.size == 1) { "ambiguous response types: $types" }
 
-        return types.first()
-    }
-
-    private fun getImportsMulti(): Set<String> {
-        val rt = success.responseType
-        return if (rt is ResultDataType) {
-            rt.getImportsMulti()
-        } else {
-            emptySet()
-        }
-    }
-
-    private fun getImportsSingle(): Set<String> {
-        return success.imports
+        return AnnotationData(types.first(), success.imports)
     }
 
     private fun getDistinctResponseTypes(): List<ResponseWithStatus> {

@@ -12,6 +12,7 @@ import io.openapiprocessor.core.builder.api.endpoint
 import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.openapi.HttpMethod
 import io.openapiprocessor.core.processor.mapping.ResultStyle
+import io.openapiprocessor.core.writer.java.AnnotationData
 
 class EndpointResponseSpec: StringSpec({
 
@@ -30,8 +31,10 @@ class EndpointResponseSpec: StringSpec({
 
         er.getResponseType(ResultStyle.ALL) shouldBe "Object"
         er.getResponseImports(ResultStyle.ALL) shouldBe emptySet()
+        er.getResponseTypeX(ResultStyle.ALL) shouldBe AnnotationData("Object", emptySet())
         er.getResponseType(ResultStyle.SUCCESS) shouldBe "Object"
         er.getResponseImports(ResultStyle.SUCCESS) shouldBe emptySet()
+        er.getResponseTypeX(ResultStyle.SUCCESS) shouldBe AnnotationData("Object", emptySet())
     }
 
     "result style all with errors uses multi response" {
@@ -51,6 +54,7 @@ class EndpointResponseSpec: StringSpec({
 
         er.getResponseType(ResultStyle.ALL) shouldBe "Object"
         er.getResponseImports(ResultStyle.ALL) shouldBe emptySet()
+        er.getResponseTypeX(ResultStyle.ALL) shouldBe AnnotationData("Object", emptySet())
     }
 
     "result style all without errors uses single response" {
@@ -74,6 +78,7 @@ class EndpointResponseSpec: StringSpec({
 
         er.getResponseType(ResultStyle.ALL) shouldBe "Foo"
         er.getResponseImports(ResultStyle.ALL) shouldBe setOf("pkg.Foo")
+        er.getResponseTypeX(ResultStyle.ALL) shouldBe AnnotationData("Foo", setOf("pkg.Foo"))
     }
 
     "result style success uses single response" {
@@ -102,6 +107,33 @@ class EndpointResponseSpec: StringSpec({
 
         er.getResponseType(ResultStyle.SUCCESS) shouldBe "Foo"
         er.getResponseImports(ResultStyle.SUCCESS) shouldBe setOf("pkg.Foo")
+        er.getResponseTypeX(ResultStyle.SUCCESS) shouldBe AnnotationData("Foo", setOf("pkg.Foo"))
+    }
+
+    "result style all with wrapper and multiple responses uses multi response" {
+        val rw = ResponseWithStatus(
+            "200",
+            Response(
+                "application/json",
+                ResultDataType(
+                    "ResultWrapper",
+                    "http",
+                    StringDataType()
+                )
+            )
+        )
+
+        val er = EndpointResponse(
+            rw,
+            setOf(ResponseWithStatus(
+                "500", Response("text/plain", StringDataType())
+            )),
+            listOf(rw)
+        )
+
+        er.getResponseType(ResultStyle.ALL) shouldBe "ResultWrapper<?>"
+        er.getResponseImports(ResultStyle.ALL) shouldBe setOf("http.ResultWrapper")
+        er.getResponseTypeX(ResultStyle.ALL) shouldBe AnnotationData("ResultWrapper<?>", setOf("http.ResultWrapper"))
     }
 
     "result style SUCCESS has single response" {
