@@ -67,11 +67,7 @@ class EndpointResponse(
      * @param style required style
      * @return the response data type in the requested style
      */
-    fun getResponseType(style: ResultStyle): String {
-        return getResponseTypeX(style).text
-    }
-
-    fun getResponseTypeX(style: ResultStyle): AnnotationData {
+    fun getResponseType(style: ResultStyle): AnnotationData {
         if (isAnyOneOfResponse())
             return getMultiResponse()
 
@@ -113,22 +109,11 @@ class EndpointResponse(
      */
     val responseType: String
         get() {
-            return getResponseType(ResultStyle.SUCCESS)
+            return getResponseType(ResultStyle.SUCCESS).text
         }
 
     val description: String?
     get() = success.description
-
-    /**
-     * provides the imports required for {@link #getResponseType()}.
-     *
-     * @param style required style
-     * @return list of imports
-     */
-
-    fun getResponseImports(style: ResultStyle): Set<String> {
-        return getResponseTypeX(style).imports
-    }
 
     /**
      * returns a list with all content types.
@@ -160,7 +145,7 @@ class EndpointResponse(
         if (rt is ResultDataType) {
             return AnnotationData(rt.getNameMulti(), rt.getImportsMulti())
         }
-        return AnnotationData("Object", emptySet())
+        return AnnotationData("Object", setOf("java.lang.Object"))
     }
 
     private fun getSingleResponse(): AnnotationData {

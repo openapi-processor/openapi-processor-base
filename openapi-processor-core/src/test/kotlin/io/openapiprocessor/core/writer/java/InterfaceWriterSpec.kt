@@ -8,6 +8,7 @@ package io.openapiprocessor.core.writer.java
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContain
+import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.collections.shouldNotContain
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
@@ -53,6 +54,28 @@ class InterfaceWriterSpec: StringSpec({
         return InterfaceWriter(options, generatedWriter, methodWriter, annotations)
     }
 
+    "writes imports from collected method imports" {
+        val expectedImports = setOf(
+            "one.imported.Class",
+            "another.imported.Class")
+
+        every { methodWriter.write(any(),any(), any()) } returns expectedImports
+
+        val itf = `interface` {
+            endpoint("/foo") {
+                responses { status("200") { empty() } }
+            }
+        }
+
+        // when:
+        writer().write(target, itf)
+
+        // then:
+        val actualImports = extractImports(target)
+        actualImports shouldContainAll expectedImports.map { "import $it;" }
+    }
+
+    // todo @Deprecated("obsolete")
     "writes mapping import" {
         every { annotations.getAnnotation(any<HttpMethod>()) } returns Annotation("annotation.Mapping")
 
@@ -118,25 +141,7 @@ class InterfaceWriterSpec: StringSpec({
         imports shouldContain "import annotation.MappingC;"
     }
 
-    "writes result wrapper data type import" {
-        val itf = `interface` {
-            endpoint("/foo") {
-                responses {
-                    status("200") {
-                        response(dataType = ResultDataType("ResultWrapper", "http", NoneDataType()))
-                    }
-                }
-            }
-        }
-
-        // when:
-        writer.write(target, itf)
-
-        // then:
-        val imports = extractImports(target)
-        imports shouldContain "import http.ResultWrapper;"
-    }
-
+    // todo @Deprecated("obsolete")
     "writes parameter annotation import" {
         every { annotations.getAnnotation(any<HttpMethod>()) } returns Annotation("annotation.Mapping")
         every { annotations.getAnnotation(any<Parameter>()) } returns Annotation("annotation.Parameter")
@@ -357,49 +362,6 @@ class InterfaceWriterSpec: StringSpec({
         // then:
         val imports = extractImports(target)
         imports shouldContain "import mapped.Foo;"
-    }
-
-    "writes model import" {
-        val itf = `interface` {
-            endpoint("/foo") {
-                responses {
-                    status("200") {
-                        response("application/json",
-                            ObjectDataType("Foo", "model"))
-                    }
-                }
-            }
-        }
-
-        // when:
-        writer.write(target, itf)
-
-        // then:
-        val imports = extractImports(target)
-        imports shouldContain "import model.Foo;"
-    }
-
-    "writes multiple response model import" {
-        val itf = `interface` {
-            endpoint("/foo") {
-                responses {
-                    status("200") {
-                        response("text/html",
-                            ObjectDataType("Foo", "foo"))
-                        response("text/plain",
-                            ObjectDataType("Bar", "bar"))
-                    }
-                }
-            }
-        }
-
-        // when:
-        writer.write(target, itf)
-
-        // then:
-        val imports = extractImports(target)
-        imports shouldContain "import foo.Foo;"
-        imports shouldContain "import bar.Bar;"
     }
 
     // todo added import check to method writer annotation spec

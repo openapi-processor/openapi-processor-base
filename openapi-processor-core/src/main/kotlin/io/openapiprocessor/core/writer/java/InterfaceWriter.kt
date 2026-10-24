@@ -81,10 +81,6 @@ class InterfaceWriter(
             ep.requestBodies.forEach { b ->
                 addImports(ep, b, imports)
             }
-
-            ep.endpointResponses.forEach { r ->
-                addImports(ep, r, imports)
-            }
         }
 
         return importFilter
@@ -144,11 +140,6 @@ class InterfaceWriter(
         val query = MappingFinderQuery(endpoint)
         val resultStyle = mappingFinder.findResultStyleMapping(query)
         val resultStatus = mappingFinder.getResultStatusOption(query)
-
-        val responseImports = response.getResponseImports(resultStyle)
-        if (responseImports.isNotEmpty()) {
-            imports.addAll(responseImports)
-        }
 
         if (resultStatus && response.hasSingleResponse(resultStyle)) {
             val annotation = annotations.getAnnotation(response)

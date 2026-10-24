@@ -7,6 +7,9 @@ package io.openapiprocessor.core.writer.java
 
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.shouldContain
+import io.kotest.matchers.collections.shouldContainAll
+import io.kotest.matchers.collections.shouldNotContainAll
 import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.builder.api.endpoint
 import io.openapiprocessor.core.converter.ApiOptions
@@ -14,9 +17,11 @@ import io.openapiprocessor.core.converter.mapping.Mappings
 import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.model.parameters.ParameterBase
 import io.openapiprocessor.core.processor.mapping.ResultStyle
-import io.openapiprocessor.core.support.TestStatusAnnotationFactory
+import io.openapiprocessor.core.support.MAPPING
+import io.openapiprocessor.core.support.STATUS
 import io.openapiprocessor.core.support.TestMappingAnnotationFactory
 import io.openapiprocessor.core.support.TestParameterAnnotationWriter
+import io.openapiprocessor.core.support.TestStatusAnnotationFactory
 import io.openapiprocessor.core.support.datatypes.CollectionDataType
 import java.io.StringWriter
 
@@ -81,8 +86,8 @@ class MethodWriterSpec: StringSpec({
         }
 
         // when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first())
-        writer.write (target, endpoint, endpoint.endpointResponses.last())
+        val jsonImports = writer.write (target, endpoint, endpoint.endpointResponses.first())
+        val xmlImports = writer.write (target, endpoint, endpoint.endpointResponses.last())
 
         // then:
         target.toString () shouldBe
@@ -93,6 +98,11 @@ class MethodWriterSpec: StringSpec({
             |    Collection<String> getFooApplicationXml();
             |
             """.trimMargin()
+
+        jsonImports shouldContainAll setOf("java.util.Collection", "java.lang.String")
+        jsonImports shouldContainAll MAPPING.imports
+        xmlImports shouldContainAll setOf("java.util.Collection", "java.lang.String")
+        xmlImports shouldContainAll MAPPING.imports
     }
 
     "writes multi content response methods with media-type postfix on operationId" {
@@ -113,8 +123,8 @@ class MethodWriterSpec: StringSpec({
         }
 
         // when:
-        writer.write(target, endpoint, endpoint.endpointResponses.first())
-        writer.write(target, endpoint, endpoint.endpointResponses.last())
+        val jsonImports = writer.write(target, endpoint, endpoint.endpointResponses.first())
+        val xmlImports = writer.write(target, endpoint, endpoint.endpointResponses.last())
 
         // then:
         target.toString () shouldBe
@@ -125,6 +135,11 @@ class MethodWriterSpec: StringSpec({
             |    Collection<String> getFooOperationIdApplicationXml();
             |
             """.trimMargin()
+
+        jsonImports shouldContainAll setOf("java.util.Collection", "java.lang.String")
+        jsonImports shouldContainAll MAPPING.imports
+        xmlImports shouldContainAll setOf("java.util.Collection", "java.lang.String")
+        xmlImports shouldContainAll MAPPING.imports
     }
 
     "writes parameter with type name" {
@@ -194,7 +209,7 @@ class MethodWriterSpec: StringSpec({
         }
 
         // when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first())
+        val imports = writer.write (target, endpoint, endpoint.endpointResponses.first())
 
         // then:
         target.toString () shouldBe
@@ -203,6 +218,9 @@ class MethodWriterSpec: StringSpec({
             |    FooX getFoo();
             |
             """.trimMargin()
+
+        imports shouldContainAll MAPPING.imports
+        imports shouldContain "pkg.FooX"
     }
 
     "writes parameter with nested generics" {
@@ -260,7 +278,7 @@ class MethodWriterSpec: StringSpec({
         }
 
         // when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first())
+        val imports = writer.write (target, endpoint, endpoint.endpointResponses.first())
 
         // then:
         target.toString () shouldBe
@@ -269,6 +287,9 @@ class MethodWriterSpec: StringSpec({
             |    Map<String, Collection<String>> getFoo();
             |
             """.trimMargin()
+
+        imports shouldContainAll MAPPING.imports
+        imports shouldContainAll setOf("java.util.Map", "java.lang.String", "java.util.Collection")
     }
 
     "writes generic wildcard parameter from mapping" {
@@ -286,7 +307,7 @@ class MethodWriterSpec: StringSpec({
         }
 
         // when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        val imports = writer.write (target, endpoint, endpoint.endpointResponses.first ())
 
         // then:
         target.toString () shouldBe
@@ -296,6 +317,9 @@ class MethodWriterSpec: StringSpec({
             |    void getFoo(@Parameter Bar<?> foo);
             |
             """.trimMargin()
+
+        imports shouldContainAll MAPPING.imports
+        imports shouldContainAll STATUS.imports
     }
 
     "writes success status annotation" {
@@ -317,7 +341,7 @@ class MethodWriterSpec: StringSpec({
             }
         }
 
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        val imports = writer.write (target, endpoint, endpoint.endpointResponses.first ())
 
         target.toString () shouldBe
             """
@@ -326,6 +350,9 @@ class MethodWriterSpec: StringSpec({
             |    void getFoo();
             |
             """.trimMargin()
+
+        imports shouldContainAll MAPPING.imports
+        imports shouldContainAll STATUS.imports
     }
 
     "do not write success status annotation for default 200 status" {
@@ -350,7 +377,7 @@ class MethodWriterSpec: StringSpec({
             }
         }
 
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        val imports = writer.write (target, endpoint, endpoint.endpointResponses.first ())
 
         target.toString () shouldBe
             """
@@ -358,6 +385,8 @@ class MethodWriterSpec: StringSpec({
             |    String getFoo();
             |
             """.trimMargin()
+
+        imports shouldNotContainAll STATUS.imports
     }
 
     "does not write success status annotation with result style all" {
@@ -379,7 +408,7 @@ class MethodWriterSpec: StringSpec({
             }
         }
 
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        val imports = writer.write (target, endpoint, endpoint.endpointResponses.first ())
 
         target.toString () shouldBe
             """
@@ -387,6 +416,8 @@ class MethodWriterSpec: StringSpec({
             |    Object getFoo();
             |
             """.trimMargin()
+
+        imports shouldNotContainAll STATUS.imports
     }
 
     "write success status annotation with result style all and no errors" {
@@ -402,7 +433,7 @@ class MethodWriterSpec: StringSpec({
             }
         }
 
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        val imports = writer.write (target, endpoint, endpoint.endpointResponses.first ())
 
         target.toString () shouldBe
             """
@@ -411,6 +442,8 @@ class MethodWriterSpec: StringSpec({
             |    void getFoo();
             |
             """.trimMargin()
+
+        imports shouldContainAll STATUS.imports
     }
 
 })

@@ -7,6 +7,7 @@ package io.openapiprocessor.core.writer.java
 
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.FreeSpec
+import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.shouldBe
 import io.mockk.mockk
 import io.openapiprocessor.core.builder.api.endpoint
@@ -14,6 +15,7 @@ import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.model.datatypes.ResultDataType
 import io.openapiprocessor.core.model.datatypes.StringDataType
 import io.openapiprocessor.core.openapi.HttpMethod
+import io.openapiprocessor.core.support.MAPPING
 import io.openapiprocessor.core.support.TestStatusAnnotationFactory
 import io.openapiprocessor.core.support.TestMappingAnnotationFactory
 import io.openapiprocessor.core.support.TestParameterAnnotationWriter
@@ -60,7 +62,7 @@ class MethodWriterResponseStyleSpec: FreeSpec() {
                 }
 
                 // when:
-                writer(options).write(target, endpoint, endpoint.endpointResponses.first())
+                val imports = writer(options).write(target, endpoint, endpoint.endpointResponses.first())
 
                 // then:
                 target.toString() shouldBe
@@ -69,6 +71,13 @@ class MethodWriterResponseStyleSpec: FreeSpec() {
                     |    Object getFoo();
                     |
                     """.trimMargin()
+
+                val expectedImports = mutableSetOf<String>()
+                expectedImports.addAll(MAPPING.imports)
+                expectedImports.addAll(MAPPING.referencedImports)
+                expectedImports.add("java.lang.Object")
+
+                imports shouldContainAll expectedImports
             }
 
             "writes method with success response type when it has only empty error responses" {
@@ -93,7 +102,7 @@ class MethodWriterResponseStyleSpec: FreeSpec() {
                 }
 
                 // when:
-                writer(options).write (target, endpoint, endpoint.endpointResponses.first ())
+                val imports = writer(options).write (target, endpoint, endpoint.endpointResponses.first ())
 
                 // then:
                 target.toString() shouldBe
@@ -102,6 +111,11 @@ class MethodWriterResponseStyleSpec: FreeSpec() {
                     |    String getFoo();
                     |
                     """.trimMargin()
+
+                val expectedImports = mutableSetOf<String>()
+                expectedImports.add("java.lang.String")
+
+                imports shouldContainAll expectedImports
             }
 
             "writes method with '?' response when it has multiple result contents types & wrapper result type" {
@@ -133,7 +147,7 @@ class MethodWriterResponseStyleSpec: FreeSpec() {
                 }
 
                 // when:
-                writer(options).write(target, endpoint, endpoint.endpointResponses.first())
+                val imports = writer(options).write(target, endpoint, endpoint.endpointResponses.first())
 
                 // then:
                 target.toString() shouldBe
@@ -142,6 +156,11 @@ class MethodWriterResponseStyleSpec: FreeSpec() {
                     |    ResultWrapper<?> getFoo();
                     |
                     """.trimMargin()
+
+                val expectedImports = mutableSetOf<String>()
+                expectedImports.add("http.ResultWrapper")
+
+                imports shouldContainAll expectedImports
             }
 
         }
@@ -161,7 +180,7 @@ class MethodWriterResponseStyleSpec: FreeSpec() {
                 }
 
                 // when:
-                writer().write(target, endpoint, endpoint.endpointResponses.first())
+                val imports = writer().write(target, endpoint, endpoint.endpointResponses.first())
 
                 // then:
                 target.toString() shouldBe
@@ -170,6 +189,11 @@ class MethodWriterResponseStyleSpec: FreeSpec() {
                     |    String getFoo();
                     |
                     """.trimMargin()
+
+                val expectedImports = mutableSetOf<String>()
+                expectedImports.add("java.lang.String")
+
+                imports shouldContainAll expectedImports
             }
 
             "writes method with success response when it has multiple result contents types & wrapper result type" {
@@ -195,7 +219,7 @@ class MethodWriterResponseStyleSpec: FreeSpec() {
                 }
 
                 // when:
-                writer().write(target, endpoint, endpoint.endpointResponses.first())
+                val imports = writer().write(target, endpoint, endpoint.endpointResponses.first())
 
                 // then:
                 target.toString() shouldBe
@@ -204,6 +228,12 @@ class MethodWriterResponseStyleSpec: FreeSpec() {
                     |    ResultWrapper<String> getFoo();
                     |
                     """.trimMargin()
+
+                val expectedImports = mutableSetOf<String>()
+                expectedImports.add("http.ResultWrapper")
+                expectedImports.add("java.lang.String")
+
+                imports shouldContainAll expectedImports
             }
 
         }

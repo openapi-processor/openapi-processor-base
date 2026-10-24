@@ -66,8 +66,11 @@ open class MethodWriter(
             target.write(LF)
         }
 
-        target.write(createResult(endpoint, endpointResponse).indent())
+        val resultData = createResult(endpoint, endpointResponse)
+        collectedImports.addAll(resultData.imports)
+        target.write(resultData.text.indent())
         target.write(" ")
+
         target.write(createMethodName(endpoint, endpointResponse))
         target.write("(")
         val parameters = createParameters(endpoint)
@@ -117,7 +120,7 @@ open class MethodWriter(
         return mappingAnnotationFactory.create(endpoint, endpointResponse)
     }
 
-    private fun createResult(endpoint: Endpoint, endpointResponse: EndpointResponse): String {
+    private fun createResult(endpoint: Endpoint, endpointResponse: EndpointResponse): AnnotationData {
         return endpointResponse.getResponseType(getResultStyle(endpoint))
     }
 
