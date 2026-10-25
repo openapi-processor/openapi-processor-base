@@ -12,5 +12,5 @@ import io.openapiprocessor.core.model.EndpointResponse
  * mapping annotation factory.
  */
 interface MappingAnnotationFactory {
-    fun create(endpoint: Endpoint, endpointResponse: EndpointResponse): List<AnnotationData>
+    fun create(endpoint: Endpoint, endpointResponse: EndpointResponse): List<CodeSnippet>
 }

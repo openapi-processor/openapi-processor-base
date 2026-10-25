@@ -15,7 +15,7 @@ import io.openapiprocessor.core.model.datatypes.PropertyDataType
 import io.openapiprocessor.core.model.datatypes.StringDataType
 import io.openapiprocessor.core.openapi.HttpMethod
 import io.openapiprocessor.core.processor.mapping.ResultStyle
-import io.openapiprocessor.core.writer.java.AnnotationData
+import io.openapiprocessor.core.writer.java.CodeSnippet
 
 class EndpointSuccessResponseSpec: StringSpec({
 
@@ -64,10 +64,10 @@ class EndpointSuccessResponseSpec: StringSpec({
         result shouldHaveSize 2
 
         result[0].contentType shouldBe "application/json"
-        result[0].getResponseType(ResultStyle.SUCCESS) shouldBe AnnotationData("Object", setOf("java.lang.Object"))
+        result[0].getResponseType(ResultStyle.SUCCESS) shouldBe CodeSnippet("Object", setOf("java.lang.Object"))
 
         result[1].contentType shouldBe "application/xml"
-        result[1].getResponseType(ResultStyle.SUCCESS) shouldBe AnnotationData("Foo200Xml", setOf("pkg.Foo200Xml"))
+        result[1].getResponseType(ResultStyle.SUCCESS) shouldBe CodeSnippet("Foo200Xml", setOf("pkg.Foo200Xml"))
     }
 
     "groups multiple success responses - no content type" {
@@ -91,7 +91,7 @@ class EndpointSuccessResponseSpec: StringSpec({
         val result = ep.endpointResponses
 
         result shouldHaveSize 1
-        result.first().getResponseType(ResultStyle.SUCCESS) shouldBe AnnotationData("void", emptySet())
+        result.first().getResponseType(ResultStyle.SUCCESS) shouldBe CodeSnippet("void", emptySet())
     }
 
     "groups multiple success responses - same content type" {
@@ -109,6 +109,6 @@ class EndpointSuccessResponseSpec: StringSpec({
         val result = ep.endpointResponses
 
         result shouldHaveSize 1
-        result.first().getResponseType(ResultStyle.SUCCESS) shouldBe AnnotationData("String", setOf("java.lang.String"))
+        result.first().getResponseType(ResultStyle.SUCCESS) shouldBe CodeSnippet("String", setOf("java.lang.String"))
     }
 })

@@ -114,15 +114,15 @@ open class MethodWriter(
             && endpointResponse.hasSingleResponse(getResultStyle(endpoint))
     }
 
-    private fun createStatusAnnotations(endpoint: Endpoint, endpointResponse: EndpointResponse): List<AnnotationData> {
+    private fun createStatusAnnotations(endpoint: Endpoint, endpointResponse: EndpointResponse): List<CodeSnippet> {
         return statusAnnotationFactory.create(endpoint, endpointResponse)
     }
 
-    private fun createMappingAnnotations(endpoint: Endpoint, endpointResponse: EndpointResponse): List<AnnotationData> {
+    private fun createMappingAnnotations(endpoint: Endpoint, endpointResponse: EndpointResponse): List<CodeSnippet> {
         return mappingAnnotationFactory.create(endpoint, endpointResponse)
     }
 
-    private fun createResult(endpoint: Endpoint, endpointResponse: EndpointResponse): AnnotationData {
+    private fun createResult(endpoint: Endpoint, endpointResponse: EndpointResponse): CodeSnippet {
         return endpointResponse.getResponseType(getResultStyle(endpoint))
     }
 
@@ -159,8 +159,8 @@ open class MethodWriter(
         return head + tail
     }
 
-    private fun createParameters(endpoint: Endpoint): List<AnnotationData> {
-        val parameters = mutableListOf<AnnotationData>()
+    private fun createParameters(endpoint: Endpoint): List<CodeSnippet> {
+        val parameters = mutableListOf<CodeSnippet>()
 
         endpoint.parameters.forEach {
             val collectedImports = mutableSetOf<String>()
@@ -184,7 +184,7 @@ open class MethodWriter(
 
             target.write("$dataTypeValue ${identifier.toIdentifier(it.name)}")
 
-            parameters.add(AnnotationData(target.toString(), collectedImports))
+            parameters.add(CodeSnippet(target.toString(), collectedImports))
         }
 
         if (endpoint.requestBodies.isNotEmpty()) {
@@ -211,13 +211,13 @@ open class MethodWriter(
 
             target.write("$dataTypeValue ${identifier.toIdentifier(body.name)}")
 
-            parameters.add(AnnotationData(target.toString(), collectedImports))
+            parameters.add(CodeSnippet(target.toString(), collectedImports))
         }
 
         return parameters
     }
 
-    private fun createParameterAnnotation(endpoint: Endpoint, parameter: Parameter): AnnotationData? {
+    private fun createParameterAnnotation(endpoint: Endpoint, parameter: Parameter): CodeSnippet? {
         val collectedImports = mutableSetOf<String>()
         val parts = mutableListOf<String>()
 
@@ -249,10 +249,10 @@ open class MethodWriter(
         val target = StringWriter()
         target.write(parts.joinToString(" "))
 
-        return AnnotationData(target.toString(), collectedImports)
+        return CodeSnippet(target.toString(), collectedImports)
     }
 
-    private fun createAdditionalParameterAnnotation(parameter: AdditionalParameter): AnnotationData {
+    private fun createAdditionalParameterAnnotation(parameter: AdditionalParameter): CodeSnippet {
         val collectedImports = mutableSetOf<String>()
 
         val target = StringWriter()
@@ -285,10 +285,10 @@ open class MethodWriter(
             }
         }
 
-        return AnnotationData(target.toString(), collectedImports)
+        return CodeSnippet(target.toString(), collectedImports)
     }
 
-    private fun createAnnotations(endpoint: Endpoint, parameter: Parameter): List<AnnotationData> {
+    private fun createAnnotations(endpoint: Endpoint, parameter: Parameter): List<CodeSnippet> {
         val mappingFinder = MappingFinder(apiOptions)
 
         val mappingAnnotations = mutableListOf<io.openapiprocessor.core.converter.mapping.Annotation>()
@@ -313,7 +313,7 @@ open class MethodWriter(
                 val target = StringWriter()
                 annotationWriter.write(target, annotation)
 
-                AnnotationData(target.toString(), annotation.imports + annotation.referencedImports)
+                CodeSnippet(target.toString(), annotation.imports + annotation.referencedImports)
             }
     }
 }

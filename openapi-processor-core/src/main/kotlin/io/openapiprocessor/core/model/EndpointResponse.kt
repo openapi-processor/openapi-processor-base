@@ -8,7 +8,7 @@ package io.openapiprocessor.core.model
 import io.openapiprocessor.core.model.datatypes.AnyOneOfObjectDataType
 import io.openapiprocessor.core.model.datatypes.ResultDataType
 import io.openapiprocessor.core.processor.mapping.ResultStyle
-import io.openapiprocessor.core.writer.java.AnnotationData
+import io.openapiprocessor.core.writer.java.CodeSnippet
 
 /**
  * The responses that can be returned by an endpoint method for one (successful) response.
@@ -67,7 +67,7 @@ class EndpointResponse(
      * @param style required style
      * @return the response data type in the requested style
      */
-    fun getResponseType(style: ResultStyle): AnnotationData {
+    fun getResponseType(style: ResultStyle): CodeSnippet {
         if (isAnyOneOfResponse())
             return getMultiResponse()
 
@@ -140,21 +140,21 @@ class EndpointResponse(
     /**
      * Object or ResultDataType<?> if wrapped
      */
-    private fun getMultiResponse(): AnnotationData {
+    private fun getMultiResponse(): CodeSnippet {
         val rt = success.responseType
         if (rt is ResultDataType) {
-            return AnnotationData(rt.getNameMulti(), rt.getImportsMulti())
+            return CodeSnippet(rt.getNameMulti(), rt.getImportsMulti())
         }
-        return AnnotationData("Object", setOf("java.lang.Object"))
+        return CodeSnippet("Object", setOf("java.lang.Object"))
     }
 
-    private fun getSingleResponse(): AnnotationData {
+    private fun getSingleResponse(): CodeSnippet {
         val types = getDistinctResponseTypes()
             .map { r -> r.response.responseType.getTypeName() }
 
         check(types.size == 1) { "ambiguous response types: $types" }
 
-        return AnnotationData(types.first(), success.imports)
+        return CodeSnippet(types.first(), success.imports)
     }
 
     private fun getDistinctResponseTypes(): List<ResponseWithStatus> {

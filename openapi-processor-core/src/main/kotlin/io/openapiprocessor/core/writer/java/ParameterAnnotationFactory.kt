@@ -15,5 +15,5 @@ interface ParameterAnnotationFactory {
     @Deprecated(message = "use create() instead")
     fun write (target: Writer, parameter: Parameter)
 
-    fun create(parameter: Parameter): List<AnnotationData>
+    fun create(parameter: Parameter): List<CodeSnippet>
 }

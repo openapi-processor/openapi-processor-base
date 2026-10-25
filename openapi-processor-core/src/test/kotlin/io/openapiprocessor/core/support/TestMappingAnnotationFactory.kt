@@ -7,16 +7,16 @@ package io.openapiprocessor.core.support
 
 import io.openapiprocessor.core.model.Endpoint
 import io.openapiprocessor.core.model.EndpointResponse
-import io.openapiprocessor.core.writer.java.AnnotationData
+import io.openapiprocessor.core.writer.java.CodeSnippet
 import io.openapiprocessor.core.writer.java.MappingAnnotationFactory
 
 class TestMappingAnnotationFactory(val withPath: Boolean = false): MappingAnnotationFactory {
 
-    override fun create(endpoint: Endpoint, endpointResponse: EndpointResponse): List<AnnotationData> {
+    override fun create(endpoint: Endpoint, endpointResponse: EndpointResponse): List<CodeSnippet> {
         return if (withPath) {
-            listOf(AnnotationData("""${MAPPING.annotationName}("${endpoint.path}")""", MAPPING.imports))
+            listOf(CodeSnippet("""${MAPPING.annotationName}("${endpoint.path}")""", MAPPING.imports))
         } else {
-            listOf(AnnotationData(MAPPING.annotationName, MAPPING.imports))
+            listOf(CodeSnippet(MAPPING.annotationName, MAPPING.imports))
         }
     }
 }

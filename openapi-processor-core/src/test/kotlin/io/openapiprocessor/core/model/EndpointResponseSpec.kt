@@ -12,7 +12,7 @@ import io.openapiprocessor.core.builder.api.endpoint
 import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.openapi.HttpMethod
 import io.openapiprocessor.core.processor.mapping.ResultStyle
-import io.openapiprocessor.core.writer.java.AnnotationData
+import io.openapiprocessor.core.writer.java.CodeSnippet
 
 class EndpointResponseSpec: StringSpec({
 
@@ -29,7 +29,7 @@ class EndpointResponseSpec: StringSpec({
             listOf(rw)
         )
 
-        val expected = AnnotationData("Object", setOf("java.lang.Object"))
+        val expected = CodeSnippet("Object", setOf("java.lang.Object"))
         er.getResponseType(ResultStyle.ALL) shouldBe expected
         er.getResponseType(ResultStyle.SUCCESS) shouldBe expected
     }
@@ -49,7 +49,7 @@ class EndpointResponseSpec: StringSpec({
             listOf(rw)
         )
 
-        val expected = AnnotationData("Object", setOf("java.lang.Object"))
+        val expected = CodeSnippet("Object", setOf("java.lang.Object"))
         er.getResponseType(ResultStyle.ALL) shouldBe expected
     }
 
@@ -72,7 +72,7 @@ class EndpointResponseSpec: StringSpec({
             emptySet(),
             listOf(rw))
 
-        er.getResponseType(ResultStyle.ALL) shouldBe AnnotationData("Foo", setOf("pkg.Foo"))
+        er.getResponseType(ResultStyle.ALL) shouldBe CodeSnippet("Foo", setOf("pkg.Foo"))
     }
 
     "result style success uses single response" {
@@ -99,7 +99,7 @@ class EndpointResponseSpec: StringSpec({
             listOf(rw)
         )
 
-        er.getResponseType(ResultStyle.SUCCESS) shouldBe AnnotationData("Foo", setOf("pkg.Foo"))
+        er.getResponseType(ResultStyle.SUCCESS) shouldBe CodeSnippet("Foo", setOf("pkg.Foo"))
     }
 
     "result style all with wrapper and multiple responses uses multi response" {
@@ -123,7 +123,7 @@ class EndpointResponseSpec: StringSpec({
             listOf(rw)
         )
 
-        er.getResponseType(ResultStyle.ALL) shouldBe AnnotationData("ResultWrapper<?>", setOf("http.ResultWrapper"))
+        er.getResponseType(ResultStyle.ALL) shouldBe CodeSnippet("ResultWrapper<?>", setOf("http.ResultWrapper"))
     }
 
     "result style SUCCESS has single response" {
@@ -186,7 +186,7 @@ class EndpointResponseSpec: StringSpec({
         val result = ep.endpointResponses
 
         result shouldHaveSize 1
-        result.first().getResponseType(ResultStyle.SUCCESS) shouldBe AnnotationData("void", emptySet())
+        result.first().getResponseType(ResultStyle.SUCCESS) shouldBe CodeSnippet("void", emptySet())
     }
 
     "accepts 3xx as success" {
@@ -201,6 +201,6 @@ class EndpointResponseSpec: StringSpec({
         val result = ep.endpointResponses
 
         result shouldHaveSize 1
-        result.first().getResponseType(ResultStyle.SUCCESS) shouldBe AnnotationData("void", emptySet())
+        result.first().getResponseType(ResultStyle.SUCCESS) shouldBe CodeSnippet("void", emptySet())
     }
 })

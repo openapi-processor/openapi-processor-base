@@ -17,9 +17,9 @@ interface JsonAnnotationFactory {
     )
     fun createPropertyAnnotations(propertyName: String, propDataType: PropertyDataType): Collection<String>
     /** get property annotation */
-    fun createPropertyAnnotation(propertyName: String, propDataType: PropertyDataType): AnnotationData
+    fun createPropertyAnnotation(propertyName: String, propDataType: PropertyDataType): CodeSnippet
     /** get creator annotation */
-    fun createCreatorAnnotation(): AnnotationData
+    fun createCreatorAnnotation(): CodeSnippet
     /** get value annotation */
-    fun createValueAnnotation(): AnnotationData
+    fun createValueAnnotation(): CodeSnippet
 }

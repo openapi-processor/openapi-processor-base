@@ -52,18 +52,18 @@ class JacksonAnnotations(apiOptions: ApiOptions): JsonAnnotationFactory {
         return listOf(createPropertyAnnotation(propertyName, propDataType).text)
     }
 
-    override fun createPropertyAnnotation(propertyName: String, propDataType: PropertyDataType): AnnotationData {
+    override fun createPropertyAnnotation(propertyName: String, propDataType: PropertyDataType): CodeSnippet {
         val params = createPropertyParameter(propertyName, getAccess(propDataType))
         val result = "${jsonProperty.annotationName}(${params.joinToString(", ")})"
-        return AnnotationData(result, jsonProperty.imports)
+        return CodeSnippet(result, jsonProperty.imports)
     }
 
-    override fun createCreatorAnnotation(): AnnotationData {
-        return AnnotationData(jsonCreator.annotationName, jsonCreator.imports)
+    override fun createCreatorAnnotation(): CodeSnippet {
+        return CodeSnippet(jsonCreator.annotationName, jsonCreator.imports)
     }
 
-    override fun createValueAnnotation(): AnnotationData {
-        return AnnotationData(jsonValue.annotationName, jsonValue.imports)
+    override fun createValueAnnotation(): CodeSnippet {
+        return CodeSnippet(jsonValue.annotationName, jsonValue.imports)
     }
 
     private fun createPropertyParameter(propertyName: String, access: PropertyAccess?): Collection<String> {
