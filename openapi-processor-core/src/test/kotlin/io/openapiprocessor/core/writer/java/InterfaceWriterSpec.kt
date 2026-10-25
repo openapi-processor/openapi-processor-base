@@ -14,7 +14,6 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import io.mockk.every
 import io.openapiprocessor.core.builder.api.`interface`
-import io.openapiprocessor.core.builder.api.itf
 import io.openapiprocessor.core.converter.ApiOptions
 import io.openapiprocessor.core.converter.mapping.SimpleParameterValue
 import io.openapiprocessor.core.extractBody
@@ -22,14 +21,8 @@ import io.openapiprocessor.core.extractImports
 import io.openapiprocessor.core.framework.FrameworkAnnotations
 import io.openapiprocessor.core.model.Annotation
 import io.openapiprocessor.core.model.Endpoint
-import io.openapiprocessor.core.model.datatypes.*
-import io.openapiprocessor.core.model.parameters.AdditionalParameter
-import io.openapiprocessor.core.model.parameters.Parameter
-import io.openapiprocessor.core.model.parameters.ParameterBase
+import io.openapiprocessor.core.model.datatypes.StringDataType
 import io.openapiprocessor.core.openapi.HttpMethod
-import io.openapiprocessor.core.support.datatypes.ObjectDataType
-import io.openapiprocessor.core.support.datatypes.propertyDataTypeString
-import io.openapiprocessor.core.support.parseOptions
 import java.io.StringWriter
 import java.io.Writer
 import io.mockk.mockk as stub
@@ -47,11 +40,11 @@ class InterfaceWriterSpec: StringSpec({
     val target = StringWriter()
 
     beforeTest {
-        writer = InterfaceWriter(options, generatedWriter, methodWriter, annotations)
+        writer = InterfaceWriter(generatedWriter, methodWriter, annotations)
     }
 
-    fun writer(options: ApiOptions = ApiOptions()): InterfaceWriter {
-        return InterfaceWriter(options, generatedWriter, methodWriter, annotations)
+    fun writer(): InterfaceWriter {
+        return InterfaceWriter(generatedWriter, methodWriter, annotations)
     }
 
     "writes imports from collected method imports" {
@@ -73,44 +66,6 @@ class InterfaceWriterSpec: StringSpec({
         // then:
         val actualImports = extractImports(target)
         actualImports shouldContainAll expectedImports.map { "import $it;" }
-    }
-
-    // todo @Deprecated("obsolete")
-    "writes mapping import" {
-        every { annotations.getAnnotation(any<HttpMethod>()) } returns Annotation("annotation.Mapping")
-
-        val itf = `interface` {
-            endpoint("/foo") {
-                responses { status("200") }
-            }
-        }
-
-        // when:
-        writer().write(target, itf)
-
-        // then:
-        extractImports(target) shouldContain "import annotation.Mapping;"
-    }
-
-    "writes mapping parameter import" {
-        every { annotations.getAnnotation(any<HttpMethod>()) } returns Annotation(
-            "annotation.Mapping", linkedMapOf(
-                "parameter" to SimpleParameterValue("Parameter", "parameter.Parameter")
-            )
-        )
-
-        val itf = `interface` {
-            endpoint("/foo") {
-                responses { status("200") }
-            }
-        }
-
-        // when:
-        writer.write(target, itf)
-
-        // then:
-        extractImports(target) shouldContain "import annotation.Mapping;"
-        extractImports(target) shouldContain "import parameter.Parameter;"
     }
 
     "writes multiple mapping imports" {
@@ -141,17 +96,16 @@ class InterfaceWriterSpec: StringSpec({
         imports shouldContain "import annotation.MappingC;"
     }
 
-    // todo @Deprecated("obsolete")
-    "writes parameter annotation import" {
-        every { annotations.getAnnotation(any<HttpMethod>()) } returns Annotation("annotation.Mapping")
-        every { annotations.getAnnotation(any<Parameter>()) } returns Annotation("annotation.Parameter")
+    // todo move to spring/micronaut
+    "writes mapping parameter import" {
+        every { annotations.getAnnotation(any<HttpMethod>()) } returns Annotation(
+            "annotation.Mapping", linkedMapOf(
+                "parameter" to SimpleParameterValue("Parameter", "parameter.Parameter")
+            )
+        )
 
         val itf = `interface` {
             endpoint("/foo") {
-                parameters {
-                    query("bar", StringDataType())
-                }
-
                 responses { status("200") }
             }
         }
@@ -160,231 +114,8 @@ class InterfaceWriterSpec: StringSpec({
         writer.write(target, itf)
 
         // then:
-        val imports = extractImports(target)
-        imports shouldContain "import annotation.Parameter;"
-    }
-
-    "writes parameter @NotNull validation annotation import" {
-        options.beanValidation = true
-
-        every { annotations.getAnnotation(any<HttpMethod>()) } returns Annotation("annotation.Mapping")
-        every { annotations.getAnnotation(any<Parameter>()) } returns Annotation("annotation.Parameter")
-
-        val itf = `interface` {
-            endpoint("/foo") {
-                parameters {
-                    query("bar", StringDataType()) {
-                        required()
-                    }
-                }
-
-                responses { status("200") }
-            }
-        }
-
-        // when:
-        writer.write(target, itf)
-
-        // then:
-        val imports = extractImports(target)
-        imports shouldContain "import javax.validation.constraints.NotNull;"
-    }
-
-    "does not write parameter annotation import of a parameter that does not need an annotation" {
-        val itf = `interface` {
-            endpoint("/foo") {
-                parameters {
-                    any(object : ParameterBase("foo", StringDataType()) {
-                        override val withAnnotation: Boolean
-                            get() = false
-                    })
-                }
-                responses { status("200") }
-            }
-        }
-
-        // when:
-        writer.write(target, itf)
-
-        // then:
-        val imports = extractImports(target)
-        imports shouldNotContain "import annotation.Parameter;"
-    }
-
-    "writes import of request parameter data type" {
-        val itf = `interface` {
-            endpoint("/foo") {
-                parameters {
-                    query("foo", ObjectDataType("Foo", "model", linkedMapOf(
-                        Pair("foo1", propertyDataTypeString()),
-                        Pair("foo2", propertyDataTypeString())
-                    )))
-                }
-                responses { status("200") }
-            }
-        }
-
-        // when:
-        writer.write(target, itf)
-
-        // then:
-        val imports = extractImports(target)
-        imports shouldContain "import model.Foo;"
-    }
-
-    "writes additional annotation mapping import" {
-        val currentOptions = parseOptions(
-            """
-            |openapi-processor-mapping: v8
-            |options:
-            |  package-name: pkg
-            |map:
-            |  types:
-            |    - type: Foo @ io.openapiprocessor.Type
-            |  parameters:
-            |    - name: foo @ io.openapiprocessor.Name
-            """.trimMargin())
-
-        val itf = itf {
-            endpoint("/foo") {
-                parameters {
-                    query("foo", ObjectDataType(
-                        "Foo", "model", linkedMapOf("foo" to propertyDataTypeString()
-                    )))
-                }
-                responses { status("200") }
-            }
-        }
-
-        // when:
-        writer(currentOptions).write(target, itf)
-
-        // then:
-        val imports = extractImports(target)
-        imports shouldContain "import io.openapiprocessor.Type;"
-        imports shouldContain "import io.openapiprocessor.Name;"
-    }
-
-    "skips additional annotation mapping import on a parameter if annotation is not allowed on parameter" {
-        val currentOptions = parseOptions(
-            """
-            |openapi-processor-mapping: v15
-            |options:
-            |  package-name: pkg
-            |map:
-            |  types:
-            |    - type: Foo @ io.openapiprocessor.Type
-            |  parameters:
-            |    - name: foo @ io.openapiprocessor.Name
-            |    
-            |annotation-targets:
-            |  io.openapiprocessor.Type: []
-            |  io.openapiprocessor.Name: []
-            """.trimMargin())
-
-        val itf = itf {
-            endpoint("/foo") {
-                parameters {
-                    query("foo", ObjectDataType(
-                        "Foo", "model", linkedMapOf("foo" to propertyDataTypeString()
-                    )))
-                }
-                responses { status("200") }
-            }
-        }
-
-        // when:
-        writer(currentOptions).write(target, itf)
-
-        // then:
-        val imports = extractImports(target)
-        imports shouldNotContain "import io.openapiprocessor.Type;"
-        imports shouldNotContain "import io.openapiprocessor.Name;"
-    }
-
-    "writes additional parameter annotation import" {
-        every { annotations.getAnnotation(any<Parameter>()) } returns Annotation("annotation.Parameter")
-
-        val itf = `interface` {
-            endpoint ("/foo") {
-                parameters {
-                    any(AdditionalParameter(
-                        "bar",
-                        StringDataType(),
-                        AnnotationDataType("Bar", "bar", linkedMapOf())
-                    ))
-                }
-            }
-        }
-
-        // when:
-        writer.write(target, itf)
-
-        // then:
-        val imports = extractImports(target)
-        imports shouldContain "import bar.Bar;"
-    }
-
-    "writes request body annotation import" {
-        every { annotations.getAnnotation(any<Parameter>()) } returns Annotation("annotation.Body")
-
-        val itf = `interface` {
-            endpoint("/foo") {
-                parameters {
-                    body("body", "text/plain", StringDataType())
-                }
-                responses { status("200") }
-            }
-        }
-
-        // when:
-        writer.write(target, itf)
-
-        // then:
-        val imports = extractImports(target)
-        imports shouldContain "import annotation.Body;"
-    }
-
-    "writes import of request body data type" {
-        val itf = `interface` {
-            endpoint("/foo") {
-                parameters {
-                    body("body", "plain/text",
-                        MappedDataType("Foo", "mapped"))
-                }
-                responses { status("200") }
-            }
-        }
-
-        // when:
-        writer.write(target, itf)
-
-        // then:
-        val imports = extractImports(target)
-        imports shouldContain "import mapped.Foo;"
-    }
-
-    // todo added import check to method writer annotation spec
-    "writes @Deprecated import".config(enabled = false) {
-        writer = InterfaceWriter(options, generatedWriter, methodWriter, annotations,
-            importFilter = NullImportFilter())
-
-        val itf = `interface` {
-            endpoint("/foo") {
-                deprecated()
-
-                responses {
-                    status("200")
-                }
-            }
-        }
-
-        // when:
-        writer.write(target, itf)
-
-        // then:
-        val imports = extractImports(target)
-        imports shouldContain "import java.lang.Deprecated;"
+        extractImports(target) shouldContain "import annotation.Mapping;"
+        extractImports(target) shouldContain "import parameter.Parameter;"
     }
 
     "sorts imports alphabetically" {

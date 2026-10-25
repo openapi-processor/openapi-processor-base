@@ -19,7 +19,7 @@ import io.openapiprocessor.core.support.capitalizeFirstChar
 import io.openapiprocessor.core.support.indent
 import io.openapiprocessor.core.writer.Identifier
 import io.openapiprocessor.core.writer.java.MappingAnnotationFactory as CoreMappingAnnotationFactory
-import io.openapiprocessor.core.writer.java.ParameterAnnotationWriter as CoreParameterAnnotationWriter
+import io.openapiprocessor.core.writer.java.ParameterAnnotationFactory as CoreParameterAnnotationWriter
 import io.openapiprocessor.core.writer.java.StatusAnnotationFactory as CoreStatusAnnotationFactory
 import java.io.StringWriter
 import java.io.Writer
@@ -32,7 +32,7 @@ open class MethodWriter(
     private val identifier: Identifier,
     private val statusAnnotationFactory: CoreStatusAnnotationFactory,
     private val mappingAnnotationFactory: CoreMappingAnnotationFactory,
-    private val parameterAnnotationWriter: CoreParameterAnnotationWriter,
+    private val parameterAnnotationFactory: CoreParameterAnnotationWriter,
     private val beanValidationFactory: BeanValidationFactory,
     private val javadocFactory: JavaDocFactory = JavaDocFactory(identifier)
 ) {
@@ -73,9 +73,11 @@ open class MethodWriter(
 
         target.write(createMethodName(endpoint, endpointResponse))
         target.write("(")
+
         val parameters = createParameters(endpoint)
-        parameters.forEachIndexed { index, it ->
-            target.write(formatParameter(index, it, parameters.lastIndex))
+        parameters.forEachIndexed { index, (text, imports) ->
+            collectedImports.addAll(imports)
+            target.write(formatParameter(index, text, parameters.lastIndex))
         }
         target.write(");")
         target.write(LF)
@@ -157,77 +159,136 @@ open class MethodWriter(
         return head + tail
     }
 
-    private fun createParameters(endpoint: Endpoint): List<String> {
-        val parameters = mutableListOf<String>()
+    private fun createParameters(endpoint: Endpoint): List<AnnotationData> {
+        val parameters = mutableListOf<AnnotationData>()
 
         endpoint.parameters.forEach {
+            val collectedImports = mutableSetOf<String>()
+            collectedImports.addAll(it.dataType.getImports())
 
             val dataTypeValue = if (apiOptions.beanValidation) {
                 val info = beanValidationFactory.validate(it.dataType, it.required)
+                collectedImports.addAll(info.inout.imports)
                 info.inout.dataTypeValue
             } else {
                 it.dataType.getTypeName()
             }
 
-            val parameter = "${createParameterAnnotation(endpoint, it)} $dataTypeValue ${identifier.toIdentifier (it.name)}"
-                 .trim()
+            val target = StringWriter()
+            val annotationData = createParameterAnnotation(endpoint, it)
+            if (annotationData != null) {
+                collectedImports.addAll(annotationData.imports)
+                target.write(annotationData.text)
+                target.write(" ")
+            }
 
-            parameters.add(parameter)
+            target.write("$dataTypeValue ${identifier.toIdentifier(it.name)}")
+
+            parameters.add(AnnotationData(target.toString(), collectedImports))
         }
 
         if (endpoint.requestBodies.isNotEmpty()) {
+            val collectedImports = mutableSetOf<String>()
+
             val body = endpoint.getRequestBody()
+            collectedImports.addAll(body.dataTypeImports)
 
             val dataTypeValue = if (apiOptions.beanValidation) {
                 val info = beanValidationFactory.validate(body.dataType, body.required)
+                collectedImports.addAll(info.inout.imports)
                 info.inout.dataTypeValue
             } else {
                 body.dataType.getTypeName()
             }
 
-            val param = "${createParameterAnnotation(endpoint, body)} $dataTypeValue ${identifier.toIdentifier(body.name)}"
-            parameters.add (param.trim())
+            val target = StringWriter()
+            val annotationData = createParameterAnnotation(endpoint, body)
+            if (annotationData != null) {
+                collectedImports.addAll(annotationData.imports)
+                target.write(annotationData.text)
+                target.write(" ")
+            }
+
+            target.write("$dataTypeValue ${identifier.toIdentifier(body.name)}")
+
+            parameters.add(AnnotationData(target.toString(), collectedImports))
         }
 
         return parameters
     }
 
-    private fun createParameterAnnotation(endpoint: Endpoint, parameter: Parameter): String {
-        val target = StringWriter()
+    private fun createParameterAnnotation(endpoint: Endpoint, parameter: Parameter): AnnotationData? {
+        val collectedImports = mutableSetOf<String>()
+        val parts = mutableListOf<String>()
+
         if (parameter.deprecated) {
-            target.write("@Deprecated ")
+            parts.add(DEPRECATED.annotationName)
+            collectedImports.addAll(DEPRECATED.imports)
         }
 
-        parameterAnnotationWriter.write(target, parameter)
-        addAnnotations(endpoint, parameter, target)
+        parameterAnnotationFactory.create(parameter).forEach { (text, imports) ->
+            collectedImports.addAll(imports)
+            parts.add(text)
+        }
+
+        createAnnotations(endpoint, parameter).forEach { (text, imports) ->
+            collectedImports.addAll(imports)
+            parts.add(text)
+        }
 
         if (parameter is AdditionalParameter && parameter.annotationDataType != null) {
-            target.write(" @${parameter.annotationDataType.getName()}")
+            val additionalData = createAdditionalParameterAnnotation(parameter)
+            collectedImports.addAll(additionalData.imports)
+            parts.add(additionalData.text)
+        }
 
-            val annotationParameters = parameter.annotationDataType.getParameters()
-            if (annotationParameters != null) {
-                val parameters = mutableListOf<String>()
+        if (parts.isEmpty()) {
+            return null
+        }
 
-                annotationParameters.forEach {
-                    if (it.key == "") {
-                        parameters.add(it.value.value)
-                    } else {
-                        parameters.add("${it.key} = ${it.value.value}")
-                    }
+        val target = StringWriter()
+        target.write(parts.joinToString(" "))
+
+        return AnnotationData(target.toString(), collectedImports)
+    }
+
+    private fun createAdditionalParameterAnnotation(parameter: AdditionalParameter): AnnotationData {
+        val collectedImports = mutableSetOf<String>()
+
+        val target = StringWriter()
+
+        target.write("@${parameter.annotationDataType!!.getName()}")
+
+        val annotationParameters = parameter.annotationDataType.getParameters()
+        if (annotationParameters != null) {
+            collectedImports.addAll(parameter.annotationDataType.getImports())
+            collectedImports.addAll(parameter.annotationDataType.referencedImports)
+
+            val parameters = mutableListOf<String>()
+
+            annotationParameters.forEach {
+                if (it.key == "") {
+                    parameters.add(it.value.value)
+                } else {
+                    parameters.add("${it.key} = ${it.value.value}")
                 }
 
-                if (parameters.isNotEmpty()) {
-                    target.write("(")
-                    target.write(parameters.joinToString(", "))
-                    target.write(")")
-                }
+                val valueImport = it.value.import
+                if (valueImport != null)
+                collectedImports.add(valueImport)
+            }
+
+            if (parameters.isNotEmpty()) {
+                target.write("(")
+                target.write(parameters.joinToString(", "))
+                target.write(")")
             }
         }
 
-        return target.toString()
+        return AnnotationData(target.toString(), collectedImports)
     }
 
-    private fun addAnnotations(endpoint: Endpoint, parameter: Parameter, target: StringWriter) {
+    private fun createAnnotations(endpoint: Endpoint, parameter: Parameter): List<AnnotationData> {
         val mappingFinder = MappingFinder(apiOptions)
 
         val mappingAnnotations = mutableListOf<io.openapiprocessor.core.converter.mapping.Annotation>()
@@ -242,13 +303,17 @@ open class MethodWriter(
                 .findAnnotationParameterNameTypeMapping(MappingFinderQuery(endpoint, parameter))
                 .map { it.annotation })
 
-        mappingAnnotations
+        return mappingAnnotations
             .filter {
                 apiOptions.annotationTargets.isAllowedOnParameter(it.type)
             }
-            .forEach {
-                target.write(" ")
-                annotationWriter.write(target, Annotation(it.type, it.parameters))
+            .map {
+                val annotation = Annotation(it.type, it.parameters)
+
+                val target = StringWriter()
+                annotationWriter.write(target, annotation)
+
+                AnnotationData(target.toString(), annotation.imports + annotation.referencedImports)
             }
     }
 }

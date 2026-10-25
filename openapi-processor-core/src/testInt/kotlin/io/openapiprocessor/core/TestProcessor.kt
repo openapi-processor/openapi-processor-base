@@ -11,6 +11,7 @@ import io.openapiprocessor.core.converter.OptionsConverter
 import io.openapiprocessor.core.framework.FrameworkBase
 import io.openapiprocessor.core.parser.OpenApiParser
 import io.openapiprocessor.core.support.TestMappingAnnotationFactory
+import io.openapiprocessor.core.support.TestParameterAnnotationFactory
 import io.openapiprocessor.core.support.TestStatusAnnotationFactory
 import io.openapiprocessor.core.writer.SourceFormatter
 import io.openapiprocessor.core.writer.java.*
@@ -62,20 +63,17 @@ class TestProcessor:
                 generatedWriter,
                 validationWriter,
                 InterfaceWriter(
-                    options,
                     generatedWriter,
                     MethodWriter(
                         options,
                         identifier,
                         TestStatusAnnotationFactory(true),
                         TestMappingAnnotationFactory(true),
-                        TestProcessorParameterAnnotationWriter(),
+                        TestParameterAnnotationFactory(),
                         beanValidation,
                         javaDocFactory
                     ),
-                    TestFrameworkAnnotations(),
-                    beanValidation,
-                    DefaultImportFilter()
+                    TestFrameworkAnnotations()
                 ),
                 when (options.modelType) {
                     "record" -> DataTypeWriterRecord(

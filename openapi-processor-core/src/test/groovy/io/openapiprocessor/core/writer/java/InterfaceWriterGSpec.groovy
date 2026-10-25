@@ -18,14 +18,10 @@ class InterfaceWriterGSpec extends Specification {
     def annotations = Stub (FrameworkAnnotations)
 
     def writer = new InterfaceWriter(
-        apiOptions,
         generatedWriter,
         methodWriter,
-        annotations,
-        new BeanValidationFactory(
-            apiOptions,
-            BeanValidations.create(apiOptions.beanValidationFormat)),
-        new DefaultImportFilter())
+        annotations)
+
     def target = new StringWriter ()
 
     void "writes 'package'" () {

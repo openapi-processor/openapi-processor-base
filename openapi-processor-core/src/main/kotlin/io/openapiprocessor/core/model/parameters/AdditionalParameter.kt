@@ -21,7 +21,7 @@ class AdditionalParameter(
 ): ParameterBase(name, dataType, required, deprecated, description) {
 
     override val withAnnotation: Boolean
-        get() = false
+        get() = true
 
     val additionalAnnotation: Boolean
         get() = annotationDataType != null

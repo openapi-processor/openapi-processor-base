@@ -9,6 +9,7 @@ import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldContainAll
+import io.kotest.matchers.collections.shouldNotContain
 import io.kotest.matchers.collections.shouldNotContainAll
 import io.kotest.matchers.shouldBe
 import io.openapiprocessor.core.builder.api.endpoint
@@ -17,12 +18,10 @@ import io.openapiprocessor.core.converter.mapping.Mappings
 import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.model.parameters.ParameterBase
 import io.openapiprocessor.core.processor.mapping.ResultStyle
-import io.openapiprocessor.core.support.MAPPING
-import io.openapiprocessor.core.support.STATUS
-import io.openapiprocessor.core.support.TestMappingAnnotationFactory
-import io.openapiprocessor.core.support.TestParameterAnnotationWriter
-import io.openapiprocessor.core.support.TestStatusAnnotationFactory
+import io.openapiprocessor.core.support.*
 import io.openapiprocessor.core.support.datatypes.CollectionDataType
+import io.openapiprocessor.core.support.datatypes.ObjectDataType
+import io.openapiprocessor.core.support.datatypes.propertyDataTypeString
 import java.io.StringWriter
 
 class MethodWriterSpec: StringSpec({
@@ -36,10 +35,20 @@ class MethodWriterSpec: StringSpec({
         identifier,
         TestStatusAnnotationFactory(),
         TestMappingAnnotationFactory(),
-        TestParameterAnnotationWriter(),
+        TestParameterAnnotationFactory(),
         BeanValidationFactory(apiOptions))
 
     val target = StringWriter()
+
+    fun writer(apiOptions: ApiOptions): MethodWriter {
+        return MethodWriter (
+            apiOptions,
+            identifier,
+            TestStatusAnnotationFactory(),
+            TestMappingAnnotationFactory(),
+            TestParameterAnnotationFactory(),
+            BeanValidationFactory(apiOptions))
+    }
 
     "writes parameter validation annotation" {
         apiOptions.beanValidation = true
@@ -157,7 +166,7 @@ class MethodWriterSpec: StringSpec({
         }
 
         // when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        val imports = writer.write (target, endpoint, endpoint.endpointResponses.first ())
 
         // then:
         target.toString () shouldBe
@@ -167,6 +176,56 @@ class MethodWriterSpec: StringSpec({
             |    void getFoo(@Parameter FooX foo);
             |
             """.trimMargin()
+
+        imports shouldContain "annotation.Status"
+        imports shouldContain "annotation.Mapping"
+        imports shouldContain "annotation.Parameter"
+        imports shouldContain "pkg.FooX"
+    }
+
+    "writes import of request parameter data type" {
+       val endpoint = endpoint("/foo") {
+          parameters {
+              query("foo", ObjectDataType("Foo", "model", linkedMapOf(
+                  Pair("foo1", propertyDataTypeString()),
+                  Pair("foo2", propertyDataTypeString())
+              )))
+          }
+          responses { status("200") { empty() } }
+       }
+
+        // when:
+        val imports = writer.write (target, endpoint, endpoint.endpointResponses.first ())
+
+        // then:
+        imports shouldContain "model.Foo"
+    }
+
+    "writes mapped request body parameter with type name" {
+        val endpoint = endpoint("/foo") {
+            parameters {
+                body("body", "application/json", MappedDataType("Foo", "mapped"))
+            }
+            responses {
+                status("204") {
+                    response()
+                }
+            }
+        }
+
+        // when:
+        val imports = writer.write (target, endpoint, endpoint.endpointResponses.first ())
+
+        // then:
+        target.toString () shouldBe
+            """    
+            |    @Status
+            |    @Mapping
+            |    void getFoo(@Parameter Foo body);
+            |
+            """.trimMargin()
+
+        imports shouldContain "mapped.Foo"
     }
 
     "writes request body parameter with type name" {
@@ -184,7 +243,7 @@ class MethodWriterSpec: StringSpec({
         }
 
         // when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        val imports = writer.write (target, endpoint, endpoint.endpointResponses.first ())
 
         // then:
         target.toString () shouldBe
@@ -194,6 +253,8 @@ class MethodWriterSpec: StringSpec({
             |    void getFoo(@Parameter FooX body);
             |
             """.trimMargin()
+
+        imports shouldContain "pkg.FooX"
     }
 
     "writes single response methods with type name" {
@@ -446,4 +507,86 @@ class MethodWriterSpec: StringSpec({
         imports shouldContainAll STATUS.imports
     }
 
+    "writes additional annotation mapping import" {
+        val currentOptions = parseOptions(
+            """
+            |openapi-processor-mapping: v8
+            |options:
+            |  package-name: pkg
+            |map:
+            |  types:
+            |    - type: Foo @ io.openapiprocessor.Type
+            |  parameters:
+            |    - name: foo @ io.openapiprocessor.Name
+            """.trimMargin())
+
+        val endpoint = endpoint("/foo") {
+            parameters {
+                query("foo", ObjectDataType(
+                    "Foo", "model", linkedMapOf("foo" to propertyDataTypeString()
+                )))
+            }
+            responses { status("204") { empty() } }
+        }
+
+        // when:
+        val imports = writer(currentOptions)
+            .write (target, endpoint, endpoint.endpointResponses.first ())
+
+        // then:
+        imports shouldContain "io.openapiprocessor.Type"
+        imports shouldContain "io.openapiprocessor.Name"
+    }
+
+    "does not write parameter annotation import of a parameter that does not need an annotation" {
+        val endpoint = endpoint("/foo") {
+            parameters {
+                any(object : ParameterBase("foo", StringDataType()) {
+                    override val withAnnotation: Boolean
+                        get() = false
+                })
+            }
+            responses { status("204") { empty() } }
+        }
+
+        // when:
+        val imports = writer.write (target, endpoint, endpoint.endpointResponses.first ())
+
+        // then:
+        imports shouldNotContain "annotation.Parameter"
+    }
+
+    "skips additional annotation mapping import on a parameter if annotation is not allowed on parameter" {
+        val currentOptions = parseOptions(
+            """
+            |openapi-processor-mapping: v15
+            |options:
+            |  package-name: pkg
+            |map:
+            |  types:
+            |    - type: Foo @ io.openapiprocessor.Type
+            |  parameters:
+            |    - name: foo @ io.openapiprocessor.Name
+            |    
+            |annotation-targets:
+            |  io.openapiprocessor.Type: []
+            |  io.openapiprocessor.Name: []
+            """.trimMargin())
+
+        val endpoint = endpoint("/foo") {
+            parameters {
+                query("foo", ObjectDataType(
+                    "Foo", "model", linkedMapOf("foo" to propertyDataTypeString()
+                )))
+            }
+            responses { status("200") { empty() } }
+        }
+
+        // when:
+        val imports = writer.write (target, endpoint, endpoint.endpointResponses.first ())
+
+        // then:
+        imports shouldNotContain "io.openapiprocessor.Type"
+        imports shouldNotContain "io.openapiprocessor.Name"
+    }
 })

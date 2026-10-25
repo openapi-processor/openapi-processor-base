@@ -12,7 +12,7 @@ import io.openapiprocessor.core.openapi.HttpMethod
 import io.openapiprocessor.core.model.datatypes.*
 import io.openapiprocessor.core.model.parameters.Parameter
 import io.openapiprocessor.core.model.parameters.ParameterBase
-import io.openapiprocessor.core.support.TestParameterAnnotationWriter
+import io.openapiprocessor.core.support.TestParameterAnnotationFactory
 import io.openapiprocessor.core.support.TestStatusAnnotationFactory
 import io.openapiprocessor.core.support.datatypes.ObjectDataType
 import spock.lang.Specification
@@ -29,7 +29,7 @@ class MethodWriterGSpec extends Specification {
         identifier,
         new TestStatusAnnotationFactory(),
         new TestMappingAnnotationFactory(),
-        new TestParameterAnnotationWriter(),
+        new TestParameterAnnotationFactory(),
         Stub (BeanValidationFactory),
         Stub (JavaDocFactory))
     def target = new StringWriter ()
@@ -138,13 +138,14 @@ class MethodWriterGSpec extends Specification {
 """
     }
 
+    // todo obsolete
     void "writes no parameter annotation if the annotation writer skips it" () {
         def writer = new MethodWriter (
             apiOptions,
             identifier,
             new TestStatusAnnotationFactory(),
             new TestMappingAnnotationFactory(),
-            Stub (ParameterAnnotationWriter) {},
+            Stub (ParameterAnnotationFactory) { [] },
             Stub (BeanValidationFactory),
             Stub (JavaDocFactory))
 

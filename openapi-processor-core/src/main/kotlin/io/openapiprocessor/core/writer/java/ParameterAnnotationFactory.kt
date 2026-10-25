@@ -11,6 +11,9 @@ import java.io.Writer
 /**
  * parameter annotation writer interface.
  */
-fun interface ParameterAnnotationWriter {
+interface ParameterAnnotationFactory {
+    @Deprecated(message = "use create() instead")
     fun write (target: Writer, parameter: Parameter)
+
+    fun create(parameter: Parameter): List<AnnotationData>
 }
