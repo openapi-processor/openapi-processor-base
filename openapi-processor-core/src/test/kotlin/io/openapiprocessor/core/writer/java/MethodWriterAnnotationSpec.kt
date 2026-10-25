@@ -51,7 +51,7 @@ class MethodWriterAnnotationSpec: StringSpec ({
             }
         }
 
-        val imports = writer(options).write (target, endpoint, endpoint.endpointResponses.first ())
+        val imports = writer(options).write (target, endpoint, endpoint.firstSuccessResponse)
 
         target.toString () shouldBe
             """
@@ -76,7 +76,7 @@ class MethodWriterAnnotationSpec: StringSpec ({
             }
         }
 
-        val imports = writer(options).write (target, endpoint, endpoint.endpointResponses.first ())
+        val imports = writer(options).write (target, endpoint, endpoint.firstSuccessResponse)
 
         target.toString () shouldBe
             """
@@ -108,7 +108,7 @@ class MethodWriterAnnotationSpec: StringSpec ({
         }
 
         // when:
-        val imports = writer(options).write (target, endpoint, endpoint.endpointResponses.first ())
+        val imports = writer(options).write (target, endpoint, endpoint.firstSuccessResponse)
 
         // then:
         target.toString () shouldBe
@@ -148,7 +148,7 @@ class MethodWriterAnnotationSpec: StringSpec ({
         }
 
         // when:
-        val imports = writer(options).write (target, endpoint, endpoint.endpointResponses.first ())
+        val imports = writer(options).write (target, endpoint, endpoint.firstSuccessResponse)
 
         // then:
         target.toString () shouldBe
@@ -186,7 +186,7 @@ class MethodWriterAnnotationSpec: StringSpec ({
         }
 
         // when:
-        writer(options).write (target, endpoint, endpoint.endpointResponses.first ())
+        writer(options).write (target, endpoint, endpoint.firstSuccessResponse)
 
         // then:
         target.toString () shouldBe
@@ -219,7 +219,7 @@ class MethodWriterAnnotationSpec: StringSpec ({
         }
 
         // when:
-        writer(options).write (target, endpoint, endpoint.endpointResponses.first ())
+        writer(options).write (target, endpoint, endpoint.firstSuccessResponse)
 
         // then:
         target.toString () shouldBe
@@ -259,7 +259,7 @@ class MethodWriterAnnotationSpec: StringSpec ({
         }
 
         // when:
-        writer(options).write (target, endpoint, endpoint.endpointResponses.first ())
+        writer(options).write (target, endpoint, endpoint.firstSuccessResponse)
 
         // then:
         target.toString () shouldBe
@@ -299,7 +299,7 @@ class MethodWriterAnnotationSpec: StringSpec ({
             }
         }
 
-        writer(options).write (target, endpoint, endpoint.endpointResponses.first ())
+        writer(options).write (target, endpoint, endpoint.firstSuccessResponse)
 
         target.toString () shouldBe
             """    
@@ -324,7 +324,7 @@ class MethodWriterAnnotationSpec: StringSpec ({
         }
 
         // when:
-        val imports = writer(options).write (target, endpoint, endpoint.endpointResponses.first ())
+        val imports = writer(options).write (target, endpoint, endpoint.firstSuccessResponse)
 
         // then:
         target.toString () shouldBe

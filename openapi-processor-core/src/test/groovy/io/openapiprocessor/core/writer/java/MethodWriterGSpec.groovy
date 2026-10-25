@@ -45,7 +45,7 @@ class MethodWriterGSpec extends Specification {
         }
 
         when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        writer.write (target, endpoint, endpoint.firstSuccessResponse)
 
         then:
         target.toString () == """\
@@ -79,7 +79,7 @@ class MethodWriterGSpec extends Specification {
         }
 
         when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        writer.write (target, endpoint, endpoint.firstSuccessResponse)
 
         then:
         target.toString () == """\
@@ -98,7 +98,7 @@ class MethodWriterGSpec extends Specification {
         }
 
         when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        writer.write (target, endpoint, endpoint.firstSuccessResponse)
 
         then:
         target.toString () == """\
@@ -128,7 +128,7 @@ class MethodWriterGSpec extends Specification {
         }
 
         when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        writer.write (target, endpoint, endpoint.firstSuccessResponse)
 
         then:
         target.toString () == """\
@@ -162,7 +162,7 @@ class MethodWriterGSpec extends Specification {
         }
 
         when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        writer.write (target, endpoint, endpoint.firstSuccessResponse)
 
         then:
         target.toString () == """\
@@ -185,7 +185,7 @@ class MethodWriterGSpec extends Specification {
         }
 
         when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        writer.write (target, endpoint, endpoint.firstSuccessResponse)
 
         then:
         target.toString () == """\
@@ -210,7 +210,7 @@ class MethodWriterGSpec extends Specification {
         }
 
         when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        writer.write (target, endpoint, endpoint.firstSuccessResponse)
 
         then:
         target.toString () == """\
@@ -236,7 +236,7 @@ class MethodWriterGSpec extends Specification {
         }
 
         when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        writer.write (target, endpoint, endpoint.firstSuccessResponse)
 
         then:
         target.toString () == """\
@@ -254,7 +254,7 @@ class MethodWriterGSpec extends Specification {
         }
 
         when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        writer.write (target, endpoint, endpoint.firstSuccessResponse)
 
         then:
         target.toString () == """\
@@ -273,7 +273,7 @@ class MethodWriterGSpec extends Specification {
         }
 
         when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        writer.write (target, endpoint, endpoint.firstSuccessResponse)
 
         then:
         target.toString () == """\
@@ -297,7 +297,7 @@ class MethodWriterGSpec extends Specification {
         }
 
         when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        writer.write (target, endpoint, endpoint.firstSuccessResponse)
 
         then:
         target.toString () == """\
@@ -323,7 +323,7 @@ class MethodWriterGSpec extends Specification {
         }
 
         when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        writer.write (target, endpoint, endpoint.firstSuccessResponse)
 
         then:
         target.toString () == """\

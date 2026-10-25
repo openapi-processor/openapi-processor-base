@@ -44,8 +44,8 @@ class EndpointBuilderSpec: StringSpec({
         }
 
         ep.endpointResponses.size shouldBe 1
-        ep.endpointResponses.first().contentType shouldNotBe null
-        ep.endpointResponses.first().responseType shouldNotBe null
+        ep.firstSuccessResponse.contentType shouldNotBe null
+        ep.firstSuccessResponse.responseType shouldNotBe null
     }
 
     "adds endpoint parameter" {

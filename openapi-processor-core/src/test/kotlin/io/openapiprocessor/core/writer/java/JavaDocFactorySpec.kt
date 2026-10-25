@@ -38,7 +38,7 @@ class JavaDocFactorySpec: FreeSpec({
             }
         }
 
-        val html = factory.create(endpoint, endpoint.endpointResponses.first())
+        val html = factory.create(endpoint, endpoint.firstSuccessResponse)
 
         html.shouldBeEmpty()
     }
@@ -55,7 +55,7 @@ class JavaDocFactorySpec: FreeSpec({
             }
         }
 
-        val html = factory.create(endpoint, endpoint.endpointResponses.first())
+        val html = factory.create(endpoint, endpoint.firstSuccessResponse)
 
         html shouldBe """
             |/**
@@ -76,7 +76,7 @@ class JavaDocFactorySpec: FreeSpec({
             }
         }
 
-        val html = factory.create(endpoint, endpoint.endpointResponses.first())
+        val html = factory.create(endpoint, endpoint.firstSuccessResponse)
 
         html shouldBe """
             |/**
@@ -99,7 +99,7 @@ class JavaDocFactorySpec: FreeSpec({
             }
         }
 
-        val html = factory.create(endpoint, endpoint.endpointResponses.first())
+        val html = factory.create(endpoint, endpoint.firstSuccessResponse)
 
         html shouldBe """
             |/**
@@ -125,7 +125,7 @@ class JavaDocFactorySpec: FreeSpec({
             }
         }
 
-        val html = factory.create(endpoint, endpoint.endpointResponses.first())
+        val html = factory.create(endpoint, endpoint.firstSuccessResponse)
 
         html shouldBe """
             |/**
@@ -150,7 +150,7 @@ class JavaDocFactorySpec: FreeSpec({
             }
         }
 
-        val html = factory.create(endpoint, endpoint.endpointResponses.first())
+        val html = factory.create(endpoint, endpoint.firstSuccessResponse)
 
         html shouldBe """
             |/**
@@ -183,7 +183,7 @@ class JavaDocFactorySpec: FreeSpec({
             }
         }
 
-        val html = factory.create(endpoint, endpoint.endpointResponses.first())
+        val html = factory.create(endpoint, endpoint.firstSuccessResponse)
 
         html shouldBe """
             |/**

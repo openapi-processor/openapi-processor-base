@@ -28,12 +28,19 @@ class Endpoint(
     // grouped responses
     val endpointResponses: List<EndpointResponse> = createEndpointResponses()
 
+    val hasSuccessResponse: Boolean
+        get() = endpointResponses.isNotEmpty()
+
+    // test only
+    val firstSuccessResponse: EndpointResponse
+        get() = endpointResponses.first()
+
     fun getRequestBody(): RequestBody {
         return requestBodies.first ()
     }
 
     /**
-     * all possible responses for an openapi status ('200', '2xx', ... or 'default'). If the given
+     * all possible responses for an OpenAPI status ('200', '2xx', ... or 'default'). If the given
      * status has no responses, the result is an empty list.
      *
      * @param status the response status
@@ -80,8 +87,7 @@ class Endpoint(
     @Deprecated("only used in test")
     fun getProducesContentTypes (status: String): Set<String> {
         return endpointResponses
-            .map { it.contentTypes }
-            .flatten()
+            .flatMap { it.contentTypes }
             .toSet()
     }
 

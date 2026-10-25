@@ -62,7 +62,7 @@ class MethodWriterResponseStyleSpec: FreeSpec() {
                 }
 
                 // when:
-                val imports = writer(options).write(target, endpoint, endpoint.endpointResponses.first())
+                val imports = writer(options).write(target, endpoint, endpoint.firstSuccessResponse)
 
                 // then:
                 target.toString() shouldBe
@@ -102,7 +102,7 @@ class MethodWriterResponseStyleSpec: FreeSpec() {
                 }
 
                 // when:
-                val imports = writer(options).write (target, endpoint, endpoint.endpointResponses.first ())
+                val imports = writer(options).write (target, endpoint, endpoint.firstSuccessResponse)
 
                 // then:
                 target.toString() shouldBe
@@ -147,7 +147,7 @@ class MethodWriterResponseStyleSpec: FreeSpec() {
                 }
 
                 // when:
-                val imports = writer(options).write(target, endpoint, endpoint.endpointResponses.first())
+                val imports = writer(options).write(target, endpoint, endpoint.firstSuccessResponse)
 
                 // then:
                 target.toString() shouldBe
@@ -180,7 +180,7 @@ class MethodWriterResponseStyleSpec: FreeSpec() {
                 }
 
                 // when:
-                val imports = writer().write(target, endpoint, endpoint.endpointResponses.first())
+                val imports = writer().write(target, endpoint, endpoint.firstSuccessResponse)
 
                 // then:
                 target.toString() shouldBe
@@ -219,7 +219,7 @@ class MethodWriterResponseStyleSpec: FreeSpec() {
                 }
 
                 // when:
-                val imports = writer().write(target, endpoint, endpoint.endpointResponses.first())
+                val imports = writer().write(target, endpoint, endpoint.firstSuccessResponse)
 
                 // then:
                 target.toString() shouldBe

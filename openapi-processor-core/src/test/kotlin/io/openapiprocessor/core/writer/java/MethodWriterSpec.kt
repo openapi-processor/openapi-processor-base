@@ -66,7 +66,7 @@ class MethodWriterSpec: StringSpec({
         }
 
         // when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        writer.write (target, endpoint, endpoint.firstSuccessResponse)
 
         // then:
         target.toString () shouldBe
@@ -166,7 +166,7 @@ class MethodWriterSpec: StringSpec({
         }
 
         // when:
-        val imports = writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        val imports = writer.write (target, endpoint, endpoint.firstSuccessResponse)
 
         // then:
         target.toString () shouldBe
@@ -195,7 +195,7 @@ class MethodWriterSpec: StringSpec({
        }
 
         // when:
-        val imports = writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        val imports = writer.write (target, endpoint, endpoint.firstSuccessResponse)
 
         // then:
         imports shouldContain "model.Foo"
@@ -214,7 +214,7 @@ class MethodWriterSpec: StringSpec({
         }
 
         // when:
-        val imports = writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        val imports = writer.write (target, endpoint, endpoint.firstSuccessResponse)
 
         // then:
         target.toString () shouldBe
@@ -243,7 +243,7 @@ class MethodWriterSpec: StringSpec({
         }
 
         // when:
-        val imports = writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        val imports = writer.write (target, endpoint, endpoint.firstSuccessResponse)
 
         // then:
         target.toString () shouldBe
@@ -306,7 +306,7 @@ class MethodWriterSpec: StringSpec({
         }
 
         // when:
-        writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        writer.write (target, endpoint, endpoint.firstSuccessResponse)
 
         // then:
         target.toString () shouldBe
@@ -368,7 +368,7 @@ class MethodWriterSpec: StringSpec({
         }
 
         // when:
-        val imports = writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        val imports = writer.write (target, endpoint, endpoint.firstSuccessResponse)
 
         // then:
         target.toString () shouldBe
@@ -402,7 +402,7 @@ class MethodWriterSpec: StringSpec({
             }
         }
 
-        val imports = writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        val imports = writer.write (target, endpoint, endpoint.firstSuccessResponse)
 
         target.toString () shouldBe
             """
@@ -438,7 +438,7 @@ class MethodWriterSpec: StringSpec({
             }
         }
 
-        val imports = writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        val imports = writer.write (target, endpoint, endpoint.firstSuccessResponse)
 
         target.toString () shouldBe
             """
@@ -469,7 +469,7 @@ class MethodWriterSpec: StringSpec({
             }
         }
 
-        val imports = writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        val imports = writer.write (target, endpoint, endpoint.firstSuccessResponse)
 
         target.toString () shouldBe
             """
@@ -494,7 +494,7 @@ class MethodWriterSpec: StringSpec({
             }
         }
 
-        val imports = writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        val imports = writer.write (target, endpoint, endpoint.firstSuccessResponse)
 
         target.toString () shouldBe
             """
@@ -531,7 +531,7 @@ class MethodWriterSpec: StringSpec({
 
         // when:
         val imports = writer(currentOptions)
-            .write (target, endpoint, endpoint.endpointResponses.first ())
+            .write (target, endpoint, endpoint.firstSuccessResponse)
 
         // then:
         imports shouldContain "io.openapiprocessor.Type"
@@ -550,7 +550,7 @@ class MethodWriterSpec: StringSpec({
         }
 
         // when:
-        val imports = writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        val imports = writer.write (target, endpoint, endpoint.firstSuccessResponse)
 
         // then:
         imports shouldNotContain "annotation.Parameter"
@@ -583,7 +583,7 @@ class MethodWriterSpec: StringSpec({
         }
 
         // when:
-        val imports = writer.write (target, endpoint, endpoint.endpointResponses.first ())
+        val imports = writer.write (target, endpoint, endpoint.firstSuccessResponse)
 
         // then:
         imports shouldNotContain "io.openapiprocessor.Type"
