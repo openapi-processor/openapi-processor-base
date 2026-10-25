@@ -70,4 +70,11 @@ class EndpointBuilderSpec: StringSpec({
         ep.requestBodies.first().name shouldBe "body"
     }
 
+    "adds endpoint operation id" {
+        val ep = endpoint("/foo") {
+            operationId = "id"
+        }
+
+        ep.operationId shouldBe "id"
+    }
 })
