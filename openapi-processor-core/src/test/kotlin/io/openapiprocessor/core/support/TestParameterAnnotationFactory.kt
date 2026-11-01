@@ -8,13 +8,8 @@ package io.openapiprocessor.core.support
 import io.openapiprocessor.core.model.parameters.Parameter
 import io.openapiprocessor.core.writer.java.CodeSnippet
 import io.openapiprocessor.core.writer.java.ParameterAnnotationFactory
-import java.io.Writer
 
 class TestParameterAnnotationFactory: ParameterAnnotationFactory {
-
-    override fun write(target: Writer, parameter: Parameter) {
-        target.write ("@Parameter")
-    }
 
     override fun create(parameter: Parameter): List<CodeSnippet> {
         if (!parameter.withAnnotation) {

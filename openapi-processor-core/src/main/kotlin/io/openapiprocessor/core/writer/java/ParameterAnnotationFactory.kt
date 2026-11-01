@@ -6,14 +6,10 @@
 package io.openapiprocessor.core.writer.java
 
 import io.openapiprocessor.core.model.parameters.Parameter
-import java.io.Writer
 
 /**
  * parameter annotation writer interface.
  */
 interface ParameterAnnotationFactory {
-    @Deprecated(message = "use create() instead")
-    fun write (target: Writer, parameter: Parameter)
-
     fun create(parameter: Parameter): List<CodeSnippet>
 }
