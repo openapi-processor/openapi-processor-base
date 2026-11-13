@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 https://github.com/openapi-processor/openapi-processor-core
+ * Copyright 2020 https://github.com/openapi-processor/openapi-processor-base
  * PDX-License-Identifier: Apache-2.0
  */
 package io.openapiprocessor.core.builder.api
@@ -7,6 +7,7 @@ package io.openapiprocessor.core.builder.api
 import io.openapiprocessor.core.model.RequestBody
 import io.openapiprocessor.core.model.datatypes.DataType
 import io.openapiprocessor.core.model.parameters.AdditionalParameter
+import io.openapiprocessor.core.model.parameters.MultipartParameter
 import io.openapiprocessor.core.model.parameters.Parameter
 import io.openapiprocessor.core.model.parameters.QueryParameter
 
@@ -14,7 +15,7 @@ class ParametersBuilder {
     private val parameters: MutableList<Parameter> = mutableListOf()
     private val bodies: MutableList<RequestBody> = mutableListOf()
 
-    // avoids empty {} when called from non kotlin code
+    // avoids empty {} when called from non Kotlin code
     fun any(parameter: Parameter) {
         parameters.add(parameter)
     }
@@ -52,11 +53,21 @@ class ParametersBuilder {
         body(name, contentType, dataType, {})
     }
 
-    fun body(name: String, contentType: String, dataType: DataType,
-             init: ParameterBuilder.() -> Unit = {}) {
+    fun body(name: String, contentType: String, dataType: DataType, init: ParameterBuilder.() -> Unit = {}) {
         val builder = ParameterBuilder()
         init(builder)
         bodies.add(RequestBody(name, contentType, dataType, builder.required, builder.deprecated))
+    }
+
+    fun multipart(name: String, dataType: DataType, init: ParameterBuilder.() -> Unit = {}) {
+        val builder = ParameterBuilder()
+        init(builder)
+        parameters.add(MultipartParameter(
+            name,
+            dataType,
+            builder.required,
+            builder.deprecated,
+            builder.description))
     }
 
     fun parameters(): List<Parameter> {
