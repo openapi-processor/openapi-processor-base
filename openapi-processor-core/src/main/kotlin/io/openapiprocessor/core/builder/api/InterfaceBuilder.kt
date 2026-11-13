@@ -24,18 +24,6 @@ fun `interface`(
     return builder.build()
 }
 
-fun itf(
-    name: String = "Foo",
-    pkg: String = "io.openapiprocessor.test",
-    pathPrefix: String? = null,
-    identifier: Identifier = JavaIdentifier(),
-    init: InterfaceBuilder.() -> Unit
-): Interface {
-    val builder = InterfaceBuilder(name, pkg, pathPrefix, identifier)
-    init(builder)
-    return builder.build()
-}
-
 class InterfaceBuilder(
     private val name: String,
     private val pkg: String,

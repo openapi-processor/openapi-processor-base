@@ -10,7 +10,7 @@ import io.openapiprocessor.core.model.Response
 class ResponsesBuilder {
     private val responses: MutableMap<String, List<Response>> = linkedMapOf()
 
-    fun status(status: String = "200", init: ResponseBuilder.() -> Unit? = {}) {
+    fun status(status: String = "200", init: ResponseBuilder.() -> Unit = {}) {
         val builder = ResponseBuilder()
         init(builder)
         responses[status] = builder.build()
