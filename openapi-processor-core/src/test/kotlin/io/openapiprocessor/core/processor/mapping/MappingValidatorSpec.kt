@@ -9,6 +9,7 @@ import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.openapiprocessor.core.processor.MappingValidator
+import io.openapiprocessor.jsonschema.ouput.OutputUnit
 
 private fun String.fromResource(): String {
     return MappingValidator::class.java
@@ -84,7 +85,7 @@ class MappingValidatorSpec: StringSpec({
             println(error)
         }
 
-        output.errors?.forEach { ou ->
+        output.errors?.forEach { ou: OutputUnit ->
             println("'${ou.error}': at instance ${ou.instanceLocation} (schema ${ou.absoluteKeywordLocation.substringAfter("#")})")
         }
 
