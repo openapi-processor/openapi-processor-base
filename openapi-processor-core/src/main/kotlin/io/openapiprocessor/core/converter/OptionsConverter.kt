@@ -24,7 +24,6 @@ class OptionsConverter(
 ) {
     var log: Logger = LoggerFactory.getLogger(this.javaClass.name)
 
-    @Deprecated("prefer fillOptions(...)")
     fun convertOptions(processorOptions: Map<String, Any>): ApiOptions {
         val options = ApiOptions()
         fillOptions(processorOptions, options)
