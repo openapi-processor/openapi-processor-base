@@ -23,8 +23,9 @@ class HttpMethod private constructor(val method: String) {
         val POST = HttpMethod("post")
         val PUT = HttpMethod("put")
         val TRACE = HttpMethod("trace")
+        val QUERY = HttpMethod("query")
 
-        val values: Array<HttpMethod> = arrayOf(DELETE, GET, HEAD, OPTIONS, PATCH, POST, PUT, TRACE)
+        val values: Array<HttpMethod> = arrayOf(DELETE, GET, HEAD, OPTIONS, PATCH, POST, PUT, TRACE, QUERY)
 
         fun values(): Array<HttpMethod> {
             return values.copyOf()
@@ -40,6 +41,7 @@ class HttpMethod private constructor(val method: String) {
                 "post" -> POST
                 "put" -> PUT
                 "trace" -> TRACE
+                "query" -> QUERY
                 else -> HttpMethod(method)
             }
         }
