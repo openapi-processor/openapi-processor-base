@@ -10,12 +10,10 @@ kotlin = "2.4.21"
 
 jacoco = "0.8.16"
 jacocolog = "4.0.1"
-updates = "0.67.0"
 
 [libraries]
 plugin-build = { module = "io.openapiprocessor:build-plugins", version.ref = "build-plugins" }
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
-plugin-updates = { module = "io.github.ben-manes:gradle-versions-plugin", version.ref = "updates" }
 plugin-jacocolog = { module = "org.barfuin.gradle.jacocolog:org.barfuin.gradle.jacocolog.gradle.plugin", version.ref = "jacocolog" }
 
 [plugins]
@@ -25,6 +23,5 @@ openapiprocessor-central = { id = "io.openapiprocessor.build.plugin.publish-cent
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 modernizer = { id = "io.github.andygoossens.modernizer", version = "2.0.0" }
 jacocolog = { id = "org.barfuin.gradle.jacocolog" }
-updates = { id = "io.github.ben-manes.versions", version.ref = "updates" }
 versions = { id = "io.openapiprocessor.build.plugin.create-versions" }
 sonar = { id = "org.sonarqube", version = "7.6.0.18749" }

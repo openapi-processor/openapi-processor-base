@@ -8,7 +8,6 @@ dependencies {
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
 
     implementation(build.plugin.kotlin)
-    implementation(build.plugin.updates)
     implementation(build.plugin.build)
     implementation(build.plugin.jacocolog)
 

@@ -2,7 +2,6 @@ plugins {
     base
     alias(build.plugins.kotlin.jvm) apply false
     alias(build.plugins.openapiprocessor.publish)
-    id("openapiprocessor.versions")
     id("jacoco-report-aggregation")
 }
 
@@ -16,4 +15,36 @@ publishingCentral {
     deploymentDir = layout.buildDirectory.dir("deployment")
     deploymentName = "base"
     waitFor = "VALIDATED"
+}
+
+jacoco {
+    toolVersion = build.versions.jacoco.get()
+}
+
+tasks.named<com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask>("dependencyUpdates") {
+    rejectVersionIf {
+        val rejected = candidate.version.isNonStable()
+        if (rejected) {
+            println("candidate: $candidate -> rejected")
+        }
+        rejected
+    }
+}
+
+fun String.isNonStable(): Boolean {
+    val nonStable = listOf(
+        ".M[0-9]+$",
+        ".RC[0-9]*$",
+        ".alpha.?[0-9]+$",
+        ".beta.?[0-9]+$",
+    )
+
+    for (n in nonStable) {
+       if (this.contains("(?i)$n".toRegex())) {
+           //println("not stable: $this")
+           return true
+       }
+    }
+
+    return false
 }
