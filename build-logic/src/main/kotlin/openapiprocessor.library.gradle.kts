@@ -3,7 +3,7 @@ import org.gradle.accessors.dm.LibrariesForLibs
 
 plugins {
     `java-library`
-    kotlin
+    kotlin("jvm")
 }
 
 // see buildSrc/build.gradle.kts

@@ -1,5 +1,6 @@
 plugins {
     base
+    alias(build.plugins.kotlin.jvm) apply false
     alias(build.plugins.openapiprocessor.publish)
     id("openapiprocessor.versions")
     id("jacoco-report-aggregation")

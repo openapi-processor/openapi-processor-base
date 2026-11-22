@@ -5,7 +5,7 @@ import org.gradle.accessors.dm.LibrariesForLibs
 plugins {
     java
     groovy
-    kotlin
+    kotlin("jvm")
 }
 
 // see buildSrc/build.gradle.kts
